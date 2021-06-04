@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#include "objects/object.h"
+
 
 void Eco_Banner()
 {

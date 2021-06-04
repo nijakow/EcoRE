@@ -11,26 +11,13 @@
 
 struct Eco_Object
 {
-    char payload[];
+    struct Eco_Object* next;
+    struct {
+        struct Eco_Type* type;
+    } header;
 };
 
 static inline void* Eco_Object_At(struct Eco_Object* object, unsigned int offset)
 {
-    return (void*) &(object->payload[offset]);
+    return (void*) (((char*) object) + sizeof(struct Eco_Object) + offset);
 }
-
-
-
-/*
- *
- *    s t r u c t   E c o _ S h i p
- *
- */
-
-struct Eco_Ship
-{
-    struct Eco_Ship *next;
-    struct Eco_Type *type;
-    struct Eco_Object payload;
-};
-
