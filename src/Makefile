@@ -10,6 +10,7 @@ endif
 EXECUTABLE = ./ecore.exe
 
 SOURCES = \
+vm/environment.c \
 main.c
 
 OBJECTS = $(SOURCES:.c=.o)

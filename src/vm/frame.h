@@ -7,7 +7,7 @@ struct Eco_Environment;
 
 struct Eco_Frame
 {
-    struct Eco_Frame*        previous;
+    unsigned int             delta;
 
     struct Eco_Environment*  dynamic_vars;
 
