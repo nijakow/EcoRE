@@ -16,7 +16,7 @@ enum Eco_Type_Slot_Type
 
 struct Eco_Type_Slot
 {
-    struct Eco_Object *key;
+    struct Eco_Object* key;
 
     union {
         struct {
@@ -24,13 +24,13 @@ struct Eco_Type_Slot
             /* TODO: struct Eco_Type* type; */
             bool is_inherited;
         } inlined;
-        struct Eco_Code *code;
+        struct Eco_Code* code;
     } body;
 };
 
 
 struct Eco_Type
 {
-    unsigned int slot_count;
-    struct Eco_Type_Slot slots[];
+    unsigned int          slot_count;
+    struct Eco_Type_Slot  slots[];
 };
