@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "objects/object.h"
+#include "objects/type.h"
 
 
 void Eco_Banner()
