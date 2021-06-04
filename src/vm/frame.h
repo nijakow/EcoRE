@@ -11,6 +11,6 @@ struct Eco_Frame
 
     struct Eco_Environment*  dynamic_vars;
 
-    unsigned int             static_var_count;
-    Eco_Any                  static_vars[];
+    unsigned int             register_count;
+    Eco_Any                  registers[];
 };
