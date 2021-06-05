@@ -12,6 +12,7 @@ EXECUTABLE = ./ecore.exe
 SOURCES = \
 vm/environment.c \
 vm/fiber.c \
+vm/send.c \
 main.c
 
 OBJECTS = $(SOURCES:.c=.o)

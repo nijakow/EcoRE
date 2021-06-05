@@ -16,7 +16,9 @@ enum Eco_Type_Slot_Type
 
 struct Eco_Type_Slot
 {
-    struct Eco_Object* key;
+    enum Eco_Type_Slot_Type  type;
+    
+    struct Eco_Object*       key;
 
     union {
         struct {

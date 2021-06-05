@@ -12,9 +12,7 @@
 struct Eco_Object
 {
     struct Eco_Object* next;
-    struct {
-        struct Eco_Type* type;
-    } header;
+    struct Eco_Type*   type;
 };
 
 static inline void* Eco_Object_At(struct Eco_Object* object, unsigned int offset)
