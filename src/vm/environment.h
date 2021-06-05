@@ -12,7 +12,7 @@ struct Eco_Environment
     struct Eco_Environment*  link;
 
     unsigned int             var_count;
-    Eco_Any*                 vars[];
+    Eco_Any                  vars[];
 };
 
 
