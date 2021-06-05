@@ -1,6 +1,7 @@
 #include "fiber.h"
 
 #include "bytecodes.h"
+#include "send.h"
 
 
 struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber, unsigned int register_count)
@@ -70,13 +71,17 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 break;
             }
             case Eco_Bytecode_SEND: {
-                u8 arg_loc = Eco_Frame_NextU8(top);
-                u8 arg_cnt = Eco_Frame_NextU8(top);
-                /* TODO */
+                struct Eco_Message message;
+                message.arg_location = &(top->registers[Eco_Frame_NextU8(top)]);
+                message.arg_count    = Eco_Frame_NextU8(top);
+                message.key          = Eco_Any_AsPointer(Eco_Frame_NextConstant(top));
+                message.fiber        = fiber;
+                /* TODO: Call Eco_Send(...) */
                 break;
             }
             default: {
                 /* TODO: Error */
+                break;
             }
         }
     }

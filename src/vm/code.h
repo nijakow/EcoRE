@@ -4,6 +4,9 @@
 
 struct Eco_Code
 {
-    /* TODO */
+    u8*           bytecodes;
+    
+    unsigned int  constant_count;
+    Eco_Any*      constants;
 };
 

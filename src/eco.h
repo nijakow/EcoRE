@@ -86,3 +86,19 @@ static inline void Eco_Any_AssignFloating(Eco_Any* any, Eco_Floating floating)
     any->value.floating = floating;
     any->type           = Eco_Value_Type_FLOATING;
 }
+
+
+static inline struct Eco_Object* Eco_Any_AsPointer(Eco_Any* any)
+{
+    return any->value.pointer;
+}
+
+static inline Eco_Integer Eco_Any_AsInteger(Eco_Any* any)
+{
+    return any->value.integer;
+}
+
+static inline Eco_Floating Eco_Any_AsFloating(Eco_Any* any)
+{
+    return any->value.floating;
+}

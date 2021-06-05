@@ -21,8 +21,24 @@ struct Eco_Frame
     Eco_Any                  registers[];
 };
 
-static inline u8 Eco_Frame_NextU8(struct Eco_Frame* frame) { return *(frame->instruction++); }
-static inline i32 Eco_Frame_NextI32(struct Eco_Frame* frame) {
+static inline u8 Eco_Frame_NextU8(struct Eco_Frame* frame)
+{
+    return *(frame->instruction++);
+}
+
+static inline u16 Eco_Frame_NextU16(struct Eco_Frame* frame)
+{
+    u16 v;
+
+    v = Eco_Frame_NextU8(frame);
+    v <<= 8;
+    v |= Eco_Frame_NextU8(frame);
+
+    return v;
+}
+
+static inline i32 Eco_Frame_NextI32(struct Eco_Frame* frame)
+{
     u8  i;
     i32 v;
 
@@ -35,3 +51,7 @@ static inline i32 Eco_Frame_NextI32(struct Eco_Frame* frame) {
     return v;
 }
 
+static inline Eco_Any* Eco_Frame_NextConstant(struct Eco_Frame* frame)
+{
+    return &(frame->code->constants[Eco_Frame_NextU16(frame)]);
+}
