@@ -8,6 +8,7 @@ enum Eco_Bytecode
     Eco_Bytecode_R2D,
     Eco_Bytecode_D2R,
     Eco_Bytecode_SEND,
+    Eco_Bytecode_ASSIGN,
     Eco_Bytecode_RETURN
 };
 
