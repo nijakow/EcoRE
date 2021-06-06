@@ -7,8 +7,8 @@ struct Eco_Message;
 
 struct Eco_Group
 {
-    struct Eco_Object   _;
-    struct Eco_Object*  objects;
+    struct Eco_Object    _;
+    struct Eco_Object**  objects;
 };
 
 
