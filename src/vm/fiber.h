@@ -2,8 +2,8 @@
 
 #include "../eco.h"
 
-#include "frame.h"
-#include "environment.h"
+
+struct Eco_Frame;
 
 
 struct Eco_Fiber

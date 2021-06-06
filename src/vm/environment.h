@@ -16,6 +16,9 @@ struct Eco_Environment
 };
 
 
+struct Eco_Environment* Eco_Environment_New(unsigned int, struct Eco_Environment*);
+
+
 static inline void Eco_Environment_Incr(struct Eco_Environment* environment)
 {
     environment->reference_count++;

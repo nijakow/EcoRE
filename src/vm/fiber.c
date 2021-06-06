@@ -2,6 +2,8 @@
 
 #include "bytecodes.h"
 #include "code.h"
+#include "environment.h"
+#include "frame.h"
 #include "send.h"
 
 
@@ -19,10 +21,14 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber*        fiber,
 
     new_frame = Eco_Fiber_Top(fiber);
 
-    new_frame->delta = delta;
+    new_frame->delta          = delta;
     new_frame->register_count = register_count;
 
-    /* TODO: Allocate dynamics */
+    if (dynamics_count > 0 || link != NULL) {
+        new_frame->dynamic_vars = Eco_Environment_New(dynamics_count, link);
+    } else {
+        new_frame->dynamic_vars = NULL;
+    }
 
     return new_frame;
 }
