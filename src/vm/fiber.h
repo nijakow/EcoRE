@@ -4,6 +4,9 @@
 
 
 struct Eco_Frame;
+struct Eco_Message;
+struct Eco_Code;
+struct Eco_Environment;
 
 
 struct Eco_Fiber
@@ -17,3 +20,5 @@ static inline struct Eco_Frame* Eco_Fiber_Top(struct Eco_Fiber* fiber)
 {
     return (struct Eco_Frame*) &(fiber->stack[fiber->stack_alloc_ptr]);
 }
+
+bool Eco_Fiber_Enter(struct Eco_Fiber*, struct Eco_Message*, struct Eco_Code*, struct Eco_Environment*);
