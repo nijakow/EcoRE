@@ -47,10 +47,13 @@ bool Eco_Send_ToObject(struct Eco_Message* message, struct Eco_Object* target)
 
 bool Eco_Send(struct Eco_Message* message, Eco_Any* target)
 {
+    struct Eco_Object*  object;
+
     switch (target->type)
     {
     case Eco_Value_Type_POINTER:
-        return Eco_Send_ToObject(message, Eco_Any_AsPointer(target));
+        object = Eco_Any_AsPointer(target);
+        return object->type->shared->send(message, object);
     default:
         return false;   /* TODO */
     }
