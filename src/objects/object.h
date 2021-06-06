@@ -2,6 +2,8 @@
 
 #include "../eco.h"
 
+struct Eco_Message;
+
 
 /*
  *
@@ -19,3 +21,6 @@ static inline void* Eco_Object_At(struct Eco_Object* object, unsigned int offset
 {
     return (void*) (((char*) object) + sizeof(struct Eco_Object) + offset);
 }
+
+
+bool Eco_Send_ToObject(struct Eco_Message*, struct Eco_Object*);
