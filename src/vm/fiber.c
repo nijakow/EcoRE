@@ -128,6 +128,36 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 
                 break;
             }
+            case Eco_Bytecode_RETURN: {
+                u8                       i;
+                u8                       depth;
+                struct Eco_Environment*  next;
+
+                depth = Eco_Frame_NextU8(top);
+
+                if (depth > 0) {
+                    i    = 0;
+                    next = top->dynamic_vars;
+
+                    while (i <= depth)  /* Since we start with next = top->dynamic_vars, we have to use "<=" */
+                    {
+                        /* TODO: Error if next == NULL */
+                        if (Eco_Fiber_Top(fiber)->dynamic_vars == next) {
+                            i    = i + 1;
+                            next = next->link;
+                        } else {
+                            Eco_Fiber_PopFrame(fiber);
+                            /* TODO: Error if there are no frames left */
+                        }
+                    }
+                }
+
+                Eco_Fiber_PopFrame(fiber);
+
+                top = Eco_Fiber_Top(fiber); /* TODO: Do the "slow dispatch" code */
+
+                break;
+            }
             default: {
                 /* TODO: Error */
                 break;
