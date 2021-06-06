@@ -10,6 +10,7 @@ endif
 EXECUTABLE = ./ecore.exe
 
 SOURCES = \
+objects/type.c \
 vm/environment.c \
 vm/fiber.c \
 vm/send.c \

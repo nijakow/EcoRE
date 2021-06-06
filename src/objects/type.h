@@ -4,6 +4,7 @@
 
 
 struct Eco_Code;
+struct Eco_Message;
 
 
 
@@ -29,6 +30,9 @@ struct Eco_Type_Slot
         struct Eco_Code* code;
     } body;
 };
+
+bool Eco_Type_Slot_GetValue(struct Eco_Type_Slot*, struct Eco_Object*, Eco_Any*);
+bool Eco_Type_Slot_Invoke(struct Eco_Message*, struct Eco_Object*, struct Eco_Type_Slot*);
 
 
 struct Eco_Type
