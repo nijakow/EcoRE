@@ -1,5 +1,7 @@
 #include "fiber.h"
 
+#include "../objects/closure.h"
+
 #include "bytecodes.h"
 #include "code.h"
 #include "environment.h"
@@ -172,6 +174,19 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 Eco_Fiber_PopFrame(fiber);
 
                 top = Eco_Fiber_Top(fiber); /* TODO: Do the "slow dispatch" code */
+
+                break;
+            }
+            case Eco_Bytecode_MAKE_CLOSURE: {
+                u8                   dest;
+                u8                   closure_id;
+                struct Eco_Closure*  closure;
+
+                dest       = Eco_Frame_NextU8(top);
+                closure_id = Eco_Frame_NextU8(top);
+                closure    = Eco_Closure_New(top->code->code_instances[closure_id], top->dynamic_vars);
+
+                Eco_Any_AssignPointer(&top->registers[dest], (struct Eco_Object*) closure);
 
                 break;
             }

@@ -9,6 +9,10 @@ struct Eco_Environment;
 struct Eco_Closure
 {
     struct Eco_Object        _;
+
     struct Eco_Code*         code;
     struct Eco_Environment*  environment;
 };
+
+
+struct Eco_Closure* Eco_Closure_New(struct Eco_Code*, struct Eco_Environment*);

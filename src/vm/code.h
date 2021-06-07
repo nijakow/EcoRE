@@ -4,14 +4,17 @@
 
 struct Eco_Code
 {
-    unsigned int  register_count;
-    unsigned int  dynamics_count;
+    unsigned int       register_count;
+    unsigned int       dynamics_count;
 
-    unsigned int  arg_count;
+    unsigned int       arg_count;
 
-    u8*           bytecodes;
+    u8*                bytecodes;
     
-    unsigned int  constant_count;
-    Eco_Any*      constants;
+    unsigned int       constant_count;
+    Eco_Any*           constants;
+
+    unsigned int       code_instance_count;
+    struct Eco_Code**  code_instances;
 };
 
