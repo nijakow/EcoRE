@@ -11,6 +11,9 @@ bool Eco_Send_ToObject(struct Eco_Message* message, struct Eco_Object* target)
     struct Eco_Type*       type;
     struct Eco_Type_Slot*  slot;
 
+
+    if (target == NULL) return false;
+
     type = target->type;
 
     for (i = 0; i < type->slot_count; i++)
