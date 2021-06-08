@@ -20,6 +20,25 @@ struct Eco_Group
 };
 
 
+static inline void Eco_Group_GetMembers(struct Eco_Group*     group,
+                                        struct Eco_Object***  objects_dest,
+                                        unsigned int*         size_dest,
+                                        unsigned int*         alloc_dest)
+{
+    if (group->object_alloc == 0) {
+        *objects_dest = group->body.single;
+        if (group->body.single[0] == NULL) *size_dest = 0;
+        else if (group->body.single[0] == NULL) *size_dest = 1;
+        else *size_dest = 2;
+        *alloc_dest = 2;
+    } else {
+        *objects_dest = group->body.multi.objects;
+        *size_dest    = group->body.multi.object_count;
+        *alloc_dest   = group->object_alloc;
+    }
+}
+
+
 struct Eco_Group* Eco_Group_New(struct Eco_Object*);
 
 bool Eco_Send_ToGroup(struct Eco_Message*, struct Eco_Group*);

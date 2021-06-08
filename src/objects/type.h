@@ -38,9 +38,10 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message*, struct Eco_Object*, struct Eco_Ty
 
 struct Eco_Type_Shared
 {
+    bool is_wired_in;
     bool (*send)(struct Eco_Message*, struct Eco_Object*);
-    bool (*mark)(struct Eco_GC_State*, struct Eco_Object*);
-    bool (*del)(struct Eco_Object*);
+    void (*mark)(struct Eco_GC_State*, struct Eco_Object*);
+    void (*del)(struct Eco_Object*);
 };
 
 struct Eco_Type
@@ -50,3 +51,13 @@ struct Eco_Type
     unsigned int             slot_count;
     struct Eco_Type_Slot     slots[];
 };
+
+
+#define TYPE_DEFINITION(NAME, SEND, MARK, DEL, SLOTCOUNT, SLOTS) \
+struct Eco_Type_Shared NAME ## _Shared_Type = { \
+    true, \
+    (bool (*)(struct Eco_Message*, struct Eco_Object*)) SEND, \
+    (void (*)(struct Eco_GC_State*, struct Eco_Object*)) MARK, \
+    (void (*)(struct Eco_Object*)) DEL \
+}; \
+struct Eco_Type        NAME ## _Type        = { & NAME ## _Shared_Type, SLOTCOUNT, SLOTS }
