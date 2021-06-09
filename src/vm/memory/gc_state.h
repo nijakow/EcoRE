@@ -13,13 +13,8 @@ struct Eco_GC_State
 
 static inline bool Eco_GC_State_HasObjectsToMark(struct Eco_GC_State* state)
 {
-    return false;   /* TODO */
+    return state->pages != NULL;
 }
-
-static inline struct Eco_Object* Eco_GC_State_NextObjectToMark(struct Eco_GC_State* state)
-{
-    return NULL;    /* TODO */
-}
-
 
 void Eco_GC_State_QueueObject(struct Eco_GC_State*, struct Eco_Object*);
+struct Eco_Object* Eco_GC_State_NextObjectToMark(struct Eco_GC_State*);
