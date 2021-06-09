@@ -1,15 +1,10 @@
 #pragma once
 
-#include "../../eco.h"
+#include "gc_state.h"
 
+#include "../../eco.h"
 #include "../../objects/object.h"
 
-
-
-struct Eco_GC_State;
-
-
-void Eco_GC_State_QueueObject(struct Eco_GC_State*, struct Eco_Object*);
 
 static inline void Eco_GC_State_MarkObject(struct Eco_GC_State* state, struct Eco_Object* object)
 {

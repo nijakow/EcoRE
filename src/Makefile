@@ -15,6 +15,7 @@ objects/object.c \
 objects/group.c \
 objects/closure.c \
 vm/memory/memory.c \
+vm/memory/gc_state.c \
 vm/memory/gc.c \
 vm/environment.c \
 vm/fiber.c \

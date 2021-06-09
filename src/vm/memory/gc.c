@@ -1,28 +1,13 @@
 #include "gc.h"
 
 #include "memory.h"
+#include "gc_state.h"
 
 #include "../../objects/object.h"
 #include "../../objects/type.h"
 
 
 extern struct Eco_Object* Eco_OBJECTS;
-
-
-struct Eco_GC_State
-{
-};
-
-
-static inline bool Eco_GC_State_HasObjectsToMark(struct Eco_GC_State* state)
-{
-    return false;   /* TODO */
-}
-
-static inline struct Eco_Object* Eco_GC_State_NextObjectToMark(struct Eco_GC_State* state)
-{
-    return NULL;    /* TODO */
-}
 
 
 void Eco_GC_MarkRoots(struct Eco_GC_State* state)
