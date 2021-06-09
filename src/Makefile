@@ -14,7 +14,7 @@ objects/type.c \
 objects/object.c \
 objects/group.c \
 objects/closure.c \
-vm/memory.c \
+vm/memory/memory.c \
 vm/environment.c \
 vm/fiber.c \
 vm/send.c \

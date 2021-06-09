@@ -1,7 +1,7 @@
 #include "memory.h"
 
-#include "../objects/object.h"
-#include "../objects/type.h"
+#include "../../objects/object.h"
+#include "../../objects/type.h"
 
 
 struct Eco_Object* OBJECTS = NULL;

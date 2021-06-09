@@ -1,7 +1,7 @@
 #include "closure.h"
 
 #include "type.h"
-#include "../vm/memory.h"
+#include "../vm/memory/memory.h"
 #include "../vm/environment.h"
 
 

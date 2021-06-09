@@ -2,7 +2,7 @@
 
 #include "object.h"
 #include "type.h"
-#include "../vm/memory.h"
+#include "../vm/memory/memory.h"
 
 
 
