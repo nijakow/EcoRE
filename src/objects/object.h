@@ -13,8 +13,12 @@ struct Eco_Message;
 
 struct Eco_Object
 {
-    struct Eco_Object* next;
-    struct Eco_Type*   type;
+    struct Eco_Object*  next;
+    struct Eco_Type*    type;
+    struct {
+        unsigned int mark_queued : 1;
+        unsigned int mark_done   : 1;
+    }                   header;
 };
 
 static inline void* Eco_Object_At(struct Eco_Object* object, unsigned int offset)

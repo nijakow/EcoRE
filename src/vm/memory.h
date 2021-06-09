@@ -10,3 +10,5 @@ struct Eco_Type;
 
 
 void* Eco_Object_New(struct Eco_Type*, unsigned int);
+
+void Eco_GC();
