@@ -69,6 +69,22 @@ typedef struct Eco_Any
 } Eco_Any;
 
 
+static inline bool Eco_Any_IsPointer(Eco_Any* any)
+{
+    return any->type == Eco_Value_Type_POINTER;
+}
+
+static inline bool Eco_Any_IsInteger(Eco_Any* any)
+{
+    return any->type == Eco_Value_Type_INTEGER;
+}
+
+static inline bool Eco_Any_IsFloating(Eco_Any* any)
+{
+    return any->type == Eco_Value_Type_FLOATING;
+}
+
+
 static inline void Eco_Any_AssignPointer(Eco_Any* any, struct Eco_Object* object)
 {
     any->value.pointer = object;
