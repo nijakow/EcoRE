@@ -14,6 +14,7 @@ void Eco_GC_MarkRoots(struct Eco_GC_State* state)
 {
     Eco_Type_Mark(state, Eco_Type_TYPE_TYPE);
     Eco_Type_Mark(state, Eco_Type_GROUP_TYPE);
+    Eco_Type_Mark(state, Eco_Type_CODE_TYPE);
     Eco_Type_Mark(state, Eco_Type_CLOSURE_TYPE);
 }
 

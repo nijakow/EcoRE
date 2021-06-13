@@ -59,6 +59,7 @@ void Eco_Type_Mark(struct Eco_GC_State*, struct Eco_Type*);
 
 extern struct Eco_Type* Eco_Type_TYPE_TYPE;
 extern struct Eco_Type* Eco_Type_GROUP_TYPE;
+extern struct Eco_Type* Eco_Type_CODE_TYPE;
 extern struct Eco_Type* Eco_Type_CLOSURE_TYPE;
 
 void Eco_Type_InitializeTypes();

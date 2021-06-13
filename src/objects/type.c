@@ -5,13 +5,8 @@
 #include "../vm/fiber.h"
 #include "../vm/memory/gc.h"
 #include "group.h"
+#include "code.h"
 #include "closure.h"
-
-
-struct Eco_Type* Eco_Type_TYPE_TYPE = NULL;
-struct Eco_Type* Eco_Type_GROUP_TYPE = NULL;
-struct Eco_Type* Eco_Type_CLOSURE_TYPE = NULL;
-
 
 
 bool Eco_Type_Slot_GetValue(struct Eco_Type_Slot* slot, struct Eco_Object* object, Eco_Any* location)
@@ -85,6 +80,13 @@ struct Eco_Type* Eco_Type_MakePrefabType(struct Eco_Type_Shared* shared, unsigne
 }
 
 
+
+struct Eco_Type* Eco_Type_TYPE_TYPE = NULL;
+struct Eco_Type* Eco_Type_GROUP_TYPE = NULL;
+struct Eco_Type* Eco_Type_CODE_TYPE = NULL;
+struct Eco_Type* Eco_Type_CLOSURE_TYPE = NULL;
+
+
 static struct Eco_Type_Shared Eco_Type_Shared_TYPE = {
     .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Object_Send,
     .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Type_Mark,
@@ -94,6 +96,11 @@ static struct Eco_Type_Shared Eco_Type_Shared_GROUP = {
     .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Group_Send,
     .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Group_Mark,
     .del  = (void(*)(struct Eco_Object*)) Eco_Group_Del
+};
+static struct Eco_Type_Shared Eco_Type_Shared_CODE = {
+    .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Object_Send,
+    .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Code_Mark,
+    .del  = (void(*)(struct Eco_Object*)) Eco_Code_Del
 };
 static struct Eco_Type_Shared Eco_Type_Shared_CLOSURE = {
     .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Object_Send,
@@ -107,5 +114,6 @@ void Eco_Type_InitializeTypes()
     Eco_Type_TYPE_TYPE->_.type = Eco_Type_TYPE_TYPE;
 
     Eco_Type_GROUP_TYPE        = Eco_Type_MakePrefabType(&Eco_Type_Shared_GROUP, 0);
+    Eco_Type_CODE_TYPE         = Eco_Type_MakePrefabType(&Eco_Type_Shared_CODE, 0);
     Eco_Type_CLOSURE_TYPE      = Eco_Type_MakePrefabType(&Eco_Type_Shared_CLOSURE, 0);
 }

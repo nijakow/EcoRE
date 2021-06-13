@@ -1,6 +1,7 @@
 #include "closure.h"
 
 #include "type.h"
+#include "code.h"
 #include "../vm/memory/memory.h"
 #include "../vm/environment.h"
 
@@ -21,7 +22,7 @@ struct Eco_Closure* Eco_Closure_New(struct Eco_Code* code, struct Eco_Environmen
 
 void Eco_Closure_Mark(struct Eco_GC_State* state, struct Eco_Closure* closure)
 {
-    /* TODO: Mark Code */
+    Eco_Code_Mark(state, closure->code);
     Eco_Environment_Mark(state, closure->environment);
     Eco_Object_Mark(state, &(closure->_));
 }

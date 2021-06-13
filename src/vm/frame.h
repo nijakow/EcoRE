@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../eco.h"
-#include "code.h"
+#include "../objects/code.h"
 
 struct Eco_Environment;
 

@@ -13,6 +13,7 @@ SOURCES = \
 objects/type.c \
 objects/object.c \
 objects/group.c \
+objects/code.c \
 objects/closure.c \
 vm/memory/memory.c \
 vm/memory/gc_state.c \

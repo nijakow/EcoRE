@@ -1,9 +1,9 @@
 #include "fiber.h"
 
+#include "../objects/code.h"
 #include "../objects/closure.h"
 
 #include "bytecodes.h"
-#include "code.h"
 #include "environment.h"
 #include "frame.h"
 #include "send.h"
