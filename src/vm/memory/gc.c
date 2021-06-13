@@ -12,7 +12,9 @@ extern struct Eco_Object* Eco_OBJECTS;
 
 void Eco_GC_MarkRoots(struct Eco_GC_State* state)
 {
-    /* TODO */
+    Eco_Type_Mark(state, Eco_Type_TYPE_TYPE);
+    Eco_Type_Mark(state, Eco_Type_GROUP_TYPE);
+    Eco_Type_Mark(state, Eco_Type_CLOSURE_TYPE);
 }
 
 void Eco_GC_MarkLoop(struct Eco_GC_State* state)
