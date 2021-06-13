@@ -21,11 +21,14 @@ struct Eco_Closure* Eco_Closure_New(struct Eco_Code* code, struct Eco_Environmen
 
 void Eco_Closure_Mark(struct Eco_GC_State* state, struct Eco_Closure* closure)
 {
-    /* TODO */
+    /* TODO: Mark Code */
+    Eco_Environment_Mark(state, closure->environment);
+    Eco_Object_Mark(state, &(closure->_));
 }
 
 void Eco_Closure_Del(struct Eco_Closure* closure)
 {
     Eco_Environment_Decr(closure->environment);
+    Eco_Object_Del(&(closure->_));
 }
 

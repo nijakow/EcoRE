@@ -30,7 +30,7 @@ bool Eco_Group_Send(struct Eco_Message* message, struct Eco_Group* group)
 
 void Eco_Group_Mark(struct Eco_GC_State* state, struct Eco_Group* group)
 {
-    /* TODO */
+    Eco_Object_Mark(state, &(group->_));
 }
 
 void Eco_Group_Del(struct Eco_Group* group)
@@ -38,5 +38,6 @@ void Eco_Group_Del(struct Eco_Group* group)
     if (group->object_alloc > 0) {
         Eco_Memory_Free(group->body.multi.objects);
     }
+    Eco_Object_Del(&(group->_));
 }
 
