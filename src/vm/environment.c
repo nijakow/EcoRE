@@ -35,3 +35,18 @@ void Eco_Environment_Decr(struct Eco_Environment* environment)
         environment->reference_count--;
     }
 }
+
+void Eco_Environment_Mark(struct Eco_GC_State* state, struct Eco_Environment* environment)
+{
+    unsigned int  i;
+
+    while (environment != NULL)
+    {
+        for (i = 0; i < environment->var_count; i++)
+        {
+            Eco_GC_State_MarkAny(state, &(environment->vars[i]));
+        }
+
+        environment = environment->link;
+    }
+}

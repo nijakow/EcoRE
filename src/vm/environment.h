@@ -2,7 +2,8 @@
 
 #include "../eco.h"
 
-#include "memory.h"
+#include "memory/memory.h"
+#include "memory/gc.h"
 
 
 struct Eco_Environment
@@ -25,3 +26,5 @@ static inline void Eco_Environment_Incr(struct Eco_Environment* environment)
 }
 
 void Eco_Environment_Decr(struct Eco_Environment*);
+
+void Eco_Environment_Mark(struct Eco_GC_State*, struct Eco_Environment*);
