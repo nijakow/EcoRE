@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../eco.h"
+#include "object.h"
 
 
 struct Eco_Code;
@@ -38,7 +39,6 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message*, struct Eco_Object*, struct Eco_Ty
 
 struct Eco_Type_Shared
 {
-    bool is_wired_in;
     bool (*send)(struct Eco_Message*, struct Eco_Object*);
     void (*mark)(struct Eco_GC_State*, struct Eco_Object*);
     void (*del)(struct Eco_Object*);
@@ -46,6 +46,8 @@ struct Eco_Type_Shared
 
 struct Eco_Type
 {
+    struct Eco_Object        _;
+
     struct Eco_Type_Shared*  shared;
 
     unsigned int             slot_count;
@@ -53,11 +55,8 @@ struct Eco_Type
 };
 
 
-#define TYPE_DEFINITION(NAME, SEND, MARK, DEL, SLOTCOUNT, SLOTS) \
-struct Eco_Type_Shared NAME ## _Shared_Type = { \
-    true, \
-    (bool (*)(struct Eco_Message*, struct Eco_Object*)) SEND, \
-    (void (*)(struct Eco_GC_State*, struct Eco_Object*)) MARK, \
-    (void (*)(struct Eco_Object*)) DEL \
-}; \
-struct Eco_Type        NAME ## _Type        = { & NAME ## _Shared_Type, SLOTCOUNT, SLOTS }
+extern struct Eco_Type* Eco_Type_TYPE_TYPE;
+extern struct Eco_Type* Eco_Type_GROUP_TYPE;
+extern struct Eco_Type* Eco_Type_CLOSURE_TYPE;
+
+void Eco_Type_InitializeTypes();

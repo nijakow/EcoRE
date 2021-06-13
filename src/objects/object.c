@@ -2,9 +2,27 @@
 
 #include "type.h"
 #include "../vm/send.h"
+#include "../vm/memory/memory.h"
 
 
-bool Eco_Send_ToObject(struct Eco_Message* message, struct Eco_Object* target)
+struct Eco_Object* Eco_OBJECTS = NULL;
+
+
+void* Eco_Object_New(struct Eco_Type* type, unsigned int size)
+{
+    struct Eco_Object* object;
+
+    object = Eco_Memory_Alloc(size);
+
+    object->next = Eco_OBJECTS;
+    Eco_OBJECTS = object;
+
+    object->type = type;
+
+    return object;
+}
+
+bool Eco_Object_Send(struct Eco_Message* message, struct Eco_Object* target)
 {
     unsigned int           i;
     Eco_Any                value;
@@ -45,4 +63,13 @@ bool Eco_Send_ToObject(struct Eco_Message* message, struct Eco_Object* target)
     }
 
     return false;
+}
+
+void Eco_Object_Mark(struct Eco_GC_State* state, struct Eco_Object* object)
+{
+    /* TODO */
+}
+
+void Eco_Object_Del(struct Eco_Object* object)
+{
 }
