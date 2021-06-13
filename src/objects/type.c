@@ -56,13 +56,25 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message* message, struct Eco_Object* object
 
 void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
 {
-    /* TODO */
+    unsigned int  i;
+
+    for (i = 0; i < type->slot_count; i++)
+    {
+        switch (type->slots[i].type)
+        {
+            case Eco_Type_Slot_Type_INLINED:
+                break;
+            case Eco_Type_Slot_Type_CODE:
+                Eco_Code_Mark(state, type->slots[i].body.code);
+                break;
+        }
+    }
+
     Eco_Object_Mark(state, &(type->_));
 }
 
 void Eco_Type_Del(struct Eco_Type* type)
 {
-    /* TODO */
     Eco_Object_Del(&(type->_));
 }
 
