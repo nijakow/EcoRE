@@ -27,3 +27,6 @@ static inline struct Eco_Frame* Eco_Fiber_Top(struct Eco_Fiber* fiber)
 }
 
 bool Eco_Fiber_Enter(struct Eco_Fiber*, struct Eco_Message*, struct Eco_Code*, struct Eco_Environment*);
+
+void Eco_Fiber_Run(struct Eco_Fiber*);
+
