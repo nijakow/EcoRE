@@ -21,6 +21,7 @@ vm/memory/gc.c \
 vm/environment.c \
 vm/fiber.c \
 vm/send.c \
+vm/vm.c \
 main.c
 
 OBJECTS = $(SOURCES:.c=.o)

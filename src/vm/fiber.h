@@ -11,6 +11,11 @@ struct Eco_Environment;
 
 struct Eco_Fiber
 {
+    struct Eco_Fiber*  next;
+    struct Eco_Fiber*  previous;
+    struct Eco_Fiber*  next_in_queue;
+    struct Eco_Fiber*  previous_in_queue;
+
     unsigned int       stack_size;
     unsigned int       stack_alloc_ptr;
     char               stack[];
