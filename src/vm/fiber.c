@@ -31,7 +31,11 @@ void Eco_Fiber_MoveToQueue(struct Eco_Fiber* fiber, struct Eco_Fiber** queue)
 {
     if (fiber->queue != NULL) {
         if (*(fiber->queue) == fiber) {
-            *(fiber->queue) = fiber->queue_next;
+            if (fiber->queue_next == fiber) {
+                *(fiber->queue) = NULL;
+            } else {
+                *(fiber->queue) = fiber->queue_next;
+            }
         }
         fiber->queue_prev->queue_next = fiber->queue_next;
         fiber->queue_next->queue_prev = fiber->queue_prev;

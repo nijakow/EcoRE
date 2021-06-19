@@ -6,6 +6,7 @@
 void Eco_VM_Create(struct Eco_VM* vm)
 {
     vm->fibers = NULL;
+    vm->paused_queue = NULL;
     vm->running_queue = NULL;
 }
 
