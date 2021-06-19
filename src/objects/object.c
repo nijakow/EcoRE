@@ -3,7 +3,7 @@
 #include "type.h"
 #include "../vm/send.h"
 #include "../vm/memory/memory.h"
-
+#include "../vm/memory/gc.h"
 
 struct Eco_Object* Eco_OBJECTS = NULL;
 
@@ -70,7 +70,7 @@ bool Eco_Object_Send(struct Eco_Message* message, struct Eco_Object* target)
 
 void Eco_Object_Mark(struct Eco_GC_State* state, struct Eco_Object* object)
 {
-    /* TODO */
+    Eco_GC_State_MarkObject(state, (struct Eco_Object*) object->type);
 }
 
 void Eco_Object_Del(struct Eco_Object* object)
