@@ -4,6 +4,10 @@
 #include "interpreter.h"
 
 
+struct Eco_VM Eco_THE_VM;
+
+
+
 void Eco_VM_Create(struct Eco_VM* vm)
 {
     vm->fiber_queues.running = NULL;

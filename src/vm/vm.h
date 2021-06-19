@@ -13,6 +13,8 @@ struct Eco_VM
     } fiber_queues;
 };
 
+extern struct Eco_VM Eco_THE_VM;
+
 
 void Eco_VM_Create(struct Eco_VM*);
 void Eco_VM_Destroy(struct Eco_VM*);

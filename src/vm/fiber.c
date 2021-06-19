@@ -1,7 +1,9 @@
 #include "fiber.h"
 
 #include "memory/memory.h"
+#include "memory/gc.h"
 
+#include "frame.h"
 
 
 struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
@@ -25,6 +27,22 @@ void Eco_Fiber_Delete(struct Eco_Fiber* fiber)
 {
     Eco_Fiber_MoveToQueue(fiber, NULL);
     Eco_Memory_Free(fiber);
+}
+
+void Eco_Fiber_Mark(struct Eco_GC_State* state, struct Eco_Fiber* fiber)
+{
+    unsigned int       offset;
+    struct Eco_Frame*  frame;
+
+    offset = fiber->stack_alloc_ptr;
+    do
+    {
+        frame = Eco_Fiber_FrameAt(fiber, offset);
+
+        Eco_Frame_Mark(state, frame);
+
+        offset -= frame->delta;
+    } while (frame->delta > 0);
 }
 
 void Eco_Fiber_MoveToQueue(struct Eco_Fiber* fiber, struct Eco_Fiber** queue)

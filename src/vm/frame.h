@@ -4,6 +4,7 @@
 #include "../objects/code.h"
 
 struct Eco_Environment;
+struct Eco_GC_State;
 
 
 struct Eco_Frame
@@ -20,6 +21,10 @@ struct Eco_Frame
     unsigned int             register_count;
     Eco_Any                  registers[];
 };
+
+
+void Eco_Frame_Mark(struct Eco_GC_State*, struct Eco_Frame*);
+
 
 static inline u8 Eco_Frame_NextU8(struct Eco_Frame* frame)
 {

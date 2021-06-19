@@ -6,6 +6,8 @@
 #include "../../objects/object.h"
 #include "../../objects/type.h"
 
+#include "../vm.h"
+
 
 extern struct Eco_Object* Eco_OBJECTS;
 
@@ -16,6 +18,8 @@ void Eco_GC_MarkRoots(struct Eco_GC_State* state)
     Eco_Type_Mark(state, Eco_Type_GROUP_TYPE);
     Eco_Type_Mark(state, Eco_Type_CODE_TYPE);
     Eco_Type_Mark(state, Eco_Type_CLOSURE_TYPE);
+
+    Eco_VM_Mark(state, &Eco_THE_VM);
 }
 
 void Eco_GC_MarkLoop(struct Eco_GC_State* state)

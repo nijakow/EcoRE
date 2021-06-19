@@ -14,15 +14,19 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber*        fiber,
                                       unsigned int             dynamics_count,
                                       struct Eco_Environment*  link)
 {
+    unsigned int       i;
     unsigned int       delta;
     struct Eco_Frame*  new_frame;
 
-    delta = sizeof(struct Eco_Frame) * Eco_Fiber_Top(fiber)->register_count * sizeof(Eco_Any);
+    if (Eco_Fiber_HasTop(fiber)) {
+        delta = sizeof(struct Eco_Frame) * Eco_Fiber_Top(fiber)->register_count * sizeof(Eco_Any);
+    } else {
+        delta = 0;
+    }
 
-    fiber->stack_size += delta;
+    fiber->top = Eco_Fiber_FrameAt(fiber, fiber->stack_alloc_ptr);
 
-    new_frame = Eco_Fiber_Top(fiber);
-
+    new_frame                 = fiber->top;
     new_frame->delta          = delta;
     new_frame->register_count = register_count;
 
@@ -30,6 +34,10 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber*        fiber,
         new_frame->dynamic_vars = Eco_Environment_New(dynamics_count, link);
     } else {
         new_frame->dynamic_vars = NULL;
+    }
+
+    for (i = 0; i < register_count; i++) {
+        Eco_Any_AssignInteger(&(new_frame->registers[i]), 0);   /* TODO: Improve that */
     }
 
     return new_frame;
@@ -45,7 +53,12 @@ void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
         Eco_Environment_Decr(frame->dynamic_vars);
     }
 
-    fiber->stack_size -= frame->delta;
+    if (fiber->stack_alloc_ptr == 0) {
+        fiber->top = NULL;
+    } else {
+        fiber->stack_alloc_ptr = fiber->stack_alloc_ptr - frame->delta;
+        fiber->top             = Eco_Fiber_FrameAt(fiber, fiber->stack_alloc_ptr);
+    }
 }
 
 
@@ -167,18 +180,17 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 
                         if (Eco_Fiber_Top(fiber)->dynamic_vars == next) {
                             i    = i + 1;
-                            next = next->link;
-                        } else {
+                            next = next->link;  /* TODO, XXX: Increment reference count, otherwise they might get deleted too early */
+                        } else if (Eco_Fiber_HasTop(fiber)) {
                             Eco_Fiber_PopFrame(fiber);
-                            if (!Eco_Fiber_HasTop(fiber)) {
-                                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_RETURNFAILED);
-                                goto end;
-                            }
+                        } else {
+                            Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_RETURNFAILED);
+                            goto end;
                         }
                     }
                 }
 
-                Eco_Fiber_PopFrame(fiber);
+                if (Eco_Fiber_HasTop(fiber)) Eco_Fiber_PopFrame(fiber);
 
                 top = Eco_Fiber_Top(fiber); /* TODO: Do the "slow dispatch" code */
 

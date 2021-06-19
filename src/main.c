@@ -1,7 +1,9 @@
 #include <stdio.h>
 
-#include "objects/object.h"
-#include "objects/type.h"
+
+void Eco_Init();
+void Eco_Terminate();
+void Eco_Run();
 
 
 void Eco_Banner()
@@ -17,6 +19,9 @@ void Eco_Banner()
 int main(int argc, char *argv[])
 {
     Eco_Banner();
+    Eco_Init();
+    Eco_Run();
+    Eco_Terminate();
     return 0;
 }
 
