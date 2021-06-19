@@ -17,7 +17,7 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber*        fiber,
     unsigned int       delta;
     struct Eco_Frame*  new_frame;
 
-    delta = sizeof(struct Eco_Frame) * Eco_Fiber_Top(fiber)->register_count * sizeof(Eco_Any); 
+    delta = sizeof(struct Eco_Frame) * Eco_Fiber_Top(fiber)->register_count * sizeof(Eco_Any);
 
     fiber->stack_size += delta;
 
@@ -38,7 +38,7 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber*        fiber,
 void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
 {
     struct Eco_Frame*  frame;
-    
+
     frame = Eco_Fiber_Top(fiber);
 
     if (frame->dynamic_vars != NULL) {
@@ -58,7 +58,7 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*        fiber,
     struct Eco_Frame*  frame;
 
     if (code->arg_count != (message->body.send.arg_count + 1)) {  /* The +1 stands for the SELF value */
-        /* TODO: Error */
+        Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ARGERROR);
         return false;
     }
 
@@ -84,7 +84,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 
     top = Eco_Fiber_Top(fiber);
 
-    while (true)
+    while (true)  /* TODO: Execution limit */
     {
         switch (Eco_Frame_NextU8(top))
         {
@@ -126,7 +126,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 if (Eco_Send(&message, message.body.send.arg_location)) {
                     top = Eco_Fiber_Top(fiber); /* TODO: Do the "slow dispatch" code */
                 } else {
-                    /* TODO: Error */
+                    Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
                 }
 
                 break;
@@ -142,7 +142,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 message.type              = Eco_Message_Type_ASSIGN;
 
                 if (!Eco_Send(&message, &(top->registers[reg]))) {
-                    /* TODO: Error */
+                    Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ASSIGNFAILED);
                 }
 
                 break;
@@ -160,13 +160,20 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 
                     while (i <= depth)  /* Since we start with next = top->dynamic_vars, we have to use "<=" */
                     {
-                        /* TODO: Error if next == NULL */
+                        if (next == NULL) {
+                            Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_RETURNFAILED);
+                            goto error;
+                        }
+
                         if (Eco_Fiber_Top(fiber)->dynamic_vars == next) {
                             i    = i + 1;
                             next = next->link;
                         } else {
                             Eco_Fiber_PopFrame(fiber);
-                            /* TODO: Error if there are no frames left */
+                            if (!Eco_Fiber_HasTop(fiber)) {
+                                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_RETURNFAILED);
+                                goto error;
+                            }
                         }
                     }
                 }
@@ -191,10 +198,14 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 break;
             }
             default: {
-                /* TODO: Error */
+                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_NOOPCODE);
                 break;
             }
         }
     }
+
+  error:
+    /* TODO: Error handling */
+    return;
 }
 
