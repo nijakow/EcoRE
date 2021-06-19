@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "object.h"
 
 #include "type.h"
@@ -70,7 +72,12 @@ bool Eco_Object_Send(struct Eco_Message* message, struct Eco_Object* target)
 
 void Eco_Object_Mark(struct Eco_GC_State* state, struct Eco_Object* object)
 {
-    Eco_GC_State_MarkObject(state, (struct Eco_Object*) object->type);
+    /*
+     * It's easy to confuse Eco_Object_Mark(...) and Eco_GC_State_MarkObject(...)!
+     * This simple assert statement ensures that this function is only called by
+     * Eco_GC_State_MarkObject(...) - as it should be!
+     */
+    assert(object->header.mark_queued);
 }
 
 void Eco_Object_Del(struct Eco_Object* object)

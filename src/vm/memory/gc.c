@@ -14,10 +14,10 @@ extern struct Eco_Object* Eco_OBJECTS;
 
 void Eco_GC_MarkRoots(struct Eco_GC_State* state)
 {
-    Eco_Type_Mark(state, Eco_Type_TYPE_TYPE);
-    Eco_Type_Mark(state, Eco_Type_GROUP_TYPE);
-    Eco_Type_Mark(state, Eco_Type_CODE_TYPE);
-    Eco_Type_Mark(state, Eco_Type_CLOSURE_TYPE);
+    Eco_GC_State_MarkObject(state, Eco_Type_TYPE_TYPE);
+    Eco_GC_State_MarkObject(state, Eco_Type_GROUP_TYPE);
+    Eco_GC_State_MarkObject(state, Eco_Type_CODE_TYPE);
+    Eco_GC_State_MarkObject(state, Eco_Type_CLOSURE_TYPE);
 
     Eco_VM_Mark(state, &Eco_THE_VM);
 }
@@ -66,10 +66,19 @@ void Eco_GC_Sweep(struct Eco_GC_State* state)
 
 void Eco_GC()
 {
-    struct Eco_GC_State state;
+    struct Eco_GC_State  state;
 
     Eco_GC_State_Create(&state);
     Eco_GC_Mark(&state);
+    Eco_GC_Sweep(&state);
+    Eco_GC_State_Destroy(&state);
+}
+
+void Eco_FreeAll()
+{
+    struct Eco_GC_State  state;
+
+    Eco_GC_State_Create(&state);
     Eco_GC_Sweep(&state);
     Eco_GC_State_Destroy(&state);
 }

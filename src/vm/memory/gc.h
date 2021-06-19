@@ -6,11 +6,15 @@
 #include "../../objects/object.h"
 
 
-static inline void Eco_GC_State_MarkObject(struct Eco_GC_State* state, struct Eco_Object* object)
+static inline void Eco_GC_State_MarkObject(struct Eco_GC_State* state, void* object)
 {
-    if (!object->header.mark_queued) {
-        object->header.mark_queued = true;
-        Eco_GC_State_QueueObject(state, object);
+    struct Eco_Object*  the_object;
+
+    the_object = (struct Eco_Object*) object;
+
+    if (!the_object->header.mark_queued) {
+        the_object->header.mark_queued = true;
+        Eco_GC_State_QueueObject(state, the_object);
     }
 }
 
@@ -22,3 +26,4 @@ static inline void Eco_GC_State_MarkAny(struct Eco_GC_State* state, Eco_Any* any
 }
 
 void Eco_GC();
+void Eco_FreeAll();

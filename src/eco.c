@@ -17,6 +17,7 @@ void Eco_Init()
 
 void Eco_Terminate()
 {
+    Eco_FreeAll();
     Eco_VM_Destroy(&Eco_THE_VM);
 }
 
