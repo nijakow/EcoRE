@@ -20,9 +20,20 @@ void Eco_VM_Destroy(struct Eco_VM* vm)
     while (vm->fiber_queues.paused != NULL)  Eco_Fiber_Delete(vm->fiber_queues.paused);
 }
 
+
+static void Eco_VM_MarkQueue(struct Eco_GC_State* state, struct Eco_Fiber* queue)
+{
+    while (queue != NULL)
+    {
+        Eco_Fiber_Mark(state, queue);
+        queue = queue->queue_next;
+    }
+}
+
 void Eco_VM_Mark(struct Eco_GC_State* state, struct Eco_VM* vm)
 {
-    /* TODO */
+    Eco_VM_MarkQueue(state, vm->fiber_queues.running);
+    Eco_VM_MarkQueue(state, vm->fiber_queues.paused);
 }
 
 void Eco_VM_HandleEvents(struct Eco_VM* vm)

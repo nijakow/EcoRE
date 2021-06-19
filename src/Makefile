@@ -31,7 +31,7 @@ OBJECTS = $(SOURCES:.c=.o)
 DEPENDS = $(patsubst %.c,%.d,$(SOURCES))
 
 LDFLAGS =
-CFLAGS =
+CFLAGS = -g
 
 
 %.o: %.c
@@ -44,11 +44,22 @@ all: $(EXECUTABLE)
 
 
 .phony: run
-run: all
+run: $(EXECUTABLE)
 	$(EXECUTABLE)
 
-.phony: clean
+.phony: debug
+debug: $(EXECUTABLE)
+	gdb $(EXECUTABLE)
+
+.phony: oclean
 clean:
-	- $(RM) $(EXECUTABLE) $(OBJECTS) $(DEPENDS)
+	- $(RM) $(OBJECTS) $(DEPENDS)
+
+.phony: clean
+fclean: clean
+	- $(RM) $(EXECUTABLE)
+
+.phony: re
+re: clean all
 
 -include $(DEPENDS)

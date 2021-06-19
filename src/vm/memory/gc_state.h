@@ -11,6 +11,9 @@ struct Eco_GC_State
 };
 
 
+void Eco_GC_State_Create(struct Eco_GC_State*);
+void Eco_GC_State_Destroy(struct Eco_GC_State*);
+
 static inline bool Eco_GC_State_HasObjectsToMark(struct Eco_GC_State* state)
 {
     return state->pages != NULL;

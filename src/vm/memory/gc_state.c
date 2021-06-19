@@ -14,6 +14,18 @@ struct Eco_GC_Page
 };
 
 
+
+void Eco_GC_State_Create(struct Eco_GC_State* state)
+{
+    state->pages = NULL;
+}
+
+void Eco_GC_State_Destroy(struct Eco_GC_State* state)
+{
+    /* TODO, XXX */
+}
+
+
 void Eco_GC_State_QueueObject(struct Eco_GC_State* state, struct Eco_Object* object)
 {
     struct Eco_GC_Page*  page;

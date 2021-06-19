@@ -68,6 +68,8 @@ void Eco_GC()
 {
     struct Eco_GC_State state;
 
+    Eco_GC_State_Create(&state);
     Eco_GC_Mark(&state);
     Eco_GC_Sweep(&state);
+    Eco_GC_State_Destroy(&state);
 }
