@@ -2,6 +2,8 @@
 
 #include "../eco.h"
 
+#include "fiber_states.h"
+
 
 struct Eco_Frame;
 struct Eco_Message;
@@ -9,24 +11,6 @@ struct Eco_Code;
 struct Eco_Environment;
 struct Eco_VM;
 
-
-enum Eco_Fiber_State
-{
-    Eco_Fiber_State_RUNNING,
-    Eco_Fiber_State_PAUSED,
-    Eco_Fiber_State_TERMINATED,
-    Eco_Fiber_State_ERROR,
-    Eco_Fiber_State_ERROR_NOOPCODE,
-    Eco_Fiber_State_ERROR_ARGERROR,
-    Eco_Fiber_State_ERROR_SENDFAILED,
-    Eco_Fiber_State_ERROR_ASSIGNFAILED,
-    Eco_Fiber_State_ERROR_RETURNFAILED,
-};
-
-static inline bool Eco_Fiber_State_IsError(enum Eco_Fiber_State state)
-{
-    return state >= Eco_Fiber_State_ERROR;
-}
 
 struct Eco_Fiber
 {
