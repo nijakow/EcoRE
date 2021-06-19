@@ -22,7 +22,14 @@ void Eco_GC_State_Create(struct Eco_GC_State* state)
 
 void Eco_GC_State_Destroy(struct Eco_GC_State* state)
 {
-    /* TODO, XXX */
+    struct Eco_GC_Page*  next_page;
+
+    while (state->pages != NULL)
+    {
+        next_page = state->pages->next;
+        Eco_Memory_Free(state->pages);
+        state->pages = next_page;
+    }
 }
 
 

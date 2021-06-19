@@ -14,10 +14,13 @@ void* Eco_Object_New(struct Eco_Type* type, unsigned int size)
 
     object = Eco_Memory_Alloc(size);
 
-    object->next = Eco_OBJECTS;
-    Eco_OBJECTS = object;
+    object->type               = type;
 
-    object->type = type;
+    object->header.mark_queued = false;
+    object->header.mark_done   = false;
+
+    object->next               = Eco_OBJECTS;
+    Eco_OBJECTS                = object;
 
     return object;
 }
