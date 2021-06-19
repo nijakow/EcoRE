@@ -12,14 +12,15 @@ struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
 
     fiber = Eco_Memory_Alloc(sizeof(struct Eco_Fiber) + stack_size);
 
-    fiber->state = Eco_Fiber_State_PAUSED;
+    fiber->state           = Eco_Fiber_State_PAUSED;
 
-    fiber->vm = vm;
-    fiber->queue = NULL;
-    fiber->queue_prev = NULL;
-    fiber->queue_next = NULL;
+    fiber->vm              = vm;
+    fiber->queue           = NULL;
+    fiber->queue_prev      = NULL;
+    fiber->queue_next      = NULL;
 
-    fiber->stack_size = stack_size;
+    fiber->top             = NULL;
+    fiber->stack_size      = stack_size;
     fiber->stack_alloc_ptr = 0;
 }
 
