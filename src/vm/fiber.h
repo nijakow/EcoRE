@@ -61,7 +61,3 @@ static inline struct Eco_Frame* Eco_Fiber_Top(struct Eco_Fiber* fiber)
 struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM*, unsigned int);
 void Eco_Fiber_Delete(struct Eco_Fiber*);
 void Eco_Fiber_MoveToQueue(struct Eco_Fiber*, struct Eco_Fiber**);
-
-bool Eco_Fiber_Enter(struct Eco_Fiber*, struct Eco_Message*, struct Eco_Code*, struct Eco_Environment*);
-
-void Eco_Fiber_Run(struct Eco_Fiber*);
