@@ -51,13 +51,9 @@ run: $(EXECUTABLE)
 debug: $(EXECUTABLE)
 	gdb $(EXECUTABLE)
 
-.phony: oclean
-clean:
-	- $(RM) $(OBJECTS) $(DEPENDS)
-
 .phony: clean
-fclean: clean
-	- $(RM) $(EXECUTABLE)
+clean:
+	- $(RM) $(EXECUTABLE) $(OBJECTS) $(DEPENDS)
 
 .phony: re
 re: clean all
