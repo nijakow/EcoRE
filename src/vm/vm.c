@@ -22,15 +22,24 @@ void Eco_VM_HandleEvents(struct Eco_VM* vm)
 
 void Eco_VM_Run(struct Eco_VM* vm)
 {
-    struct Eco_Fiber*  next_fiber;
+    struct Eco_Fiber*  fiber;
 
     while (true)
     {
         if (vm->running_queue != NULL) {
-            Eco_Fiber_Run(vm->running_queue);
-            vm->running_queue = vm->running_queue->next;
+            fiber = vm->running_queue;
+
+            Eco_Fiber_Run(fiber);
+
+            if (fiber->state == Eco_Fiber_State_RUNNING) {
+                vm->running_queue = vm->running_queue->queue_next;
+            } else if (Eco_Fiber_State_IsError(fiber->state)) {
+                /* TODO: Catch error */
+                Eco_Fiber_Delete(fiber);
+            } else if (fiber->state == Eco_Fiber_State_TERMINATED) {
+                Eco_Fiber_Delete(fiber);
+            }
         }
         Eco_VM_HandleEvents(vm);
     }
 }
-
