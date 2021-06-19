@@ -3,6 +3,7 @@
 #include "object.h"
 #include "../vm/send.h"
 #include "../vm/fiber.h"
+#include "../vm/interpreter.h"
 #include "../vm/memory/gc.h"
 #include "group.h"
 #include "code.h"
