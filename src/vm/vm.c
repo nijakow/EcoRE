@@ -45,7 +45,9 @@ void Eco_VM_HandleEvents(struct Eco_VM* vm)
 
 static inline void Eco_VM_AdvanceQueue(struct Eco_Fiber** queue)
 {
-    *queue = (*queue)->queue_next;
+    if (*queue != NULL) {
+        *queue = (*queue)->queue_next;
+    }
 }
 
 void Eco_VM_Run(struct Eco_VM* vm)
