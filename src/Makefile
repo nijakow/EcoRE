@@ -24,6 +24,7 @@ vm/fiber.c \
 vm/send.c \
 vm/interpreter.c \
 vm/vm.c \
+io/econnect/econnect.c \
 eco.c \
 main.c
 

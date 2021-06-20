@@ -12,7 +12,7 @@ struct Eco_IO_StringStream
 
 static inline bool Eco_IO_StringStream_HasMore(struct Eco_IO_StringStream* stream)
 {
-    return stream->current < end;
+    return stream->current < stream->end;
 }
 
 static inline char Eco_IO_StringStream_PeekChar(struct Eco_IO_StringStream* stream)
