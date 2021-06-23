@@ -12,6 +12,7 @@ EXECUTABLE = ./ecore.exe
 SOURCES = \
 objects/type.c \
 objects/object.c \
+objects/key.c \
 objects/group.c \
 objects/code.c \
 objects/closure.c \
