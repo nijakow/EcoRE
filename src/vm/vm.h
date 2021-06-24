@@ -1,6 +1,7 @@
 #pragma once
 
 #include "fiber.h"
+#include "../io/net/scheduler.h"
 
 struct Eco_GC_State;
 
@@ -11,6 +12,8 @@ struct Eco_VM
         struct Eco_Fiber*  running;
         struct Eco_Fiber*  paused;
     } fiber_queues;
+
+    struct Eco_Net_Scheduler*  net_scheduler;
 };
 
 extern struct Eco_VM Eco_THE_VM;

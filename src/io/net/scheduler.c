@@ -29,9 +29,11 @@ struct Eco_Net_Scheduler* Eco_Net_Scheduler_New(unsigned int events)
 
 void Eco_Net_Scheduler_Delete(struct Eco_Net_Scheduler* sched)
 {
-    /* TODO: What happens to all the connections? */
-    close(sched->epoll_fd);
-    Eco_Memory_Free(sched);
+    if (sched != NULL) {
+        /* TODO: What happens to all the connections? */
+        close(sched->epoll_fd);
+        Eco_Memory_Free(sched);
+    }
 }
 
 void Eco_Net_Scheduler_Register(struct Eco_Net_Scheduler* sched, struct Eco_Net_Connection* conn)
