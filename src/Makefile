@@ -27,6 +27,7 @@ vm/core/interpreter.c \
 vm/fiber.c \
 vm/vm.c \
 io/econnect/econnect.c \
+io/net/sched.c \
 main.c
 
 OBJECTS = $(SOURCES:.c=.o)
