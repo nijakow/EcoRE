@@ -3,7 +3,7 @@
 #include "object.h"
 
 #include "type.h"
-#include "../vm/send.h"
+#include "../vm/core/send.h"
 #include "../vm/memory/memory.h"
 #include "../vm/memory/gc.h"
 

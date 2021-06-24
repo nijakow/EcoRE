@@ -3,7 +3,7 @@
 #include "memory/memory.h"
 #include "memory/gc.h"
 
-#include "frame.h"
+#include "core/frame.h"
 
 
 struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)

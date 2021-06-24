@@ -10,6 +10,7 @@ endif
 EXECUTABLE = ./ecore.exe
 
 SOURCES = \
+eco.c \
 objects/type.c \
 objects/object.c \
 objects/key.c \
@@ -19,14 +20,13 @@ objects/closure.c \
 vm/memory/memory.c \
 vm/memory/gc_state.c \
 vm/memory/gc.c \
-vm/environment.c \
-vm/frame.c \
+vm/core/environment.c \
+vm/core/frame.c \
+vm/core/send.c \
+vm/core/interpreter.c \
 vm/fiber.c \
-vm/send.c \
-vm/interpreter.c \
 vm/vm.c \
 io/econnect/econnect.c \
-eco.c \
 main.c
 
 OBJECTS = $(SOURCES:.c=.o)

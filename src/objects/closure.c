@@ -2,8 +2,8 @@
 
 #include "type.h"
 #include "code.h"
+#include "../vm/core/environment.h"
 #include "../vm/memory/memory.h"
-#include "../vm/environment.h"
 
 
 struct Eco_Closure* Eco_Closure_New(struct Eco_Code* code, struct Eco_Environment* environment)

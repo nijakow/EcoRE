@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../eco.h"
+#include "../../eco.h"
 
-#include "memory/memory.h"
-#include "memory/gc.h"
+#include "../memory/memory.h"
+#include "../memory/gc.h"
 
 
 struct Eco_Environment

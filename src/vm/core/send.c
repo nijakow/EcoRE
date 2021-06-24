@@ -1,7 +1,7 @@
 #include "send.h"
 
-#include "../objects/object.h"
-#include "../objects/type.h"
+#include "../../objects/object.h"
+#include "../../objects/type.h"
 
 
 

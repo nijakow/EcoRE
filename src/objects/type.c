@@ -1,9 +1,9 @@
 #include "type.h"
 
 #include "object.h"
-#include "../vm/send.h"
+#include "../vm/core/send.h"
 #include "../vm/fiber.h"
-#include "../vm/interpreter.h"
+#include "../vm/core/interpreter.h"
 #include "../vm/memory/gc.h"
 #include "key.h"
 #include "group.h"

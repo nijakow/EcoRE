@@ -1,6 +1,6 @@
 #include "environment.h"
 
-#include "memory/memory.h"
+#include "../memory/memory.h"
 
 
 struct Eco_Environment* Eco_Environment_New(unsigned int size, struct Eco_Environment* link)

@@ -1,7 +1,7 @@
 
-#include "fiber.h"
+#include "../fiber.h"
 
-#include "../objects/closure.h"
+#include "../../objects/closure.h"
 
 #include "bytecodes.h"
 #include "environment.h"

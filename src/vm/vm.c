@@ -1,7 +1,7 @@
 #include "vm.h"
 
 #include "fiber.h"
-#include "interpreter.h"
+#include "core/interpreter.h"
 
 
 struct Eco_VM Eco_THE_VM;
