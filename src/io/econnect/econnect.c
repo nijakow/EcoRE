@@ -1,6 +1,22 @@
 #include "econnect.h"
 
 #include "../../objects/key.h"
+#include "../../vm/memory/memory.h"
+
+
+void Eco_EConnect_State_Create(struct Eco_EConnect_State* state)
+{
+    state->objects_by_id = NULL;
+    state->objects_by_id_max = 0;
+}
+
+void Eco_EConnect_State_Destroy(struct Eco_EConnect_State* state)
+{
+    if (state->objects_by_id != NULL) {
+        Eco_Memory_Free(state->objects_by_id);
+    }
+}
+
 
 
 static inline unsigned int Eco_EConnect_ParseUInt(struct Eco_IO_ByteStream* stream)
@@ -57,11 +73,11 @@ struct Eco_Object* Eco_EConnect_ParseObject_ByID(struct Eco_EConnect_Message* me
     }
 }
 
-void* Eco_EConnect_Message_Process(struct Eco_EConnect_Message* message)
+void* Eco_EConnect_Message_Parse(struct Eco_EConnect_Message* message)
 {
     struct Eco_Key*  msg_key;
 
-    /* TODO: This cast is dangerous! */
+    /* TODO: This unchecked cast is dangerous! */
     msg_key = (struct Eco_Key*) Eco_EConnect_ParseObject_ByID(message);
 
     if (msg_key->econnect_func != NULL) {

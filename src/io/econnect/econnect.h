@@ -9,6 +9,9 @@ struct Eco_EConnect_State
     struct Eco_Object**  objects_by_id;
 };
 
+void Eco_EConnect_State_Create(struct Eco_EConnect_State*);
+void Eco_EConnect_State_Destroy(struct Eco_EConnect_State*);
+
 
 struct Eco_EConnect_Message
 {
@@ -16,4 +19,4 @@ struct Eco_EConnect_Message
     struct Eco_EConnect_State*  state;
 };
 
-void* Eco_EConnect_Message_Process(struct Eco_EConnect_Message*);
+void* Eco_EConnect_Message_Parse(struct Eco_EConnect_Message*);
