@@ -12,13 +12,15 @@ struct Eco_Key* Eco_Key_New(const char* name)
 {
     struct Eco_Key*  key;
 
-    key       = Eco_Object_New(Eco_Type_KEY_TYPE, sizeof(struct Eco_Key));
+    key                = Eco_Object_New(Eco_Type_KEY_TYPE, sizeof(struct Eco_Key));
 
-    key->name = strdup(name);
+    key->name          = strdup(name);
+    key->econnect_func = NULL;
 
-    key->next = Eco_KEYS;
-    key->prev = NULL;
-    Eco_KEYS  = key;
+    key->next          = Eco_KEYS;
+    key->prev          = NULL;
+
+    Eco_KEYS           = key;
 }
 
 struct Eco_Key* Eco_Key_Find(const char* name)

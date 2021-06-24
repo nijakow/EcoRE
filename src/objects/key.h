@@ -5,6 +5,9 @@
 #include "object.h"
 
 
+struct Eco_EConnect_Message;
+
+
 struct Eco_Key
 {
     struct Eco_Object  _;
@@ -13,6 +16,8 @@ struct Eco_Key
     struct Eco_Key*    prev;
 
     char*              name;
+
+    void* (*econnect_func)(struct Eco_EConnect_Message*);
 };
 
 struct Eco_Key* Eco_Key_Find(const char*);
