@@ -37,6 +37,17 @@ struct Eco_Type;
 
 /*
  *
+ *    E c o   M a i n   F u n c t i o n s
+ *
+ */
+
+void Eco_Init();
+void Eco_Terminate();
+void Eco_Run();
+
+
+/*
+ *
  *    u n i o n   E c o _ V a l u e
  *
  */

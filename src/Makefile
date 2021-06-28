@@ -28,6 +28,8 @@ vm/fiber.c \
 vm/vm.c \
 io/econnect/econnect.c \
 io/net/scheduler.c \
+io/net/sockets.c \
+io/net/test.c \
 main.c
 
 OBJECTS = $(SOURCES:.c=.o)
