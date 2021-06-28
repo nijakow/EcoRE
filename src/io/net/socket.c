@@ -1,9 +1,12 @@
-
+#include <stddef.h>
+#include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+#include "socket.h"
 
-int Eco_Net_OpenServerSocketV4(int port, int listening)
+
+int Eco_Net_Socket_OpenServerV4(int port, int listening)
 {
     int                 value;
     int                 sock_fd;
@@ -26,4 +29,14 @@ int Eco_Net_OpenServerSocketV4(int port, int listening)
     listen(sock_fd, listening);
 
     return sock_fd;
+}
+
+int Eco_Net_Socket_AcceptClientV4(int server)
+{
+    return accept(server, NULL, 0);
+}
+
+unsigned int Eco_Net_Socket_Read(int fd, char* buffer, unsigned int bufsize)
+{
+    return read(fd, buffer, bufsize);
 }

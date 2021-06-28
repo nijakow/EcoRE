@@ -27,8 +27,9 @@ vm/core/interpreter.c \
 vm/fiber.c \
 vm/vm.c \
 io/econnect/econnect.c \
+io/net/net.c \
 io/net/scheduler.c \
-io/net/sockets.c \
+io/net/socket.c \
 io/net/test.c \
 main.c
 

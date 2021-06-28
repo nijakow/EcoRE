@@ -23,9 +23,5 @@ void Eco_Terminate()
 
 void Eco_Run()
 {
-    struct Eco_Group*  group;
-
-    group = Eco_Group_New(NULL);
-
-    Eco_GC();
+    Eco_VM_Run(&Eco_THE_VM);
 }

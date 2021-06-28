@@ -43,7 +43,7 @@ void Eco_Net_Scheduler_Register(struct Eco_Net_Scheduler* sched, struct Eco_Net_
     event.events   = EPOLLIN;
     event.data.ptr = conn;
 
-    epoll_ctl(sched->epoll_fd, EPOLL_CTL_ADD, 0, &event);
+    epoll_ctl(sched->epoll_fd, EPOLL_CTL_ADD, conn->fd, &event);
 }
 
 void Eco_Net_Scheduler_Tick(struct Eco_Net_Scheduler* sched, int timeout)
