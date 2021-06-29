@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 #include "eco.h"
-#include "io/net/test.h"
 
 
 void Eco_Banner()
@@ -18,7 +17,6 @@ int main(int argc, char *argv[])
 {
     Eco_Banner();
     Eco_Init();
-    Eco_Net_TestServer(8888);
     Eco_Run();
     Eco_Terminate();
     return 0;
