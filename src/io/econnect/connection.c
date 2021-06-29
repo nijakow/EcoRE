@@ -43,13 +43,14 @@ void Eco_EConnect_Connection_Feed(struct Eco_EConnect_Connection* connection,
                                              connection->message_length,
                                              NULL);
                     Eco_EConnect_Message_Parse(&message);
+                    i += connection->message_length;
                     connection->message_length = 0;
                 } else {
                     connection->message_fill = 0;
                     connection->message      = Eco_Memory_Alloc(connection->message_length * sizeof(char));
                 }
             }
-
+            
             i++;
         } else {
             if (byte_count - i <= connection->message_length - connection->message_fill) {
