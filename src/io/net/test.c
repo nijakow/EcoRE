@@ -18,6 +18,8 @@ void Eco_Net_Test_ClientCallback(struct Eco_Net_Connection* connection, struct E
     if (received > 0) {
         buffer[received] = '\0';
         printf("Received: %s\n", buffer);
+    } else {
+        Eco_Net_Connection_Delete(connection);
     }
 }
 

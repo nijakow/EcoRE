@@ -2,6 +2,7 @@
 
 #include "net.h"
 
+#include "scheduler.h"
 #include "../../vm/memory/memory.h"
 
 
@@ -19,6 +20,9 @@ struct Eco_Net_Connection* Eco_Net_Connection_New(int fd, Eco_Net_ReadCallback c
 
 void Eco_Net_Connection_Delete(struct Eco_Net_Connection* connection)
 {
+    if (connection->scheduler != NULL) {
+        Eco_Net_Scheduler_Unregister(connection->scheduler, connection);
+    }
     close(connection->fd);
     Eco_Memory_Free(connection);
 }

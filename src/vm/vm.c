@@ -43,7 +43,7 @@ void Eco_VM_Mark(struct Eco_GC_State* state, struct Eco_VM* vm)
 void Eco_VM_HandleEvents(struct Eco_VM* vm)
 {
     if (vm->net_scheduler != NULL) {
-        Eco_Net_Scheduler_Tick(vm->net_scheduler, 0);
+        Eco_Net_Scheduler_Tick(vm->net_scheduler, vm->fiber_queues.running == NULL ? 1000 : 0);
     }
 }
 
