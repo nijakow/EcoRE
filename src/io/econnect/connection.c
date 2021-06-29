@@ -26,12 +26,6 @@ void Eco_EConnect_Connection_Feed(struct Eco_EConnect_Connection* connection,
                                   char* buffer,
                                   unsigned int byte_count)
 {
-    /*
-     * TODO: This function can be improved by using memcpy() instead of looping!
-     *       also, in some cases the byte stream can be constructed by using a
-     *       pointer into the buffer - calling Eco_Memory_Alloc isn't always
-     *       necessary.
-     */
     unsigned int                 i;
     struct Eco_EConnect_Message  message;
 
