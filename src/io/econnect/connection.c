@@ -1,16 +1,99 @@
 #include <stddef.h>
+#include <string.h>
+#include <assert.h>
 
 #include "connection.h"
+#include "econnect.h"
 
 #include "../net/socket.h"
 #include "../net/scheduler.h"
+
+#include "../../vm/memory/memory.h"
 
 
 struct Eco_EConnect_Connection
 {
     struct Eco_Net_Connection  _;
+
+    unsigned int               message_length;
+    unsigned int               message_fill;
+    char*                      message;
 };
 
+
+
+void Eco_EConnect_Connection_Feed(struct Eco_EConnect_Connection* connection,
+                                  char* buffer,
+                                  unsigned int byte_count)
+{
+    /*
+     * TODO: This function can be improved by using memcpy() instead of looping!
+     *       also, in some cases the byte stream can be constructed by using a
+     *       pointer into the buffer - calling Eco_Memory_Alloc isn't always
+     *       necessary.
+     */
+    unsigned int                 i;
+    struct Eco_EConnect_Message  message;
+
+    i = 0;
+    while (i < byte_count)
+    {
+        if (connection->message == NULL) {
+            connection->message_length = (connection->message_length << 7) | (buffer[i] & 0x7f);
+
+            if ((buffer[i] & 0x80) == 0x00) {
+                if (byte_count - i - 1 >= connection->message_length) {
+                    message.state = NULL;   /* TODO */
+                    Eco_IO_ByteStream_Create(&(message.bytes),
+                                             &(buffer[i + 1]),
+                                             connection->message_length,
+                                             NULL);
+                    Eco_EConnect_Message_Parse(&message);
+                    connection->message_length = 0;
+                } else {
+                    connection->message_fill = 0;
+                    connection->message      = Eco_Memory_Alloc(connection->message_length * sizeof(char));
+                }
+            }
+
+            i++;
+        } else {
+            if (byte_count - i <= connection->message_length - connection->message_fill) {
+                memcpy(connection->message, &buffer[i], byte_count - i);
+                connection->message_fill += byte_count - i;
+                i = byte_count;
+            } else {
+                memcpy(connection->message, &buffer[i], connection->message_length - connection->message_fill);
+                connection->message_fill = connection->message_length;
+                i += connection->message_length - connection->message_fill;
+            }
+
+            assert(connection->message_fill <= connection->message_length);
+
+            if (connection->message_fill == connection->message_length) {
+                /* TODO: Run the parser, and reset connection->message_length and connection->message */
+                message.state = NULL;  /* TODO */
+                Eco_IO_ByteStream_Create(&(message.bytes),
+                                        connection->message,
+                                        connection->message_length,
+                                        NULL);
+                Eco_EConnect_Message_Parse(&message);
+
+                Eco_Memory_Free(connection->message);
+                connection->message_length = 0;
+                connection->message        = NULL;
+            }
+        }
+    }
+}
+
+
+
+/*
+ *
+ *    T h i s   p a r t   w i l l   b e   r e w o r k e d   l a t e r ! ! !
+ *
+ */
 
 void Eco_EConnect_Connection_Callback(struct Eco_Net_Connection* connection,
                                       struct Eco_Net_Scheduler* scheduler)
