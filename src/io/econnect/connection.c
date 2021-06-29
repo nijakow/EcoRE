@@ -71,7 +71,6 @@ void Eco_EConnect_Connection_Feed(struct Eco_EConnect_Connection* connection,
             assert(connection->message_fill <= connection->message_length);
 
             if (connection->message_fill == connection->message_length) {
-                /* TODO: Run the parser, and reset connection->message_length and connection->message */
                 message.state = NULL;  /* TODO */
                 Eco_IO_ByteStream_Create(&(message.bytes),
                                         connection->message,
@@ -98,11 +97,23 @@ void Eco_EConnect_Connection_Feed(struct Eco_EConnect_Connection* connection,
 void Eco_EConnect_Connection_Callback(struct Eco_Net_Connection* connection,
                                       struct Eco_Net_Scheduler* scheduler)
 {
+    unsigned int  bytes_read;
+    char          buffer[1024];
+
+    bytes_read = Eco_Net_Socket_Read(connection->fd, buffer, sizeof(buffer));
+
+    if (bytes_read > 0) {
+        Eco_EConnect_Connection_Feed((struct Eco_EConnect_Connection*) connection, buffer, bytes_read);
+    } else {
+        /* TODO */
+    }
 }
 
 void Eco_EConnect_Connection_Destructor(struct Eco_EConnect_Connection* connection)
 {
-    /* TODO */
+    if (connection->message != NULL) {
+        Eco_Memory_Free(connection->message);
+    }
 }
 
 struct Eco_EConnect_Connection* Eco_EConnect_Connection_New(int socket_fd)
@@ -115,7 +126,8 @@ struct Eco_EConnect_Connection* Eco_EConnect_Connection_New(int socket_fd)
                                            (Eco_Net_Connection_Destructor) Eco_EConnect_Connection_Destructor,
                                            sizeof(struct Eco_EConnect_Connection));
     
-    /* TODO: Initialize fields */
+    connection->message        = NULL;
+    connection->message_length = 0;
 
     return connection;
 }
