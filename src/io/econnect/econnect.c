@@ -54,7 +54,7 @@ static struct Eco_Key* Eco_EConnect_ParseKey(struct Eco_IO_ByteStream* stream)
 
     bytes = Eco_EConnect_ParseUInt(stream);
 
-    char           buffer[bytes + 1];
+    char          buffer[bytes + 1];
     Eco_EConnect_ParseBytes(stream, buffer, bytes);
 
     return Eco_Key_Find(buffer);
@@ -71,6 +71,23 @@ struct Eco_Object* Eco_EConnect_ParseObject_ByID(struct Eco_EConnect_Message* me
     } else {
         return NULL;
     }
+}
+
+
+
+void Eco_EConnect_Message_Create_ForReading(struct Eco_EConnect_Message* message,
+                                            struct Eco_EConnect_State* state,
+                                            char* buffer,
+                                            unsigned int bufsize,
+                                            void (*del)(u8*))
+{
+    message->state = state;
+    Eco_IO_ByteStream_Create(&(message->bytes), buffer, bufsize, del);
+}
+
+void Eco_EConnect_Message_Destroy(struct Eco_EConnect_Message* message)
+{
+    Eco_IO_ByteStream_Destroy(&(message->bytes));
 }
 
 void* Eco_EConnect_Message_Parse(struct Eco_EConnect_Message* message)

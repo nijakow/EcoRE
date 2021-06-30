@@ -19,4 +19,10 @@ struct Eco_EConnect_Message
     struct Eco_EConnect_State*  state;
 };
 
+void  Eco_EConnect_Message_Create_ForReading(struct Eco_EConnect_Message*,
+                                             struct Eco_EConnect_State*,
+                                             char*,
+                                             unsigned int,
+                                             void (*del)(u8*));
+void  Eco_EConnect_Message_Destroy(struct Eco_EConnect_Message*);
 void* Eco_EConnect_Message_Parse(struct Eco_EConnect_Message*);
