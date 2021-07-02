@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../streams/bytestream.h"
+#include "../../eco.h"
 
 
 struct Eco_EConnect_State
@@ -25,4 +26,11 @@ void  Eco_EConnect_Message_Create_ForReading(struct Eco_EConnect_Message*,
                                              unsigned int,
                                              void (*del)(u8*));
 void  Eco_EConnect_Message_Destroy(struct Eco_EConnect_Message*);
-void* Eco_EConnect_Message_Parse(struct Eco_EConnect_Message*);
+
+
+struct Eco_EConnect_ParseResult
+{
+};
+
+bool Eco_EConnect_Message_Parse(struct Eco_EConnect_Message*, struct Eco_EConnect_ParseResult*);
+

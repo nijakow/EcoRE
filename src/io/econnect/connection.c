@@ -26,8 +26,9 @@ void Eco_EConnect_Connection_Feed(struct Eco_EConnect_Connection* connection,
                                   char* buffer,
                                   unsigned int byte_count)
 {
-    unsigned int                 i;
-    struct Eco_EConnect_Message  message;
+    unsigned int                     i;
+    struct Eco_EConnect_Message      message;
+    struct Eco_EConnect_ParseResult  result;
 
     i = 0;
     while (i < byte_count)
@@ -38,7 +39,7 @@ void Eco_EConnect_Connection_Feed(struct Eco_EConnect_Connection* connection,
             if ((buffer[i] & 0x80) == 0x00) {
                 if (byte_count - i - 1 >= connection->message_length) {
                     Eco_EConnect_Message_Create_ForReading(&message, NULL, &buffer[i + 1], connection->message_length, NULL);
-                    Eco_EConnect_Message_Parse(&message);
+                    Eco_EConnect_Message_Parse(&message, &result);
                     Eco_EConnect_Message_Destroy(&message);
                     
                     i += connection->message_length;
@@ -65,7 +66,7 @@ void Eco_EConnect_Connection_Feed(struct Eco_EConnect_Connection* connection,
 
             if (connection->message_fill == connection->message_length) {
                 Eco_EConnect_Message_Create_ForReading(&message, NULL, connection->message, connection->message_length, NULL);
-                Eco_EConnect_Message_Parse(&message);
+                Eco_EConnect_Message_Parse(&message, &result);
                 Eco_EConnect_Message_Destroy(&message);
 
                 Eco_Memory_Free(connection->message);
