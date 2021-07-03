@@ -13,18 +13,15 @@ struct Eco_Key* Eco_Key_New(const char* name)
     unsigned int     namelen;
     struct Eco_Key*  key;
 
-    namelen            = strlen(name);
-
-    key                = Eco_Object_New(Eco_Type_KEY_TYPE, sizeof(struct Eco_Key) + namelen * sizeof(char));
-
-    key->econnect_func = NULL;
+    namelen                = strlen(name);
+    key                    = Eco_Object_New(Eco_Type_KEY_TYPE, sizeof(struct Eco_Key) + namelen * sizeof(char));
+    key->econnect_callback = NULL;
 
     memcpy(&(key->name), name, namelen + 1);
 
-    key->next          = Eco_KEYS;
-    key->prev          = NULL;
-
-    Eco_KEYS           = key;
+    key->next              = Eco_KEYS;
+    key->prev              = NULL;
+    Eco_KEYS               = key;
 }
 
 struct Eco_Key* Eco_Key_Find(const char* name)

@@ -4,21 +4,19 @@
 
 #include "object.h"
 
-
-struct Eco_EConnect_Reader;
-struct Eco_EConnect_ParseResult;
+#include "../io/econnect/callback_def.h"
 
 
 struct Eco_Key
 {
     struct Eco_Object  _;
 
-    struct Eco_Key*    next;
-    struct Eco_Key*    prev;
+    struct Eco_Key*        next;
+    struct Eco_Key*        prev;
 
-    bool (*econnect_func)(struct Eco_EConnect_Reader*, struct Eco_EConnect_ParseResult*);
+    Eco_EConnect_Callback  econnect_callback;
 
-    char               name[];
+    char                   name[];
 };
 
 struct Eco_Key* Eco_Key_Find(const char*);
