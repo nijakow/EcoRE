@@ -7,8 +7,6 @@
 #include "result.h"
 
 
-void Eco_EConnect_Result_Destroy(struct Eco_EConnect_Result*);
-
 unsigned int Eco_EConnect_ParseUInt(struct Eco_IO_ByteInputStream* stream);
 void Eco_EConnect_ParseBytes(struct Eco_IO_ByteInputStream*, char*, unsigned int);
 struct Eco_Key* Eco_EConnect_ParseKey(struct Eco_IO_ByteInputStream*);

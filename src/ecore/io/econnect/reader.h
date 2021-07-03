@@ -8,7 +8,7 @@
 
 struct Eco_EConnect_Reader
 {
-    struct Eco_IO_ByteInputStream  bytes;
+    struct Eco_IO_ByteInputStream  stream;
     struct Eco_EConnect_Instance*  instance;
 };
 
