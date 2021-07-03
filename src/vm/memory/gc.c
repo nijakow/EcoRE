@@ -12,6 +12,11 @@
 extern struct Eco_Object* Eco_OBJECTS;
 
 
+void Eco_GC_MakeSticky(struct Eco_Object* object)
+{
+    /* TODO, FIXME, XXX: IMPLEMENT THIS! */
+}
+
 void Eco_GC_MarkRoots(struct Eco_GC_State* state)
 {
     Eco_GC_State_MarkObject(state, Eco_Type_TYPE_TYPE);

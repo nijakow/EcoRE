@@ -20,7 +20,7 @@ struct Eco_Object
     struct {
         unsigned int mark_queued : 1;
         unsigned int mark_done   : 1;
-    }                   header;
+    } header;
 };
 
 static inline void* Eco_Object_At(struct Eco_Object* object, unsigned int offset)
@@ -30,6 +30,6 @@ static inline void* Eco_Object_At(struct Eco_Object* object, unsigned int offset
 
 
 void* Eco_Object_New(struct Eco_Type*, unsigned int);
-bool Eco_Object_Send(struct Eco_Message*, struct Eco_Object*);
-void Eco_Object_Mark(struct Eco_GC_State*, struct Eco_Object*);
-void Eco_Object_Del(struct Eco_Object*);
+bool  Eco_Object_Send(struct Eco_Message*, struct Eco_Object*);
+void  Eco_Object_Mark(struct Eco_GC_State*, struct Eco_Object*);
+void  Eco_Object_Del(struct Eco_Object*);

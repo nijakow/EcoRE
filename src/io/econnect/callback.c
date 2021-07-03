@@ -1,6 +1,7 @@
 #include "callback.h"
 
 #include "../../objects/key.h"
+#include "../../vm/memory/gc.h"
 
 
 void Eco_EConnect_InstallCallback(char* key_name, Eco_EConnect_Callback callback)
@@ -11,6 +12,6 @@ void Eco_EConnect_InstallCallback(char* key_name, Eco_EConnect_Callback callback
 
     if (key != NULL) {
         key->econnect_callback = callback;
-        /* TODO, FIXME, XXX: Make the key GC-permanent */
+        Eco_GC_MakeSticky((struct Eco_Object*) key);
     }
 }
