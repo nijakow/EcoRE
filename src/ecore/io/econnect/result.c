@@ -6,9 +6,11 @@ void Eco_EConnect_Result_Create_None(struct Eco_EConnect_Result* result)
     result->type = Eco_EConnect_Result_Type_NONE;
 }
 
-void Eco_EConnect_Result_Create_Error(struct Eco_EConnect_Result* result)
+void Eco_EConnect_Result_Create_Error(struct Eco_EConnect_Result* result,
+                                      enum Eco_EConnect_Result_ErrorType error)
 {
-    result->type = Eco_EConnect_Result_Type_ERROR;
+    result->type       = Eco_EConnect_Result_Type_ERROR;
+    result->body.error = error;
 }
 
 void Eco_EConnect_Result_Create_Any(struct Eco_EConnect_Result* result, Eco_Any* value)

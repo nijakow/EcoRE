@@ -42,7 +42,7 @@ OBJECTS = $(SOURCES:.c=.o)
 DEPENDS = $(patsubst %.c,%.d,$(SOURCES))
 
 LDFLAGS =
-CFLAGS = -g
+CFLAGS = -Werror -g
 
 
 %.o: %.c
