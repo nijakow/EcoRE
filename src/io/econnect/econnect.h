@@ -14,23 +14,23 @@ void Eco_EConnect_State_Create(struct Eco_EConnect_State*);
 void Eco_EConnect_State_Destroy(struct Eco_EConnect_State*);
 
 
-struct Eco_EConnect_Message
+struct Eco_EConnect_Reader
 {
-    struct Eco_IO_ByteStream    bytes;
-    struct Eco_EConnect_State*  state;
+    struct Eco_IO_ByteInputStream  bytes;
+    struct Eco_EConnect_State*     state;
 };
 
-void  Eco_EConnect_Message_Create_ForReading(struct Eco_EConnect_Message*,
-                                             struct Eco_EConnect_State*,
-                                             char*,
-                                             unsigned int,
-                                             void (*del)(u8*));
-void  Eco_EConnect_Message_Destroy(struct Eco_EConnect_Message*);
+void  Eco_EConnect_Reader_Create(struct Eco_EConnect_Reader*,
+                                 struct Eco_EConnect_State*,
+                                 char*,
+                                 unsigned int,
+                                 void (*del)(u8*));
+void  Eco_EConnect_Reader_Destroy(struct Eco_EConnect_Reader*);
 
 
 struct Eco_EConnect_ParseResult
 {
 };
 
-bool Eco_EConnect_Message_Parse(struct Eco_EConnect_Message*, struct Eco_EConnect_ParseResult*);
+bool Eco_EConnect_Reader_Parse(struct Eco_EConnect_Reader*, struct Eco_EConnect_ParseResult*);
 

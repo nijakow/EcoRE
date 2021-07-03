@@ -4,13 +4,13 @@
 #include "../../vm/memory/memory.h"
 
 
-void Eco_EConnect_ParseBytes(struct Eco_IO_ByteStream* stream,
+void Eco_EConnect_ParseBytes(struct Eco_IO_ByteInputStream* stream,
                              char* buffer,
                              unsigned int count)
 {
     while (count > 0)
     {
-        *buffer = Eco_IO_ByteStream_Read(stream);
+        *buffer = Eco_IO_ByteInputStream_Read(stream);
         buffer++;
         count--;
     }
@@ -18,7 +18,7 @@ void Eco_EConnect_ParseBytes(struct Eco_IO_ByteStream* stream,
 }
 
 
-struct Eco_Key* Eco_EConnect_ParseKey(struct Eco_IO_ByteStream* stream)
+struct Eco_Key* Eco_EConnect_ParseKey(struct Eco_IO_ByteInputStream* stream)
 {
     unsigned int  bytes;
 
@@ -30,16 +30,15 @@ struct Eco_Key* Eco_EConnect_ParseKey(struct Eco_IO_ByteStream* stream)
     return Eco_Key_Find(buffer);
 }
 
-struct Eco_Object* Eco_EConnect_ParseObject_ByID(struct Eco_EConnect_Message* message)
+struct Eco_Object* Eco_EConnect_ParseObject_ByID(struct Eco_EConnect_Reader* reader)
 {
     unsigned int  id;
 
-    id = Eco_EConnect_ParseUInt(&(message->bytes));
+    id = Eco_EConnect_ParseUInt(&(reader->bytes));
 
-    if (id < message->state->objects_by_id_max) {
-        return message->state->objects_by_id[id];
+    if (id < reader->state->objects_by_id_max) {
+        return reader->state->objects_by_id[id];
     } else {
         return NULL;
     }
 }
-

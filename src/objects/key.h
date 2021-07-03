@@ -5,7 +5,8 @@
 #include "object.h"
 
 
-struct Eco_EConnect_Message;
+struct Eco_EConnect_Reader;
+struct Eco_EConnect_ParseResult;
 
 
 struct Eco_Key
@@ -15,7 +16,7 @@ struct Eco_Key
     struct Eco_Key*    next;
     struct Eco_Key*    prev;
 
-    void* (*econnect_func)(struct Eco_EConnect_Message*);
+    bool (*econnect_func)(struct Eco_EConnect_Reader*, struct Eco_EConnect_ParseResult*);
 
     char               name[];
 };
