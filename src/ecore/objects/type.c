@@ -47,8 +47,9 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message* message, struct Eco_Object* object
                 case Eco_Type_Slot_Type_INLINED:
                     *((Eco_Any*) Eco_Object_At(object, slot->body.inlined.offset)) = *(message->body.assign.value);
                     return true;
+                default:
+                    return false;
             }
-            return false;
         default:
             return false;
     }

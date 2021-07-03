@@ -5,16 +5,16 @@
 
 struct Eco_IO_ByteInputStream
 {
-    u8*           bytes;
+    char*         bytes;
     unsigned int  index;
     unsigned int  count;
-    void          (*del)(u8*);
+    void          (*del)(char*);
 };
 
 static inline void Eco_IO_ByteInputStream_Create(struct Eco_IO_ByteInputStream* bytestream,
-                                                 u8* bytes,
+                                                 char* bytes,
                                                  unsigned int count,
-                                                 void (*del)(u8*))
+                                                 void (*del)(char*))
 {
     bytestream->bytes = bytes;
     bytestream->index = 0;

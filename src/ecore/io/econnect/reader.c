@@ -9,7 +9,7 @@ void Eco_EConnect_Reader_Create(struct Eco_EConnect_Reader* reader,
                                 struct Eco_EConnect_Instance* instance,
                                 char* buffer,
                                 unsigned int bufsize,
-                                void (*del)(u8*))
+                                void (*del)(char*))
 {
     reader->instance = instance;
     Eco_IO_ByteInputStream_Create(&(reader->stream), buffer, bufsize, del);

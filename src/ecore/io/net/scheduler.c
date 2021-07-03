@@ -60,8 +60,6 @@ void Eco_Net_Scheduler_Tick(struct Eco_Net_Scheduler* sched, int timeout)
     struct Eco_Net_Connection*  connection;
     unsigned int                event_index;
     unsigned int                event_count;
-    unsigned int                bytes_read;
-    char                        buffer[1024];
 
     event_count = epoll_wait(sched->epoll_fd,
                              sched->epoll_events,

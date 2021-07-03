@@ -22,6 +22,8 @@ struct Eco_Key* Eco_Key_New(const char* name)
     key->next              = Eco_KEYS;
     key->prev              = NULL;
     Eco_KEYS               = key;
+
+    return key;
 }
 
 struct Eco_Key* Eco_Key_Find(const char* name)

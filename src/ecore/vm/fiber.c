@@ -22,6 +22,8 @@ struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
     fiber->top             = NULL;
     fiber->stack_size      = stack_size;
     fiber->stack_alloc_ptr = 0;
+
+    return fiber;
 }
 
 void Eco_Fiber_Delete(struct Eco_Fiber* fiber)
