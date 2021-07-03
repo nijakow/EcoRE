@@ -4,7 +4,7 @@
 
 #include "object.h"
 
-#include "../io/econnect/callback_def.h"
+#include "../io/econnect/callback.h"
 
 
 struct Eco_Key
