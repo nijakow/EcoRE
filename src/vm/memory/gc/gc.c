@@ -1,12 +1,12 @@
 #include "gc.h"
 
-#include "memory.h"
+#include "../memory.h"
 #include "gc_state.h"
 
-#include "../../objects/object.h"
-#include "../../objects/type.h"
+#include "../../../objects/object.h"
+#include "../../../objects/type.h"
 
-#include "../vm.h"
+#include "../../vm.h"
 
 
 extern struct Eco_Object* Eco_OBJECTS;

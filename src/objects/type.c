@@ -4,7 +4,7 @@
 #include "../vm/core/send.h"
 #include "../vm/fiber.h"
 #include "../vm/core/interpreter.h"
-#include "../vm/memory/gc.h"
+#include "../vm/memory/gc/gc.h"
 #include "key.h"
 #include "group.h"
 #include "code.h"

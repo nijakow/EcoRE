@@ -1,6 +1,6 @@
 #include "frame.h"
 
-#include "../memory/gc.h"
+#include "../memory/gc/gc.h"
 
 #include "environment.h"
 

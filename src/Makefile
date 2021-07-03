@@ -18,8 +18,8 @@ objects/group.c \
 objects/code.c \
 objects/closure.c \
 vm/memory/memory.c \
-vm/memory/gc_state.c \
-vm/memory/gc.c \
+vm/memory/gc/gc_state.c \
+vm/memory/gc/gc.c \
 vm/core/environment.c \
 vm/core/frame.c \
 vm/core/send.c \

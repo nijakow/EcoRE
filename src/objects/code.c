@@ -1,7 +1,7 @@
 #include "code.h"
 
 #include "type.h"
-#include "../vm/memory/gc.h"
+#include "../vm/memory/gc/gc.h"
 
 
 struct Eco_Code* Eco_Code_New()

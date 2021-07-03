@@ -1,7 +1,7 @@
 #include "fiber.h"
 
 #include "memory/memory.h"
-#include "memory/gc.h"
+#include "memory/gc/gc.h"
 
 #include "core/frame.h"
 

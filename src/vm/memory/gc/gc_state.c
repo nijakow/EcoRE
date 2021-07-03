@@ -1,6 +1,6 @@
 #include "gc_state.h"
 
-#include "memory.h"
+#include "../memory.h"
 
 
 struct Eco_GC_Page

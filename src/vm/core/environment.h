@@ -3,7 +3,7 @@
 #include "../../eco.h"
 
 #include "../memory/memory.h"
-#include "../memory/gc.h"
+#include "../memory/gc/gc.h"
 
 
 struct Eco_Environment

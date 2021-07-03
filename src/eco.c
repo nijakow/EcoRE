@@ -4,7 +4,7 @@
 #include "objects/object.h"
 #include "objects/group.h"
 
-#include "vm/memory/gc.h"
+#include "vm/memory/gc/gc.h"
 
 #include "vm/vm.h"
 
