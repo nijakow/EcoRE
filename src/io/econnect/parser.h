@@ -2,7 +2,7 @@
 
 #include "../../eco.h"
 
-#include "econnect.h"
+#include "instance.h"
 #include "reader.h"
 
 

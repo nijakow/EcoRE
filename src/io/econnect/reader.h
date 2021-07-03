@@ -1,6 +1,6 @@
 #pragma once
 
-#include "econnect.h"
+#include "instance.h"
 
 #include "../streams/bytestream.h"
 
@@ -8,11 +8,11 @@
 struct Eco_EConnect_Reader
 {
     struct Eco_IO_ByteInputStream  bytes;
-    struct Eco_EConnect_State*     state;
+    struct Eco_EConnect_Instance*  instance;
 };
 
 void  Eco_EConnect_Reader_Create(struct Eco_EConnect_Reader*,
-                                 struct Eco_EConnect_State*,
+                                 struct Eco_EConnect_Instance*,
                                  char*,
                                  unsigned int,
                                  void (*del)(u8*));

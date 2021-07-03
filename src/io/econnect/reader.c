@@ -2,12 +2,12 @@
 
 
 void Eco_EConnect_Reader_Create(struct Eco_EConnect_Reader* reader,
-                                struct Eco_EConnect_State* state,
+                                struct Eco_EConnect_Instance* instance,
                                 char* buffer,
                                 unsigned int bufsize,
                                 void (*del)(u8*))
 {
-    reader->state = state;
+    reader->instance = instance;
     Eco_IO_ByteInputStream_Create(&(reader->bytes), buffer, bufsize, del);
 }
 

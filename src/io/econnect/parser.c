@@ -51,8 +51,8 @@ struct Eco_Object* Eco_EConnect_ParseObject_ByID(struct Eco_EConnect_Reader* rea
 
     id = Eco_EConnect_ParseUInt(&(reader->bytes));
 
-    if (id < reader->state->objects_by_id_max) {
-        return reader->state->objects_by_id[id];
+    if (id < reader->instance->objects_by_id_max) {
+        return reader->instance->objects_by_id[id];
     } else {
         return NULL;
     }
