@@ -9,7 +9,6 @@ void Eco_Banner()
     printf("    The Ecosphere\n");
     printf("    Eco Runtime Environment\n");
     printf("\n");
-    printf("\n");
 }
 
 

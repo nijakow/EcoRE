@@ -4,6 +4,21 @@
 #include "../../vm/memory/memory.h"
 
 
+unsigned int Eco_EConnect_ParseUInt(struct Eco_IO_ByteInputStream* stream)
+{
+    u8            byte;
+    unsigned int  value;
+
+    value = 0;
+    do
+    {
+        byte = Eco_IO_ByteInputStream_Read(stream);
+        value = (value << 7) | (byte & 0b01111111);
+    } while ((byte & 0b1000000) != 0);
+
+    return value;
+}
+
 void Eco_EConnect_ParseBytes(struct Eco_IO_ByteInputStream* stream,
                              char* buffer,
                              unsigned int count)
