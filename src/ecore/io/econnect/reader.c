@@ -31,7 +31,7 @@ bool Eco_EConnect_Reader_Read(struct Eco_EConnect_Reader* reader,
     /* TODO, FIXME, XXX: This unchecked cast is dangerous! */
     msg_key = (struct Eco_Key*) Eco_EConnect_ParseObjectByID(reader);
 
-    if (msg_key->econnect_callback != NULL) {
+    if (msg_key != NULL && msg_key->econnect_callback != NULL) {
         return msg_key->econnect_callback(reader, result);
     } else {
         return false;
