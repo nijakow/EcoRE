@@ -45,7 +45,7 @@ struct Eco_Key* Eco_EConnect_ParseKey(struct Eco_IO_ByteInputStream* stream)
     return Eco_Key_Find(buffer);
 }
 
-struct Eco_Object* Eco_EConnect_ParseObject_ByID(struct Eco_EConnect_Reader* reader)
+struct Eco_Object* Eco_EConnect_ParseObjectByID(struct Eco_EConnect_Reader* reader)
 {
     unsigned int  id;
 
@@ -64,7 +64,7 @@ bool Eco_EConnect_Parse(struct Eco_EConnect_Reader* reader,
     struct Eco_Key*  msg_key;
 
     /* TODO: This unchecked cast is dangerous! */
-    msg_key = (struct Eco_Key*) Eco_EConnect_ParseObject_ByID(reader);
+    msg_key = (struct Eco_Key*) Eco_EConnect_ParseObjectByID(reader);
 
     if (msg_key->econnect_func != NULL) {
         return msg_key->econnect_func(reader, result);
