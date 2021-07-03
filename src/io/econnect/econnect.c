@@ -19,3 +19,11 @@ void Eco_EConnect_State_Destroy(struct Eco_EConnect_State* state)
     }
 }
 
+
+void Eco_EConnect_Init()
+{
+}
+
+void Eco_EConnect_Terminate()
+{
+}
