@@ -8,6 +8,7 @@ else
 endif
 
 EXECUTABLE = ./ecore.exe
+PROJECT_ROOT_DIR = $(PWD)
 
 SOURCES = \
 eco.c \
