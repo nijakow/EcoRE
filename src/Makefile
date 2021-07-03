@@ -30,6 +30,7 @@ io/net/net.c \
 io/net/scheduler.c \
 io/net/socket.c \
 io/econnect/econnect.c \
+io/econnect/reader.c \
 io/econnect/parser.c \
 io/econnect/net/connection.c \
 main.c

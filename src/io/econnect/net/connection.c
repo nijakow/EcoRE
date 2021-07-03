@@ -5,6 +5,7 @@
 #include "connection.h"
 
 #include "../econnect.h"
+#include "../reader.h"
 #include "../parser.h"
 
 #include "../../net/socket.h"

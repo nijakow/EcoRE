@@ -1,7 +1,10 @@
 #pragma once
 
-#include "econnect.h"
 #include "../../eco.h"
+
+#include "econnect.h"
+#include "reader.h"
+
 
 struct Eco_EConnect_ParseResult
 {
