@@ -7,6 +7,7 @@
 #include "../econnect.h"
 #include "../reader.h"
 #include "../parser.h"
+#include "../result.h"
 
 #include "../../net/socket.h"
 #include "../../net/scheduler.h"
@@ -29,9 +30,9 @@ void Eco_EConnect_Connection_Feed(struct Eco_EConnect_Connection* connection,
                                   char* buffer,
                                   unsigned int byte_count)
 {
-    unsigned int                     i;
-    struct Eco_EConnect_Reader       reader;
-    struct Eco_EConnect_ParseResult  result;
+    unsigned int                i;
+    struct Eco_EConnect_Reader  reader;
+    struct Eco_EConnect_Result  result;
 
     i = 0;
     while (i < byte_count)
@@ -44,6 +45,7 @@ void Eco_EConnect_Connection_Feed(struct Eco_EConnect_Connection* connection,
                     Eco_EConnect_Reader_Create(&reader, NULL, &buffer[i + 1], connection->message_length, NULL);
                     Eco_EConnect_Parse(&reader, &result);
                     Eco_EConnect_Reader_Destroy(&reader);
+                    Eco_EConnect_Result_Destroy(&result);
                     
                     i += connection->message_length;
                     connection->message_length = 0;
@@ -71,6 +73,7 @@ void Eco_EConnect_Connection_Feed(struct Eco_EConnect_Connection* connection,
                 Eco_EConnect_Reader_Create(&reader, NULL, connection->message, connection->message_length, NULL);
                 Eco_EConnect_Parse(&reader, &result);
                 Eco_EConnect_Reader_Destroy(&reader);
+                Eco_EConnect_Result_Destroy(&result);
 
                 Eco_Memory_Free(connection->message);
                 connection->message_length = 0;

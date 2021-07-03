@@ -58,8 +58,9 @@ struct Eco_Object* Eco_EConnect_ParseObjectByID(struct Eco_EConnect_Reader* read
     }
 }
 
+
 bool Eco_EConnect_Parse(struct Eco_EConnect_Reader* reader,
-                        struct Eco_EConnect_ParseResult* result)
+                        struct Eco_EConnect_Result* result)
 {
     struct Eco_Key*  msg_key;
 

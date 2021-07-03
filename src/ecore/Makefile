@@ -34,6 +34,7 @@ io/econnect/callback.c \
 io/econnect/instance.c \
 io/econnect/reader.c \
 io/econnect/parser.c \
+io/econnect/result.c \
 io/econnect/net/connection.c \
 main.c
 
