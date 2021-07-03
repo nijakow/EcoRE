@@ -1,7 +1,6 @@
 #include "parser.h"
 
 #include "../../objects/key.h"
-#include "../../vm/memory/memory.h"
 
 
 unsigned int Eco_EConnect_ParseUInt(struct Eco_IO_ByteInputStream* stream)
@@ -57,21 +56,3 @@ struct Eco_Object* Eco_EConnect_ParseObjectByID(struct Eco_EConnect_Reader* read
         return NULL;
     }
 }
-
-
-bool Eco_EConnect_Parse(struct Eco_EConnect_Reader* reader,
-                        struct Eco_EConnect_Result* result)
-{
-    struct Eco_Key*  msg_key;
-
-    /* TODO: This unchecked cast is dangerous! */
-    msg_key = (struct Eco_Key*) Eco_EConnect_ParseObjectByID(reader);
-
-    if (msg_key->econnect_callback != NULL) {
-        return msg_key->econnect_callback(reader, result);
-    } else {
-        /* TODO: Error */
-        return NULL;
-    }
-}
-

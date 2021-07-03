@@ -43,7 +43,7 @@ void Eco_EConnect_Connection_Feed(struct Eco_EConnect_Connection* connection,
             if ((buffer[i] & 0x80) == 0x00) {
                 if (byte_count - i - 1 >= connection->message_length) {
                     Eco_EConnect_Reader_Create(&reader, NULL, &buffer[i + 1], connection->message_length, NULL);
-                    Eco_EConnect_Parse(&reader, &result);
+                    Eco_EConnect_Reader_Read(&reader, &result);
                     Eco_EConnect_Reader_Destroy(&reader);
                     Eco_EConnect_Result_Destroy(&result);
                     
@@ -71,7 +71,7 @@ void Eco_EConnect_Connection_Feed(struct Eco_EConnect_Connection* connection,
 
             if (connection->message_fill == connection->message_length) {
                 Eco_EConnect_Reader_Create(&reader, NULL, connection->message, connection->message_length, NULL);
-                Eco_EConnect_Parse(&reader, &result);
+                Eco_EConnect_Reader_Read(&reader, &result);
                 Eco_EConnect_Reader_Destroy(&reader);
                 Eco_EConnect_Result_Destroy(&result);
 
