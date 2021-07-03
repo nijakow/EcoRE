@@ -8,7 +8,7 @@ else
 endif
 
 EXECUTABLE = ./ecore.exe
-PROJECT_ROOT_DIR = $(PWD)
+PROJECT_ROOT_DIR = $(CURDIR)/..
 
 SOURCES = \
 eco.c \
@@ -42,7 +42,7 @@ OBJECTS = $(SOURCES:.c=.o)
 DEPENDS = $(patsubst %.c,%.d,$(SOURCES))
 
 LDFLAGS =
-CFLAGS = -g
+CFLAGS = -g -I $(PROJECT_ROOT_DIR)
 
 
 %.o: %.c
