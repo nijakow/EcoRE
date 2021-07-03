@@ -31,7 +31,7 @@ io/net/scheduler.c \
 io/net/socket.c \
 io/econnect/econnect.c \
 io/econnect/parser.c \
-io/econnect/connection.c \
+io/econnect/net/connection.c \
 main.c
 
 OBJECTS = $(SOURCES:.c=.o)

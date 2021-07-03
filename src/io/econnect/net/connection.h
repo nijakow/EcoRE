@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../net/net.h"
+#include "../../net/net.h"
 
 struct Eco_EConnect_Connection;
 

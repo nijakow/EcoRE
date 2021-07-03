@@ -3,13 +3,14 @@
 #include <assert.h>
 
 #include "connection.h"
-#include "econnect.h"
-#include "parser.h"
 
-#include "../net/socket.h"
-#include "../net/scheduler.h"
+#include "../econnect.h"
+#include "../parser.h"
 
-#include "../../vm/memory/memory.h"
+#include "../../net/socket.h"
+#include "../../net/scheduler.h"
+
+#include "../../../vm/memory/memory.h"
 
 
 struct Eco_EConnect_Connection
