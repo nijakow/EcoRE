@@ -27,10 +27,3 @@ void  Eco_EConnect_Reader_Create(struct Eco_EConnect_Reader*,
                                  void (*del)(u8*));
 void  Eco_EConnect_Reader_Destroy(struct Eco_EConnect_Reader*);
 
-
-struct Eco_EConnect_ParseResult
-{
-};
-
-bool Eco_EConnect_Reader_Parse(struct Eco_EConnect_Reader*, struct Eco_EConnect_ParseResult*);
-

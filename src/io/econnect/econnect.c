@@ -35,19 +35,3 @@ void Eco_EConnect_Reader_Destroy(struct Eco_EConnect_Reader* reader)
     Eco_IO_ByteInputStream_Destroy(&(reader->bytes));
 }
 
-
-bool Eco_EConnect_Reader_Parse(struct Eco_EConnect_Reader* reader,
-                               struct Eco_EConnect_ParseResult* result)
-{
-    struct Eco_Key*  msg_key;
-
-    /* TODO: This unchecked cast is dangerous! */
-    msg_key = (struct Eco_Key*) Eco_EConnect_ParseObject_ByID(reader);
-
-    if (msg_key->econnect_func != NULL) {
-        return msg_key->econnect_func(reader, result);
-    } else {
-        /* TODO: Error */
-        return NULL;
-    }
-}
