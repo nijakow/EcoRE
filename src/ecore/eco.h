@@ -114,6 +114,11 @@ static inline void Eco_Any_AssignFloating(Eco_Any* any, Eco_Floating floating)
     any->type           = Eco_Value_Type_FLOATING;
 }
 
+static inline void Eco_Any_AssignAny(Eco_Any* dest, Eco_Any* src)
+{
+    *dest = *src;
+}
+
 
 static inline struct Eco_Object* Eco_Any_AsPointer(Eco_Any* any)
 {
