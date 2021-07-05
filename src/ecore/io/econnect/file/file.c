@@ -7,7 +7,7 @@
 #include "../../../vm/memory/memory.h"
 
 
-bool Eco_EConnect_ReadFromFile(const char* filename, struct Eco_EConnect_Result* result)
+bool Eco_EConnect_ReadFile(const char* filename, struct Eco_EConnect_Result* result)
 {
     FILE*                         file;
     unsigned int                  file_size;
