@@ -1,9 +1,9 @@
 #include "econnect.h"
 
-#include "callback.h"
-#include "reader.h"
-#include "result.h"
-#include "parser.h"
+#include "reader/callback.h"
+#include "reader/reader.h"
+#include "reader/parser.h"
+#include "reader/result.h"
 
 #include "../../eco.h"
 

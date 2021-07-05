@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../eco.h"
+#include "../../../eco.h"
 
-#include "../streams/bytestream.h"
+#include "../../streams/bytestream.h"
 
 
 unsigned int Eco_EConnect_ParseUInt(struct Eco_IO_ByteInputStream* stream);

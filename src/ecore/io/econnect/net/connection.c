@@ -5,9 +5,9 @@
 #include "connection.h"
 
 #include "../econnect.h"
-#include "../reader.h"
-#include "../parser.h"
-#include "../result.h"
+#include "../reader/reader.h"
+#include "../reader/parser.h"
+#include "../reader/result.h"
 
 #include "../../net/socket.h"
 #include "../../net/scheduler.h"

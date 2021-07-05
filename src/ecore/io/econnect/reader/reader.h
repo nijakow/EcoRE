@@ -1,9 +1,9 @@
 #pragma once
 
-#include "instance.h"
+#include "../instance.h"
 #include "result.h"
 
-#include "../streams/bytestream.h"
+#include "../../streams/bytestream.h"
 
 
 struct Eco_EConnect_Reader

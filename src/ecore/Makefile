@@ -30,11 +30,11 @@ io/net/net.c \
 io/net/scheduler.c \
 io/net/socket.c \
 io/econnect/econnect.c \
-io/econnect/callback.c \
 io/econnect/instance.c \
-io/econnect/reader.c \
-io/econnect/parser.c \
-io/econnect/result.c \
+io/econnect/reader/callback.c \
+io/econnect/reader/parser.c \
+io/econnect/reader/reader.c \
+io/econnect/reader/result.c \
 io/econnect/net/connection.c \
 main.c
 
