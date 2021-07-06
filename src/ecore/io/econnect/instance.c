@@ -9,7 +9,8 @@ void Eco_EConnect_Instance_Create(struct Eco_EConnect_Instance* instance)
     instance->objects_by_id = NULL;
     instance->objects_by_id_max = 0;
 
-    Eco_EConnect_Instance_BindObject(instance, (struct Eco_Object*) Eco_Key_Find("ecosphere.object.key"), 0);
+    Eco_EConnect_Instance_BindObject(instance, (struct Eco_Object*) Eco_Key_Find("ecosphere.econnect.block"), 0);
+    Eco_EConnect_Instance_BindObject(instance, (struct Eco_Object*) Eco_Key_Find("ecosphere.object.key"), 1);
 }
 
 void Eco_EConnect_Instance_Destroy(struct Eco_EConnect_Instance* instance)
