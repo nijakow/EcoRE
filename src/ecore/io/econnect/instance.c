@@ -9,8 +9,7 @@ void Eco_EConnect_Instance_Create(struct Eco_EConnect_Instance* instance)
     instance->objects_by_id = NULL;
     instance->objects_by_id_max = 0;
 
-    Eco_EConnect_Instance_BindObject(instance, (struct Eco_Object*) Eco_Key_Find("ecosphere.econnect.bind"), 0);
-    Eco_EConnect_Instance_BindObject(instance, (struct Eco_Object*) Eco_Key_Find("ecosphere.object.key"), 1);
+    Eco_EConnect_Instance_BindObject(instance, (struct Eco_Object*) Eco_Key_Find("ecosphere.object.key"), 0);
 }
 
 void Eco_EConnect_Instance_Destroy(struct Eco_EConnect_Instance* instance)
@@ -37,4 +36,13 @@ void Eco_EConnect_Instance_BindObject(struct Eco_EConnect_Instance* instance,
     }
 
     instance->objects_by_id[id] = object;
+}
+
+void Eco_EConnect_Instance_OptionallyBindObject(struct Eco_EConnect_Instance* instance,
+                                                struct Eco_Object* object,
+                                                unsigned int id)
+{
+    if (id != 0) {
+        Eco_EConnect_Instance_BindObject(instance, object, id);
+    }
 }
