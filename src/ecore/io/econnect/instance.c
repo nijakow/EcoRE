@@ -47,3 +47,11 @@ void Eco_EConnect_Instance_OptionallyBindObject(struct Eco_EConnect_Instance* in
         Eco_EConnect_Instance_BindObject(instance, object, id);
     }
 }
+
+void Eco_EConnect_Instance_UnbindObject(struct Eco_EConnect_Instance* instance,
+                                        unsigned int id)
+{
+    if (id < instance->objects_by_id_max) {
+        instance->objects_by_id[id] = NULL;
+    }
+}
