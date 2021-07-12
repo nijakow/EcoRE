@@ -47,6 +47,7 @@ bool Eco_EConnect_Builtin_Unbind(struct Eco_EConnect_Reader* reader,
     id = Eco_EConnect_ParseUInt(&reader->stream);
 
     Eco_EConnect_Instance_UnbindObject(reader->instance, id);
+    Eco_EConnect_Result_Create_None(result);
 
     return true;
 }
