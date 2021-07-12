@@ -77,6 +77,25 @@ bool Eco_EConnect_Builtin_Block(struct Eco_EConnect_Reader* reader,
     return Eco_EConnect_Reader_Read(reader, result);
 }
 
+bool Eco_EConnect_Builtin_Prog1(struct Eco_EConnect_Reader* reader,
+                                struct Eco_EConnect_Result* result)
+{
+    struct Eco_EConnect_Result  throwaway_result;
+
+    if (!Eco_EConnect_Reader_Read(reader, result)) {
+        return false;
+    }
+    
+    if (Eco_EConnect_Reader_Read(reader, &throwaway_result)) {
+        Eco_EConnect_Result_Destroy(&throwaway_result);
+        return true;
+    } else {
+        Eco_EConnect_Result_Destroy(result);
+        Eco_EConnect_Result_Copy(result, &throwaway_result);
+        return false;
+    }
+}
+
 bool Eco_EConnect_Builtin_GetKey(struct Eco_EConnect_Reader* reader,
                                  struct Eco_EConnect_Result* result)
 {
@@ -103,6 +122,7 @@ void Eco_EConnect_InitReaderBuiltins()
     Eco_EConnect_InstallCallback("ecosphere.econnect.bind", Eco_EConnect_Builtin_Bind);
     Eco_EConnect_InstallCallback("ecosphere.econnect.unbind", Eco_EConnect_Builtin_Unbind);
     Eco_EConnect_InstallCallback("ecosphere.econnect.block", Eco_EConnect_Builtin_Bind);
+    Eco_EConnect_InstallCallback("ecosphere.econnect.prog1", Eco_EConnect_Builtin_Prog1);
     Eco_EConnect_InstallCallback("ecosphere.object.key", Eco_EConnect_Builtin_GetKey);
 }
 

@@ -33,6 +33,7 @@ void Eco_EConnect_Result_Create_None(struct Eco_EConnect_Result*);
 void Eco_EConnect_Result_Create_Error(struct Eco_EConnect_Result*, enum Eco_EConnect_Result_ErrorType);
 void Eco_EConnect_Result_Create_Any(struct Eco_EConnect_Result*, Eco_Any*);
 void Eco_EConnect_Result_Create_Object(struct Eco_EConnect_Result*, struct Eco_Object*);
+void Eco_EConnect_Result_Copy(struct Eco_EConnect_Result*, struct Eco_EConnect_Result*);
 void Eco_EConnect_Result_Destroy(struct Eco_EConnect_Result*);
 
 bool Eco_EConnect_Result_ExpectAny(struct Eco_EConnect_Result*, Eco_Any*);
