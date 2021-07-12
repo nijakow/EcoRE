@@ -2,12 +2,12 @@
 
 #include "builtins.h"
 
-#include "callback.h"
-#include "reader.h"
-#include "result.h"
-#include "parser.h"
+#include "../callback.h"
+#include "../reader.h"
+#include "../result.h"
+#include "../parser.h"
 
-#include "../../../objects/key.h"
+#include "../../../../objects/key.h"
 
 
 bool Eco_EConnect_Builtin_Hello(struct Eco_EConnect_Reader* reader,
