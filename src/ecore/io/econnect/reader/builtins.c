@@ -17,8 +17,8 @@ bool Eco_EConnect_Builtin_Hello(struct Eco_EConnect_Reader* reader,
     return true;
 }
 
-bool Eco_EConnect_Builtin_Bind(struct Eco_EConnect_Reader* reader,
-                               struct Eco_EConnect_Result* result)
+bool Eco_EConnect_Builtin_NewID(struct Eco_EConnect_Reader* reader,
+                                struct Eco_EConnect_Result* result)
 {
     unsigned int        id;
     struct Eco_Object*  object;
@@ -39,8 +39,8 @@ bool Eco_EConnect_Builtin_Bind(struct Eco_EConnect_Reader* reader,
     return false;
 }
 
-bool Eco_EConnect_Builtin_Unbind(struct Eco_EConnect_Reader* reader,
-                                 struct Eco_EConnect_Result* result)
+bool Eco_EConnect_Builtin_DelID(struct Eco_EConnect_Reader* reader,
+                                struct Eco_EConnect_Result* result)
 {
     unsigned int  id;
 
@@ -52,8 +52,8 @@ bool Eco_EConnect_Builtin_Unbind(struct Eco_EConnect_Reader* reader,
     return true;
 }
 
-bool Eco_EConnect_Builtin_GetByID(struct Eco_EConnect_Reader* reader,
-                                  struct Eco_EConnect_Result* result)
+bool Eco_EConnect_Builtin_GetID(struct Eco_EConnect_Reader* reader,
+                                struct Eco_EConnect_Result* result)
 {
     struct Eco_Object*  object;
 
@@ -93,8 +93,8 @@ bool Eco_EConnect_Builtin_Block(struct Eco_EConnect_Reader* reader,
     return Eco_EConnect_Reader_Read(reader, result);
 }
 
-bool Eco_EConnect_Builtin_Prog1(struct Eco_EConnect_Reader* reader,
-                                struct Eco_EConnect_Result* result)
+bool Eco_EConnect_Builtin_Unwind(struct Eco_EConnect_Reader* reader,
+                                 struct Eco_EConnect_Result* result)
 {
     struct Eco_EConnect_Result  throwaway_result;
 
@@ -135,11 +135,11 @@ bool Eco_EConnect_Builtin_GetKey(struct Eco_EConnect_Reader* reader,
 void Eco_EConnect_InitReaderBuiltins()
 {
     Eco_EConnect_InstallCallback("ecosphere.econnect.hello", Eco_EConnect_Builtin_Hello);
-    Eco_EConnect_InstallCallback("ecosphere.econnect.bind", Eco_EConnect_Builtin_Bind);
-    Eco_EConnect_InstallCallback("ecosphere.econnect.unbind", Eco_EConnect_Builtin_Unbind);
-    Eco_EConnect_InstallCallback("ecosphere.econnect.id", Eco_EConnect_Builtin_GetByID);
-    Eco_EConnect_InstallCallback("ecosphere.econnect.block", Eco_EConnect_Builtin_Bind);
-    Eco_EConnect_InstallCallback("ecosphere.econnect.prog1", Eco_EConnect_Builtin_Prog1);
+    Eco_EConnect_InstallCallback("ecosphere.econnect.newid", Eco_EConnect_Builtin_NewID);
+    Eco_EConnect_InstallCallback("ecosphere.econnect.delid", Eco_EConnect_Builtin_DelID);
+    Eco_EConnect_InstallCallback("ecosphere.econnect.id", Eco_EConnect_Builtin_GetID);
+    Eco_EConnect_InstallCallback("ecosphere.econnect.block", Eco_EConnect_Builtin_Block);
+    Eco_EConnect_InstallCallback("ecosphere.econnect.unwind", Eco_EConnect_Builtin_Unwind);
     Eco_EConnect_InstallCallback("ecosphere.object.key", Eco_EConnect_Builtin_GetKey);
 }
 
