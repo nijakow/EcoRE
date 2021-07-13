@@ -72,9 +72,9 @@ static struct Eco_Type* Eco_Type_New(unsigned int slot_count)
 {
     struct Eco_Type*  type;
     
-    type             = Eco_Object_New(Eco_Type_TYPE_TYPE,
-                                      sizeof(struct Eco_Type) + sizeof(struct Eco_Type_Slot) * slot_count,
-                                      0);
+    type             = Eco_Object_New_Derived(Eco_Type_TYPE_TYPE,
+                                              sizeof(struct Eco_Type) + sizeof(struct Eco_Type_Slot) * slot_count,
+                                              0);
     type->slot_count = slot_count;
 
     return type;
@@ -161,6 +161,7 @@ void Eco_Type_Del(struct Eco_Type* type)
 
 
 struct Eco_Type* Eco_Type_TYPE_TYPE = NULL;
+struct Eco_Type* Eco_Type_PLAIN_OBJECT_TYPE = NULL;
 struct Eco_Type* Eco_Type_KEY_TYPE = NULL;
 struct Eco_Type* Eco_Type_GROUP_TYPE = NULL;
 struct Eco_Type* Eco_Type_CODE_TYPE = NULL;
@@ -171,6 +172,11 @@ static struct Eco_Type_Shared Eco_Type_Shared_TYPE = {
     .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Object_Send,
     .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Type_Mark,
     .del  = (void(*)(struct Eco_Object*)) Eco_Type_Del
+};
+static struct Eco_Type_Shared Eco_Type_Shared_PLAIN_OBJECT = {
+    .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Object_Send,
+    .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Object_Mark,
+    .del  = (void(*)(struct Eco_Object*)) Eco_Object_Del
 };
 static struct Eco_Type_Shared Eco_Type_Shared_KEY = {
     .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Object_Send,
@@ -198,6 +204,7 @@ void Eco_Type_InitializeTypes()
     Eco_Type_TYPE_TYPE         = Eco_Type_New_Prefab(&Eco_Type_Shared_TYPE, 0);
     Eco_Type_TYPE_TYPE->_.type = Eco_Type_TYPE_TYPE;
 
+    Eco_Type_PLAIN_OBJECT_TYPE = Eco_Type_New_Prefab(&Eco_Type_Shared_PLAIN_OBJECT, 0);
     Eco_Type_KEY_TYPE          = Eco_Type_New_Prefab(&Eco_Type_Shared_KEY, 0);
     Eco_Type_GROUP_TYPE        = Eco_Type_New_Prefab(&Eco_Type_Shared_GROUP, 0);
     Eco_Type_CODE_TYPE         = Eco_Type_New_Prefab(&Eco_Type_Shared_CODE, 0);

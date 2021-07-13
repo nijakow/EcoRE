@@ -11,9 +11,14 @@
 struct Eco_Object* Eco_OBJECTS = NULL;
 
 
-void* Eco_Object_New(struct Eco_Type* type,
-                     unsigned int size,
-                     unsigned int payload_size)
+struct Eco_Object*  Eco_Object_New()
+{
+    return Eco_Object_New_Derived(Eco_Type_PLAIN_OBJECT_TYPE, sizeof(struct Eco_Object), 0);
+}
+
+void* Eco_Object_New_Derived(struct Eco_Type* type,
+                             unsigned int size,
+                             unsigned int payload_size)
 {
     struct Eco_Object* object;
 
@@ -115,7 +120,7 @@ static void Eco_Object_ResizePayload(struct Eco_Object* object, unsigned int new
             new_payload                      = Eco_Memory_Alloc(new_size);
 
             memcpy(new_payload, object->payload, object->header.payload_size);
-            
+
             object->payload                  = new_payload;
             object->header.payload_in_object = false;
             object->header.payload_size      = new_size;
