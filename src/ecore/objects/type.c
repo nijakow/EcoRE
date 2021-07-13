@@ -104,6 +104,7 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type* self,
     struct Eco_Type*  the_copy;
 
     const unsigned int  new_slot_count = self->slot_count + 1;
+    const unsigned int  slot_value_size = sizeof(Eco_Any);
 
     if (pos >= 0) adjusted_pos =  pos;
     else          adjusted_pos = -pos; 
@@ -114,7 +115,7 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type* self,
     the_copy                        = Eco_Type_New(new_slot_count);
     *type_loc                       = the_copy;
     the_copy->shared                = self->shared;
-    the_copy->instance_payload_size = self->instance_payload_size + sizeof(Eco_Any);
+    the_copy->instance_payload_size = self->instance_payload_size + slot_value_size;
 
     for (i = 0; i < new_slot_count; i++) {
         if (i < adjusted_pos) the_copy->slots[i] = self->slots[i];
@@ -123,7 +124,8 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type* self,
             the_copy->slots[i].type                      = Eco_Type_Slot_Type_INLINED;
             the_copy->slots[i].key                       = key;
             the_copy->slots[i].body.inlined.is_inherited = false;
-            the_copy->slots[i].body.inlined.offset       = the_copy->instance_payload_size - sizeof(Eco_Any);
+            the_copy->slots[i].body.inlined.value_size   = slot_value_size;
+            the_copy->slots[i].body.inlined.offset       = the_copy->instance_payload_size - slot_value_size;
         }
         else the_copy->slots[i] = self->slots[i - 1];
     }

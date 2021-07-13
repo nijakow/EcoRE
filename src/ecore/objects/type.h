@@ -26,7 +26,7 @@ struct Eco_Type_Slot
     union {
         struct {
             unsigned int offset;
-            /* TODO: struct Eco_Type* type; */
+            unsigned int value_size;
             bool is_inherited;
         } inlined;
         struct Eco_Code* code;
