@@ -20,7 +20,7 @@ void* Eco_Object_New(struct Eco_Type* type,
         object                           = Eco_Memory_Alloc(size);
         object->payload                  = NULL;
         object->header.payload_in_object = false;
-    } else if (payload_size < 512) {
+    } else if (payload_size * 2 <= size) {
         object                           = Eco_Memory_Alloc(size + payload_size);
         object->payload                  = ((char*) object) + size;
         object->header.payload_in_object = true;
