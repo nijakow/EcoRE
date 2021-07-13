@@ -4,11 +4,16 @@
 #include "../vm/core/send.h"
 #include "../vm/fiber.h"
 #include "../vm/core/interpreter.h"
+#include "../vm/memory/memory.h"
 #include "../vm/memory/gc/gc.h"
 #include "key.h"
 #include "group.h"
 #include "code.h"
 #include "closure.h"
+
+
+struct Eco_Type*  Eco_TYPES = NULL;
+
 
 
 bool Eco_Type_Slot_GetValue(struct Eco_Type_Slot* slot, struct Eco_Object* object, Eco_Any* location)
@@ -72,12 +77,32 @@ static struct Eco_Type* Eco_Type_New(unsigned int slot_count)
 {
     struct Eco_Type*  type;
     
-    type             = Eco_Object_New_Derived(Eco_Type_TYPE_TYPE,
-                                              sizeof(struct Eco_Type) + sizeof(struct Eco_Type_Slot) * slot_count,
-                                              0);
-    type->slot_count = slot_count;
+    type                        = Eco_Memory_Alloc(sizeof(struct Eco_Type) + sizeof(struct Eco_Type_Slot) * slot_count);
+    type->header.refcount       = 0;
+    type->header.persistent     = false;
+
+    type->shared                = NULL;
+    type->slot_count            = slot_count;
+    type->instance_payload_size = 0;
+
+    type->header.prev           = NULL;
+    type->header.next           = Eco_TYPES;
+    Eco_TYPES                   = type;
 
     return type;
+}
+
+void Eco_Type_Del(struct Eco_Type* type)
+{
+    if (Eco_TYPES == type) {
+        if (type->header.prev != NULL) Eco_TYPES = type->header.prev;
+        else                           Eco_TYPES = type->header.next;
+    }
+
+    if (type->header.prev != NULL) type->header.prev->header.next = type->header.next;
+    if (type->header.next != NULL) type->header.next->header.prev = type->header.prev;
+
+    Eco_Memory_Free(type);
 }
 
 static struct Eco_Type* Eco_Type_New_Prefab(struct Eco_Type_Shared* shared, unsigned int slots)
@@ -86,6 +111,7 @@ static struct Eco_Type* Eco_Type_New_Prefab(struct Eco_Type_Shared* shared, unsi
 
     type = Eco_Type_New(slots);
 
+    type->header.persistent     = true;
     type->shared                = shared;
     type->instance_payload_size = 0;
 
@@ -149,15 +175,19 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
                 break;
         }
     }
-
-    Eco_Object_Mark(state, &(type->_));
 }
 
-void Eco_Type_Del(struct Eco_Type* type)
+void Eco_Type_MarkTypes(struct Eco_GC_State* state)
 {
-    Eco_Object_Del(&(type->_));
-}
+    struct Eco_Type*  type;
 
+    type = Eco_TYPES;
+    while (type != NULL)
+    {
+        Eco_Type_Mark(state, type);
+        type = type->header.next;
+    }
+}
 
 
 struct Eco_Type* Eco_Type_TYPE_TYPE = NULL;
@@ -168,11 +198,6 @@ struct Eco_Type* Eco_Type_CODE_TYPE = NULL;
 struct Eco_Type* Eco_Type_CLOSURE_TYPE = NULL;
 
 
-static struct Eco_Type_Shared Eco_Type_Shared_TYPE = {
-    .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Object_Send,
-    .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Type_Mark,
-    .del  = (void(*)(struct Eco_Object*)) Eco_Type_Del
-};
 static struct Eco_Type_Shared Eco_Type_Shared_PLAIN_OBJECT = {
     .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Object_Send,
     .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Object_Mark,
@@ -199,14 +224,20 @@ static struct Eco_Type_Shared Eco_Type_Shared_CLOSURE = {
     .del  = (void(*)(struct Eco_Object*)) Eco_Closure_Del
 };
 
-void Eco_Type_InitializeTypes()
+void Eco_Type_CreateTypes()
 {
-    Eco_Type_TYPE_TYPE         = Eco_Type_New_Prefab(&Eco_Type_Shared_TYPE, 0);
-    Eco_Type_TYPE_TYPE->_.type = Eco_Type_TYPE_TYPE;
-
     Eco_Type_PLAIN_OBJECT_TYPE = Eco_Type_New_Prefab(&Eco_Type_Shared_PLAIN_OBJECT, 0);
     Eco_Type_KEY_TYPE          = Eco_Type_New_Prefab(&Eco_Type_Shared_KEY, 0);
     Eco_Type_GROUP_TYPE        = Eco_Type_New_Prefab(&Eco_Type_Shared_GROUP, 0);
     Eco_Type_CODE_TYPE         = Eco_Type_New_Prefab(&Eco_Type_Shared_CODE, 0);
     Eco_Type_CLOSURE_TYPE      = Eco_Type_New_Prefab(&Eco_Type_Shared_CLOSURE, 0);
+}
+
+void Eco_Type_DestroyTypes()
+{
+    Eco_Type_Del(Eco_Type_PLAIN_OBJECT_TYPE);
+    Eco_Type_Del(Eco_Type_KEY_TYPE);
+    Eco_Type_Del(Eco_Type_GROUP_TYPE);
+    Eco_Type_Del(Eco_Type_CODE_TYPE);
+    Eco_Type_Del(Eco_Type_CLOSURE_TYPE);
 }

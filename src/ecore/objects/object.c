@@ -36,6 +36,8 @@ void* Eco_Object_New_Derived(struct Eco_Type* type,
         object->header.payload_in_object = false;
     }
 
+    Eco_Type_Incr(type);
+
     object->type                = type;
 
     object->header.mark_queued  = false;
@@ -107,6 +109,8 @@ void Eco_Object_Del(struct Eco_Object* object)
         Eco_Memory_Free(object->payload);
     }
 
+    Eco_Type_Decr(object->type);
+
     Eco_Memory_Free(object);
 }
 
@@ -133,8 +137,18 @@ static void Eco_Object_ResizePayload(struct Eco_Object* object, unsigned int new
 
 static void Eco_Object_SwitchType(struct Eco_Object* object, struct Eco_Type* new_type)
 {
+    struct Eco_Type*  old_type;
+
+    if (object->type == new_type) return;
+
+    Eco_Type_Incr(new_type);
+
+    old_type     = object->type;
     object->type = new_type;
+
     Eco_Object_ResizePayload(object, new_type->instance_payload_size);
+
+    Eco_Type_Decr(old_type);
 }
 
 bool Eco_Object_AddSlot(struct Eco_Object* self, struct Eco_Object* key, int pos, Eco_Any* value)

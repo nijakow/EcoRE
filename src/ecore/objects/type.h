@@ -47,7 +47,12 @@ struct Eco_Type_Shared
 
 struct Eco_Type
 {
-    struct Eco_Object        _;
+    struct {
+        struct Eco_Type* next;
+        struct Eco_Type* prev;
+        unsigned int     refcount;
+        bool             persistent;
+    } header;
 
     struct Eco_Type_Shared*  shared;
 
@@ -55,6 +60,24 @@ struct Eco_Type
     unsigned int             instance_payload_size;
     struct Eco_Type_Slot     slots[];
 };
+
+void Eco_Type_Del(struct Eco_Type*);
+
+static inline void Eco_Type_Incr(struct Eco_Type* type)
+{
+    type->header.refcount++;
+}
+
+static inline void Eco_Type_Decr(struct Eco_Type* type)
+{
+    if (type->header.refcount <= 1) {
+        if (!type->header.persistent) {
+            Eco_Type_Del(type);
+        }
+    } else {
+        type->header.refcount--;
+    }
+}
 
 bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*, int, struct Eco_Object* key, struct Eco_Type**, struct Eco_Type_Slot**);
 
@@ -68,4 +91,6 @@ extern struct Eco_Type* Eco_Type_GROUP_TYPE;
 extern struct Eco_Type* Eco_Type_CODE_TYPE;
 extern struct Eco_Type* Eco_Type_CLOSURE_TYPE;
 
-void Eco_Type_InitializeTypes();
+void Eco_Type_MarkTypes(struct Eco_GC_State*);
+void Eco_Type_CreateTypes();
+void Eco_Type_DestroyTypes();

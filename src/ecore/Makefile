@@ -68,9 +68,9 @@ run: $(EXECUTABLE)
 debug: $(EXECUTABLE)
 	gdb $(EXECUTABLE)
 
-.phony: test
-test: $(EXECUTABLE)
-	valgrind --leak-check=full $(EXECUTABLE)
+.phony: leakcheck
+leakcheck: $(EXECUTABLE)
+	valgrind --leak-check=full --show-leak-kinds=all $(EXECUTABLE)
 
 .phony: clean
 clean:

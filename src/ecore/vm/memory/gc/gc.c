@@ -24,6 +24,8 @@ void Eco_GC_MarkRoots(struct Eco_GC_State* state)
     Eco_GC_State_MarkObject(state, Eco_Type_CODE_TYPE);
     Eco_GC_State_MarkObject(state, Eco_Type_CLOSURE_TYPE);
 
+    Eco_Type_MarkTypes(state);
+
     Eco_VM_Mark(state, &Eco_THE_VM);
 }
 
