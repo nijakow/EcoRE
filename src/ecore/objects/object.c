@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <string.h>
 
 #include "object.h"
 
@@ -105,11 +106,30 @@ void Eco_Object_Del(struct Eco_Object* object)
 }
 
 
+static void Eco_Object_ResizePayload(struct Eco_Object* object, unsigned int new_size)
+{
+    char*  new_payload;
+
+    if (object->header.payload_in_object) {
+        if (new_size >= object->header.payload_size) {
+            new_payload                      = Eco_Memory_Alloc(new_size);
+
+            memcpy(new_payload, object->payload, object->header.payload_size);
+            
+            object->payload                  = new_payload;
+            object->header.payload_in_object = false;
+            object->header.payload_size      = new_size;
+        }
+    } else {
+        object->payload             = Eco_Memory_Realloc(object->payload, new_size);
+        object->header.payload_size = new_size;
+    }
+}
 
 static void Eco_Object_SwitchType(struct Eco_Object* object, struct Eco_Type* new_type)
 {
     object->type = new_type;
-    /* TODO: Maybe resize object->payload depending on new_type->instance_payload_size */
+    Eco_Object_ResizePayload(object, new_type->instance_payload_size);
 }
 
 bool Eco_Object_AddSlot(struct Eco_Object* self, struct Eco_Object* key, int pos, Eco_Any* value)
