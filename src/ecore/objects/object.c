@@ -16,15 +16,25 @@ void* Eco_Object_New(struct Eco_Type* type,
 {
     struct Eco_Object* object;
 
-    object = Eco_Memory_Alloc(size);
+    if (payload_size == 0) {
+        object                           = Eco_Memory_Alloc(size);
+        object->payload                  = NULL;
+        object->header.payload_in_object = false;
+    } else if (payload_size < 512) {
+        object                           = Eco_Memory_Alloc(size + payload_size);
+        object->payload                  = ((char*) object) + size;
+        object->header.payload_in_object = true;
+    } else {
+        object                           = Eco_Memory_Alloc(size);
+        object->payload                  = Eco_Memory_Alloc(payload_size);
+        object->header.payload_in_object = false;
+    }
 
     object->type                = type;
 
     object->header.mark_queued  = false;
     object->header.mark_done    = false;
     object->header.payload_size = payload_size;
-
-    object->payload             = payload_size > 0 ? Eco_Memory_Alloc(payload_size) : NULL;
 
     object->next                = Eco_OBJECTS;
     Eco_OBJECTS                 = object;
@@ -87,7 +97,7 @@ void Eco_Object_Mark(struct Eco_GC_State* state, struct Eco_Object* object)
 
 void Eco_Object_Del(struct Eco_Object* object)
 {
-    if (object->payload != NULL) {
+    if ((object->payload != NULL) && (!object->header.payload_in_object)) {
         Eco_Memory_Free(object->payload);
     }
 

@@ -18,9 +18,10 @@ struct Eco_Object
     struct Eco_Object*  next;
     struct Eco_Type*    type;
     struct {
-        unsigned int mark_queued  : 1;
-        unsigned int mark_done    : 1;
-        unsigned int payload_size : 30;
+        unsigned int mark_queued       : 1;
+        unsigned int mark_done         : 1;
+        unsigned int payload_in_object : 1;
+        unsigned int payload_size      : 29;
     } header;
     char*               payload;
 };
