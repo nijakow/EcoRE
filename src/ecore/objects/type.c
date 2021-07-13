@@ -87,6 +87,9 @@ static struct Eco_Type* Eco_Type_New(unsigned int slot_count)
 
     type->header.prev           = NULL;
     type->header.next           = Eco_TYPES;
+    if (Eco_TYPES != NULL) {
+        Eco_TYPES->header.prev  = type;
+    }
     Eco_TYPES                   = type;
 
     return type;
