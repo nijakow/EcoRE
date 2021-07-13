@@ -10,7 +10,9 @@
 struct Eco_Object* Eco_OBJECTS = NULL;
 
 
-void* Eco_Object_New(struct Eco_Type* type, unsigned int size)
+void* Eco_Object_New(struct Eco_Type* type,
+                     unsigned int size,
+                     unsigned int payload_size)
 {
     struct Eco_Object* object;
 
@@ -20,6 +22,9 @@ void* Eco_Object_New(struct Eco_Type* type, unsigned int size)
 
     object->header.mark_queued  = false;
     object->header.mark_done    = false;
+    object->header.payload_size = payload_size;
+
+    object->payload             = payload_size > 0 ? Eco_Memory_Alloc(payload_size) : NULL;
 
     object->next                = Eco_OBJECTS;
     Eco_OBJECTS                 = object;
@@ -82,4 +87,9 @@ void Eco_Object_Mark(struct Eco_GC_State* state, struct Eco_Object* object)
 
 void Eco_Object_Del(struct Eco_Object* object)
 {
+    if (object->payload != NULL) {
+        Eco_Memory_Free(object->payload);
+    }
+
+    Eco_Memory_Free(object);
 }

@@ -10,7 +10,7 @@ struct Eco_Closure* Eco_Closure_New(struct Eco_Code* code, struct Eco_Environmen
 {
     struct Eco_Closure* closure;
 
-    closure = Eco_Object_New(Eco_Type_CLOSURE_TYPE, sizeof(struct Eco_Closure));
+    closure = Eco_Object_New(Eco_Type_CLOSURE_TYPE, sizeof(struct Eco_Closure), 0);
 
     closure->code = code;
     closure->environment = environment;

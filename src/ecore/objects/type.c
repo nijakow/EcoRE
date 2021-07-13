@@ -86,7 +86,7 @@ struct Eco_Type* Eco_Type_MakePrefabType(struct Eco_Type_Shared* shared, unsigne
 {
     struct Eco_Type* type;
 
-    type = Eco_Object_New(Eco_Type_TYPE_TYPE, sizeof(struct Eco_Type) + sizeof(struct Eco_Type_Slot) * slots);
+    type = Eco_Object_New(Eco_Type_TYPE_TYPE, sizeof(struct Eco_Type) + sizeof(struct Eco_Type_Slot) * slots, 0);
 
     type->shared = shared;
     type->slot_count = slots;

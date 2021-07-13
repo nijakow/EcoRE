@@ -64,7 +64,6 @@ void Eco_GC_Sweep(struct Eco_GC_State* state)
         } else {
             *ptr = object->next;
             object->type->shared->del(object);
-            Eco_Memory_Free(object);
         }
     }
 }

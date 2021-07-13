@@ -6,7 +6,7 @@
 
 struct Eco_Code* Eco_Code_New()
 {
-    return Eco_Object_New(Eco_Type_CODE_TYPE, sizeof(struct Eco_Code));
+    return Eco_Object_New(Eco_Type_CODE_TYPE, sizeof(struct Eco_Code), 0);
 }
 
 void Eco_Code_Mark(struct Eco_GC_State* state, struct Eco_Code* code)

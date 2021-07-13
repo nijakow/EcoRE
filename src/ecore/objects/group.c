@@ -10,7 +10,7 @@ struct Eco_Group* Eco_Group_New(struct Eco_Object* core)
 {
     struct Eco_Group* group;
 
-    group = Eco_Object_New(Eco_Type_GROUP_TYPE, sizeof(struct Eco_Group));
+    group = Eco_Object_New(Eco_Type_GROUP_TYPE, sizeof(struct Eco_Group), 0);
 
     group->object_alloc    = 0;
     group->body.single[0]  = core;

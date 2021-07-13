@@ -14,7 +14,7 @@ struct Eco_Key* Eco_Key_New(const char* name)
     struct Eco_Key*  key;
 
     namelen                = strlen(name);
-    key                    = Eco_Object_New(Eco_Type_KEY_TYPE, sizeof(struct Eco_Key) + (namelen + 1) * sizeof(char));
+    key                    = Eco_Object_New(Eco_Type_KEY_TYPE, sizeof(struct Eco_Key) + (namelen + 1) * sizeof(char), 0);
     key->econnect_callback = NULL;
 
     memcpy(&(key->name), name, namelen + 1);
