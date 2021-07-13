@@ -103,3 +103,10 @@ void Eco_Object_Del(struct Eco_Object* object)
 
     Eco_Memory_Free(object);
 }
+
+
+
+void Eco_Object_AddSlot(struct Eco_Object* self, struct Eco_Object* key, int pos, Eco_Any value)
+{
+    /* TODO, FIXME, XXX! */
+}
