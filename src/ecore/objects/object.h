@@ -37,4 +37,4 @@ bool  Eco_Object_Send(struct Eco_Message*, struct Eco_Object*);
 void  Eco_Object_Mark(struct Eco_GC_State*, struct Eco_Object*);
 void  Eco_Object_Del(struct Eco_Object*);
 
-void Eco_Object_AddSlot(struct Eco_Object*, struct Eco_Object*, int, Eco_Any);
+bool Eco_Object_AddSlot(struct Eco_Object*, struct Eco_Object*, int, Eco_Any*);

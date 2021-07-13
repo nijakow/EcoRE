@@ -23,6 +23,18 @@ bool Eco_Type_Slot_GetValue(struct Eco_Type_Slot* slot, struct Eco_Object* objec
     }
 }
 
+bool Eco_Type_Slot_SetValue(struct Eco_Type_Slot* slot, struct Eco_Object* object, Eco_Any* value)
+{
+    switch (slot->type)
+    {
+        case Eco_Type_Slot_Type_INLINED:
+            *((Eco_Any*) Eco_Object_At(object, slot->body.inlined.offset)) = *value;
+            return true;
+        default:
+            return false;
+    }
+}
+
 bool Eco_Type_Slot_Invoke(struct Eco_Message* message, struct Eco_Object* object, struct Eco_Type_Slot* slot)
 {
     switch (message->type)
@@ -56,6 +68,69 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message* message, struct Eco_Object* object
 }
 
 
+static struct Eco_Type* Eco_Type_New(unsigned int slot_count)
+{
+    struct Eco_Type*  type;
+    
+    type             = Eco_Object_New(Eco_Type_TYPE_TYPE,
+                                      sizeof(struct Eco_Type) + sizeof(struct Eco_Type_Slot) * slot_count,
+                                      0);
+    type->slot_count = slot_count;
+
+    return type;
+}
+
+static struct Eco_Type* Eco_Type_New_Prefab(struct Eco_Type_Shared* shared, unsigned int slots)
+{
+    struct Eco_Type* type;
+
+    type = Eco_Type_New(slots);
+
+    type->shared                = shared;
+    type->instance_payload_size = 0;
+
+    return type;
+}
+
+bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type* self,
+                                     int pos,
+                                     struct Eco_Object* key,
+                                     /* TODO: Flags */
+                                     struct Eco_Type** type_loc,
+                                     struct Eco_Type_Slot** slot_loc)
+{
+    unsigned int      i;
+    unsigned int      adjusted_pos;
+    struct Eco_Type*  the_copy;
+
+    const unsigned int  new_slot_count = self->slot_count + 1;
+
+    if (pos >= 0) adjusted_pos =  pos;
+    else          adjusted_pos = -pos; 
+
+    if (adjusted_pos >= new_slot_count) adjusted_pos = new_slot_count - 1;
+
+
+    the_copy                        = Eco_Type_New(new_slot_count);
+    *type_loc                       = the_copy;
+    the_copy->shared                = self->shared;
+    the_copy->instance_payload_size = self->instance_payload_size + sizeof(Eco_Any);
+
+    for (i = 0; i < new_slot_count; i++) {
+        if (i < adjusted_pos) the_copy->slots[i] = self->slots[i];
+        else if (i == adjusted_pos) {
+            *slot_loc = &the_copy->slots[i];
+            the_copy->slots[i].type                      = Eco_Type_Slot_Type_INLINED;
+            the_copy->slots[i].key                       = key;
+            the_copy->slots[i].body.inlined.is_inherited = false;
+            the_copy->slots[i].body.inlined.offset       = the_copy->instance_payload_size - sizeof(Eco_Any);
+        }
+        else the_copy->slots[i] = self->slots[i - 1];
+    }
+
+    return true;
+}
+
 
 void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
 {
@@ -79,19 +154,6 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
 void Eco_Type_Del(struct Eco_Type* type)
 {
     Eco_Object_Del(&(type->_));
-}
-
-
-struct Eco_Type* Eco_Type_MakePrefabType(struct Eco_Type_Shared* shared, unsigned int slots)
-{
-    struct Eco_Type* type;
-
-    type = Eco_Object_New(Eco_Type_TYPE_TYPE, sizeof(struct Eco_Type) + sizeof(struct Eco_Type_Slot) * slots, 0);
-
-    type->shared = shared;
-    type->slot_count = slots;
-
-    return type;
 }
 
 
@@ -131,11 +193,11 @@ static struct Eco_Type_Shared Eco_Type_Shared_CLOSURE = {
 
 void Eco_Type_InitializeTypes()
 {
-    Eco_Type_TYPE_TYPE         = Eco_Type_MakePrefabType(&Eco_Type_Shared_TYPE, 0);
+    Eco_Type_TYPE_TYPE         = Eco_Type_New_Prefab(&Eco_Type_Shared_TYPE, 0);
     Eco_Type_TYPE_TYPE->_.type = Eco_Type_TYPE_TYPE;
 
-    Eco_Type_KEY_TYPE          = Eco_Type_MakePrefabType(&Eco_Type_Shared_KEY, 0);
-    Eco_Type_GROUP_TYPE        = Eco_Type_MakePrefabType(&Eco_Type_Shared_GROUP, 0);
-    Eco_Type_CODE_TYPE         = Eco_Type_MakePrefabType(&Eco_Type_Shared_CODE, 0);
-    Eco_Type_CLOSURE_TYPE      = Eco_Type_MakePrefabType(&Eco_Type_Shared_CLOSURE, 0);
+    Eco_Type_KEY_TYPE          = Eco_Type_New_Prefab(&Eco_Type_Shared_KEY, 0);
+    Eco_Type_GROUP_TYPE        = Eco_Type_New_Prefab(&Eco_Type_Shared_GROUP, 0);
+    Eco_Type_CODE_TYPE         = Eco_Type_New_Prefab(&Eco_Type_Shared_CODE, 0);
+    Eco_Type_CLOSURE_TYPE      = Eco_Type_New_Prefab(&Eco_Type_Shared_CLOSURE, 0);
 }

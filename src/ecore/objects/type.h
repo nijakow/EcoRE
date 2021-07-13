@@ -34,6 +34,7 @@ struct Eco_Type_Slot
 };
 
 bool Eco_Type_Slot_GetValue(struct Eco_Type_Slot*, struct Eco_Object*, Eco_Any*);
+bool Eco_Type_Slot_SetValue(struct Eco_Type_Slot*, struct Eco_Object*, Eco_Any*);
 bool Eco_Type_Slot_Invoke(struct Eco_Message*, struct Eco_Object*, struct Eco_Type_Slot*);
 
 
@@ -51,8 +52,11 @@ struct Eco_Type
     struct Eco_Type_Shared*  shared;
 
     unsigned int             slot_count;
+    unsigned int             instance_payload_size;
     struct Eco_Type_Slot     slots[];
 };
+
+bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*, int, struct Eco_Object* key, struct Eco_Type**, struct Eco_Type_Slot**);
 
 void Eco_Type_Mark(struct Eco_GC_State*, struct Eco_Type*);
 
