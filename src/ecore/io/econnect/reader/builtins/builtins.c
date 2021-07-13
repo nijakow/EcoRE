@@ -1,8 +1,7 @@
-#include <stdio.h>
-
 #include "builtins.h"
 
 #include "builtins_common_header.h"
+#include "protocol.h"
 #include "id.h"
 #include "flow.h"
 
@@ -10,13 +9,6 @@
 
 #include "../../../../objects/key.h"
 
-
-bool Eco_EConnect_Builtin_Hello(struct Eco_EConnect_Reader* reader,
-                                struct Eco_EConnect_Result* result)
-{
-    printf("Hello :)\n");
-    return true;
-}
 
 bool Eco_EConnect_Builtin_GetKey(struct Eco_EConnect_Reader* reader,
                                  struct Eco_EConnect_Result* result)

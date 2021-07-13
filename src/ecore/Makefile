@@ -36,6 +36,7 @@ io/econnect/reader/parser.c \
 io/econnect/reader/reader.c \
 io/econnect/reader/result.c \
 io/econnect/reader/builtins/builtins.c \
+io/econnect/reader/builtins/protocol.c \
 io/econnect/reader/builtins/id.c \
 io/econnect/reader/builtins/flow.c \
 io/econnect/file/file.c \
