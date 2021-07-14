@@ -2,6 +2,8 @@
 
 #include "../../eco.h"
 
+#include "object_payload.h"
+
 
 struct Eco_Message;
 struct Eco_GC_State;
@@ -12,12 +14,6 @@ struct Eco_GC_State;
  *    s t r u c t   E c o _ O b j e c t
  *
  */
-
-struct Eco_Object_Payload
-{
-    unsigned int  size;
-    char          data[];
-};
 
 struct Eco_Object_Header
 {

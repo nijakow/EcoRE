@@ -13,6 +13,7 @@ SOURCES = \
 eco.c \
 objects/base/type.c \
 objects/base/object.c \
+objects/base/object_payload.c \
 objects/group/group.c \
 objects/misc/key/key.c \
 objects/vm/code/code.c \
