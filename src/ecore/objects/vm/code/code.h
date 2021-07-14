@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../eco.h"
+#include "../../../eco.h"
 
-#include "object.h"
+#include "../../base/object.h"
 
 struct Eco_GC_State;
 

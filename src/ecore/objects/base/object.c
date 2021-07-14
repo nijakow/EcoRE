@@ -4,9 +4,9 @@
 #include "object.h"
 
 #include "type.h"
-#include "../vm/core/send.h"
-#include "../vm/memory/memory.h"
-#include "../vm/memory/gc/gc.h"
+#include "../../vm/core/send.h"
+#include "../../vm/memory/memory.h"
+#include "../../vm/memory/gc/gc.h"
 
 struct Eco_Object* Eco_OBJECTS = NULL;
 

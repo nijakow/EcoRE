@@ -3,7 +3,7 @@
 #include "gc_state.h"
 
 #include "../../../eco.h"
-#include "../../../objects/object.h"
+#include "../../../objects/base/object.h"
 
 
 static inline void Eco_GC_State_MarkObject(struct Eco_GC_State* state, void* object)

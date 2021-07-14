@@ -2,9 +2,9 @@
 
 #include "eco.h"
 
+#include "objects/base/object.h"
+#include "objects/base/type.h"
 #include "io/econnect/file/file.h"
-#include "objects/object.h"
-#include "objects/type.h"
 
 
 void Eco_Banner()

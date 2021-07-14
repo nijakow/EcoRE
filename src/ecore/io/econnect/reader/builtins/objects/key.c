@@ -2,7 +2,7 @@
 
 #include "../../parser.h"
 
-#include "../../../../../objects/key.h"
+#include "../../../../../objects/misc/key/key.h"
 
 
 bool Eco_EConnect_Builtin_GetKey(struct Eco_EConnect_Reader* reader,

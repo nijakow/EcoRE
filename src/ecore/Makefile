@@ -11,12 +11,12 @@ EXECUTABLE = ./ecore.exe
 
 SOURCES = \
 eco.c \
-objects/type.c \
-objects/object.c \
-objects/key.c \
-objects/group.c \
-objects/code.c \
-objects/closure.c \
+objects/base/type.c \
+objects/base/object.c \
+objects/group/group.c \
+objects/misc/key/key.c \
+objects/vm/code/code.c \
+objects/vm/code/closure.c \
 vm/memory/memory.c \
 vm/memory/gc/gc_state.c \
 vm/memory/gc/gc.c \

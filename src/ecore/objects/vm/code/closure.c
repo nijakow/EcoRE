@@ -1,9 +1,9 @@
 #include "closure.h"
 
-#include "type.h"
 #include "code.h"
-#include "../vm/core/environment.h"
-#include "../vm/memory/memory.h"
+#include "../../base/type.h"
+#include "../../../vm/core/environment.h"
+#include "../../../vm/memory/memory.h"
 
 
 struct Eco_Closure* Eco_Closure_New(struct Eco_Code* code, struct Eco_Environment* environment)

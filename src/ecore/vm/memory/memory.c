@@ -1,5 +1,5 @@
 #include "memory.h"
 
-#include "../../objects/object.h"
-#include "../../objects/type.h"
+#include "../../objects/base/object.h"
+#include "../../objects/base/type.h"
 

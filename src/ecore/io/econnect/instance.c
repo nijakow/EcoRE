@@ -1,6 +1,6 @@
 #include "instance.h"
 
-#include "../../objects/key.h"
+#include "../../objects/misc/key/key.h"
 #include "../../vm/memory/memory.h"
 
 

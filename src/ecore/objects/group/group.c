@@ -1,9 +1,9 @@
 #include "group.h"
 
-#include "object.h"
-#include "type.h"
-#include "../vm/memory/memory.h"
-#include "../vm/memory/gc/gc.h"
+#include "../base/object.h"
+#include "../base/type.h"
+#include "../../vm/memory/memory.h"
+#include "../../vm/memory/gc/gc.h"
 
 
 struct Eco_Group* Eco_Group_New(struct Eco_Object* core)

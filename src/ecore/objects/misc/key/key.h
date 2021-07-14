@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../eco.h"
+#include "../../../eco.h"
 
-#include "object.h"
+#include "../../base/object.h"
 
-#include "../io/econnect/reader/callback.h"
+#include "../../../io/econnect/reader/callback.h"
 
 
 struct Eco_Key

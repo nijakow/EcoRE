@@ -1,15 +1,15 @@
 #include "type.h"
 
 #include "object.h"
-#include "../vm/core/send.h"
-#include "../vm/fiber.h"
-#include "../vm/core/interpreter.h"
-#include "../vm/memory/memory.h"
-#include "../vm/memory/gc/gc.h"
-#include "key.h"
-#include "group.h"
-#include "code.h"
-#include "closure.h"
+#include "../group/group.h"
+#include "../misc/key/key.h"
+#include "../vm/code/code.h"
+#include "../vm/code/closure.h"
+#include "../../vm/core/send.h"
+#include "../../vm/fiber.h"
+#include "../../vm/core/interpreter.h"
+#include "../../vm/memory/memory.h"
+#include "../../vm/memory/gc/gc.h"
 
 
 struct Eco_Type*  Eco_TYPES = NULL;

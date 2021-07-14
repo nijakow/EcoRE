@@ -1,8 +1,8 @@
 #include "eco.h"
 
-#include "objects/type.h"
-#include "objects/object.h"
-#include "objects/group.h"
+#include "objects/base/type.h"
+#include "objects/base/object.h"
+#include "objects/group/group.h"
 
 #include "vm/memory/gc/gc.h"
 

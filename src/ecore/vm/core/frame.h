@@ -1,7 +1,8 @@
 #pragma once
 
 #include "../../eco.h"
-#include "../../objects/code.h"
+#include "../../objects/vm/code/code.h"
+
 
 struct Eco_Environment;
 struct Eco_GC_State;

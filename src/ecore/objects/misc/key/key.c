@@ -2,7 +2,7 @@
 
 #include "key.h"
 
-#include "type.h"
+#include "../../base/type.h"
 
 
 static struct Eco_Key* Eco_KEYS = NULL;
