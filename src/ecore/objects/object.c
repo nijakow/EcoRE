@@ -11,6 +11,39 @@
 struct Eco_Object* Eco_OBJECTS = NULL;
 
 
+
+
+static struct Eco_Object_Payload* Eco_Object_Payload_New(unsigned int size)
+{
+    struct Eco_Object_Payload*  payload;
+
+    if (size == 0) return NULL;
+
+    payload       = Eco_Memory_Alloc(sizeof(struct Eco_Object_Payload) + size);
+    payload->size = size;
+
+    return payload;
+}
+
+static void Eco_Object_Payload_Delete(struct Eco_Object_Payload* payload)
+{
+    Eco_Memory_Free(payload);
+}
+
+static struct Eco_Object_Payload* Eco_Object_Payload_Resize(struct Eco_Object_Payload* payload, unsigned int new_size)
+{
+    if (payload == NULL) {
+        return Eco_Object_Payload_New(new_size);
+    } else if (new_size == 0) {
+        Eco_Object_Payload_Delete(payload);
+        return NULL;
+    } else {
+        return Eco_Memory_Realloc(payload, sizeof(struct Eco_Object_Payload) + new_size);
+    }
+}
+
+
+
 struct Eco_Object*  Eco_Object_New()
 {
     return Eco_Object_New_Derived(Eco_Type_PLAIN_OBJECT_TYPE, sizeof(struct Eco_Object), 0);
@@ -22,19 +55,7 @@ void* Eco_Object_New_Derived(struct Eco_Type* type,
 {
     struct Eco_Object* object;
 
-    if (payload_size == 0) {
-        object                           = Eco_Memory_Alloc(size);
-        object->payload                  = NULL;
-        object->header.payload_in_object = false;
-    } else if (payload_size * 2 <= size) {
-        object                           = Eco_Memory_Alloc(size + payload_size);
-        object->payload                  = ((char*) object) + size;
-        object->header.payload_in_object = true;
-    } else {
-        object                           = Eco_Memory_Alloc(size);
-        object->payload                  = Eco_Memory_Alloc(payload_size);
-        object->header.payload_in_object = false;
-    }
+    object = Eco_Memory_Alloc(size);
 
     Eco_Type_Incr(type);
 
@@ -42,7 +63,9 @@ void* Eco_Object_New_Derived(struct Eco_Type* type,
 
     object->header.mark_queued  = false;
     object->header.mark_done    = false;
-    object->header.payload_size = payload_size;
+    object->header.object_size  = size;
+
+    object->payload             = Eco_Object_Payload_New(payload_size);
 
     object->next                = Eco_OBJECTS;
     Eco_OBJECTS                 = object;
@@ -105,8 +128,8 @@ void Eco_Object_Mark(struct Eco_GC_State* state, struct Eco_Object* object)
 
 void Eco_Object_Del(struct Eco_Object* object)
 {
-    if ((object->payload != NULL) && (!object->header.payload_in_object)) {
-        Eco_Memory_Free(object->payload);
+    if (object->payload != NULL) {
+        Eco_Object_Payload_Delete(object->payload);
     }
 
     Eco_Type_Decr(object->type);
@@ -117,22 +140,7 @@ void Eco_Object_Del(struct Eco_Object* object)
 
 static void Eco_Object_ResizePayload(struct Eco_Object* object, unsigned int new_size)
 {
-    char*  new_payload;
-
-    if (object->header.payload_in_object) {
-        if (new_size >= object->header.payload_size) {
-            new_payload                      = Eco_Memory_Alloc(new_size);
-
-            memcpy(new_payload, object->payload, object->header.payload_size);
-
-            object->payload                  = new_payload;
-            object->header.payload_in_object = false;
-            object->header.payload_size      = new_size;
-        }
-    } else {
-        object->payload             = Eco_Memory_Realloc(object->payload, new_size);
-        object->header.payload_size = new_size;
-    }
+    object->payload = Eco_Object_Payload_Resize(object->payload, new_size);
 }
 
 static void Eco_Object_SwitchType(struct Eco_Object* object, struct Eco_Type* new_type)
