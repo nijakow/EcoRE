@@ -1,10 +1,10 @@
 #include "builtins.h"
 
-#include "protocol.h"
-#include "id.h"
-#include "flow.h"
 #include "objects/key.h"
 #include "objects/object.h"
+#include "protocol/protocol.h"
+#include "id/id.h"
+#include "flow/flow.h"
 
 #include "../callback.h"
 
