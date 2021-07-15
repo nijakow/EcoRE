@@ -3,6 +3,7 @@
 #include "../../parser.h"
 
 #include "../../../../../objects/base/object.h"
+#include "../../../../../objects/base/object_slots.h"
 #include "../../../../../objects/base/slot.h"
 
 

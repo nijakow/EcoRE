@@ -16,6 +16,7 @@ objects/base/type.c \
 objects/base/typecore.c \
 objects/base/object.c \
 objects/base/object_payload.c \
+objects/base/object_slots.c \
 objects/group/group.c \
 objects/misc/key/key.c \
 objects/vm/code/code.c \
