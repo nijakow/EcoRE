@@ -30,6 +30,21 @@ struct Eco_Object* Eco_EConnect_Reader_ReadObjectByID(struct Eco_EConnect_Reader
     return Eco_EConnect_Instance_GetBoundObject(reader->instance, Eco_EConnect_ParseUInt(&reader->stream));
 }
 
+bool Eco_EConnect_Reader_ReadObject(struct Eco_EConnect_Reader* reader,
+                                    struct Eco_EConnect_Result* result,
+                                    struct Eco_Object** object_loc)
+{
+    if (!Eco_EConnect_Reader_Read(reader, result)) {
+        return false;
+    } else if (!Eco_EConnect_Result_ExpectObject(result, object_loc)) {
+        Eco_EConnect_Result_Destroy(result);
+        Eco_EConnect_Result_Create_Error(result, Eco_EConnect_ErrorType_TYPE_ERROR);
+        return false;
+    }
+
+    return true;
+}
+
 bool Eco_EConnect_Reader_ReadAny(struct Eco_EConnect_Reader* reader,
                                  struct Eco_EConnect_Result* result,
                                  Eco_Any* value)

@@ -16,6 +16,7 @@ struct Eco_Code
 
     unsigned int       arg_count;
 
+    unsigned int       bytecode_count;
     u8*                bytecodes;
     
     unsigned int       constant_count;

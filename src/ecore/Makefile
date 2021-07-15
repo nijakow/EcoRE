@@ -44,6 +44,7 @@ io/econnect/reader/builtins/protocol/protocol.c \
 io/econnect/reader/builtins/objects/object.c \
 io/econnect/reader/builtins/objects/object_body.c \
 io/econnect/reader/builtins/objects/key.c \
+io/econnect/reader/builtins/objects/code.c \
 io/econnect/reader/builtins/id/id.c \
 io/econnect/reader/builtins/flow/flow.c \
 io/econnect/file/file.c \
