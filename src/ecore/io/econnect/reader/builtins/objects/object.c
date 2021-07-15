@@ -24,8 +24,12 @@ bool Eco_EConnect_Builtin_GetObject_Parse(struct Eco_EConnect_Reader* reader,
     {
         flags = Eco_EConnect_ParseByte(&reader->stream);
 
-        if (!Eco_EConnect_Reader_Read(reader, result)
-            || !Eco_EConnect_Result_ExpectObject(result, &slot_info.key)) {
+        if (!Eco_EConnect_Reader_Read(reader, result))
+            return false;
+
+        if (!Eco_EConnect_Result_ExpectObject(result, &slot_info.key)) {
+            Eco_EConnect_Result_Destroy(result);
+            Eco_EConnect_Result_Create_Error(result, Eco_EConnect_ErrorType_TYPE_ERROR);
             return false;
         }
 

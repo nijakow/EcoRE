@@ -44,7 +44,7 @@ bool Eco_EConnect_Reader_ReadAny(struct Eco_EConnect_Reader* reader,
     // TODO: Integers and Floats
     } else {
         Eco_EConnect_Result_Destroy(result);
-        Eco_EConnect_Result_Create_Error(result, Eco_EConnect_ErrorType_EXPECTED_ANY);
+        Eco_EConnect_Result_Create_Error(result, Eco_EConnect_ErrorType_TYPE_ERROR);
         return false;
     }
 }

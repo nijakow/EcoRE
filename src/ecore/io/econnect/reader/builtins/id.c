@@ -18,7 +18,7 @@ bool Eco_EConnect_Builtin_NewID(struct Eco_EConnect_Reader* reader,
             return Eco_EConnect_Reader_Read(reader, result);
         } else {
             Eco_EConnect_Result_Destroy(result);
-            Eco_EConnect_Result_Create_Error(result, Eco_EConnect_ErrorType_EXPECTED_OBJECT);
+            Eco_EConnect_Result_Create_Error(result, Eco_EConnect_ErrorType_TYPE_ERROR);
         }
     }
 
@@ -49,7 +49,7 @@ bool Eco_EConnect_Builtin_GetID(struct Eco_EConnect_Reader* reader,
         Eco_EConnect_Result_Create_Object(result, object);
         return true;
     } else {
-        Eco_EConnect_Result_Create_Error(result, Eco_EConnect_ErrorType_ID_INVALID);
+        Eco_EConnect_Result_Create_Error(result, Eco_EConnect_ErrorType_UNBOUND_OBJECT);
         return false;
     }
 }
