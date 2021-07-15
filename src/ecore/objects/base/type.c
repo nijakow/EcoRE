@@ -81,7 +81,7 @@ static struct Eco_Type* Eco_Type_New(unsigned int slot_count)
     type->header.refcount       = 0;
     type->header.persistent     = false;
 
-    type->shared                = NULL;
+    type->typecore              = NULL;
     type->slot_count            = slot_count;
     type->instance_payload_size = 0;
 
@@ -108,14 +108,14 @@ void Eco_Type_Del(struct Eco_Type* type)
     Eco_Memory_Free(type);
 }
 
-static struct Eco_Type* Eco_Type_New_Prefab(struct Eco_Type_Shared* shared, unsigned int slots)
+static struct Eco_Type* Eco_Type_New_Prefab(struct Eco_TypeCore* typecore, unsigned int slots)
 {
     struct Eco_Type* type;
 
     type = Eco_Type_New(slots);
 
     type->header.persistent     = true;
-    type->shared                = shared;
+    type->typecore              = typecore;
     type->instance_payload_size = 0;
 
     return type;
@@ -140,7 +140,7 @@ static bool Eco_Type_CopyWithNewSlot(struct Eco_Type* self,
 
     the_copy                        = Eco_Type_New(new_slot_count);
     *type_loc                       = the_copy;
-    the_copy->shared                = self->shared;
+    the_copy->typecore              = self->typecore;
     the_copy->instance_payload_size = self->instance_payload_size;
 
     for (i = 0; i < new_slot_count; i++) {
@@ -249,27 +249,27 @@ struct Eco_Type* Eco_Type_CODE_TYPE = NULL;
 struct Eco_Type* Eco_Type_CLOSURE_TYPE = NULL;
 
 
-static struct Eco_Type_Shared Eco_Type_Shared_PLAIN_OBJECT = {
+static struct Eco_TypeCore Eco_TypeCore_PLAIN_OBJECT = {
     .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Object_Send,
     .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Object_Mark,
     .del  = (void(*)(struct Eco_Object*)) Eco_Object_Del
 };
-static struct Eco_Type_Shared Eco_Type_Shared_KEY = {
+static struct Eco_TypeCore Eco_TypeCore_KEY = {
     .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Object_Send,
     .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Key_Mark,
     .del  = (void(*)(struct Eco_Object*)) Eco_Key_Del
 };
-static struct Eco_Type_Shared Eco_Type_Shared_GROUP = {
+static struct Eco_TypeCore Eco_TypeCore_GROUP = {
     .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Group_Send,
     .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Group_Mark,
     .del  = (void(*)(struct Eco_Object*)) Eco_Group_Del
 };
-static struct Eco_Type_Shared Eco_Type_Shared_CODE = {
+static struct Eco_TypeCore Eco_TypeCore_CODE = {
     .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Object_Send,
     .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Code_Mark,
     .del  = (void(*)(struct Eco_Object*)) Eco_Code_Del
 };
-static struct Eco_Type_Shared Eco_Type_Shared_CLOSURE = {
+static struct Eco_TypeCore Eco_TypeCore_CLOSURE = {
     .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Object_Send,
     .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Closure_Mark,
     .del  = (void(*)(struct Eco_Object*)) Eco_Closure_Del
@@ -277,11 +277,11 @@ static struct Eco_Type_Shared Eco_Type_Shared_CLOSURE = {
 
 void Eco_Type_CreateTypes()
 {
-    Eco_Type_PLAIN_OBJECT_TYPE = Eco_Type_New_Prefab(&Eco_Type_Shared_PLAIN_OBJECT, 0);
-    Eco_Type_KEY_TYPE          = Eco_Type_New_Prefab(&Eco_Type_Shared_KEY, 0);
-    Eco_Type_GROUP_TYPE        = Eco_Type_New_Prefab(&Eco_Type_Shared_GROUP, 0);
-    Eco_Type_CODE_TYPE         = Eco_Type_New_Prefab(&Eco_Type_Shared_CODE, 0);
-    Eco_Type_CLOSURE_TYPE      = Eco_Type_New_Prefab(&Eco_Type_Shared_CLOSURE, 0);
+    Eco_Type_PLAIN_OBJECT_TYPE = Eco_Type_New_Prefab(&Eco_TypeCore_PLAIN_OBJECT, 0);
+    Eco_Type_KEY_TYPE          = Eco_Type_New_Prefab(&Eco_TypeCore_KEY, 0);
+    Eco_Type_GROUP_TYPE        = Eco_Type_New_Prefab(&Eco_TypeCore_GROUP, 0);
+    Eco_Type_CODE_TYPE         = Eco_Type_New_Prefab(&Eco_TypeCore_CODE, 0);
+    Eco_Type_CLOSURE_TYPE      = Eco_Type_New_Prefab(&Eco_TypeCore_CLOSURE, 0);
 }
 
 void Eco_Type_DestroyTypes()

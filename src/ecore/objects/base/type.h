@@ -4,6 +4,7 @@
 
 #include "object.h"
 #include "slot.h"
+#include "typecore.h"
 
 
 struct Eco_Code;
@@ -40,27 +41,21 @@ bool Eco_Type_Slot_SetValue(struct Eco_Type_Slot*, struct Eco_Object*, Eco_Any*)
 bool Eco_Type_Slot_Invoke(struct Eco_Message*, struct Eco_Object*, struct Eco_Type_Slot*);
 
 
-struct Eco_Type_Shared
-{
-    bool (*send)(struct Eco_Message*, struct Eco_Object*);
-    void (*mark)(struct Eco_GC_State*, struct Eco_Object*);
-    void (*del)(struct Eco_Object*);
-};
 
 struct Eco_Type
 {
     struct {
-        struct Eco_Type* next;
-        struct Eco_Type* prev;
-        unsigned int     refcount;
-        bool             persistent;
-    } header;
+        struct Eco_Type*  next;
+        struct Eco_Type*  prev;
+        unsigned int      refcount;
+        bool              persistent;
+    }                     header;
 
-    struct Eco_Type_Shared*  shared;
+    struct Eco_TypeCore*  typecore;
 
-    unsigned int             slot_count;
-    unsigned int             instance_payload_size;
-    struct Eco_Type_Slot     slots[];
+    unsigned int          slot_count;
+    unsigned int          instance_payload_size;
+    struct Eco_Type_Slot  slots[];
 };
 
 void Eco_Type_Del(struct Eco_Type*);

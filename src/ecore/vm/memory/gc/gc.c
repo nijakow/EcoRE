@@ -37,7 +37,7 @@ void Eco_GC_MarkLoop(struct Eco_GC_State* state)
         object = Eco_GC_State_NextObjectToMark(state);
 
         object->header.mark_done = true;
-        object->type->shared->mark(state, object);
+        object->type->typecore->mark(state, object);
     }
 }
 
@@ -64,7 +64,7 @@ void Eco_GC_Sweep(struct Eco_GC_State* state)
             ptr = &(object->next);
         } else {
             *ptr = object->next;
-            object->type->shared->del(object);
+            object->type->typecore->del(object);
         }
     }
 }

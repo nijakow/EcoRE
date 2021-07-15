@@ -12,7 +12,7 @@ bool Eco_Send(struct Eco_Message* message, Eco_Any* target)
     {
     case Eco_Value_Type_POINTER:
         object = Eco_Any_AsPointer(target);
-        return object->type->shared->send(message, object);
+        return object->type->typecore->send(message, object);
     default:
         return false;   /* TODO */
     }
