@@ -36,6 +36,25 @@ struct Eco_Object* Eco_EConnect_Reader_ReadObjectByID(struct Eco_EConnect_Reader
     }
 }
 
+bool Eco_EConnect_Reader_ReadAny(struct Eco_EConnect_Reader* reader,
+                                 struct Eco_EConnect_Result* result,
+                                 Eco_Any* value)
+{
+    struct Eco_Object*  object;
+
+    if (!Eco_EConnect_Reader_Read(reader, result)) {
+        return false;
+    } else if (Eco_EConnect_Result_ExpectObject(result, &object)) {
+        Eco_Any_AssignPointer(value, object);
+        return true;
+    // TODO: Integers and Floats
+    } else {
+        Eco_EConnect_Result_Destroy(result);
+        Eco_EConnect_Result_Create_Error(result, Eco_EConnect_ErrorType_EXPECTED_ANY);
+        return false;
+    }
+}
+
 bool Eco_EConnect_Reader_Read(struct Eco_EConnect_Reader* reader,
                               struct Eco_EConnect_Result* result)
 {

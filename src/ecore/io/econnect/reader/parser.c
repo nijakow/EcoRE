@@ -3,6 +3,11 @@
 #include "../../../objects/misc/key/key.h"
 
 
+unsigned char Eco_EConnect_ParseByte(struct Eco_IO_ByteInputStream* stream)
+{
+    return (unsigned char) Eco_IO_ByteInputStream_Read(stream);
+}
+
 unsigned int Eco_EConnect_ParseUInt(struct Eco_IO_ByteInputStream* stream)
 {
     u8            byte;

@@ -4,6 +4,7 @@
 #include "id.h"
 #include "flow.h"
 #include "objects/key.h"
+#include "objects/object.h"
 
 #include "../callback.h"
 
@@ -17,6 +18,7 @@ void Eco_EConnect_InitReaderBuiltins()
     Eco_EConnect_InstallCallback("ecosphere.econnect.block", Eco_EConnect_Builtin_Block);
     Eco_EConnect_InstallCallback("ecosphere.econnect.unwind", Eco_EConnect_Builtin_Unwind);
     Eco_EConnect_InstallCallback("ecosphere.object.key", Eco_EConnect_Builtin_GetKey);
+    Eco_EConnect_InstallCallback("ecosphere.object.object", Eco_EConnect_Builtin_GetObject);
 }
 
 void Eco_EConnect_TerminateReaderBuiltins()
