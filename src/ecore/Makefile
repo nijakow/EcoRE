@@ -11,6 +11,7 @@ EXECUTABLE = ./ecore.exe
 
 SOURCES = \
 eco.c \
+objects/objects.c \
 objects/base/type.c \
 objects/base/object.c \
 objects/base/object_payload.c \

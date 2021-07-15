@@ -1,5 +1,6 @@
 #include "eco.h"
 
+#include "objects/objects.h"
 #include "objects/base/type.h"
 #include "objects/base/object.h"
 #include "objects/group/group.h"
@@ -14,7 +15,8 @@
 void Eco_Init()
 {
     Eco_VM_Create(&Eco_THE_VM);
-    Eco_Type_CreateTypes();
+    Eco_Type_Init();
+    Eco_Objects_Init();
     Eco_EConnect_Init();
 }
 
@@ -22,7 +24,8 @@ void Eco_Terminate()
 {
     Eco_EConnect_Terminate();
     Eco_FreeAll();
-    Eco_Type_DestroyTypes();
+    Eco_Objects_Terminate();
+    Eco_Type_Terminate();
     Eco_VM_Destroy(&Eco_THE_VM);
 }
 

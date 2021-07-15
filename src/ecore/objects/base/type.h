@@ -90,5 +90,6 @@ extern struct Eco_Type* Eco_Type_CODE_TYPE;
 extern struct Eco_Type* Eco_Type_CLOSURE_TYPE;
 
 void Eco_Type_MarkTypes(struct Eco_GC_State*);
-void Eco_Type_CreateTypes();
-void Eco_Type_DestroyTypes();
+
+void Eco_Type_Init();
+void Eco_Type_Terminate();

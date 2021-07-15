@@ -275,7 +275,7 @@ static struct Eco_TypeCore Eco_TypeCore_CLOSURE = {
     .del  = (void(*)(struct Eco_Object*)) Eco_Closure_Del
 };
 
-void Eco_Type_CreateTypes()
+void Eco_Type_Init()
 {
     Eco_Type_PLAIN_OBJECT_TYPE = Eco_Type_New_Prefab(&Eco_TypeCore_PLAIN_OBJECT, 0);
     Eco_Type_KEY_TYPE          = Eco_Type_New_Prefab(&Eco_TypeCore_KEY, 0);
@@ -284,7 +284,7 @@ void Eco_Type_CreateTypes()
     Eco_Type_CLOSURE_TYPE      = Eco_Type_New_Prefab(&Eco_TypeCore_CLOSURE, 0);
 }
 
-void Eco_Type_DestroyTypes()
+void Eco_Type_Terminate()
 {
     Eco_Type_Del(Eco_Type_PLAIN_OBJECT_TYPE);
     Eco_Type_Del(Eco_Type_KEY_TYPE);
