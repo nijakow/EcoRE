@@ -33,3 +33,20 @@ void Eco_Closure_Del(struct Eco_Closure* closure)
     Eco_Object_Del(&(closure->_));
 }
 
+
+
+/*
+ *    T y p e C o r e
+ */
+
+struct Eco_TypeCore Eco_Closure_TYPECORE;
+
+void Eco_Closure_Init()
+{
+    Eco_TypeCore_Create(&Eco_Closure_TYPECORE, "Eco_Closure");
+}
+
+void Eco_Closure_Terminate()
+{
+    Eco_TypeCore_Destroy(&Eco_Closure_TYPECORE);
+}

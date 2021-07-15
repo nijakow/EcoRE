@@ -159,3 +159,21 @@ bool Eco_Object_AddCodeSlot(struct Eco_Object* self,
         return false;
     }
 }
+
+
+
+/*
+ *    T y p e C o r e
+ */
+
+struct Eco_TypeCore Eco_Object_TYPECORE;
+
+void Eco_Object_Init()
+{
+    Eco_TypeCore_Create(&Eco_Object_TYPECORE, "Eco_Object");
+}
+
+void Eco_Object_Terminate()
+{
+    Eco_TypeCore_Destroy(&Eco_Object_TYPECORE);
+}

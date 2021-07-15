@@ -30,3 +30,20 @@ void Eco_Code_Del(struct Eco_Code* code)
 {
     Eco_Object_Del(&(code->_));
 }
+
+
+/*
+ *    T y p e C o r e
+ */
+
+struct Eco_TypeCore Eco_Code_TYPECORE;
+
+void Eco_Code_Init()
+{
+    Eco_TypeCore_Create(&Eco_Code_TYPECORE, "Eco_Code");
+}
+
+void Eco_Code_Terminate()
+{
+    Eco_TypeCore_Destroy(&Eco_Code_TYPECORE);
+}

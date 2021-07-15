@@ -57,3 +57,21 @@ void Eco_Key_Del(struct Eco_Key*  key)
 
     Eco_Object_Del(&(key->_));
 }
+
+
+
+/*
+ *    T y p e C o r e
+ */
+
+struct Eco_TypeCore Eco_Key_TYPECORE;
+
+void Eco_Key_Init()
+{
+    Eco_TypeCore_Create(&Eco_Key_TYPECORE, "Eco_Key");
+}
+
+void Eco_Key_Terminate()
+{
+    Eco_TypeCore_Destroy(&Eco_Key_TYPECORE);
+}

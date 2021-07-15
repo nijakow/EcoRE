@@ -45,3 +45,6 @@ struct Eco_Group* Eco_Group_New(struct Eco_Object*);
 bool Eco_Group_Send(struct Eco_Message*, struct Eco_Group*);
 void Eco_Group_Mark(struct Eco_GC_State*, struct Eco_Group*);
 void Eco_Group_Del(struct Eco_Group*);
+
+void Eco_Group_Init();
+void Eco_Group_Terminate();

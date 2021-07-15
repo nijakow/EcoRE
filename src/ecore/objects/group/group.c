@@ -2,6 +2,7 @@
 
 #include "../base/object.h"
 #include "../base/type.h"
+#include "../base/typecore.h"
 #include "../../vm/memory/memory.h"
 #include "../../vm/memory/gc/gc.h"
 
@@ -51,4 +52,21 @@ void Eco_Group_Del(struct Eco_Group* group)
         Eco_Memory_Free(group->body.multi.objects);
     }
     Eco_Object_Del(&(group->_));
+}
+
+
+/*
+ *    T y p e C o r e
+ */
+
+struct Eco_TypeCore Eco_Group_TYPECORE;
+
+void Eco_Group_Init()
+{
+    Eco_TypeCore_Create(&Eco_Group_TYPECORE, "Eco_Group");
+}
+
+void Eco_Group_Terminate()
+{
+    Eco_TypeCore_Destroy(&Eco_Group_TYPECORE);
 }

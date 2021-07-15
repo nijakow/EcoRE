@@ -23,3 +23,6 @@ struct Eco_Key* Eco_Key_Find(const char*);
 
 void Eco_Key_Mark(struct Eco_GC_State*, struct Eco_Key*);
 void Eco_Key_Del(struct Eco_Key*);
+
+void Eco_Key_Init();
+void Eco_Key_Terminate();
