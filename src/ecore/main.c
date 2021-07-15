@@ -6,6 +6,7 @@
 #include "objects/base/object_slots.h"
 #include "objects/base/type.h"
 #include "io/econnect/file/file.h"
+#include "io/logging/log.h"
 
 
 void Eco_Banner()
@@ -44,13 +45,24 @@ void Main_Test2()
 }
 
 
+void Main_LogTest()
+{
+    Eco_Log(Eco_Loglevel_DEBUG, "This is DEBUG\n");
+    Eco_Log(Eco_Loglevel_INFO, "This is INFO\n");
+    Eco_Log(Eco_Loglevel_WARNING, "This is WARNING\n");
+    Eco_Log(Eco_Loglevel_ERROR, "This is ERROR\n");
+    Eco_Log(Eco_Loglevel_CRITICAL, "This is CRITICAL\n");
+}
+
+
 int main(int argc, char *argv[])
 {
     Eco_Banner();
     Eco_Init();
     // Eco_Run();
+    Main_LogTest();
     Main_Test1();
-    // Main_Test2();
+    Main_Test2();
     Eco_Terminate();
     return 0;
 }

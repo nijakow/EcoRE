@@ -30,6 +30,7 @@ vm/core/send.c \
 vm/core/interpreter.c \
 vm/fiber.c \
 vm/vm.c \
+io/logging/log.c \
 io/net/net.c \
 io/net/scheduler.c \
 io/net/socket.c \
