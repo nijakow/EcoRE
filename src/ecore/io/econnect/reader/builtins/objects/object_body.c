@@ -14,6 +14,7 @@ bool Eco_EConnect_Reader_ReadObjectBody(struct Eco_EConnect_Reader* reader,
     unsigned char               flags;
     struct Eco_Object_SlotInfo  slot_info;
     Eco_Any                     any;
+    struct Eco_Code*            code;
 
     slot_def_max = Eco_EConnect_ParseUInt(&reader->stream);
 
@@ -34,12 +35,14 @@ bool Eco_EConnect_Reader_ReadObjectBody(struct Eco_EConnect_Reader* reader,
 
         if ((flags & 0x01) == 0) {
             slot_info.is_inherited = flags & 0x02;
-            if (!Eco_EConnect_Reader_ReadAny(reader, result, &any)) {
+            if (!Eco_EConnect_Reader_ReadAny(reader, result, &any))
                 return false;
-            }
             Eco_Object_AddSlot(object, -1, slot_info, &any);
         } else {
             slot_info.is_inherited = false;
+            if (!Eco_EConnect_Reader_ReadObject(reader, result, (struct Eco_Object**) &code))
+                return false;
+            Eco_Object_AddCodeSlot(object, -1, slot_info, code);
         }
     }
 
