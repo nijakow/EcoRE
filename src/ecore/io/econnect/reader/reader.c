@@ -34,6 +34,11 @@ struct Eco_Object* Eco_EConnect_Reader_GetObjectByID(struct Eco_EConnect_Reader*
     }
 }
 
+struct Eco_Object* Eco_EConnect_Reader_ReadObjectByID(struct Eco_EConnect_Reader* reader)
+{
+    return Eco_EConnect_Reader_GetObjectByID(reader, Eco_EConnect_ParseUInt(&reader->stream));
+}
+
 bool Eco_EConnect_Reader_ReadAny(struct Eco_EConnect_Reader* reader,
                                  struct Eco_EConnect_Result* result,
                                  Eco_Any* value)

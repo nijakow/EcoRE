@@ -20,5 +20,6 @@ void  Eco_EConnect_Reader_Create(struct Eco_EConnect_Reader*,
 void  Eco_EConnect_Reader_Destroy(struct Eco_EConnect_Reader*);
 
 struct Eco_Object* Eco_EConnect_Reader_GetObjectByID(struct Eco_EConnect_Reader*, unsigned int);
+struct Eco_Object* Eco_EConnect_Reader_ReadObjectByID(struct Eco_EConnect_Reader*);
 bool Eco_EConnect_Reader_ReadAny(struct Eco_EConnect_Reader*, struct Eco_EConnect_Result*, Eco_Any*);
 bool Eco_EConnect_Reader_Read(struct Eco_EConnect_Reader*, struct Eco_EConnect_Result*);
