@@ -144,3 +144,18 @@ bool Eco_Object_AddSlot(struct Eco_Object* self,
         return false;
     }
 }
+
+bool Eco_Object_AddCodeSlot(struct Eco_Object* self,
+                            int pos,
+                            struct Eco_Object_SlotInfo info,
+                            struct Eco_Code* code)
+{
+    struct Eco_Type*  new_type;
+
+    if (Eco_Type_CopyWithNewCodeSlot(self->type, pos, info, code, &new_type)) {
+        Eco_Object_SwitchType(self, new_type);
+        return true;
+    } else {
+        return false;
+    }
+}

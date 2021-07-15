@@ -121,10 +121,8 @@ static struct Eco_Type* Eco_Type_New_Prefab(struct Eco_Type_Shared* shared, unsi
     return type;
 }
 
-bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type* self,
+static bool Eco_Type_CopyWithNewSlot(struct Eco_Type* self,
                                      int pos,
-                                     struct Eco_Object_SlotInfo info,
-                                     /* TODO: Flags */
                                      struct Eco_Type** type_loc,
                                      struct Eco_Type_Slot** slot_loc)
 {
@@ -133,7 +131,6 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type* self,
     struct Eco_Type*  the_copy;
 
     const unsigned int  new_slot_count = self->slot_count + 1;
-    const unsigned int  slot_value_size = sizeof(Eco_Any);
 
     if (pos >= 0) adjusted_pos =  pos;
     else          adjusted_pos = -pos; 
@@ -144,22 +141,59 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type* self,
     the_copy                        = Eco_Type_New(new_slot_count);
     *type_loc                       = the_copy;
     the_copy->shared                = self->shared;
-    the_copy->instance_payload_size = self->instance_payload_size + slot_value_size;
+    the_copy->instance_payload_size = self->instance_payload_size;
 
     for (i = 0; i < new_slot_count; i++) {
         if (i < adjusted_pos) the_copy->slots[i] = self->slots[i];
-        else if (i == adjusted_pos) {
-            *slot_loc = &the_copy->slots[i];
-            the_copy->slots[i].type                      = Eco_Type_Slot_Type_INLINED;
-            the_copy->slots[i].key                       = info.key;
-            the_copy->slots[i].body.inlined.is_inherited = info.is_inherited;
-            the_copy->slots[i].body.inlined.value_size   = slot_value_size;
-            the_copy->slots[i].body.inlined.offset       = the_copy->instance_payload_size - slot_value_size;
-        }
+        else if (i == adjusted_pos) *slot_loc = &the_copy->slots[i];
         else the_copy->slots[i] = self->slots[i - 1];
     }
 
+    *type_loc = the_copy;
+
     return true;
+}
+
+bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type* self,
+                                     int pos,
+                                     struct Eco_Object_SlotInfo info,
+                                     /* TODO: Flags */
+                                     struct Eco_Type** type_loc,
+                                     struct Eco_Type_Slot** slot_loc)
+{
+    struct Eco_Type*       the_copy;
+    struct Eco_Type_Slot*  the_slot;
+
+    const unsigned int     slot_value_size = sizeof(Eco_Any);
+
+    if (Eco_Type_CopyWithNewSlot(self, pos, &the_copy, &the_slot)) {
+        
+        the_copy->instance_payload_size += slot_value_size;
+
+        the_slot->type                      = Eco_Type_Slot_Type_INLINED;
+        the_slot->key                       = info.key;
+        the_slot->body.inlined.is_inherited = info.is_inherited;
+        the_slot->body.inlined.value_size   = slot_value_size;
+        the_slot->body.inlined.offset       = the_copy->instance_payload_size - slot_value_size;
+
+        *type_loc = the_copy;
+        *slot_loc = the_slot;
+
+        return true;
+    } else {
+        return false;
+    }
+    
+    return true;
+}
+
+bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type* self,
+                                  int pos,
+                                  struct Eco_Object_SlotInfo info,
+                                  struct Eco_Code* code,
+                                  struct Eco_Type** type)
+{
+    return false;
 }
 
 
