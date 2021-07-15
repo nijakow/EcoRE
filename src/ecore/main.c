@@ -27,15 +27,19 @@ void Main_Test1()
 
 void Main_Test2()
 {
-    struct Eco_Object*  object;
-    struct Eco_Object*  key;
-    Eco_Any             value;
+    struct Eco_Object*          object;
+    struct Eco_Object*          key;
+    Eco_Any                     value;
+    struct Eco_Object_SlotInfo  info;
 
     object = Eco_Object_New();
     key    = Eco_Object_New();
     Eco_Any_AssignInteger(&value, 42);
 
-    Eco_Object_AddSlot(object, key, 0, &value);
+    info.is_inherited = false;
+    info.key          = key;
+
+    Eco_Object_AddSlot(object, 0, info, &value);
 }
 
 

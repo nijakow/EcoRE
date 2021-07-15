@@ -3,6 +3,7 @@
 #include "../../eco.h"
 
 #include "object_payload.h"
+#include "slot.h"
 
 
 struct Eco_Message;
@@ -37,7 +38,7 @@ bool  Eco_Object_Send(struct Eco_Message*, struct Eco_Object*);
 void  Eco_Object_Mark(struct Eco_GC_State*, struct Eco_Object*);
 void  Eco_Object_Del(struct Eco_Object*);
 
-bool Eco_Object_AddSlot(struct Eco_Object*, struct Eco_Object*, int, Eco_Any*);
+bool Eco_Object_AddSlot(struct Eco_Object*, int, struct Eco_Object_SlotInfo, Eco_Any*);
 
 
 static inline void* Eco_Object_At(struct Eco_Object* object, unsigned int offset)

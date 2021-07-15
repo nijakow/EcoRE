@@ -1,7 +1,9 @@
 #pragma once
 
 #include "../../eco.h"
+
 #include "object.h"
+#include "slot.h"
 
 
 struct Eco_Code;
@@ -79,7 +81,7 @@ static inline void Eco_Type_Decr(struct Eco_Type* type)
     }
 }
 
-bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*, int, struct Eco_Object* key, struct Eco_Type**, struct Eco_Type_Slot**);
+bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*, int, struct Eco_Object_SlotInfo, struct Eco_Type**, struct Eco_Type_Slot**);
 
 void Eco_Type_Mark(struct Eco_GC_State*, struct Eco_Type*);
 

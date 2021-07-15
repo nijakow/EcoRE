@@ -123,7 +123,7 @@ static struct Eco_Type* Eco_Type_New_Prefab(struct Eco_Type_Shared* shared, unsi
 
 bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type* self,
                                      int pos,
-                                     struct Eco_Object* key,
+                                     struct Eco_Object_SlotInfo info,
                                      /* TODO: Flags */
                                      struct Eco_Type** type_loc,
                                      struct Eco_Type_Slot** slot_loc)
@@ -151,8 +151,8 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type* self,
         else if (i == adjusted_pos) {
             *slot_loc = &the_copy->slots[i];
             the_copy->slots[i].type                      = Eco_Type_Slot_Type_INLINED;
-            the_copy->slots[i].key                       = key;
-            the_copy->slots[i].body.inlined.is_inherited = false;
+            the_copy->slots[i].key                       = info.key;
+            the_copy->slots[i].body.inlined.is_inherited = info.is_inherited;
             the_copy->slots[i].body.inlined.value_size   = slot_value_size;
             the_copy->slots[i].body.inlined.offset       = the_copy->instance_payload_size - slot_value_size;
         }
