@@ -54,7 +54,8 @@ bool Eco_EConnect_Builtin_GetObject(struct Eco_EConnect_Reader* reader,
     the_object = Eco_Object_New();
 
     Eco_EConnect_Instance_OptionallyBindObject(reader->instance, the_object, id);
-    Eco_EConnect_Builtin_GetObject_Parse(reader, result, the_object);
+    if (!Eco_EConnect_Builtin_GetObject_Parse(reader, result, the_object))
+        return false;
     Eco_EConnect_Result_Create_Object(result, the_object);
 
     return true;
