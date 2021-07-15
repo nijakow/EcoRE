@@ -6,11 +6,41 @@
 #include "../../../vm/memory/memory.h"
 
 
+/*
+ *    T y p e
+ */
+
+static struct Eco_TypeCore Eco_Closure_TYPECORE;
+static struct Eco_Type*    Eco_Closure_TYPE;
+
+
+void Eco_Closure_Init()
+{
+    Eco_TypeCore_Create(&Eco_Closure_TYPECORE, "Eco_Closure");
+
+    Eco_Closure_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
+    Eco_Closure_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_Closure_Mark;
+    Eco_Closure_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_Closure_Del;
+
+    Eco_Closure_TYPE          = Eco_Type_NewPrefab(&Eco_Closure_TYPECORE);
+}
+
+void Eco_Closure_Terminate()
+{
+    Eco_TypeCore_Destroy(&Eco_Closure_TYPECORE);
+}
+
+
+
+/*
+ *    B a s i c s
+ */
+
 struct Eco_Closure* Eco_Closure_New(struct Eco_Code* code, struct Eco_Environment* environment)
 {
     struct Eco_Closure* closure;
 
-    closure = Eco_Object_New_Derived(Eco_Type_CLOSURE_TYPE, sizeof(struct Eco_Closure), 0);
+    closure = Eco_Object_New_Derived(Eco_Closure_TYPE, sizeof(struct Eco_Closure), 0);
 
     closure->code = code;
     closure->environment = environment;
@@ -31,26 +61,4 @@ void Eco_Closure_Del(struct Eco_Closure* closure)
 {
     Eco_Environment_Decr(closure->environment);
     Eco_Object_Del(&(closure->_));
-}
-
-
-
-/*
- *    T y p e C o r e
- */
-
-struct Eco_TypeCore Eco_Closure_TYPECORE;
-
-void Eco_Closure_Init()
-{
-    Eco_TypeCore_Create(&Eco_Closure_TYPECORE, "Eco_Closure");
-
-    Eco_Closure_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
-    Eco_Closure_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_Closure_Mark;
-    Eco_Closure_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_Closure_Del;
-}
-
-void Eco_Closure_Terminate()
-{
-    Eco_TypeCore_Destroy(&Eco_Closure_TYPECORE);
 }

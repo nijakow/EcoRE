@@ -76,20 +76,14 @@ static inline void Eco_Type_Decr(struct Eco_Type* type)
     }
 }
 
+
+struct Eco_Type* Eco_Type_NewPrefab(struct Eco_TypeCore*);
+
 bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*, int, struct Eco_Object_SlotInfo, struct Eco_Type**, struct Eco_Type_Slot**);
 bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type*, int, struct Eco_Object_SlotInfo, struct Eco_Code*, struct Eco_Type**);
 
 void Eco_Type_Mark(struct Eco_GC_State*, struct Eco_Type*);
-
-
-extern struct Eco_Type* Eco_Type_TYPE_TYPE;
-extern struct Eco_Type* Eco_Type_PLAIN_OBJECT_TYPE;
-extern struct Eco_Type* Eco_Type_KEY_TYPE;
-extern struct Eco_Type* Eco_Type_GROUP_TYPE;
-extern struct Eco_Type* Eco_Type_CODE_TYPE;
-extern struct Eco_Type* Eco_Type_CLOSURE_TYPE;
-
 void Eco_Type_MarkTypes(struct Eco_GC_State*);
 
-void Eco_Type_Init();
-void Eco_Type_Terminate();
+void Eco_Types_Init();
+void Eco_Types_Terminate();

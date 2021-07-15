@@ -5,6 +5,36 @@
 #include "../../base/type.h"
 
 
+/*
+ *    T y p e C o r e
+ */
+
+static struct Eco_TypeCore Eco_Key_TYPECORE;
+static struct Eco_Type*    Eco_Key_TYPE;
+
+
+void Eco_Key_Init()
+{
+    Eco_TypeCore_Create(&Eco_Key_TYPECORE, "Eco_Key");
+
+    Eco_Key_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
+    Eco_Key_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_Key_Mark;
+    Eco_Key_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_Key_Del;
+
+    Eco_Key_TYPE          = Eco_Type_NewPrefab(&Eco_Key_TYPECORE);
+}
+
+void Eco_Key_Terminate()
+{
+    Eco_TypeCore_Destroy(&Eco_Key_TYPECORE);
+}
+
+
+
+/*
+ *    B a s i c s
+ */
+
 static struct Eco_Key* Eco_KEYS = NULL;
 
 
@@ -14,7 +44,7 @@ struct Eco_Key* Eco_Key_New(const char* name)
     struct Eco_Key*  key;
 
     namelen                = strlen(name);
-    key                    = Eco_Object_New_Derived(Eco_Type_KEY_TYPE, sizeof(struct Eco_Key) + (namelen + 1) * sizeof(char), 0);
+    key                    = Eco_Object_New_Derived(Eco_Key_TYPE, sizeof(struct Eco_Key) + (namelen + 1) * sizeof(char), 0);
     key->econnect_callback = NULL;
 
     memcpy(&(key->name), name, namelen + 1);
@@ -56,26 +86,4 @@ void Eco_Key_Del(struct Eco_Key*  key)
     if (key->next != NULL) key->next->prev = key->prev;
 
     Eco_Object_Del(&(key->_));
-}
-
-
-
-/*
- *    T y p e C o r e
- */
-
-struct Eco_TypeCore Eco_Key_TYPECORE;
-
-void Eco_Key_Init()
-{
-    Eco_TypeCore_Create(&Eco_Key_TYPECORE, "Eco_Key");
-
-    Eco_Key_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
-    Eco_Key_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_Key_Mark;
-    Eco_Key_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_Key_Del;
-}
-
-void Eco_Key_Terminate()
-{
-    Eco_TypeCore_Destroy(&Eco_Key_TYPECORE);
 }

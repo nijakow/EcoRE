@@ -15,7 +15,7 @@
 void Eco_Init()
 {
     Eco_VM_Create(&Eco_THE_VM);
-    Eco_Type_Init();
+    Eco_Types_Init();
     Eco_Objects_Init();
     Eco_EConnect_Init();
 }
@@ -25,7 +25,7 @@ void Eco_Terminate()
     Eco_EConnect_Terminate();
     Eco_FreeAll();
     Eco_Objects_Terminate();
-    Eco_Type_Terminate();
+    Eco_Types_Terminate();
     Eco_VM_Destroy(&Eco_THE_VM);
 }
 

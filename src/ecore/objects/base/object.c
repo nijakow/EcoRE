@@ -10,13 +10,36 @@
 #include "../../vm/memory/gc/gc.h"
 
 
+/*
+ *    T y p e
+ */
+
+static struct Eco_TypeCore Eco_Object_TYPECORE;
+static struct Eco_Type*    Eco_Object_TYPE;
+
+void Eco_Object_Init()
+{
+    Eco_TypeCore_Create(&Eco_Object_TYPECORE, "Eco_Object");
+    
+    Eco_Object_TYPECORE.send = Eco_Object_Send;
+    Eco_Object_TYPECORE.mark = Eco_Object_Mark;
+    Eco_Object_TYPECORE.del  = Eco_Object_Del;
+
+    Eco_Object_TYPE          = Eco_Type_NewPrefab(&Eco_Object_TYPECORE);
+}
+
+void Eco_Object_Terminate()
+{
+    Eco_TypeCore_Destroy(&Eco_Object_TYPECORE);
+}
+
+
+/*
+ *    B a s i c s
+ */
+
 struct Eco_Object* Eco_OBJECTS = NULL;
 
-
-struct Eco_Object*  Eco_Object_New()
-{
-    return Eco_Object_New_Derived(Eco_Type_PLAIN_OBJECT_TYPE, sizeof(struct Eco_Object), 0);
-}
 
 void* Eco_Object_New_Derived(struct Eco_Type* type,
                              unsigned int size,
@@ -40,6 +63,11 @@ void* Eco_Object_New_Derived(struct Eco_Type* type,
     Eco_OBJECTS                 = object;
 
     return object;
+}
+
+struct Eco_Object*  Eco_Object_New()
+{
+    return Eco_Object_New_Derived(Eco_Object_TYPE, sizeof(struct Eco_Object), 0);
 }
 
 bool Eco_Object_Send(struct Eco_Message* message, struct Eco_Object* target)
@@ -104,26 +132,4 @@ void Eco_Object_Del(struct Eco_Object* object)
     Eco_Type_Decr(object->type);
 
     Eco_Memory_Free(object);
-}
-
-
-
-/*
- *    T y p e C o r e
- */
-
-struct Eco_TypeCore Eco_Object_TYPECORE;
-
-void Eco_Object_Init()
-{
-    Eco_TypeCore_Create(&Eco_Object_TYPECORE, "Eco_Object");
-    
-    Eco_Object_TYPECORE.send = Eco_Object_Send;
-    Eco_Object_TYPECORE.mark = Eco_Object_Mark;
-    Eco_Object_TYPECORE.del  = Eco_Object_Del;
-}
-
-void Eco_Object_Terminate()
-{
-    Eco_TypeCore_Destroy(&Eco_Object_TYPECORE);
 }

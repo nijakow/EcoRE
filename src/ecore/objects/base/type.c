@@ -108,11 +108,11 @@ void Eco_Type_Del(struct Eco_Type* type)
     Eco_Memory_Free(type);
 }
 
-static struct Eco_Type* Eco_Type_New_Prefab(struct Eco_TypeCore* typecore, unsigned int slots)
+struct Eco_Type* Eco_Type_NewPrefab(struct Eco_TypeCore* typecore)
 {
     struct Eco_Type* type;
 
-    type = Eco_Type_New(slots);
+    type = Eco_Type_New(0);
 
     type->header.persistent     = true;
     type->typecore              = typecore;
@@ -241,54 +241,13 @@ void Eco_Type_MarkTypes(struct Eco_GC_State* state)
 }
 
 
-struct Eco_Type* Eco_Type_TYPE_TYPE = NULL;
-struct Eco_Type* Eco_Type_PLAIN_OBJECT_TYPE = NULL;
-struct Eco_Type* Eco_Type_KEY_TYPE = NULL;
-struct Eco_Type* Eco_Type_GROUP_TYPE = NULL;
-struct Eco_Type* Eco_Type_CODE_TYPE = NULL;
-struct Eco_Type* Eco_Type_CLOSURE_TYPE = NULL;
 
-
-static struct Eco_TypeCore Eco_TypeCore_PLAIN_OBJECT = {
-    .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Object_Send,
-    .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Object_Mark,
-    .del  = (void(*)(struct Eco_Object*)) Eco_Object_Del
-};
-static struct Eco_TypeCore Eco_TypeCore_KEY = {
-    .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Object_Send,
-    .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Key_Mark,
-    .del  = (void(*)(struct Eco_Object*)) Eco_Key_Del
-};
-static struct Eco_TypeCore Eco_TypeCore_GROUP = {
-    .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Group_Send,
-    .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Group_Mark,
-    .del  = (void(*)(struct Eco_Object*)) Eco_Group_Del
-};
-static struct Eco_TypeCore Eco_TypeCore_CODE = {
-    .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Object_Send,
-    .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Code_Mark,
-    .del  = (void(*)(struct Eco_Object*)) Eco_Code_Del
-};
-static struct Eco_TypeCore Eco_TypeCore_CLOSURE = {
-    .send = (bool(*)(struct Eco_Message*, struct Eco_Object*)) Eco_Object_Send,
-    .mark = (void(*)(struct Eco_GC_State*, struct Eco_Object*)) Eco_Closure_Mark,
-    .del  = (void(*)(struct Eco_Object*)) Eco_Closure_Del
-};
-
-void Eco_Type_Init()
+void Eco_Types_Init()
 {
-    Eco_Type_PLAIN_OBJECT_TYPE = Eco_Type_New_Prefab(&Eco_TypeCore_PLAIN_OBJECT, 0);
-    Eco_Type_KEY_TYPE          = Eco_Type_New_Prefab(&Eco_TypeCore_KEY, 0);
-    Eco_Type_GROUP_TYPE        = Eco_Type_New_Prefab(&Eco_TypeCore_GROUP, 0);
-    Eco_Type_CODE_TYPE         = Eco_Type_New_Prefab(&Eco_TypeCore_CODE, 0);
-    Eco_Type_CLOSURE_TYPE      = Eco_Type_New_Prefab(&Eco_TypeCore_CLOSURE, 0);
 }
 
-void Eco_Type_Terminate()
+void Eco_Types_Terminate()
 {
-    Eco_Type_Del(Eco_Type_PLAIN_OBJECT_TYPE);
-    Eco_Type_Del(Eco_Type_KEY_TYPE);
-    Eco_Type_Del(Eco_Type_GROUP_TYPE);
-    Eco_Type_Del(Eco_Type_CODE_TYPE);
-    Eco_Type_Del(Eco_Type_CLOSURE_TYPE);
+    while (Eco_TYPES != NULL)
+        Eco_Type_Del(Eco_TYPES);
 }
