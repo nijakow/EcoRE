@@ -69,6 +69,10 @@ struct Eco_TypeCore Eco_Key_TYPECORE;
 void Eco_Key_Init()
 {
     Eco_TypeCore_Create(&Eco_Key_TYPECORE, "Eco_Key");
+
+    Eco_Key_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
+    Eco_Key_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_Key_Mark;
+    Eco_Key_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_Key_Del;
 }
 
 void Eco_Key_Terminate()

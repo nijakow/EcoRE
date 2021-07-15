@@ -44,6 +44,10 @@ struct Eco_TypeCore Eco_Closure_TYPECORE;
 void Eco_Closure_Init()
 {
     Eco_TypeCore_Create(&Eco_Closure_TYPECORE, "Eco_Closure");
+
+    Eco_Closure_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
+    Eco_Closure_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_Closure_Mark;
+    Eco_Closure_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_Closure_Del;
 }
 
 void Eco_Closure_Terminate()

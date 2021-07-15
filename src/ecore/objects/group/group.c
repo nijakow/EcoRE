@@ -64,6 +64,10 @@ struct Eco_TypeCore Eco_Group_TYPECORE;
 void Eco_Group_Init()
 {
     Eco_TypeCore_Create(&Eco_Group_TYPECORE, "Eco_Group");
+
+    Eco_Group_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Group_Send;
+    Eco_Group_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_Group_Mark;
+    Eco_Group_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_Group_Del;
 }
 
 void Eco_Group_Terminate()

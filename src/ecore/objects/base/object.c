@@ -171,6 +171,10 @@ struct Eco_TypeCore Eco_Object_TYPECORE;
 void Eco_Object_Init()
 {
     Eco_TypeCore_Create(&Eco_Object_TYPECORE, "Eco_Object");
+    
+    Eco_Object_TYPECORE.send = Eco_Object_Send;
+    Eco_Object_TYPECORE.mark = Eco_Object_Mark;
+    Eco_Object_TYPECORE.del  = Eco_Object_Del;
 }
 
 void Eco_Object_Terminate()
