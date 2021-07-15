@@ -25,18 +25,9 @@ void Eco_EConnect_Reader_Destroy(struct Eco_EConnect_Reader* reader)
 }
 
 
-struct Eco_Object* Eco_EConnect_Reader_GetObjectByID(struct Eco_EConnect_Reader* reader, unsigned int id)
-{
-    if (id < reader->instance->objects_by_id_max) {
-        return reader->instance->objects_by_id[id];
-    } else {
-        return NULL;
-    }
-}
-
 struct Eco_Object* Eco_EConnect_Reader_ReadObjectByID(struct Eco_EConnect_Reader* reader)
 {
-    return Eco_EConnect_Reader_GetObjectByID(reader, Eco_EConnect_ParseUInt(&reader->stream));
+    return Eco_EConnect_Instance_GetBoundObject(reader->instance, Eco_EConnect_ParseUInt(&reader->stream));
 }
 
 bool Eco_EConnect_Reader_ReadAny(struct Eco_EConnect_Reader* reader,
@@ -74,7 +65,7 @@ bool Eco_EConnect_Reader_Read(struct Eco_EConnect_Reader* reader,
         // There shouldn't be any errors, GetKey(...) handles this
         Eco_EConnect_Result_ExpectObject(result, (struct Eco_Object**) &msg_key);
     } else {
-        msg_key = (struct Eco_Key*) Eco_EConnect_Reader_GetObjectByID(reader, id);
+        msg_key = (struct Eco_Key*) Eco_EConnect_Instance_GetBoundObject(reader->instance, id);
     }
 
     if (msg_key != NULL && msg_key->econnect_callback != NULL) {

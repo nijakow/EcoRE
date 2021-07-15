@@ -52,3 +52,13 @@ void Eco_EConnect_Instance_UnbindObject(struct Eco_EConnect_Instance* instance,
         instance->objects_by_id[id] = NULL;
     }
 }
+
+struct Eco_Object* Eco_EConnect_Instance_GetBoundObject(struct Eco_EConnect_Instance* instance,
+                                                        unsigned int id)
+{
+    if (id < instance->objects_by_id_max) {
+        return instance->objects_by_id[id];
+    } else {
+        return NULL;
+    }
+}
