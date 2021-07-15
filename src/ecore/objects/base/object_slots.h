@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../eco.h"
-#include "slot.h"
+#include "slot_info.h"
 
 struct Eco_Code;
 

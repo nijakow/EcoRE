@@ -4,7 +4,7 @@
 
 #include "../../../../../objects/base/object.h"
 #include "../../../../../objects/base/object_slots.h"
-#include "../../../../../objects/base/slot.h"
+#include "../../../../../objects/base/slot_info.h"
 
 
 bool Eco_EConnect_Builtin_GetObject_Parse(struct Eco_EConnect_Reader* reader,

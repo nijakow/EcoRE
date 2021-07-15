@@ -3,7 +3,7 @@
 #include "../../eco.h"
 
 #include "object.h"
-#include "slot.h"
+#include "slot_info.h"
 #include "typecore.h"
 
 

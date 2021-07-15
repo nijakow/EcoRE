@@ -3,7 +3,7 @@
 #include "../../eco.h"
 
 #include "object_payload.h"
-#include "slot.h"
+#include "slot_info.h"
 
 
 struct Eco_Message;
