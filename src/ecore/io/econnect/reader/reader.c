@@ -4,6 +4,8 @@
 
 #include "parser.h"
 
+#include "builtins/objects/key.h"
+
 #include "../../../objects/misc/key/key.h"
 
 
@@ -23,12 +25,8 @@ void Eco_EConnect_Reader_Destroy(struct Eco_EConnect_Reader* reader)
 }
 
 
-struct Eco_Object* Eco_EConnect_Reader_ReadObjectByID(struct Eco_EConnect_Reader* reader)
+struct Eco_Object* Eco_EConnect_Reader_GetObjectByID(struct Eco_EConnect_Reader* reader, unsigned int id)
 {
-    unsigned int  id;
-
-    id = Eco_EConnect_ParseUInt(&(reader->stream));
-
     if (id < reader->instance->objects_by_id_max) {
         return reader->instance->objects_by_id[id];
     } else {
@@ -58,12 +56,21 @@ bool Eco_EConnect_Reader_ReadAny(struct Eco_EConnect_Reader* reader,
 bool Eco_EConnect_Reader_Read(struct Eco_EConnect_Reader* reader,
                               struct Eco_EConnect_Result* result)
 {
+    unsigned int     id;
     struct Eco_Key*  msg_key;
 
     Eco_EConnect_Result_Create_Error(result, Eco_EConnect_Result_ErrorType_UNDEFINED);
 
     /* TODO, FIXME, XXX: This unchecked cast is dangerous! */
-    msg_key = (struct Eco_Key*) Eco_EConnect_Reader_ReadObjectByID(reader);
+    id = Eco_EConnect_ParseUInt(&reader->stream);
+    if (id == 0x00) {
+        if (!Eco_EConnect_Builtin_GetKey(reader, result))
+            return false;
+        // There shouldn't be any errors, GetKey(...) handles this
+        Eco_EConnect_Result_ExpectObject(result, (struct Eco_Object**) &msg_key);
+    } else {
+        msg_key = (struct Eco_Key*) Eco_EConnect_Reader_GetObjectByID(reader, id);
+    }
 
     if (msg_key != NULL && msg_key->econnect_callback != NULL) {
         return msg_key->econnect_callback(reader, result);

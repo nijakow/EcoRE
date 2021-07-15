@@ -41,9 +41,11 @@ bool Eco_EConnect_Builtin_DelID(struct Eco_EConnect_Reader* reader,
 bool Eco_EConnect_Builtin_GetID(struct Eco_EConnect_Reader* reader,
                                 struct Eco_EConnect_Result* result)
 {
+    unsigned int        id;
     struct Eco_Object*  object;
 
-    object = Eco_EConnect_Reader_ReadObjectByID(reader);
+    id     = Eco_EConnect_ParseUInt(&reader->stream);
+    object = Eco_EConnect_Reader_GetObjectByID(reader, id);
 
     if (object != NULL) {
         Eco_EConnect_Result_Create_Object(result, object);
