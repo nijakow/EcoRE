@@ -29,7 +29,7 @@ bool Eco_EConnect_Builtin_GetObject_Parse(struct Eco_EConnect_Reader* reader,
             return false;
         }
 
-        if (flags & 0x01) {
+        if ((flags & 0x01) == 0) {
             slot_info.is_inherited = flags & 0x02;
             if (!Eco_EConnect_Reader_ReadAny(reader, result, &any)) {
                 return false;
