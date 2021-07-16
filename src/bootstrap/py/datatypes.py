@@ -84,15 +84,15 @@ class Key(EcoObject):
         serializer.write_uint(id)
         serializer.write_string(self._name)
 
-    def takes_parameters(self):
+    def is_binary_op(self):
         c = self._name[-1]
         return not (str.isalpha(c) or str.isdigit(c))
 
-    def has_followup(self):
-        return self._name[-1] == ':'
+    def colonize(self):
+            return Key.get(self._name + ':')
 
-    def add_followup(self, name):
-        return Key.get(self._name + name)
+    def extend_name(self, name):
+        return Key.get(self._name + name.get_name())
 
     def __init__(self, name):
         super().__init__()

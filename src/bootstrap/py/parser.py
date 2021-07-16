@@ -33,13 +33,14 @@ class TokenType(enum.Enum):
     RBRACK     = enum.auto()
     LCURLY     = enum.auto()
     RCURLY     = enum.auto()
+    COLON      = enum.auto()
     SEPARATOR  = enum.auto()
+    RARROW     = enum.auto()
     EQUALS     = enum.auto()
     CARET      = enum.auto()
     BAR        = enum.auto()
     SELF       = enum.auto()
     WITH       = enum.auto()
-    METHOD     = enum.auto()
 
 
 class Token:
@@ -106,10 +107,16 @@ class Tokenizer:
         elif c == ']': return Token(self, TokenType.RBRACK)
         elif c == '{': return Token(self, TokenType.LCURLY)
         elif c == '}': return Token(self, TokenType.RCURLY)
+        elif c == ':': return Token(self, TokenType.COLON)
         elif c == '.': return Token(self, TokenType.SEPARATOR)
         elif c == ',': return Token(self, TokenType.SEPARATOR)
         elif c == ';': return Token(self, TokenType.SEPARATOR)
-        elif c == '=': return Token(self, TokenType.EQUALS)
+        elif c == '=':
+            if self._s.peek() == '>':
+                self._s.read()
+                return Token(self, TokenType.RARROW)
+            else:
+                return Token(self, TokenType.EQUALS)
         elif c == '^': return Token(self, TokenType.CARET)
         elif c == '|': return Token(self, TokenType.BAR)
 
@@ -118,7 +125,6 @@ class Tokenizer:
 
         if c == 'self': return Token(self, TokenType.SELF)
         elif c == 'with': return Token(self, TokenType.WITH)
-        elif c == 'method': return Token(self, TokenType.METHOD)
         else: return IdentifierToken(self, c)
 
     def unread(self, token):
@@ -140,14 +146,28 @@ class Tokenizer:
 
 class Parser:
 
+    def parse_closure(self):
+        params = []
+        exprs = []
+        if not self._t.check(TokenType.RBRACK):
+            while True:
+                if self._t.check(TokenType.RARROW):
+                    for e in exprs:
+                        params.append(e)
+                    exprs.clear()
+                exprs.append(self.parse_expression())
+                if self._t.check(TokenType.RBRACK):
+                    break
+                self._t.expect(TokenType.SEPARATOR)
+        return ast.ASTBlock(params, self.parse_expression_list(TokenType.RBRACK))
+
     def parse_simple_expression(self, allow_followups=True):
         if self._t.check(TokenType.SELF):
             return ast.ASTSelf()
         elif self._t.check(TokenType.LPAREN):
             return ast.ASTSequence(self.parse_expression_list(TokenType.RPAREN))
         elif self._t.check(TokenType.LBRACK):
-            # TODO: Parse argument list
-            return ast.ASTBlock([], self.parse_expression_list(TokenType.RBRACK))
+            return self.parse_closure()
         elif self._t.check(TokenType.LCURLY):
             # TODO: Parse object
             return ast.ASTObject()
@@ -163,19 +183,24 @@ class Parser:
     def parse_send(self, the_ast, allow_followups=True):
         ident = self._t.check_identifier()
         if ident:
-            params = []
             key = ident.get_key()
-            if key.takes_parameters():
-                if key.has_followup() and not allow_followups:
-                    ident.fail()
-                else:
-                    funcname = key
+            if key.is_binary_op():
+                params = [self.parse_expression(allow_followups)]
+            else:
+                params = []
+                if allow_followups and self._t.check(TokenType.COLON):
+                    key = key.colonize()
                     params.append(self.parse_expression(False))
-                    while key.has_followup():
+                    while True:
                         ident = self._t.check_identifier()
-                        if not ident: break
-                        key = ident.get_key()
-                        funcname = funcname.add_followup(key)
+                        if not ident:
+                            break
+                        colon = self._t.read()
+                        if not self._t.check(TokenType.COLON):
+                            ident.fail()
+                            colon.fail()
+                            break
+                        key.extend_name(ident.get_key().colonize())
                         params.append(self.parse_expression(False))
             if self._t.check(TokenType.LPAREN):
                 for arg in self.parse_expression_list(TokenType.RPAREN):
