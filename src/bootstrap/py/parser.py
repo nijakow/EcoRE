@@ -163,10 +163,11 @@ class Parser:
                         params.append(e)
                     exprs.clear()
                     exprs.append(self.parse_expression())
-                if self._t.check(TokenType.RBRACK):
+                elif self._t.check(TokenType.SEPARATOR):
+                    exprs.append(self.parse_expression())
+                else:
+                    self._t.expect(TokenType.RBRACK)
                     break
-                self._t.expect(TokenType.SEPARATOR)
-                exprs.append(self.parse_expression())
         return ast.ASTBlock(params, exprs)
 
     def parse_simple_expression(self, allow_followups=True):
@@ -243,7 +244,10 @@ class Parser:
             while True:
                 l.append(self.parse_expression())
                 if self._t.check(terminator): break
-                else: self._t.expect(TokenType.SEPARATOR)
+                else:
+                    self._t.expect(TokenType.SEPARATOR)
+                    if self._t.check(terminator):
+                        break
         return l
 
     def __init__(self, tokenizer):

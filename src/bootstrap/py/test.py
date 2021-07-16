@@ -17,7 +17,7 @@ print(s.finish())
 
 
 the_parser = parser.TextStream('''
-foo: System out println(text) * 2 bar: [3]()
+foo: System out println(text) * 2 bar: [x, y, z => 3](1, 2, 3)
 ''').get_parser()
 
 print(the_parser.parse_expression())
