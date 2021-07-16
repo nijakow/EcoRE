@@ -3,7 +3,9 @@ class AST:
     pass
 
 class ASTExpression(AST):
-    pass
+    
+    def compile(self, compiler):
+        raise Exception('Can\'t compile this AST!')
 
 class ASTValue(ASTExpression):
     pass
@@ -15,15 +17,26 @@ class ASTObject(ASTValue):
     pass
 
 class ASTSend(ASTExpression):
-    pass
+    
+    def __init__(self, subj, msg, args):
+        self._subj = subj
+        self._msg = msg
+        self._args = args
 
 class ASTCompound(ASTExpression):
-    pass
+    
+    def __init__(self, instructions):
+        self._instrs = instructions
 
 class ASTSequence(ASTCompound):
-    pass
+    
+    def __init__(self, instructions):
+        super().__init__(instructions)
 
 class ASTBlock(ASTCompound):
-    pass
+
+    def __init__(self, params, instructions):
+        super().__init__(instructions)
+        self._params = params
 
 

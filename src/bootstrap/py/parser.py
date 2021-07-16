@@ -193,7 +193,6 @@ class Parser:
                 the_ast = ast.ASTSend(the_ast, datatypes.Key.get('value'), self.parse_expression_list(TokenType.RPAREN))
             elif self._t.check(TokenType.EQUALS):
                 the_ast = ast.ASTAssignment(the_ast, self.parse_expression(allow_followups))
-            # TODO: Assignments
         return the_ast
 
     def parse_expression_list(self, terminator):
