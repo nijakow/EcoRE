@@ -71,7 +71,7 @@ class Key(EcoObject):
             return k
 
     def __repr__(self):
-        return '#\'' + self._name + '\''
+        return '\'' + self._name + '\''
 
     def get_name(self):
         return self._name

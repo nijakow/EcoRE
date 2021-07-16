@@ -18,6 +18,9 @@ class TextStream:
         if c:
             self._index += 1
         return c
+    
+    def get_parser(self):
+        return Parser(Tokenizer(self))
 
     def __init__(self, string):
         self._string = string
@@ -63,7 +66,7 @@ class Token:
 
     def expect(self, token_type):
         if not self.is_type(token_type):
-            raise Exception('Oof, expected different type')
+            raise Exception('Oof, expected ' + str(token_type) + ', got ' + str(self))
 
     def __init__(self, tokenizer, token_type):
         self._tokenizer = tokenizer
@@ -77,6 +80,9 @@ class IdentifierToken(Token):
 
     def get_name(self):
         return self._name
+    
+    def get_key(self):
+        return datatypes.Key.get(self.get_name())
 
     def __init__(self, tokenizer, name):
         super().__init__(tokenizer, TokenType.IDENTIFIER)
@@ -86,7 +92,7 @@ class IdentifierToken(Token):
 class Tokenizer:
 
     def isspecial(self, c):
-        return str.isspace(c) or (c in '()[]{}.,;|=')
+        return str.isspace(c) or (c in '()[]{}.,:;|=')
 
     def slurp_whitespace(self):
         while str.isspace(self._s.peek()):
@@ -150,22 +156,28 @@ class Parser:
         params = []
         exprs = []
         if not self._t.check(TokenType.RBRACK):
+            exprs.append(self.parse_expression())
             while True:
                 if self._t.check(TokenType.RARROW):
                     for e in exprs:
                         params.append(e)
                     exprs.clear()
-                exprs.append(self.parse_expression())
+                    exprs.append(self.parse_expression())
                 if self._t.check(TokenType.RBRACK):
                     break
                 self._t.expect(TokenType.SEPARATOR)
-        return ast.ASTBlock(params, self.parse_expression_list(TokenType.RBRACK))
+                exprs.append(self.parse_expression())
+        return ast.ASTBlock(params, exprs)
 
     def parse_simple_expression(self, allow_followups=True):
         if self._t.check(TokenType.SELF):
             return ast.ASTSelf()
         elif self._t.check(TokenType.LPAREN):
-            return ast.ASTSequence(self.parse_expression_list(TokenType.RPAREN))
+            exprs = self.parse_expression_list(TokenType.RPAREN)
+            if len(exprs) == 1:
+                return exprs[0]
+            else:
+                return ast.ASTSequence(exprs)
         elif self._t.check(TokenType.LBRACK):
             return self.parse_closure()
         elif self._t.check(TokenType.LCURLY):
@@ -183,12 +195,20 @@ class Parser:
     def parse_send(self, the_ast, allow_followups=True):
         ident = self._t.check_identifier()
         if ident:
+            params = []
             key = ident.get_key()
             if key.is_binary_op():
-                params = [self.parse_expression(allow_followups)]
+                params.append(self.parse_expression(allow_followups))
+            elif self._t.check(TokenType.LPAREN):
+                for arg in self.parse_expression_list(TokenType.RPAREN):
+                    params.append(arg)
             else:
-                params = []
-                if allow_followups and self._t.check(TokenType.COLON):
+                colon = self._t.read()
+                if colon.check(TokenType.COLON):
+                    if not allow_followups:
+                        colon.fail()
+                        ident.fail()
+                        return the_ast
                     key = key.colonize()
                     params.append(self.parse_expression(False))
                     while True:
@@ -196,15 +216,12 @@ class Parser:
                         if not ident:
                             break
                         colon = self._t.read()
-                        if not self._t.check(TokenType.COLON):
+                        if not colon.check(TokenType.COLON):
                             ident.fail()
                             colon.fail()
                             break
-                        key.extend_name(ident.get_key().colonize())
+                        key = key.extend_name(ident.get_key().colonize())
                         params.append(self.parse_expression(False))
-            if self._t.check(TokenType.LPAREN):
-                for arg in self.parse_expression_list(TokenType.RPAREN):
-                    params.append(arg)
             the_ast = ast.ASTSend(the_ast, key, params)
         return the_ast
 

@@ -11,13 +11,18 @@ class ASTValue(ASTExpression):
     pass
 
 class ASTSelf(ASTValue):
-    pass
+    
+    def __repr__(self):
+        return 'self'
 
 class ASTObject(ASTValue):
     pass
 
 class ASTSend(ASTExpression):
     
+    def __repr__(self):
+        return str(self._subj) + '.' + str(self._msg) + str(self._args)
+
     def __init__(self, subj, msg, args):
         self._subj = subj
         self._msg = msg

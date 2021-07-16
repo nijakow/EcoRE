@@ -1,5 +1,6 @@
 import datatypes
 import econnect
+import parser
 
 d = datatypes.PlainObject()
 d.add_slot(datatypes.ValueSlot('meta', datatypes.PlainObject()))
@@ -13,3 +14,10 @@ s = econnect.Serializer()
 
 c.serialize(s)
 print(s.finish())
+
+
+the_parser = parser.TextStream('''
+foo: System out println(text) * 2 bar: [3]()
+''').get_parser()
+
+print(the_parser.parse_expression())
