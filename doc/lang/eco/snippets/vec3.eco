@@ -1,0 +1,36 @@
+
+{
+    x = 0,
+    y = 0,
+    z = 0;
+
+    with parent = {
+        length => ((x ²) + (y ²) + (z ²)) sqrt;
+
+        incX: n => (x = x + n);
+        decX: n => (x = x - n);
+        incX    => incX: 1;
+
+        incY: n => (y = y + n);
+        decY: n => (y = y - n);
+        incY    => incY: 1;
+
+        incZ: n => (z = z + n);
+        decZ: n => (z = z - n);
+        incZ    => incZ: 1;
+
+        incX: dx Y: dy Z: dz => (
+            x = x + dx,
+            y = y + dy,
+            z = z + dz;
+          ^ self
+        );
+
+        x: nx y: ny z: nz => (
+            x = nx,
+            y = ny,
+            z = nz;
+          ^ self
+        );
+    };
+}
