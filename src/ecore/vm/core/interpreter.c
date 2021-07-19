@@ -14,20 +14,9 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber*        fiber,
                                       struct Eco_Environment*  link)
 {
     unsigned int       i;
-    unsigned int       delta;
     struct Eco_Frame*  new_frame;
 
-    if (Eco_Fiber_HasTop(fiber)) {
-        delta = sizeof(struct Eco_Frame) * Eco_Fiber_Top(fiber)->register_count * sizeof(Eco_Any);
-    } else {
-        delta = 0;
-    }
-
-    fiber->top = Eco_Fiber_FrameAt(fiber, fiber->stack_alloc_ptr);
-
-    new_frame                 = fiber->top;
-    new_frame->delta          = delta;
-    new_frame->register_count = register_count;
+    new_frame                 = Eco_Fiber_AllocFrame(fiber, register_count);
 
     if (dynamics_count > 0 || link != NULL) {
         new_frame->dynamic_vars = Eco_Environment_New(dynamics_count, link);
@@ -52,7 +41,7 @@ void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
         Eco_Environment_Decr(frame->dynamic_vars);
     }
 
-    if (fiber->stack_alloc_ptr == 0) {
+    if (frame->delta == 0) {
         fiber->top = NULL;
     } else {
         fiber->stack_alloc_ptr = fiber->stack_alloc_ptr - frame->delta;

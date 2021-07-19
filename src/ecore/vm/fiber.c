@@ -77,3 +77,27 @@ void Eco_Fiber_MoveToQueue(struct Eco_Fiber* fiber, struct Eco_Fiber** queue)
         *queue = fiber;
     }
 }
+
+struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber* fiber, unsigned int register_count)
+{
+    struct Eco_Frame*  the_frame;
+    unsigned int       delta;
+
+    const unsigned int frame_size = sizeof(struct Eco_Frame) + sizeof(Eco_Any) * register_count;
+
+    the_frame                 = (struct Eco_Frame*) &fiber->stack[fiber->stack_alloc_ptr];
+    the_frame->register_count = register_count;
+
+    if (Eco_Fiber_HasTop(fiber)) {
+        delta = Eco_Fiber_Top(fiber) - the_frame;
+    } else {
+        delta = 0;
+    }
+
+    fiber->top = the_frame;
+    fiber->stack_alloc_ptr += frame_size;
+
+    Eco_Fiber_Top(fiber)->delta = delta;
+
+    return the_frame;
+}
