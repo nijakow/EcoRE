@@ -87,6 +87,7 @@ struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber* fiber, unsigned int reg
 
     the_frame                 = (struct Eco_Frame*) &fiber->stack[fiber->stack_alloc_ptr];
     the_frame->register_count = register_count;
+    the_frame->closures       = NULL;
 
     if (Eco_Fiber_HasTop(fiber)) {
         delta = Eco_Fiber_Top(fiber) - the_frame;

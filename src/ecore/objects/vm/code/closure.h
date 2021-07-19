@@ -10,10 +10,13 @@ struct Eco_GC_State;
 
 struct Eco_Closure
 {
-    struct Eco_Object  _;
+    struct Eco_Object     _;
 
-    struct Eco_Code*   code;
-    struct Eco_Frame*  lexical;
+    struct Eco_Code*      code;
+    struct Eco_Frame*     lexical;
+
+    struct Eco_Closure**  prev;
+    struct Eco_Closure*   next;
 };
 
 

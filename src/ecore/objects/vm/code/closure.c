@@ -2,7 +2,7 @@
 
 #include "code.h"
 #include "../../base/type.h"
-#include "../../../vm/core/environment.h"
+#include "../../../vm/core/frame.h"
 #include "../../../vm/memory/memory.h"
 
 
@@ -42,8 +42,13 @@ struct Eco_Closure* Eco_Closure_New(struct Eco_Code* code, struct Eco_Frame* lex
 
     closure = Eco_Object_New_Derived(Eco_Closure_TYPE, sizeof(struct Eco_Closure), 0);
 
-    closure->code    = code;
-    closure->lexical = lexical;
+    closure->code       = code;
+    closure->lexical    = lexical;
+
+    closure->prev       = &(lexical->closures);
+    closure->next       = lexical->closures;
+    closure->next->prev = &(closure->next);
+    lexical->closures   = closure;
 
     return closure;
 }
@@ -56,5 +61,9 @@ void Eco_Closure_Mark(struct Eco_GC_State* state, struct Eco_Closure* closure)
 
 void Eco_Closure_Del(struct Eco_Closure* closure)
 {
+    *(closure->prev) = closure->next;
+    if (closure->next != NULL) {
+        closure->next->prev = closure->prev;
+    }
     Eco_Object_Del(&(closure->_));
 }

@@ -10,16 +10,16 @@ struct Eco_GC_State;
 
 struct Eco_Frame
 {
-    unsigned int       delta;
-    struct Eco_Frame*  lexical;
+    unsigned int         delta;
+    struct Eco_Frame*    lexical;
+    struct Eco_Closure*  closures;
 
-    Eco_Any            self;
+    struct Eco_Code*     code;
+    u8*                  instruction;
 
-    struct Eco_Code*   code;
-    u8*                instruction;
-
-    unsigned int       register_count;
-    Eco_Any            registers[];
+    unsigned int         register_count;
+    Eco_Any              self;
+    Eco_Any              registers[];
 };
 
 
