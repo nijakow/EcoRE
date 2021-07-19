@@ -72,7 +72,7 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*        fiber,
 
     for (i = 0; i < code->arg_count; i++)
     {
-        frame->registers[i] = message->body.send.arg_location[i + 1];
+        Eco_Any_AssignAny(&frame->registers[i], &message->body.send.arg_location[i + 1]);
     }
 
     return true;
