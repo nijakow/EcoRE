@@ -4,20 +4,20 @@
 
 
 struct Eco_Code;
-struct Eco_Environment;
+struct Eco_Frame;
 struct Eco_GC_State;
 
 
 struct Eco_Closure
 {
-    struct Eco_Object        _;
+    struct Eco_Object  _;
 
-    struct Eco_Code*         code;
-    struct Eco_Environment*  environment;
+    struct Eco_Code*   code;
+    struct Eco_Frame*  lexical;
 };
 
 
-struct Eco_Closure* Eco_Closure_New(struct Eco_Code*, struct Eco_Environment*);
+struct Eco_Closure* Eco_Closure_New(struct Eco_Code*, struct Eco_Frame*);
 void Eco_Closure_Mark(struct Eco_GC_State*, struct Eco_Closure*);
 void Eco_Closure_Del(struct Eco_Closure*);
 

@@ -10,17 +10,16 @@ struct Eco_GC_State;
 
 struct Eco_Frame
 {
-    unsigned int             delta;
+    unsigned int       delta;
+    struct Eco_Frame*  lexical;
 
-    Eco_Any                  self;
+    Eco_Any            self;
 
-    struct Eco_Code*         code;
-    u8*                      instruction;
+    struct Eco_Code*   code;
+    u8*                instruction;
 
-    struct Eco_Environment*  dynamic_vars;
-
-    unsigned int             register_count;
-    Eco_Any                  registers[];
+    unsigned int       register_count;
+    Eco_Any            registers[];
 };
 
 
@@ -60,4 +59,15 @@ static inline i32 Eco_Frame_NextI32(struct Eco_Frame* frame)
 static inline Eco_Any* Eco_Frame_NextConstant(struct Eco_Frame* frame)
 {
     return &(frame->code->constants[Eco_Frame_NextU16(frame)]);
+}
+
+static inline struct Eco_Frame* Eco_Frame_NthLexical(struct Eco_Frame* frame, unsigned int depth)
+{
+    while (depth --> 0)
+    {
+        if (frame == NULL)
+            return frame;
+        frame = frame->lexical;
+    }
+    return frame;
 }

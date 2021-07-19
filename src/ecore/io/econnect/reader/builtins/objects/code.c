@@ -13,7 +13,6 @@ bool Eco_EConnect_Builtin_GetCode(struct Eco_EConnect_Reader* reader,
     unsigned int      id;
     unsigned int      index;
     unsigned int      register_count;
-    unsigned int      dynamics_count;
     unsigned int      arg_count;
     unsigned int      constant_count;
     unsigned int      instance_count;
@@ -23,7 +22,6 @@ bool Eco_EConnect_Builtin_GetCode(struct Eco_EConnect_Reader* reader,
     id             = Eco_EConnect_ParseUInt(&reader->stream);
 
     register_count = Eco_EConnect_ParseUInt(&reader->stream);
-    dynamics_count = Eco_EConnect_ParseUInt(&reader->stream);
     arg_count      = Eco_EConnect_ParseUInt(&reader->stream);
     constant_count = Eco_EConnect_ParseUInt(&reader->stream);
     instance_count = Eco_EConnect_ParseUInt(&reader->stream);
@@ -36,7 +34,6 @@ bool Eco_EConnect_Builtin_GetCode(struct Eco_EConnect_Reader* reader,
         return false;
     
     the_code->register_count      = register_count;
-    the_code->dynamics_count      = dynamics_count;
     the_code->arg_count           = arg_count;
 
     the_code->constant_count      = constant_count;

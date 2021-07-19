@@ -12,7 +12,6 @@ struct Eco_Code
     struct Eco_Object  _;
 
     unsigned int       register_count;
-    unsigned int       dynamics_count;
 
     unsigned int       arg_count;
 

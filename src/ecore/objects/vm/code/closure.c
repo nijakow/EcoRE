@@ -36,16 +36,14 @@ void Eco_Closure_Terminate()
  *    B a s i c s
  */
 
-struct Eco_Closure* Eco_Closure_New(struct Eco_Code* code, struct Eco_Environment* environment)
+struct Eco_Closure* Eco_Closure_New(struct Eco_Code* code, struct Eco_Frame* lexical)
 {
     struct Eco_Closure* closure;
 
     closure = Eco_Object_New_Derived(Eco_Closure_TYPE, sizeof(struct Eco_Closure), 0);
 
-    closure->code = code;
-    closure->environment = environment;
-
-    Eco_Environment_Incr(environment);
+    closure->code    = code;
+    closure->lexical = lexical;
 
     return closure;
 }
@@ -53,12 +51,10 @@ struct Eco_Closure* Eco_Closure_New(struct Eco_Code* code, struct Eco_Environmen
 void Eco_Closure_Mark(struct Eco_GC_State* state, struct Eco_Closure* closure)
 {
     Eco_Code_Mark(state, closure->code);
-    Eco_Environment_Mark(state, closure->environment);
     Eco_Object_Mark(state, &(closure->_));
 }
 
 void Eco_Closure_Del(struct Eco_Closure* closure)
 {
-    Eco_Environment_Decr(closure->environment);
     Eco_Object_Del(&(closure->_));
 }

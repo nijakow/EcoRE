@@ -9,20 +9,12 @@
 
 
 struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber*        fiber,
-                                      unsigned int             register_count,
-                                      unsigned int             dynamics_count,
-                                      struct Eco_Environment*  link)
+                                      unsigned int             register_count)
 {
     unsigned int       i;
     struct Eco_Frame*  new_frame;
 
-    new_frame                 = Eco_Fiber_AllocFrame(fiber, register_count);
-
-    if (dynamics_count > 0 || link != NULL) {
-        new_frame->dynamic_vars = Eco_Environment_New(dynamics_count, link);
-    } else {
-        new_frame->dynamic_vars = NULL;
-    }
+    new_frame = Eco_Fiber_AllocFrame(fiber, register_count);
 
     for (i = 0; i < register_count; i++) {
         Eco_Any_AssignInteger(&(new_frame->registers[i]), 0);   /* TODO: Improve that */
@@ -37,10 +29,6 @@ void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
 
     frame = Eco_Fiber_Top(fiber);
 
-    if (frame->dynamic_vars != NULL) {
-        Eco_Environment_Decr(frame->dynamic_vars);
-    }
-
     if (frame->delta == 0) {
         fiber->top = NULL;
     } else {
@@ -50,10 +38,10 @@ void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
 }
 
 
-bool Eco_Fiber_Enter(struct Eco_Fiber*        fiber,
-                     struct Eco_Message*      message,
-                     struct Eco_Code*         code,
-                     struct Eco_Environment*  link)
+bool Eco_Fiber_Enter(struct Eco_Fiber*    fiber,
+                     struct Eco_Frame*    lexical,
+                     struct Eco_Message*  message,
+                     struct Eco_Code*     code)
 {
     unsigned int       i;
     struct Eco_Frame*  frame;
@@ -63,7 +51,7 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*        fiber,
         return false;
     }
 
-    frame = Eco_Fiber_PushFrame(fiber, code->register_count, code->dynamics_count, link);
+    frame = Eco_Fiber_PushFrame(fiber, code->register_count);
 
     frame->self        = message->body.send.arg_location[0];
 
@@ -82,6 +70,7 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*        fiber,
 void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 {
     struct Eco_Frame*  top;
+    struct Eco_Frame*  bottom;
 
     top = Eco_Fiber_Top(fiber);
 
@@ -103,16 +92,20 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 top->registers[to] = top->registers[from];
                 break;
             }
-            case Eco_Bytecode_R2D: {
-                u8 to   = Eco_Frame_NextU8(top);
-                u8 from = Eco_Frame_NextU8(top);
-                top->dynamic_vars->vars[to] = top->registers[from];
+            case Eco_Bytecode_R2L: {
+                u8 to    = Eco_Frame_NextU8(top);
+                u8 from  = Eco_Frame_NextU8(top);
+                u8 depth = Eco_Frame_NextU8(top);
+                bottom   = Eco_Frame_NthLexical(top, depth);
+                bottom->registers[to] = top->registers[from];
                 break;
             }
-            case Eco_Bytecode_D2R: {
-                u8 to   = Eco_Frame_NextU8(top);
-                u8 from = Eco_Frame_NextU8(top);
-                top->registers[to] = top->dynamic_vars->vars[from];
+            case Eco_Bytecode_L2R: {
+                u8 to    = Eco_Frame_NextU8(top);
+                u8 from  = Eco_Frame_NextU8(top);
+                u8 depth = Eco_Frame_NextU8(top);
+                bottom   = Eco_Frame_NthLexical(top, depth);
+                top->registers[to] = bottom->registers[from];
                 break;
             }
             case Eco_Bytecode_SEND: {
@@ -128,6 +121,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                     top = Eco_Fiber_Top(fiber); /* TODO: Do the "slow dispatch" code */
                 } else {
                     Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
+                    goto end;
                 }
 
                 break;
@@ -144,41 +138,31 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 
                 if (!Eco_Send(&message, &(top->registers[reg]))) {
                     Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ASSIGNFAILED);
+                    goto end;
                 }
 
                 break;
             }
             case Eco_Bytecode_RETURN: {
-                u8                       i;
-                u8                       depth;
-                struct Eco_Environment*  next;
+                u8                 depth;
+                struct Eco_Frame*  target;
 
                 depth = Eco_Frame_NextU8(top);
 
-                if (depth > 0) {
-                    i    = 0;
-                    next = top->dynamic_vars;
-
-                    while (i <= depth)  /* Since we start with next = top->dynamic_vars, we have to use "<=" */
+                while (depth > 0)
+                {
+                    target = Eco_Fiber_Top(fiber)->lexical;
+                    while (Eco_Fiber_Top(fiber) != target)
                     {
-                        if (next == NULL) {
-                            Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_RETURNFAILED);
-                            goto end;
-                        }
-
-                        if (Eco_Fiber_Top(fiber)->dynamic_vars == next) {
-                            i    = i + 1;
-                            next = next->link;  /* TODO, XXX: Increment reference count, otherwise they might get deleted too early */
-                        } else if (Eco_Fiber_HasTop(fiber)) {
-                            Eco_Fiber_PopFrame(fiber);
-                        } else {
+                        Eco_Fiber_PopFrame(fiber);
+                        if (!Eco_Fiber_HasTop(fiber)) {
                             Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_RETURNFAILED);
                             goto end;
                         }
                     }
                 }
 
-                if (Eco_Fiber_HasTop(fiber)) Eco_Fiber_PopFrame(fiber);
+                Eco_Fiber_PopFrame(fiber);
 
                 top = Eco_Fiber_Top(fiber); /* TODO: Do the "slow dispatch" code */
 
@@ -191,7 +175,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 
                 dest       = Eco_Frame_NextU8(top);
                 closure_id = Eco_Frame_NextU8(top);
-                closure    = Eco_Closure_New(top->code->code_instances[closure_id], top->dynamic_vars);
+                closure    = Eco_Closure_New(top->code->code_instances[closure_id], Eco_Fiber_Top(fiber));
 
                 Eco_Any_AssignPointer(&top->registers[dest], (struct Eco_Object*) closure);
 
