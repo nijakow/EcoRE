@@ -23,19 +23,6 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber*        fiber,
     return new_frame;
 }
 
-void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
-{
-    struct Eco_Frame*  frame;
-
-    frame = Eco_Fiber_Top(fiber);
-
-    if (frame->delta == 0) {
-        fiber->top = NULL;
-    } else {
-        fiber->stack_alloc_ptr = fiber->stack_alloc_ptr - frame->delta;
-        fiber->top             = Eco_Fiber_FrameAt(fiber, fiber->stack_alloc_ptr);
-    }
-}
 
 
 bool Eco_Fiber_Enter(struct Eco_Fiber*    fiber,

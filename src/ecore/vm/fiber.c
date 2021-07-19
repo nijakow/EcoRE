@@ -4,6 +4,7 @@
 #include "memory/gc/gc.h"
 
 #include "core/frame.h"
+#include "../objects/vm/code/closure.h"
 
 
 struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
@@ -28,7 +29,13 @@ struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
 
 void Eco_Fiber_Delete(struct Eco_Fiber* fiber)
 {
+    while (Eco_Fiber_HasTop(fiber))
+    {
+        Eco_Fiber_PopFrame(fiber);
+    }
+
     Eco_Fiber_MoveToQueue(fiber, NULL);
+
     Eco_Memory_Free(fiber);
 }
 
@@ -102,3 +109,25 @@ struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber* fiber, unsigned int reg
 
     return the_frame;
 }
+
+void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
+{
+    struct Eco_Frame*  frame;
+
+    frame = Eco_Fiber_Top(fiber);
+
+    while (frame->closures != NULL)
+    {
+        frame->closures->lexical = NULL;
+        frame->closures->prev    = NULL;
+        frame->closures = frame->closures->next;
+    }
+
+    if (frame->delta == 0) {
+        fiber->top = NULL;
+    } else {
+        fiber->stack_alloc_ptr = fiber->stack_alloc_ptr - frame->delta;
+        fiber->top             = Eco_Fiber_FrameAt(fiber, fiber->stack_alloc_ptr);
+    }
+}
+

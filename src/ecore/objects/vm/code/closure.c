@@ -61,9 +61,10 @@ void Eco_Closure_Mark(struct Eco_GC_State* state, struct Eco_Closure* closure)
 
 void Eco_Closure_Del(struct Eco_Closure* closure)
 {
-    *(closure->prev) = closure->next;
-    if (closure->next != NULL) {
-        closure->next->prev = closure->prev;
-    }
+    if (closure->prev != NULL)
+        *(closure->prev) = closure->next;
+    if (closure->next != NULL)
+        closure->next->prev = NULL;
+
     Eco_Object_Del(&(closure->_));
 }
