@@ -22,6 +22,8 @@ struct Eco_Fiber
     struct Eco_Fiber*       queue_prev;
     struct Eco_Fiber*       queue_next;
 
+    Eco_Any                 return_value;
+
     struct Eco_Frame*       top;
     unsigned int            stack_size;
     unsigned int            stack_alloc_ptr;

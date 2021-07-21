@@ -70,13 +70,13 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
             }
             case Eco_Bytecode_SELF: {
                 u8 reg = Eco_Frame_NextU8(top);
-                top->registers[reg] = top->self;
+                Eco_Any_AssignAny(&top->registers[reg], &top->self);
                 break;
             }
             case Eco_Bytecode_R2R: {
                 u8 to   = Eco_Frame_NextU8(top);
                 u8 from = Eco_Frame_NextU8(top);
-                top->registers[to] = top->registers[from];
+                Eco_Any_AssignAny(&top->registers[to], &top->registers[from]);
                 break;
             }
             case Eco_Bytecode_R2L: {
@@ -84,7 +84,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 u8 from  = Eco_Frame_NextU8(top);
                 u8 depth = Eco_Frame_NextU8(top);
                 bottom   = Eco_Frame_NthLexical(top, depth);
-                bottom->registers[to] = top->registers[from];
+                Eco_Any_AssignAny(&bottom->registers[to], &top->registers[from]);
                 break;
             }
             case Eco_Bytecode_L2R: {
@@ -92,7 +92,12 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 u8 from  = Eco_Frame_NextU8(top);
                 u8 depth = Eco_Frame_NextU8(top);
                 bottom   = Eco_Frame_NthLexical(top, depth);
-                top->registers[to] = bottom->registers[from];
+                Eco_Any_AssignAny(&top->registers[to], &bottom->registers[from]);
+                break;
+            }
+            case Eco_Bytecode_A2R: {
+                u8 to = Eco_Frame_NextU8(top);
+                Eco_Any_AssignAny(&top->registers[to], &fiber->return_value);
                 break;
             }
             case Eco_Bytecode_SEND: {
@@ -132,9 +137,13 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
             }
             case Eco_Bytecode_RETURN: {
                 u8                 depth;
+                u8                 retval_register;
                 struct Eco_Frame*  target;
 
-                depth = Eco_Frame_NextU8(top);
+                retval_register = Eco_Frame_NextU8(top);
+                depth           = Eco_Frame_NextU8(top);
+
+                Eco_Any_AssignAny(&fiber->return_value, &top->registers[retval_register]);
 
                 while (depth > 0)
                 {

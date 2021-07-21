@@ -20,6 +20,8 @@ struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
     fiber->queue_prev      = NULL;
     fiber->queue_next      = NULL;
 
+    Eco_Any_AssignInteger(&fiber->return_value, 0);
+
     fiber->top             = NULL;
     fiber->stack_size      = stack_size;
     fiber->stack_alloc_ptr = 0;
@@ -43,6 +45,8 @@ void Eco_Fiber_Mark(struct Eco_GC_State* state, struct Eco_Fiber* fiber)
 {
     unsigned int       offset;
     struct Eco_Frame*  frame;
+
+    Eco_GC_State_MarkAny(state, &fiber->return_value);
 
     offset = fiber->stack_alloc_ptr;
     do
