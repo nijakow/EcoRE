@@ -2,11 +2,20 @@
 
 class EcoSlot:
 
+    def _set_serialization_flag(self, x):
+        self._ser_flags |= (1 << x)
+
+    def _set_serialization_flags(self):
+        if self._is_private:
+            self._set_serialization_flag(self, 1)
+
     def serialize(self, serializer):
-        self.write_flags(serializer)
+        self._set_serialization_flags(serializer)
+        serializer.write_byte(self._ser_flags)
         self._name.serialize(serializer)
 
     def __init__(self, name, is_private=False):
+        self._ser_flags = 0x00
         self._is_private = is_private
         if isinstance(name, Key):
             self._name = name
@@ -16,13 +25,10 @@ class EcoSlot:
 
 class ValueSlot(EcoSlot):
 
-    def write_flags(self, serializer):
-        flags = 0x00
-        if self._is_private:
-            flags |= 0x02
+    def _set_serialization_flags(self, serializer):
+        super()._set_serialization_flags()
         if self._is_inherited:
-            flags |= 0x04
-        serializer.write_byte(flags)
+            self._set_serialization_flag(2)
     
     def serialize(self, serializer):
         super().serialize(serializer)
@@ -36,11 +42,9 @@ class ValueSlot(EcoSlot):
 
 class CodeSlot(EcoSlot):
 
-    def write_flags(self, serializer):
-        flags = 0x01
-        if self._is_private:
-            flags |= 0x02
-        serializer.write_byte(flags)
+    def _set_serialization_flags(self, serializer):
+        super()._set_serialization_flags()
+        self._set_serialization_flag(0)
     
     def serialize(self, serializer):
         super().serialize(serializer)

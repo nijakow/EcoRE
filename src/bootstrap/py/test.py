@@ -17,7 +17,7 @@ print(s.finish())
 
 
 the_parser = parser.TextStream('''
-foo: {x, y, with z = {}, with code => x}
+foo: {x, y, with z = {}, z => x}
 ''').get_parser()
 
 print(the_parser.parse_expression())
