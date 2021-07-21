@@ -44,6 +44,7 @@ class TokenType(enum.Enum):
     BAR        = enum.auto()
     SELF       = enum.auto()
     WITH       = enum.auto()
+    PRIVATE    = enum.auto()
 
 
 class Token:
@@ -67,6 +68,7 @@ class Token:
     def expect(self, token_type):
         if not self.is_type(token_type):
             raise Exception('Oof, expected ' + str(token_type) + ', got ' + str(self))
+        return self
 
     def __init__(self, tokenizer, token_type):
         self._tokenizer = tokenizer
@@ -131,6 +133,7 @@ class Tokenizer:
 
         if c == 'self': return Token(self, TokenType.SELF)
         elif c == 'with': return Token(self, TokenType.WITH)
+        elif c == 'private': return Token(self, TokenType.PRIVATE)
         else: return IdentifierToken(self, c)
 
     def unread(self, token):
@@ -143,7 +146,10 @@ class Tokenizer:
         return self.check(TokenType.IDENTIFIER)
 
     def expect(self, token_type):
-        self.read().expect(token_type)
+        return self.read().expect(token_type)
+    
+    def expect_identifier(self):
+        return self.expect(TokenType.IDENTIFIER)
 
     def __init__(self, stream):
         self._s = stream
@@ -170,6 +176,60 @@ class Parser:
                     break
         return ast.ASTBlock(params, exprs)
 
+    def parse_object_slot_header(self):
+        key = self._t.expect_identifier().get_key()
+        params = []
+        if self._t.check(TokenType.COLON):
+            key = key.colonize()
+            params.append(self._t.expect_identifier().get_key())
+            t = self._t.read()
+            while t.check(TokenType.IDENTIFIER):
+                self._t.expect(TokenType.COLON)
+                key = key.extend_name(t.get_key().colonize())
+                params.append(self._t.expect_identifier().get_key())
+                t = self._t.read()
+        elif self._t.check(TokenType.LPAREN):
+            if not self._t.check(TokenType.RPAREN):
+                self.params.append(self._t.expect_identifier())
+                while not self._t.check(TokenType.RPAREN):
+                    self._t.expect(TokenType.SEPARATOR)
+                    self.params.append(self._t.expect_identifier())
+        return key, params
+
+    def parse_object(self):
+        object = datatypes.PlainObject()
+        while not self._t.check(TokenType.RCURLY):
+            if self._t.check(TokenType.WITH):
+                flag_inherited = True
+            else:
+                flag_inherited = False
+            if self._t.check(TokenType.PRIVATE):
+                flag_private = True
+            else:
+                flag_private = False
+            key, params = self.parse_object_slot_header()
+            if self._t.check(TokenType.SEPARATOR):
+                object.add_slot(datatypes.ValueSlot(key, ast.ASTNil(), is_inherited=flag_inherited, is_private=flag_private))
+                continue
+            elif self._t.check(TokenType.RCURLY):
+                object.add_slot(datatypes.ValueSlot(key, ast.ASTNil(), is_inherited=flag_inherited, is_private=flag_private))
+                break
+            elif self._t.check(TokenType.RARROW):
+                flag_method = True
+                # TODO: Check against flag_inherited (must be false)
+            else:
+                self._t.expect(TokenType.EQUALS)
+                flag_method = False
+                # TODO: len(params) must be 0!
+            value = self.parse_expression()
+            if flag_method:
+                code = self.parse_expression().compile_as_code()  # TODO
+                object.add_slot(datatypes.CodeSlot(key, code, is_private=flag_private))
+            else:
+                object.add_slot(datatypes.ValueSlot(key, self.parse_expression(), is_inherited=flag_inherited, is_private=flag_private))
+            self._t.check(TokenType.SEPARATOR)
+        return ast.ASTConstant(object)
+
     def parse_simple_expression(self, allow_followups=True):
         if self._t.check(TokenType.SELF):
             return ast.ASTSelf()
@@ -182,8 +242,7 @@ class Parser:
         elif self._t.check(TokenType.LBRACK):
             return self.parse_closure()
         elif self._t.check(TokenType.LCURLY):
-            # TODO: Parse object
-            return ast.ASTObject()
+            return self.parse_object()
         elif self._t.check(TokenType.CARET):
             return ast.ASTReturn(self.parse_expression(allow_followups))
         elif self._t.check(TokenType.BAR):

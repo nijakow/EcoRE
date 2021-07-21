@@ -6,7 +6,8 @@ class EcoSlot:
         self.write_flags(serializer)
         self._name.serialize(serializer)
 
-    def __init__(self, name):
+    def __init__(self, name, is_private=False):
+        self._is_private = is_private
         if isinstance(name, Key):
             self._name = name
         else:
@@ -17,18 +18,37 @@ class ValueSlot(EcoSlot):
 
     def write_flags(self, serializer):
         flags = 0x00
-        if self._is_inherited:
+        if self._is_private:
             flags |= 0x02
+        if self._is_inherited:
+            flags |= 0x04
         serializer.write_byte(flags)
     
     def serialize(self, serializer):
         super().serialize(serializer)
         self._value.serialize(serializer)
 
-    def __init__(self, name, value, inherited=False):
-        super().__init__(name)
+    def __init__(self, name, value, is_inherited=False, is_private=False):
+        super().__init__(name, is_private=is_private)
         self._value = value
-        self._is_inherited = inherited
+        self._is_inherited = is_inherited
+
+
+class CodeSlot(EcoSlot):
+
+    def write_flags(self, serializer):
+        flags = 0x01
+        if self._is_private:
+            flags |= 0x02
+        serializer.write_byte(flags)
+    
+    def serialize(self, serializer):
+        super().serialize(serializer)
+        self._code.serialize(serializer)
+    
+    def __init__(self, name, code, is_private=False):
+        super().__init__(name, is_private=is_private)
+        self._code = code
 
 
 class EcoObject:
@@ -105,16 +125,14 @@ class Code(EcoObject):
         serializer.open_message('ecosphere.object.code')
         super().do_serialize(serializer, id)
         serializer.write_uint(self._register_count)
-        serializer.write_uint(self._dynamics_count)
         serializer.write_uint(self._arg_count)
         serializer.write_object_sequence(self._constants)
         serializer.write_object_sequence(self._subcodes)
         serializer.write_byte_sequence(self._instructions)
 
-    def __init__(self, register_count, dynamics_count, arg_count, constants, subcodes, instructions):
+    def __init__(self, register_count, arg_count, constants, subcodes, instructions):
         super().__init__()
         self._register_count = register_count
-        self._dynamics_count = dynamics_count
         self._arg_count = arg_count
         self._constants = constants
         self._subcodes = subcodes
