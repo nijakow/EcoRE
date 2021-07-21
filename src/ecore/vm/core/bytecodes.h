@@ -4,6 +4,7 @@ enum Eco_Bytecode
 {
     Eco_Bytecode_NOOP = 0,
     Eco_Bytecode_SELF,
+    Eco_Bytecode_C2R,
     Eco_Bytecode_R2R,
     Eco_Bytecode_R2L,
     Eco_Bytecode_L2R,

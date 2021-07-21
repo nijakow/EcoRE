@@ -73,6 +73,11 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 Eco_Any_AssignAny(&top->registers[reg], &top->self);
                 break;
             }
+            case Eco_Bytecode_C2R: {
+                u8 to = Eco_Frame_NextU8(top);
+                Eco_Any_AssignAny(&top->registers, Eco_Frame_NextConstant(top));
+                break;
+            }
             case Eco_Bytecode_R2R: {
                 u8 to   = Eco_Frame_NextU8(top);
                 u8 from = Eco_Frame_NextU8(top);
@@ -81,8 +86,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
             }
             case Eco_Bytecode_R2L: {
                 u8 to    = Eco_Frame_NextU8(top);
-                u8 from  = Eco_Frame_NextU8(top);
                 u8 depth = Eco_Frame_NextU8(top);
+                u8 from  = Eco_Frame_NextU8(top);
                 bottom   = Eco_Frame_NthLexical(top, depth);
                 Eco_Any_AssignAny(&bottom->registers[to], &top->registers[from]);
                 break;
@@ -103,9 +108,9 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
             case Eco_Bytecode_SEND: {
                 struct Eco_Message  message;
 
+                message.key                    = Eco_Any_AsPointer(Eco_Frame_NextConstant(top));
                 message.body.send.arg_location = &(top->registers[Eco_Frame_NextU8(top)]);
                 message.body.send.arg_count    = Eco_Frame_NextU8(top);
-                message.key                    = Eco_Any_AsPointer(Eco_Frame_NextConstant(top));
                 message.fiber                  = fiber;
                 message.type                   = Eco_Message_Type_SEND;
 
@@ -123,8 +128,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 u8                  reg;
 
                 reg                       = Eco_Frame_NextU8(top);
-                message.body.assign.value = &(top->registers[Eco_Frame_NextU8(top)]);
                 message.key               = Eco_Any_AsPointer(Eco_Frame_NextConstant(top));
+                message.body.assign.value = &(top->registers[Eco_Frame_NextU8(top)]);
                 message.fiber             = fiber;
                 message.type              = Eco_Message_Type_ASSIGN;
 
