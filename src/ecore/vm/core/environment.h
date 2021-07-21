@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_VM_CORE_ENVIRONMENT_H
+#define ECO_VM_CORE_ENVIRONMENT_H
 
 #include "../../eco.h"
 
@@ -28,3 +29,5 @@ static inline void Eco_Environment_Incr(struct Eco_Environment* environment)
 void Eco_Environment_Decr(struct Eco_Environment*);
 
 void Eco_Environment_Mark(struct Eco_GC_State*, struct Eco_Environment*);
+
+#endif

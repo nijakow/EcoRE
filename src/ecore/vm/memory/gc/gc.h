@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_VM_MEMORY_GC_GC_H
+#define ECO_VM_MEMORY_GC_GC_H
 
 #include "gc_state.h"
 
@@ -29,3 +30,5 @@ void Eco_GC_MakeSticky(struct Eco_Object* object);
 
 void Eco_GC();
 void Eco_FreeAll();
+
+#endif

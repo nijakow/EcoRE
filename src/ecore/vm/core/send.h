@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_VM_CORE_SEND_H
+#define ECO_VM_CORE_SEND_H
 
 #include "../../eco.h"
 
@@ -29,3 +30,5 @@ struct Eco_Message
 
 
 bool Eco_Send(struct Eco_Message*, Eco_Any*);
+
+#endif

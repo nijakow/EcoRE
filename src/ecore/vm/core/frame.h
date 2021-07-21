@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_VM_CORE_FRAME_H
+#define ECO_VM_CORE_FRAME_H
 
 #include "../../eco.h"
 #include "../../objects/vm/code/code.h"
@@ -71,3 +72,5 @@ static inline struct Eco_Frame* Eco_Frame_NthLexical(struct Eco_Frame* frame, un
     }
     return frame;
 }
+
+#endif

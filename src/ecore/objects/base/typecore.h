@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_OBJECTS_BASE_TYPECORE_H
+#define ECO_OBJECTS_BASE_TYPECORE_H
 
 #include "../../eco.h"
 
@@ -24,3 +25,5 @@ struct Eco_TypeCore
 
 void Eco_TypeCore_Create(struct Eco_TypeCore*, const char*);
 void Eco_TypeCore_Destroy(struct Eco_TypeCore*);
+
+#endif

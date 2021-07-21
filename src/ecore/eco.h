@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_ECO_H
+#define ECO_ECO_H
 
 #include <stddef.h>
 #include <stdint.h>
@@ -134,3 +135,5 @@ static inline Eco_Floating Eco_Any_AsFloating(Eco_Any* any)
 {
     return any->value.floating;
 }
+
+#endif

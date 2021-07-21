@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_OBJECTS_GROUP_GROUP_H
+#define ECO_OBJECTS_GROUP_GROUP_H
 
 #include "../base/object.h"
 
@@ -48,3 +49,5 @@ void Eco_Group_Del(struct Eco_Group*);
 
 void Eco_Group_Init();
 void Eco_Group_Terminate();
+
+#endif

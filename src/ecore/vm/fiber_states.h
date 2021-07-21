@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_VM_FIBER_STATES_H
+#define ECO_VM_FIBER_STATES_H
 
 enum Eco_Fiber_State
 {
@@ -17,3 +18,5 @@ static inline bool Eco_Fiber_State_IsError(enum Eco_Fiber_State state)
 {
     return state >= Eco_Fiber_State_ERROR;
 }
+
+#endif

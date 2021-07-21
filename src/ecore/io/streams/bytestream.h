@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_IO_STREAMS_BYTESTREAM_H
+#define ECO_IO_STREAMS_BYTESTREAM_H
 
 #include "../../eco.h"
 
@@ -47,3 +48,5 @@ static inline u8 Eco_IO_ByteInputStream_Read(struct Eco_IO_ByteInputStream* byte
         return 0x00;
     }
 }
+
+#endif

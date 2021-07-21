@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_VM_VM_H
+#define ECO_VM_VM_H
 
 #include "fiber.h"
 #include "../io/net/scheduler.h"
@@ -23,3 +24,5 @@ void Eco_VM_Create(struct Eco_VM*);
 void Eco_VM_Destroy(struct Eco_VM*);
 void Eco_VM_Mark(struct Eco_GC_State*, struct Eco_VM*);
 void Eco_VM_Run(struct Eco_VM*);
+
+#endif

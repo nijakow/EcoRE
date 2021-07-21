@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_VM_MEMORY_MEMORY_H
+#define ECO_VM_MEMORY_MEMORY_H
 
 #include <malloc.h>
 
@@ -16,3 +17,5 @@ static inline void* Eco_Memory_Realloc(void* ptr, unsigned int new_size)
         return realloc(ptr, new_size);
     }
 }
+
+#endif

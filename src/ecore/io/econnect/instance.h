@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_IO_ECONNECT_INSTANCE_H
+#define ECO_IO_ECONNECT_INSTANCE_H
 
 #include "../../eco.h"
 
@@ -16,3 +17,5 @@ void Eco_EConnect_Instance_BindObject(struct Eco_EConnect_Instance*, struct Eco_
 void Eco_EConnect_Instance_OptionallyBindObject(struct Eco_EConnect_Instance*, struct Eco_Object*, unsigned int);
 void Eco_EConnect_Instance_UnbindObject(struct Eco_EConnect_Instance*, unsigned int);
 struct Eco_Object* Eco_EConnect_Instance_GetBoundObject(struct Eco_EConnect_Instance*, unsigned int);
+
+#endif

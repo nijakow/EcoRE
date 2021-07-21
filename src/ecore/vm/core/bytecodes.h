@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_VM_CORE_BYTECODES_H
+#define ECO_VM_CORE_BYTECODES_H
 
 enum Eco_Bytecode
 {
@@ -15,3 +16,4 @@ enum Eco_Bytecode
     Eco_Bytecode_MAKE_CLOSURE
 };
 
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_VM_FIBER_H
+#define ECO_VM_FIBER_H
 
 #include "../eco.h"
 
@@ -58,3 +59,5 @@ void Eco_Fiber_MoveToQueue(struct Eco_Fiber*, struct Eco_Fiber**);
 
 struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber*, unsigned int);
 void Eco_Fiber_PopFrame(struct Eco_Fiber*);
+
+#endif

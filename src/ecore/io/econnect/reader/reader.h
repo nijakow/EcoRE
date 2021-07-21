@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ECO_IO_ECONNECT_READER_READER_H
+#define ECO_IO_ECONNECT_READER_READER_H
+
 
 #include "../instance.h"
 #include "result.h"
@@ -23,3 +25,5 @@ struct Eco_Object* Eco_EConnect_Reader_ReadObjectByID(struct Eco_EConnect_Reader
 bool Eco_EConnect_Reader_ReadObject(struct Eco_EConnect_Reader*, struct Eco_EConnect_Result*, struct Eco_Object**);
 bool Eco_EConnect_Reader_ReadAny(struct Eco_EConnect_Reader*, struct Eco_EConnect_Result*, Eco_Any*);
 bool Eco_EConnect_Reader_Read(struct Eco_EConnect_Reader*, struct Eco_EConnect_Result*);
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_IO_ECONNECT_READER_RESULT_H
+#define ECO_IO_ECONNECT_READER_RESULT_H
 
 #include "../../../eco.h"
 
@@ -39,3 +40,5 @@ void Eco_EConnect_Result_Destroy(struct Eco_EConnect_Result*);
 
 bool Eco_EConnect_Result_ExpectAny(struct Eco_EConnect_Result*, Eco_Any*);
 bool Eco_EConnect_Result_ExpectObject(struct Eco_EConnect_Result*, struct Eco_Object**);
+
+#endif

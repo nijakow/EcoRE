@@ -1,6 +1,8 @@
-#pragma once
+#ifndef ECO_IO_LOGGING_LOG_H
+#define ECO_IO_LOGGING_LOG_H
 
 #include <stdarg.h>
+
 
 enum Eco_Loglevel
 {
@@ -12,3 +14,5 @@ enum Eco_Loglevel
 };
 
 void Eco_Log(enum Eco_Loglevel, const char*, ...);
+
+#endif

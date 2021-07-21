@@ -75,7 +75,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
             }
             case Eco_Bytecode_C2R: {
                 u8 to = Eco_Frame_NextU8(top);
-                Eco_Any_AssignAny(&top->registers, Eco_Frame_NextConstant(top));
+                Eco_Any_AssignAny(&top->registers[to], Eco_Frame_NextConstant(top));
                 break;
             }
             case Eco_Bytecode_R2R: {

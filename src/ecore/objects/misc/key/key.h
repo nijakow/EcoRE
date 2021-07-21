@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_OBJECTS_MISC_KEY_KEY_H
+#define ECO_OBJECTS_MISC_KEY_KEY_H
 
 #include "../../../eco.h"
 
@@ -26,3 +27,5 @@ void Eco_Key_Del(struct Eco_Key*);
 
 void Eco_Key_Init();
 void Eco_Key_Terminate();
+
+#endif

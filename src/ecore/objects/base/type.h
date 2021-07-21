@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_OBJECTS_BASE_TYPE_H
+#define ECO_OBJECTS_BASE_TYPE_H
 
 #include "../../eco.h"
 
@@ -87,3 +88,5 @@ void Eco_Type_MarkTypes(struct Eco_GC_State*);
 
 void Eco_Types_Init();
 void Eco_Types_Terminate();
+
+#endif

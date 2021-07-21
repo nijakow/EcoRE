@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_OBJECTS_BASE_OBJECT_H
+#define ECO_OBJECTS_BASE_OBJECT_H
 
 #include "../../eco.h"
 
@@ -47,3 +48,5 @@ static inline void* Eco_Object_At(struct Eco_Object* object, unsigned int offset
 
 void Eco_Object_Init();
 void Eco_Object_Terminate();
+
+#endif

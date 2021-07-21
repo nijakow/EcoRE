@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_OBJECTS_VM_CODE_CODE_H
+#define ECO_OBJECTS_VM_CODE_CODE_H
 
 #include "../../../eco.h"
 
@@ -32,3 +33,5 @@ void Eco_Code_Del(struct Eco_Code*);
 
 void Eco_Code_Init();
 void Eco_Code_Terminate();
+
+#endif

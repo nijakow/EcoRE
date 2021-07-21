@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ECO_OBJECTS_VM_CODE_CLOSURE_H
+#define ECO_OBJECTS_VM_CODE_CLOSURE_H
 
 #include "../../base/object.h"
 
@@ -26,3 +27,5 @@ void Eco_Closure_Del(struct Eco_Closure*);
 
 void Eco_Closure_Init();
 void Eco_Closure_Terminate();
+
+#endif
