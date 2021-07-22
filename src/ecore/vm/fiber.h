@@ -53,10 +53,11 @@ static inline bool Eco_Fiber_HasTop(struct Eco_Fiber* fiber)
     return Eco_Fiber_Top(fiber) != NULL;
 }
 
-static inline void Eco_Fiber_Push(struct Eco_Fiber* fiber, Eco_Any* src)
+static inline bool Eco_Fiber_Push(struct Eco_Fiber* fiber, Eco_Any* src)
 {
     Eco_Any_AssignAny(&fiber->data_stack[fiber->data_stack_alloc], src);
     fiber->data_stack_alloc++;
+    return true;
 }
 
 static inline bool Eco_Fiber_Pop(struct Eco_Fiber* fiber, Eco_Any* dest)
@@ -78,6 +79,15 @@ static inline bool Eco_Fiber_Drop(struct Eco_Fiber* fiber)
     } else {
         return false;
     }
+}
+
+static inline bool Eco_Fiber_Dup(struct Eco_Fiber* fiber)
+{
+    Eco_Any  any;
+
+    return Eco_Fiber_Pop(fiber, &any)
+        && Eco_Fiber_Push(fiber, &any)
+        && Eco_Fiber_Push(fiber, &any);
 }
 
 static inline Eco_Any* Eco_Fiber_Nth(struct Eco_Fiber* fiber, unsigned int n)

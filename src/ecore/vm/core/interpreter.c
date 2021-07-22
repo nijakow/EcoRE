@@ -87,6 +87,10 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 Eco_Fiber_Drop(fiber);
                 break;
             }
+            case Eco_Bytecode_DUP: {
+                Eco_Fiber_Dup(fiber);
+                break;
+            }
             case Eco_Bytecode_CONST: {
                 u8 to = Eco_Frame_NextU8(top);
                 Eco_Any_AssignAny(&top->registers[to], Eco_Frame_NextConstant(top));
@@ -149,13 +153,9 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
             }
             case Eco_Bytecode_RETURN: {
                 u8                 depth;
-                u8                 retval_register;
                 struct Eco_Frame*  target;
 
-                retval_register = Eco_Frame_NextU8(top);
-                depth           = Eco_Frame_NextU8(top);
-
-                Eco_Fiber_Push(fiber, &top->registers[retval_register]);
+                depth = Eco_Frame_NextU8(top);
 
                 while (depth > 0)
                 {
