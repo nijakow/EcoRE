@@ -100,11 +100,6 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 Eco_Any_AssignAny(&top->registers[to], &bottom->registers[from]);
                 break;
             }
-            case Eco_Bytecode_A2R: {
-                u8 to = Eco_Frame_NextU8(top);
-                Eco_Any_AssignAny(&top->registers[to], &fiber->return_value);
-                break;
-            }
             case Eco_Bytecode_SEND: {
                 struct Eco_Message  message;
 
@@ -148,7 +143,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 retval_register = Eco_Frame_NextU8(top);
                 depth           = Eco_Frame_NextU8(top);
 
-                Eco_Any_AssignAny(&fiber->return_value, &top->registers[retval_register]);
+                Eco_Fiber_Push(fiber, &top->registers[retval_register]);
 
                 while (depth > 0)
                 {

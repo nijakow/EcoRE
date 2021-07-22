@@ -13,18 +13,20 @@ struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
 
     fiber = Eco_Memory_Alloc(sizeof(struct Eco_Fiber) + stack_size);
 
-    fiber->state           = Eco_Fiber_State_PAUSED;
+    fiber->state            = Eco_Fiber_State_PAUSED;
 
-    fiber->vm              = vm;
-    fiber->queue           = NULL;
-    fiber->queue_prev      = NULL;
-    fiber->queue_next      = NULL;
+    fiber->vm               = vm;
+    fiber->queue            = NULL;
+    fiber->queue_prev       = NULL;
+    fiber->queue_next       = NULL;
 
-    Eco_Any_AssignInteger(&fiber->return_value, 0);
+    fiber->data_stack       = Eco_Memory_Alloc(1024 * sizeof(Eco_Any));
+    fiber->data_stack_alloc = 0;
+    fiber->data_stack_size  = 1024;
 
-    fiber->top             = NULL;
-    fiber->stack_size      = stack_size;
-    fiber->stack_alloc_ptr = 0;
+    fiber->top              = NULL;
+    fiber->stack_size       = stack_size;
+    fiber->stack_alloc_ptr  = 0;
 
     return fiber;
 }
@@ -38,6 +40,7 @@ void Eco_Fiber_Delete(struct Eco_Fiber* fiber)
 
     Eco_Fiber_MoveToQueue(fiber, NULL);
 
+    Eco_Memory_Free(fiber->data_stack);
     Eco_Memory_Free(fiber);
 }
 
@@ -46,7 +49,10 @@ void Eco_Fiber_Mark(struct Eco_GC_State* state, struct Eco_Fiber* fiber)
     unsigned int       offset;
     struct Eco_Frame*  frame;
 
-    Eco_GC_State_MarkAny(state, &fiber->return_value);
+    for (offset = 0; offset < fiber->data_stack_alloc; offset++)
+    {
+        Eco_GC_State_MarkAny(state, &fiber->data_stack[offset]);
+    }
 
     offset = fiber->stack_alloc_ptr;
     do
@@ -134,4 +140,3 @@ void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
         fiber->top             = Eco_Fiber_FrameAt(fiber, fiber->stack_alloc_ptr);
     }
 }
-
