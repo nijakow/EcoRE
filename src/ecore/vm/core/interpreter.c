@@ -40,15 +40,15 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*    fiber,
 
     frame = Eco_Fiber_PushFrame(fiber, code->register_count);
 
-    frame->self        = message->body.send.arg_location[0];
+    for (i = code->arg_count; i > 0; i--)
+    {
+        Eco_Fiber_Pop(fiber, &frame->registers[i - 1]);
+    }
+
+    Eco_Fiber_Pop(fiber, &frame->self);
 
     frame->code        = code;
     frame->instruction = code->bytecodes;
-
-    for (i = 0; i < code->arg_count; i++)
-    {
-        Eco_Any_AssignAny(&frame->registers[i], &message->body.send.arg_location[i + 1]);
-    }
 
     return true;
 }
@@ -73,7 +73,21 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 Eco_Any_AssignAny(&top->registers[reg], &top->self);
                 break;
             }
-            case Eco_Bytecode_C2R: {
+            case Eco_Bytecode_PUSH: {
+                u8 reg = Eco_Frame_NextU8(top);
+                Eco_Fiber_Push(fiber, &top->registers[reg]);
+                break;
+            }
+            case Eco_Bytecode_POP: {
+                u8 reg = Eco_Frame_NextU8(top);
+                Eco_Fiber_Pop(fiber, &top->registers[reg]);
+                break;
+            }
+            case Eco_Bytecode_DROP: {
+                Eco_Fiber_Drop(fiber);
+                break;
+            }
+            case Eco_Bytecode_CONST: {
                 u8 to = Eco_Frame_NextU8(top);
                 Eco_Any_AssignAny(&top->registers[to], Eco_Frame_NextConstant(top));
                 break;
@@ -103,13 +117,12 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
             case Eco_Bytecode_SEND: {
                 struct Eco_Message  message;
 
-                message.key                    = Eco_Any_AsPointer(Eco_Frame_NextConstant(top));
-                message.body.send.arg_location = &(top->registers[Eco_Frame_NextU8(top)]);
-                message.body.send.arg_count    = Eco_Frame_NextU8(top);
-                message.fiber                  = fiber;
-                message.type                   = Eco_Message_Type_SEND;
+                message.body.send.arg_count = Eco_Frame_NextU8(top);
+                message.key                 = Eco_Any_AsPointer(Eco_Frame_NextConstant(top));
+                message.fiber               = fiber;
+                message.type                = Eco_Message_Type_SEND;
 
-                if (Eco_Send(&message, message.body.send.arg_location)) {
+                if (Eco_Send(&message, Eco_Fiber_Nth(fiber, message.body.send.arg_count + 1))) {
                     top = Eco_Fiber_Top(fiber); /* TODO: Do the "slow dispatch" code */
                 } else {
                     Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
@@ -120,15 +133,14 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
             }
             case Eco_Bytecode_ASSIGN: {
                 struct Eco_Message  message;
-                u8                  reg;
 
-                reg                       = Eco_Frame_NextU8(top);
                 message.key               = Eco_Any_AsPointer(Eco_Frame_NextConstant(top));
-                message.body.assign.value = &(top->registers[Eco_Frame_NextU8(top)]);
                 message.fiber             = fiber;
                 message.type              = Eco_Message_Type_ASSIGN;
 
-                if (!Eco_Send(&message, &(top->registers[reg]))) {
+                Eco_Fiber_Pop(fiber, &message.body.assign.value);
+
+                if (!Eco_Send(&message, Eco_Fiber_Nth(fiber, 1))) {
                     Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ASSIGNFAILED);
                     goto end;
                 }

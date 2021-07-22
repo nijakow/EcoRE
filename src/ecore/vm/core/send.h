@@ -16,16 +16,15 @@ struct Eco_Message
 {
     union {
         struct {
-            struct Eco_Any*  arg_location;
-            unsigned int     arg_count;
+            unsigned int    arg_count;
         } send;
         struct {
-            struct Eco_Any*  value;
+            struct Eco_Any  value;
         } assign;
-    }                      body;
-    struct Eco_Fiber*      fiber;
-    struct Eco_Object*     key;
-    enum Eco_Message_Type  type;
+    }                       body;
+    struct Eco_Fiber*       fiber;
+    struct Eco_Object*      key;
+    enum Eco_Message_Type   type;
 };
 
 

@@ -48,7 +48,8 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message* message, struct Eco_Object* object
             switch (slot->type)
             {
                 case Eco_Type_Slot_Type_INLINED:
-                    message->body.send.arg_location[0] = *((Eco_Any*) Eco_Object_At(object, slot->body.inlined.offset));
+                    Eco_Fiber_Drop(message->fiber);  /* Drop self */
+                    Eco_Fiber_Push(message->fiber, ((Eco_Any*) Eco_Object_At(object, slot->body.inlined.offset)));
                     return true;
                 case Eco_Type_Slot_Type_CODE:
                     if (!Eco_Fiber_Enter(message->fiber, NULL, message, slot->body.code)) {
@@ -62,7 +63,7 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message* message, struct Eco_Object* object
             switch (slot->type)
             {
                 case Eco_Type_Slot_Type_INLINED:
-                    *((Eco_Any*) Eco_Object_At(object, slot->body.inlined.offset)) = *(message->body.assign.value);
+                    Eco_Any_AssignAny((Eco_Any*) Eco_Object_At(object, slot->body.inlined.offset), &message->body.assign.value);
                     return true;
                 default:
                     return false;

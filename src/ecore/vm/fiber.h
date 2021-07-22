@@ -70,6 +70,21 @@ static inline bool Eco_Fiber_Pop(struct Eco_Fiber* fiber, Eco_Any* dest)
     }
 }
 
+static inline bool Eco_Fiber_Drop(struct Eco_Fiber* fiber)
+{
+    if (fiber->data_stack_alloc > 0) {
+        fiber->data_stack_alloc--;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+static inline Eco_Any* Eco_Fiber_Nth(struct Eco_Fiber* fiber, unsigned int n)
+{
+    return &fiber->data_stack[fiber->data_stack_alloc - n];
+}
+
 
 struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM*, unsigned int);
 void Eco_Fiber_Delete(struct Eco_Fiber*);
