@@ -1,8 +1,15 @@
+import compiler as piler
+
 
 class AST:
     pass
 
 class ASTExpression(AST):
+
+    def compile_as_code(self):
+        compiler = piler.CodeGenerator()
+        self.compile(compiler)
+        return compiler.finish()
     
     def compile(self, compiler):
         raise Exception('Can\'t compile this AST!')

@@ -1,5 +1,7 @@
 import enum
 
+import datatypes
+
 
 class Bytecodes(enum.IntEnum):
     NOOP    = 0x00
@@ -74,8 +76,13 @@ class RegisterAllocator:
         self._registers.append(r)
         return r
 
+    def get_max_local_count(self):
+        return self._max_local_count
+    
     def allocate(self):
         i = 0
+        self._local_count += 1
+        self._max_local_count = max(self._max_local_count, self._local_count)
         while i < len(self._registers):
             if self._registers[i] is None:
                 self._registers[i] = Register(self, i)
@@ -84,12 +91,15 @@ class RegisterAllocator:
         return self._allocate_new_reg()
     
     def free(self, r):
+        self._local_count -= 1
         self._registers[r.get_number()] = None
         while self._registers and self._registers[-1] is None:
             self._registers.pop()
 
     def __init__(self):
         self._registers = []
+        self._local_count = 0
+        self._max_local_count = 0
 
 
 class Scope:
@@ -179,21 +189,21 @@ class CodeGenerator:
         self._add_u8(Bytecodes.POP)
         self._add_u8(reg)
 
-    def _compile_r2r(self, to, from):
+    def _compile_r2r(self, dest, src):
         self._add_u8(Bytecodes.R2R)
-        self._add_u8(to)
-        self._add_u8(from)
+        self._add_u8(dest)
+        self._add_u8(src)
     
-    def _compile_r2l(self, to, depth, from):
+    def _compile_r2l(self, dest, depth, src):
         self._add_u8(Bytecodes.R2L)
-        self._add_u8(to)
+        self._add_u8(dest)
         self._add_u8(depth)
-        self._add_u8(from)
+        self._add_u8(src)
     
-    def _compile_l2r(self, to, from, depth):
+    def _compile_l2r(self, dest, src, depth):
         self._add_u8(Bytecodes.L2R)
-        self._add_u8(to)
-        self._add_u8(from)
+        self._add_u8(dest)
+        self._add_u8(src)
         self._add_u8(depth)
     
     def _compile_send(self, arg_cnt, key):
@@ -232,16 +242,16 @@ class CodeGenerator:
     def compile_drop(self):
         self._add_u8(Bytecodes.DROP)
 
-    def compile_mov(self, to, from):
-        assert from.is_register() and to.is_register()
-        if from.is_lexical():
-            assert not to.is_lexical()
-            self._compile_l2r(to.get_number(), from.get_number(), from.get_depth())
+    def compile_mov(self, dest, src):
+        assert src.is_register() and dest.is_register()
+        if src.is_lexical():
+            assert not dest.is_lexical()
+            self._compile_l2r(dest.get_number(), src.get_number(), src.get_depth())
         else:
-            if to.is_lexical():
-                self._compile_r2l(to.get_number(), to.get_depth(), from.get_number())
+            if dest.is_lexical():
+                self._compile_r2l(dest.get_number(), dest.get_depth(), src.get_number())
             else:
-                self._compile_r2r(to.get_number(), from.get_number())
+                self._compile_r2r(dest.get_number(), src.get_number())
 
     def compile_send(self, arg_cnt, key):
         self._compile_send(arg_cnt, key)
@@ -256,11 +266,22 @@ class CodeGenerator:
         assert reg.is_register() and not reg.is_lexical()
         self._compile_make_closure(reg.get_number(), code)
 
+    def push_scope(self):
+        self._scope = self._scope.create_subscope()
+
+    def pop_scope(self):
+        self._scope = self._scope.get_parent()
+        
     def finish(self):
-        return None
+        return datatypes.Code(self._root_scope.get_register_allocator().get_max_local_count(),
+                              0,
+                              list(self._constants),
+                              list(self._closures),
+                              bytes(self._bytes))
 
     def __init__(self):
         self._bytes = []
         self._constants = []
         self._closures = []
-        self._scope = Scope()
+        self._root_scope = BaseScope(None)
+        self._scope = self._root_scope
