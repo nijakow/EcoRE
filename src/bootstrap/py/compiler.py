@@ -2,17 +2,20 @@ import enum
 
 
 class Bytecodes(enum.IntEnum):
-    NOOP         = 0
-    SELF         = 1
-    C2R          = 2
-    R2R          = 3
-    R2L          = 4
-    L2R          = 5
-    A2R          = 6
-    SEND         = 7
-    ASSIGN       = 8
-    RETURN       = 9
-    MAKE_CLOSURE = 10
+    NOOP    = 0x00
+    SELF    = 0x01
+    CONST   = 0x02
+    PUSH    = 0x03
+    POP     = 0x04
+    DROP    = 0x05
+    DUP     = 0x06
+    R2R     = 0x07
+    R2L     = 0x08
+    L2R     = 0x09
+    SEND    = 0x0a
+    ASSIGN  = 0x0b
+    RETURN  = 0x0c
+    CLOSURE = 0x0d
 
 
 class CompilationException(Exception):
@@ -58,14 +61,6 @@ class Register(StorageLocation):
         self._allocator = allocator
         self._reg_num = reg_num
         self._depth = depth
-
-class ReturnStorageSlot(StorageLocation):
-
-    def is_return_storage_slot(self):
-        return True
-
-    def __init__(self):
-        super().__init__()
 
 class Registers:
 
@@ -135,10 +130,29 @@ class CodeGenerator:
         self._add_u16(index)
         return index
     
+    def _add_closure(self, c):
+        index = len(self._closures)
+        self._closures.append(c)
+        self._add_u8(index)
+        return index
+    
     def _compile_self2r(self, reg):
         self._add_u8(Bytecodes.SELF)
         self._add_u8(reg)
     
+    def _compile_const2r(self, to, value):
+        self._add_u8(Bytecodes.C2R)
+        self._add_u8(to)
+        self._add_constant(value)
+
+    def _compile_push(self, reg):
+        self._add_u8(Bytecodes.PUSH)
+        self._add_u8(reg)
+    
+    def _compile_pop(self, reg):
+        self._add_u8(Bytecodes.POP)
+        self._add_u8(reg)
+
     def _compile_r2r(self, to, from):
         self._add_u8(Bytecodes.R2R)
         self._add_u8(to)
@@ -156,50 +170,65 @@ class CodeGenerator:
         self._add_u8(from)
         self._add_u8(depth)
     
-    def _compile_a2r(self, to):
-        self._add_u8(Bytecodes.A2R)
-        self._add_u8(to)
-    
-    def _compile_send(self, key, arg_loc, arg_cnt):
+    def _compile_send(self, arg_cnt, key):
         self._add_u8(Bytecodes.SEND)
-        self._add_constant(key)
-        self._add_u8(arg_loc)
         self._add_u8(arg_cnt)
-    
-    def _compile_assign(self, target_reg, key, value_loc):
-        self._add_u8(Bytecodes.ASSIGN)
-        self._add_u8(target_reg)
         self._add_constant(key)
-        self._add_u8(value_loc)
+    
+    def _compile_assign(self, key):
+        self._add_u8(Bytecodes.ASSIGN)
+        self._add_constant(key)
 
-    def _compile_return(self, reg, depth):
+    def _compile_return(self, depth):
         self._add_u8(Bytecodes.RETURN)
-        self._add_u8(reg)
         self._add_u8(depth)
 
-    def _compile_c2r(self, to, value):
-        self._add_u8(Bytecodes.C2R)
-        self._add_u8(to)
-        self._add_constant(value)
+    def _compile_make_closure(self, dest, code_id):
+        self._add_u8(Bytecodes.CLOSURE)
+        self._add_u8(dest)
+        self._add_closure(code_id)
 
-    def compile_c2r(self, to, value):
+    def compile_const(self, to, value):
         assert to.is_register() and not to.is_lexical()
         self._compile_c2r(to.get_number(), value)
+    
+    def compile_push(self, reg):
+        assert reg.is_register() and not reg.is_lexical()
+        self._compile_push(reg.get_number())
+    
+    def compile_pop(self, reg):
+        assert reg.is_register() and not reg.is_lexical()
+        self._compile_pop(reg.get_number())
+
+    def compile_dup(self):
+        self._add_u8(Bytecodes.DUP)
+
+    def compile_drop(self):
+        self._add_u8(Bytecodes.DROP)
 
     def compile_mov(self, to, from):
-        if from.is_return_storage_slot():
-            assert to.is_register() and not to.is_lexical()
-            self._compile_a2r(to.get_number())
+        assert from.is_register() and to.is_register()
+        if from.is_lexical():
+            assert not to.is_lexical()
+            self._compile_l2r(to.get_number(), from.get_number(), from.get_depth())
         else:
-            assert from.is_register() and to.is_register()
-            if from.is_lexical():
-                assert not to.is_lexical()
-                self._compile_l2r(to.get_number(), from.get_number(), from.get_depth())
+            if to.is_lexical():
+                self._compile_r2l(to.get_number(), to.get_depth(), from.get_number())
             else:
-                if to.is_lexical():
-                    self._compile_r2l(to.get_number(), to.get_depth(), from.get_number())
-                else:
-                    self._compile_r2r(to.get_number(), from.get_number())
+                self._compile_r2r(to.get_number(), from.get_number())
+
+    def compile_send(self, arg_cnt, key):
+        self._compile_send(arg_cnt, key)
+    
+    def compile_assign(self, key):
+        self._compile_assign(key)
+    
+    def compile_return(self, depth):
+        self._compile_return(depth)
+    
+    def compile_make_closure(self, reg, code):
+        assert reg.is_register() and not reg.is_lexical()
+        self._compile_make_closure(reg.get_number(), code)
 
     def finish(self):
         return None
@@ -207,3 +236,4 @@ class CodeGenerator:
     def __init__(self):
         self._bytes = []
         self._constants = []
+        self._closures = []
