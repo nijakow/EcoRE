@@ -47,8 +47,12 @@ class Register(StorageLocation):
     def get_register_number(self):
         return self._reg_num
 
-    def get_depth(self):
-        return self._depth
+    def get_depth(self, scope):
+        depth = 0
+        while self._allocator != scope.get_register_allocator():
+            scope = scope.get_lexical()
+            depth = depth + 1
+        return depth
     
     def is_lexical(self):
         return self.get_depth() != 0
@@ -61,19 +65,6 @@ class Register(StorageLocation):
         self._allocator = allocator
         self._reg_num = reg_num
         self._depth = depth
-
-class Registers:
-
-    def get(self, r):
-        return self._registers[r]
-    
-    def free(self):
-        for r in self._registers:
-            r.free()
-
-    def __init__(self, registers):
-        self._registers = registers
-
 
 
 class RegisterAllocator:
@@ -92,12 +83,6 @@ class RegisterAllocator:
             x = x + 1
         return self._allocate_new_reg()
     
-    def allocateN(self, n):
-        regs = []
-        for i in range(0, n):
-            regs.append(self._allocate_new_reg())
-        return Registers(regs)
-    
     def free(self, r):
         self._registers[r.get_number()] = None
         while self._registers and self._registers[-1] is None:
@@ -109,10 +94,51 @@ class RegisterAllocator:
 
 class Scope:
 
+    def get_parent(self):
+        return self._parent
+
+    def get_lexical(self):
+        return self._lexical
+
+    def get_register_allocator(self):
+        return self._reg_alloc
+
+    def create_subscope(self):
+        return ChildScope(self, self.get_lexical(), self.get_register_allocator())
+
+    def add_var(self, key):
+        if key in self._bindings:
+            return self._bindings[key]
+        else:
+            reg = self.get_register_allocator().allocate()
+            self._bindings[key] = reg
+            return reg
+    
+    def get_var(self, key):
+        if key in self._bindings:
+            return self._bindings[key]
+        elif self.get_parent() is not None:
+            return self.get_parent().get_var(key)
+        elif self.get_lexical() is not None:
+            return self.get_lexical().get_var(key)
+        else:
+            return None
+
     def __init__(self, parent, lexical, register_allocator):
         self._parent = parent
         self._lexical = lexical
+        self._reg_alloc = register_allocator
         self._bindings = {}
+
+class BaseScope(Scope):
+    
+    def __init__(self, lexical):
+        super().__init__(None, lexical, RegisterAllocator())
+
+class ChildScope(Scope):
+
+    def __init__(self, parent, lexical, register_allocator):
+        super().__init__(parent, lexical, register_allocator)
 
 
 class CodeGenerator:
@@ -237,3 +263,4 @@ class CodeGenerator:
         self._bytes = []
         self._constants = []
         self._closures = []
+        self._scope = Scope()
