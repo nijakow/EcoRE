@@ -1,4 +1,6 @@
 import compiler.storage
+import compiler.codegenerator
+import compiler.visitor
 
 
 class Compiler:
@@ -79,7 +81,13 @@ class Compiler:
         # TODO: Find variable, return True or False depending on success
         return False
 
+    def finish(self):
+        return self._codegen.finish()
+    
+    def gen_visitor(self):
+        return compiler.visitor.ASTVisitor(self)
+    
     def __init__(self):
         self._passed_value_callback = None
-        self._codegen = None # TODO
-        self._regalloc = None
+        self._codegen = compiler.codegenerator.CodeGenerator()
+        self._regalloc = compiler.storage.RegisterAllocator()

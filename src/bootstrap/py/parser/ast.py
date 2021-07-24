@@ -1,4 +1,4 @@
-import compiler as piler
+import compiler.base
 
 
 class AST:
@@ -7,9 +7,10 @@ class AST:
 class ASTExpression(AST):
 
     def compile_as_code(self):
-        visitor = piler.ASTVisitor()
+        piler = compiler.base.Compiler()
+        visitor = piler.gen_visitor()
         self.visit(visitor)
-        return visitor.finish()
+        return piler.finish()
     
     def visit(self, visitor):
         visitor.visit_invalid(self)

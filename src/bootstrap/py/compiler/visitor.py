@@ -1,3 +1,5 @@
+import compiler.base
+
 
 class ASTVisitor:
 
@@ -25,5 +27,5 @@ class ASTVisitor:
     def visit_block(self, elem):
         pass
     
-    def __init__(self):
-        pass
+    def __init__(self, compiler):
+        self._compiler = compiler
