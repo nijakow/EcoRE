@@ -57,18 +57,36 @@ class Compiler:
             elif loc.is_stack():
                 return loc  # Nothing to do, already on stack
             elif loc.is_local_register():
-                self._codegen.add_pop2r(loc.get_id())
+                self._codegen.add_popr(loc.get_id())
                 return loc
             else:
                 reg = self._regalloc.allocate_temporary_register()
-                self._codegen.add_pop2r(loc.get_id())
+                self._codegen.add_popr(loc.get_id())
                 self._compile_transfer(loc, reg)
                 reg.free()
                 return loc
+        self._set_passed_value_callback(drop_compiler)
     
     def compile_send(self, args, key):
         self._drop_passed_value()
-        self._codegen.add_send(args, key)
+        def send_compiler(loc):
+            self._codegen.add_send(args, key)
+            self._compile_transfer(loc, compiler.storage.STACK)
+            return loc
+        self._set_passed_value_callback(send_compiler)
+
+    def compile_assign(self, key):
+        self._drop_passed_value()
+        def assign_compiler(loc):
+            self._codegen.add_assign(key)
+            self._compile_transfer(loc, compiler.storage.STACK)
+            return loc
+        self._set_passed_value_callback(assign_compiler)
+
+    def compile_nonlocal_return(self):
+        self.push_that()
+        depth = 0  # TODO: Calculate
+        self._codegen.add_return(depth)
     
     def push_that(self):
         self._pull_passed_value(compiler.storage.STACK)
@@ -82,6 +100,7 @@ class Compiler:
         return False
 
     def finish(self):
+        self.push_that()  # TODO: Is this correct in every case?
         return self._codegen.finish()
     
     def gen_visitor(self):
