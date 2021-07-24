@@ -2,7 +2,7 @@
 import enum
 
 import datatypes
-import ast
+import parser.ast
 
 
 class TextStream:
@@ -174,7 +174,7 @@ class Parser:
                 else:
                     self._t.expect(TokenType.RBRACK)
                     break
-        return ast.ASTBlock(params, exprs)
+        return parser.ast.ASTBlock(params, exprs)
 
     def parse_object_slot_header(self):
         key = self._t.expect_identifier().get_key()
@@ -209,10 +209,10 @@ class Parser:
                 flag_private = False
             key, params = self.parse_object_slot_header()
             if self._t.check(TokenType.SEPARATOR):
-                object.add_slot(datatypes.ValueSlot(key, ast.ASTNil(), is_inherited=flag_inherited, is_private=flag_private))
+                object.add_slot(datatypes.ValueSlot(key, parser.ast.ASTNil(), is_inherited=flag_inherited, is_private=flag_private))
                 continue
             elif self._t.check(TokenType.RCURLY):
-                object.add_slot(datatypes.ValueSlot(key, ast.ASTNil(), is_inherited=flag_inherited, is_private=flag_private))
+                object.add_slot(datatypes.ValueSlot(key, parser.ast.ASTNil(), is_inherited=flag_inherited, is_private=flag_private))
                 break
             elif self._t.check(TokenType.RARROW):
                 flag_method = True
@@ -228,29 +228,29 @@ class Parser:
             else:
                 object.add_slot(datatypes.ValueSlot(key, self.parse_expression(), is_inherited=flag_inherited, is_private=flag_private))
             self._t.check(TokenType.SEPARATOR)
-        return ast.ASTConstant(object)
+        return parser.ast.ASTConstant(object)
 
     def parse_simple_expression(self, allow_followups=True):
         if self._t.check(TokenType.SELF):
-            return ast.ASTSelf()
+            return parser.ast.ASTSelf()
         elif self._t.check(TokenType.LPAREN):
             exprs = self.parse_expression_list(TokenType.RPAREN)
             if len(exprs) == 1:
                 return exprs[0]
             else:
-                return ast.ASTSequence(exprs)
+                return parser.ast.ASTCompound(exprs)
         elif self._t.check(TokenType.LBRACK):
             return self.parse_closure()
         elif self._t.check(TokenType.LCURLY):
             return self.parse_object()
         elif self._t.check(TokenType.CARET):
-            return ast.ASTReturn(self.parse_expression(allow_followups))
+            return parser.ast.ASTReturn(self.parse_expression(allow_followups))
         elif self._t.check(TokenType.BAR):
             # TODO: Parse variable list
             self._t.expect(TokenType.BAR)
-            return ast.ASTVariable()
+            return parser.ast.ASTVariable()
         else:
-            return ast.ASTSelf()
+            return parser.ast.ASTSelf()
 
     def parse_send(self, the_ast, allow_followups=True):
         ident = self._t.check_identifier()
@@ -282,7 +282,7 @@ class Parser:
                             break
                         key = key.extend_name(ident.get_key().colonize())
                         params.append(self.parse_expression(False))
-            the_ast = ast.ASTSend(the_ast, key, params)
+            the_ast = parser.ast.ASTSend(the_ast, key, params)
         return the_ast
 
     def parse_expression(self, allow_followups=True):
@@ -292,9 +292,9 @@ class Parser:
             prev = the_ast
             the_ast = self.parse_send(the_ast, allow_followups)
             if self._t.check(TokenType.LPAREN):
-                the_ast = ast.ASTSend(the_ast, datatypes.Key.get('value'), self.parse_expression_list(TokenType.RPAREN))
+                the_ast = parser.ast.ASTSend(the_ast, datatypes.Key.get('value'), self.parse_expression_list(TokenType.RPAREN))
             elif self._t.check(TokenType.EQUALS):
-                the_ast = ast.ASTAssignment(the_ast, self.parse_expression(allow_followups))
+                the_ast = parser.ast.ASTAssignment(the_ast, self.parse_expression(allow_followups))
         return the_ast
 
     def parse_expression_list(self, terminator):

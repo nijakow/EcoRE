@@ -12,7 +12,7 @@ class ASTExpression(AST):
         return visitor.finish()
     
     def visit(self, visitor):
-        visitor.invalid_ast(self)
+        visitor.visit_invalid(self)
     
     def __init__(self):
         super().__init__()
@@ -84,17 +84,12 @@ class ASTCompound(ASTExpression):
     def get_instructions(self):
         return self._instrs
     
+    def visit(self, visitor):
+        visitor.visit_compound(self)
+
     def __init__(self, instructions):
         super().__init__()
         self._instrs = instructions
-
-class ASTSequence(ASTCompound):
-    
-    def visit(self, visitor):
-        visitor.visit_sequence(self)
-    
-    def __init__(self, instructions):
-        super().__init__(instructions)
 
 class ASTBlock(ASTValue):
 

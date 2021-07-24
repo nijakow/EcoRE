@@ -1,6 +1,6 @@
 import datatypes
 import econnect
-import parser
+import parser.parser
 
 d = datatypes.PlainObject()
 d.add_slot(datatypes.ValueSlot('meta', datatypes.PlainObject()))
@@ -16,7 +16,7 @@ c.serialize(s)
 print(s.finish())
 
 
-the_parser = parser.TextStream('''
+the_parser = parser.parser.TextStream('''
 foo: {x, y, with z = {}, z => x}
 ''').get_parser()
 
