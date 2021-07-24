@@ -32,6 +32,11 @@ class ASTVisitor:
     def visit_assign(self, elem):
         self.visit_unimplemented(elem)
 
+    def visit_return(self, elem):
+        retval = elem.get_return_value()
+        retval.visit(self)
+        self._compiler.compile_nonlocal_return()
+    
     def visit_compound(self, elem):
         # TODO: Create new subscope
         for instruction in elem.get_instructions():

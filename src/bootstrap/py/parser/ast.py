@@ -83,6 +83,21 @@ class ASTSend(ASTExpression):
         self._msg = msg
         self._args = args
 
+class ASTReturn(ASTExpression):
+
+    def __repr__(self):
+        return '^ ' + str(self._retval)
+
+    def get_return_value(self):
+        return self._retval
+
+    def visit(self, visitor):
+        visitor.visit_return(self)
+    
+    def __init__(self, retval):
+        super().__init__()
+        self._retval = retval
+
 class ASTCompound(ASTExpression):
 
     def get_instructions(self):
