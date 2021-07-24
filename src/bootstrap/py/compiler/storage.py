@@ -14,6 +14,18 @@ class StorageLocation:
         pass
 
 
+class Stack(StorageLocation):
+
+    def is_stack(self):
+        return True
+
+    def __init__(self):
+        pass
+
+STACK = Stack()
+
+
+
 class LocalRegister(StorageLocation):
 
     def is_register(self):
@@ -29,7 +41,7 @@ class LocalRegister(StorageLocation):
         return self._id
 
     def free(self):
-        self.get_allocator().free(self)
+        self.get_allocator().free_register(self)
     
     def __init__(self, allocator, r_id):
         self._allocator = allocator

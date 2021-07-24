@@ -94,6 +94,7 @@ class CodeGenerator:
         self._add_u8(Bytecodes.MAKE_CLOSURE)
     
     def finish(self):
+        print(self._instructions)
         return datatypes.Code(0,
                               0,
                               self._constants,
