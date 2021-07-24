@@ -9,8 +9,10 @@ class ASTExpression(AST):
     def is_self(self):
         return False
     
-    def compile_as_code(self):
+    def compile_as_code(self, params=[]):
         piler = compiler.base.Compiler()
+        for p in params:
+            piler.add_parameter(p)
         visitor = piler.gen_visitor()
         self.visit(visitor)
         return piler.finish()

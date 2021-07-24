@@ -223,7 +223,7 @@ class Parser:
                 # TODO: len(params) must be 0!
             value = self.parse_expression()
             if flag_method:
-                code = self.parse_expression().compile_as_code()  # TODO
+                code = self.parse_expression().compile_as_code(params)
                 object.add_slot(datatypes.CodeSlot(key, code, is_private=flag_private))
             else:
                 object.add_slot(datatypes.ValueSlot(key, self.parse_expression(), is_inherited=flag_inherited, is_private=flag_private))
