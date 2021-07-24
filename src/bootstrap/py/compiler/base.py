@@ -125,6 +125,21 @@ class Compiler:
         self.push_that()
         depth = 0  # TODO: Calculate
         self._codegen.add_return(depth)
+
+    def compile_make_closure(self, code):
+        self._drop_passed_value()
+        def closure_compiler(loc):
+            if loc is None:
+                return None
+            elif loc.is_local_register(self._current_scope):
+                self._codegen.add_make_closure(reg.get_id(), code)
+            else:
+                reg = self._regalloc.allocate_temporary_register()
+                self._codegen.add_make_closure(reg.get_id(), code)
+                self._compile_transfer(loc, reg)
+                reg.free()
+                return loc
+        self._set_passed_value_callback(closure_compiler)
     
     def push_that(self):
         self._pull_passed_value(compiler.storage.STACK)

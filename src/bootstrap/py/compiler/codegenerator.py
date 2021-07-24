@@ -42,9 +42,10 @@ class CodeGenerator:
         self._add_u8(Bytecodes.SELF2R)
         self._add_u8(r)
 
-    def add_const2r(self, r):
+    def add_const2r(self, r, value):
         self._add_u8(Bytecodes.CONST2R)
         self._add_u8(r)
+        self._add_constant(value)
 
     def add_pushr(self, r):
         self._add_u8(Bytecodes.PUSHR)
@@ -90,11 +91,13 @@ class CodeGenerator:
         self._add_u8(Bytecodes.RET)
         self._add_u8(depth)
 
-    def add_make_closure(self, depth):
+    def add_make_closure(self, dest, code):
         self._add_u8(Bytecodes.MAKE_CLOSURE)
+        self._add_u8(dest)
+        self._add_u8(len(self._subcodes))
+        self._subcodes.append(code)
     
     def finish(self):
-        print(self._instructions)
         return datatypes.Code(0,
                               0,
                               self._constants,

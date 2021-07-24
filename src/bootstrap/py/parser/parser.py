@@ -209,10 +209,10 @@ class Parser:
                 flag_private = False
             key, params = self.parse_object_slot_header()
             if self._t.check(TokenType.SEPARATOR):
-                object.add_slot(datatypes.ValueSlot(key, parser.ast.ASTNil(), is_inherited=flag_inherited, is_private=flag_private))
+                object.add_slot(datatypes.ValueSlot(key, datatypes.PlainObject(), is_inherited=flag_inherited, is_private=flag_private))
                 continue
             elif self._t.check(TokenType.RCURLY):
-                object.add_slot(datatypes.ValueSlot(key, parser.ast.ASTNil(), is_inherited=flag_inherited, is_private=flag_private))
+                object.add_slot(datatypes.ValueSlot(key, datatypes.PlainObject(), is_inherited=flag_inherited, is_private=flag_private))
                 break
             elif self._t.check(TokenType.RARROW):
                 flag_method = True

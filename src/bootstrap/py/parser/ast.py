@@ -68,6 +68,9 @@ class ASTSend(ASTExpression):
     def get_subj(self):
         return self._subj
 
+    def get_message(self):
+        return self._msg
+
     def get_args(self):
         return self._args
     
