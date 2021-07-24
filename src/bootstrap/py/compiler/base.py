@@ -8,7 +8,11 @@ class Compiler:
     def _pull_passed_value(self, storage_loc):
         if self._passed_value_callback is None:
             self.compile_load_self()
-        self._passed_value_callback(storage_loc)
+        r = self._passed_value_callback(storage_loc)
+        def next(loc):
+            # self._compile_transfer(loc, r)
+            return None
+        self._passed_value_callback = next
 
     def _drop_passed_value(self):
         if self._passed_value_callback is not None:
@@ -106,7 +110,7 @@ class Compiler:
         self._set_passed_value_callback(drop_compiler)
     
     def compile_send(self, args, key):
-        self._drop_passed_value()
+        self.push_that()
         def send_compiler(loc):
             self._codegen.add_send(args, key)
             self._compile_transfer(loc, compiler.storage.STACK)
@@ -114,7 +118,7 @@ class Compiler:
         self._set_passed_value_callback(send_compiler)
 
     def compile_assign(self, key):
-        self._drop_passed_value()
+        self.push_that()
         def assign_compiler(loc):
             self._codegen.add_assign(key)
             self._compile_transfer(loc, compiler.storage.STACK)

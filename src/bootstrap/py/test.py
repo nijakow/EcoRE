@@ -4,7 +4,7 @@ import parser.parser
 
 
 the_parser = parser.parser.TextStream('''
-foo: {x, y, with z = {}, z => x}
+( foo bar: x baz: y; self; self; self; {} clone; quux )
 ''').get_parser()
 
 expr = the_parser.parse_expression()

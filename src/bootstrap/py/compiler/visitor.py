@@ -35,7 +35,7 @@ class ASTVisitor:
     def visit_compound(self, elem):
         # TODO: Create new subscope
         for instruction in elem.get_instructions():
-            elem.visit(self)
+            instruction.visit(self)
 
     def visit_block(self, elem):
         code = elem.compile_as_code() # TODO: Pass current environment
