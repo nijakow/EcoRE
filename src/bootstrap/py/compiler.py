@@ -224,6 +224,10 @@ class CodeGenerator:
         self._add_u8(dest)
         self._add_closure(code_id)
 
+    def compile_self(self, to):
+        assert to.is_register() and not to.is_lexical()
+        self._compile_self2r(to.get_number())
+        
     def compile_const(self, to, value):
         assert to.is_register() and not to.is_lexical()
         self._compile_c2r(to.get_number(), value)
@@ -271,7 +275,7 @@ class CodeGenerator:
 
     def pop_scope(self):
         self._scope = self._scope.get_parent()
-        
+    
     def finish(self):
         return datatypes.Code(self._root_scope.get_register_allocator().get_max_local_count(),
                               0,
@@ -279,9 +283,80 @@ class CodeGenerator:
                               list(self._closures),
                               bytes(self._bytes))
 
-    def __init__(self):
+    def __init__(self, parent_scope=None):
         self._bytes = []
         self._constants = []
         self._closures = []
-        self._root_scope = BaseScope(None)
+        self._root_scope = BaseScope(parent_scope)
         self._scope = self._root_scope
+
+
+
+class ASTVisitor:
+
+    def invalid_ast(self, the_ast):
+        raise CompilationException('Can\'t compile this AST!', the_ast)
+
+    def get_target(self):
+        return None # TODO
+
+    def set_target_to_stack(self):
+        pass # TODO
+
+    def get_source(self):
+        return None # TODO
+    
+    def set_source(self):
+        pass # TODO
+    
+    def set_source_to_stack(self):
+        pass # TODO
+
+    def drop_source(self):
+        pass # TODO: Drop if source is stack
+    
+    def visit_self(self, the_ast):
+        target = self.get_target()
+        self._codegen.compile_self(self.get_target())
+        self.set_source(target)
+
+    def visit_nil(self, the_ast):
+        self.invalid_ast(the_ast)
+
+    def visit_constant(self, the_ast):
+        target = self.get_target()
+        self._codegen.compile_const(target, the_ast.get_value())
+        self.set_source(target)
+
+    def visit_send(self, the_ast):
+        # Ignore the source and target
+        self.set_target_to_stack()
+        the_ast.get_subj().visit(self)
+        args = the_ast.get_args()
+        for arg in args:
+            self.set_target_to_stack()
+            arg.visit(self)
+        self._codegen.compile_send(len(args), the_ast.get_key())
+        self.set_source_to_stack()
+
+    def visit_sequence(self, the_ast):
+        self._codegen.push_scope()
+        for instruction in the_ast.get_instructions():
+            self.drop_source()
+            instruction.visit(self)
+        self._codegen.pop_scope()
+
+    def visit_block(self, the_ast):
+        child_visitor = ASTVisitor(self._codegen.get_scope())
+        for param in the_ast.get_parameters():
+            pass # TODO
+        the_ast.get_body().visit(child_visitor)
+        self._codegen.compile_make_closure(self.get_target(),
+                                           child_visitor.finish())
+
+    def finish(self):
+        return self._codegen.finish()
+    
+    def __init__(self, scope=None):
+        self._codegen = CodeGenerator(parent_scope=scope)
+        self.set_target_to_stack()
