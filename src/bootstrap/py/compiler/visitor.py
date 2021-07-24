@@ -22,6 +22,9 @@ class ASTVisitor:
         subj = elem.get_subj()
         key  = elem.get_message()
         args = elem.get_args()
+        if subj.is_self() and len(args) == 0:
+            if self._compiler.grab_var_contents(key):
+                return
         subj.visit(self)
         self._compiler.push_that()
         for arg in args:
@@ -38,13 +41,18 @@ class ASTVisitor:
         self._compiler.compile_nonlocal_return()
     
     def visit_compound(self, elem):
-        # TODO: Create new subscope
+        self._compiler.push_scope()
         for instruction in elem.get_instructions():
             instruction.visit(self)
+        self._compiler.pop_scope()
 
     def visit_block(self, elem):
-        code = elem.compile_as_code() # TODO: Pass current environment
-        compiler.compile_make_closure(code)
+        subcompiler = self._compiler.gen_subcompiler()
+        for p in elem.get_parameters():
+            subcompiler.add_parameter(p)
+        visitor = subcompiler.gen_visitor()
+        elem.get_body().visit(visitor)
+        self._compiler.compile_make_closure(subcompiler.finish())
     
     def __init__(self, compiler):
         self._compiler = compiler

@@ -1,4 +1,5 @@
 import compiler.storage
+import compiler.scope
 import compiler.codegenerator
 import compiler.visitor
 
@@ -149,23 +150,50 @@ class Compiler:
         self._pull_passed_value(compiler.storage.STACK)
 
     def grab_var_contents(self, varname):
-        # TODO: Find variable, return True or False depending on success
-        return False
+        reg = self._current_scope.get_var(varname)
+        if reg is not None:
+            self._drop_passed_value()
+            def var_compiler(loc):
+                self._compile_transfer(loc, reg)
+                return loc
+            self._set_passed_value_callback(var_compiler)
+            return True
+        else:
+            return False
     
     def send_that_to_var(self, varname):
-        # TODO: Find variable, return True or False depending on success
-        return False
+        reg = self._current_scope.get_var(varname)
+        if reg is not None:
+            self._pull_passed_value(reg)
+            return True
+        else:
+            return False
 
+    def push_scope(self):
+        self._current_scope = compiler.scope.SubScope(self._current_scope)
+
+    def pop_scope(self):
+        self._current_scope = self._current_scope.get_parent()
+
+    def add_parameter(self, expr):
+        self._root_scope.add_var(expr.get_message())  # Assuming it's a SEND expression
+        self._parameter_count += 1
+    
     def finish(self):
         self.push_that()  # TODO: Is this correct in every case?
         return self._codegen.finish()
     
     def gen_visitor(self):
         return compiler.visitor.ASTVisitor(self)
+
+    def gen_subcompiler(self):
+        return Compiler(lexical_parent_scope=self._current_scope)
     
-    def __init__(self):
+    def __init__(self, lexical_parent_scope=None):
         self._passed_value_callback = None
         self._codegen = compiler.codegenerator.CodeGenerator()
         self._regalloc = compiler.storage.RegisterAllocator()
-        self._current_scope = None
+        self._root_scope = compiler.scope.BaseScope(self._regalloc, lexical=lexical_parent_scope)
+        self._current_scope = self._root_scope
+        self._parameter_count = 0
 

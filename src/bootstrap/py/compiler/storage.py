@@ -26,13 +26,13 @@ STACK = Stack()
 
 
 
-class LocalRegister(StorageLocation):
+class Register(StorageLocation):
 
     def is_register(self):
         return True
 
     def is_local_register(self, scope):
-        return True
+        return self.get_depth() == 0
 
     def get_allocator(self):
         return self._allocator
@@ -40,12 +40,19 @@ class LocalRegister(StorageLocation):
     def get_id(self):
         return self._id
 
+    def get_depth(self):
+        return self._depth
+
     def free(self):
         self.get_allocator().free_register(self)
+
+    def increment_depth(self):
+        return Register(self, self.get_allocator(), self.get_id(), self.get_depth() + 1)
     
-    def __init__(self, allocator, r_id):
+    def __init__(self, allocator, r_id, depth=0):
         self._allocator = allocator
         self._id = r_id
+        self._depth = 0
 
 
 class RegisterAllocator:
@@ -54,11 +61,11 @@ class RegisterAllocator:
         i = 0
         while i < len(self._registers):
             if self._registers[i] is None:
-                r = LocalRegister(self, i)
+                r = Register(self, i)
                 self._registers[i] = r
                 return r
             i = i + 1
-        r = LocalRegister(self, i)
+        r = Register(self, i)
         self._registers.append(r)
         return r
 

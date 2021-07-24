@@ -6,6 +6,9 @@ class AST:
 
 class ASTExpression(AST):
 
+    def is_self(self):
+        return False
+    
     def compile_as_code(self):
         piler = compiler.base.Compiler()
         visitor = piler.gen_visitor()
@@ -28,6 +31,9 @@ class ASTSelf(ASTValue):
     def __repr__(self):
         return 'self'
 
+    def is_self(self):
+        return True
+    
     def visit(self, visitor):
         visitor.visit_self(self)
     
@@ -123,5 +129,5 @@ class ASTBlock(ASTValue):
 
     def __init__(self, params, instructions):
         super().__init__()
-        self._body = ASTSequence(instructions)
+        self._body = ASTCompound(instructions)
         self._params = params
