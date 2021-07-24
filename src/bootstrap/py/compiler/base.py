@@ -181,7 +181,8 @@ class Compiler:
     
     def finish(self):
         self.push_that()  # TODO: Is this correct in every case?
-        return self._codegen.finish()
+        return self._codegen.finish(self._root_scope.get_var_count(),
+                                    self._parameter_count)
     
     def gen_visitor(self):
         return compiler.visitor.ASTVisitor(self)

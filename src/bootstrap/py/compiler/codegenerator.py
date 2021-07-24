@@ -97,9 +97,9 @@ class CodeGenerator:
         self._add_u8(len(self._subcodes))
         self._subcodes.append(code)
     
-    def finish(self):
-        return datatypes.Code(0,
-                              0,
+    def finish(self, local_count, param_count):
+        return datatypes.Code(local_count,
+                              param_count,
                               self._constants,
                               self._subcodes,
                               self._instructions)
