@@ -1,0 +1,60 @@
+
+#=vec3D: {
+    x = 0,
+    y = 0,
+    z = 0;
+
+    with final parent = Eco lang Object;
+
+    with final trait = {
+         length => ((x sq) + (y sq) + (z sq)) sqrt;
+
+         stringify => (
+             | sb <- (Eco util StringBuilder) clone |
+             sb append: '('.
+             sb append: (x stringify).
+             sb append: ' | '.
+             sb append: (y stringify).
+             sb append: ' | '.
+             sb append: (z stringify).
+             sb append: ')'.
+           ^ sb finalize.
+         );
+    };
+};
+
+
+Vec3D = << with #:vec3D, #:vec3D parent >>;
+
+
+#=LinkedListNode: {
+    next,
+    value;
+
+    with final parent = Eco lang Object;
+
+    with final trait = {
+         init(n, v) => (
+             super(parent) init;
+             next:  n;
+             value: v;
+           ^ self
+         );
+         
+         next:  n =>  next  <- n;
+         value: v =>  value <- v;
+    };
+};
+
+LinkedListNode = << with #:LinkedListNode, #:LinkedListNode parent >>;
+
+
+#=LinkedList: {
+    nodes;
+
+    with final parent = Eco lang Object;
+
+    with final trait = {
+         "..."
+    };
+};
