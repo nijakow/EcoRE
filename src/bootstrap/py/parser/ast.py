@@ -1,3 +1,4 @@
+from datatypes import PlainObject
 import compiler.base
 
 
@@ -56,6 +57,9 @@ class ASTNil(ASTValue):
     def visit(self, visitor):
         visitor.visit_nil(self)
     
+    def evaluate(self, subj):
+        return PlainObject()  # TODO: Use a reference to NIL
+
     def __init__(self):
         super().__init__()
 

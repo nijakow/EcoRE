@@ -1,15 +1,13 @@
 import datatypes
 import econnect
-import parser.parser
+import parser.stream
 
 
-the_parser = parser.parser.TextStream('''
-{ 'foo'
-   the_obj = #<foo>,
-   x => x },
+the_parser = parser.stream.TextStream('''
+{ x, y, z }
 ''').get_parser()
 
-expr = the_parser.parse_expression()
+expr = the_parser.parse()
 code = expr.compile_as_code()
 
 print(code._instructions)
