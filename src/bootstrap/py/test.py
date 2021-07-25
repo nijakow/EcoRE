@@ -4,7 +4,7 @@ import parser.stream
 
 
 the_parser = parser.stream.TextStream('''
-{ x, y, z }
+(x)(5)
 ''').get_parser()
 
 expr = the_parser.parse()

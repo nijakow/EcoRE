@@ -12,11 +12,11 @@ class ExpressionParser(parser.core.SubParser):
 
     def parse_expression_list(self, terminator):
         l = []
-        if not self._t.check(terminator):
+        if not self.check(terminator):
             l.append(self.parse_expression())
-            while not self._t.check(terminator):
-                self._t.expect(TokenType.SEPARATOR)
-                if self._t.check(terminator):
+            while not self.check(terminator):
+                self.expect(TokenType.SEPARATOR)
+                if self.check(terminator):
                     break
                 l.append(self.parse_expression())
         return l
@@ -29,7 +29,7 @@ class ExpressionParser(parser.core.SubParser):
             the_ast = self.gen_send_parser().parse_send(the_ast, allow_followups)
             if self.check(TokenType.LPAREN):
                 the_ast = parser.ast.ASTSend(the_ast,
-                                             datatypes.Key.get_value(),
+                                             datatypes.Key.get('value'),
                                              self.parse_expression_list(TokenType.RPAREN))
             elif self.check(TokenType.EQUALS):
                 the_ast = parser.ast.ASTAssignment(the_ast,
@@ -78,7 +78,7 @@ class SimpleExpressionParser(ExpressionParser):
         elif self.check(TokenType.BAR):
             return self.parse_var_decl()
         else:
-            kw = self._t.read()
+            kw = self.get_tokenizer().read()
             if kw.isa(TokenType.KEY):
                 return parser.ast.ASTConstant(kw.get_key())
             elif kw.is_type(TokenType.LABEL):
@@ -216,10 +216,10 @@ class SendParser(ExpressionParser):
     def _parse_multi(self, key):
         while True:
             self._params.append(self.parse_expression(False))
-            ident = self._t.check_identifier()
+            ident = self.check_identifier()
             if not ident:
                 break
-            colon = self._t.read()
+            colon = self.get_tokenizer().read()
             if not colon.check(TokenType.COLON):
                 ident.fail()
                 colon.fail()
@@ -233,10 +233,10 @@ class SendParser(ExpressionParser):
             key = ident.get_key()
             if key.is_binary_op():
                 self._parse_binary_op(allow_followups)
-            elif self._t.check(TokenType.LPAREN):
+            elif self.check(TokenType.LPAREN):
                 self._parse_paren_arglist()
             else:
-                colon = self._t.read()
+                colon = self.get_tokenizer().read()
                 if colon.check(TokenType.COLON):
                     if not allow_followups:
                         colon.fail()
