@@ -19,6 +19,9 @@ class SubScope(Scope):
 
     def get_parent(self):
         return self._parent
+    
+    def get_lexical(self):
+        return self.get_parent().get_lexical()
 
     def _increment_var_count(self):
         self.get_parent()._increment_var_count()
