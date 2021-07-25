@@ -4,8 +4,9 @@ import parser.parser
 
 
 the_parser = parser.parser.TextStream('''
-{ x => x },
-[x, y, z => aa]
+{ 'foo'
+   the_obj = #<foo>,
+   x => x },
 ''').get_parser()
 
 expr = the_parser.parse_expression()

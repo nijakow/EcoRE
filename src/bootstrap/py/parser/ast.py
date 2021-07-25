@@ -19,6 +19,9 @@ class ASTExpression(AST):
     
     def visit(self, visitor):
         visitor.visit_invalid(self)
+
+    def evaluate(self, subj):
+        raise Exception('Can\'t evaluate this AST!')
     
     def __init__(self):
         super().__init__()
@@ -38,7 +41,10 @@ class ASTSelf(ASTValue):
     
     def visit(self, visitor):
         visitor.visit_self(self)
-    
+
+    def evaluate(self, subj):
+        return subj
+        
     def __init__(self):
         super().__init__()
 
@@ -63,7 +69,10 @@ class ASTConstant(ASTValue):
     
     def visit(self, visitor):
         visitor.visit_constant(self)
-    
+
+    def evaluate(self, subj):
+        return self.get_value()
+        
     def __init__(self, value):
         super().__init__()
         self._value = value
@@ -84,6 +93,15 @@ class ASTSend(ASTExpression):
     
     def visit(self, visitor):
         visitor.visit_send(self)
+
+    def evaluate(self, subj):
+        assert len(self.get_args()) != 0
+        subj = self.get_subj().evaluate(subj)
+        if subj is None:
+            return None
+        else:
+            slot = subj.lookup_slot(self.get_message())
+            return slot.get_value()
     
     def __init__(self, subj, msg, args):
         super().__init__()

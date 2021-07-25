@@ -14,6 +14,12 @@ class EcoSlot:
         serializer.write_byte(self._ser_flags)
         self._name.serialize(serializer)
 
+    def get_name(self):
+        return self._name
+
+    def is_inherited(self):
+        return False
+    
     def __init__(self, name, is_private=False):
         self._ser_flags = 0x00
         self._is_private = is_private
@@ -34,6 +40,12 @@ class ValueSlot(EcoSlot):
         super().serialize(serializer)
         self._value.serialize(serializer)
 
+    def get_value(self):
+        return self._value
+
+    def is_inherited(self):
+        return self._is_inherited
+    
     def __init__(self, name, value, is_inherited=False, is_private=False):
         super().__init__(name, is_private=is_private)
         self._value = value
@@ -69,6 +81,15 @@ class EcoObject:
     def add_slot(self, slot):
         self._slots.append(slot)
 
+    def lookup_slot(self, key):
+        for s in self._slots:
+            if s.get_name() == key:
+                return s
+        for s in self._slots:
+            if s.is_inherited():
+                return s.get_value().lookup_slot(key)
+        return None
+    
     def __init__(self):
         self._slots = []
 

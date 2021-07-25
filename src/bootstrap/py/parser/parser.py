@@ -30,6 +30,8 @@ class TextStream:
 class TokenType(enum.Enum):
     EOF        = enum.auto()
     IDENTIFIER = enum.auto()
+    KEY        = enum.auto()
+    LABEL      = enum.auto()
     LPAREN     = enum.auto()
     RPAREN     = enum.auto()
     LBRACK     = enum.auto()
@@ -48,9 +50,6 @@ class TokenType(enum.Enum):
 
 
 class Token:
-
-    def __repr__(self):
-        return '<Token:' + str(self._token_type) + '>'
 
     def fail(self):
         self._tokenizer.unread(self)
@@ -77,9 +76,6 @@ class Token:
 
 class IdentifierToken(Token):
 
-    def __repr__(self):
-        return '<IdentifierToken:' + str(self._name) + '>'
-
     def get_name(self):
         return self._name
     
@@ -91,15 +87,46 @@ class IdentifierToken(Token):
         self._name = name
 
 
+class KeyToken(Token):
+
+    def get_key(self):
+        return self._key
+
+    def __init__(self, tokenizer, key_name):
+        super().__init__(tokenizer, TokenType.KEY)
+        self._key = datatypes.Key(key_name)
+
+
+class LabelToken(Token):
+
+    def get_key(self):
+        return self._key
+
+    def __init__(self, tokenizer, key_name):
+        super().__init__(tokenizer, TokenType.LABEL)
+        self._key = datatypes.Key(key_name)
+
+
 class Tokenizer:
 
     def isspecial(self, c):
-        return str.isspace(c) or (c in '()[]{}.,:;|=')
+        return str.isspace(c) or (c in '()[]{}.,:;|=\'\"#')
 
     def slurp_whitespace(self):
         while str.isspace(self._s.peek()):
             self._s.read()
 
+    def parse_quoted_str(self, end):
+        the_str = ''
+        c = self._s.read()
+        while (c != end) and (c != ''):
+            if c == '\\':
+                pass
+            else:
+                the_str += c
+            c = self._s.read()
+        return the_str
+    
     def read(self):
         if self._pushbacks:
             return self._pushbacks.pop()
@@ -127,6 +154,16 @@ class Tokenizer:
                 return Token(self, TokenType.EQUALS)
         elif c == '^': return Token(self, TokenType.CARET)
         elif c == '|': return Token(self, TokenType.BAR)
+        elif c == '\'': return KeyToken(self, self.parse_quoted_str('\''))
+        elif c == '\"':
+            self.parse_quoted_str('\"')
+            return self.read()
+        elif c == '#':
+            c = self._s.read()
+            if c == '<':
+                return LabelToken(self, self.parse_quoted_str('>'))
+            else:
+                raise Exception('Unknown macro char!')
 
         while not self.isspecial(self._s.peek()):
             c += self._s.read()
@@ -144,6 +181,9 @@ class Tokenizer:
 
     def check_identifier(self):
         return self.check(TokenType.IDENTIFIER)
+
+    def check_key(self):
+        return self.check(TokenType.KEY)
 
     def expect(self, token_type):
         return self.read().expect(token_type)
@@ -198,6 +238,10 @@ class Parser:
 
     def parse_object(self):
         object = datatypes.PlainObject()
+        the_ast = parser.ast.ASTConstant(object)
+        kw = self._t.check_key()
+        if kw:
+            self.set_label(the_ast, kw)
         while not self._t.check(TokenType.RCURLY):
             if self._t.check(TokenType.WITH):
                 flag_inherited = True
@@ -226,9 +270,9 @@ class Parser:
                 code = self.parse_expression().compile_as_code(params)
                 object.add_slot(datatypes.CodeSlot(key, code, is_private=flag_private))
             else:
-                object.add_slot(datatypes.ValueSlot(key, self.parse_expression(), is_inherited=flag_inherited, is_private=flag_private))
+                object.add_slot(datatypes.ValueSlot(key, self.parse_expression().evaluate(object), is_inherited=flag_inherited, is_private=flag_private))
             self._t.check(TokenType.SEPARATOR)
-        return parser.ast.ASTConstant(object)
+        return the_ast
 
     def parse_simple_expression(self, allow_followups=True):
         if self._t.check(TokenType.SELF):
@@ -250,7 +294,14 @@ class Parser:
             self._t.expect(TokenType.BAR)
             return parser.ast.ASTVariable()
         else:
-            return parser.ast.ASTSelf()
+            kw = self._t.read()
+            if kw.is_type(TokenType.KEY):
+                return parser.ast.ASTConstant(kw.get_key())
+            elif kw.is_type(TokenType.LABEL):
+                return self.get_label(kw.get_key())
+            else:
+                kw.fail()
+                return parser.ast.ASTSelf()
 
     def parse_send(self, the_ast, allow_followups=True):
         ident = self._t.check_identifier()
@@ -309,5 +360,14 @@ class Parser:
                         break
         return l
 
+    def set_label(self, object, key):
+        print('Labelling', object, 'with', key)
+        self._labels[key] = object
+
+    def get_label(self, key):
+        print('Retrieving label', key)
+        return self._labels.get(key)
+    
     def __init__(self, tokenizer):
         self._t = tokenizer
+        self._labels = dict()
