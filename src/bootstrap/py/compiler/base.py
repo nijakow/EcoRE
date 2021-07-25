@@ -128,7 +128,7 @@ class Compiler:
 
     def compile_nonlocal_return(self):
         self.push_that()
-        depth = 0  # TODO: Calculate
+        depth = self._root_scope.get_lexical_depth()
         self._codegen.add_return(depth)
 
     def compile_make_closure(self, code):
@@ -137,7 +137,7 @@ class Compiler:
             if loc is None:
                 return None
             elif loc.is_local_register(self._current_scope):
-                self._codegen.add_make_closure(reg.get_id(), code)
+                self._codegen.add_make_closure(loc.get_id(), code)
             else:
                 reg = self._regalloc.allocate_temporary_register()
                 self._codegen.add_make_closure(reg.get_id(), code)

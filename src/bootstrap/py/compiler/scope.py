@@ -42,6 +42,14 @@ class BaseScope(Scope):
     def get_lexical(self):
         return self._lexical
     
+    def get_lexical_depth(self):
+        depth = 0
+        obj = self
+        while obj.get_lexical() is not None:
+            obj = obj.get_lexical()
+            depth += 1
+        return depth
+
     def _find_var(self, key):
         if self.get_lexical() is None:
             return None
