@@ -4,7 +4,10 @@ import parser.stream
 
 
 the_parser = parser.stream.TextStream('''
-(x)(5)
+{
+    x,
+    hello = x
+}
 ''').get_parser()
 
 expr = the_parser.parse()

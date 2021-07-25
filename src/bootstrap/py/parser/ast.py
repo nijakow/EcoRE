@@ -99,7 +99,7 @@ class ASTSend(ASTExpression):
         visitor.visit_send(self)
 
     def evaluate(self, subj):
-        assert len(self.get_args()) != 0
+        assert len(self.get_args()) == 0
         subj = self.get_subj().evaluate(subj)
         if subj is None:
             return None
