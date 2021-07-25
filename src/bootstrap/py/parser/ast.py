@@ -27,6 +27,24 @@ class ASTExpression(AST):
     def __init__(self):
         super().__init__()
 
+class ASTProxy(ASTExpression):
+
+    def get_value(self):
+        return self._value
+    
+    def set_value(self, val):
+        self._value = val
+
+    def visit(self, visitor):
+        self._value.visit(visitor)
+    
+    def evaluate(self, subj):
+        return self._value.evaluate(subj)
+    
+    def __init__(self):
+        super().__init__()
+        self._value = None
+
 class ASTValue(ASTExpression):
 
     def __init__(self):

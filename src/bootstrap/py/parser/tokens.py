@@ -73,7 +73,7 @@ class KeyToken(Token):
 
     def __init__(self, tokenizer, key_name):
         super().__init__(tokenizer, TokenType.KEY)
-        self._key = datatypes.Key(key_name)
+        self._key = datatypes.Key.get(key_name)
 
 
 class LabelToken(Token):
@@ -83,7 +83,7 @@ class LabelToken(Token):
 
     def __init__(self, tokenizer, key_name):
         super().__init__(tokenizer, TokenType.LABEL)
-        self._key = datatypes.Key(key_name)
+        self._key = datatypes.Key.get(key_name)
 
 
 class Tokenizer:

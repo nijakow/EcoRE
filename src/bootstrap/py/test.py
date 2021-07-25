@@ -5,8 +5,8 @@ import parser.stream
 
 the_parser = parser.stream.TextStream('''
 {
-    x,
-    hello = x
+    x = { 'foo' },
+    hello = #<foo>
 }
 ''').get_parser()
 
