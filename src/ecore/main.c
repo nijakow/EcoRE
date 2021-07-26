@@ -18,40 +18,17 @@ void Eco_Banner()
 }
 
 
-void Main_Test1()
+void Eco_LoadImage(const char* file)
 {
     struct Eco_EConnect_Result  result;
 
-    Eco_EConnect_ReadFile("../tests/object.ebf", &result);
-    Eco_EConnect_Result_Destroy(&result);
-}
+    Eco_Log(Eco_Loglevel_INFO, "Loading file '%s'...\n", file);
 
-
-void Main_Test2()
-{
-    struct Eco_Object*          object;
-    struct Eco_Object*          key;
-    Eco_Any                     value;
-    struct Eco_Object_SlotInfo  info;
-
-    object = Eco_Object_New();
-    key    = Eco_Object_New();
-    Eco_Any_AssignInteger(&value, 42);
-
-    info.is_inherited = false;
-    info.key          = key;
-
-    Eco_Object_AddSlot(object, 0, info, &value);
-}
-
-
-void Main_LogTest()
-{
-    Eco_Log(Eco_Loglevel_DEBUG, "This is DEBUG\n");
-    Eco_Log(Eco_Loglevel_INFO, "This is INFO\n");
-    Eco_Log(Eco_Loglevel_WARNING, "This is WARNING\n");
-    Eco_Log(Eco_Loglevel_ERROR, "This is ERROR\n");
-    Eco_Log(Eco_Loglevel_CRITICAL, "This is CRITICAL\n");
+    if (Eco_EConnect_ReadFile(file, &result)) {
+        Eco_Log(Eco_Loglevel_INFO, "Loading file '%s' was successful!\n", file);
+    } else {
+        Eco_Log(Eco_Loglevel_ERROR, "Can't load file '%s'!\n", file);
+    }
 }
 
 
@@ -59,10 +36,13 @@ int main(int argc, char *argv[])
 {
     Eco_Banner();
     Eco_Init();
-    // Eco_Run();
-    Main_LogTest();
-    Main_Test1();
-    Main_Test2();
+
+    if (argc != 2) {
+        Eco_Log(Eco_Loglevel_ERROR, "Usage: %s <filename.ebf>\n", argv[0]);
+    } else {
+        Eco_LoadImage(argv[1]);
+    }
+
     Eco_Terminate();
     return 0;
 }
