@@ -15,6 +15,10 @@ class Bootstrapper:
 
     def construct_from_stream(self, stream):
         self.construct_from_string(stream.read())
+    
+    def construct_from_file(self, path):
+        with open(path, 'r') as f:
+            self.construct_from_stream(f)
 
     def serialize(self):
         serializer = econnect.Serializer()
