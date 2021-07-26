@@ -5,7 +5,7 @@
 
 static const char* Eco_LOGLEVELS[] = {
     "[DEBUG]:    ",
-    "[INFO]:     ",
+    "            ",
     "[WARNING]:  ",
     "[ERROR]:    ",
     "[CRITICAL]: "

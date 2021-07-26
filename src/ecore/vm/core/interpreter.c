@@ -7,6 +7,8 @@
 #include "frame.h"
 #include "send.h"
 
+#include "../../io/logging/log.h"
+
 
 struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber*        fiber,
                                       unsigned int             register_count)
@@ -24,6 +26,19 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber*        fiber,
 }
 
 
+bool Eco_Fiber_EnterThunk(struct Eco_Fiber* fiber, Eco_Any* lobby, struct Eco_Code* code)
+{
+    struct Eco_Frame*  frame;
+
+    frame              = Eco_Fiber_PushFrame(fiber, code->register_count);
+
+    frame->instruction = code->bytecodes;
+    frame->code        = code;
+
+    Eco_Any_AssignAny(&frame->self, lobby);
+
+    return true;
+}
 
 bool Eco_Fiber_Enter(struct Eco_Fiber*    fiber,
                      struct Eco_Frame*    lexical,
@@ -171,6 +186,12 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 }
 
                 Eco_Fiber_PopFrame(fiber);
+
+                if (!Eco_Fiber_HasTop(fiber)) {
+                    // Last frame was popped, we can now return
+                    Eco_Fiber_SetState(fiber, Eco_Fiber_State_TERMINATED);  // TODO: Write a function for this
+                    goto end;
+                }
 
                 top = Eco_Fiber_Top(fiber); /* TODO: Do the "slow dispatch" code */
 

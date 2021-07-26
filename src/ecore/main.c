@@ -10,10 +10,10 @@
 
 void Eco_Banner()
 {
-    printf("\n");
-    printf("    The Ecosphere\n");
-    printf("    Eco Runtime Environment\n");
-    printf("\n");
+    Eco_Log_Info("\n");
+    Eco_Log_Info("    The Ecosphere\n");
+    Eco_Log_Info("    Eco Runtime Environment\n");
+    Eco_Log_Info("\n");
 }
 
 
@@ -23,7 +23,7 @@ void Eco_Main(int argc, char *argv[])
     Eco_Init();
 
     if (argc != 2) {
-        Eco_Log(Eco_Loglevel_ERROR, "Usage: %s <filename.ebf>\n", argv[0]);
+        Eco_Log_Error("Usage: %s <filename.ebf>\n", argv[0]);
     } else {
         Eco_LoadImage(argv[1]);
         Eco_Run();

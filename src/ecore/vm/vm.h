@@ -5,6 +5,7 @@
 #include "../io/net/scheduler.h"
 
 struct Eco_GC_State;
+struct Eco_Code;
 
 
 struct Eco_VM
@@ -15,6 +16,8 @@ struct Eco_VM
     } fiber_queues;
 
     struct Eco_Net_Scheduler*  net_scheduler;
+
+    Eco_Any                    lobby;
 };
 
 extern struct Eco_VM Eco_THE_VM;
@@ -24,6 +27,7 @@ void Eco_VM_Create(struct Eco_VM*);
 void Eco_VM_Destroy(struct Eco_VM*);
 void Eco_VM_Mark(struct Eco_GC_State*, struct Eco_VM*);
 
+struct Eco_Fiber* Eco_VM_SpawnThunk(struct Eco_VM*, struct Eco_Code*);
 void Eco_VM_Run(struct Eco_VM*);
 
 bool Eco_VM_LoadImage(struct Eco_VM*, const char*);
