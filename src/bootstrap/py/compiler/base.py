@@ -130,6 +130,10 @@ class Compiler:
         self.push_that()
         depth = self._root_scope.get_lexical_depth()
         self._codegen.add_return(depth)
+    
+    def compile_local_return(self):
+        self.push_that()
+        self._codegen.add_return(0)
 
     def compile_make_closure(self, code):
         self._drop_passed_value()
@@ -180,7 +184,7 @@ class Compiler:
         self._parameter_count += 1
     
     def finish(self):
-        self.push_that()  # TODO: Is this correct in every case?
+        self.compile_local_return() # TODO: Only if the last instruction wasn't a return
         return self._codegen.finish(self._root_scope.get_var_count(),
                                     self._parameter_count)
     
