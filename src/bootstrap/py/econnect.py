@@ -67,6 +67,6 @@ class Serializer:
         return bytes(self._bytes)
 
     def __init__(self):
-        self._bytes = []
+        self._bytes = bytearray()
         self._objects = dict()
         self._id_counter = 0

@@ -105,6 +105,6 @@ class CodeGenerator:
                               self._instructions)
     
     def __init__(self):
-        self._instructions = []
+        self._instructions = bytearray()
         self._constants = []
         self._subcodes = []
