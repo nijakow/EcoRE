@@ -41,7 +41,7 @@ def bootstrap():
     if len(sys.argv) != 3:
         raise Exception('Usage: ' + sys.argv[0] + ' <source> <target.ebf>')
     print('Bootstrapping from', sys.argv[1])
-    strapper.construct_from_string(sys.argv[1])
+    strapper.construct_from_file(sys.argv[1])
     strapper.write_to_file(sys.argv[2])
 
 
