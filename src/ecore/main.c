@@ -5,7 +5,6 @@
 #include "objects/base/object.h"
 #include "objects/base/object_slots.h"
 #include "objects/base/type.h"
-#include "io/econnect/file/file.h"
 #include "io/logging/log.h"
 
 
@@ -18,21 +17,7 @@ void Eco_Banner()
 }
 
 
-void Eco_LoadImage(const char* file)
-{
-    struct Eco_EConnect_Result  result;
-
-    Eco_Log(Eco_Loglevel_INFO, "Loading file '%s'...\n", file);
-
-    if (Eco_EConnect_ReadFile(file, &result)) {
-        Eco_Log(Eco_Loglevel_INFO, "Loading file '%s' was successful!\n", file);
-    } else {
-        Eco_Log(Eco_Loglevel_ERROR, "Can't load file '%s'!\n", file);
-    }
-}
-
-
-int main(int argc, char *argv[])
+void Eco_Main(int argc, char *argv[])
 {
     Eco_Banner();
     Eco_Init();
@@ -41,9 +26,16 @@ int main(int argc, char *argv[])
         Eco_Log(Eco_Loglevel_ERROR, "Usage: %s <filename.ebf>\n", argv[0]);
     } else {
         Eco_LoadImage(argv[1]);
+        Eco_Run();
     }
 
     Eco_Terminate();
+}
+
+
+int main(int argc, char *argv[])
+{
+    Eco_Main(argc, argv);
     return 0;
 }
 

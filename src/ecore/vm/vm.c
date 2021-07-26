@@ -2,6 +2,8 @@
 
 #include "fiber.h"
 #include "core/interpreter.h"
+#include "../io/econnect/file/file.h"
+#include "../io/logging/log.h"
 
 
 struct Eco_VM Eco_THE_VM;
@@ -77,5 +79,23 @@ void Eco_VM_Run(struct Eco_VM* vm)
             }
         }
         Eco_VM_HandleEvents(vm);
+    }
+}
+
+
+bool Eco_VM_LoadImage(struct Eco_VM* vm, const char* file)
+{
+    struct Eco_EConnect_Result  result;
+
+    Eco_Log(Eco_Loglevel_INFO, "Loading file '%s'...\n", file);
+
+    if (Eco_EConnect_ReadFile(file, &result)) {
+        Eco_Log(Eco_Loglevel_INFO, "Loading file '%s' was successful!\n", file);
+        // TODO: Start fiber
+        Eco_EConnect_Result_Destroy(&result);
+        return true;
+    } else {
+        Eco_Log(Eco_Loglevel_ERROR, "Can't load file '%s'!\n", file);
+        return false;
     }
 }

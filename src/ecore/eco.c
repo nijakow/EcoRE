@@ -12,6 +12,18 @@
 #include "io/econnect/econnect.h"
 
 
+
+void Eco_LoadImage(const char* file)
+{
+    Eco_VM_LoadImage(&Eco_THE_VM, file);
+}
+
+void Eco_Run()
+{
+    Eco_VM_Run(&Eco_THE_VM);
+}
+
+
 void Eco_Init()
 {
     Eco_VM_Create(&Eco_THE_VM);
@@ -27,9 +39,4 @@ void Eco_Terminate()
     Eco_Objects_Terminate();
     Eco_Types_Terminate();
     Eco_VM_Destroy(&Eco_THE_VM);
-}
-
-void Eco_Run()
-{
-    Eco_VM_Run(&Eco_THE_VM);
 }

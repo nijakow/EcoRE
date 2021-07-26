@@ -44,6 +44,7 @@ struct Eco_Type;
 
 void Eco_Init();
 void Eco_Terminate();
+void Eco_LoadImage(const char*);
 void Eco_Run();
 
 

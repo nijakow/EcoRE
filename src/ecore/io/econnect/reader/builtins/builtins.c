@@ -2,6 +2,7 @@
 
 #include "objects/key.h"
 #include "objects/object.h"
+#include "objects/code.h"
 #include "protocol/protocol.h"
 #include "id/id.h"
 #include "flow/flow.h"
@@ -19,7 +20,7 @@ void Eco_EConnect_InitReaderBuiltins()
     Eco_EConnect_InstallCallback("ecosphere.econnect.unwind", Eco_EConnect_Builtin_Unwind);
     Eco_EConnect_InstallCallback("ecosphere.object.key", Eco_EConnect_Builtin_GetKey);
     Eco_EConnect_InstallCallback("ecosphere.object.object", Eco_EConnect_Builtin_GetObject);
-    Eco_EConnect_InstallCallback("ecosphere.object.code", Eco_EConnect_Builtin_GetObject);
+    Eco_EConnect_InstallCallback("ecosphere.object.code", Eco_EConnect_Builtin_GetCode);
 }
 
 void Eco_EConnect_TerminateReaderBuiltins()
