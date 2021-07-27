@@ -3,6 +3,7 @@
 
 #include "../../eco.h"
 
+#include "builtin.h"
 #include "object.h"
 #include "slot_info.h"
 #include "typecore.h"
@@ -17,7 +18,8 @@ struct Eco_GC_State;
 enum Eco_Type_Slot_Type
 {
     Eco_Type_Slot_Type_INLINED,
-    Eco_Type_Slot_Type_CODE
+    Eco_Type_Slot_Type_CODE,
+    Eco_Type_Slot_Type_BUILTIN
 };
 
 
@@ -33,7 +35,8 @@ struct Eco_Type_Slot
             unsigned int value_size;
             bool is_inherited;
         } inlined;
-        struct Eco_Code* code;
+        struct Eco_Code*     code;
+        Eco_Builtin          builtin;
     } body;
 };
 
@@ -82,6 +85,7 @@ struct Eco_Type* Eco_Type_NewPrefab(struct Eco_TypeCore*);
 
 bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*, int, struct Eco_Object_SlotInfo, struct Eco_Type**, struct Eco_Type_Slot**);
 bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type*, int, struct Eco_Object_SlotInfo, struct Eco_Code*, struct Eco_Type**);
+bool Eco_Type_CopyWithNewBuiltinSlot(struct Eco_Type*, int, struct Eco_Object_SlotInfo, Eco_Builtin, struct Eco_Type**);
 
 void Eco_Type_Mark(struct Eco_GC_State*, struct Eco_Type*);
 void Eco_Type_MarkTypes(struct Eco_GC_State*);

@@ -24,6 +24,7 @@ objects/group/group.c \
 objects/misc/key/key.c \
 objects/vm/code/code.c \
 objects/vm/code/closure.c \
+vm/builtins/builtins.c \
 vm/memory/memory.c \
 vm/memory/gc/gc_state.c \
 vm/memory/gc/gc.c \
@@ -55,7 +56,7 @@ io/econnect/file/file.c \
 io/econnect/net/connection.c \
 main.c
 
-OBJECTS = $(SOURCES:.c=.o)
+OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
 DEPENDS = $(patsubst %.c,%.d,$(SOURCES))
 
 LDFLAGS =

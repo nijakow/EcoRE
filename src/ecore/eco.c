@@ -5,9 +5,9 @@
 #include "objects/base/object.h"
 #include "objects/group/group.h"
 
-#include "vm/memory/gc/gc.h"
-
 #include "vm/vm.h"
+#include "vm/builtins/builtins.h"
+#include "vm/memory/gc/gc.h"
 
 #include "io/econnect/econnect.h"
 
@@ -30,10 +30,12 @@ void Eco_Init()
     Eco_Types_Init();
     Eco_Objects_Init();
     Eco_EConnect_Init();
+    Eco_VM_Builtins_Init();
 }
 
 void Eco_Terminate()
 {
+    Eco_VM_Builtins_Terminate();
     Eco_EConnect_Terminate();
     Eco_FreeAll();
     Eco_Objects_Terminate();
