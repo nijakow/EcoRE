@@ -71,6 +71,7 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*    fiber,
 
 void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 {
+    u8                 bytecode;
     struct Eco_Frame*  top;
     struct Eco_Frame*  bottom;
 
@@ -78,7 +79,9 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 
     while (true)  /* TODO: Execution limit */
     {
-        switch (Eco_Frame_NextU8(top))
+        bytecode = Eco_Frame_NextU8(top);
+        Eco_Log_Debug("Executing bytecode %02x\n", bytecode);
+        switch (bytecode)
         {
             case Eco_Bytecode_NOOP: {
                 break;

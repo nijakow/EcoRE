@@ -31,7 +31,7 @@ class ExpressionParser(parser.core.SubParser):
                 the_ast = parser.ast.ASTSend(the_ast,
                                              datatypes.Key.get('value'),
                                              self.parse_expression_list(TokenType.RPAREN))
-            elif self.check(TokenType.EQUALS):
+            elif self.check(TokenType.ASSIGNMENT):
                 the_ast = parser.ast.ASTAssignment(the_ast,
                                                    self.parse_expression(allow_followups))
         return the_ast
@@ -48,8 +48,8 @@ class ExpressionParser(parser.core.SubParser):
 
 class SimpleExpressionParser(ExpressionParser):
 
-    def parse_compound(self):
-        exprs = self.parse_expression_list(TokenType.RPAREN)
+    def parse_compound(self, end=TokenType.RPAREN):
+        exprs = self.parse_expression_list(end)
         if len(exprs) == 1:
             return exprs[0]
         else:
@@ -63,6 +63,12 @@ class SimpleExpressionParser(ExpressionParser):
     
     def parse_return(self, allow_followups=True):
         return parser.ast.ASTReturn(self.parse_expression(allow_followups))
+    
+    def parse_var_decl(self, allow_followups=True):
+        decl = self.parse_expression()
+        # TODO: Parse multiple vars
+        self.expect(TokenType.BAR)
+        return parser.ast.ASTVarDecl(decl, self.parse_expression(allow_followups))
 
     def parse_simple_expression(self, allow_followups=True):
         if self.check(TokenType.SELF):
@@ -76,7 +82,7 @@ class SimpleExpressionParser(ExpressionParser):
         elif self.check(TokenType.CARET):
             return self.parse_return(allow_followups)
         elif self.check(TokenType.BAR):
-            return self.parse_var_decl()
+            return self.parse_var_decl(allow_followups)
         else:
             kw = self.get_tokenizer().read()
             if kw.isa(TokenType.KEY):
@@ -258,7 +264,7 @@ class SendParser(ExpressionParser):
 class EcoParser(parser.core.Parser):
 
     def parse(self):
-        return ExpressionParser(self).parse_expression()
+        return SimpleExpressionParser(self).parse_compound(end=TokenType.EOF)
 
     def __init__(self, tokenizer):
         super().__init__(tokenizer)

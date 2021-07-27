@@ -18,6 +18,7 @@ class TokenType(enum.Enum):
     SEPARATOR  = enum.auto()
     RARROW     = enum.auto()
     EQUALS     = enum.auto()
+    ASSIGNMENT = enum.auto()
     CARET      = enum.auto()
     BAR        = enum.auto()
     SELF       = enum.auto()
@@ -150,6 +151,7 @@ class Tokenizer:
         if c == 'self': return Token(self, TokenType.SELF)
         elif c == 'with': return Token(self, TokenType.WITH)
         elif c == 'private': return Token(self, TokenType.PRIVATE)
+        elif c == '<-': return Token(self, TokenType.ASSIGNMENT)
         else: return IdentifierToken(self, c)
 
     def unread(self, token):

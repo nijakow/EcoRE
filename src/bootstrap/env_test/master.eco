@@ -1,5 +1,16 @@
 "Create a simple object"
 
-{
-    x, y, z
-}
+| x |
+
+x <- {
+    x, y,
+    z = {}
+},
+
+| y |
+
+y <- {
+    a, b, c
+},
+
+^ x

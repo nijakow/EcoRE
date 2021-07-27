@@ -9,9 +9,8 @@ class Compiler:
     def _pull_passed_value(self, storage_loc):
         if self._passed_value_callback is None:
             self.compile_load_self()
-        r = self._passed_value_callback(storage_loc)
+        self._passed_value_callback(storage_loc)
         def next(loc):
-            # self._compile_transfer(loc, r)
             return None
         self._passed_value_callback = next
 
@@ -110,13 +109,25 @@ class Compiler:
                 return loc
         self._set_passed_value_callback(drop_compiler)
     
+    def compile_var_declaration(self, expr):
+        name = expr.get_message()  # Assuming it's a SEND expression, TODO: Assignments
+        self.add_var(name)
+        self.compile_load_self()
+        self.send_that_to_var(name)
+    
     def compile_send(self, args, key):
-        self.push_that()
+        self._codegen.add_send(args, key)
         def send_compiler(loc):
-            self._codegen.add_send(args, key)
             self._compile_transfer(loc, compiler.storage.STACK)
             return loc
         self._set_passed_value_callback(send_compiler)
+
+    def compile_slot_assignment(self, key):
+        self._codegen.add_assign(key)
+        def assign_compiler(loc):
+            self._compile_transfer(loc, compiler.storage.STACK)
+            return loc
+        self._set_passed_value_callback(assign_compiler)
 
     def compile_assign(self, key):
         self.push_that()
@@ -169,6 +180,9 @@ class Compiler:
         reg = self._current_scope.get_var(varname)
         if reg is not None:
             self._pull_passed_value(reg)
+            def cb(loc):
+                self._compile_transfer(loc, reg)
+            self._set_passed_value_callback(cb)
             return True
         else:
             return False
@@ -183,8 +197,12 @@ class Compiler:
         self._root_scope.add_var(expr.get_message())  # Assuming it's a SEND expression
         self._parameter_count += 1
     
+    def add_var(self, varname):
+        self._root_scope.add_var(varname)
+    
     def finish(self):
         self.compile_local_return() # TODO: Only if the last instruction wasn't a return
+        print(list(self._codegen._instructions))
         return self._codegen.finish(self._root_scope.get_var_count(),
                                     self._parameter_count)
     
@@ -201,4 +219,3 @@ class Compiler:
         self._root_scope = compiler.scope.BaseScope(self._regalloc, lexical=lexical_parent_scope)
         self._current_scope = self._root_scope
         self._parameter_count = 0
-

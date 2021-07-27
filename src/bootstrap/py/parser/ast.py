@@ -131,6 +131,37 @@ class ASTSend(ASTExpression):
         self._msg = msg
         self._args = args
 
+
+class ASTVarDecl(ASTExpression):
+
+    def get_declaration(self):
+        return self._decl
+    
+    def get_next_expression(self):
+        return self._next
+
+    def visit(self, visitor):
+        visitor.visit_var_decl(self)
+
+    def __init__(self, decl, next_expr):
+        self._decl = decl
+        self._next = next_expr
+
+class ASTAssignment(ASTExpression):
+
+    def get_lhs(self):
+        return self._lhs
+    
+    def get_rhs(self):
+        return self._rhs
+
+    def visit(self, visitor):
+        visitor.visit_assignment(self)
+
+    def __init__(self, lhs, rhs):
+        self._lhs = lhs
+        self._rhs = rhs
+
 class ASTReturn(ASTExpression):
 
     def __repr__(self):

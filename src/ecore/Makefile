@@ -8,6 +8,9 @@ else
 endif
 
 EXECUTABLE = ./ecore.exe
+BOOTSTRAP_ENVIRONMENT = ../bootstrap/env_test
+BOOTSTRAP_MASTER      = $(BOOTSTRAP_ENVIRONMENT)/master.ebf
+
 
 SOURCES = \
 eco.c \
@@ -86,5 +89,9 @@ clean:
 
 .phony: re
 re: clean all
+
+.phony: test
+test: $(EXECUTABLE)
+	$(EXECUTABLE) '$(BOOTSTRAP_MASTER)'
 
 -include $(DEPENDS)

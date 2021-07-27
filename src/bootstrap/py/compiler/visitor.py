@@ -1,4 +1,5 @@
 import compiler.base
+import parser.ast
 
 
 class ASTVisitor:
@@ -17,6 +18,10 @@ class ASTVisitor:
 
     def visit_constant(self, elem):
         self._compiler.compile_load_constant(elem.get_value())
+    
+    def visit_var_decl(self, decl):
+        self._compiler.compile_var_declaration(decl.get_declaration())
+        decl.get_next_expression().visit(self)
 
     def visit_send(self, elem):
         subj = elem.get_subj()
@@ -32,8 +37,19 @@ class ASTVisitor:
             self._compiler.push_that()
         self._compiler.compile_send(len(args), key)
 
-    def visit_assign(self, elem):
-        self.visit_unimplemented(elem)
+    def visit_assignment(self, elem):
+        lhand = elem.get_lhs()
+        rhand = elem.get_rhs()
+        assert isinstance(lhand, parser.ast.ASTSend) and len(lhand.get_args()) == 0
+        if lhand.get_subj().is_self():
+            rhand.visit(self)
+            self._compiler.send_that_to_var(lhand.get_message())
+        else:
+            lhand.get_subj().visit(self)
+            self._compiler.push_that()
+            rhand.visit(self)
+            self._compiler.push_that()
+            self._compiler.compile_slot_assignment(lhand.get_message())
 
     def visit_return(self, elem):
         retval = elem.get_return_value()
