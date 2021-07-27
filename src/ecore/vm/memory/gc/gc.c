@@ -4,6 +4,7 @@
 #include "gc_state.h"
 #include "../memory.h"
 #include "../../vm.h"
+#include "../../builtins/builtins.h"
 #include "../../../objects/base/object.h"
 #include "../../../objects/base/type.h"
 
@@ -20,6 +21,7 @@ void Eco_GC_MarkRoots(struct Eco_GC_State* state)
 {
     Eco_Type_MarkTypes(state);
     Eco_VM_Mark(state, &Eco_THE_VM);
+    Eco_GC_State_MarkObject(state, Eco_VM_Builtin_LOBBY);
 }
 
 void Eco_GC_MarkLoop(struct Eco_GC_State* state)

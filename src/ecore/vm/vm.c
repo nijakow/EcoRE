@@ -1,6 +1,7 @@
 #include "vm.h"
 
 #include "fiber.h"
+#include "builtins/builtins.h"
 #include "core/interpreter.h"
 #include "../io/econnect/file/file.h"
 #include "../io/logging/log.h"
@@ -24,8 +25,6 @@ void Eco_VM_Create(struct Eco_VM* vm)
     vm->fiber_queues.paused  = NULL;
 
     vm->net_scheduler = Eco_Net_Scheduler_New(4096);
-
-    Eco_Any_AssignInteger(&vm->lobby, 0);   // TODO: Initialize this with a more meaningful value
 }
 
 void Eco_VM_Destroy(struct Eco_VM* vm)
@@ -62,11 +61,14 @@ void Eco_VM_HandleEvents(struct Eco_VM* vm)
 
 struct Eco_Fiber* Eco_VM_SpawnThunk(struct Eco_VM* vm, struct Eco_Code* code)
 {
+    Eco_Any            lobby_arg;
     struct Eco_Fiber*  fiber;
 
     fiber = Eco_Fiber_New(vm, 65536);
 
-    Eco_Fiber_EnterThunk(fiber, &vm->lobby, code);
+    Eco_Any_AssignPointer(&lobby_arg, Eco_VM_Builtin_LOBBY);
+
+    Eco_Fiber_EnterThunk(fiber, &lobby_arg, code);
     Eco_Fiber_MoveToQueue(fiber, &vm->fiber_queues.running);
 
     return fiber;

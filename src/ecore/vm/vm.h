@@ -16,8 +16,6 @@ struct Eco_VM
     } fiber_queues;
 
     struct Eco_Net_Scheduler*  net_scheduler;
-
-    Eco_Any                    lobby;
 };
 
 extern struct Eco_VM Eco_THE_VM;
