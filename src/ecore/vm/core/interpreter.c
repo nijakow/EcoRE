@@ -45,19 +45,19 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*    fiber,
                      struct Eco_Message*  message,
                      struct Eco_Code*     code)
 {
-    unsigned int       i;
+    int                i;
     struct Eco_Frame*  frame;
 
-    if (code->arg_count != (message->body.send.arg_count + 1)) {  /* The +1 stands for the SELF value */
+    if (code->arg_count != message->body.send.arg_count) {  /* The +1 stands for the SELF value */
         Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ARGERROR);
         return false;
     }
 
     frame = Eco_Fiber_PushFrame(fiber, code->register_count);
 
-    for (i = code->arg_count; i > 0; i--)
+    for (i = code->arg_count - 1; i >= 0; i--)
     {
-        Eco_Fiber_Pop(fiber, &frame->registers[i - 1]);
+        Eco_Fiber_Pop(fiber, &frame->registers[i]);
     }
 
     Eco_Fiber_Pop(fiber, &frame->self);

@@ -10,7 +10,8 @@ x <- {
 | y |
 
 y <- {
-    a, b, c
+    a, b, c,
+    foo => foo;
 },
 
-^ x
+^ y foo
