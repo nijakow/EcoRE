@@ -10,6 +10,7 @@
 #include "../../vm/core/interpreter.h"
 #include "../../vm/memory/memory.h"
 #include "../../vm/memory/gc/gc.h"
+#include "../../io/logging/log.h"
 
 
 struct Eco_Type*  Eco_TYPES = NULL;
@@ -227,7 +228,7 @@ bool Eco_Type_CopyWithNewBuiltinSlot(struct Eco_Type* self,
     if (Eco_Type_CopyWithNewSlot(self, pos, &the_copy, &the_slot)) {
         the_copy->instance_payload_size += slot_value_size;
 
-        the_slot->type         = Eco_Type_Slot_Type_CODE;
+        the_slot->type         = Eco_Type_Slot_Type_BUILTIN;
         the_slot->key          = info.key;
         the_slot->body.builtin = builtin;
 
