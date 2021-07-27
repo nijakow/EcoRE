@@ -202,7 +202,6 @@ class Compiler:
     
     def finish(self):
         self.compile_local_return() # TODO: Only if the last instruction wasn't a return
-        print(list(self._codegen._instructions))
         return self._codegen.finish(self._root_scope.get_var_count(),
                                     self._parameter_count)
     

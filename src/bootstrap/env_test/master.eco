@@ -11,7 +11,9 @@ x <- {
 
 y <- {
     a, b, c,
-    foo => foo;
+    foo => bar;
+    bar => baz;
+    baz => a;
 },
 
 ^ y foo

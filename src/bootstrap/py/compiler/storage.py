@@ -47,7 +47,7 @@ class Register(StorageLocation):
         self.get_allocator().free_register(self)
 
     def increment_depth(self):
-        return Register(self, self.get_allocator(), self.get_id(), self.get_depth() + 1)
+        return Register(self.get_allocator(), self.get_id(), self.get_depth() + 1)
     
     def __init__(self, allocator, r_id, depth=0):
         self._allocator = allocator
