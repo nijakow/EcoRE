@@ -11,7 +11,7 @@ struct Eco_GC_State;
 
 struct Eco_Frame
 {
-    unsigned int         delta;
+    struct Eco_Frame*    previous;
     struct Eco_Frame*    lexical;
     struct Eco_Closure*  closures;
 

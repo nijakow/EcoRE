@@ -80,43 +80,50 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
     while (true)  /* TODO: Execution limit */
     {
         bytecode = Eco_Frame_NextU8(top);
-        Eco_Log_Debug("Executing bytecode %02x\n", bytecode);
         switch (bytecode)
         {
             case Eco_Bytecode_NOOP: {
+                Eco_Log_Debug("-> NOOP\n");
                 break;
             }
             case Eco_Bytecode_SELF: {
                 u8 reg = Eco_Frame_NextU8(top);
+                Eco_Log_Debug("-> SELF %02x\n", reg);
                 Eco_Any_AssignAny(&top->registers[reg], &top->self);
                 break;
             }
             case Eco_Bytecode_PUSH: {
                 u8 reg = Eco_Frame_NextU8(top);
+                Eco_Log_Debug("-> PUSH %02x\n", reg);
                 Eco_Fiber_Push(fiber, &top->registers[reg]);
                 break;
             }
             case Eco_Bytecode_POP: {
                 u8 reg = Eco_Frame_NextU8(top);
+                Eco_Log_Debug("-> POP %02x\n", reg);
                 Eco_Fiber_Pop(fiber, &top->registers[reg]);
                 break;
             }
             case Eco_Bytecode_DROP: {
+                Eco_Log_Debug("-> DROP\n");
                 Eco_Fiber_Drop(fiber);
                 break;
             }
             case Eco_Bytecode_DUP: {
+                Eco_Log_Debug("-> DUP\n");
                 Eco_Fiber_Dup(fiber);
                 break;
             }
             case Eco_Bytecode_CONST: {
-                u8 to = Eco_Frame_NextU8(top);
+                u8  to = Eco_Frame_NextU8(top);
+                Eco_Log_Debug("-> CONST %02x\n", to);
                 Eco_Any_AssignAny(&top->registers[to], Eco_Frame_NextConstant(top));
                 break;
             }
             case Eco_Bytecode_R2R: {
                 u8 to   = Eco_Frame_NextU8(top);
                 u8 from = Eco_Frame_NextU8(top);
+                Eco_Log_Debug("-> R2R %02x %02x\n", to, from);
                 Eco_Any_AssignAny(&top->registers[to], &top->registers[from]);
                 break;
             }
@@ -124,6 +131,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 u8 to    = Eco_Frame_NextU8(top);
                 u8 depth = Eco_Frame_NextU8(top);
                 u8 from  = Eco_Frame_NextU8(top);
+                Eco_Log_Debug("-> R2L %02x:%u %02x\n", to, depth, from);
                 bottom   = Eco_Frame_NthLexical(top, depth);
                 Eco_Any_AssignAny(&bottom->registers[to], &top->registers[from]);
                 break;
@@ -132,6 +140,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 u8 to    = Eco_Frame_NextU8(top);
                 u8 from  = Eco_Frame_NextU8(top);
                 u8 depth = Eco_Frame_NextU8(top);
+                Eco_Log_Debug("-> L2R %02x %02x:%u\n", to, from, depth);
                 bottom   = Eco_Frame_NthLexical(top, depth);
                 Eco_Any_AssignAny(&top->registers[to], &bottom->registers[from]);
                 break;
@@ -143,6 +152,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 message.key                 = Eco_Any_AsPointer(Eco_Frame_NextConstant(top));
                 message.fiber               = fiber;
                 message.type                = Eco_Message_Type_SEND;
+
+                Eco_Log_Debug("-> SEND %u\n", message.body.send.arg_count);
 
                 if (Eco_Send(&message, Eco_Fiber_Nth(fiber, message.body.send.arg_count + 1))) {
                     top = Eco_Fiber_Top(fiber); /* TODO: Do the "slow dispatch" code */
@@ -160,6 +171,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 message.fiber             = fiber;
                 message.type              = Eco_Message_Type_ASSIGN;
 
+                Eco_Log_Debug("-> ASSIGN\n");
+
                 Eco_Fiber_Pop(fiber, &message.body.assign.value);
 
                 if (!Eco_Send(&message, Eco_Fiber_Nth(fiber, 1))) {
@@ -175,8 +188,11 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 
                 depth = Eco_Frame_NextU8(top);
 
+                Eco_Log_Debug("-> RETURN %u\n", depth);
+
                 while (depth > 0)
                 {
+                    depth--;
                     target = Eco_Fiber_Top(fiber)->lexical;
                     while (Eco_Fiber_Top(fiber) != target)
                     {
@@ -207,6 +223,9 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 
                 dest       = Eco_Frame_NextU8(top);
                 closure_id = Eco_Frame_NextU8(top);
+
+                Eco_Log_Debug("-> MAKE_CLOSURE %02x %u\n", dest, closure_id);
+
                 closure    = Eco_Closure_New(top->code->code_instances[closure_id], Eco_Fiber_Top(fiber));
 
                 Eco_Any_AssignPointer(&top->registers[dest], (struct Eco_Object*) closure);

@@ -28,19 +28,14 @@ struct Eco_Fiber
     unsigned int          data_stack_size;
 
     struct Eco_Frame*     top;
-    unsigned int          stack_size;
-    unsigned int          stack_alloc_ptr;
+    char*                 stack_pointer;
+    char*                 stack_max;
     char                  stack[];
 };
 
 static inline void Eco_Fiber_SetState(struct Eco_Fiber* fiber, enum Eco_Fiber_State state)
 {
     fiber->state = state;
-}
-
-static inline struct Eco_Frame* Eco_Fiber_FrameAt(struct Eco_Fiber* fiber, unsigned int offset)
-{
-    return (struct Eco_Frame*) &(fiber->stack[offset]);
 }
 
 static inline struct Eco_Frame* Eco_Fiber_Top(struct Eco_Fiber* fiber)
@@ -50,7 +45,7 @@ static inline struct Eco_Frame* Eco_Fiber_Top(struct Eco_Fiber* fiber)
 
 static inline bool Eco_Fiber_HasTop(struct Eco_Fiber* fiber)
 {
-    return Eco_Fiber_Top(fiber) != NULL;
+    return fiber->stack_pointer > &fiber->stack[0];
 }
 
 static inline bool Eco_Fiber_Push(struct Eco_Fiber* fiber, Eco_Any* src)

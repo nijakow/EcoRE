@@ -6,6 +6,8 @@
 #include "core/frame.h"
 #include "../objects/vm/code/closure.h"
 
+#include "../io/logging/log.h"
+
 
 struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
 {
@@ -25,8 +27,8 @@ struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
     fiber->data_stack_size  = 1024;
 
     fiber->top              = NULL;
-    fiber->stack_size       = stack_size;
-    fiber->stack_alloc_ptr  = 0;
+    fiber->stack_pointer    = &fiber->stack[0];
+    fiber->stack_max        = &fiber->stack[stack_size];
 
     return fiber;
 }
@@ -54,15 +56,12 @@ void Eco_Fiber_Mark(struct Eco_GC_State* state, struct Eco_Fiber* fiber)
         Eco_GC_State_MarkAny(state, &fiber->data_stack[offset]);
     }
 
-    offset = fiber->stack_alloc_ptr;
-    do
+    frame = fiber->top;
+    while (frame != NULL)
     {
-        frame = Eco_Fiber_FrameAt(fiber, offset);
-
         Eco_Frame_Mark(state, frame);
-
-        offset -= frame->delta;
-    } while (frame->delta > 0);
+        frame = frame->previous;
+    }
 }
 
 void Eco_Fiber_MoveToQueue(struct Eco_Fiber* fiber, struct Eco_Fiber** queue)
@@ -98,24 +97,15 @@ void Eco_Fiber_MoveToQueue(struct Eco_Fiber* fiber, struct Eco_Fiber** queue)
 struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber* fiber, unsigned int register_count)
 {
     struct Eco_Frame*  the_frame;
-    unsigned int       delta;
 
     const unsigned int frame_size = sizeof(struct Eco_Frame) + sizeof(Eco_Any) * register_count;
 
-    the_frame                 = (struct Eco_Frame*) &fiber->stack[fiber->stack_alloc_ptr];
+    the_frame                 = (struct Eco_Frame*) fiber->stack_pointer;
     the_frame->register_count = register_count;
     the_frame->closures       = NULL;
-
-    if (Eco_Fiber_HasTop(fiber)) {
-        delta = Eco_Fiber_Top(fiber) - the_frame;
-    } else {
-        delta = 0;
-    }
-
-    fiber->top = the_frame;
-    fiber->stack_alloc_ptr += frame_size;
-
-    Eco_Fiber_Top(fiber)->delta = delta;
+    the_frame->previous       = fiber->top;
+    fiber->top                = the_frame;
+    fiber->stack_pointer      = fiber->stack_pointer + frame_size;
 
     return the_frame;
 }
@@ -133,10 +123,6 @@ void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
         frame->closures = frame->closures->next;
     }
 
-    if (frame->delta == 0) {
-        fiber->top = NULL;
-    } else {
-        fiber->stack_alloc_ptr = fiber->stack_alloc_ptr - frame->delta;
-        fiber->top             = Eco_Fiber_FrameAt(fiber, fiber->stack_alloc_ptr);
-    }
+    fiber->top           = frame->previous;
+    fiber->stack_pointer = (char*) frame;
 }
