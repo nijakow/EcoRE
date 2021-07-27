@@ -12,8 +12,8 @@ x <- {
 y <- {
     a, b, c,
     foo => bar;
-    bar => baz;
-    baz => a;
+    bar => baz(self, self, self);
+    baz(x, y, z) => x;
 },
 
 ^ y foo

@@ -75,8 +75,11 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
     struct Eco_Frame*  top;
     struct Eco_Frame*  bottom;
 
+  long_retry:
     top = Eco_Fiber_Top(fiber);
-
+  short_retry:
+    if (fiber->state != Eco_Fiber_State_RUNNING)
+        goto end;
     while (true)  /* TODO: Execution limit */
     {
         bytecode = Eco_Frame_NextU8(top);
@@ -162,7 +165,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                     goto end;
                 }
 
-                break;
+                goto long_retry;
             }
             case Eco_Bytecode_ASSIGN: {
                 struct Eco_Message  message;
@@ -177,10 +180,10 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 
                 if (!Eco_Send(&message, Eco_Fiber_Nth(fiber, 1))) {
                     Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ASSIGNFAILED);
-                    goto end;
+                    goto error;
                 }
 
-                break;
+                goto short_retry;
             }
             case Eco_Bytecode_RETURN: {
                 u8                 depth;
@@ -199,7 +202,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                         Eco_Fiber_PopFrame(fiber);
                         if (!Eco_Fiber_HasTop(fiber)) {
                             Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_RETURNFAILED);
-                            goto end;
+                            goto error;
                         }
                     }
                 }
@@ -212,9 +215,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                     goto end;
                 }
 
-                top = Eco_Fiber_Top(fiber); /* TODO: Do the "slow dispatch" code */
-
-                break;
+                goto long_retry;
             }
             case Eco_Bytecode_MAKE_CLOSURE: {
                 u8                   dest;
@@ -230,15 +231,16 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 
                 Eco_Any_AssignPointer(&top->registers[dest], (struct Eco_Object*) closure);
 
-                break;
+                goto short_retry;
             }
             default: {
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_NOOPCODE);
-                break;
+                goto error;
             }
         }
     }
 
+  error:
   end:
     return;
 }

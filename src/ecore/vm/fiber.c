@@ -15,7 +15,7 @@ struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
 
     fiber = Eco_Memory_Alloc(sizeof(struct Eco_Fiber) + stack_size);
 
-    fiber->state            = Eco_Fiber_State_PAUSED;
+    fiber->state            = Eco_Fiber_State_RUNNING;
 
     fiber->vm               = vm;
     fiber->queue            = NULL;
