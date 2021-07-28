@@ -12,6 +12,7 @@
 | R2R      | `0x07 <dest:u8> <src:u8>`            |                     |                |
 | R2L      | `0x08 <dest:u8> <depth:u8> <src:u8>` |                     |                |
 | L2R      | `0x09 <dest:u8> <src:u8> <depth:u8>` |                     |                |
+| BUILTIN  | `0x0a <args:u8> <key:u16>`           | `self, a0, ..., aN` | `return_value` |
 | SEND     | `0x0a <args:u8> <key:u16>`           | `self, a0, ..., aN` | `return_value` |
 | ASSIGN   | `0x0b <key:u16>`                     | `target, value`     | `target`       |
 | RETURN   | `0x0c <depth:u8>`                    |                     |                |

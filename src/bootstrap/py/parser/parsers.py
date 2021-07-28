@@ -28,9 +28,12 @@ class ExpressionParser(parser.core.SubParser):
             prev = the_ast
             the_ast = self.gen_send_parser().parse_send(the_ast, allow_followups)
             if self.check(TokenType.LPAREN):
-                the_ast = parser.ast.ASTSend(the_ast,
-                                             datatypes.Key.get('value'),
-                                             self.parse_expression_list(TokenType.RPAREN))
+                if isinstance(the_ast, parser.ast.ASTKey):
+                    the_ast = parser.ast.ASTBuiltin(the_ast, self.parse_expression_list(TokenType.RPAREN))
+                else:
+                    the_ast = parser.ast.ASTSend(the_ast,
+                                                 datatypes.Key.get('value'),
+                                                 self.parse_expression_list(TokenType.RPAREN))
             elif self.check(TokenType.ASSIGNMENT):
                 the_ast = parser.ast.ASTAssignment(the_ast,
                                                    self.parse_expression(allow_followups))
@@ -86,7 +89,7 @@ class SimpleExpressionParser(ExpressionParser):
         else:
             kw = self.get_tokenizer().read()
             if kw.isa(TokenType.KEY):
-                return parser.ast.ASTConstant(kw.get_key())
+                return parser.ast.ASTKey(kw.get_key())
             elif kw.is_type(TokenType.LABEL):
                 proxy = parser.ast.ASTProxy()
                 self.get_label_storage().when_label_defined(kw.get_key(), lambda obj: proxy.set_value(obj))

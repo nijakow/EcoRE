@@ -6,6 +6,7 @@
 #include "../../base/object.h"
 
 #include "../../../io/econnect/reader/callback.h"
+#include "../../../vm/builtins/builtin.h"
 
 
 struct Eco_Key
@@ -16,6 +17,7 @@ struct Eco_Key
     struct Eco_Key*        prev;
 
     Eco_EConnect_Callback  econnect_callback;
+    Eco_Builtin            builtin;
 
     char                   name[];
 };
@@ -24,6 +26,11 @@ struct Eco_Key* Eco_Key_Find(const char*);
 
 void Eco_Key_Mark(struct Eco_GC_State*, struct Eco_Key*);
 void Eco_Key_Del(struct Eco_Key*);
+
+static inline bool Eco_Key_CallBuiltin(struct Eco_Key* key, struct Eco_Fiber* fiber, unsigned int args)
+{
+    return key->builtin(fiber, args);
+}
 
 void Eco_Key_Init();
 void Eco_Key_Terminate();

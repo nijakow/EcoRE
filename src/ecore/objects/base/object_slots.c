@@ -57,33 +57,3 @@ bool Eco_Object_AddCodeSlot(struct Eco_Object* self,
         return false;
     }
 }
-
-static bool Eco_Object_AddBuiltinSlot(struct Eco_Object* self,
-                                      int pos,
-                                      struct Eco_Object_SlotInfo info,
-                                      Eco_Builtin builtin)
-{
-    struct Eco_Type*  new_type;
-
-    if (Eco_Type_CopyWithNewBuiltinSlot(self->type, pos, info, builtin, &new_type)) {
-        Eco_Object_SwitchType(self, new_type);
-        return true;
-    } else {
-        return false;
-    }
-}
-
-bool Eco_Object_AddBuiltin(struct Eco_Object* self, const char* key_name, Eco_Builtin builtin)
-{
-    struct Eco_Key*             key;
-    struct Eco_Object_SlotInfo  slot_info;
-
-    key = Eco_Key_Find(key_name);
-
-    if (key == NULL) return false;
-
-    slot_info.key          = (struct Eco_Object*) key;
-    slot_info.is_inherited = false;
-
-    return Eco_Object_AddBuiltinSlot(self, -1, slot_info, builtin);
-}

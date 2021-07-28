@@ -1,11 +1,12 @@
 #include "../fiber.h"
 
-#include "../../objects/vm/code/closure.h"
-
 #include "bytecodes.h"
 #include "environment.h"
 #include "frame.h"
 #include "send.h"
+
+#include "../../objects/misc/key/key.h"
+#include "../../objects/vm/code/closure.h"
 
 #include "../../io/logging/log.h"
 
@@ -147,6 +148,13 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 bottom   = Eco_Frame_NthLexical(top, depth);
                 Eco_Any_AssignAny(&top->registers[to], &bottom->registers[from]);
                 break;
+            }
+            case Eco_Bytecode_BUILTIN: {
+                u8               args = Eco_Frame_NextU8(top);
+                struct Eco_Key*  key  = (struct Eco_Key*) Eco_Any_AsPointer(Eco_Frame_NextConstant(top));   // TODO: Safety check!
+                Eco_Log_Debug("-> BUILTIN '%s' %02x\n", key->name, args);
+                Eco_Key_CallBuiltin(key, fiber, args);
+                goto long_retry;
             }
             case Eco_Bytecode_SEND: {
                 struct Eco_Message  message;

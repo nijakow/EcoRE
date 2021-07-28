@@ -99,6 +99,26 @@ class ASTConstant(ASTValue):
         super().__init__()
         self._value = value
 
+class ASTKey(ASTConstant):
+
+    def __init__(self, value):
+        super().__init__(value)
+
+class ASTBuiltin(ASTExpression):
+
+    def get_key(self):
+        return self._key
+    
+    def get_args(self):
+        return self._args
+    
+    def visit(self, visitor):
+        visitor.visit_builtin(self)
+
+    def __init__(self, key, args):
+        self._key = key
+        self._args = args
+
 class ASTSend(ASTExpression):
     
     def __repr__(self):

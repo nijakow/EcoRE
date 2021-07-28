@@ -115,6 +115,13 @@ class Compiler:
         self.compile_load_self()
         self.send_that_to_var(name)
     
+    def compile_builtin(self, args, key):
+        self._codegen.add_builtin(args, key)
+        def builtin_compiler(loc):
+            self._compile_transfer(loc, compiler.storage.STACK)
+            return loc
+        self._set_passed_value_callback(builtin_compiler)
+
     def compile_send(self, args, key):
         self._codegen.add_send(args, key)
         def send_compiler(loc):

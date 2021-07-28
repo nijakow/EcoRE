@@ -58,8 +58,6 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message* message, struct Eco_Object* object
                         return false;
                     }
                     return true;
-                case Eco_Type_Slot_Type_BUILTIN:
-                    return slot->body.builtin(message->fiber, message->body.send.arg_count);
             }
             return false;
         case Eco_Message_Type_ASSIGN:
@@ -214,32 +212,6 @@ bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type* self,
     }
 }
 
-bool Eco_Type_CopyWithNewBuiltinSlot(struct Eco_Type* self,
-                                     int pos,
-                                     struct Eco_Object_SlotInfo info,
-                                     Eco_Builtin builtin,
-                                     struct Eco_Type** type_loc)
-{
-    struct Eco_Type*       the_copy;
-    struct Eco_Type_Slot*  the_slot;
-
-    const unsigned int     slot_value_size = sizeof(Eco_Any);
-
-    if (Eco_Type_CopyWithNewSlot(self, pos, &the_copy, &the_slot)) {
-        the_copy->instance_payload_size += slot_value_size;
-
-        the_slot->type         = Eco_Type_Slot_Type_BUILTIN;
-        the_slot->key          = info.key;
-        the_slot->body.builtin = builtin;
-
-        *type_loc              = the_copy;
-
-        return true;
-    } else {
-        return false;
-    }
-}
-
 
 void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
 {
@@ -253,8 +225,6 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
                 break;
             case Eco_Type_Slot_Type_CODE:
                 Eco_Code_Mark(state, type->slots[i].body.code);
-                break;
-            case Eco_Type_Slot_Type_BUILTIN:
                 break;
         }
     }

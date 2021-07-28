@@ -1,5 +1,5 @@
-#ifndef ECO_OBJECTS_BASE_BUILTIN_H
-#define ECO_OBJECTS_BASE_BUILTIN_H
+#ifndef ECO_VM_BUILTINS_BUILTIN_H
+#define ECO_VM_BUILTINS_BUILTIN_H
 
 #include "../../eco.h"
 
