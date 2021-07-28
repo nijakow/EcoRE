@@ -75,6 +75,8 @@ class Compiler:
             elif loc.is_local_register(self._current_scope):
                 self._codegen.add_const2r(loc.get_id(), value)
                 return loc
+            elif loc.is_stack():
+                self._codegen.add_pushc(value)
             else:
                 reg = self._regalloc.allocate_temporary_register()
                 self._codegen.add_const2r(reg.get_id(), value)

@@ -6,18 +6,19 @@ import datatypes
 class Bytecodes(enum.IntEnum):
     NOOP = 0x00
     CONST2R = 0x01
-    PUSHR = 0x02
-    POPR = 0x03
-    DROP = 0x04
-    DUP = 0x05
-    R2R = 0x06
-    R2L = 0x07
-    L2R = 0x08
-    BUILTIN = 0x09
-    SEND = 0x0a
-    ASSIGN = 0x0b
-    RET = 0x0c
-    MAKE_CLOSURE = 0x0d
+    PUSHC = 0x02
+    PUSHR = 0x03
+    POPR = 0x04
+    DROP = 0x05
+    DUP = 0x06
+    R2R = 0x07
+    R2L = 0x08
+    L2R = 0x09
+    BUILTIN = 0x0a
+    SEND = 0x0b
+    ASSIGN = 0x0c
+    RET = 0x0d
+    MAKE_CLOSURE = 0x0e
 
 
 class CodeGenerator:
@@ -38,12 +39,13 @@ class CodeGenerator:
     def add_noop(self):
         self._add_u8(Bytecodes.NOOP)
 
-    def add_self2r(self, r):
-        self.add_r2r(r, 0)
-
     def add_const2r(self, r, value):
         self._add_u8(Bytecodes.CONST2R)
         self._add_u8(r)
+        self._add_constant(value)
+    
+    def add_pushc(self, value):
+        self._add_u8(Bytecodes.PUSHC)
         self._add_constant(value)
 
     def add_pushr(self, r):

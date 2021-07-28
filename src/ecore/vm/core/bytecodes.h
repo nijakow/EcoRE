@@ -5,6 +5,7 @@ enum Eco_Bytecode
 {
     Eco_Bytecode_NOOP = 0,
     Eco_Bytecode_CONST,
+    Eco_Bytecode_PUSHC,
     Eco_Bytecode_PUSH,
     Eco_Bytecode_POP,
     Eco_Bytecode_DROP,

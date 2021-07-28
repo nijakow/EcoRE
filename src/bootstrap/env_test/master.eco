@@ -16,6 +16,6 @@ y <- {
     baz(x, y, z) => x;
 },
 
-y foo;
+y bar({}, {}, {});
 
 ^ 'traptest'()

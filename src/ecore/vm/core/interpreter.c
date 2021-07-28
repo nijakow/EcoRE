@@ -88,6 +88,17 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 Eco_Log_Debug("-> NOOP\n");
                 break;
             }
+            case Eco_Bytecode_CONST: {
+                u8 to = Eco_Frame_NextU8(top);
+                Eco_Log_Debug("-> CONST %02x\n", to);
+                Eco_Any_AssignAny(&top->registers[to], Eco_Frame_NextConstant(top));
+                break;
+            }
+            case Eco_Bytecode_PUSHC: {
+                Eco_Log_Debug("-> PUSHC\n");
+                Eco_Fiber_Push(fiber, Eco_Frame_NextConstant(top));
+                break;
+            }
             case Eco_Bytecode_PUSH: {
                 u8 reg = Eco_Frame_NextU8(top);
                 Eco_Log_Debug("-> PUSH %02x\n", reg);
@@ -108,12 +119,6 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
             case Eco_Bytecode_DUP: {
                 Eco_Log_Debug("-> DUP\n");
                 Eco_Fiber_Dup(fiber);
-                break;
-            }
-            case Eco_Bytecode_CONST: {
-                u8  to = Eco_Frame_NextU8(top);
-                Eco_Log_Debug("-> CONST %02x\n", to);
-                Eco_Any_AssignAny(&top->registers[to], Eco_Frame_NextConstant(top));
                 break;
             }
             case Eco_Bytecode_R2R: {
