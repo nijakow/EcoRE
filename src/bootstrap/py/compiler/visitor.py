@@ -43,7 +43,7 @@ class ASTVisitor:
         for arg in args:
             arg.visit(self)
             self._compiler.push_that()
-        self._compiler.compile_send(len(args), key)
+        self._compiler.compile_send(len(args) + 1, key)
 
     def visit_assignment(self, elem):
         lhand = elem.get_lhs()

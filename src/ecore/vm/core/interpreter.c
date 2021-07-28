@@ -36,7 +36,7 @@ bool Eco_Fiber_EnterThunk(struct Eco_Fiber* fiber, Eco_Any* lobby, struct Eco_Co
     frame->instruction = code->bytecodes;
     frame->code        = code;
 
-    Eco_Any_AssignAny(&frame->self, lobby);
+    Eco_Any_AssignAny(&frame->registers[0], lobby);
 
     return true;
 }
@@ -60,8 +60,6 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*    fiber,
     {
         Eco_Fiber_Pop(fiber, &frame->registers[i]);
     }
-
-    Eco_Fiber_Pop(fiber, &frame->self);
 
     frame->code        = code;
     frame->instruction = code->bytecodes;
@@ -88,12 +86,6 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
         {
             case Eco_Bytecode_NOOP: {
                 Eco_Log_Debug("-> NOOP\n");
-                break;
-            }
-            case Eco_Bytecode_SELF: {
-                u8 reg = Eco_Frame_NextU8(top);
-                Eco_Log_Debug("-> SELF %02x\n", reg);
-                Eco_Any_AssignAny(&top->registers[reg], &top->self);
                 break;
             }
             case Eco_Bytecode_PUSH: {
@@ -166,7 +158,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 
                 Eco_Log_Debug("-> SEND %u\n", message.body.send.arg_count);
 
-                if (Eco_Send(&message, Eco_Fiber_Nth(fiber, message.body.send.arg_count + 1))) {
+                if (Eco_Send(&message, Eco_Fiber_Nth(fiber, message.body.send.arg_count))) {
                     top = Eco_Fiber_Top(fiber); /* TODO: Do the "slow dispatch" code */
                 } else {
                     Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);

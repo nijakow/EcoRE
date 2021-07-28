@@ -62,17 +62,9 @@ class Compiler:
     def compile_load_self(self):
         self._drop_passed_value()
         def self_compiler(loc):
-            if loc is None:
-                return None
-            elif loc.is_local_register(self._current_scope):
-                self._codegen.add_self2r(loc.get_id())
-                return loc
-            else:
-                reg = self._regalloc.allocate_temporary_register()
-                self._codegen.add_self2r(reg.get_id())
-                self._compile_transfer(loc, reg)
-                reg.free()
-                return loc
+            if loc is not None:
+                self._compile_transfer(loc, self._self_register)
+            return loc
         self._set_passed_value_callback(self_compiler)
 
     def compile_load_constant(self, value):
@@ -222,6 +214,7 @@ class Compiler:
         self._passed_value_callback = None
         self._codegen = compiler.codegenerator.CodeGenerator()
         self._regalloc = compiler.storage.RegisterAllocator()
+        self._self_register = self._regalloc.allocate_register()
         self._root_scope = compiler.scope.BaseScope(self._regalloc, lexical=lexical_parent_scope)
         self._current_scope = self._root_scope
-        self._parameter_count = 0
+        self._parameter_count = 1  # The SELF
