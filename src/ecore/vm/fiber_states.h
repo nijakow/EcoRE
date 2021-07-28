@@ -7,6 +7,7 @@ enum Eco_Fiber_State
     Eco_Fiber_State_PAUSED,
     Eco_Fiber_State_TERMINATED,
     Eco_Fiber_State_ERROR,
+    Eco_Fiber_State_ERROR_BUILTIN_TRAP,
     Eco_Fiber_State_ERROR_NOOPCODE,
     Eco_Fiber_State_ERROR_ARGERROR,
     Eco_Fiber_State_ERROR_SENDFAILED,

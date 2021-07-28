@@ -2,6 +2,7 @@
 
 #include "builtin.h"
 
+#include "../fiber.h"
 #include "../../objects/misc/key/key.h"
 #include "../../io/logging/log.h"
 
@@ -9,6 +10,11 @@
 struct Eco_Object* Eco_VM_Builtin_LOBBY = NULL;
 
 
+bool Eco_VM_Builtin_Trap(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_BUILTIN_TRAP);
+    return false;
+}
 
 static bool Eco_VM_Builtin_Hello(struct Eco_Fiber* fiber, unsigned int args)
 {
