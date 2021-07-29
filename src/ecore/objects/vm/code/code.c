@@ -1,6 +1,7 @@
 #include "code.h"
 
 #include "../../base/type.h"
+#include "../../../vm/memory/memory.h"
 #include "../../../vm/memory/gc/gc.h"
 
 
@@ -58,5 +59,11 @@ void Eco_Code_Mark(struct Eco_GC_State* state, struct Eco_Code* code)
 
 void Eco_Code_Del(struct Eco_Code* code)
 {
+    if (code->bytecodes != NULL)
+        Eco_Memory_Free(code->bytecodes);
+    if (code->constants != NULL)
+        Eco_Memory_Free(code->constants);
+    if (code->code_instances != NULL)
+        Eco_Memory_Free(code->code_instances);
     Eco_Object_Del(&(code->_));
 }
