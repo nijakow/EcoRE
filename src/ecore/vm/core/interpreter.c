@@ -49,7 +49,7 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*    fiber,
     int                i;
     struct Eco_Frame*  frame;
 
-    if (code->arg_count != message->body.send.arg_count) {  /* The +1 stands for the SELF value */
+    if (code->arg_count != message->body.send.arg_count) {
         Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ARGERROR);
         return false;
     }
