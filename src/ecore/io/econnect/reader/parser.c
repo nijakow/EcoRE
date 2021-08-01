@@ -18,7 +18,7 @@ unsigned int Eco_EConnect_ParseUInt(struct Eco_IO_ByteInputStream* stream)
     {
         byte = Eco_IO_ByteInputStream_Read(stream);
         value = (value << 7) | (byte & 0b01111111);
-    } while ((byte & 0b1000000) != 0);
+    } while ((byte & 0b10000000) != 0);
 
     return value;
 }
