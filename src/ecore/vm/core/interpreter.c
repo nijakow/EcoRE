@@ -46,185 +46,172 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
 }
 
 
+#define NEXT_U8()             *(instruction++)
+static inline u16 CONSTRUCT_U16(u8** ptr) { u16 v = **ptr; (*ptr)++; v <<= 8; v |= **ptr; (*ptr)++; return v; }
+#define NEXT_U16()            CONSTRUCT_U16(&instruction)
+#define NEXT_CONSTANT()       &top->code->constants[NEXT_U16()]
+#define TARGET(T)             dispatch_label_ ## T:
+#define DEFAULT_TARGET()      /* TARGET(DEFAULT) */
+#define DISPATCH(B)           goto *DISPATCH_TABLE[B];
+#define ULTRAFAST_DISPATCH()  DISPATCH(NEXT_U8())
+#define FAST_DISPATCH()       goto short_retry
+#define SLOW_DISPATCH()       goto long_retry
+
+
 void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 {
-    u8                 bytecode;
+    u8*                instruction;
     struct Eco_Frame*  top;
     struct Eco_Frame*  bottom;
 
+#include "bytecodes_dispatch.c"
+
   long_retry:
-    top = Eco_Fiber_Top(fiber);
+    top         = Eco_Fiber_Top(fiber);
+    instruction = top->instruction;
   short_retry:
     if (fiber->state != Eco_Fiber_State_RUNNING)
         goto end;
-    while (true)  /* TODO: Execution limit */
+    DISPATCH(NEXT_U8())
     {
-            Eco_Log_Debug("Registers:    %u\n", top->register_count);
-            Eco_Log_Debug("Stack:        %p\n", &fiber->stack);
-            Eco_Log_Debug("Previous:     %p\n", top->previous);
-        for (unsigned int x = 0; x < top->register_count; x++) {
-            Eco_Log_Debug("Register %3u: %p --> %d %p\n", x, &top->registers[x], top->registers[x].type, top->registers[x].value);
+        TARGET(NOOP) {
+            ULTRAFAST_DISPATCH();
         }
-            Eco_Log_Debug("Top:          %p\n", top);
-            Eco_Log_Debug("SP:           %p\n", fiber->stack_pointer);
-        bytecode = Eco_Frame_NextU8(top);
-        switch (bytecode)
-        {
-            case Eco_Bytecode_NOOP: {
-                Eco_Log_Debug("-> NOOP\n");
-                break;
+        TARGET(CONST) {
+            u8 to = NEXT_U8();
+            Eco_Any_AssignAny(&top->registers[to], NEXT_CONSTANT());
+            ULTRAFAST_DISPATCH();
+        }
+        TARGET(PUSHC) {
+            Eco_Fiber_Push(fiber, NEXT_CONSTANT());
+            ULTRAFAST_DISPATCH();
+        }
+        TARGET(PUSH) {
+            u8 reg = NEXT_U8();
+            Eco_Fiber_Push(fiber, &top->registers[reg]);
+            ULTRAFAST_DISPATCH();
+        }
+        TARGET(POP) {
+            u8 reg = NEXT_U8();
+            Eco_Fiber_Pop(fiber, &top->registers[reg]);
+            ULTRAFAST_DISPATCH();
+        }
+        TARGET(DROP) {
+            Eco_Fiber_Drop(fiber);
+            ULTRAFAST_DISPATCH();
+        }
+        TARGET(DUP) {
+            Eco_Fiber_Dup(fiber);
+            ULTRAFAST_DISPATCH();
+        }
+        TARGET(R2R) {
+            u8 to   = NEXT_U8();
+            u8 from = NEXT_U8();
+            Eco_Any_AssignAny(&top->registers[to], &top->registers[from]);
+            ULTRAFAST_DISPATCH();
+        }
+        TARGET(R2L) {
+            u8 to    = NEXT_U8();
+            u8 depth = NEXT_U8();
+            u8 from  = NEXT_U8();
+            bottom   = Eco_Frame_NthLexical(top, depth);
+            Eco_Any_AssignAny(&bottom->registers[to], &top->registers[from]);
+            ULTRAFAST_DISPATCH();
+        }
+        TARGET(L2R) {
+            u8 to    = NEXT_U8();
+            u8 from  = NEXT_U8();
+            u8 depth = NEXT_U8();
+            bottom   = Eco_Frame_NthLexical(top, depth);
+            Eco_Any_AssignAny(&top->registers[to], &bottom->registers[from]);
+            ULTRAFAST_DISPATCH();
+        }
+        TARGET(BUILTIN) {
+            u8               args = NEXT_U8();
+            struct Eco_Key*  key  = (struct Eco_Key*) Eco_Any_AsPointer(NEXT_CONSTANT());   // TODO: Safety check!
+            top->instruction      = instruction;
+            Eco_Key_CallBuiltin(key, fiber, args);
+            SLOW_DISPATCH();
+        }
+        TARGET(SEND) {
+            struct Eco_Message  message;
+
+            message.body.send.arg_count = NEXT_U8();
+            message.key                 = Eco_Any_AsPointer(NEXT_CONSTANT());
+            message.fiber               = fiber;
+            message.type                = Eco_Message_Type_SEND;
+
+            top->instruction            = instruction;
+
+            if (!Eco_Send(&message, Eco_Fiber_Nth(fiber, message.body.send.arg_count))) {
+                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
+                goto end;
             }
-            case Eco_Bytecode_CONST: {
-                u8 to = Eco_Frame_NextU8(top);
-                Eco_Log_Debug("-> CONST %02x\n", to);
-                Eco_Any_AssignAny(&top->registers[to], Eco_Frame_NextConstant(top));
-                break;
-            }
-            case Eco_Bytecode_PUSHC: {
-                Eco_Log_Debug("-> PUSHC\n");
-                Eco_Fiber_Push(fiber, Eco_Frame_NextConstant(top));
-                break;
-            }
-            case Eco_Bytecode_PUSH: {
-                u8 reg = Eco_Frame_NextU8(top);
-                Eco_Log_Debug("-> PUSH %02x\n", reg);
-                Eco_Fiber_Push(fiber, &top->registers[reg]);
-                break;
-            }
-            case Eco_Bytecode_POP: {
-                u8 reg = Eco_Frame_NextU8(top);
-                Eco_Log_Debug("-> POP %02x\n", reg);
-                Eco_Fiber_Pop(fiber, &top->registers[reg]);
-                break;
-            }
-            case Eco_Bytecode_DROP: {
-                Eco_Log_Debug("-> DROP\n");
-                Eco_Fiber_Drop(fiber);
-                break;
-            }
-            case Eco_Bytecode_DUP: {
-                Eco_Log_Debug("-> DUP\n");
-                Eco_Fiber_Dup(fiber);
-                break;
-            }
-            case Eco_Bytecode_R2R: {
-                u8 to   = Eco_Frame_NextU8(top);
-                u8 from = Eco_Frame_NextU8(top);
-                Eco_Log_Debug("-> R2R %02x %02x\n", to, from);
-                Eco_Any_AssignAny(&top->registers[to], &top->registers[from]);
-                break;
-            }
-            case Eco_Bytecode_R2L: {
-                u8 to    = Eco_Frame_NextU8(top);
-                u8 depth = Eco_Frame_NextU8(top);
-                u8 from  = Eco_Frame_NextU8(top);
-                Eco_Log_Debug("-> R2L %02x:%u %02x\n", to, depth, from);
-                bottom   = Eco_Frame_NthLexical(top, depth);
-                Eco_Any_AssignAny(&bottom->registers[to], &top->registers[from]);
-                break;
-            }
-            case Eco_Bytecode_L2R: {
-                u8 to    = Eco_Frame_NextU8(top);
-                u8 from  = Eco_Frame_NextU8(top);
-                u8 depth = Eco_Frame_NextU8(top);
-                Eco_Log_Debug("-> L2R %02x %02x:%u\n", to, from, depth);
-                bottom   = Eco_Frame_NthLexical(top, depth);
-                Eco_Any_AssignAny(&top->registers[to], &bottom->registers[from]);
-                break;
-            }
-            case Eco_Bytecode_BUILTIN: {
-                u8               args = Eco_Frame_NextU8(top);
-                struct Eco_Key*  key  = (struct Eco_Key*) Eco_Any_AsPointer(Eco_Frame_NextConstant(top));   // TODO: Safety check!
-                Eco_Log_Debug("-> BUILTIN '%s' %02x\n", key->name, args);
-                Eco_Key_CallBuiltin(key, fiber, args);
-                goto long_retry;
-            }
-            case Eco_Bytecode_SEND: {
-                struct Eco_Message  message;
+            SLOW_DISPATCH();
+        }
+        TARGET(ASSIGN) {
+            struct Eco_Message  message;
 
-                message.body.send.arg_count = Eco_Frame_NextU8(top);
-                message.key                 = Eco_Any_AsPointer(Eco_Frame_NextConstant(top));
-                message.fiber               = fiber;
-                message.type                = Eco_Message_Type_SEND;
+            message.key               = Eco_Any_AsPointer(NEXT_CONSTANT());
+            message.fiber             = fiber;
+            message.type              = Eco_Message_Type_ASSIGN;
 
-                Eco_Log_Debug("-> SEND %u\n", message.body.send.arg_count);
+            Eco_Fiber_Pop(fiber, &message.body.assign.value);
 
-                if (!Eco_Send(&message, Eco_Fiber_Nth(fiber, message.body.send.arg_count))) {
-                    Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
-                    goto end;
-                }
-                goto long_retry;
-            }
-            case Eco_Bytecode_ASSIGN: {
-                struct Eco_Message  message;
-
-                message.key               = Eco_Any_AsPointer(Eco_Frame_NextConstant(top));
-                message.fiber             = fiber;
-                message.type              = Eco_Message_Type_ASSIGN;
-
-                Eco_Log_Debug("-> ASSIGN\n");
-
-                Eco_Fiber_Pop(fiber, &message.body.assign.value);
-
-                if (!Eco_Send(&message, Eco_Fiber_Nth(fiber, 1))) {
-                    Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ASSIGNFAILED);
-                    goto error;
-                }
-
-                goto short_retry;
-            }
-            case Eco_Bytecode_RETURN: {
-                u8                 depth;
-                struct Eco_Frame*  target;
-
-                depth = Eco_Frame_NextU8(top);
-
-                Eco_Log_Debug("-> RETURN %u\n", depth);
-
-                while (depth > 0)
-                {
-                    depth--;
-                    target = Eco_Fiber_Top(fiber)->lexical;
-                    while (Eco_Fiber_Top(fiber) != target)
-                    {
-                        Eco_Fiber_PopFrame(fiber);
-                        if (!Eco_Fiber_HasTop(fiber)) {
-                            Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_RETURNFAILED);
-                            goto error;
-                        }
-                    }
-                }
-
-                Eco_Fiber_PopFrame(fiber);
-
-                if (!Eco_Fiber_HasTop(fiber)) {
-                    // Last frame was popped, we can now return
-                    Eco_Fiber_SetState(fiber, Eco_Fiber_State_TERMINATED);  // TODO: Write a function for this
-                    goto end;
-                }
-
-                goto long_retry;
-            }
-            case Eco_Bytecode_MAKE_CLOSURE: {
-                u8                   dest;
-                u8                   closure_id;
-                struct Eco_Closure*  closure;
-
-                dest       = Eco_Frame_NextU8(top);
-                closure_id = Eco_Frame_NextU8(top);
-
-                Eco_Log_Debug("-> MAKE_CLOSURE %02x %u\n", dest, closure_id);
-
-                closure    = Eco_Closure_New(top->code->code_instances[closure_id], Eco_Fiber_Top(fiber));
-
-                Eco_Any_AssignPointer(&top->registers[dest], (struct Eco_Object*) closure);
-
-                goto short_retry;
-            }
-            default: {
-                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_NOOPCODE);
+            if (!Eco_Send(&message, Eco_Fiber_Nth(fiber, 1))) {
+                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ASSIGNFAILED);
                 goto error;
             }
+
+            FAST_DISPATCH();
+        }
+        TARGET(RETURN) {
+            u8                 depth;
+            struct Eco_Frame*  target;
+
+            depth = NEXT_U8();
+
+            while (depth > 0)
+            {
+                depth--;
+                target = Eco_Fiber_Top(fiber)->lexical;
+                while (Eco_Fiber_Top(fiber) != target)
+                {
+                    Eco_Fiber_PopFrame(fiber);
+                    if (!Eco_Fiber_HasTop(fiber)) {
+                        Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_RETURNFAILED);
+                        goto error;
+                    }
+                }
+            }
+
+            Eco_Fiber_PopFrame(fiber);
+
+            if (!Eco_Fiber_HasTop(fiber)) {
+                // Last frame was popped, we can now return
+                Eco_Fiber_SetState(fiber, Eco_Fiber_State_TERMINATED);  // TODO: Write a function for this
+                goto end;
+            }
+
+            SLOW_DISPATCH();
+        }
+        TARGET(MAKE_CLOSURE) {
+            u8                   dest;
+            u8                   closure_id;
+            struct Eco_Closure*  closure;
+
+            dest       = NEXT_U8();
+            closure_id = NEXT_U8();
+
+            closure    = Eco_Closure_New(top->code->code_instances[closure_id], Eco_Fiber_Top(fiber));
+
+            Eco_Any_AssignPointer(&top->registers[dest], (struct Eco_Object*) closure);
+
+            FAST_DISPATCH();
+        }
+        DEFAULT_TARGET() {
+            Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_NOOPCODE);
+            goto error;
         }
     }
 
