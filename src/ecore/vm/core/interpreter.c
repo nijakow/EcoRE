@@ -47,7 +47,7 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
 
 
 #define NEXT_U8()             *(instruction++)
-static inline u16 CONSTRUCT_U16(u8** ptr) { u16 v = **ptr; (*ptr)++; v <<= 8; v |= **ptr; (*ptr)++; return v; }
+static inline u16 CONSTRUCT_U16(u8** ptr) { u16 v = *((u16*) *ptr); *ptr += 2; return v; }
 #define NEXT_U16()            CONSTRUCT_U16(&instruction)
 #define NEXT_CONSTANT()       &top->code->constants[NEXT_U16()]
 #define TARGET(T)             dispatch_label_ ## T:
@@ -57,10 +57,17 @@ static inline u16 CONSTRUCT_U16(u8** ptr) { u16 v = **ptr; (*ptr)++; v <<= 8; v 
 #define FAST_DISPATCH()       goto short_retry
 #define SLOW_DISPATCH()       goto long_retry
 
+#define FAST_PUSH(V)               { Eco_Any_AssignAny((Eco_Any*) sp, V); sp += sizeof(Eco_Any); }
+#define FAST_POP(V)                { sp -= sizeof(Eco_Any); Eco_Any_AssignAny(V, (Eco_Any*) sp); }
+#define FAST_DROP()                { sp -= sizeof(Eco_Any); }
+#define FAST_NTH(N)                ((Eco_Any*) (sp - (N) * sizeof(Eco_Any)))
+#define FAST_DUP()                 { FAST_PUSH(FAST_NTH(1)); }
 
 void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 {
     u8*                instruction;
+    Eco_Any*           registers;
+    char*              sp;
     struct Eco_Frame*  top;
     struct Eco_Frame*  bottom;
 
@@ -69,6 +76,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
   long_retry:
     top         = Eco_Fiber_Top(fiber);
     instruction = top->instruction;
+    registers   = top->registers;
+    sp          = fiber->stack_pointer;
   short_retry:
     if (fiber->state != Eco_Fiber_State_RUNNING)
         goto end;
@@ -79,35 +88,35 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
         }
         TARGET(CONST) {
             u8 to = NEXT_U8();
-            Eco_Any_AssignAny(&top->registers[to], NEXT_CONSTANT());
+            Eco_Any_AssignAny(&registers[to], NEXT_CONSTANT());
             ULTRAFAST_DISPATCH();
         }
         TARGET(PUSHC) {
-            Eco_Fiber_Push(fiber, NEXT_CONSTANT());
+            FAST_PUSH(NEXT_CONSTANT());
             ULTRAFAST_DISPATCH();
         }
         TARGET(PUSH) {
             u8 reg = NEXT_U8();
-            Eco_Fiber_Push(fiber, &top->registers[reg]);
+            FAST_PUSH(&registers[reg]);
             ULTRAFAST_DISPATCH();
         }
         TARGET(POP) {
             u8 reg = NEXT_U8();
-            Eco_Fiber_Pop(fiber, &top->registers[reg]);
+            FAST_POP(&registers[reg]);
             ULTRAFAST_DISPATCH();
         }
         TARGET(DROP) {
-            Eco_Fiber_Drop(fiber);
+            FAST_DROP();
             ULTRAFAST_DISPATCH();
         }
         TARGET(DUP) {
-            Eco_Fiber_Dup(fiber);
+            FAST_DUP();
             ULTRAFAST_DISPATCH();
         }
         TARGET(R2R) {
             u8 to   = NEXT_U8();
             u8 from = NEXT_U8();
-            Eco_Any_AssignAny(&top->registers[to], &top->registers[from]);
+            Eco_Any_AssignAny(&registers[to], &registers[from]);
             ULTRAFAST_DISPATCH();
         }
         TARGET(R2L) {
@@ -115,7 +124,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
             u8 depth = NEXT_U8();
             u8 from  = NEXT_U8();
             bottom   = Eco_Frame_NthLexical(top, depth);
-            Eco_Any_AssignAny(&bottom->registers[to], &top->registers[from]);
+            Eco_Any_AssignAny(&bottom->registers[to], &registers[from]);
             ULTRAFAST_DISPATCH();
         }
         TARGET(L2R) {
@@ -123,13 +132,14 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
             u8 from  = NEXT_U8();
             u8 depth = NEXT_U8();
             bottom   = Eco_Frame_NthLexical(top, depth);
-            Eco_Any_AssignAny(&top->registers[to], &bottom->registers[from]);
+            Eco_Any_AssignAny(&registers[to], &bottom->registers[from]);
             ULTRAFAST_DISPATCH();
         }
         TARGET(BUILTIN) {
             u8               args = NEXT_U8();
             struct Eco_Key*  key  = (struct Eco_Key*) Eco_Any_AsPointer(NEXT_CONSTANT());   // TODO: Safety check!
             top->instruction      = instruction;
+            fiber->stack_pointer  = sp;
             Eco_Key_CallBuiltin(key, fiber, args);
             SLOW_DISPATCH();
         }
@@ -142,6 +152,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
             message.type                = Eco_Message_Type_SEND;
 
             top->instruction            = instruction;
+            fiber->stack_pointer        = sp;
 
             if (!Eco_Send(&message, Eco_Fiber_Nth(fiber, message.body.send.arg_count))) {
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
@@ -169,7 +180,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
             u8                 depth;
             struct Eco_Frame*  target;
 
-            depth = NEXT_U8();
+            depth                 = NEXT_U8();
+            fiber->stack_pointer  = sp;
 
             while (depth > 0)
             {
@@ -205,7 +217,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 
             closure    = Eco_Closure_New(top->code->code_instances[closure_id], Eco_Fiber_Top(fiber));
 
-            Eco_Any_AssignPointer(&top->registers[dest], (struct Eco_Object*) closure);
+            Eco_Any_AssignPointer(&registers[dest], (struct Eco_Object*) closure);
 
             FAST_DISPATCH();
         }

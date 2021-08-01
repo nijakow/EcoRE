@@ -24,11 +24,11 @@ class Bytecodes(enum.IntEnum):
 class CodeGenerator:
 
     def _add_u8(self, u8):
-        self._instructions.append(u8 & 0xff)
+        self._instructions.append(u8)
 
     def _add_u16(self, u16):
-        self._add_u8(u16 >> 8)
-        self._add_u8(u16)
+        self._add_u8(u16 & 0xff)
+        self._add_u8((u16 >> 8) & 0xff)
 
     def _add_constant(self, value):
         constant_id = len(self._constants)
