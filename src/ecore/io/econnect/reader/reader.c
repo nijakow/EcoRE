@@ -49,14 +49,10 @@ bool Eco_EConnect_Reader_ReadAny(struct Eco_EConnect_Reader* reader,
                                  struct Eco_EConnect_Result* result,
                                  Eco_Any* value)
 {
-    struct Eco_Object*  object;
-
     if (!Eco_EConnect_Reader_Read(reader, result)) {
         return false;
-    } else if (Eco_EConnect_Result_ExpectObject(result, &object)) {
-        Eco_Any_AssignPointer(value, object);
+    } else if (Eco_EConnect_Result_ExpectAny(result, value)) {
         return true;
-    // TODO: Integers and Floats
     } else {
         Eco_EConnect_Result_Destroy(result);
         Eco_EConnect_Result_Create_Error(result, Eco_EConnect_ErrorType_TYPE_ERROR);

@@ -18,4 +18,11 @@ y <- {
 
 y bar({}, {}, {});
 
-^ 'ecosphere.ecore.io.print'({})
+^ (
+    'ecosphere.ecore.io.print'(6),
+    'ecosphere.ecore.io.print'(7),
+    'ecosphere.ecore.io.print'(8),
+    'ecosphere.ecore.io.print'(9),
+    'ecosphere.ecore.io.print'(y),
+    'ecosphere.ecore.io.print'(self)
+  )

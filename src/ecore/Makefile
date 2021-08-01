@@ -48,6 +48,7 @@ io/econnect/reader/reader.c \
 io/econnect/reader/result.c \
 io/econnect/reader/builtins/builtins.c \
 io/econnect/reader/builtins/protocol/protocol.c \
+io/econnect/reader/builtins/objects/uint.c \
 io/econnect/reader/builtins/objects/object.c \
 io/econnect/reader/builtins/objects/object_body.c \
 io/econnect/reader/builtins/objects/key.c \

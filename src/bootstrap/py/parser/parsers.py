@@ -90,6 +90,8 @@ class SimpleExpressionParser(ExpressionParser):
             kw = self.get_tokenizer().read()
             if kw.isa(TokenType.KEY):
                 return parser.ast.ASTKey(kw.get_key())
+            elif kw.isa(TokenType.CONSTANT):
+                return parser.ast.ASTConstant(kw.get_value())
             elif kw.is_type(TokenType.LABEL):
                 proxy = parser.ast.ASTProxy()
                 self.get_label_storage().when_label_defined(kw.get_key(), lambda obj: proxy.set_value(obj))

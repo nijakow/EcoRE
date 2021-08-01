@@ -25,6 +25,12 @@ void Eco_EConnect_Result_Create_Object(struct Eco_EConnect_Result* result, struc
     Eco_Any_AssignPointer(&(result->body.any), value);
 }
 
+void Eco_EConnect_Result_Create_Integer(struct Eco_EConnect_Result* result, Eco_Integer value)
+{
+    result->type = Eco_EConnect_Result_Type_ANY;
+    Eco_Any_AssignInteger(&(result->body.any), value);
+}
+
 void Eco_EConnect_Result_Copy(struct Eco_EConnect_Result* dst, struct Eco_EConnect_Result* src)
 {
     *dst = *src;

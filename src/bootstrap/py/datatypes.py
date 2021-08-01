@@ -67,11 +67,28 @@ class CodeSlot(EcoSlot):
         self._code = code
 
 
-class EcoObject:
+class EcoBaseObject:
 
     def serialize(self, serializer):
         serializer.serialize_object(self)
-    
+
+    def __init__(self):
+        pass
+
+
+class IntegerObject(EcoBaseObject):
+
+    def do_serialize(self, serializer, id=0):
+        serializer.open_message('ecosphere.object.uint')  # TODO: Signed ints
+        serializer.write_uint(self._value)
+
+    def __init__(self, value):
+        self._value = value
+        super().__init__()
+
+
+class EcoObject(EcoBaseObject):
+
     def do_serialize(self, serializer, id=0):
         serializer.write_uint(id)
         serializer.write_uint(len(self._slots))
@@ -91,6 +108,7 @@ class EcoObject:
         return None
     
     def __init__(self):
+        super().__init__()
         self._slots = []
 
 

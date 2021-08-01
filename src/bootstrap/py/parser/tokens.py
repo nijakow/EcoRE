@@ -6,6 +6,7 @@ import datatypes
 class TokenType(enum.Enum):
     EOF        = enum.auto()
     IDENTIFIER = enum.auto()
+    CONSTANT   = enum.auto()
     KEY        = enum.auto()
     LABEL      = enum.auto()
     LPAREN     = enum.auto()
@@ -65,6 +66,16 @@ class IdentifierToken(Token):
     def __init__(self, tokenizer, name):
         super().__init__(tokenizer, TokenType.IDENTIFIER)
         self._name = name
+
+
+class ConstantToken(Token):
+
+    def get_value(self):
+        return self._value
+
+    def __init__(self, tokenizer, value):
+        super().__init__(tokenizer, TokenType.CONSTANT)
+        self._value = value
 
 
 class KeyToken(Token):
@@ -147,6 +158,12 @@ class Tokenizer:
 
         while not self.isspecial(self._s.peek()):
             c += self._s.read()
+        
+        try:
+            i = int(c)
+            return ConstantToken(self, datatypes.IntegerObject(i))
+        except:
+            pass
 
         if c == 'self': return Token(self, TokenType.SELF)
         elif c == 'with': return Token(self, TokenType.WITH)
