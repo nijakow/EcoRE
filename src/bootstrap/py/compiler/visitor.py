@@ -27,7 +27,7 @@ class ASTVisitor:
         args = elem.get_args()
         self._compiler.compile_load_self()
         for arg in args:
-            arg.visit()
+            arg.visit(self)
             self._compiler.push_that()
         self._compiler.compile_builtin(len(args), elem.get_key().get_value())
 

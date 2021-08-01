@@ -18,4 +18,4 @@ y <- {
 
 y bar({}, {}, {});
 
-^ 'traptest'()
+^ 'ecosphere.ecore.io.print'({})

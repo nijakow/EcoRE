@@ -25,6 +25,8 @@ objects/misc/key/key.c \
 objects/vm/code/code.c \
 objects/vm/code/closure.c \
 vm/builtins/builtins.c \
+vm/builtins/core/io.c \
+vm/builtins/core/math.c \
 vm/memory/memory.c \
 vm/memory/gc/gc_state.c \
 vm/memory/gc/gc.c \

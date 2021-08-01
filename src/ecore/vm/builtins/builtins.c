@@ -2,6 +2,9 @@
 
 #include "builtin.h"
 
+#include "core/io.h"
+#include "core/math.h"
+
 #include "../fiber.h"
 #include "../../objects/misc/key/key.h"
 #include "../../io/logging/log.h"
@@ -15,13 +18,6 @@ bool Eco_VM_Builtin_Trap(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_BUILTIN_TRAP);
     return false;
 }
-
-static bool Eco_VM_Builtin_Hello(struct Eco_Fiber* fiber, unsigned int args)
-{
-    Eco_Log_Info("Hello :)\n");
-    return true;
-}
-
 
 static void Eco_VM_Builtins_AddBuiltin(const char* name, Eco_Builtin builtin)
 {
@@ -41,7 +37,8 @@ void Eco_VM_Builtins_Init()
 {
     Eco_VM_Builtin_LOBBY = Eco_Object_New();
 
-    Eco_VM_Builtins_AddBuiltin("hello", Eco_VM_Builtin_Hello);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.io.print", Eco_VM_Builtin_Print);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add_integers", Eco_VM_Builtin_AddIntegers);
 }
 
 void Eco_VM_Builtins_Terminate()
