@@ -3,7 +3,6 @@ class Scope:
 
     def add_var(self, key, is_param=False):
         self._vars[key] = self._register_allocator.allocate_register()
-        self._increment_var_count()
 
     def get_var(self, key):
         if key in self._vars:
@@ -23,9 +22,6 @@ class SubScope(Scope):
     def get_lexical(self):
         return self.get_parent().get_lexical()
 
-    def _increment_var_count(self):
-        self.get_parent()._increment_var_count()
-
     def _find_var(self, key):
         return self.get_parent().get_var(key)
 
@@ -36,12 +32,6 @@ class SubScope(Scope):
 
 class BaseScope(Scope):
 
-    def _increment_var_count(self):
-        self._var_count += 1
-
-    def get_var_count(self):
-        return self._var_count
-    
     def get_lexical(self):
         return self._lexical
     
@@ -66,4 +56,3 @@ class BaseScope(Scope):
         super().__init__()
         self._register_allocator = register_allocator
         self._lexical = lexical
-        self._var_count = 0

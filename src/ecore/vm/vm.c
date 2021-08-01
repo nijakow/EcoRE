@@ -88,6 +88,7 @@ void Eco_VM_Run(struct Eco_VM* vm)
             Eco_VM_AdvanceQueue(&(vm->fiber_queues.running));
         } else if (Eco_Fiber_State_IsError(fiber->state)) {
             /* TODO: Catch error */
+            Eco_Log_Error("Got a non-TERMINATED state: %d\n", fiber->state);
             Eco_Fiber_Delete(fiber);
         } else if (fiber->state == Eco_Fiber_State_TERMINATED) {
             Eco_Fiber_Delete(fiber);

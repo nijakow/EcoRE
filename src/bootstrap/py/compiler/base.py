@@ -203,7 +203,7 @@ class Compiler:
     
     def finish(self):
         self.compile_local_return() # TODO: Only if the last instruction wasn't a return
-        return self._codegen.finish(self._root_scope.get_var_count(),
+        return self._codegen.finish(self._regalloc.get_register_count(),
                                     self._parameter_count)
     
     def gen_visitor(self):

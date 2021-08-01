@@ -11,32 +11,16 @@
 #include "../../io/logging/log.h"
 
 
-struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber*        fiber,
-                                      unsigned int             register_count)
-{
-    unsigned int       i;
-    struct Eco_Frame*  new_frame;
-
-    new_frame = Eco_Fiber_AllocFrame(fiber, register_count);
-
-    for (i = 0; i < register_count; i++) {
-        Eco_Any_AssignInteger(&(new_frame->registers[i]), 0);   /* TODO: Improve that */
-    }
-
-    return new_frame;
-}
-
-
 bool Eco_Fiber_EnterThunk(struct Eco_Fiber* fiber, Eco_Any* lobby, struct Eco_Code* code)
 {
     struct Eco_Frame*  frame;
 
-    frame              = Eco_Fiber_PushFrame(fiber, code->register_count);
+    Eco_Fiber_Push(fiber, lobby);
+
+    frame              = Eco_Fiber_AllocFrame(fiber, 1, code->register_count);
 
     frame->instruction = code->bytecodes;
     frame->code        = code;
-
-    Eco_Any_AssignAny(&frame->registers[0], lobby);
 
     return true;
 }
@@ -46,7 +30,6 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
                      struct Eco_Code*   code,
                      unsigned int       arg_count)
 {
-    int                i;
     struct Eco_Frame*  frame;
 
     if (code->arg_count != arg_count) {
@@ -54,12 +37,7 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
         return false;
     }
 
-    frame = Eco_Fiber_PushFrame(fiber, code->register_count);
-
-    for (i = code->arg_count - 1; i >= 0; i--)
-    {
-        Eco_Fiber_Pop(fiber, &frame->registers[i]);
-    }
+    frame = Eco_Fiber_AllocFrame(fiber, arg_count, code->register_count);
 
     frame->code        = code;
     frame->instruction = code->bytecodes;
@@ -81,6 +59,14 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
         goto end;
     while (true)  /* TODO: Execution limit */
     {
+            Eco_Log_Debug("Registers:    %u\n", top->register_count);
+            Eco_Log_Debug("Stack:        %p\n", &fiber->stack);
+            Eco_Log_Debug("Previous:     %p\n", top->previous);
+        for (unsigned int x = 0; x < top->register_count; x++) {
+            Eco_Log_Debug("Register %3u: %p --> %d %p\n", x, &top->registers[x], top->registers[x].type, top->registers[x].value);
+        }
+            Eco_Log_Debug("Top:          %p\n", top);
+            Eco_Log_Debug("SP:           %p\n", fiber->stack_pointer);
         bytecode = Eco_Frame_NextU8(top);
         switch (bytecode)
         {
@@ -163,13 +149,10 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
 
                 Eco_Log_Debug("-> SEND %u\n", message.body.send.arg_count);
 
-                if (Eco_Send(&message, Eco_Fiber_Nth(fiber, message.body.send.arg_count))) {
-                    top = Eco_Fiber_Top(fiber); /* TODO: Do the "slow dispatch" code */
-                } else {
+                if (!Eco_Send(&message, Eco_Fiber_Nth(fiber, message.body.send.arg_count))) {
                     Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
                     goto end;
                 }
-
                 goto long_retry;
             }
             case Eco_Bytecode_ASSIGN: {

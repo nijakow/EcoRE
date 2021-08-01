@@ -57,6 +57,9 @@ class Register(StorageLocation):
 
 class RegisterAllocator:
 
+    def get_register_count(self):
+        return self._max_register_count
+
     def allocate_register(self):
         i = 0
         while i < len(self._registers):
@@ -67,6 +70,7 @@ class RegisterAllocator:
             i = i + 1
         r = Register(self, i)
         self._registers.append(r)
+        self._max_register_count = max(self._max_register_count, len(self._registers))
         return r
 
     def allocate_temporary_register(self):
@@ -78,3 +82,4 @@ class RegisterAllocator:
     
     def __init__(self):
         self._registers = []
+        self._max_register_count = 0

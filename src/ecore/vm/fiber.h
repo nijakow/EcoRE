@@ -23,10 +23,6 @@ struct Eco_Fiber
     struct Eco_Fiber*     queue_prev;
     struct Eco_Fiber*     queue_next;
 
-    Eco_Any*              data_stack;
-    unsigned int          data_stack_alloc;
-    unsigned int          data_stack_size;
-
     struct Eco_Frame*     top;
     char*                 stack_pointer;
     char*                 stack_max;
@@ -45,49 +41,39 @@ static inline struct Eco_Frame* Eco_Fiber_Top(struct Eco_Fiber* fiber)
 
 static inline bool Eco_Fiber_HasTop(struct Eco_Fiber* fiber)
 {
-    return fiber->stack_pointer > &fiber->stack[0];
+    return Eco_Fiber_Top(fiber) != NULL;
 }
 
 static inline bool Eco_Fiber_Push(struct Eco_Fiber* fiber, Eco_Any* src)
 {
-    Eco_Any_AssignAny(&fiber->data_stack[fiber->data_stack_alloc], src);
-    fiber->data_stack_alloc++;
+    Eco_Any_AssignAny((Eco_Any*) fiber->stack_pointer, src);
+    fiber->stack_pointer += sizeof(Eco_Any);
     return true;
 }
 
 static inline bool Eco_Fiber_Pop(struct Eco_Fiber* fiber, Eco_Any* dest)
 {
-    if (fiber->data_stack_alloc > 0) {
-        fiber->data_stack_alloc--;
-        Eco_Any_AssignAny(dest, &fiber->data_stack[fiber->data_stack_alloc]);
-        return true;
-    } else {
-        return false;
-    }
+    fiber->stack_pointer -= sizeof(Eco_Any);
+    Eco_Any_AssignAny(dest, (Eco_Any*) fiber->stack_pointer);
+    return true;
 }
 
 static inline bool Eco_Fiber_Drop(struct Eco_Fiber* fiber)
 {
-    if (fiber->data_stack_alloc > 0) {
-        fiber->data_stack_alloc--;
-        return true;
-    } else {
-        return false;
-    }
+    fiber->stack_pointer -= sizeof(Eco_Any);
+    return true;
 }
 
 static inline bool Eco_Fiber_Dup(struct Eco_Fiber* fiber)
 {
-    Eco_Any  any;
-
-    return Eco_Fiber_Pop(fiber, &any)
-        && Eco_Fiber_Push(fiber, &any)
-        && Eco_Fiber_Push(fiber, &any);
+    Eco_Any_AssignAny((Eco_Any*) fiber->stack_pointer, (Eco_Any*) (fiber->stack_pointer - sizeof(Eco_Any)));
+    fiber->stack_pointer += sizeof(Eco_Any);
+    return true;
 }
 
 static inline Eco_Any* Eco_Fiber_Nth(struct Eco_Fiber* fiber, unsigned int n)
 {
-    return &fiber->data_stack[fiber->data_stack_alloc - n];
+    return (Eco_Any*) (fiber->stack_pointer - n * sizeof(Eco_Any));
 }
 
 
@@ -96,7 +82,7 @@ void Eco_Fiber_Delete(struct Eco_Fiber*);
 void Eco_Fiber_Mark(struct Eco_GC_State*, struct Eco_Fiber*);
 void Eco_Fiber_MoveToQueue(struct Eco_Fiber*, struct Eco_Fiber**);
 
-struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber*, unsigned int);
+struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber*, unsigned int, unsigned int);
 void Eco_Fiber_PopFrame(struct Eco_Fiber*);
 
 #endif

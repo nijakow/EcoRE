@@ -22,10 +22,6 @@ struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
     fiber->queue_prev       = NULL;
     fiber->queue_next       = NULL;
 
-    fiber->data_stack       = Eco_Memory_Alloc(1024 * sizeof(Eco_Any));
-    fiber->data_stack_alloc = 0;
-    fiber->data_stack_size  = 1024;
-
     fiber->top              = NULL;
     fiber->stack_pointer    = &fiber->stack[0];
     fiber->stack_max        = &fiber->stack[stack_size];
@@ -42,19 +38,12 @@ void Eco_Fiber_Delete(struct Eco_Fiber* fiber)
 
     Eco_Fiber_MoveToQueue(fiber, NULL);
 
-    Eco_Memory_Free(fiber->data_stack);
     Eco_Memory_Free(fiber);
 }
 
 void Eco_Fiber_Mark(struct Eco_GC_State* state, struct Eco_Fiber* fiber)
 {
-    unsigned int       offset;
     struct Eco_Frame*  frame;
-
-    for (offset = 0; offset < fiber->data_stack_alloc; offset++)
-    {
-        Eco_GC_State_MarkAny(state, &fiber->data_stack[offset]);
-    }
 
     frame = fiber->top;
     while (frame != NULL)
@@ -94,27 +83,42 @@ void Eco_Fiber_MoveToQueue(struct Eco_Fiber* fiber, struct Eco_Fiber** queue)
     }
 }
 
-struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber* fiber, unsigned int register_count)
+struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber* fiber, unsigned int args, unsigned int register_count)
 {
+    struct Eco_Any*    registers;
     struct Eco_Frame*  the_frame;
 
     const unsigned int frame_size = sizeof(struct Eco_Frame) + sizeof(Eco_Any) * register_count;
 
-    the_frame                 = (struct Eco_Frame*) fiber->stack_pointer;
+    if (register_count < args) {
+        // XXX: This is only a quickfix!
+        register_count = args;
+    }
+
+    registers                 = Eco_Fiber_Nth(fiber, args);
+
+    the_frame                 = (struct Eco_Frame*) (fiber->stack_pointer + (register_count - args) * sizeof(Eco_Any));
     the_frame->register_count = register_count;
     the_frame->closures       = NULL;
     the_frame->previous       = fiber->top;
+    the_frame->registers      = registers;
     fiber->top                = the_frame;
     fiber->stack_pointer      = fiber->stack_pointer + frame_size;
+
+    /*
+     * TODO, FIXME, XXX: Initialize registers to avoid making the GC go crazy!
+     */
 
     return the_frame;
 }
 
 void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
 {
+    Eco_Any*           result;
     struct Eco_Frame*  frame;
 
-    frame = Eco_Fiber_Top(fiber);
+    frame  = Eco_Fiber_Top(fiber);
+    result = Eco_Fiber_Nth(fiber, 1);
 
     while (frame->closures != NULL)
     {
@@ -124,5 +128,7 @@ void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
     }
 
     fiber->top           = frame->previous;
-    fiber->stack_pointer = (char*) frame;
+    fiber->stack_pointer = (char*) frame->registers;
+
+    Eco_Fiber_Push(fiber, result);  // Re-push the value
 }
