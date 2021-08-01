@@ -85,7 +85,7 @@ void Eco_Fiber_MoveToQueue(struct Eco_Fiber* fiber, struct Eco_Fiber** queue)
 
 struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber* fiber, unsigned int args, unsigned int register_count)
 {
-    struct Eco_Any*    registers;
+    Eco_Any*           registers;
     struct Eco_Frame*  the_frame;
 
     const unsigned int frame_size = sizeof(struct Eco_Frame) + sizeof(Eco_Any) * register_count;
