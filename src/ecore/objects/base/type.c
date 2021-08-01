@@ -166,7 +166,9 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type* self,
     struct Eco_Type*       the_copy;
     struct Eco_Type_Slot*  the_slot;
 
-    const unsigned int     slot_value_size = sizeof(Eco_Any);
+    const unsigned int     slot_value_size  = sizeof(Eco_Any);
+
+    the_slot                                = NULL;
 
     if (Eco_Type_CopyWithNewSlot(self, pos, &the_copy, &the_slot)) {
         the_copy->instance_payload_size += slot_value_size;
@@ -195,7 +197,8 @@ bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type* self,
     struct Eco_Type*       the_copy;
     struct Eco_Type_Slot*  the_slot;
 
-    const unsigned int     slot_value_size = sizeof(Eco_Any);
+    const unsigned int     slot_value_size  = sizeof(Eco_Any);
+    the_slot                                = NULL;
 
     if (Eco_Type_CopyWithNewSlot(self, pos, &the_copy, &the_slot)) {
         the_copy->instance_payload_size += slot_value_size;

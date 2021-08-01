@@ -28,15 +28,17 @@ bool Eco_EConnect_ReadFile(const char* filename, struct Eco_EConnect_Result* res
     rewind(file);
 
     buffer = Eco_Memory_Alloc(file_size * sizeof(char));
-    fread(buffer, file_size, sizeof(char), file);
+    if (fread(buffer, file_size, sizeof(char), file) != 0) {
+        Eco_EConnect_Instance_Create(&instance);
+        Eco_EConnect_Reader_Create(&reader, &instance, buffer, file_size, (void (*)(char*)) Eco_Memory_Free);
+        retval = Eco_EConnect_Reader_Read(&reader, result);
+        Eco_EConnect_Reader_Destroy(&reader);
+        Eco_EConnect_Instance_Destroy(&instance);
+    } else {
+        retval = false;
+    }
 
     fclose(file);
-
-    Eco_EConnect_Instance_Create(&instance);
-    Eco_EConnect_Reader_Create(&reader, &instance, buffer, file_size, (void (*)(char*)) Eco_Memory_Free);
-    retval = Eco_EConnect_Reader_Read(&reader, result);
-    Eco_EConnect_Reader_Destroy(&reader);
-    Eco_EConnect_Instance_Destroy(&instance);
 
     return retval;
 }
