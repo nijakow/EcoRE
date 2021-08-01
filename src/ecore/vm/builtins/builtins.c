@@ -2,6 +2,7 @@
 
 #include "builtin.h"
 
+#include "core/flow.h"
 #include "core/io.h"
 #include "core/math.h"
 
@@ -37,6 +38,7 @@ void Eco_VM_Builtins_Init()
 {
     Eco_VM_Builtin_LOBBY = Eco_Object_New();
 
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.flow.value", Eco_VM_Builtin_Value);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.io.print", Eco_VM_Builtin_Print);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add_integers", Eco_VM_Builtin_AddIntegers);
 }

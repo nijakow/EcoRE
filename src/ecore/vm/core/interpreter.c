@@ -41,15 +41,15 @@ bool Eco_Fiber_EnterThunk(struct Eco_Fiber* fiber, Eco_Any* lobby, struct Eco_Co
     return true;
 }
 
-bool Eco_Fiber_Enter(struct Eco_Fiber*    fiber,
-                     struct Eco_Frame*    lexical,
-                     struct Eco_Message*  message,
-                     struct Eco_Code*     code)
+bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
+                     struct Eco_Frame*  lexical,
+                     struct Eco_Code*   code,
+                     unsigned int       arg_count)
 {
     int                i;
     struct Eco_Frame*  frame;
 
-    if (code->arg_count != message->body.send.arg_count) {
+    if (code->arg_count != arg_count) {
         Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ARGERROR);
         return false;
     }

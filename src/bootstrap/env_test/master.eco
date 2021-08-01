@@ -19,10 +19,13 @@ y <- {
 y bar({}, {}, {});
 
 ^ (
+    | the_closure |
+    the_closure <- [ 42 ],
     'ecosphere.ecore.io.print'(6),
     'ecosphere.ecore.io.print'(7),
     'ecosphere.ecore.io.print'(8),
     'ecosphere.ecore.io.print'(9),
     'ecosphere.ecore.io.print'(y),
-    'ecosphere.ecore.io.print'(self)
+    'ecosphere.ecore.io.print'(self),
+    'ecosphere.ecore.io.print'('ecosphere.ecore.flow.value'(the_closure))
   )

@@ -53,7 +53,7 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message* message, struct Eco_Object* object
                     Eco_Fiber_Push(message->fiber, ((Eco_Any*) Eco_Object_At(object, slot->body.inlined.offset)));
                     return true;
                 case Eco_Type_Slot_Type_CODE:
-                    if (!Eco_Fiber_Enter(message->fiber, NULL, message, slot->body.code)) {
+                    if (!Eco_Fiber_Enter(message->fiber, NULL, slot->body.code, message->body.send.arg_count)) {
                         /* TODO: Error */
                         return false;
                     }

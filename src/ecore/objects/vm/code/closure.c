@@ -47,7 +47,8 @@ struct Eco_Closure* Eco_Closure_New(struct Eco_Code* code, struct Eco_Frame* lex
 
     closure->prev       = &(lexical->closures);
     closure->next       = lexical->closures;
-    closure->next->prev = &(closure->next);
+    if (closure->next != NULL)
+        closure->next->prev = &(closure->next);
     lexical->closures   = closure;
 
     return closure;
