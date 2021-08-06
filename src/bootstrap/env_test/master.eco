@@ -20,9 +20,7 @@ y bar({}, {}, {});
 
 | z |
 z <- {
-    test_varargs(x, ...) => (
-        'ecosphere.ecore.io.print'(x);
-        'ecosphere.ecore.io.print'(x);
+    test_varargs(...) => (
         'ecosphere.ecore.io.print'(...);
     ),
     test_varargs2(...) => test_varargs(...);
@@ -35,6 +33,6 @@ z <- {
 
 ^ (
     | the_closure |
-    the_closure <- [ x => z test_varargs(x, 3) ],
+    the_closure <- [ x => z test_varargs2(x) ],
     z counting_loop(the_closure, 0)
   )
