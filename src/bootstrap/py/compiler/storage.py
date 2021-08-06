@@ -52,7 +52,7 @@ class Register(StorageLocation):
     def __init__(self, allocator, r_id, depth=0):
         self._allocator = allocator
         self._id = r_id
-        self._depth = 0
+        self._depth = depth
 
 
 class RegisterAllocator:

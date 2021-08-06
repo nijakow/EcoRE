@@ -26,14 +26,15 @@ z <- {
         'ecosphere.ecore.io.print'(...);
     ),
     test_varargs2(...) => test_varargs(...);
+    counting_loop(closure, x) => (
+        'ecosphere.ecore.flow.value'(closure, x),
+        x <- 'ecosphere.ecore.math.add_integers'(x, 1),
+        'ecosphere.ecore.flow.reset'()
+    )
 },
 
 ^ (
     | the_closure |
-    the_closure <- [ x =>
-        'ecosphere.ecore.io.print'(x),
-        x <- 'ecosphere.ecore.math.add_integers'(x, 1),
-        'ecosphere.ecore.flow.reset'()
-    ],
-    'ecosphere.ecore.flow.value'(the_closure, 1)
+    the_closure <- [ x => z test_varargs(x, 3) ],
+    z counting_loop(the_closure, 0)
   )

@@ -39,6 +39,7 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
 
     frame = Eco_Fiber_AllocFrame(fiber, arg_count, code->arg_count, code->register_count);
 
+    frame->lexical     = lexical;
     frame->code        = code;
     frame->instruction = code->bytecodes;
 

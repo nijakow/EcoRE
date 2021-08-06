@@ -50,7 +50,9 @@ class BaseScope(Scope):
         if p is None:
             return None
         else:
-            self._vars[key] = p.increment_depth()
+            var = p.increment_depth()
+            self._vars[key] = var
+            return var
 
     def __init__(self, register_allocator, lexical=None):
         super().__init__()

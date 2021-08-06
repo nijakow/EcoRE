@@ -112,6 +112,9 @@ class CodeGenerator:
         self._subcodes.append(code)
     
     def finish(self, local_count, param_count, has_varargs=False):
+        print(list(self._instructions))
+        print(self._constants)
+        print()
         return datatypes.Code(local_count,
                               param_count,
                               self._constants,
