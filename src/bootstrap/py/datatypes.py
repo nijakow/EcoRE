@@ -169,6 +169,10 @@ class Code(EcoObject):
         super().do_serialize(serializer, id)
         serializer.write_uint(self._register_count)
         serializer.write_uint(self._arg_count)
+        #if self._has_varargs:
+        #    serializer.write_byte(0x01)
+        #else:
+        #    serializer.write_byte(0x00)
         serializer.write_object_sequence(self._constants)
         serializer.write_object_sequence(self._subcodes)
         serializer.write_byte_sequence(self._instructions)

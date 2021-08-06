@@ -24,6 +24,7 @@ bool Eco_EConnect_Builtin_GetCode(struct Eco_EConnect_Reader* reader,
 
     the_code->register_count      = Eco_EConnect_ParseUInt(&reader->stream);
     the_code->arg_count           = Eco_EConnect_ParseUInt(&reader->stream);
+    the_code->has_varargs         = true;
 
     the_code->constant_count      = Eco_EConnect_ParseUInt(&reader->stream);
     the_code->constants           = Eco_Memory_Alloc(the_code->constant_count * sizeof(Eco_Any));

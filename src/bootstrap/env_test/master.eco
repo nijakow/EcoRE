@@ -18,14 +18,18 @@ y <- {
 
 y bar({}, {}, {});
 
+| z |
+z <- {
+    test_varargs(x, ...) => (
+        'ecosphere.ecore.io.print'(x);
+        'ecosphere.ecore.io.print'(x);
+        'ecosphere.ecore.io.print'(...);
+    )
+},
+
 ^ (
     | the_closure |
     the_closure <- [ 42 ],
-    'ecosphere.ecore.io.print'(6),
-    'ecosphere.ecore.io.print'(7),
-    'ecosphere.ecore.io.print'(8),
-    'ecosphere.ecore.io.print'(9),
-    'ecosphere.ecore.io.print'(y),
-    'ecosphere.ecore.io.print'(self),
+    z test_varargs(1, 2, 3),
     'ecosphere.ecore.io.print'('ecosphere.ecore.flow.value'(the_closure))
   )

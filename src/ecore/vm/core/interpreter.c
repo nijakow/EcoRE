@@ -32,7 +32,7 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
 {
     struct Eco_Frame*  frame;
 
-    if (code->arg_count != arg_count) {
+    if ((arg_count < code->arg_count) || ((arg_count > code->arg_count) && !(code->has_varargs))) {
         Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ARGERROR);
         return false;
     }

@@ -13,8 +13,8 @@ struct Eco_Code
     struct Eco_Object  _;
 
     unsigned int       register_count;
-
     unsigned int       arg_count;
+    bool               has_varargs;
 
     unsigned int       bytecode_count;
     u8*                bytecodes;
