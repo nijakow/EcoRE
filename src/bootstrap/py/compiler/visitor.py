@@ -27,7 +27,6 @@ class ASTVisitor:
         args = elem.get_args()
         self._compiler._drop_passed_value()
         for arg in args:
-            print('Arg: ', arg)
             arg.visit(self)
             self._compiler.push_that()
         self._compiler.compile_builtin(len(args), elem.get_key().get_value(), has_varargs=elem.has_varargs())
