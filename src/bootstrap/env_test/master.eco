@@ -24,12 +24,17 @@ z <- {
         'ecosphere.ecore.io.print'(x);
         'ecosphere.ecore.io.print'(x);
         'ecosphere.ecore.io.print'(...);
-    )
+    ),
+    test_varargs2(...) => test_varargs(...);
 },
 
 ^ (
     | the_closure |
-    the_closure <- [ 42 ],
-    z test_varargs(1, 2, 3),
-    'ecosphere.ecore.io.print'('ecosphere.ecore.flow.value'(the_closure))
+    the_closure <- [
+        'ecosphere.ecore.io.print'(1),
+        'ecosphere.ecore.io.print'(2),
+        'ecosphere.ecore.io.print'(3),
+        'ecosphere.ecore.flow.reset'()
+    ],
+    'ecosphere.ecore.flow.value'(the_closure)
   )

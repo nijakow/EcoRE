@@ -12,6 +12,8 @@ class ExpressionParser(parser.core.SubParser):
 
     def parse_argument_list(self, terminator=TokenType.RPAREN):
         params = []
+        if self.check(terminator):
+            return params, False
         while True:
             if self.check(TokenType.ELLIPSIS):
                 self.expect(terminator)

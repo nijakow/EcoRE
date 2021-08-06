@@ -133,3 +133,13 @@ void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
 
     Eco_Fiber_Push(fiber, result);  // Re-push the returned value
 }
+
+void Eco_Fiber_ResetFrame(struct Eco_Fiber* fiber)
+{
+    struct Eco_Frame*  top;
+
+    top                  = Eco_Fiber_Top(fiber);
+
+    top->instruction     = top->code->bytecodes;
+    fiber->stack_pointer = (char*) &top->registers[top->register_count];
+}
