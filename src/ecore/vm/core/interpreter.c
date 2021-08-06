@@ -22,6 +22,8 @@ bool Eco_Fiber_EnterThunk(struct Eco_Fiber* fiber, Eco_Any* lobby, struct Eco_Co
     frame->instruction = code->bytecodes;
     frame->code        = code;
 
+    Eco_Any_AssignAny(&frame->registers[0], &frame->arguments[0]);
+
     return true;
 }
 
@@ -31,6 +33,7 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
                      unsigned int       arg_count)
 {
     struct Eco_Frame*  frame;
+    unsigned int       i;
 
     if (code->arg_count != arg_count) {
         Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ARGERROR);
@@ -41,6 +44,10 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
 
     frame->code        = code;
     frame->instruction = code->bytecodes;
+
+    for (i = 0; i < code->arg_count; i++) {
+        Eco_Any_AssignAny(&frame->registers[i], &frame->arguments[i]);
+    }
 
     return true;
 }

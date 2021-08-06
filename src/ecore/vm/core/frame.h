@@ -17,9 +17,12 @@ struct Eco_Frame
 
     struct Eco_Code*     code;
     u8*                  instruction;
+    
+    unsigned int         argument_count;
+    Eco_Any*             arguments;
 
     unsigned int         register_count;
-    Eco_Any*             registers;
+    Eco_Any              registers[];
 };
 
 

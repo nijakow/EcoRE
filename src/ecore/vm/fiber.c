@@ -83,25 +83,23 @@ void Eco_Fiber_MoveToQueue(struct Eco_Fiber* fiber, struct Eco_Fiber** queue)
     }
 }
 
-struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber* fiber, unsigned int args, unsigned int register_count)
+struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber* fiber,
+                                       unsigned int argument_count,
+                                       unsigned int register_count)
 {
-    Eco_Any*           registers;
+    Eco_Any*           arguments;
     struct Eco_Frame*  the_frame;
 
     const unsigned int frame_size = sizeof(struct Eco_Frame) + sizeof(Eco_Any) * register_count;
 
-    if (register_count < args) {
-        // XXX: This is only a quickfix!
-        register_count = args;
-    }
+    arguments                 = Eco_Fiber_Nth(fiber, argument_count);
 
-    registers                 = Eco_Fiber_Nth(fiber, args);
-
-    the_frame                 = (struct Eco_Frame*) (fiber->stack_pointer + (register_count - args) * sizeof(Eco_Any));
-    the_frame->register_count = register_count;
+    the_frame                 = (struct Eco_Frame*) fiber->stack_pointer;
     the_frame->closures       = NULL;
     the_frame->previous       = fiber->top;
-    the_frame->registers      = registers;
+    the_frame->argument_count = argument_count;
+    the_frame->arguments      = arguments;
+    the_frame->register_count = register_count;
     fiber->top                = the_frame;
     fiber->stack_pointer      = fiber->stack_pointer + frame_size;
 
@@ -128,7 +126,7 @@ void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
     }
 
     fiber->top           = frame->previous;
-    fiber->stack_pointer = (char*) frame->registers;
+    fiber->stack_pointer = (char*) frame->arguments;
 
-    Eco_Fiber_Push(fiber, result);  // Re-push the value
+    Eco_Fiber_Push(fiber, result);  // Re-push the returned value
 }
