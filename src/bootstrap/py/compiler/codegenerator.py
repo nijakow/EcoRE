@@ -15,11 +15,12 @@ class Bytecodes(enum.IntEnum):
     R2L = 0x08
     L2R = 0x09
     BUILTIN = 0x0a
-    SEND = 0x0b
-    SENDV = 0x0c
-    ASSIGN = 0x0d
-    RET = 0x0e
-    MAKE_CLOSURE = 0x0f
+    BUILTINV = 0x0b
+    SEND = 0x0c
+    SENDV = 0x0d
+    ASSIGN = 0x0e
+    RET = 0x0f
+    MAKE_CLOSURE = 0x10
 
 
 class CodeGenerator:
@@ -80,13 +81,16 @@ class CodeGenerator:
         self._add_u8(src)
         self._add_u8(depth)
 
-    def add_builtin(self, arg_count, key):
-        self._add_u8(Bytecodes.BUILTIN)
+    def add_builtin(self, arg_count, key, has_varargs=False):
+        if has_varargs:
+            self._add_u8(Bytecodes.BUILTINV)
+        else:
+            self._add_u8(Bytecodes.BUILTIN)
         self._add_u8(arg_count)
         self._add_constant(key)
 
-    def add_send(self, arg_count, key, varargs=False):
-        if varargs:
+    def add_send(self, arg_count, key, has_varargs=False):
+        if has_varargs:
             self._add_u8(Bytecodes.SENDV)
         else:
             self._add_u8(Bytecodes.SEND)

@@ -114,12 +114,16 @@ class ASTBuiltin(ASTExpression):
     def get_args(self):
         return self._args
     
+    def has_varargs(self):
+        return self._has_varargs
+    
     def visit(self, visitor):
         visitor.visit_builtin(self)
 
-    def __init__(self, key, args):
+    def __init__(self, key, args, has_varargs=False):
         self._key = key
         self._args = args
+        self._has_varargs = has_varargs
 
 class ASTSend(ASTExpression):
     
@@ -135,6 +139,9 @@ class ASTSend(ASTExpression):
     def get_args(self):
         return self._args
     
+    def has_varargs(self):
+        return self._has_varargs
+    
     def visit(self, visitor):
         visitor.visit_send(self)
 
@@ -147,11 +154,12 @@ class ASTSend(ASTExpression):
             slot = subj.lookup_slot(self.get_message())
             return slot.get_value()
     
-    def __init__(self, subj, msg, args):
+    def __init__(self, subj, msg, args, has_varargs=False):
         super().__init__()
         self._subj = subj
         self._msg = msg
         self._args = args
+        self._has_varargs = has_varargs
 
 
 class ASTVarDecl(ASTExpression):

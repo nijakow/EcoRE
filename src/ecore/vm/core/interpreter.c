@@ -126,6 +126,20 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
             Eco_Key_CallBuiltin(key, fiber, args);
             SLOW_DISPATCH();
         }
+        TARGET(BUILTINV) {
+            unsigned int  i;
+
+            for (i = 0; i < top->vararg_count; i++) {
+                FAST_PUSH(&top->varargs[i]);
+            }
+
+            u8               args = NEXT_U8() + i;
+            struct Eco_Key*  key  = (struct Eco_Key*) Eco_Any_AsPointer(NEXT_CONSTANT());   // TODO: Safety check!
+            top->instruction      = instruction;
+            fiber->stack_pointer  = sp;
+            Eco_Key_CallBuiltin(key, fiber, args);
+            SLOW_DISPATCH();
+        }
         TARGET(SEND) {
             struct Eco_Message  message;
 
@@ -151,7 +165,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
                 FAST_PUSH(&top->varargs[i]);
             }
 
-            message.body.send.arg_count = NEXT_U8() + top->vararg_count;
+            message.body.send.arg_count = NEXT_U8() + i;
             message.key                 = Eco_Any_AsPointer(NEXT_CONSTANT());
             message.fiber               = fiber;
             message.type                = Eco_Message_Type_SEND;
