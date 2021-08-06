@@ -15,10 +15,10 @@ enum Eco_Bytecode
     Eco_Bytecode_L2R,
     Eco_Bytecode_BUILTIN,
     Eco_Bytecode_SEND,
+    Eco_Bytecode_SENDV,
     Eco_Bytecode_ASSIGN,
     Eco_Bytecode_RETURN,
     Eco_Bytecode_MAKE_CLOSURE,
-    Eco_Bytecode_SENDV,
 };
 
 #endif
