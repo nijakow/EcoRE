@@ -22,6 +22,7 @@ class TokenType(enum.Enum):
     ASSIGNMENT = enum.auto()
     CARET      = enum.auto()
     BAR        = enum.auto()
+    ELLIPSIS   = enum.auto()
     SELF       = enum.auto()
     WITH       = enum.auto()
     PRIVATE    = enum.auto()
@@ -134,7 +135,14 @@ class Tokenizer:
         elif c == '{': return Token(self, TokenType.LCURLY)
         elif c == '}': return Token(self, TokenType.RCURLY)
         elif c == ':': return Token(self, TokenType.COLON)
-        elif c == '.': return Token(self, TokenType.SEPARATOR)
+        elif c == '.':
+            if self._s.peek() == '.':
+                self._s.read()
+                if self._s.read() != '.':
+                    raise Exception('Parse exception: Expected \'...\'!')
+                return Token(self, TokenType.ELLIPSIS)
+            else:
+                return Token(self, TokenType.SEPARATOR)
         elif c == ',': return Token(self, TokenType.SEPARATOR)
         elif c == ';': return Token(self, TokenType.SEPARATOR)
         elif c == '=':

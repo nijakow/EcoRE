@@ -173,10 +173,11 @@ class Code(EcoObject):
         serializer.write_object_sequence(self._subcodes)
         serializer.write_byte_sequence(self._instructions)
 
-    def __init__(self, register_count, arg_count, constants, subcodes, instructions):
+    def __init__(self, register_count, arg_count, constants, subcodes, instructions, has_varargs=False):
         super().__init__()
         self._register_count = register_count
         self._arg_count = arg_count
+        self._has_varargs = has_varargs
         self._constants = constants
         self._subcodes = subcodes
         self._instructions = instructions

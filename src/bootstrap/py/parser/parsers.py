@@ -10,6 +10,17 @@ def default_object():
 
 class ExpressionParser(parser.core.SubParser):
 
+    def parse_argument_list(self, terminator=TokenType.RPAREN):
+        params = []
+        while True:
+            if self.check(TokenType.ELLIPSIS):
+                self.expect(terminator)
+                return params, True
+            params.append(self.parse_expression())
+            if self.check(terminator):
+                return params, False
+            self.expect(TokenType.SEPARATOR)
+
     def parse_expression_list(self, terminator):
         l = []
         if not self.check(terminator):
@@ -28,12 +39,14 @@ class ExpressionParser(parser.core.SubParser):
             prev = the_ast
             the_ast = self.gen_send_parser().parse_send(the_ast, allow_followups)
             if self.check(TokenType.LPAREN):
+                args, varargs = self.parse_argument_list(TokenType.RPAREN)
                 if isinstance(the_ast, parser.ast.ASTKey):
-                    the_ast = parser.ast.ASTBuiltin(the_ast, self.parse_expression_list(TokenType.RPAREN))
+                    the_ast = parser.ast.ASTBuiltin(the_ast, args, has_varargs=varargs)
                 else:
                     the_ast = parser.ast.ASTSend(the_ast,
                                                  datatypes.Key.get('value'),
-                                                 self.parse_expression_list(TokenType.RPAREN))
+                                                 args,
+                                                 has_varargs=varargs)
             elif self.check(TokenType.ASSIGNMENT):
                 the_ast = parser.ast.ASTAssignment(the_ast,
                                                    self.parse_expression(allow_followups))
@@ -115,10 +128,18 @@ class ClosureParser(ExpressionParser):
     def parse_closure(self):
         params = []
         exprs = []
+        varargs = False
         if not self.check(TokenType.RBRACK):
             exprs.append(self.parse_expression())
             while True:
                 if self.check(TokenType.RARROW):
+                    for e in exprs:
+                        params.append(e)
+                    exprs.clear()
+                    exprs.append(self.parse_expression())
+                elif self.check(TokenType.ELLIPSIS):
+                    varargs = True
+                    self.expect(TokenType.RARROW)
                     for e in exprs:
                         params.append(e)
                     exprs.clear()
@@ -128,7 +149,7 @@ class ClosureParser(ExpressionParser):
                 else:
                     self.expect(TokenType.RBRACK)
                     break
-        return parser.ast.ASTBlock(params, exprs)
+        return parser.ast.ASTBlock(params, exprs, has_varargs=varargs)
 
     def __init__(self, parent_parser):
         super().__init__(parent_parser)
@@ -148,6 +169,7 @@ class ObjectSlotParser(ExpressionParser):
     def parse_header(self):
         key = self.expect_identifier().get_key()
         params = []
+        varargs = False
         if self.check(TokenType.COLON):
             key = key.colonize()
             params.append(self.expect_identifier().get_key())
@@ -158,13 +180,14 @@ class ObjectSlotParser(ExpressionParser):
                 params.append(self.expect_identifier().get_key())
                 t = self.get_tokenizer().read()
         elif self.check(TokenType.LPAREN):
-            for p in self.parse_expression_list(TokenType.RPAREN):
+            exprs, varargs = self.parse_argument_list(TokenType.RPAREN)
+            for p in exprs:
                 params.append(p)
-        return key, params
+        return key, params, varargs
 
     def parse_slot(self):
         self._parse_flags()
-        self._key, self._params = self.parse_header()
+        self._key, self._params, self._has_varargs = self.parse_header()
         if self.check(TokenType.RARROW):
             self._flag_method = True
             self._body = self.parse_expression()
@@ -175,7 +198,7 @@ class ObjectSlotParser(ExpressionParser):
     def _finish(self):
         if self._flag_method:
             assert not self._flag_inherited
-            code = self._body.compile_as_code(self._params)
+            code = self._body.compile_as_code(self._params, has_varargs=self._has_varargs)
             self._object.add_slot(datatypes.CodeSlot(self._key,
                                                      code,
                                                      is_private=self._flag_private))
@@ -191,6 +214,7 @@ class ObjectSlotParser(ExpressionParser):
         self._object = the_object
         self._key = None
         self._params = []
+        self._has_varargs = False
         self._body = default_object()
         self._flag_inherited = False
         self._flag_private = False
@@ -223,7 +247,8 @@ class SendParser(ExpressionParser):
         self._params.append(self.parse_expression(allow_followups))
     
     def _parse_paren_arglist(self):
-        for arg in self.parse_expression_list(TokenType.RPAREN):
+        args, self._has_varargs = self.parse_argument_list(TokenType.RPAREN)
+        for arg in args:
             self._params.append(arg)
     
     def _parse_multi(self, key):
@@ -257,13 +282,14 @@ class SendParser(ExpressionParser):
                         return the_ast
                     else:
                         key = self._parse_multi(key.colonize())
-            return parser.ast.ASTSend(the_ast, key, self._params)
+            return parser.ast.ASTSend(the_ast, key, self._params, has_varargs=self._has_varargs)
         else:
             return the_ast
     
     def __init__(self, parent_parser):
         super().__init__(parent_parser)
         self._params = []
+        self._has_varargs = False
 
 
 class EcoParser(parser.core.Parser):

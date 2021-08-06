@@ -10,10 +10,12 @@ class ASTExpression(AST):
     def is_self(self):
         return False
     
-    def compile_as_code(self, params=[]):
+    def compile_as_code(self, params=[], has_varargs=False):
         piler = compiler.base.Compiler()
         for p in params:
             piler.add_parameter(p)
+        if has_varargs:
+            piler.enable_varargs()
         visitor = piler.gen_visitor()
         self.visit(visitor)
         return piler.finish()
@@ -213,6 +215,9 @@ class ASTBlock(ASTValue):
 
     def get_parameters(self):
         return self._params
+    
+    def has_varargs(self):
+        return self._has_varargs
 
     def get_body(self):
         return self._body
@@ -220,7 +225,8 @@ class ASTBlock(ASTValue):
     def visit(self, visitor):
         visitor.visit_block(self)
 
-    def __init__(self, params, instructions):
+    def __init__(self, params, instructions, has_varargs=False):
         super().__init__()
         self._body = ASTCompound(instructions)
         self._params = params
+        self._has_varargs = has_varargs

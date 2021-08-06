@@ -107,12 +107,13 @@ class CodeGenerator:
         self._add_u8(len(self._subcodes))
         self._subcodes.append(code)
     
-    def finish(self, local_count, param_count):
+    def finish(self, local_count, param_count, has_varargs=False):
         return datatypes.Code(local_count,
                               param_count,
                               self._constants,
                               self._subcodes,
-                              self._instructions)
+                              self._instructions,
+                              has_varargs=has_varargs)
     
     def __init__(self):
         self._instructions = bytearray()

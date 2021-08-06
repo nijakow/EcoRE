@@ -74,6 +74,8 @@ class ASTVisitor:
         subcompiler = self._compiler.gen_subcompiler()
         for p in elem.get_parameters():
             subcompiler.add_parameter(p)
+        if elem.has_varargs():
+            subcompiler.enable_varargs()
         visitor = subcompiler.gen_visitor()
         elem.get_body().visit(visitor)
         self._compiler.compile_make_closure(subcompiler.finish())

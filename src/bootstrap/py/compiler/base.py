@@ -201,10 +201,14 @@ class Compiler:
     def add_var(self, varname):
         self._root_scope.add_var(varname)
     
+    def enable_varargs(self):
+        self._has_varargs = True
+    
     def finish(self):
         self.compile_local_return() # TODO: Only if the last instruction wasn't a return
         return self._codegen.finish(self._regalloc.get_register_count(),
-                                    self._parameter_count)
+                                    self._parameter_count,
+                                    has_varargs=self._has_varargs)
     
     def gen_visitor(self):
         return compiler.visitor.ASTVisitor(self)
@@ -220,3 +224,4 @@ class Compiler:
         self._root_scope = compiler.scope.BaseScope(self._regalloc, lexical=lexical_parent_scope)
         self._current_scope = self._root_scope
         self._parameter_count = 1  # The SELF
+        self._has_varargs = False
