@@ -85,10 +85,12 @@ void Eco_Fiber_MoveToQueue(struct Eco_Fiber* fiber, struct Eco_Fiber** queue)
 
 struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber* fiber,
                                        unsigned int argument_count,
+                                       unsigned int fixed_argument_count,
                                        unsigned int register_count)
 {
     Eco_Any*           arguments;
     struct Eco_Frame*  the_frame;
+    unsigned int       i;
 
     const unsigned int frame_size = sizeof(struct Eco_Frame) + sizeof(Eco_Any) * register_count;
 
@@ -97,15 +99,16 @@ struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber* fiber,
     the_frame                 = (struct Eco_Frame*) fiber->stack_pointer;
     the_frame->closures       = NULL;
     the_frame->previous       = fiber->top;
-    the_frame->argument_count = argument_count;
+    the_frame->vararg_count   = argument_count - fixed_argument_count;   // TODO: Check underflows!
+    the_frame->varargs        = &arguments[fixed_argument_count];
     the_frame->arguments      = arguments;
     the_frame->register_count = register_count;
     fiber->top                = the_frame;
     fiber->stack_pointer      = fiber->stack_pointer + frame_size;
 
-    /*
-     * TODO, FIXME, XXX: Initialize registers to avoid making the GC go crazy!
-     */
+    for (i = 0; i < fixed_argument_count; i++) {
+        Eco_Any_AssignAny(&the_frame->registers[i], &arguments[i]);
+    }
 
     return the_frame;
 }

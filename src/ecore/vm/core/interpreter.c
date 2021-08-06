@@ -17,12 +17,10 @@ bool Eco_Fiber_EnterThunk(struct Eco_Fiber* fiber, Eco_Any* lobby, struct Eco_Co
 
     Eco_Fiber_Push(fiber, lobby);
 
-    frame              = Eco_Fiber_AllocFrame(fiber, 1, code->register_count);
+    frame              = Eco_Fiber_AllocFrame(fiber, 1, code->arg_count, code->register_count);
 
     frame->instruction = code->bytecodes;
     frame->code        = code;
-
-    Eco_Any_AssignAny(&frame->registers[0], &frame->arguments[0]);
 
     return true;
 }
@@ -33,21 +31,16 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
                      unsigned int       arg_count)
 {
     struct Eco_Frame*  frame;
-    unsigned int       i;
 
     if (code->arg_count != arg_count) {
         Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ARGERROR);
         return false;
     }
 
-    frame = Eco_Fiber_AllocFrame(fiber, arg_count, code->register_count);
+    frame = Eco_Fiber_AllocFrame(fiber, arg_count, code->arg_count, code->register_count);
 
     frame->code        = code;
     frame->instruction = code->bytecodes;
-
-    for (i = 0; i < code->arg_count; i++) {
-        Eco_Any_AssignAny(&frame->registers[i], &frame->arguments[i]);
-    }
 
     return true;
 }
@@ -137,6 +130,28 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
             struct Eco_Message  message;
 
             message.body.send.arg_count = NEXT_U8();
+            message.key                 = Eco_Any_AsPointer(NEXT_CONSTANT());
+            message.fiber               = fiber;
+            message.type                = Eco_Message_Type_SEND;
+
+            top->instruction            = instruction;
+            fiber->stack_pointer        = sp;
+
+            if (!Eco_Send(&message, Eco_Fiber_Nth(fiber, message.body.send.arg_count))) {
+                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
+                goto end;
+            }
+            SLOW_DISPATCH();
+        }
+        TARGET(SENDV) {
+            unsigned int        i;
+            struct Eco_Message  message;
+
+            for (i = 0; i < top->vararg_count; i++) {
+                FAST_PUSH(&top->varargs[i]);
+            }
+
+            message.body.send.arg_count = NEXT_U8() + top->vararg_count;
             message.key                 = Eco_Any_AsPointer(NEXT_CONSTANT());
             message.fiber               = fiber;
             message.type                = Eco_Message_Type_SEND;

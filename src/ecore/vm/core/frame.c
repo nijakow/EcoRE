@@ -11,10 +11,6 @@ void Eco_Frame_Mark(struct Eco_GC_State* state, struct Eco_Frame* frame)
 
     Eco_GC_State_MarkObject(state, (struct Eco_Object*) frame->code);
 
-    for (i = 0; i < frame->argument_count; i++) {
-        Eco_GC_State_MarkAny(state, &(frame->arguments[i]));
-    }
-    
     for (i = 0; i < frame->code->register_count; i++) {
         Eco_GC_State_MarkAny(state, &(frame->registers[i]));
     }

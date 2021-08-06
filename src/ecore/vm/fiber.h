@@ -82,7 +82,7 @@ void Eco_Fiber_Delete(struct Eco_Fiber*);
 void Eco_Fiber_Mark(struct Eco_GC_State*, struct Eco_Fiber*);
 void Eco_Fiber_MoveToQueue(struct Eco_Fiber*, struct Eco_Fiber**);
 
-struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber*, unsigned int, unsigned int);
+struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber*, unsigned int, unsigned int, unsigned int);
 void Eco_Fiber_PopFrame(struct Eco_Fiber*);
 
 #endif
