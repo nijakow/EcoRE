@@ -19,11 +19,8 @@ struct Eco_Frame
     u8*                  instruction;
     
     unsigned int         vararg_count;
-    Eco_Any*             arguments;
     Eco_Any*             varargs;
-
-    unsigned int         register_count;
-    Eco_Any              registers[];
+    Eco_Any*             registers;
 };
 
 
