@@ -5,6 +5,7 @@
 #include "core/flow.h"
 #include "core/io.h"
 #include "core/math.h"
+#include "core/slots.h"
 
 #include "../fiber.h"
 #include "../../objects/misc/key/key.h"
@@ -42,6 +43,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.flow.reset", Eco_VM_Builtin_Reset);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.io.print", Eco_VM_Builtin_Print);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add_integers", Eco_VM_Builtin_AddIntegers);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.slots.add_value_slot", Eco_VM_Builtin_AddValueSlot);
 }
 
 void Eco_VM_Builtins_Terminate()
