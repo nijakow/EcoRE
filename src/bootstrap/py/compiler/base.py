@@ -103,10 +103,8 @@ class Compiler:
                 return loc
         self._set_passed_value_callback(drop_compiler)
     
-    def compile_var_declaration(self, expr):
-        name = expr.get_message()  # Assuming it's a SEND expression, TODO: Assignments
+    def compile_var_declaration(self, name):
         self.add_var(name)
-        self.compile_load_self()
         self.send_that_to_var(name)
     
     def compile_builtin(self, args, key, has_varargs=False):

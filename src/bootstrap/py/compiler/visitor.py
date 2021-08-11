@@ -14,14 +14,16 @@ class ASTVisitor:
         self._compiler.compile_load_self()
 
     def visit_nil(self, elem):
-        self._compiler.compile_load_nil()
+        self._compiler.compile_load_self()  # TODO
 
     def visit_constant(self, elem):
         self._compiler.compile_load_constant(elem.get_value())
     
-    def visit_var_decl(self, decl):
-        self._compiler.compile_var_declaration(decl.get_declaration())
-        decl.get_next_expression().visit(self)
+    def visit_var_decl(self, elem):
+        for decl in elem.get_declarations():
+            decl[1].visit(self)
+            self._compiler.compile_var_declaration(decl[0])
+        elem.get_next_expression().visit(self)
 
     def visit_builtin(self, elem):
         args = elem.get_args()

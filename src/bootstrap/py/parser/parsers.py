@@ -83,10 +83,18 @@ class SimpleExpressionParser(ExpressionParser):
         return parser.ast.ASTReturn(self.parse_expression(allow_followups))
     
     def parse_var_decl(self, allow_followups=True):
-        decl = self.parse_expression()
-        # TODO: Parse multiple vars
-        self.expect(TokenType.BAR)
-        return parser.ast.ASTVarDecl(decl, self.parse_expression(allow_followups))
+        decls = []
+        while True:
+            name = self.expect_identifier().get_key()
+            if self.check(TokenType.ASSIGNMENT):
+                value = self.parse_expression()
+            else:
+                value = parser.ast.ASTNil()
+            decls.append((name, value))
+            if self.check(TokenType.BAR):
+                break
+            self.expect(TokenType.SEPARATOR)
+        return parser.ast.ASTVarDecl(decls, self.parse_expression(allow_followups))
 
     def parse_simple_expression(self, allow_followups=True):
         if self.check(TokenType.SELF):

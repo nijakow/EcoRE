@@ -164,8 +164,8 @@ class ASTSend(ASTExpression):
 
 class ASTVarDecl(ASTExpression):
 
-    def get_declaration(self):
-        return self._decl
+    def get_declarations(self):
+        return self._decls
     
     def get_next_expression(self):
         return self._next
@@ -173,8 +173,8 @@ class ASTVarDecl(ASTExpression):
     def visit(self, visitor):
         visitor.visit_var_decl(self)
 
-    def __init__(self, decl, next_expr):
-        self._decl = decl
+    def __init__(self, decls, next_expr):
+        self._decls = decls
         self._next = next_expr
 
 class ASTAssignment(ASTExpression):
