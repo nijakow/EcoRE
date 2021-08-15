@@ -122,6 +122,20 @@ class PlainObject(EcoObject):
         super().__init__()
 
 
+class Group(EcoObject):
+
+    def do_serialize(self, serializer, id=0):
+        serializer.open_message('ecosphere.object.group')
+        serializer.write_uint(id)
+        serializer.write_object_sequence(self._objects)
+    
+    def add_object(self, object):
+        self._objects.append(object)
+
+    def __init__(self):
+        super().__init__()
+        self._objects = []
+
 class Key(EcoObject):
     KEYS = dict()
 
