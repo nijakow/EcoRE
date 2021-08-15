@@ -81,3 +81,17 @@
           (t (make-token :tokenizer tokenizer
                          :type :identifier
                          :meta tok)))))))
+
+(defun token-fail (token)
+  (push token (tokenizer-pushbacks (token-tokenizer token))))
+
+(defun tokenizer-check (tokenizer type)
+  (let ((token (tokenizer-read tokenizer)))
+    (cond ((eq (token-type token) type) token)
+          (t (token-fail token) nil))))
+
+(defun tokenizer-expect (tokenizer type)
+  (let ((token (tokenizer-check tokenizer type)))
+    (unless token
+      (error "Parse error: Expected different token!"))
+    token))
