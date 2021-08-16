@@ -79,6 +79,9 @@ class SimpleExpressionParser(ExpressionParser):
     def parse_object(self):
         return self.gen_object_parser().parse_object()
     
+    def parse_group(self):
+        return self.gen_group_parser().parse_group()
+    
     def parse_return(self, allow_followups=True):
         return parser.ast.ASTReturn(self.parse_expression(allow_followups))
     
@@ -104,7 +107,10 @@ class SimpleExpressionParser(ExpressionParser):
         elif self.check(TokenType.LBRACK):
             return self.parse_closure()
         elif self.check(TokenType.LCURLY):
-            return self.parse_object()
+            if self.check(TokenType.RARROW):
+                return self.parse_group()
+            else:
+                return self.parse_object()
         elif self.check(TokenType.CARET):
             return self.parse_return(allow_followups)
         elif self.check(TokenType.BAR):
@@ -128,6 +134,9 @@ class SimpleExpressionParser(ExpressionParser):
     
     def gen_object_parser(self):
         return ObjectParser(self)
+    
+    def gen_group_parser(self):
+        return GroupParser(self)
 
     def __init__(self, parent_parser):
         super().__init__(parent_parser)
@@ -249,6 +258,19 @@ class ObjectParser(ExpressionParser):
         super().__init__(parent_parser)
         self._object = datatypes.PlainObject()
         self._ast = parser.ast.ASTConstant(self._object)
+
+
+class GroupParser(ExpressionParser):
+
+    def parse_group(self):
+        objects = self.parse_expression_list(TokenType.RCURLY)
+        group = datatypes.Group()
+        for obj in objects:
+            group.add_object(obj.evaluate(group))
+        return group
+
+    def __init__(self, parent_parser):
+        super().__init__(parent_parser)
 
 
 class SendParser(ExpressionParser):
