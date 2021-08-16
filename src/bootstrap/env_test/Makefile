@@ -1,5 +1,5 @@
 
-BOOTSTRAPPER = ../py/bootstrapper.py
+BOOTSTRAPPER = ../py/ecosphere/bootstrap.sh
 
 NAME = master.ebf
 

@@ -1,5 +1,5 @@
-from datatypes import PlainObject
-import compiler.base
+from ecosphere.datatypes import PlainObject
+import ecosphere.compiler.base
 
 
 class AST:
@@ -11,7 +11,7 @@ class ASTExpression(AST):
         return False
     
     def compile_as_code(self, params=[], has_varargs=False):
-        piler = compiler.base.Compiler()
+        piler = ecosphere.compiler.base.Compiler()
         for p in params:
             piler.add_parameter(p)
         if has_varargs:

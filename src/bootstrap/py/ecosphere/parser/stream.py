@@ -1,5 +1,5 @@
-import parser.tokens
-import parser.parsers
+import ecosphere.parser.tokens
+import ecosphere.parser.parsers
 
 
 class TextStream:
@@ -17,7 +17,7 @@ class TextStream:
         return c
     
     def get_parser(self):
-        return parser.parsers.EcoParser(parser.tokens.Tokenizer(self))
+        return ecosphere.parser.parsers.EcoParser(ecosphere.parser.tokens.Tokenizer(self))
 
     def __init__(self, string):
         self._string = string

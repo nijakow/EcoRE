@@ -1,4 +1,4 @@
-import datatypes
+import ecosphere.datatypes
 
 
 class Serializer:
@@ -36,7 +36,7 @@ class Serializer:
             e.serialize(self)
 
     def open_message(self, name):
-        k = datatypes.Key.get(name)
+        k = ecosphere.datatypes.Key.get(name)
         id = self.get_id(k)
         if id:
             self.write_uint(id)

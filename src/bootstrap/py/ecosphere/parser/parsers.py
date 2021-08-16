@@ -1,14 +1,14 @@
-import parser.core
-import parser.ast
-import datatypes
-from parser.tokens import TokenType
+import ecosphere.parser.core
+import ecosphere.parser.ast
+import ecosphere.datatypes
+from ecosphere.parser.tokens import TokenType
 
 
 def default_object():
-    return parser.ast.ASTNil()
+    return ecosphere.parser.ast.ASTNil()
 
 
-class ExpressionParser(parser.core.SubParser):
+class ExpressionParser(ecosphere.parser.core.SubParser):
 
     def parse_argument_list(self, terminator=TokenType.RPAREN):
         params = []
@@ -42,15 +42,15 @@ class ExpressionParser(parser.core.SubParser):
             the_ast = self.gen_send_parser().parse_send(the_ast, allow_followups)
             if self.check(TokenType.LPAREN):
                 args, varargs = self.parse_argument_list(TokenType.RPAREN)
-                if isinstance(the_ast, parser.ast.ASTKey):
-                    the_ast = parser.ast.ASTBuiltin(the_ast, args, has_varargs=varargs)
+                if isinstance(the_ast, ecosphere.parser.ast.ASTKey):
+                    the_ast = ecosphere.parser.ast.ASTBuiltin(the_ast, args, has_varargs=varargs)
                 else:
-                    the_ast = parser.ast.ASTSend(the_ast,
-                                                 datatypes.Key.get('value'),
+                    the_ast = ecosphere.parser.ast.ASTSend(the_ast,
+                                                 ecosphere.datatypes.Key.get('value'),
                                                  args,
                                                  has_varargs=varargs)
             elif self.check(TokenType.ASSIGNMENT):
-                the_ast = parser.ast.ASTAssignment(the_ast,
+                the_ast = ecosphere.parser.ast.ASTAssignment(the_ast,
                                                    self.parse_expression(allow_followups))
         return the_ast
 
@@ -71,7 +71,7 @@ class SimpleExpressionParser(ExpressionParser):
         if len(exprs) == 1:
             return exprs[0]
         else:
-            return parser.ast.ASTCompound(exprs)
+            return ecosphere.parser.ast.ASTCompound(exprs)
     
     def parse_closure(self):
         return self.gen_closure_parser().parse_closure()
@@ -83,7 +83,7 @@ class SimpleExpressionParser(ExpressionParser):
         return self.gen_group_parser().parse_group()
     
     def parse_return(self, allow_followups=True):
-        return parser.ast.ASTReturn(self.parse_expression(allow_followups))
+        return ecosphere.parser.ast.ASTReturn(self.parse_expression(allow_followups))
     
     def parse_var_decl(self, allow_followups=True):
         decls = []
@@ -92,16 +92,16 @@ class SimpleExpressionParser(ExpressionParser):
             if self.check(TokenType.ASSIGNMENT):
                 value = self.parse_expression()
             else:
-                value = parser.ast.ASTNil()
+                value = ecosphere.parser.ast.ASTNil()
             decls.append((name, value))
             if self.check(TokenType.BAR):
                 break
             self.expect(TokenType.SEPARATOR)
-        return parser.ast.ASTVarDecl(decls, self.parse_expression(allow_followups))
+        return ecosphere.parser.ast.ASTVarDecl(decls, self.parse_expression(allow_followups))
 
     def parse_simple_expression(self, allow_followups=True):
         if self.check(TokenType.SELF):
-            return parser.ast.ASTSelf()
+            return ecosphere.parser.ast.ASTSelf()
         elif self.check(TokenType.LPAREN):
             return self.parse_compound()
         elif self.check(TokenType.LBRACK):
@@ -118,16 +118,16 @@ class SimpleExpressionParser(ExpressionParser):
         else:
             kw = self.get_tokenizer().read()
             if kw.isa(TokenType.KEY):
-                return parser.ast.ASTKey(kw.get_key())
+                return ecosphere.parser.ast.ASTKey(kw.get_key())
             elif kw.isa(TokenType.CONSTANT):
-                return parser.ast.ASTConstant(kw.get_value())
+                return ecosphere.parser.ast.ASTConstant(kw.get_value())
             elif kw.is_type(TokenType.LABEL):
-                proxy = parser.ast.ASTProxy()
+                proxy = ecosphere.parser.ast.ASTProxy()
                 self.get_label_storage().when_label_defined(kw.get_key(), lambda obj: proxy.set_value(obj))
                 return proxy
             else:
                 kw.fail()
-                return parser.ast.ASTSelf()
+                return ecosphere.parser.ast.ASTSelf()
 
     def gen_closure_parser(self):
         return ClosureParser(self)
@@ -168,7 +168,7 @@ class ClosureParser(ExpressionParser):
                 else:
                     self.expect(TokenType.RBRACK)
                     break
-        return parser.ast.ASTBlock(params, exprs, has_varargs=varargs)
+        return ecosphere.parser.ast.ASTBlock(params, exprs, has_varargs=varargs)
 
     def __init__(self, parent_parser):
         super().__init__(parent_parser)
@@ -218,12 +218,12 @@ class ObjectSlotParser(ExpressionParser):
         if self._flag_method:
             assert not self._flag_inherited
             code = self._body.compile_as_code(self._params, has_varargs=self._has_varargs)
-            self._object.add_slot(datatypes.CodeSlot(self._key,
+            self._object.add_slot(ecosphere.datatypes.CodeSlot(self._key,
                                                      code,
                                                      is_private=self._flag_private))
         else:
             assert len(self._params) == 0
-            self._object.add_slot(datatypes.ValueSlot(self._key,
+            self._object.add_slot(ecosphere.datatypes.ValueSlot(self._key,
                                                       self._body.evaluate(self._object),
                                                       is_inherited=self._flag_inherited,
                                                       is_private=self._flag_private))
@@ -256,15 +256,15 @@ class ObjectParser(ExpressionParser):
 
     def __init__(self, parent_parser):
         super().__init__(parent_parser)
-        self._object = datatypes.PlainObject()
-        self._ast = parser.ast.ASTConstant(self._object)
+        self._object = ecosphere.datatypes.PlainObject()
+        self._ast = ecosphere.parser.ast.ASTConstant(self._object)
 
 
 class GroupParser(ExpressionParser):
 
     def parse_group(self):
         objects = self.parse_expression_list(TokenType.RCURLY)
-        group = datatypes.Group()
+        group = ecosphere.datatypes.Group()
         for obj in objects:
             group.add_object(obj.evaluate(group))
         return group
@@ -314,7 +314,7 @@ class SendParser(ExpressionParser):
                         return the_ast
                     else:
                         key = self._parse_multi(key.colonize())
-            return parser.ast.ASTSend(the_ast, key, self._params, has_varargs=self._has_varargs)
+            return ecosphere.parser.ast.ASTSend(the_ast, key, self._params, has_varargs=self._has_varargs)
         else:
             return the_ast
     
@@ -324,7 +324,7 @@ class SendParser(ExpressionParser):
         self._has_varargs = False
 
 
-class EcoParser(parser.core.Parser):
+class EcoParser(ecosphere.parser.core.Parser):
 
     def parse(self):
         return SimpleExpressionParser(self).parse_compound(end=TokenType.EOF)

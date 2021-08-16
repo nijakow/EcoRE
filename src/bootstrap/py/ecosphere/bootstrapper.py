@@ -2,14 +2,14 @@
 
 import sys
 
-import parser.stream
-import econnect
+import ecosphere.parser.stream
+import ecosphere.econnect
 
 
 class Bootstrapper:
 
     def construct_from_string(self, string):
-        text_stream = parser.stream.TextStream(string)
+        text_stream = ecosphere.parser.stream.TextStream(string)
         the_parser = text_stream.get_parser()
         self._lobby = the_parser.parse()
 
@@ -21,7 +21,7 @@ class Bootstrapper:
             self.construct_from_stream(f)
 
     def serialize(self):
-        serializer = econnect.Serializer()
+        serializer = ecosphere.econnect.Serializer()
         self._lobby.compile_as_code().serialize(serializer)
         return serializer.finish()
 

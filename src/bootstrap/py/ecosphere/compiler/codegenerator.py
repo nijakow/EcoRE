@@ -1,6 +1,6 @@
 import enum
 
-import datatypes
+import ecosphere.datatypes
 
 
 class Bytecodes(enum.IntEnum):
@@ -112,7 +112,7 @@ class CodeGenerator:
         self._subcodes.append(code)
     
     def finish(self, local_count, param_count, has_varargs=False):
-        return datatypes.Code(local_count,
+        return ecosphere.datatypes.Code(local_count,
                               param_count,
                               self._constants,
                               self._subcodes,

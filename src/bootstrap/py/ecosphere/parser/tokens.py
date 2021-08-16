@@ -1,6 +1,6 @@
 import enum
 
-import datatypes
+import ecosphere.datatypes
 
 
 class TokenType(enum.Enum):
@@ -62,7 +62,7 @@ class IdentifierToken(Token):
         return self._name
     
     def get_key(self):
-        return datatypes.Key.get(self.get_name())
+        return ecosphere.datatypes.Key.get(self.get_name())
 
     def __init__(self, tokenizer, name):
         super().__init__(tokenizer, TokenType.IDENTIFIER)
@@ -86,7 +86,7 @@ class KeyToken(Token):
 
     def __init__(self, tokenizer, key_name):
         super().__init__(tokenizer, TokenType.KEY)
-        self._key = datatypes.Key.get(key_name)
+        self._key = ecosphere.datatypes.Key.get(key_name)
 
 
 class LabelToken(Token):
@@ -96,7 +96,7 @@ class LabelToken(Token):
 
     def __init__(self, tokenizer, key_name):
         super().__init__(tokenizer, TokenType.LABEL)
-        self._key = datatypes.Key.get(key_name)
+        self._key = ecosphere.datatypes.Key.get(key_name)
 
 
 class Tokenizer:
@@ -169,7 +169,7 @@ class Tokenizer:
         
         try:
             i = int(c)
-            return ConstantToken(self, datatypes.IntegerObject(i))
+            return ConstantToken(self, ecosphere.datatypes.IntegerObject(i))
         except:
             pass
 

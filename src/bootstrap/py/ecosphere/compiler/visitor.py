@@ -1,5 +1,5 @@
-import compiler.base
-import parser.ast
+import ecosphere.compiler.base
+import ecosphere.parser.ast
 
 
 class ASTVisitor:
@@ -50,7 +50,7 @@ class ASTVisitor:
     def visit_assignment(self, elem):
         lhand = elem.get_lhs()
         rhand = elem.get_rhs()
-        assert isinstance(lhand, parser.ast.ASTSend) and len(lhand.get_args()) == 0
+        assert isinstance(lhand, ecosphere.parser.ast.ASTSend) and len(lhand.get_args()) == 0
         if lhand.get_subj().is_self():
             rhand.visit(self)
             self._compiler.send_that_to_var(lhand.get_message())

@@ -1,4 +1,4 @@
-from parser.tokens import TokenType as TokenType
+from ecosphere.parser.tokens import TokenType as TokenType
 
 
 class ParseException(Exception):

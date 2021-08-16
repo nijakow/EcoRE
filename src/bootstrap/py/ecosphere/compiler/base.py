@@ -1,7 +1,7 @@
-import compiler.storage
-import compiler.scope
-import compiler.codegenerator
-import compiler.visitor
+import ecosphere.compiler.storage
+import ecosphere.compiler.scope
+import ecosphere.compiler.codegenerator
+import ecosphere.compiler.visitor
 
 
 class Compiler:
@@ -110,21 +110,21 @@ class Compiler:
     def compile_builtin(self, args, key, has_varargs=False):
         self._codegen.add_builtin(args, key, has_varargs=has_varargs)
         def builtin_compiler(loc):
-            self._compile_transfer(loc, compiler.storage.STACK)
+            self._compile_transfer(loc, ecosphere.compiler.storage.STACK)
             return loc
         self._set_passed_value_callback(builtin_compiler)
 
     def compile_send(self, args, key, has_varargs=False):
         self._codegen.add_send(args, key, has_varargs=has_varargs)
         def send_compiler(loc):
-            self._compile_transfer(loc, compiler.storage.STACK)
+            self._compile_transfer(loc, ecosphere.compiler.storage.STACK)
             return loc
         self._set_passed_value_callback(send_compiler)
 
     def compile_slot_assignment(self, key):
         self._codegen.add_assign(key)
         def assign_compiler(loc):
-            self._compile_transfer(loc, compiler.storage.STACK)
+            self._compile_transfer(loc, ecosphere.compiler.storage.STACK)
             return loc
         self._set_passed_value_callback(assign_compiler)
 
@@ -132,7 +132,7 @@ class Compiler:
         self.push_that()
         def assign_compiler(loc):
             self._codegen.add_assign(key)
-            self._compile_transfer(loc, compiler.storage.STACK)
+            self._compile_transfer(loc, ecosphere.compiler.storage.STACK)
             return loc
         self._set_passed_value_callback(assign_compiler)
 
@@ -161,7 +161,7 @@ class Compiler:
         self._set_passed_value_callback(closure_compiler)
     
     def push_that(self):
-        self._pull_passed_value(compiler.storage.STACK)
+        self._pull_passed_value(ecosphere.compiler.storage.STACK)
 
     def grab_var_contents(self, varname):
         reg = self._current_scope.get_var(varname)
@@ -187,7 +187,7 @@ class Compiler:
             return False
 
     def push_scope(self):
-        self._current_scope = compiler.scope.SubScope(self._current_scope)
+        self._current_scope = ecosphere.compiler.scope.SubScope(self._current_scope)
 
     def pop_scope(self):
         self._current_scope = self._current_scope.get_parent()
@@ -209,17 +209,17 @@ class Compiler:
                                     has_varargs=self._has_varargs)
     
     def gen_visitor(self):
-        return compiler.visitor.ASTVisitor(self)
+        return ecosphere.compiler.visitor.ASTVisitor(self)
 
     def gen_subcompiler(self):
         return Compiler(lexical_parent_scope=self._current_scope)
     
     def __init__(self, lexical_parent_scope=None):
         self._passed_value_callback = None
-        self._codegen = compiler.codegenerator.CodeGenerator()
-        self._regalloc = compiler.storage.RegisterAllocator()
+        self._codegen = ecosphere.compiler.codegenerator.CodeGenerator()
+        self._regalloc = ecosphere.compiler.storage.RegisterAllocator()
         self._self_register = self._regalloc.allocate_register()
-        self._root_scope = compiler.scope.BaseScope(self._regalloc, lexical=lexical_parent_scope)
+        self._root_scope = ecosphere.compiler.scope.BaseScope(self._regalloc, lexical=lexical_parent_scope)
         self._current_scope = self._root_scope
         self._parameter_count = 1  # The SELF
         self._has_varargs = False
