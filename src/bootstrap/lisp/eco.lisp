@@ -1,1 +1,0 @@
-(load "parser/master.lisp")
