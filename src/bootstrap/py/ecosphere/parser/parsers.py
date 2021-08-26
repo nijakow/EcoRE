@@ -329,5 +329,5 @@ class EcoParser(ecosphere.parser.core.Parser):
     def parse(self):
         return SimpleExpressionParser(self).parse_compound(end=TokenType.EOF)
 
-    def __init__(self, tokenizer):
-        super().__init__(tokenizer)
+    def __init__(self, tokenizer, parse_manager):
+        super().__init__(tokenizer, parse_manager)

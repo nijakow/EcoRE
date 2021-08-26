@@ -1,3 +1,4 @@
+import ecosphere.parser.stream
 from ecosphere.parser.tokens import TokenType as TokenType
 
 
@@ -39,9 +40,19 @@ class ParseManager:
     
     def define_label(self, key, value):
         self._label_storage.define_label(key, value)
+    
+    def parse_file(self, path):
+        if path not in self._files:
+            # TODO: Insert sentinel value to avoid endless recursions
+            with open(path, 'r') as f:
+                text_stream = ecosphere.parser.stream.TextStream(f.read())
+                the_parser = text_stream.get_parser(self)
+                self._files[path] = the_parser.parse()
+        return self._files[path]
 
     def __init__(self):
         self._label_storage = LabelStorage()
+        self._files = dict()
 
 
 class Parser:

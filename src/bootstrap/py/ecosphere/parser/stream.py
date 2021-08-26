@@ -16,8 +16,8 @@ class TextStream:
             self._index += 1
         return c
     
-    def get_parser(self):
-        return ecosphere.parser.parsers.EcoParser(ecosphere.parser.tokens.Tokenizer(self))
+    def get_parser(self, parse_manager=None):
+        return ecosphere.parser.parsers.EcoParser(ecosphere.parser.tokens.Tokenizer(self), parse_manager)
 
     def __init__(self, string):
         self._string = string
