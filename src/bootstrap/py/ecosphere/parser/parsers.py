@@ -123,7 +123,7 @@ class SimpleExpressionParser(ExpressionParser):
                 return ecosphere.parser.ast.ASTConstant(kw.get_value())
             elif kw.is_type(TokenType.LABEL):
                 proxy = ecosphere.parser.ast.ASTProxy()
-                self.get_label_storage().when_label_defined(kw.get_key(), lambda obj: proxy.set_value(obj))
+                self.get_pm().when_label_defined(kw.get_key(), lambda obj: proxy.set_value(obj))
                 return proxy
             else:
                 kw.fail()
@@ -245,7 +245,7 @@ class ObjectParser(ExpressionParser):
     def parse_object(self):
         kw = self.check_key()
         if kw:
-            self.get_label_storage().define_label(kw.get_key(), self._ast)
+            self.get_pm().define_label(kw.get_key(), self._ast)
         while not self.check(TokenType.RCURLY):
             self.gen_object_slot_parser().parse_slot()
             self.check(TokenType.SEPARATOR)

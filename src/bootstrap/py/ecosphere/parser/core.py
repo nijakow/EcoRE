@@ -32,6 +32,18 @@ class LabelStorage:
         self._label_callbacks = dict()
 
 
+class ParseManager:
+
+    def when_label_defined(self, label, callback):
+        self._label_storage.when_label_defined(label, callback)
+    
+    def define_label(self, key, value):
+        self._label_storage.define_label(key, value)
+
+    def __init__(self):
+        self._label_storage = LabelStorage()
+
+
 class Parser:
 
     def check(self, token_type):
@@ -62,12 +74,12 @@ class Parser:
     def get_tokenizer(self):
         return self._t
     
-    def get_label_storage(self):
-        return self._label_storage
+    def get_pm(self):
+        return self._pm
 
-    def __init__(self, tokenizer, label_storage=None):
+    def __init__(self, tokenizer, parse_manager=None):
         self._t = tokenizer
-        self._label_storage = label_storage or LabelStorage()
+        self._pm = parse_manager or ParseManager()
 
 
 class SubParser(Parser):
@@ -76,5 +88,5 @@ class SubParser(Parser):
         return self._parent
 
     def __init__(self, parent):
-        super().__init__(parent.get_tokenizer(), parent.get_label_storage())
+        super().__init__(parent.get_tokenizer(), parent.get_pm())
         self._parent = parent
