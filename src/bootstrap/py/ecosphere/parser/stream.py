@@ -1,6 +1,3 @@
-import ecosphere.parser.tokens
-import ecosphere.parser.parsers
-
 
 class TextStream:
 
@@ -15,9 +12,6 @@ class TextStream:
         if c:
             self._index += 1
         return c
-    
-    def get_parser(self, parse_manager=None):
-        return ecosphere.parser.parsers.EcoParser(ecosphere.parser.tokens.Tokenizer(self), parse_manager)
 
     def __init__(self, string):
         self._string = string
