@@ -13,7 +13,7 @@ class Bootstrapper:
 
     def serialize(self):
         serializer = ecosphere.econnect.Serializer()
-        self._lobby.compile_as_code().serialize(serializer)
+        self._lobby.compile_as_code(self._parse_manager).serialize(serializer)
         return serializer.finish()
 
     def write_to_stream(self, stream):

@@ -209,12 +209,13 @@ class Compiler:
                                     has_varargs=self._has_varargs)
     
     def gen_visitor(self):
-        return ecosphere.compiler.visitor.ASTVisitor(self)
+        return ecosphere.compiler.visitor.ASTVisitor(self, self._meta)
 
     def gen_subcompiler(self):
         return Compiler(lexical_parent_scope=self._current_scope)
     
-    def __init__(self, lexical_parent_scope=None):
+    def __init__(self, meta, lexical_parent_scope=None):
+        self._meta = meta
         self._passed_value_callback = None
         self._codegen = ecosphere.compiler.codegenerator.CodeGenerator()
         self._regalloc = ecosphere.compiler.storage.RegisterAllocator()

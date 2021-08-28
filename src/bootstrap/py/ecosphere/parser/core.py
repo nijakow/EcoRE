@@ -221,9 +221,12 @@ class SimpleExpressionParser(ExpressionParser):
             elif kw.isa(TokenType.CONSTANT):
                 return ecosphere.parser.ast.ASTConstant(kw.get_value())
             elif kw.is_type(TokenType.LABEL):
-                proxy = ecosphere.parser.ast.ASTProxy()
-                self.get_pm().when_label_defined(kw.get_key(), lambda obj: proxy.set_value(obj))
-                return proxy
+                if kw.is_definition():
+                    expr = self.parse_simple_expression()
+                    self.get_pm().define_label(kw.get_key(), expr)
+                    return expr
+                else:
+                    return ecosphere.parser.ast.ASTProxy(kw.get_key())
             else:
                 kw.fail()
                 return ecosphere.parser.ast.ASTSelf()
@@ -316,16 +319,11 @@ class ObjectSlotParser(ExpressionParser):
     def _finish(self):
         if self._flag_method:
             assert not self._flag_inherited
-            code = self._body.compile_as_code(self._params, has_varargs=self._has_varargs)
-            self._object.add_slot(ecosphere.datatypes.CodeSlot(self._key,
-                                                     code,
-                                                     is_private=self._flag_private))
+            # code = self._body.compile_as_code(self._params, has_varargs=self._has_varargs)
+            self._object.add_slot(ecosphere.parser.ast.ASTCodeSlot(self._flag_private, self._key, self._params, self._has_varargs, self._body))
         else:
             assert len(self._params) == 0
-            self._object.add_slot(ecosphere.datatypes.ValueSlot(self._key,
-                                                      self._body.evaluate(self._object),
-                                                      is_inherited=self._flag_inherited,
-                                                      is_private=self._flag_private))
+            self._object.add_slot(ecosphere.parser.ast.ASTValueSlot(self._flag_private, self._flag_inherited, self._key, self._body))
 
     def __init__(self, parent_parser, the_object):
         super().__init__(parent_parser)
@@ -348,25 +346,20 @@ class ObjectParser(ExpressionParser):
         while not self.check(TokenType.RCURLY):
             self.gen_object_slot_parser().parse_slot()
             self.check(TokenType.SEPARATOR)
-        return self._ast
+        return self._object
 
     def gen_object_slot_parser(self):
         return ObjectSlotParser(self, self._object)
 
     def __init__(self, parent_parser):
         super().__init__(parent_parser)
-        self._object = ecosphere.datatypes.PlainObject()
-        self._ast = ecosphere.parser.ast.ASTConstant(self._object)
+        self._object = ecosphere.parser.ast.ASTPlainObject()
 
 
 class GroupParser(ExpressionParser):
 
     def parse_group(self):
-        objects = self.parse_expression_list(TokenType.RCURLY)
-        group = ecosphere.datatypes.Group()
-        for obj in objects:
-            group.add_object(obj.evaluate(group))
-        return group
+        ecosphere.parser.ast.ASTGroupObject(self.parse_expression_list(TokenType.RCURLY))
 
     def __init__(self, parent_parser):
         super().__init__(parent_parser)

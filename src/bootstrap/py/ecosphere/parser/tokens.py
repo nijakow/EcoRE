@@ -93,10 +93,14 @@ class LabelToken(Token):
 
     def get_key(self):
         return self._key
+    
+    def is_definition(self):
+        return self._is_definition
 
-    def __init__(self, tokenizer, key_name):
+    def __init__(self, tokenizer, key_name, is_definition):
         super().__init__(tokenizer, TokenType.LABEL)
         self._key = ecosphere.datatypes.Key.get(key_name)
+        self._is_definition = is_definition
 
 
 class Tokenizer:
@@ -160,7 +164,9 @@ class Tokenizer:
         elif c == '#':
             c = self._s.read()
             if c == '<':
-                return LabelToken(self, self.parse_quoted_str('>'))
+                return LabelToken(self, self.parse_quoted_str('>'), False)
+            elif c == '=':
+                return LabelToken(self, self.parse_quoted_str(':'), True)
             else:
                 raise Exception('Unknown macro char!')
 

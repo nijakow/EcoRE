@@ -81,6 +81,10 @@ class ASTVisitor:
         visitor = subcompiler.gen_visitor()
         elem.get_body().visit(visitor)
         self._compiler.compile_make_closure(subcompiler.finish())
-    
-    def __init__(self, compiler):
+
+    def visit_object(self, elem):
+        self._compiler.compile_load_constant(elem.evaluate(elem, self._meta))
+
+    def __init__(self, compiler, meta):
         self._compiler = compiler
+        self._meta = meta

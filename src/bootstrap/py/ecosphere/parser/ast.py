@@ -1,6 +1,5 @@
-from ecosphere.datatypes import PlainObject
+import ecosphere.datatypes
 import ecosphere.compiler.base
-
 
 class AST:
     pass
@@ -10,8 +9,8 @@ class ASTExpression(AST):
     def is_self(self):
         return False
     
-    def compile_as_code(self, params=[], has_varargs=False):
-        piler = ecosphere.compiler.base.Compiler()
+    def compile_as_code(self, meta, params=[], has_varargs=False):
+        piler = ecosphere.compiler.base.Compiler(meta)
         for p in params:
             piler.add_parameter(p)
         if has_varargs:
@@ -23,7 +22,7 @@ class ASTExpression(AST):
     def visit(self, visitor):
         visitor.visit_invalid(self)
 
-    def evaluate(self, subj):
+    def evaluate(self, subj, meta):
         raise Exception('Can\'t evaluate this AST!')
     
     def __init__(self):
@@ -40,8 +39,9 @@ class ASTProxy(ASTExpression):
     def visit(self, visitor):
         self._value.visit(visitor)
     
-    def evaluate(self, subj):
-        return self._value.evaluate(subj)
+    def evaluate(self, subj, meta):
+        # TODO: Lookup value
+        return self._value.evaluate(subj, meta)
     
     def __init__(self):
         super().__init__()
@@ -63,7 +63,7 @@ class ASTSelf(ASTValue):
     def visit(self, visitor):
         visitor.visit_self(self)
 
-    def evaluate(self, subj):
+    def evaluate(self, subj, meta):
         return subj
         
     def __init__(self):
@@ -77,8 +77,8 @@ class ASTNil(ASTValue):
     def visit(self, visitor):
         visitor.visit_nil(self)
     
-    def evaluate(self, subj):
-        return PlainObject()  # TODO: Use a reference to NIL
+    def evaluate(self, subj, meta):
+        return ecosphere.datatypes.PlainObject()  # TODO: Use a reference to NIL, maybe ask Meta for a specific label?
 
     def __init__(self):
         super().__init__()
@@ -94,7 +94,7 @@ class ASTConstant(ASTValue):
     def visit(self, visitor):
         visitor.visit_constant(self)
 
-    def evaluate(self, subj):
+    def evaluate(self, subj, meta):
         return self.get_value()
         
     def __init__(self, value):
@@ -145,9 +145,9 @@ class ASTSend(ASTExpression):
     def visit(self, visitor):
         visitor.visit_send(self)
 
-    def evaluate(self, subj):
+    def evaluate(self, subj, meta):
         assert len(self.get_args()) == 0
-        subj = self.get_subj().evaluate(subj)
+        subj = self.get_subj().evaluate(subj, meta)
         if subj is None:
             return None
         else:
@@ -238,3 +238,68 @@ class ASTBlock(ASTValue):
         self._body = ASTCompound(instructions)
         self._params = params
         self._has_varargs = has_varargs
+
+
+class ASTObject(ASTValue):
+
+    def visit(self, visitor):
+        visitor.visit_object(self)
+
+    def __init__(self):
+        pass
+
+class ASTGroupObject(ASTObject):
+
+    def evaluate(self, subj, meta):
+        group = ecosphere.datatypes.Group()
+        for elem in self._elements:
+            group.add_object(elem.evaluate(subj, meta))
+        return group
+
+    def __init__(self, elements):
+        self._elements = elements
+
+class ASTSlot:
+
+    def evaluate(self, obj, subj, meta):
+        raise Exception('Error while evaluating an ASTSlot: No evaluation method was implemented!')
+
+    def __init__(self, is_private, name):
+        self._is_private = is_private
+        self._name = name
+
+class ASTCodeSlot(ASTSlot):
+
+    def evaluate(self, obj, subj, meta):
+        code = self._body.compile_as_code(meta, self._params, self._has_varargs)
+        obj.add_slot(ecosphere.datatypes.CodeSlot(self._name, code, self._is_private))
+
+    def __init__(self, is_private, name, params, has_varargs, body):
+        super().__init__(is_private, name)
+        self._params = params
+        self._has_varargs = has_varargs
+        self._body = body
+
+class ASTValueSlot(ASTSlot):
+
+    def evaluate(self, obj, subj, meta):
+        obj.add_slot(ecosphere.datatypes.ValueSlot(self._name, self._value.evaluate(subj, meta), self._is_inherited, self._is_private))
+
+    def __init__(self, is_private, is_inherited, name, value):
+        super().__init__(is_private, name)
+        self._is_inherited = is_inherited
+        self._value = value
+
+class ASTPlainObject(ASTObject):
+
+    def add_slot(self, slot):
+        self._slots.append(slot)
+    
+    def evaluate(self, subj, meta):
+        obj = ecosphere.datatypes.PlainObject()
+        for slot in self._slots:
+            slot.evaluate(obj, subj, meta)
+        return obj
+
+    def __init__(self):
+        self._slots = list()
