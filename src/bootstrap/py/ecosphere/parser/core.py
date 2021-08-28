@@ -133,7 +133,7 @@ class ExpressionParser(SubParser):
                 l.append(self.parse_expression())
         return l
 
-    def parse_expression_callback(self, cb, allow_followups=True):
+    def parse_expression(self, allow_followups=True):
         the_ast = self.gen_simple_expression_parser().parse_simple_expression(allow_followups)
         prev = None
         while the_ast != prev:
@@ -151,14 +151,7 @@ class ExpressionParser(SubParser):
             elif self.check(TokenType.ASSIGNMENT):
                 the_ast = ecosphere.parser.ast.ASTAssignment(the_ast,
                                                    self.parse_expression(allow_followups))
-        cb(the_ast)
-    
-    def parse_expression(self, allow_followups=True):
-        value = [None]  # Small workaround to allow for modifyable closed variables
-        def callback(new_value):
-            value[0] = new_value
-        self.parse_expression_callback(callback, allow_followups)
-        return value[0]
+        return the_ast
 
     def gen_simple_expression_parser(self):
         return SimpleExpressionParser(self)
