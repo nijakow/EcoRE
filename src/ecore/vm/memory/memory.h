@@ -1,7 +1,7 @@
 #ifndef ECO_VM_MEMORY_MEMORY_H
 #define ECO_VM_MEMORY_MEMORY_H
 
-#include <malloc.h>
+#include <stdlib.h>
 
 struct Eco_Type;
 
