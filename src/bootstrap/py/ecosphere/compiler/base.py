@@ -212,7 +212,7 @@ class Compiler:
         return ecosphere.compiler.visitor.ASTVisitor(self, self._meta)
 
     def gen_subcompiler(self):
-        return Compiler(lexical_parent_scope=self._current_scope)
+        return Compiler(self._meta, lexical_parent_scope=self._current_scope)
     
     def __init__(self, meta, lexical_parent_scope=None):
         self._meta = meta
