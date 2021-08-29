@@ -16,14 +16,6 @@ class ParseException(Exception):
 
 class LabelStorage:
 
-    def when_label_defined(self, label, callback):
-        if label in self._labels:
-            callback(self._labels[label])
-        elif label in self._label_callbacks:
-            self._label_callbacks[label] = callback
-        else:
-            self._label_callbacks[label] = [callback]
-    
     def define_label(self, key, value):
         self._labels[key] = value
         if key in self._label_callbacks:
@@ -31,6 +23,9 @@ class LabelStorage:
             del self._label_callbacks[key]
             for cb in callbacks:
                 cb(value)
+    
+    def get_label_value(self, key):
+        return self._labels[key]
 
     def __init__(self):
         self._labels = dict()
@@ -38,12 +33,12 @@ class LabelStorage:
 
 
 class ParseManager:
-
-    def when_label_defined(self, label, callback):
-        self._label_storage.when_label_defined(label, callback)
     
     def define_label(self, key, value):
         self._label_storage.define_label(key, value)
+    
+    def get_label_value(self, key):
+        return self._label_storage.get_label_value(key)
     
     def parse_file(self, path):
         if path not in self._files:

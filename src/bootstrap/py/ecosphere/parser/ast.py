@@ -28,25 +28,6 @@ class ASTExpression(AST):
     def __init__(self):
         super().__init__()
 
-class ASTProxy(ASTExpression):
-
-    def get_value(self):
-        return self._value
-    
-    def set_value(self, val):
-        self._value = val
-
-    def visit(self, visitor):
-        self._value.visit(visitor)
-    
-    def evaluate(self, subj, meta):
-        # TODO: Lookup value
-        return self._value.evaluate(subj, meta)
-    
-    def __init__(self):
-        super().__init__()
-        self._value = None
-
 class ASTValue(ASTExpression):
 
     def __init__(self):
@@ -244,19 +225,26 @@ class ASTObject(ASTValue):
 
     def visit(self, visitor):
         visitor.visit_object(self)
+    
+    def evaluate(self, subj, meta):
+        if self._value is None:
+            self._value = self.do_evaluate(subj, meta)
+        return self._value
 
     def __init__(self):
-        pass
+        super().__init__()
+        self._value = None
 
 class ASTGroupObject(ASTObject):
 
-    def evaluate(self, subj, meta):
+    def do_evaluate(self, subj, meta):
         group = ecosphere.datatypes.Group()
         for elem in self._elements:
             group.add_object(elem.evaluate(subj, meta))
         return group
 
     def __init__(self, elements):
+        super().__init__()
         self._elements = elements
 
 class ASTSlot:
@@ -295,11 +283,22 @@ class ASTPlainObject(ASTObject):
     def add_slot(self, slot):
         self._slots.append(slot)
     
-    def evaluate(self, subj, meta):
+    def do_evaluate(self, subj, meta):
         obj = ecosphere.datatypes.PlainObject()
         for slot in self._slots:
             slot.evaluate(obj, subj, meta)
         return obj
 
     def __init__(self):
+        super().__init__()
         self._slots = list()
+
+class ASTProxy(ASTObject):
+    
+    def do_evaluate(self, subj, meta):
+        value = meta.get_label_value(self._label)
+        return value.evaluate(subj, meta)
+    
+    def __init__(self, label):
+        super().__init__()
+        self._label = label
