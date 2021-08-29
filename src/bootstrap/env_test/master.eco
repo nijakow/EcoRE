@@ -36,7 +36,7 @@ z <- {
     the_closure <- [ x => z test_varargs2(x) ],
     z counting_loop(the_closure, 0)"
 
-    | obj <- {} |
+    | the_object <- #=alabel: {}, obj <- #~alabel~ |
     'ecosphere.ecore.slots.add_value_slot'(obj, 0, 'hello', 42),
     'ecosphere.ecore.io.print'(obj hello)
   )

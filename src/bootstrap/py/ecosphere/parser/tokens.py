@@ -163,8 +163,8 @@ class Tokenizer:
             return self.read()
         elif c == '#':
             c = self._s.read()
-            if c == '<':
-                return LabelToken(self, self.parse_quoted_str('>'), False)
+            if c == '~':
+                return LabelToken(self, self.parse_quoted_str('~'), False)
             elif c == '=':
                 return LabelToken(self, self.parse_quoted_str(':'), True)
             else:
