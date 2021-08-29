@@ -1,0 +1,37 @@
+"
+    types.eco - An experiment concerning types
+
+    (c) 2021  nijakow
+"
+
+{
+    meta = {
+        name = 'Eco Type Experiment',
+        author = 'nijakow',
+        version = {
+            major = 0,
+            minor = 0,
+            micro = 1
+        }
+    };
+
+    int = "some type info for integers will be inserted here";
+
+    Math = {
+
+        [int] square: [int] x => (
+            return x * x
+        );
+
+        square: x => (
+            #"
+                @author: nijakow
+                @name 'square:'
+                @param [int] x: The value to square
+                @returns [int]: x squared
+             "
+        );
+    };
+
+    init: x => (Math square: 5);
+}
