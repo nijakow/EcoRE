@@ -21,13 +21,13 @@ y bar({}, {}, {});
 | z |
 z <- {
     test_varargs(...) => (
-        'ecosphere.ecore.io.print'(...);
+        #'ecosphere.ecore.io.print'(...);
     ),
     test_varargs2(...) => test_varargs(...);
     counting_loop(closure, x) => (
-        'ecosphere.ecore.flow.value'(closure, x),
-        x <- 'ecosphere.ecore.math.add_integers'(x, 1),
-        'ecosphere.ecore.flow.reset'()
+        #'ecosphere.ecore.flow.value'(closure, x),
+        x <- #'ecosphere.ecore.math.add_integers'(x, 1),
+        #'ecosphere.ecore.flow.reset'()
     )
 },
 
@@ -37,6 +37,6 @@ z <- {
     z counting_loop(the_closure, 0)"
 
     | the_object <- #=alabel: {}, obj <- #~alabel~ |
-    'ecosphere.ecore.slots.add_value_slot'(obj, 0, 'hello', 42),
-    'ecosphere.ecore.io.print'(obj hello)
+    #'ecosphere.ecore.slots.add_value_slot'(obj, 0, #'hello', 42),
+    #'ecosphere.ecore.io.print'(obj hello)
   )

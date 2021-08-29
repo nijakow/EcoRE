@@ -157,13 +157,15 @@ class Tokenizer:
                 return Token(self, TokenType.EQUALS)
         elif c == '^': return Token(self, TokenType.CARET)
         elif c == '|': return Token(self, TokenType.BAR)
-        elif c == '\'': return KeyToken(self, self.parse_quoted_str('\''))
+        # elif c == '\'': return KeyToken(self, self.parse_quoted_str('\''))    # TODO: Uninterned KeyToken (i.e. Strings)
         elif c == '\"':
             self.parse_quoted_str('\"')
             return self.read()
         elif c == '#':
             c = self._s.read()
-            if c == '~':
+            if c == '\'':
+                return KeyToken(self, self.parse_quoted_str('\''))
+            elif c == '~':
                 return LabelToken(self, self.parse_quoted_str('~'), False)
             elif c == '=':
                 return LabelToken(self, self.parse_quoted_str(':'), True)
