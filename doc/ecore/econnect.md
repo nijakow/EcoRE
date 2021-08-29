@@ -6,6 +6,24 @@ The EConnect protocol the binary file format responsible for storing and transmi
 
 The default file extension for EConnect binary files is `.ebf`. In its current iteration the EConnect protocol has no magic number or similar mechanisms to provide a way of determining the version of EConnect that's being used. All metadata is optional.
 
+## The Binding Table
+
+The EConnect protocol is centered around the _Binding Table_, a mapping from unsigned integers to objects. When serializing an object to the EConnect format there is an option to insert it into the Binding Table, giving it a unique ID until the binding is dissolved or overwritten by another object. It is possible to refer to already bound objects from within the file. This is especially important for [Messages](#messages).
+
+Example:
+
+| ID      | Value                                    |
+|---------|------------------------------------------|
+| 0       | _always reserved_                        |
+| 1       | _uninitialized_                          |
+| 2       | `<key:'ecosphere.econnect.id'>`          |
+| 3       | `<object:...>`                           |
+| 4       | _uninitialized_                          |
+| 5       | `<object:nil>`                           |
+| 6       | _uninitialized_                          |
+| ...     | ...                                      |
+
+
 ## Atomic Types and Encodings
 
 The EConnect protocol supports these basic encodings:
@@ -39,7 +57,7 @@ Example:
 
 ### Messages
 
-Messages are a mechanism to represent more complex data structures. They start with an unsigned integer denoting a _binding_ to a key, followed by more fields based on the data type defined by the referenced key.
+Messages are a mechanism to represent more complex data structures. They start with an unsigned integer denoting a [binding](#the-binding-table) to a key, followed by more fields based on the data type defined by the referenced key.
 
 Example:
 
