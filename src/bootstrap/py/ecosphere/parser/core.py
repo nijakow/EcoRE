@@ -354,7 +354,7 @@ class ObjectParser(ExpressionParser):
 class GroupParser(ExpressionParser):
 
     def parse_group(self):
-        ecosphere.parser.ast.ASTGroupObject(self.parse_expression_list(TokenType.RCURLY))
+        return ecosphere.parser.ast.ASTGroupObject(self.parse_expression_list(TokenType.RCURLY))
 
     def __init__(self, parent_parser):
         super().__init__(parent_parser)
