@@ -31,7 +31,7 @@ Example:
 
 ### Byte sequences
 
-Byte sequences are preceeded by an unsigned integer denoting their count. There is no limitation to their length. Null bytes (`'\0'`) may be used inside of byte sequences.
+Byte sequences are preceeded by an unsigned integer denoting their length. There is no limitation to their length. Null bytes (`'\0'`) may be used inside of byte sequences.
 
 Example:
 
