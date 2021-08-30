@@ -37,14 +37,14 @@ void Eco_Group_Terminate()
  *    B a s i c s
  */
 
-struct Eco_Group* Eco_Group_New(struct Eco_Object* core)
+struct Eco_Group* Eco_Group_New()
 {
     struct Eco_Group* group;
 
     group = Eco_Object_New_Derived(Eco_Group_TYPE, sizeof(struct Eco_Group), 0);
 
     group->object_alloc    = 0;
-    group->body.single[0]  = core;
+    group->body.single[0]  = NULL;
     group->body.single[1]  = NULL;
 
     return group;
@@ -82,4 +82,10 @@ void Eco_Group_Del(struct Eco_Group* group)
         Eco_Memory_Free(group->body.multi.objects);
     }
     Eco_Object_Del(&(group->_));
+}
+
+
+void Eco_Group_AddObject(struct Eco_Group* group, struct Eco_Object* object)
+{
+    // TODO, FIXME, XXX: Stub
 }

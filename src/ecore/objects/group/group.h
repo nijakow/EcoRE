@@ -42,10 +42,12 @@ static inline void Eco_Group_GetMembers(struct Eco_Group*     group,
 }
 
 
-struct Eco_Group* Eco_Group_New(struct Eco_Object*);
+struct Eco_Group* Eco_Group_New();
 bool Eco_Group_Send(struct Eco_Message*, struct Eco_Group*);
 void Eco_Group_Mark(struct Eco_GC_State*, struct Eco_Group*);
 void Eco_Group_Del(struct Eco_Group*);
+
+void Eco_Group_AddObject(struct Eco_Group*, struct Eco_Object*);
 
 void Eco_Group_Init();
 void Eco_Group_Terminate();
