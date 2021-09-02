@@ -43,6 +43,7 @@ class ParseManager:
     def parse_file(self, path):
         if path not in self._files:
             # TODO: Insert sentinel value to avoid endless recursions
+            print('Loading file', path, '...')
             with open(path, 'r') as f:
                 text_stream = ecosphere.parser.stream.TextStream(f.read())
                 the_parser = EcoParser(ecosphere.parser.tokens.Tokenizer(text_stream), self)
@@ -222,6 +223,9 @@ class SimpleExpressionParser(ExpressionParser):
                     return expr
                 else:
                     return ecosphere.parser.ast.ASTProxy(kw.get_key())
+            elif kw.is_type(TokenType.FILE):
+                path = kw.get_filename()
+                return self._pm.parse_file(path)
             else:
                 kw.fail()
                 return ecosphere.parser.ast.ASTSelf()

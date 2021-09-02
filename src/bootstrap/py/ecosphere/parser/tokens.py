@@ -9,6 +9,7 @@ class TokenType(enum.Enum):
     CONSTANT   = enum.auto()
     KEY        = enum.auto()
     LABEL      = enum.auto()
+    FILE       = enum.auto()
     LPAREN     = enum.auto()
     RPAREN     = enum.auto()
     LBRACK     = enum.auto()
@@ -87,6 +88,16 @@ class KeyToken(Token):
     def __init__(self, tokenizer, key_name):
         super().__init__(tokenizer, TokenType.KEY)
         self._key = ecosphere.datatypes.Key.get(key_name)
+
+
+class FileToken(Token):
+
+    def get_filename(self):
+        return self._filename
+
+    def __init__(self, tokenizer, filename):
+        super().__init__(tokenizer, TokenType.FILE)
+        self._filename = filename
 
 
 class LabelToken(Token):
@@ -169,6 +180,8 @@ class Tokenizer:
                 return LabelToken(self, self.parse_quoted_str('~'), False)
             elif c == '=':
                 return LabelToken(self, self.parse_quoted_str(':'), True)
+            elif c == '<':
+                return FileToken(self, self.parse_quoted_str('>'))
             else:
                 raise Exception('Unknown macro char!')
 

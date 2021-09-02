@@ -9,12 +9,7 @@ x <- {
 
 | y |
 
-y <- {
-    a, b, c,
-    foo => bar;
-    bar(x, y, z) => baz(x, y, self);
-    baz(x, y, z) => x;
-},
+y <- #<sub.eco>,
 
 y bar({}, {}, {});
 
