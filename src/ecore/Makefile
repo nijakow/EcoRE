@@ -80,7 +80,8 @@ all: $(EXECUTABLE)
 
 .phony: run
 run: $(EXECUTABLE)
-	$(EXECUTABLE)
+	$(MAKE) -C ../lib
+	$(EXECUTABLE) ../lib/master.ebf
 
 .phony: debug
 debug: $(EXECUTABLE)

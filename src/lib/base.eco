@@ -1,0 +1,21 @@
+"
+    base.eco - The Base Library
+"
+
+{
+    Object = {
+
+    },
+
+    true = {
+
+    },
+
+    false = {
+
+    },
+
+    nil = {
+        
+    }
+}

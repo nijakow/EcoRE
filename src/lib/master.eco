@@ -1,0 +1,11 @@
+"
+    master.eco - The Master Object
+"
+
+{
+    with Packages = {
+        with Base = #<base.eco>;
+    };
+
+    Init => ;
+}
