@@ -9,7 +9,8 @@ class ASTExpression(AST):
     def is_self(self):
         return False
     
-    def compile_as_code(self, meta, params=[], has_varargs=False):
+    def compile_as_code(self, params=[], has_varargs=False):
+        meta = self._meta
         piler = ecosphere.compiler.base.Compiler(meta)
         for p in params:
             piler.add_parameter(p)
@@ -25,13 +26,14 @@ class ASTExpression(AST):
     def evaluate(self, subj, meta):
         raise Exception('Can\'t evaluate this AST!')
     
-    def __init__(self):
+    def __init__(self, meta):
         super().__init__()
+        self._meta = meta
 
 class ASTValue(ASTExpression):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, meta):
+        super().__init__(meta)
 
 class ASTSelf(ASTValue):
     
@@ -47,8 +49,8 @@ class ASTSelf(ASTValue):
     def evaluate(self, subj, meta):
         return subj
         
-    def __init__(self):
-        super().__init__()
+    def __init__(self, meta):
+        super().__init__(meta)
 
 class ASTNil(ASTValue):
     
@@ -61,8 +63,8 @@ class ASTNil(ASTValue):
     def evaluate(self, subj, meta):
         return ecosphere.datatypes.PlainObject()  # TODO: Use a reference to NIL, maybe ask Meta for a specific label?
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, meta):
+        super().__init__(meta)
 
 class ASTConstant(ASTValue):
 
@@ -78,14 +80,14 @@ class ASTConstant(ASTValue):
     def evaluate(self, subj, meta):
         return self.get_value()
         
-    def __init__(self, value):
-        super().__init__()
+    def __init__(self, meta, value):
+        super().__init__(meta)
         self._value = value
 
 class ASTKey(ASTConstant):
 
-    def __init__(self, value):
-        super().__init__(value)
+    def __init__(self, meta, value):
+        super().__init__(meta, value)
 
 class ASTBuiltin(ASTExpression):
 
@@ -101,7 +103,8 @@ class ASTBuiltin(ASTExpression):
     def visit(self, visitor):
         visitor.visit_builtin(self)
 
-    def __init__(self, key, args, has_varargs=False):
+    def __init__(self, meta, key, args, has_varargs=False):
+        super().__init__(meta)
         self._key = key
         self._args = args
         self._has_varargs = has_varargs
@@ -135,8 +138,8 @@ class ASTSend(ASTExpression):
             slot = subj.lookup_slot(self.get_message())
             return slot.get_value()
     
-    def __init__(self, subj, msg, args, has_varargs=False):
-        super().__init__()
+    def __init__(self, meta, subj, msg, args, has_varargs=False):
+        super().__init__(meta)
         self._subj = subj
         self._msg = msg
         self._args = args
@@ -154,7 +157,8 @@ class ASTVarDecl(ASTExpression):
     def visit(self, visitor):
         visitor.visit_var_decl(self)
 
-    def __init__(self, decls, next_expr):
+    def __init__(self, meta, decls, next_expr):
+        super().__init__(meta)
         self._decls = decls
         self._next = next_expr
 
@@ -169,7 +173,8 @@ class ASTAssignment(ASTExpression):
     def visit(self, visitor):
         visitor.visit_assignment(self)
 
-    def __init__(self, lhs, rhs):
+    def __init__(self, meta, lhs, rhs):
+        super().__init__(meta)
         self._lhs = lhs
         self._rhs = rhs
 
@@ -184,8 +189,8 @@ class ASTReturn(ASTExpression):
     def visit(self, visitor):
         visitor.visit_return(self)
     
-    def __init__(self, retval):
-        super().__init__()
+    def __init__(self, meta, retval):
+        super().__init__(meta)
         self._retval = retval
 
 class ASTCompound(ASTExpression):
@@ -196,8 +201,8 @@ class ASTCompound(ASTExpression):
     def visit(self, visitor):
         visitor.visit_compound(self)
 
-    def __init__(self, instructions):
-        super().__init__()
+    def __init__(self, meta, instructions):
+        super().__init__(meta)
         self._instrs = instructions
 
 class ASTBlock(ASTValue):
@@ -214,8 +219,8 @@ class ASTBlock(ASTValue):
     def visit(self, visitor):
         visitor.visit_block(self)
 
-    def __init__(self, params, instructions, has_varargs=False):
-        super().__init__()
+    def __init__(self, meta, params, instructions, has_varargs=False):
+        super().__init__(meta)
         self._body = ASTCompound(instructions)
         self._params = params
         self._has_varargs = has_varargs
@@ -231,8 +236,8 @@ class ASTObject(ASTValue):
             self._value = self.do_evaluate(subj, meta)
         return self._value
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, meta):
+        super().__init__(meta)
         self._value = None
 
 class ASTGroupObject(ASTObject):
@@ -243,8 +248,8 @@ class ASTGroupObject(ASTObject):
             group.add_object(elem.evaluate(subj, meta))
         return group
 
-    def __init__(self, elements):
-        super().__init__()
+    def __init__(self, meta, elements):
+        super().__init__(meta)
         self._elements = elements
 
 class ASTSlot:
@@ -259,7 +264,7 @@ class ASTSlot:
 class ASTCodeSlot(ASTSlot):
 
     def evaluate(self, obj, subj, meta):
-        code = self._body.compile_as_code(meta, self._params, self._has_varargs)
+        code = self._body.compile_as_code(self._params, self._has_varargs)
         obj.add_slot(ecosphere.datatypes.CodeSlot(self._name, code, self._is_private))
 
     def __init__(self, is_private, name, params, has_varargs, body):
@@ -289,16 +294,17 @@ class ASTPlainObject(ASTObject):
             slot.evaluate(obj, subj, meta)
         return obj
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, meta):
+        super().__init__(meta)
         self._slots = list()
 
 class ASTProxy(ASTObject):
     
     def do_evaluate(self, subj, meta):
         value = meta.get_label_value(self._label)
-        return value.evaluate(subj, meta)
+        return value.evaluate(subj, subj._meta)
     
-    def __init__(self, label):
-        super().__init__()
+    def __init__(self, meta, label):
+        super().__init__(meta)
         self._label = label
+

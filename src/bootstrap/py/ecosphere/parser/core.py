@@ -1,10 +1,11 @@
+import pathlib
 from ecosphere.parser.tokens import TokenType as TokenType
 import ecosphere.parser.stream
 import ecosphere.parser.ast
 
 
-def default_object():
-    return ecosphere.parser.ast.ASTNil()
+def default_object(meta):
+    return ecosphere.parser.ast.ASTNil(meta)
 
 
 class ParseException(Exception):
@@ -32,6 +33,21 @@ class LabelStorage:
         self._label_callbacks = dict()
 
 
+class ParseManagerCore:
+
+    def load_file(self, path):
+        if path in self._files:
+            return self._files[path]
+        print('Loading file', path, '...')
+        text_stream = ecosphere.parser.stream.TextStream(path.read_text())
+        the_parser = EcoParser(ecosphere.parser.tokens.Tokenizer(text_stream), ParseManager(path, self))
+        value = the_parser.parse()
+        self._files[path] = value
+        return value
+
+    def __init__(self):
+        self._files = dict()
+
 class ParseManager:
     
     def define_label(self, key, value):
@@ -40,19 +56,13 @@ class ParseManager:
     def get_label_value(self, key):
         return self._label_storage.get_label_value(key)
     
-    def parse_file(self, path):
-        if path not in self._files:
-            # TODO: Insert sentinel value to avoid endless recursions
-            print('Loading file', path, '...')
-            with open(path, 'r') as f:
-                text_stream = ecosphere.parser.stream.TextStream(f.read())
-                the_parser = EcoParser(ecosphere.parser.tokens.Tokenizer(text_stream), self)
-                self._files[path] = the_parser.parse()
-        return self._files[path]
+    def load_relative_file(self, path_text):
+        return self._core.load_file(self._path.parent.joinpath(path_text))
 
-    def __init__(self):
+    def __init__(self, path, core=None):
+        self._path = path
+        self._core = core or ParseManagerCore()
         self._label_storage = LabelStorage()
-        self._files = dict()
 
 
 class Parser:
@@ -138,14 +148,14 @@ class ExpressionParser(SubParser):
             if self.check(TokenType.LPAREN):
                 args, varargs = self.parse_argument_list(TokenType.RPAREN)
                 if isinstance(the_ast, ecosphere.parser.ast.ASTKey):
-                    the_ast = ecosphere.parser.ast.ASTBuiltin(the_ast, args, has_varargs=varargs)
+                    the_ast = ecosphere.parser.ast.ASTBuiltin(self._pm, the_ast, args, has_varargs=varargs)
                 else:
-                    the_ast = ecosphere.parser.ast.ASTSend(the_ast,
+                    the_ast = ecosphere.parser.ast.ASTSend(self._pm, the_ast,
                                                  ecosphere.datatypes.Key.get('value'),
                                                  args,
                                                  has_varargs=varargs)
             elif self.check(TokenType.ASSIGNMENT):
-                the_ast = ecosphere.parser.ast.ASTAssignment(the_ast,
+                the_ast = ecosphere.parser.ast.ASTAssignment(self._pm, the_ast,
                                                    self.parse_expression(allow_followups))
         return the_ast
 
@@ -166,7 +176,7 @@ class SimpleExpressionParser(ExpressionParser):
         if len(exprs) == 1:
             return exprs[0]
         else:
-            return ecosphere.parser.ast.ASTCompound(exprs)
+            return ecosphere.parser.ast.ASTCompound(self._pm, exprs)
     
     def parse_closure(self):
         return self.gen_closure_parser().parse_closure()
@@ -178,7 +188,7 @@ class SimpleExpressionParser(ExpressionParser):
         return self.gen_group_parser().parse_group()
     
     def parse_return(self, allow_followups=True):
-        return ecosphere.parser.ast.ASTReturn(self.parse_expression(allow_followups))
+        return ecosphere.parser.ast.ASTReturn(self._pm, self.parse_expression(allow_followups))
     
     def parse_var_decl(self, allow_followups=True):
         decls = []
@@ -187,16 +197,16 @@ class SimpleExpressionParser(ExpressionParser):
             if self.check(TokenType.ASSIGNMENT):
                 value = self.parse_expression()
             else:
-                value = ecosphere.parser.ast.ASTNil()
+                value = ecosphere.parser.ast.ASTNil(self._pm)
             decls.append((name, value))
             if self.check(TokenType.BAR):
                 break
             self.expect(TokenType.SEPARATOR)
-        return ecosphere.parser.ast.ASTVarDecl(decls, self.parse_expression(allow_followups))
+        return ecosphere.parser.ast.ASTVarDecl(self._pm, decls, self.parse_expression(allow_followups))
 
     def parse_simple_expression(self, allow_followups=True):
         if self.check(TokenType.SELF):
-            return ecosphere.parser.ast.ASTSelf()
+            return ecosphere.parser.ast.ASTSelf(self._pm)
         elif self.check(TokenType.LPAREN):
             return self.parse_compound()
         elif self.check(TokenType.LBRACK):
@@ -213,22 +223,22 @@ class SimpleExpressionParser(ExpressionParser):
         else:
             kw = self.get_tokenizer().read()
             if kw.isa(TokenType.KEY):
-                return ecosphere.parser.ast.ASTKey(kw.get_key())
+                return ecosphere.parser.ast.ASTKey(self._pm, kw.get_key())
             elif kw.isa(TokenType.CONSTANT):
-                return ecosphere.parser.ast.ASTConstant(kw.get_value())
+                return ecosphere.parser.ast.ASTConstant(self._pm, kw.get_value())
             elif kw.is_type(TokenType.LABEL):
                 if kw.is_definition():
                     expr = self.parse_simple_expression()
-                    self.get_pm().define_label(kw.get_key(), expr)
+                    self._pm.define_label(kw.get_key(), expr)
                     return expr
                 else:
-                    return ecosphere.parser.ast.ASTProxy(kw.get_key())
+                    return ecosphere.parser.ast.ASTProxy(self._pm, kw.get_key())
             elif kw.is_type(TokenType.FILE):
                 path = kw.get_filename()
-                return self._pm.parse_file(path)
+                return self._pm.load_relative_file(path)
             else:
                 kw.fail()
-                return ecosphere.parser.ast.ASTSelf()
+                return ecosphere.parser.ast.ASTSelf(self._pm)
 
     def gen_closure_parser(self):
         return ClosureParser(self)
@@ -269,7 +279,7 @@ class ClosureParser(ExpressionParser):
                 else:
                     self.expect(TokenType.RBRACK)
                     break
-        return ecosphere.parser.ast.ASTBlock(params, exprs, has_varargs=varargs)
+        return ecosphere.parser.ast.ASTBlock(self._pm, params, exprs, has_varargs=varargs)
 
     def __init__(self, parent_parser):
         super().__init__(parent_parser)
@@ -330,7 +340,7 @@ class ObjectSlotParser(ExpressionParser):
         self._key = None
         self._params = []
         self._has_varargs = False
-        self._body = default_object()
+        self._body = ecosphere.parser.ast.ASTNil(self._pm)
         self._flag_inherited = False
         self._flag_private = False
         self._flag_method = False
@@ -352,13 +362,13 @@ class ObjectParser(ExpressionParser):
 
     def __init__(self, parent_parser):
         super().__init__(parent_parser)
-        self._object = ecosphere.parser.ast.ASTPlainObject()
+        self._object = ecosphere.parser.ast.ASTPlainObject(self._pm)
 
 
 class GroupParser(ExpressionParser):
 
     def parse_group(self):
-        return ecosphere.parser.ast.ASTGroupObject(self.parse_expression_list(TokenType.RCURLY))
+        return ecosphere.parser.ast.ASTGroupObject(self._pm, self.parse_expression_list(TokenType.RCURLY))
 
     def __init__(self, parent_parser):
         super().__init__(parent_parser)
@@ -405,7 +415,7 @@ class SendParser(ExpressionParser):
                         return the_ast
                     else:
                         key = self._parse_multi(key.colonize())
-            return ecosphere.parser.ast.ASTSend(the_ast, key, self._params, has_varargs=self._has_varargs)
+            return ecosphere.parser.ast.ASTSend(self._pm, the_ast, key, self._params, has_varargs=self._has_varargs)
         else:
             return the_ast
     
@@ -422,3 +432,4 @@ class EcoParser(Parser):
 
     def __init__(self, tokenizer, parse_manager):
         super().__init__(tokenizer, parse_manager)
+

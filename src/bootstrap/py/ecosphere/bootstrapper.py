@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import sys
+import pathlib
 
 import ecosphere.parser.core
 import ecosphere.econnect
@@ -9,11 +10,12 @@ import ecosphere.econnect
 class Bootstrapper:
 
     def construct_from_file(self, path):
-        self._lobby = self._parse_manager.parse_file(path)
+        path = pathlib.Path(path)
+        self._lobby = self._parse_manager.load_file(path)
 
     def serialize(self):
         serializer = ecosphere.econnect.Serializer()
-        self._lobby.compile_as_code(self._parse_manager).serialize(serializer)
+        self._lobby.compile_as_code().serialize(serializer)
         return serializer.finish()
 
     def write_to_stream(self, stream):
@@ -25,7 +27,7 @@ class Bootstrapper:
 
     def __init__(self):
         self._lobby = None
-        self._parse_manager = ecosphere.parser.core.ParseManager()
+        self._parse_manager = ecosphere.parser.core.ParseManagerCore()
 
 
 def bootstrap():
