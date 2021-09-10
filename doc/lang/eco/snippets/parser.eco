@@ -1,0 +1,32 @@
+{
+    Parser = {
+        _t = nil;
+
+
+        ParseSimpleExpression: allow_followups => (
+            (Check: TokenType SELF) ifTrue: [ ^ ASTSelf ].
+            (Check: TokenType LPAREN) ifTrue: [ ^ ASTCompound New: (ParseBlock: TokenType RPAREN) ].
+            (Check: TokenType LBRACK) ifTrue: [ ^ ParseClosure ].
+            (Check: TokenType LCURLY) ifTrue: [
+                (Check: TokenType RARROW)
+                    ifTrue:  [ ^ ParseGroup  ]
+                    ifFalse: [ ^ ParseObject ]
+            ].
+            (Check: TokenType CARET) ifTrue: [ ^ ParseReturn: allow_followups ].
+            (Check: TokenType BAR) ifTrue: [ ^ ParseVarDecl: allow_followups ].
+            | kw <- ReadToken |
+            " TODO "
+          ^ ASTSelf
+        ).
+
+        ParseExpression: allow_followups => (
+        ).
+
+        Init: tokenizer => (
+            _t <- tokenizer
+        ).
+    },
+
+    Init => ;
+}
+
