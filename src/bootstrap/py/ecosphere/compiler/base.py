@@ -193,7 +193,8 @@ class Compiler:
         self._current_scope = self._current_scope.get_parent()
 
     def add_parameter(self, expr):
-        self._root_scope.add_var(expr.get_message())  # Assuming it's a SEND expression
+        assert not isinstance(expr, ecosphere.parser.ast.ASTSend)
+        self._root_scope.add_var(expr)
         self._parameter_count += 1
     
     def add_var(self, varname):

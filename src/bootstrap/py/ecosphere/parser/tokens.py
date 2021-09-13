@@ -26,6 +26,7 @@ class TokenType(enum.Enum):
     ELLIPSIS   = enum.auto()
     SELF       = enum.auto()
     WITH       = enum.auto()
+    WITHSTAR   = enum.auto()
     PRIVATE    = enum.auto()
 
 
@@ -196,27 +197,13 @@ class Tokenizer:
 
         if c == 'self': return Token(self, TokenType.SELF)
         elif c == 'with': return Token(self, TokenType.WITH)
+        elif c == 'with*': return Token(self, TokenType.WITHSTAR)
         elif c == 'private': return Token(self, TokenType.PRIVATE)
         elif c == '<-': return Token(self, TokenType.ASSIGNMENT)
         else: return IdentifierToken(self, c)
 
     def unread(self, token):
         self._pushbacks.append(token)
-
-    #def check(self, token_type):
-    #    return self.read().check(token_type)
-
-    #def check_identifier(self):
-    #    return self.check(TokenType.IDENTIFIER)
-
-    #def check_key(self):
-    #    return self.check(TokenType.KEY)
-
-    #def expect(self, token_type):
-    #    return self.read().expect(token_type)
-    
-    #def expect_identifier(self):
-    #    return self.expect(TokenType.IDENTIFIER)
 
     def __init__(self, stream):
         self._s = stream

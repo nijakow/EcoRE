@@ -24,7 +24,7 @@ class ASTExpression(AST):
         visitor.visit_invalid(self)
 
     def evaluate(self, subj, meta):
-        raise Exception('Can\'t evaluate this AST!')
+        raise Exception('Can\'t evaluate this AST: ' + str(type(self)))
     
     def __init__(self, meta):
         super().__init__()
@@ -200,6 +200,12 @@ class ASTCompound(ASTExpression):
     
     def visit(self, visitor):
         visitor.visit_compound(self)
+    
+    def evaluate(self, subj, meta):
+        retval = None
+        for i in self._instrs:
+            retval = i.evaluate(subj, meta)
+        return retval  # TODO: Nil?
 
     def __init__(self, meta, instructions):
         super().__init__(meta)
@@ -221,7 +227,7 @@ class ASTBlock(ASTValue):
 
     def __init__(self, meta, params, instructions, has_varargs=False):
         super().__init__(meta)
-        self._body = ASTCompound(instructions)
+        self._body = ASTCompound(meta, instructions)
         self._params = params
         self._has_varargs = has_varargs
 

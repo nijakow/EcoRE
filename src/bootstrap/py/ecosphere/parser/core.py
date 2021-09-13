@@ -291,6 +291,9 @@ class ObjectSlotParser(ExpressionParser):
         while True:
             if self.check(TokenType.WITH):
                 self._flag_inherited = True
+            elif self.check(TokenType.WITHSTAR):
+                self._flag_inherited = True
+                self._flag_part = True
             elif self.check(TokenType.PRIVATE):
                 self._flag_private = True
             else:
@@ -326,6 +329,7 @@ class ObjectSlotParser(ExpressionParser):
         self._finish()
 
     def _finish(self):
+        # TODO: Handle flag_part!!!
         if self._flag_method:
             assert not self._flag_inherited
             # code = self._body.compile_as_code(self._params, has_varargs=self._has_varargs)
@@ -342,6 +346,7 @@ class ObjectSlotParser(ExpressionParser):
         self._has_varargs = False
         self._body = ecosphere.parser.ast.ASTNil(self._pm)
         self._flag_inherited = False
+        self._flag_part = False
         self._flag_private = False
         self._flag_method = False
 
