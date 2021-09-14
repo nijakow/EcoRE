@@ -31,6 +31,9 @@ class Parser:
                     break
                 self.expect(TokenType.SEPARATOR)
         return ASTBlock(parameters, ASTCompound(instructions))
+    
+    def parse_group(self):
+        return ASTGroup(self.parse_expressions(TokenType.RCURLY))
 
     def parse_simple_expression(self) -> ASTExpression:
         if self.check(TokenType.SELF):
