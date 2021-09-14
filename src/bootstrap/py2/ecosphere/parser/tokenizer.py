@@ -1,5 +1,4 @@
 import enum
-import ecosphere.objects.misc.EcoKey
 
 
 class TokenType(enum.Enum):
@@ -12,7 +11,7 @@ class TokenType(enum.Enum):
     LCURLY = enum.auto()
     RCURLY = enum.auto()
     SEPARATOR = enum.auto()
-    COLON = enum.auto()
+    CARET = enum.auto()
     BAR = enum.auto()
     ASSIGNMENT = enum.auto()
     RARROW = enum.auto()
@@ -37,18 +36,18 @@ class Token:
 
 class IdentifierToken(Token):
 
-    def get_key(self) -> ecosphere.objects.misc.EcoKey:
-        return self._key
+    def get_text(self) -> str:
+        return self._text
 
     def __init__(self, tokenizer: 'Tokenizer', name: str):
         super().__init__(tokenizer, TokenType.IDENTIFIER)
-        self._key = ecosphere.objects.misc.EcoKey.Get(name)
+        self._text = name
 
 
 class Tokenizer:
 
     def _isspecial(self, c):
-        return (c is None) or (c in '()[]\{\}.,;:|')
+        return (c is None) or (c in '()[]\{\}.,;|')
 
     def _slurp_whitespace(self):
         while self._s.peek().isspace():
@@ -75,8 +74,8 @@ class Tokenizer:
         elif self._s.peeks('.'): return Token(self, TokenType.SEPARATOR)
         elif self._s.peeks(','): return Token(self, TokenType.SEPARATOR)
         elif self._s.peeks(';'): return Token(self, TokenType.SEPARATOR)
-        elif self._s.peeks(':'): return Token(self, TokenType.COLON)
         elif self._s.peeks('|'): return Token(self, TokenType.BAR)
+        elif self._s.peeks('^'): return Token(self, TokenType.CARET)
 
         c = ''
 

@@ -1,3 +1,4 @@
+import ecosphere.objects.misc.EcoKey
 import ecosphere.parser.tokenizer
 from ecosphere.parser.tokenizer import TokenType
 
@@ -9,6 +10,9 @@ class ParseException(Exception):
 
 
 class Parser:
+
+    def _is_bin(self, c):
+        return not (c.isalnum() or c == '_')
 
     def parse_compound(self):
         return ASTCompound(self.parse_expressions(TokenType.RPAREN))
@@ -42,12 +46,32 @@ class Parser:
                 return self.parse_object()
         else:
             return ASTSelf()
-
-
-    def parse_send(self, ast: ASTExpression, allow_followups:bool=True) -> ASTExpression:
-        return ast
+    
+    def parse_send(self, ast: ASTExpression, allow_followups: bool) -> ASTExpression:
+        name = ''
+        args = []
+        kw = self.check(TokenType.IDENTIFIER)
+        while kw:
+            name += kw.get_text()
+            if self._is_bin(name[-1]):
+                if not allow_followups:
+                    kw.fail()
+                    return ast
+                else:
+                    args.append(self.parse_expression(False))
+            if name[-1] != ':':
+                break
+            kw = self.check(TokenType.IDENTIFIER)
+        if self.check(TokenType.LPAREN):
+            for e in self.parse_expressions(TokenType.RPAREN):
+                args.append(e)
+        return ASTSend(ast, ecosphere.objects.misc.EcoKey.Get(name), args)
 
     def parse_expression(self, allow_followups:bool=True) -> ASTExpression:
+        if allow_followups and self.check(TokenType.CARET):
+            return ASTReturn(self.parse_expression(allow_followups))
+        elif allow_followups and self.check(TokenType.BAR):
+            return ASTVar(self.parse_expressions(TokenType.BAR), self.parse_expression())
         ast = self.parse_simple_expression()
         next = None
         while ast != next:
