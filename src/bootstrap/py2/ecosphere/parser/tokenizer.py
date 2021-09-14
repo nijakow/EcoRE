@@ -1,9 +1,26 @@
 import enum
 import ecosphere.objects.misc.EcoKey
 
+
 class TokenType(enum.Enum):
     EOF = enum.auto()
     IDENTIFIER = enum.auto()
+    LPAREN = enum.auto()
+    RPAREN = enum.auto()
+    LBRACK = enum.auto()
+    RBRACK = enum.auto()
+    LCURLY = enum.auto()
+    RCURLY = enum.auto()
+    SEPARATOR = enum.auto()
+    COLON = enum.auto()
+    BAR = enum.auto()
+    ASSIGNMENT = enum.auto()
+    RARROW = enum.auto()
+    ELLIPSIS = enum.auto()
+    SELF = enum.auto()
+    WITH = enum.auto()
+    WITHSTAR = enum.auto()
+
 
 class Token:
 
