@@ -76,6 +76,8 @@ class Parser:
         next = None
         while ast != next:
             ast = self.parse_send(ast, allow_followups)
+            if self.check(TokenType.LPAREN):
+                ast = ASTSend(ast, ecosphere.objects.misc.EcoKey.Get('value'), self.parse_expressions(TokenType.RPAREN))
         return ast
 
     def parse_expressions(self, terminator: TokenType) -> list:
