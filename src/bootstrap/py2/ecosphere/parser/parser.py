@@ -2,7 +2,7 @@ import ecosphere.objects.misc
 import ecosphere.parser.tokenizer
 from ecosphere.parser.tokenizer import TokenType
 
-from ecosphere.parser.ast import ASTExpression, ASTSelf, ASTGroup, ASTObject, ASTSlot, ASTSend, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn
+from ecosphere.parser.ast import ASTExpression, ASTSelf, ASTGroup, ASTObject, ASTSlot, ASTKey, ASTSend, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn
 
 
 class ParseException(Exception):
@@ -101,7 +101,12 @@ class Parser:
                 return self.parse_group()
             else:
                 return self.parse_object()
+        kw = self._t.read()
+        if kw.is_a(TokenType.KEY):
+            return ASTKey(kw.get_key())
+        # TODO: Strings
         else:
+            kw.fail()
             return ASTSelf()
     
     def parse_send(self, ast: ASTExpression, allow_followups: bool) -> ASTExpression:

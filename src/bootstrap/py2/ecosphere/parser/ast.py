@@ -31,6 +31,12 @@ class ASTSlot:
         self._flags = flags
         self._value = value
 
+class ASTKey(ASTExpression):
+
+    def __init__(self, key):
+        super().__init__()
+        self._key = key
+
 class ASTSend(ASTExpression):
     
     def __init__(self, subject, key, args):
