@@ -21,4 +21,14 @@ if __name__ == '__main__':
     this is a test.
     [ x => y ].
     y <- a.
+    \{
+        x = 5.
+        [int] y = 101.
+        with z = foo.
+        with* zz = foo.
+        with* [int] zzz = 42.
+        [any] routine => hey.
+        square: [int] x => x * x.
+        [int] f([int] x, [int] y) => (x * x) + (2 * y).
+    \}.
     ''')

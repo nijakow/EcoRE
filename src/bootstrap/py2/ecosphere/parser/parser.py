@@ -2,7 +2,7 @@ import ecosphere.objects.misc
 import ecosphere.parser.tokenizer
 from ecosphere.parser.tokenizer import TokenType
 
-from ecosphere.parser.ast import ASTExpression, ASTSelf, ASTGroup, ASTObject, ASTSend, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn
+from ecosphere.parser.ast import ASTExpression, ASTSelf, ASTGroup, ASTObject, ASTSlot, ASTSend, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn
 
 
 class ParseException(Exception):
@@ -37,21 +37,49 @@ class Parser:
     def parse_group(self):
         return ASTGroup(self.parse_expressions(TokenType.RCURLY))
     
-    def parse_object_slot(self):
-        inherited = False
-        subpart = False
-        code = False
+    def parse_optional_type(self):
+        the_type = None
+        if self.check(TokenType.LBRACK):
+            the_type = self.parse_expression()
+            self.expect(TokenType.RBRACK)
+        return the_type
 
+    def parse_object_slot(self):
+        flags = set()
         while True:
             if self.check(TokenType.WITH):
-                inherited = True
+                flags.add('inherited')
             elif self.check(TokenType.WITHSTAR):
-                inherited = True
-                subpart = True
+                flags.add('inherited')
+                flags.add('subpart')
             else:
                 break
-        
-        # TODO
+        name = ''
+        args = []
+        the_type = self.parse_optional_type()
+        kw = self.expect(TokenType.IDENTIFIER)
+        while kw:
+            name += kw.get_text()
+            if self._is_bin(name[-1]):
+                arg_type = self.parse_optional_type()
+                args.append((ecosphere.objects.misc.EcoKey.Get(self.expect(TokenType.IDENTIFIER).get_text()), arg_type))
+            if name[-1] != ':':
+                break
+            kw = self.check(TokenType.IDENTIFIER)
+        if self.check(TokenType.LPAREN):
+            if not self.check(TokenType.RPAREN):
+                while True:
+                    arg_type = self.parse_optional_type()
+                    args.append((ecosphere.objects.misc.EcoKey.Get(self.expect(TokenType.IDENTIFIER).get_text()), arg_type))
+                    if self.check(TokenType.RPAREN):
+                        break
+                    self.expect(TokenType.SEPARATOR)
+        if self.check(TokenType.RARROW):
+            flags.add('code')
+        else:
+            self.expect(TokenType.ASSIGNMENT)
+        value = self.parse_expression()
+        return ASTSlot(ecosphere.objects.misc.EcoKey.Get(name), the_type, args, flags, value)
 
     def parse_object(self):
         slots = []
@@ -136,7 +164,7 @@ class Parser:
             return t
         else:
             t.fail()
-            raise ParseException('Expected a different token type!', t)
+            raise ParseException('Expected a token type \'' + str(token_type) + '\'!', t)
 
     def __init__(self, tokenizer: ecosphere.parser.tokenizer.Tokenizer):
         self._t = tokenizer

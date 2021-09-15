@@ -47,7 +47,7 @@ class IdentifierToken(Token):
 class Tokenizer:
 
     def _isspecial(self, c):
-        return (c is None) or (c in '()[]\{\}.,;|') or (c.isspace())
+        return (c is None) or (c in '()[]\{\}.,;|^') or (c.isspace())
 
     def _slurp_whitespace(self):
         while self._s.has() and self._s.peek().isspace():
@@ -69,24 +69,24 @@ class Tokenizer:
         elif self._s.peeks(')'): return Token(self, TokenType.RPAREN)
         elif self._s.peeks('['): return Token(self, TokenType.LBRACK)
         elif self._s.peeks(']'): return Token(self, TokenType.RBRACK)
-        elif self._s.peeks('{'): return Token(self, TokenType.LCURLY)
-        elif self._s.peeks('}'): return Token(self, TokenType.RCURLY)
+        elif self._s.peeks('\{'): return Token(self, TokenType.LCURLY)
+        elif self._s.peeks('\}'): return Token(self, TokenType.RCURLY)
         elif self._s.peeks('.'): return Token(self, TokenType.SEPARATOR)
         elif self._s.peeks(','): return Token(self, TokenType.SEPARATOR)
         elif self._s.peeks(';'): return Token(self, TokenType.SEPARATOR)
         elif self._s.peeks('|'): return Token(self, TokenType.BAR)
         elif self._s.peeks('^'): return Token(self, TokenType.CARET)
 
-        if not self._s.has(): return Token(self, TokenType.EOF)
-
         c = ''
 
         while self._s.has() and not self._isspecial(self._s.peek()):
             c += self._s.read()
         
-        if c == 'self': return Token(self, TokenType.SELF)
+        if c == '': return Token(self, TokenType.EOF)
+        elif c == 'self': return Token(self, TokenType.SELF)
         elif c == 'with': return Token(self, TokenType.WITH)
         elif c == 'with*': return Token(self, TokenType.WITHSTAR)
+        elif c == '=': return Token(self, TokenType.ASSIGNMENT)
         else: return IdentifierToken(self, c)
 
     def __init__(self, stream):

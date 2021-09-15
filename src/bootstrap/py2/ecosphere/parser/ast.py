@@ -22,6 +22,15 @@ class ASTObject(ASTExpression):
         super().__init__()
         self._slots = slots
 
+class ASTSlot:
+
+    def __init__(self, name, the_type, args, flags, value):
+        self._name = name
+        self._type = the_type
+        self._args = args
+        self._flags = flags
+        self._value = value
+
 class ASTSend(ASTExpression):
     
     def __init__(self, subject, key, args):
