@@ -76,3 +76,16 @@ class ASTBlock(ASTExpression):
         super().__init__()
         self._parameters = parameters
         self._body = body
+
+class ASTLabelDef(ASTExpression):
+
+    def __init__(self, address, expr):
+        super().__init__()
+        self._address = address
+        self._expr = expr
+
+class ASTLabelRef(ASTExpression):
+
+    def __init__(self, address):
+        super().__init__()
+        self._address = address

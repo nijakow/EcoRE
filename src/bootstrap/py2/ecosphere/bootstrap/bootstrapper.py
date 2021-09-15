@@ -32,4 +32,6 @@ if __name__ == '__main__':
         square: [int] x => x * x.
         [int] f([int] x, [int] y) => (x * x) + (2 * y).
     \}.
+    #=hello: \{ x = 5 \}.
+    #~hello~.
     ''')
