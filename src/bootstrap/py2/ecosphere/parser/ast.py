@@ -29,6 +29,13 @@ class ASTVar(ASTExpression):
         super().__init__()
         self._vars = variables
 
+class ASTAssignment(ASTExpression):
+
+    def __init__(self, lhs, rhs):
+        super().__init__()
+        self._lhs = lhs
+        self._rhs = rhs
+
 class ASTReturn(ASTExpression):
 
     def __init__(self, value):

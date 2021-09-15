@@ -19,4 +19,6 @@ if __name__ == '__main__':
     test('''
     hello world.
     this is a test.
+    [ x => y ].
+    y <- a.
     ''')
