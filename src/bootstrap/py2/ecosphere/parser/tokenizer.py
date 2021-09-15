@@ -47,10 +47,10 @@ class IdentifierToken(Token):
 class Tokenizer:
 
     def _isspecial(self, c):
-        return (c is None) or (c in '()[]\{\}.,;|')
+        return (c is None) or (c in '()[]\{\}.,;|') or (c.isspace())
 
     def _slurp_whitespace(self):
-        while self._s.peek().isspace():
+        while self._s.has() and self._s.peek().isspace():
             self._s.read()
 
     def unread(self, token: Token):
@@ -77,9 +77,11 @@ class Tokenizer:
         elif self._s.peeks('|'): return Token(self, TokenType.BAR)
         elif self._s.peeks('^'): return Token(self, TokenType.CARET)
 
+        if not self._s.has(): return Token(self, TokenType.EOF)
+
         c = ''
 
-        while not self.isspecial(self._s.peek()):
+        while self._s.has() and not self._isspecial(self._s.peek()):
             c += self._s.read()
         
         if c == 'self': return Token(self, TokenType.SELF)

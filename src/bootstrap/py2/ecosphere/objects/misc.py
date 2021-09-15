@@ -1,6 +1,6 @@
 import ecosphere.objects.base
 
-class EcoKey(ecosphere.object.base.EcoObject):
+class EcoKey(ecosphere.objects.base.EcoObject):
     KEYS = dict()
 
     def dot_extend(self, extension):

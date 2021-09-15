@@ -1,10 +1,13 @@
 
 class StringStream:
 
+    def has(self) -> bool:
+        return self._x < len(self._s)
+
     def peek(self) -> str:
-        try:
+        if self.has():
             return self._s[self._x]
-        except:
+        else:
             return None
     
     def read(self) -> str:
@@ -15,7 +18,7 @@ class StringStream:
     def peeks(self, s: str) -> bool:
         the_x = self._x
         for c in s:
-            if self.read() != c:
+            if not self.has() or self.read() != c:
                 self._x = the_x
                 return False
         return True
