@@ -12,8 +12,15 @@ class ASTSelf(ASTExpression):
 
 class ASTGroup(ASTExpression):
 
-    def __init__(self):
+    def __init__(self, objects):
         super().__init__()
+        self._objects = objects
+
+class ASTObject(ASTExpression):
+
+    def __init__(self, slots):
+        super().__init__()
+        self._slots = slots
 
 class ASTSend(ASTExpression):
     

@@ -2,7 +2,7 @@ import ecosphere.objects.misc
 import ecosphere.parser.tokenizer
 from ecosphere.parser.tokenizer import TokenType
 
-from ecosphere.parser.ast import ASTExpression, ASTSelf, ASTGroup, ASTSend, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn
+from ecosphere.parser.ast import ASTExpression, ASTSelf, ASTGroup, ASTObject, ASTSend, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn
 
 
 class ParseException(Exception):
@@ -36,6 +36,30 @@ class Parser:
     
     def parse_group(self):
         return ASTGroup(self.parse_expressions(TokenType.RCURLY))
+    
+    def parse_object_slot(self):
+        inherited = False
+        subpart = False
+        code = False
+
+        while True:
+            if self.check(TokenType.WITH):
+                inherited = True
+            elif self.check(TokenType.WITHSTAR):
+                inherited = True
+                subpart = True
+            else:
+                break
+        
+        # TODO
+
+    def parse_object(self):
+        slots = []
+        while not self.check(TokenType.RCURLY):
+            slots.append(self.parse_object_slot())
+            if self.check(TokenType.RCURLY): break
+            self.expect(TokenType.SEPARATOR)
+        return ASTObject(slots)
 
     def parse_simple_expression(self) -> ASTExpression:
         if self.check(TokenType.SELF):
