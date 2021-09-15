@@ -22,6 +22,7 @@ if __name__ == '__main__':
     [ x => y ].
     y <- a.
     \{
+        "This is a comment!"
         x = 5.
         [int] y = 101.
         with z = foo.
