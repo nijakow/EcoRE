@@ -69,6 +69,10 @@ class Parser:
         if self.check(TokenType.LPAREN):
             if not self.check(TokenType.RPAREN):
                 while True:
+                    if self.check(TokenType.ELLIPSIS):
+                        flags.add('varargs')
+                        self.expect(TokenType.RPAREN)
+                        break
                     arg_type = self.parse_optional_type()
                     args.append((ecosphere.objects.misc.EcoKey.Get(self.expect(TokenType.IDENTIFIER).get_text()), arg_type))
                     if self.check(TokenType.RPAREN):
@@ -117,6 +121,7 @@ class Parser:
     def parse_send(self, ast: ASTExpression, allow_followups: bool) -> ASTExpression:
         name = ''
         args = []
+        varargs = False
         kw = self.check(TokenType.IDENTIFIER)
         if not kw:
             return ast
@@ -132,9 +137,10 @@ class Parser:
                 break
             kw = self.check(TokenType.IDENTIFIER)
         if self.check(TokenType.LPAREN):
-            for e in self.parse_expressions(TokenType.RPAREN):
+            par_args, varargs = self.parse_arglist()
+            for e in par_args:
                 args.append(e)
-        return ASTSend(ast, ecosphere.objects.misc.EcoKey.Get(name), args)
+        return ASTSend(ast, ecosphere.objects.misc.EcoKey.Get(name), args, varargs)
 
     def parse_expression(self, allow_followups:bool=True) -> ASTExpression:
         if allow_followups and self.check(TokenType.CARET):
@@ -147,7 +153,8 @@ class Parser:
             next = ast
             ast = self.parse_send(ast, allow_followups)
             if self.check(TokenType.LPAREN):
-                ast = ASTSend(ast, ecosphere.objects.misc.EcoKey.Get('value'), self.parse_expressions(TokenType.RPAREN))
+                args, varargs = self.parse_arglist()
+                ast = ASTSend(ast, ecosphere.objects.misc.EcoKey.Get('value'), args, varargs)
             elif self.check(TokenType.ASSIGNMENT):
                 ast = ASTAssignment(ast, self.parse_expression(allow_followups))
         return ast
@@ -159,6 +166,17 @@ class Parser:
             if self.check(terminator): break
             self.expect(TokenType.SEPARATOR)
         return exprs
+    
+    def parse_arglist(self) -> list:
+        exprs = []
+        while not self.check(TokenType.RPAREN):
+            if self.check(TokenType.ELLIPSIS):
+                self.expect(TokenType.RPAREN)
+                return exprs, True
+            exprs.append(self.parse_expression())
+            if self.check(TokenType.RPAREN): break
+            self.expect(TokenType.SEPARATOR)
+        return exprs, False
 
     def check(self, token_type: TokenType):
         t = self._t.read()

@@ -39,11 +39,12 @@ class ASTKey(ASTExpression):
 
 class ASTSend(ASTExpression):
     
-    def __init__(self, subject, key, args):
+    def __init__(self, subject, key, args, varargs):
         super().__init__()
         self._subject = subject
         self._key = key
         self._args = args
+        self._varargs = varargs
 
 class ASTVar(ASTExpression):
 
