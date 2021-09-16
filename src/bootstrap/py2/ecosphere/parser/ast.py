@@ -73,9 +73,10 @@ class ASTCompound(ASTExpression):
 
 class ASTBlock(ASTExpression):
 
-    def __init__(self, parameters, body):
+    def __init__(self, varargs, parameters, body):
         super().__init__()
         self._parameters = parameters
+        self._varargs = varargs
         self._body = body
 
 class ASTLabelDef(ASTExpression):

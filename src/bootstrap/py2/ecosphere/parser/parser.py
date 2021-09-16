@@ -22,17 +22,18 @@ class Parser:
     def parse_block(self):
         parameters = []
         instructions = []
-        if not self.check(TokenType.RBRACK):
-            while True:
-                instructions.append(self.parse_expression())
-                if self.check(TokenType.RARROW):
-                    parameters = instructions
-                    instructions = self.parse_expressions(TokenType.RBRACK)
-                    break
-                elif self.check(TokenType.RBRACK):
-                    break
-                self.expect(TokenType.SEPARATOR)
-        return ASTBlock(parameters, ASTCompound(instructions))
+        varargs = False
+        while True:
+            if self.check(TokenType.COLON):
+                parameters.append(ecosphere.objects.misc.EcoKey.Get(self.expect(TokenType.IDENTIFIER).get_text()))
+                if not self.check(TokenType.RARROW):
+                    self.expect(TokenType.SEPARATOR)
+                continue
+            elif self.check(TokenType.ELLIPSIS):
+                varargs = True
+                self.expect(TokenType.RARROW)
+            break
+        return ASTBlock(parameters, varargs, ASTCompound(self.parse_expressions(TokenType.RBRACK)))
     
     def parse_group(self):
         return ASTGroup(self.parse_expressions(TokenType.RCURLY))

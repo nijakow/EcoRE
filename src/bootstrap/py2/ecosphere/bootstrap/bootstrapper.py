@@ -19,7 +19,7 @@ if __name__ == '__main__':
     test('''
     hello world.
     this is a test.
-    [ x => y ].
+    [ :x => y ].
     y <- a.
     \{
         "This is a comment!"
