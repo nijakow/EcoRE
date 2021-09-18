@@ -2,7 +2,7 @@ import ecosphere.objects.misc
 import ecosphere.parser.tokenizer
 from ecosphere.parser.tokenizer import TokenType
 
-from ecosphere.parser.ast import ASTExpression, ASTSelf, ASTGroup, ASTObject, ASTSlot, ASTKey, ASTSend, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn, ASTLabelDef, ASTLabelRef
+from ecosphere.parser.ast import ASTExpression, ASTSelf, ASTGroup, ASTObject, ASTSlot, ASTKey, ASTBuiltin, ASTSend, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn, ASTLabelDef, ASTLabelRef
 
 
 class ParseException(Exception):
@@ -94,7 +94,7 @@ class Parser:
             self.expect(TokenType.SEPARATOR)
         return ASTObject(slots)
 
-    def parse_simple_expression(self) -> ASTExpression:
+    def parse_simple_expression(self, allow_followups=True) -> ASTExpression:
         if self.check(TokenType.SELF):
             return ASTSelf()
         elif self.check(TokenType.LPAREN):
@@ -108,7 +108,11 @@ class Parser:
                 return self.parse_object()
         kw = self._t.read()
         if kw.is_a(TokenType.KEY):
-            return ASTKey(kw.get_key())
+            if allow_followups and self.check(TokenType.LPAREN):
+                args, varargs = self.parse_arglist()
+                return ASTBuiltin(kw.get_key(), args, varargs)
+            else:
+                return ASTKey(kw.get_key())
         elif kw.is_a(TokenType.LABEL):
             if kw.is_definition():
                 return ASTLabelDef(kw.get_address(), self.parse_simple_expression())
@@ -137,7 +141,7 @@ class Parser:
             if name[-1] != ':':
                 break
             kw = self.check(TokenType.IDENTIFIER)
-        if self.check(TokenType.LPAREN):
+        if allow_followups and self.check(TokenType.LPAREN):
             par_args, varargs = self.parse_arglist()
             for e in par_args:
                 args.append(e)
@@ -148,12 +152,12 @@ class Parser:
             return ASTReturn(self.parse_expression(allow_followups))
         elif allow_followups and self.check(TokenType.BAR):
             return ASTVar(self.parse_expressions(TokenType.BAR), self.parse_expression())
-        ast = self.parse_simple_expression()
+        ast = self.parse_simple_expression(allow_followups)
         next = None
         while ast != next:
             next = ast
             ast = self.parse_send(ast, allow_followups)
-            if self.check(TokenType.LPAREN):
+            if allow_followups and self.check(TokenType.LPAREN):
                 args, varargs = self.parse_arglist()
                 ast = ASTSend(ast, ecosphere.objects.misc.EcoKey.Get('value'), args, varargs)
             elif self.check(TokenType.ASSIGNMENT):

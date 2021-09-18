@@ -37,6 +37,14 @@ class ASTKey(ASTExpression):
         super().__init__()
         self._key = key
 
+class ASTBuiltin(ASTExpression):
+
+    def __init__(self, key, args, varargs):
+        super().__init__()
+        self._key = key
+        self._args = args
+        self._varargs = varargs
+
 class ASTSend(ASTExpression):
     
     def __init__(self, subject, key, args, varargs):
