@@ -50,9 +50,8 @@ class Parser:
         while True:
             if self.check(TokenType.WITH):
                 flags.add('inherited')
-            elif self.check(TokenType.WITHSTAR):
-                flags.add('inherited')
-                flags.add('subpart')
+            elif self.check(TokenType.OWN):
+                flags.add('own')
             else:
                 break
         name = ''
