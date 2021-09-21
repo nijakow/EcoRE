@@ -121,6 +121,30 @@ class CodeWriter:
 
 class CodeGenerator:
 
+    def load_self(self, c):
+        pass # TODO
+
+    def load_constant(self, c):
+        pass # TODO
+
+    def push(self):
+        pass # TODO
+
+    def op_builtin(self, args, key):
+        pass # TODO
+
+    def op_builtinv(self, args, key):
+        pass # TODO
+
+    def op_send(self, args, key):
+        pass # TODO
+
+    def op_sendv(self, args, key):
+        pass # TODO
+
+    def op_return(self, depth):
+        pass # TODO
+
     def __init__(self, writer: CodeWriter):
         self._writer = writer
 

@@ -12,6 +12,7 @@ class ASTVisitor:
         self._code_generator.load_constant(ast.get_value())
 
     def visit_builtin(self, ast):
+        # TODO: Variables
         args = ast.get_args()
         for arg in args:
             arg.accept_visitor(self)
