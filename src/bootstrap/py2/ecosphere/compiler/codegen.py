@@ -19,7 +19,7 @@ class Bytecode:
     CLOSURE = 0x10
 
 
-class CodeGenerator:
+class CodeWriter:
 
     def _u8(self, b):
         self._instructions.append(b)
@@ -118,4 +118,9 @@ class CodeGenerator:
         self._instructions = bytearray()
         self._constants = list()
         self._code_objects = list()
+
+class CodeGenerator:
+
+    def __init__(self, writer: CodeWriter):
+        self._writer = writer
 
