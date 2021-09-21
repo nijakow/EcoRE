@@ -122,7 +122,7 @@ class CodeWriter:
 class CodeGenerator:
 
     def load_self(self, c):
-        pass # TODO
+        self._last_location = self._register_allocator.get(0)
 
     def load_constant(self, c):
         pass # TODO
@@ -148,6 +148,8 @@ class CodeGenerator:
     def op_return(self, depth):
         pass # TODO
 
-    def __init__(self, writer: CodeWriter):
+    def __init__(self, writer: CodeWriter, register_allocator):
         self._writer = writer
+        self._register_allocator = regalloc
+        self._last_storage_location = None
 

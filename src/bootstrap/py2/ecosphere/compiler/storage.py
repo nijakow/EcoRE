@@ -18,6 +18,9 @@ class Register(StorageLocation):
 
 class RegisterAllocator:
 
+    def get(self, i):
+        return self._registers(i)  # TODO: Allocate it if it does not exist
+
     def allocate(self):
         i = 0
         m = len(self._registers)
