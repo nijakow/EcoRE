@@ -12,7 +12,6 @@ class ASTVisitor:
         self._code_generator.load_constant(ast.get_value())
 
     def visit_builtin(self, ast):
-        # TODO: Variables
         args = ast.get_args()
         for arg in args:
             arg.accept_visitor(self)
@@ -23,15 +22,19 @@ class ASTVisitor:
             self._code_generator.op_builtin(len(args), arg.get_key())
 
     def visit_send(self, ast):
+        if ast.get_arg_count() == 0:
+            storage_location, depth = self._environment.get(ast.get_key())
+            if storage_location is not None:
+                self._code_generator.load_var(storage_location, depth)
+                return
         ast.get_subject().accept_visitor(self)
-        args = ast.get_args()
-        for arg in args:
+        for arg in ast.get_args():
             arg.accept_visitor(self)
             self._code_generator.push()
         if ast.has_varargs():
-            self._code_generator.op_sendv(len(args), arg.get_key())
+            self._code_generator.op_sendv(args.get_arg_count(), arg.get_key())
         else:
-            self._code_generator.op_send(len(args), arg.get_key())
+            self._code_generator.op_send(args.get_arg_count(), arg.get_key())
 
     def visit_assignment(self, ast):
         return self.visit_unknown(ast)  # TODO

@@ -127,6 +127,9 @@ class CodeGenerator:
     def load_constant(self, c):
         pass # TODO
 
+    def load_var(self, storage_location, depth):
+        pass # TODO
+
     def push(self):
         pass # TODO
 
