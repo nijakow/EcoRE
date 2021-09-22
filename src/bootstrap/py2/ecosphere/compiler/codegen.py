@@ -1,5 +1,5 @@
 
-class Bytecode:
+class Bytecodes:
     NOOP = 0x00
     CONST = 0x01
     PUSHC = 0x02
@@ -121,17 +121,43 @@ class CodeWriter:
 
 class CodeGenerator:
 
+    def _drop_last_value(self):
+        if self._last_value is None:
+            pass
+        elif self._last_value.is_register():
+            pass
+        elif self._last_value.is_stack():
+            self._writer.write_pop()
+        self._last_value = None
+
     def load_self(self, c):
-        self._last_location = self._register_allocator.get(0)
+        self._last_value = self._scope.get_self()
 
     def load_constant(self, c):
-        pass # TODO
+        self._last_value = self._scope.get_constant(c)
 
-    def load_var(self, storage_location, depth):
+    def load_var(self, name):
+        self._drop_last_value()
+        storage_location = self._scope.get_var(name)
+        self._last_value = storage_location
+
+    def store_var(self, storage_location, depth):
         pass # TODO
 
     def push(self):
-        pass # TODO
+        if self._last_value is None:
+            self.load_self()
+        if self._last_value.is_register():
+            if self._last_value.get_depth() > 0:
+                register = self.to_temporary_register()
+                self._writer.write_push(register.get_index())
+                register.free()
+            else:
+                self._writer.write_push(self._last_value.get_index())
+        elif self._last_value.is_stack():
+            pass # TODO: Duplicate?
+        else:
+            pass
 
     def op_builtin(self, args, key):
         pass # TODO
@@ -148,8 +174,8 @@ class CodeGenerator:
     def op_return(self, depth):
         pass # TODO
 
-    def __init__(self, writer: CodeWriter, register_allocator):
+    def __init__(self, writer: CodeWriter, scope):
         self._writer = writer
-        self._register_allocator = regalloc
-        self._last_storage_location = None
+        self._scope = scope
+        self._last_value = None
 
