@@ -128,18 +128,24 @@ class CodeGenerator:
             pass
         elif self._last_value.is_stack():
             self._writer.write_pop()
+        elif self._last_value.is_constant():
+            pass
         self._last_value = None
 
     def load_self(self, c):
-        self._last_value = self._scope.get_self()
+        self._last_value = self._scope.get_storage_manager().get_self()
 
     def load_constant(self, c):
-        self._last_value = self._scope.get_constant(c)
+        self._last_value = self._scope.get_storage_manager().get_constant(c)
 
     def load_var(self, name):
         self._drop_last_value()
-        storage_location = self._scope.get_var(name)
-        self._last_value = storage_location
+        storage_location = self._scope.get_binding(name)
+        if storage_location is not None:
+            self._last_value = storage_location
+            return True
+        else:
+            return False
 
     def store_var(self, storage_location, depth):
         pass # TODO

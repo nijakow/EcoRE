@@ -1,25 +1,61 @@
 
 class StorageLocation:
 
+    def is_register(self):
+        return False
+
+    def is_stack(self):
+        return False
+
+    def is_constant(self):
+        return False
+
     def __init__(self):
         pass
 
 class StackLocation(StorageLocation):
+
+    def is_stack(self):
+        return True
 
     def __init__(self):
         pass
 
 class Register(StorageLocation):
 
-    def __init__(self, allocator, number):
+    def is_register(self):
+        return True
+
+    def get_depth(self):
+        return self._depth
+
+    def increase_depth(self):
+        return Register(None, self._number, self._depth + 1)
+
+    def __init__(self, allocator, number, depth=0):
         self._allocator = allocator
         self._number = number
+        self._depth = depth
+
+class Constant(StorageLocation):
+
+    def is_constant(self):
+        return True
+
+    def get_value(self):
+        return self._value
+
+    def __init__(self, value):
+        self._value = value
 
 
-class RegisterAllocator:
+class StorageManager:
 
-    def get(self, i):
+    def get_register(self, i):
         return self._registers(i)  # TODO: Allocate it if it does not exist
+
+    def get_constant(self, c):
+        return Constant(c)
 
     def allocate(self):
         i = 0
@@ -41,6 +77,15 @@ class RegisterAllocator:
             if self._registers[i] == r:
                 self._registers[i] = None
 
+    def bind(self, key, register=None):
+        if register is None:
+            register = self.allocate()
+        self._bindings[key] = register
+
+    def get_binding(self, key):
+        return self._bindings.get(key)
+
     def __init__(self):
         self._registers = list()
+        self._bindings = dict()
 
