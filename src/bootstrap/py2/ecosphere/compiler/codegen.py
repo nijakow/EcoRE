@@ -39,8 +39,9 @@ class CodeWriter:
     def write_noop(self):
         self._u8(Bytecodes.NOOP)
 
-    def write_const(self, c):
+    def write_const(self, r, c):
         self._u8(Bytecodes.CONST)
+        self._u8(r)
         self._add_constant(c)
 
     def write_pushc(self, c):
@@ -144,6 +145,8 @@ class CodeGenerator:
                     v.free()
                 else:
                     self._writer.write_push(src.get_register_number())
+            elif src.is_constant():
+                self._writer.write_pushc(src.get_value())
             else:
                 pass # TODO: Error
         elif dst.is_register():
@@ -167,6 +170,22 @@ class CodeGenerator:
                     self._transfer_value(src, v)
                     self._transfer_value(v, dst)
                     v.free()
+            elif src.is_constant():
+                if dst.get_depth() > 0:
+                    v = self._scope.get_storage_manager().allocate()
+                    self._transfer_value(src, v)
+                    self._transfer_value(v, dst)
+                    v.free()
+                else:
+                    self._writer.write_const(dst.get_register_number(), src.get_value())
+            elif src.is_closure():
+                if dst.get_depth() > 0:
+                    v = self._scope.get_storage_manager().allocate()
+                    self._transfer_value(src, v)
+                    self._transfer_value(v, dst)
+                    v.free()
+                else:
+                    self._writer.write_closure(dst.get_register_number(), src.get_code())
             else:
                 pass # TODO: Error
         else:
