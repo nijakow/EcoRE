@@ -25,6 +25,9 @@ class Register(StorageLocation):
 
     def is_register(self):
         return True
+    
+    def get_register_number(self):
+        return self._number
 
     def get_depth(self):
         return self._depth

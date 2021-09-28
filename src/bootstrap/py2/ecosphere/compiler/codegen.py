@@ -131,6 +131,48 @@ class CodeGenerator:
         elif self._last_value.is_constant():
             pass
         self._last_value = None
+    
+    def _transfer_value(self, src, dst):
+        # TODO: From Stack to None -> POP
+        # TODO: From None to Somewhere -> Load self
+        if dst.is_stack():
+            if src.is_stack():
+                pass
+            elif src.is_register():
+                if src.get_depth() > 0:
+                    v = self._scope.get_storage_manager().allocate()
+                    self._transfer_value(src, v)
+                    self._transfer_value(v, dst)
+                    v.free()
+                else:
+                    self._writer.write_push(src.get_register_number())
+            else:
+                pass # TODO: Error
+        elif dst.is_register():
+            if src.is_stack():
+                if dst.get_depth() > 0:
+                    v = self._scope.get_storage_manager().allocate()
+                    self._transfer_value(src, v)
+                    self._transfer_value(v, dst)
+                    v.free()
+                else:
+                    self._writer.write_pop(dst.get_register_number())
+            elif src.is_register():
+                if src.get_depth() == 0 and dst.get_depth() == 0:
+                    self._writer.write_r2r(dst.get_register_number(), src.get_register_number())
+                elif src.get_depth() > 0 and dst.get_depth() == 0:
+                    self._writer.write_l2r(dst.get_register_number(), src.get_register_number(), src.get_depth())
+                elif src.get_depth() == 0 and dst.get_depth() > 0:
+                    self._writer.write_r2l(dst.get_register_number(), dst.get_depth(), src.get_register_number())
+                else:
+                    v = self._scope.get_storage_manager().allocate()
+                    self._transfer_value(src, v)
+                    self._transfer_value(v, dst)
+                    v.free()
+            else:
+                pass # TODO: Error
+        else:
+            pass # TODO: Error
 
     def load_self(self, c):
         self._last_value = self._scope.get_storage_manager().get_self()
@@ -147,8 +189,13 @@ class CodeGenerator:
         else:
             return False
 
-    def store_var(self, storage_location, depth):
-        pass # TODO
+    def store_var(self, name):
+        storage_location = self._scope.get_binding(name)
+        if storage_location is not None:
+            self._transfer_value_to(storage_location)
+            return True
+        else:
+            return False
 
     def push(self):
         if self._last_value is None:
@@ -166,19 +213,19 @@ class CodeGenerator:
             pass
 
     def op_builtin(self, args, key):
-        pass # TODO
+        self._writer.write_builtin(args, key)
 
     def op_builtinv(self, args, key):
-        pass # TODO
+        self._writer.write_builtinv(args, key)
 
     def op_send(self, args, key):
-        pass # TODO
+        self._writer.write_send(args, key)
 
     def op_sendv(self, args, key):
-        pass # TODO
+        self._writer.write_sendv(args, key)
 
     def op_return(self, depth):
-        pass # TODO
+        self._writer.write_return(self._scope.get_depth())
 
     def __init__(self, writer: CodeWriter, scope):
         self._writer = writer
