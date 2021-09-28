@@ -122,20 +122,18 @@ class CodeWriter:
 class CodeGenerator:
 
     def _drop_last_value(self):
-        if self._last_value is None:
-            pass
-        elif self._last_value.is_register():
-            pass
-        elif self._last_value.is_stack():
-            self._writer.write_pop()
-        elif self._last_value.is_constant():
-            pass
+        self._transfer_value(self._last_value, None)
         self._last_value = None
     
     def _transfer_value(self, src, dst):
-        # TODO: From Stack to None -> POP
-        # TODO: From None to Somewhere -> Load self
-        if dst.is_stack():
+        if src is None:
+            src = self._scope.get_storage_manager().get_self()
+        if dst is None:
+            if src.is_stack():
+                self._writer.write_pop()
+            else:
+                pass
+        elif dst.is_stack():
             if src.is_stack():
                 pass
             elif src.is_register():
