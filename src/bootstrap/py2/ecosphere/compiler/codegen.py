@@ -209,25 +209,13 @@ class CodeGenerator:
     def store_var(self, name):
         storage_location = self._scope.get_binding(name)
         if storage_location is not None:
-            self._transfer_value_to(storage_location)
+            self._transfer_value_to(self._last_value, storage_location)
             return True
         else:
             return False
 
     def push(self):
-        if self._last_value is None:
-            self.load_self()
-        if self._last_value.is_register():
-            if self._last_value.get_depth() > 0:
-                register = self.to_temporary_register()
-                self._writer.write_push(register.get_index())
-                register.free()
-            else:
-                self._writer.write_push(self._last_value.get_index())
-        elif self._last_value.is_stack():
-            pass # TODO: Duplicate?
-        else:
-            pass
+        self._transfer_value(self._last_value, self._scope.get_storage_manager().get_stack())
 
     def op_builtin(self, args, key):
         self._writer.write_builtin(args, key)

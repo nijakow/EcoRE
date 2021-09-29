@@ -13,11 +13,13 @@ class Environment:
 
     def bind(self, var, storage_location=None):
         self.get_storage_manager().bind(var, storage_location)
+        if storage_location is None:
+            storage_location = self.get_storage_manager().allocate()
+        self._bindings[var] = storage_location
 
     def get_binding(self, var):
-        storage_location = self.get_storage_manager().get_binding(var)
-        if storage_location:
-            return storage_location
+        if var in self._bindings:
+            return self._bindings[var]
         else:
             return self._lookup(var)
 
@@ -30,6 +32,7 @@ class Environment:
     def __init__(self, storage_manager, parent):
         self._storage = storage_manager
         self._direct_parent = parent
+        self._bindings = dict()
 
 class RootEnvironment(Environment):
 

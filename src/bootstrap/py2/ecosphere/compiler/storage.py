@@ -34,6 +34,9 @@ class Register(StorageLocation):
 
     def increase_depth(self):
         return Register(None, self._number, self._depth + 1)
+    
+    def free(self):
+        self._allocator.free(self)
 
     def __init__(self, allocator, number, depth=0):
         self._allocator = allocator
@@ -79,14 +82,6 @@ class StorageManager:
         while i < m:
             if self._registers[i] == r:
                 self._registers[i] = None
-
-    def bind(self, key, register=None):
-        if register is None:
-            register = self.allocate()
-        self._bindings[key] = register
-
-    def get_binding(self, key):
-        return self._bindings.get(key)
 
     def __init__(self):
         self._registers = list()
