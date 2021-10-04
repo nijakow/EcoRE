@@ -4,6 +4,12 @@ class ASTVisitor:
 
     def visit_unknown(self, ast):
         raise Exception('Visiting unknown AST: ' + str(type(ast)))
+    
+    def __init__(self):
+        pass
+    
+
+class ASTCompilerVisitor(ASTVisitor):
 
     def visit_self(self, ast):
         self._code_generator.load_self()
