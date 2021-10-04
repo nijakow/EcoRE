@@ -123,8 +123,7 @@ class CodeWriter:
 class CodeGenerator:
 
     def _drop_last_value(self):
-        self._transfer_value(self._last_value, None)
-        self._last_value = None
+        self._transfer_last_value(None)
     
     def _transfer_value(self, src, dst):
         if src is None:
@@ -190,18 +189,28 @@ class CodeGenerator:
                 pass # TODO: Error
         else:
             pass # TODO: Error
+    
+    def _transfer_last_value(self, target):
+        if not self._last_value:
+            self.load_self()
+        f = self._last_value
+        self._last_value = None
+        f(target)
+    
+    def _set_last_value(self, v):
+        self._last_value = lambda target: self._transfer_value(v, target)
 
     def load_self(self):
-        self._last_value = self._scope.get_storage_manager().get_self()
+        self._set_last_value(self._scope.get_storage_manager().get_self())
 
     def load_constant(self, c):
-        self._last_value = self._scope.get_storage_manager().get_constant(c)
+        self._set_last_value(self._scope.get_storage_manager().get_constant(c))
 
     def load_var(self, name):
         self._drop_last_value()
         storage_location = self._scope.get_binding(name)
         if storage_location is not None:
-            self._last_value = storage_location
+            self._set_last_value(storage_location)
             return True
         else:
             return False
@@ -209,13 +218,13 @@ class CodeGenerator:
     def store_var(self, name):
         storage_location = self._scope.get_binding(name)
         if storage_location is not None:
-            self._transfer_value_to(self._last_value, storage_location)
+            self._transfer_last_value(storage_location)
             return True
         else:
             return False
 
     def push(self):
-        self._transfer_value(self._last_value, self._scope.get_storage_manager().get_stack())
+        self._transfer_last_value(self._scope.get_storage_manager().get_stack())
 
     def op_builtin(self, args, key):
         self._writer.write_builtin(args, key)
@@ -234,7 +243,16 @@ class CodeGenerator:
 
     def op_closure(self, code):
         self._drop_last_value()
-        self._writer.write_closure(code)  # TODO, FIXME, XXX: Where do we put this???
+        def writer(target):
+            if target is not None:
+                if target.is_register() and target.get_depth() == 0:
+                    self._writer.write_closure(target.get_register_number(), code)
+                else:
+                    v = self._scope.get_storage_manager().allocate()
+                    self._writer.write_closure(v.get_register_number(), code)
+                    self._transfer_value(v, target)
+                    v.free()
+        self._last_value = writer
 
     def __init__(self, writer: CodeWriter, scope):
         self._writer = writer
