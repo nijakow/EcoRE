@@ -7,7 +7,19 @@ class ASTVisitor:
     
     def __init__(self):
         pass
-    
+
+
+class ASTAssignmentVisitor(ASTVisitor):
+
+    def visit_send(self, ast):
+        assert ast.get_arg_count() == 0
+        if not self._code_generator.store_var(ast.get_key()):
+            self._code_generator.push()
+            self._code_generator.op_assign(ast.get_key())  # TODO, FIXME, XXX: What's with the subject?
+
+    def __init__(self, code_generator):
+        self._code_generator = code_generator
+
 
 class ASTCompilerVisitor(ASTVisitor):
 
@@ -41,7 +53,9 @@ class ASTCompilerVisitor(ASTVisitor):
             self._code_generator.op_send(arg_count, ast.get_key())  # TODO: Add one because of the subject?
 
     def visit_assignment(self, ast):
-        return self.visit_unknown(ast)  # TODO
+        ast.get_rhs().accept(self)
+        assignment_visitor = ASTAssignmentVisitor(self._code_generator)
+        ast.get_lhs().accept(assignment_visitor)
 
     def visit_var(self, ast):
         return self.visit_unknown(ast)  # TODO
@@ -58,6 +72,9 @@ class ASTCompilerVisitor(ASTVisitor):
     def visit_block(self, ast):
         code = ecosphere.compiler.compile_ast(ast.get_body(), parameters=ast.get_parameters(), has_varargs=ast.has_varargs(), parent_env=self._environment)
         self._code_generator.op_closure(code)
+    
+    def visit_object(self, ast):
+        self._code_generator.load_constant(ast.get_value())
 
     def finish(self):
         pass  # TODO: Load the last value as the return value, add a return bytecode

@@ -102,6 +102,12 @@ class ASTAssignment(ASTExpression):
 
     def accept(self, visitor):
         visitor.visit_assignment(self)
+    
+    def get_lhs(self):
+        return self._lhs
+    
+    def get_rhs(self):
+        return self._rhs
 
     def __init__(self, lhs, rhs):
         super().__init__()

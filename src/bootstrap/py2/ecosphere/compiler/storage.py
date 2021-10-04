@@ -65,6 +65,9 @@ class StorageManager:
 
     def get_constant(self, c):
         return Constant(c)
+    
+    def get_stack(self):
+        return StackLocation()
 
     def allocate(self):
         i = 0

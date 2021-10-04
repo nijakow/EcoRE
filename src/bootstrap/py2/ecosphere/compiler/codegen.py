@@ -237,6 +237,9 @@ class CodeGenerator:
 
     def op_sendv(self, args, key):
         self._writer.write_sendv(args, key)
+    
+    def op_assign(self, key):
+        self._writer.write_assign(key)
 
     def op_return(self, depth):
         self._writer.write_return(self._scope.get_depth())
