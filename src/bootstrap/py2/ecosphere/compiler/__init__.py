@@ -7,10 +7,11 @@ class Compiler:
     def __init__(self, ast, parent_env=None):
         self._environment = ecosphere.compiler.scopes.RootEnvironment(parent_env)
 
-def compile_ast(the_ast, parameters=list()):
-    environment = ecosphere.compiler.scopes.RootEnvironment()
+def compile_ast(the_ast, parameters=list(), has_varargs=False, parent_env=None):
+    environment = ecosphere.compiler.scopes.RootEnvironment(parent_env)
+    # TODO: Handle parameters and varargs
     writer = ecosphere.compiler.codegen.CodeWriter()
-    codegen = ecosphere.compiler.codegen.CodeGenerator(writer)
+    codegen = ecosphere.compiler.codegen.CodeGenerator(writer, environment)
     visitor = ecosphere.compiler.visitors.ASTVisitor(codegen, environment)
     the_ast.accept(visitor)
 

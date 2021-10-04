@@ -1,6 +1,7 @@
 import ecosphere.parser.stream
 import ecosphere.parser.tokenizer
 import ecosphere.parser.parser
+import ecosphere.compiler
 
 from pprint import pprint
 
@@ -12,6 +13,8 @@ def test(text):
     for e in p.parse_expressions(ecosphere.parser.tokenizer.TokenType.EOF):
         print(type(e))
         pprint(e.__dict__)
+        print('Compiling...')
+        print(ecosphere.compiler.compile_ast(e))
         print()
 
 

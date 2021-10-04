@@ -191,7 +191,7 @@ class CodeGenerator:
         else:
             pass # TODO: Error
 
-    def load_self(self, c):
+    def load_self(self):
         self._last_value = self._scope.get_storage_manager().get_self()
 
     def load_constant(self, c):
@@ -231,6 +231,10 @@ class CodeGenerator:
 
     def op_return(self, depth):
         self._writer.write_return(self._scope.get_depth())
+
+    def op_closure(self, code):
+        self._drop_last_value()
+        self._writer.write_closure(code)  # TODO, FIXME, XXX: Where do we put this???
 
     def __init__(self, writer: CodeWriter, scope):
         self._writer = writer

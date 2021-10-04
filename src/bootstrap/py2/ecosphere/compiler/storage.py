@@ -57,8 +57,11 @@ class Constant(StorageLocation):
 
 class StorageManager:
 
+    def get_self(self):
+        return self.get_register(0)
+
     def get_register(self, i):
-        return self._registers(i)  # TODO: Allocate it if it does not exist
+        return self._registers[i]  # TODO: Allocate it if it does not exist
 
     def get_constant(self, c):
         return Constant(c)
@@ -85,5 +88,5 @@ class StorageManager:
 
     def __init__(self):
         self._registers = list()
+        self._registers.append(Register(self, 0)) # This register will be treated as SELF
         self._bindings = dict()
-
