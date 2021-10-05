@@ -28,6 +28,27 @@ class EcoCodeSlot(EcoSlot):
 
 class EcoPlainObject(ecosphere.objects.base.EcoObject):
 
+    def find_slot_by_name(self, key):
+        for s in self._slots:
+            if s.get_name() == key:
+                return s
+        return None
+    
+    def add_slot(self, slot):
+        self._slots.append(slot)
+        if slot in self._slot_def_callbacks:
+            for f in self._slot_def_callbacks[slot]:
+                f(slot)
+
+    def when_slot_defined(self, key, func):
+        s = self.find_slot_by_name(key)
+        if s is not None:
+            func(s)
+        else:
+            if key not in self._slot_def_callbacks:
+                self._slot_def_callbacks[key] = list()
+            self._slot_def_callbacks[key].append(func)
+
     def __init__(self):
         super().__init__
         self._slots = list()
