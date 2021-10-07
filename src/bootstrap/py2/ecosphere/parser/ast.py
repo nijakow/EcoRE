@@ -3,6 +3,9 @@ class ASTExpression:
 
     def accept(self, visitor):
         visitor.visit_unknown(self)
+    
+    def eval(self, the_subject, the_environment, the_callback):
+        raise Exception('Unable to evaluate this AST!')
 
     def __init__(self):
         pass
@@ -12,6 +15,9 @@ class ASTSelf(ASTExpression):
 
     def accept(self, visitor):
         visitor.visit_self(self)
+
+    def eval(self, the_subject, the_environment, the_callback):
+        the_callback(the_subject)
 
     def __init__(self):
         super().__init__()
@@ -81,6 +87,13 @@ class ASTSend(ASTExpression):
 
     def has_varargs(self):
         return self._varargs
+    
+    def eval(self, the_subject, the_environment, the_callback):
+        def subject_callback(self, the_new_subject):
+            slot = the_new_subject.lookup_key(self.get_key())
+            slot.evaluate(the_new_subject, the_environment, the_callback)
+        assert self.get_arg_count() == 0
+        self.get_subject().eval(the_subject, the_environment, subject_callback)
 
     def __init__(self, subject, key, args, varargs):
         super().__init__()
