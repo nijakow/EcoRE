@@ -28,13 +28,15 @@ if __name__ == '__main__':
         "This is a comment!"
         x = 5.
         [int] y = 101.
-        with z = foo.
-        with* zz = foo.
+        with z = 7.
+        with* zz = 42.
         with* [int] zzz = 42.
         [any] routine => hey.
         square: [int] x => x * x.
         [int] f([int] x, [int] y) => (x * x) + (2 * y).
     \}.
+    ''')
+    '''
     #=hello: \{ x = 5 \}.
     #~hello~.
-    ''')
+    '''

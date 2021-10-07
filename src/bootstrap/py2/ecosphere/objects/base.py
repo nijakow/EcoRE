@@ -6,3 +6,8 @@ class EcoObject:
 
     def __init__(self):
         pass
+
+class EcoNumber(EcoObject):
+
+    def __init__(self, value):
+        self._value = value

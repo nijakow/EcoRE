@@ -76,10 +76,6 @@ class ASTCompilerVisitor(ASTVisitor):
     def visit_object(self, ast):
         self._code_generator.load_constant(ast.get_value())
 
-    def finish(self):
-        pass  # TODO: Load the last value as the return value, add a return bytecode
-
     def __init__(self, code_generator, environment):
         self._code_generator = code_generator
         self._environment = environment
-

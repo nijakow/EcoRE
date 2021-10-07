@@ -8,6 +8,7 @@ class TokenType(enum.Enum):
     IDENTIFIER = enum.auto()
     STRING = enum.auto()
     KEY = enum.auto()
+    NUMBER = enum.auto()
     LABEL = enum.auto()
     LPAREN = enum.auto()
     RPAREN = enum.auto()
@@ -65,6 +66,15 @@ class KeyToken(Token):
     def __init__(self, tokenizer: 'Tokenizer', key: ecosphere.objects.misc.EcoKey):
         super().__init__(tokenizer, TokenType.KEY)
         self._key = key
+
+class NumberToken(Token):
+
+    def get_value(self):
+        return self._value
+    
+    def __init__(self, tokenizer: 'Tokenizer', value):
+        super().__init__(tokenizer, TokenType.NUMBER)
+        self._value = value
 
 class LabelToken(Token):
 
@@ -136,7 +146,12 @@ class Tokenizer:
 
         while self._s.has() and not self._isspecial(self._s.peek()):
             c += self._s.read()
-        
+
+        try:
+            return NumberToken(self, int(c))
+        except:
+            pass
+
         if c == '': return Token(self, TokenType.EOF)
         elif c == 'self': return Token(self, TokenType.SELF)
         elif c == 'with': return Token(self, TokenType.WITH)

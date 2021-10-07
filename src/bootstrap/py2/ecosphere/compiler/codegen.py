@@ -256,9 +256,11 @@ class CodeGenerator:
                     self._transfer_value(v, target)
                     v.free()
         self._last_value = writer
+    
+    def finish(self):
+        pass # TODO
 
     def __init__(self, writer: CodeWriter, scope):
         self._writer = writer
         self._scope = scope
         self._last_value = None
-

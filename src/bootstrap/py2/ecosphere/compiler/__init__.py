@@ -14,4 +14,4 @@ def compile_ast(the_ast, parameters=list(), has_varargs=False, parent_env=None):
     codegen = ecosphere.compiler.codegen.CodeGenerator(writer, environment)
     visitor = ecosphere.compiler.visitors.ASTCompilerVisitor(codegen, environment)
     the_ast.accept(visitor)
-
+    return codegen.finish()
