@@ -12,7 +12,6 @@ class Environment:
         return RootEnvironment(self)
 
     def bind(self, var, storage_location=None):
-        self.get_storage_manager().bind(var, storage_location)
         if storage_location is None:
             storage_location = self.get_storage_manager().allocate()
         self._bindings[var] = storage_location
@@ -45,9 +44,24 @@ class RootEnvironment(Environment):
                 return inc
         return None
 
+    def add_parameter(self, key):
+        self.bind(key)
+        self._parameter_count += 1
+    
+    def enable_varargs(self):
+        self._has_varargs = True
+    
+    def get_parameter_count(self):
+        return self._parameter_count
+    
+    def has_varargs(self):
+        return self._has_varargs
+
     def __init__(self, parent=None):
         super().__init__(ecosphere.compiler.storage.StorageManager(), None)
         self._indirect_parent = parent
+        self._parameter_count = 0
+        self._has_varargs = False
 
 class SubEnvironment(Environment):
 

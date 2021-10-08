@@ -199,7 +199,7 @@ class ASTBlock(ASTExpression):
     def get_body(self):
         return self._body
 
-    def __init__(self, varargs, parameters, body):
+    def __init__(self, parameters, varargs, body):
         super().__init__()
         self._parameters = parameters
         self._varargs = varargs

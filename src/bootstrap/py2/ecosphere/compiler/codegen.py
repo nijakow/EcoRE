@@ -1,3 +1,4 @@
+import ecosphere.objects.misc
 
 class Bytecodes:
     NOOP = 0x00
@@ -258,7 +259,8 @@ class CodeGenerator:
         self._last_value = writer
     
     def finish(self):
-        pass # TODO
+        instructions, constants, objects = self._writer.finish()
+        return ecosphere.objects.misc.EcoCode(instructions, constants, objects, self._scope.get_parameter_count(), self._scope.has_varargs())
 
     def __init__(self, writer: CodeWriter, scope):
         self._writer = writer
