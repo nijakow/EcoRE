@@ -44,6 +44,7 @@ class ASTCompilerVisitor(ASTVisitor):
         if (arg_count == 0) and (self._code_generator.load_var(ast.get_key())):
             return
         ast.get_subject().accept(self)
+        self._code_generator.push()
         for arg in ast.get_args():
             arg.accept(self)
             self._code_generator.push()

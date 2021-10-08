@@ -22,7 +22,9 @@ if __name__ == '__main__':
     test('''
     hello world.
     this is a test.
+    [ :y => y ].
     [ :x => y ].
+    [ :x => x <- a ].
     y <- a.
     \{
         "This is a comment!"

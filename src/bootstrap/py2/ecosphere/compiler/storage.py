@@ -56,6 +56,7 @@ class Constant(StorageLocation):
 
 
 class StorageManager:
+    _STACK = StackLocation()
 
     def get_self(self):
         return self.get_register(0)
@@ -67,7 +68,7 @@ class StorageManager:
         return Constant(c)
     
     def get_stack(self):
-        return StackLocation()
+        return StorageManager._STACK
 
     def allocate(self):
         i = 0
@@ -88,6 +89,7 @@ class StorageManager:
         while i < m:
             if self._registers[i] == r:
                 self._registers[i] = None
+            i += 1
 
     def __init__(self):
         self._registers = list()

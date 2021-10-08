@@ -200,6 +200,9 @@ class CodeGenerator:
     
     def _set_last_value(self, v):
         self._last_value = lambda target: self._transfer_value(v, target)
+    
+    def _set_last_value_to_stack(self):
+        self._set_last_value(self._scope.get_storage_manager().get_stack())
 
     def load_self(self):
         self._set_last_value(self._scope.get_storage_manager().get_self())
@@ -229,21 +232,26 @@ class CodeGenerator:
 
     def op_builtin(self, args, key):
         self._writer.write_builtin(args, key)
+        self._set_last_value_to_stack()
 
     def op_builtinv(self, args, key):
         self._writer.write_builtinv(args, key)
+        self._set_last_value_to_stack()
 
     def op_send(self, args, key):
         self._writer.write_send(args, key)
+        self._set_last_value_to_stack()
 
     def op_sendv(self, args, key):
         self._writer.write_sendv(args, key)
+        self._set_last_value_to_stack()
     
     def op_assign(self, key):
         self._writer.write_assign(key)
 
     def op_return(self, depth):
-        self._writer.write_return(self._scope.get_depth())
+        self.push()
+        self._writer.write_return(depth)
 
     def op_closure(self, code):
         self._drop_last_value()
@@ -259,7 +267,9 @@ class CodeGenerator:
         self._last_value = writer
     
     def finish(self):
+        self.op_return(0)
         instructions, constants, objects = self._writer.finish()
+        self._writer = None
         return ecosphere.objects.misc.EcoCode(instructions, constants, objects, self._scope.get_parameter_count(), self._scope.has_varargs())
 
     def __init__(self, writer: CodeWriter, scope):

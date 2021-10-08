@@ -229,11 +229,11 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber)
         }
         TARGET(MAKE_CLOSURE) {
             u8                   dest;
-            u8                   closure_id;
+            u16                  closure_id;
             struct Eco_Closure*  closure;
 
             dest       = NEXT_U8();
-            closure_id = NEXT_U8();
+            closure_id = NEXT_U16();
 
             closure    = Eco_Closure_New(top->code->code_instances[closure_id], Eco_Fiber_Top(fiber));
 
