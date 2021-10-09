@@ -143,10 +143,21 @@ class ASTVar(ASTExpression):
 
     def accept(self, visitor):
         visitor.visit_var(self)
+    
+    def get_var(self):
+        return self._var
+    
+    def get_var_value(self):
+        return self._value
+    
+    def get_followup_expression(self):
+        return self._next
 
-    def __init__(self, variables):
+    def __init__(self, variable, value, next_expr):
         super().__init__()
-        self._vars = variables
+        self._var = variable
+        self._value = value
+        self._next = next_expr
 
 class ASTAssignment(ASTExpression):
 

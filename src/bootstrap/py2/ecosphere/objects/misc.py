@@ -49,7 +49,8 @@ class EcoCode(ecosphere.objects.base.EcoObject):
                 if op == Bytecodes.NOOP:
                     self._op('NOOP')
                 elif op == Bytecodes.CONST:
-                    self._op('CONST', self._const())
+                    reg = self._u8()
+                    self._op('CONST', reg, '<-', self._const())
                 elif op == Bytecodes.PUSHC:
                     self._op('PUSHC', self._const())
                 elif op == Bytecodes.PUSH:

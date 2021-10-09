@@ -44,6 +44,9 @@ class IdentifierToken(Token):
 
     def get_text(self) -> str:
         return self._text
+    
+    def get_key(self):
+        return ecosphere.objects.misc.EcoKey.Get(self.get_text())
 
     def __init__(self, tokenizer: 'Tokenizer', name: str):
         super().__init__(tokenizer, TokenType.IDENTIFIER)

@@ -59,7 +59,12 @@ class ASTCompilerVisitor(ASTVisitor):
         ast.get_lhs().accept(assignment_visitor)
 
     def visit_var(self, ast):
-        return self.visit_unknown(ast)  # TODO
+        varname = ast.get_var()
+        value = ast.get_var_value()
+        value.accept(self)
+        self._environment.bind(varname)
+        self._code_generator.store_var(varname)
+        ast.get_followup_expression().accept(self)
 
     def visit_return(self, ast):
         ast.get_expr().accept(self)

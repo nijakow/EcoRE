@@ -25,6 +25,7 @@ if __name__ == '__main__':
     [ :y => y ].
     [ :x => y ].
     [ :x => x <- a ].
+    [ | x <- 5 | x ].
     y <- a.
     \{
         "This is a comment!"

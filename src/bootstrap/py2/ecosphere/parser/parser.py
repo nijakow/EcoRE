@@ -148,11 +148,20 @@ class Parser:
                 args.append(e)
         return ASTSend(ast, ecosphere.objects.misc.EcoKey.Get(name), args, varargs)
 
+    def parse_var(self):
+        varname = self.expect(TokenType.IDENTIFIER).get_key()
+        if self.check(TokenType.ASSIGNMENT):
+            value = self.parse_expression()
+        else:
+            value = ASTSelf()
+        self.expect(TokenType.BAR)
+        return ASTVar(varname, value, self.parse_expression())
+
     def parse_expression(self, allow_followups:bool=True) -> ASTExpression:
         if allow_followups and self.check(TokenType.CARET):
             return ASTReturn(self.parse_expression(allow_followups))
         elif allow_followups and self.check(TokenType.BAR):
-            return ASTVar(self.parse_expressions(TokenType.BAR), self.parse_expression())
+            return self.parse_var()
         ast = self.parse_simple_expression(allow_followups)
         next = None
         while ast != next:
