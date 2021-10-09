@@ -80,7 +80,11 @@ class ASTCompilerVisitor(ASTVisitor):
         self._code_generator.op_closure(code)
     
     def visit_object(self, ast):
-        self._code_generator.load_constant(ast.get_value())
+        d = dict()
+        def callback(value):
+            d['value'] = value
+        ast.evaluate(None, None, callback)
+        self._code_generator.load_constant(d['value'])
 
     def __init__(self, code_generator, environment):
         self._code_generator = code_generator

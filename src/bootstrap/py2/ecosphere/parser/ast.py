@@ -30,17 +30,14 @@ class ASTObject(ASTExpression):
     def accept(self, visitor):
         visitor.visit_object(self)
     
-    def get_value(self):
-        if self._value is None:
-            self._value = self._construct_value()
-        return self._value
+    def evaluate(self, the_subject, the_environment, the_callback):
+        self._evaluate(the_subject, the_environment, the_callback)
     
-    def _construct_value(self):
+    def _evaluate(self, the_subject, the_environment, the_callback):
         raise Exception('Can\'t construct a value for this AST!')
 
     def __init__(self):
         super().__init__()
-        self._value = None
 
 class ASTGroup(ASTObject):
 
@@ -49,12 +46,12 @@ class ASTGroup(ASTObject):
         self._objects = objects
 
 class ASTPlainObject(ASTObject):
-
-    def _construct_value(self):
+    
+    def _evaluate(self, the_subject, the_environment, the_callback):
         plain = ecosphere.objects.plain.EcoPlainObject()
+        the_callback(plain)
         for slot in self._slots:
-            slot.create_on(plain)
-        return plain
+            slot.create_on(plain, the_environment)
 
     def __init__(self, slots):
         super().__init__()
@@ -62,14 +59,14 @@ class ASTPlainObject(ASTObject):
 
 class ASTSlot:
 
-    def create_on(self, plain_object):
+    def create_on(self, plain_object, the_environment):
         if 'code' in self._flags:
             code = ecosphere.compiler.compile_ast(self._value, self._args, 'varargs' in self._flags)
             slot = ecosphere.objects.plain.EcoCodeSlot(self._name, code)
         else:
             slot = ecosphere.objects.plain.EcoValueSlot(self._name, 'inherited' in self._flags, 'part' in self._flags)
             if self._value is not None:
-                slot.set_value(self._value.get_value())
+                self._value.evaluate(plain_object, the_environment, lambda value: slot.set_value(value))
         plain_object.add_slot(slot)
 
     def __init__(self, name, the_type, args, flags, value):
@@ -81,14 +78,17 @@ class ASTSlot:
 
 class ASTNumber(ASTObject):
 
-    def _construct_value(self):
-        return ecosphere.objects.base.EcoNumber(self._value)
+    def _evaluate(self, the_subject, the_environment, the_callback):
+        the_callback(ecosphere.objects.base.EcoNumber(self._value))
 
     def __init__(self, value):
         super().__init__()
         self._value = value
 
 class ASTKey(ASTObject):
+
+    def _evaluate(self, the_subject, the_environment, the_callback):
+        the_callback(self._key)
 
     def __init__(self, key):
         super().__init__()
