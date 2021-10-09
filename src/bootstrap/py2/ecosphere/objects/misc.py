@@ -93,7 +93,7 @@ class EcoCode(ecosphere.objects.base.EcoObject):
                     self._op('RET ', self._u8())
                 elif op == Bytecodes.CLOSURE:
                     dst = self._u8()
-                    self._op('CLSR', dst, self._u16())
+                    self._op('CLSR', dst, '<-', self._u16())
                 else:
                     self._op('???')
             return self._text
