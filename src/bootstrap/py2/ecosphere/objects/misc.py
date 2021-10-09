@@ -50,50 +50,50 @@ class EcoCode(ecosphere.objects.base.EcoObject):
                     self._op('NOOP')
                 elif op == Bytecodes.CONST:
                     reg = self._u8()
-                    self._op('CONST', reg, '<-', self._const())
+                    self._op('LOAD', reg, '<-', self._const())
                 elif op == Bytecodes.PUSHC:
-                    self._op('PUSHC', self._const())
+                    self._op('PSHC', self._const())
                 elif op == Bytecodes.PUSH:
                     self._op('PUSH', self._u8())
                 elif op == Bytecodes.POP:
-                    self._op('POP', self._u8())
+                    self._op('POP ', self._u8())
                 elif op == Bytecodes.DROP:
                     self._op('DROP')
                 elif op == Bytecodes.DUP:
-                    self._op('DUP')
+                    self._op('DUP ')
                 elif op == Bytecodes.R2R:
                     dst = self._u8()
                     src = self._u8()
-                    self._op('R2R', dst, '<-', src)
+                    self._op('R2R ', dst, '<-', src)
                 elif op == Bytecodes.R2L:
                     dst = self._u8()
                     dep = self._u8()
                     src = self._u8()
-                    self._op('R2L', dst, dep, '<-', src)
+                    self._op('R2L ', dst, dep, '<-', src)
                 elif op == Bytecodes.L2R:
                     dst = self._u8()
                     src = self._u8()
                     dep = self._u8()
-                    self._op('L2R', dst, '<-', src, dep)
+                    self._op('L2R ', dst, '<-', src, dep)
                 elif op == Bytecodes.BUILTIN:
                     args = self._u8()
-                    self._op('BUILTIN', args, self._const())
+                    self._op('BLT ', args, self._const())
                 elif op == Bytecodes.BUILTINV:
                     args = self._u8()
-                    self._op('BUILTINV', args, self._const())
+                    self._op('BLTV', args, self._const())
                 elif op == Bytecodes.SEND:
                     args = self._u8()
                     self._op('SEND', args, self._const())
                 elif op == Bytecodes.SENDV:
                     args = self._u8()
-                    self._op('SENDV', args, self._const())
+                    self._op('SNDV', args, self._const())
                 elif op == Bytecodes.ASSIGN:
-                    self._op('ASSIGN', self._const())
+                    self._op('ASGN', self._const())
                 elif op == Bytecodes.RETURN:
-                    self._op('RETURN', self._u8())
+                    self._op('RET ', self._u8())
                 elif op == Bytecodes.CLOSURE:
                     dst = self._u8()
-                    self._op('CLOSURE', dst, self._u16())
+                    self._op('CLSR', dst, self._u16())
                 else:
                     self._op('???')
             return self._text
