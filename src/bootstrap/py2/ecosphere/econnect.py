@@ -9,6 +9,8 @@ class EConnectWriter:
             num = -num
         else:
             negative = False
+        if num == 0:
+            b.append(0x00)
         while num > 0:
             if b:
                 b.append((num & 0x7f) | 0x80)
