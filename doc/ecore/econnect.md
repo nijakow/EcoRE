@@ -81,9 +81,7 @@ Format: `<value:vlq>`.
 
 The `value` gets returned.
 
-Example: The Integer 31:
-
-`0x1f`
+Example: The Integer 31: `0x1f`
 
 #### The Standard Key Message
 
@@ -93,6 +91,4 @@ Format: `<id:vlq> <name:string>`
 
 The key is bound to `id` (if nonzero) and gets returned.
 
-Example: The key `x`, stored at table index 42:
-
-`0x2a 0x01 h i`
+Example: The key `hi`, stored at table index 42: `0x2a 0x02 h i`
