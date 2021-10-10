@@ -54,6 +54,7 @@ class Serializer(EConnectWriter):
         if key in self._table:
             self.write_vlq(self._table[key])
         else:
+            self.write_vlq(0)
             obj_id = self.add_object(key)
             self.write_vlq(obj_id)
             self.write_string(name)
