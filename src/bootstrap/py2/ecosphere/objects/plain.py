@@ -3,11 +3,22 @@ import ecosphere.objects.base
 
 class EcoSlot:
 
+    def serialize(self, serializer):
+        raise Exception('Can\'t serialize this slot!')
+
     def __init__(self, name):
         self._name = name
 
 
 class EcoValueSlot(EcoSlot):
+
+    def serialize(self, serializer):
+        flags = 0x00
+        if self._is_inherited: flags |= 0x02
+        if self._is_part:      flags |= 0x04
+        serializer.write_vlq(flags)
+        serializer.write_object(self._name)
+        serializer.write_object(self._value)
 
     def set_value(self, value):
         self._value = value
@@ -32,6 +43,12 @@ class EcoValueSlot(EcoSlot):
 
 class EcoCodeSlot(EcoSlot):
 
+    def serialize(self, serializer):
+        flags = 0x01
+        serializer.write_vlq(flags)
+        serializer.write_object(self._name)
+        serializer.write_object(self._code)
+
     def evaluate(self, the_subject, the_environment, the_callback, args=list()):
         # TODO, XXX: Handle args, create a new environment
         self._code.get_ast().evaluate(the_subject, the_environment, the_callback)
@@ -54,6 +71,14 @@ class EcoPlainObject(ecosphere.objects.base.EcoObject):
     
     def add_slot(self, slot):
         self._slots.append(slot)
+    
+    def serialize(self, serializer):
+        if not serializer.try_serialize_known_object(self):
+            serializer.write_message('ecosphere.object.object')
+            serializer.write_vlq(serializer.add_object(self))
+            serializer.write_vlq(len(self._slots))
+            for slot in self._slots:
+                slot.serialize(serializer)
 
     def __init__(self):
         super().__init__

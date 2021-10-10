@@ -4,7 +4,7 @@ class EcoObject:
     def lookup_key(self, key):
         return None
     
-    def serialize(self, serializer, id=0):
+    def serialize(self, serializer):
         raise Exception('Can\'t serialize this object!')
 
     def __init__(self):
@@ -12,7 +12,7 @@ class EcoObject:
 
 class EcoNumber(EcoObject):
 
-    def serialize(self, serializer, id=0):
+    def serialize(self, serializer):
         serializer.write_message('ecosphere.object.int')
         serializer.write_vlq(self._value)
 

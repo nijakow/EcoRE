@@ -12,10 +12,11 @@ class EcoKey(ecosphere.objects.base.EcoObject):
     def dot_extend(self, extension):
         return EcoKey.Get(self._name + ':' + extension)
     
-    def serialize(self, serializer, id=0):
-        serializer.write_message('ecosphere.object.key')
-        serializer.write_vlq(id)
-        serializer.write_string(self._name)
+    def serialize(self, serializer):
+        if not serializer.try_serialize_known_object(self):
+            serializer.write_message('ecosphere.object.key')
+            serializer.write_vlq(serializer.add_object(self))
+            serializer.write_string(self._name)
 
     def Get(name):
         if name not in EcoKey.KEYS:

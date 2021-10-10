@@ -44,7 +44,7 @@ class EConnectWriter:
 
 class Serializer(EConnectWriter):
 
-    def _add_object(self, object):
+    def add_object(self, object):
         obj_id = len(self._table)
         self._table[object] = obj_id
         return obj_id
@@ -58,12 +58,16 @@ class Serializer(EConnectWriter):
             self.write_vlq(obj_id)
             self.write_string(name)
 
-    def write_object(self, object):
+    def try_serialize_known_object(self, object):
         if object in self._table:
             self.write_message('ecosphere.econnect.id')
             self.write_vlq(self._table[object])
+            return True
         else:
-            object.serialize(self, self._add_object(object))
+            return False
+
+    def write_object(self, object):
+        object.serialize(self)
     
     def write_objects(self, objects):
         self.write_vlq(len(objects))
