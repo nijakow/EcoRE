@@ -51,7 +51,10 @@ class Parser:
             if self.check(TokenType.WITH):
                 flags.add('inherited')
             elif self.check(TokenType.OWN):
-                flags.add('own')
+                flags.add('part')
+            elif self.check(TokenType.WITHSTAR):
+                flags.add('inherited')
+                flags.add('part')
             else:
                 break
         name = ''

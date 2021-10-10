@@ -25,6 +25,7 @@ class TokenType(enum.Enum):
     ELLIPSIS = enum.auto()
     SELF = enum.auto()
     WITH = enum.auto()
+    WITHSTAR = enum.auto()
     OWN = enum.auto()
 
 
@@ -158,6 +159,7 @@ class Tokenizer:
         if c == '': return Token(self, TokenType.EOF)
         elif c == 'self': return Token(self, TokenType.SELF)
         elif c == 'with': return Token(self, TokenType.WITH)
+        elif c == 'with*': return Token(self, TokenType.WITHSTAR)
         elif c == 'own': return Token(self, TokenType.OWN)
         elif c == '=': return Token(self, TokenType.ASSIGNMENT)
         else: return IdentifierToken(self, c)
