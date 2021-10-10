@@ -63,4 +63,36 @@ Example:
 
 `0x01 <optional>`
 
-> Note: Since the binding `0x00` is special, using `0x00` as a message ID always references the _Standard Key Message_.
+> Note: Since the binding `0x00` is special, using `0x00` as a message ID always references the _Block Message_.
+
+#### The Block Message
+
+Canonical message ID: `ecosphere.econnect.block`.
+
+Format: `<message_count:vlq> <messages:message...>`.
+
+The values of the following messages are evaluated in order, the results (except the last one, which serves as the return value) get discarded.
+
+#### The Integer Message
+
+Canonical message ID: `ecosphere.object.int`.
+
+Format: `<value:vlq>`.
+
+The `value` gets returned.
+
+Example: The Integer 31:
+
+`0x1f`
+
+#### The Standard Key Message
+
+Canonical message ID: `ecosphere.object.key`.
+
+Format: `<id:vlq> <name:string>`
+
+The key is bound to `id` (if nonzero) and gets returned.
+
+Example: The key `x`, stored at table index 42:
+
+`0x2a 0x01 h i`
