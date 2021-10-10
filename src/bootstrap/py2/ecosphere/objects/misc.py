@@ -111,8 +111,9 @@ class EcoCode(ecosphere.objects.base.EcoObject):
 
     def serialize(self, serializer, id=0):
         serializer.write_message('ecosphere.object.code')
-        serializer.write_vlq(self._register_count)  # TODO, FIXME, XXX!
-        serializer.write_vlq(len(self._parameters))
+        # serializer.write_vlq(self._register_count)  # TODO, FIXME, XXX!
+        print('Warning: register_count can not be serialized, THE RESULTING BINARY IS BROKEN!')
+        serializer.write_vlq(self._parameters)
         if self._has_varargs:
             serializer.write_vlq(0x01)
         else:

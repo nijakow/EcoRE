@@ -12,12 +12,15 @@ def test(text):
     t = ecosphere.parser.tokenizer.Tokenizer(s)
     p = ecosphere.parser.parser.Parser(t)
     expression = p.parse_expression()
+    holder = dict()
     def the_callback(value):
-        print('Result:', value)
-        serializer = ecosphere.econnect.Serializer()
-        serializer.write_object(value)
-        print(serializer.finish())
+        holder['value'] = value    
     expression.evaluate(None, None, the_callback)
+    value = holder['value']
+    print('Result:', value)
+    serializer = ecosphere.econnect.Serializer()
+    serializer.write_object(value)
+    print(serializer.finish())
 
 
 if __name__ == '__main__':
