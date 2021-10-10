@@ -50,11 +50,11 @@ class Serializer(EConnectWriter):
         return obj_id
 
     def write_message(self, name):
-        key = ecosphere.objects.misc.EcoKey.Get(name)
+        key = EcoKey.Get(name)
         if key in self._table:
             self.write_vlq(self._table[key])
         else:
-            obj_id = self._add_object(key)
+            obj_id = self.add_object(key)
             self.write_vlq(obj_id)
             self.write_string(name)
 
@@ -75,4 +75,5 @@ class Serializer(EConnectWriter):
             self.write_object(object)
 
     def __init__(self):
+        super().__init__()
         self._table = dict()

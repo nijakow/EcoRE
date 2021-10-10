@@ -131,7 +131,7 @@ class CodeGenerator:
             src = self._scope.get_storage_manager().get_self()
         if dst is None:
             if src.is_stack():
-                self._writer.write_pop()
+                self._writer.write_drop()
             else:
                 pass
         elif dst.is_stack():

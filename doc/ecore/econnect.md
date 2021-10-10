@@ -63,7 +63,7 @@ Example:
 
 `0x01 <optional>`
 
-> Note: Since the binding `0x00` is special, using `0x00` as a message ID always references the _Block Message_.
+> Note: Since the binding `0x00` is special, using `0x00` as a message ID always references a _Standard Key Message_, followed by the message body defined by the previously declared key.
 
 #### The Block Message
 
