@@ -47,7 +47,7 @@ class EConnectWriter:
 class Serializer(EConnectWriter):
 
     def add_object(self, object):
-        obj_id = len(self._table)
+        obj_id = len(self._table) + 1   # "+1" to avoid generating the magical ID of 0x00
         self._table[object] = obj_id
         return obj_id
 
