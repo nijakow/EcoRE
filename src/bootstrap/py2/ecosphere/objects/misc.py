@@ -130,4 +130,3 @@ class EcoCode(ecosphere.objects.base.EcoObject):
         self._parameters = parameter_count
         self._has_varargs = has_varargs
         disasm = EcoCode.Disassembler(self)
-        print(disasm.disassemble())
