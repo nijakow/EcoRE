@@ -270,7 +270,12 @@ class CodeGenerator:
         self.op_return(0)
         instructions, constants, objects = self._writer.finish()
         self._writer = None
-        return ecosphere.objects.misc.EcoCode(instructions, constants, objects, self._scope.get_parameter_count(), self._scope.has_varargs())
+        return ecosphere.objects.misc.EcoCode(instructions,
+                                              constants,
+                                              objects,
+                                              self._scope.get_storage_manager().get_max_register_count(),
+                                              self._scope.get_parameter_count(),
+                                              self._scope.has_varargs())
 
     def __init__(self, writer: CodeWriter, scope):
         self._writer = writer

@@ -81,6 +81,7 @@ class StorageManager:
             i += 1
         r = Register(self, m)
         self._registers.append(r)
+        self._max_register_count = max(self._max_register_count, len(self._registers))
         return r
 
     def free(self, r):
@@ -91,7 +92,11 @@ class StorageManager:
                 self._registers[i] = None
             i += 1
 
+    def get_max_register_count(self):
+        return self._max_register_count
+
     def __init__(self):
         self._registers = list()
         self._registers.append(Register(self, 0)) # This register will be treated as SELF
         self._bindings = dict()
+        self._max_register_count = 1  # The SELF register is already allocated
