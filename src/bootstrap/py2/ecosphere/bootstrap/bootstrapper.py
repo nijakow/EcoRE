@@ -11,11 +11,12 @@ def test(text):
     s = ecosphere.parser.stream.StringStream(text)
     t = ecosphere.parser.tokenizer.Tokenizer(s)
     p = ecosphere.parser.parser.Parser(t)
-    expression = p.parse_expression()
+    expressions = p.parse_expressions(ecosphere.parser.tokenizer.TokenType.EOF)
     holder = dict()
     def the_callback(value):
-        holder['value'] = value    
-    expression.evaluate(None, None, the_callback)
+        holder['value'] = value
+    for expression in expressions:
+        expression.evaluate(None, None, the_callback)
     value = holder['value']
     print('Result:', value)
     serializer = ecosphere.econnect.Serializer()
