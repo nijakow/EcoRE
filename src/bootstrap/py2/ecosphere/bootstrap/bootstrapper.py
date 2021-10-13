@@ -1,10 +1,43 @@
+import os.path
+import pathlib
+
 import ecosphere.parser.stream
 import ecosphere.parser.tokenizer
 import ecosphere.parser.parser
 import ecosphere.compiler
 import ecosphere.econnect
 
-from pprint import pprint
+
+class FileLoader:
+
+    def load_relative_path(self, path):
+        return self._shared_info.load(self._path.joinpath(path).resolve())
+
+    def parse_expressions(self):
+        print('Loading', self._path.as_posix(), '...')
+        s = ecosphere.parser.stream.StringStream(self._path.read_text())
+        t = ecosphere.parser.tokenizer.Tokenizer(s)
+        p = ecosphere.parser.parser.Parser(t)
+        expressions = p.parse_expressions(ecosphere.parser.tokenizer.TokenType.EOF)
+        return expressions
+
+    def __init__(self, shared_info, path):
+        self._shared_info = shared_info
+        self._path = path
+
+class SharedBootstrappingInfo:
+
+    def load(self, path):
+        as_posix = path.as_posix()
+        if as_posix not in self._loaded_files:
+            loader = FileLoader(self, path)
+            self._loaded_files[as_posix] = loader
+            return loader
+        else:
+            return self._loaded_files[as_posix]
+
+    def __init__(self):
+        self._loaded_files = dict()
 
 
 def test(text):
