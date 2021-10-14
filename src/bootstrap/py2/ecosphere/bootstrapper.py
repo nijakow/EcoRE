@@ -16,7 +16,8 @@ class FileLoader:
 
     def parse_expressions(self):
         print('Loading', self._path.as_posix(), '...')
-        s = ecosphere.parser.stream.StringStream(self._path.read_text())
+        text = self._path.read_text()
+        s = ecosphere.parser.stream.StringStream(text)
         t = ecosphere.parser.tokenizer.Tokenizer(s)
         p = ecosphere.parser.parser.Parser(t)
         expressions = p.parse_expressions(ecosphere.parser.tokenizer.TokenType.EOF)
@@ -28,7 +29,7 @@ class FileLoader:
         def callback(value):
             holder['value'] = value
         for expr in expressions:
-            expr.evaluate(None, self, the_callback)
+            expr.evaluate(None, self, callback)
         return holder['value']
 
     def __init__(self, shared_info, path):
@@ -52,11 +53,12 @@ class SharedBootstrappingInfo:
 
 def main(srcfile, binfile):
     shared = SharedBootstrappingInfo()
-    loader = shared.load(srcfile)
+    loader = shared.load(pathlib.Path(srcfile))
     result = loader.evaluate()
     serializer = ecosphere.econnect.Serializer()
     serializer.write_object(result)
-    print(serializer.finish())  # TODO: Write to file
+    with open(binfile, 'wb') as out:
+        out.write(serializer.finish())
 
 if __name__ == '__main__':
     main(sys.argv[1], sys.argv[2])

@@ -2,11 +2,11 @@ ifeq ($(PYTHON),)
 PYTHON := python3
 endif
 
-NAME = master.ebf
+NAME = test_v2.ebf
 
 
 %.ebf: %.eco
-	PYTHONPATH=../py $(PYTHON) -m ecosphere.bootstrapper $< $@
+	PYTHONPATH=../py2 $(PYTHON) -m ecosphere.bootstrapper $< $@
 
 all: $(NAME)
 
