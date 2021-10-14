@@ -238,8 +238,13 @@ class ASTProxy(ASTExpression):
         visitor.visit_proxy(self)
     
     def evaluate(self, subject, environment, the_callback):
-        # TODO: Depending on the proxy type, load a file (or do something else)
-        environment.when_label_defined(self._address, the_callback)
+        if self._proxy_type == '':
+            environment.when_label_defined(self._address, the_callback)
+        elif self._proxy_type == 'file':
+            loader = environment.load_file(self._address)
+            the_callback(loader.evaluate())
+        else:
+            raise Exception('Can\'t evaluate ASTProxy: Proxy type not recognized!')
 
     def __init__(self, proxy_type, address):
         super().__init__()

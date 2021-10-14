@@ -11,11 +11,12 @@ import ecosphere.econnect
 
 class FileLoader:
 
-    def load_relative_path(self, path):
-        return self._shared_info.load(self._path.joinpath(path).resolve())
+    def load_file(self, path):
+        parent = self._path.parents[0]
+        return self._shared_info.load(parent.joinpath(path).resolve())
 
-    def parse_expressions(self):
-        print('Loading', self._path.as_posix(), '...')
+    def _parse_expressions(self):
+        print('Loading', self._path.resolve().as_posix(), '...')
         text = self._path.read_text()
         s = ecosphere.parser.stream.StringStream(text)
         t = ecosphere.parser.tokenizer.Tokenizer(s)
@@ -24,13 +25,15 @@ class FileLoader:
         return expressions
     
     def evaluate(self):
-        expressions = self.parse_expressions()
-        holder = dict()
+        if self._evaluated:
+            return self._evaluated
+        if not self._expressions:
+            self._expressions = self._parse_expressions()
         def callback(value):
-            holder['value'] = value
-        for expr in expressions:
+            self._evaluated = value
+        for expr in self._expressions:
             expr.evaluate(None, self, callback)
-        return holder['value']
+        return self._evaluated
     
     def when_label_defined(self, label, callback):
         if label in self._label_values:
@@ -52,6 +55,8 @@ class FileLoader:
     def __init__(self, shared_info, path):
         self._shared_info = shared_info
         self._path = path
+        self._expressions = None
+        self._evaluated = None
         self._label_values = dict()
         self._callbacks = dict()
 
