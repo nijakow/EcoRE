@@ -2,8 +2,14 @@
     test_v2.eco - Tests for the V2 Ecosphere Bootstrapper
 "
 
+#=test: {
+
+},
+
 {
     x = 5.
+    test1 = #<:test>.
+    test2 = #<:test>.
 
     Init => self;
 }

@@ -10,6 +10,7 @@ class TokenType(enum.Enum):
     KEY = enum.auto()
     NUMBER = enum.auto()
     LABEL = enum.auto()
+    PROXY = enum.auto()
     LPAREN = enum.auto()
     RPAREN = enum.auto()
     LBRACK = enum.auto()
@@ -82,16 +83,30 @@ class NumberToken(Token):
 
 class LabelToken(Token):
 
-    def is_definition(self):
-        return self._is_definition
-    
     def get_address(self):
         return self._target
 
-    def __init__(self, tokenizer: 'Tokenizer', target: str, is_definition: bool):
+    def __init__(self, tokenizer: 'Tokenizer', target: str):
         super().__init__(tokenizer, TokenType.LABEL)
         self._target = target
-        self._is_definition = is_definition
+
+class ProxyToken(Token):
+
+    def get_proxy_type(self):
+        return self._proxy_type
+    
+    def get_proxy_target(self):
+        return self._target
+
+    def __init__(self, tokenizer: 'Tokenizer', target: str):
+        super().__init__(tokenizer, TokenType.PROXY)
+        index = target.find(':')
+        if index >= 0:
+            self._proxy_type = target[:index]
+            self._target = target[index+1:]
+        else:
+            self._proxy_type = ''
+            self._target = target
 
 
 class Tokenizer:
@@ -142,8 +157,8 @@ class Tokenizer:
         elif self._s.peeks('^'): return Token(self, TokenType.CARET)
         elif self._s.peeks('\''): return StringToken(self, self.parse_string('\''))
         elif self._s.peeks('#\''): return KeyToken(self, ecosphere.objects.misc.EcoKey.Get(self.parse_string('\'')))
-        elif self._s.peeks('#='): return LabelToken(self, self.parse_string(':'), True)
-        elif self._s.peeks('#~'): return LabelToken(self, self.parse_string('~'), False)
+        elif self._s.peeks('#='): return LabelToken(self, self.parse_string(':'))
+        elif self._s.peeks('#<'): return ProxyToken(self, self.parse_string('>'))
         elif self._s.peeks('\"'): self.parse_string('\"'); return self.read()  # Comment
 
         c = ''

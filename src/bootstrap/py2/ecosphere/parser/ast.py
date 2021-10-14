@@ -220,17 +220,28 @@ class ASTLabelDef(ASTExpression):
 
     def accept(self, visitor):
         visitor.visit_labeldef(self)
+    
+    def evaluate(self, subject, environment, the_callback):
+        def our_callback(value):
+            environment.define_label(self._address, value)
+            the_callback(value)
+        self._expr.evaluate(subject, environment, our_callback)
 
     def __init__(self, address, expr):
         super().__init__()
         self._address = address
         self._expr = expr
 
-class ASTLabelRef(ASTExpression):
+class ASTProxy(ASTExpression):
 
     def accept(self, visitor):
-        visitor.visit_labelref(self)
+        visitor.visit_proxy(self)
+    
+    def evaluate(self, subject, environment, the_callback):
+        # TODO: Depending on the proxy type, load a file (or do something else)
+        environment.when_label_defined(self._address, the_callback)
 
-    def __init__(self, address):
+    def __init__(self, proxy_type, address):
         super().__init__()
+        self._proxy_type = proxy_type
         self._address = address

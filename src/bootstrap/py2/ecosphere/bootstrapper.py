@@ -31,10 +31,29 @@ class FileLoader:
         for expr in expressions:
             expr.evaluate(None, self, callback)
         return holder['value']
+    
+    def when_label_defined(self, label, callback):
+        if label in self._label_values:
+            callback(self._label_values[label])
+            return
+        if label not in self._callbacks:
+            self._callbacks[label] = list()
+        self._callbacks[label].append(callback)
+    
+    def define_label(self, label, value):
+        if label in self._label_values:
+            print('Warning: Redefining label \'', label, '\'!', sep='')
+        self._label_values[label] = value
+        if label in self._callbacks:
+            for callback in self._callbacks[label]:
+                callback(value)
+            del self._callbacks[label]
 
     def __init__(self, shared_info, path):
         self._shared_info = shared_info
         self._path = path
+        self._label_values = dict()
+        self._callbacks = dict()
 
 class SharedBootstrappingInfo:
 
