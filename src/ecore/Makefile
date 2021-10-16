@@ -32,7 +32,6 @@ vm/builtins/core/slots.c \
 vm/memory/memory.c \
 vm/memory/gc/gc_state.c \
 vm/memory/gc/gc.c \
-vm/core/environment.c \
 vm/core/frame.c \
 vm/core/send.c \
 vm/core/interpreter.c \

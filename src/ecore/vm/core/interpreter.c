@@ -1,7 +1,6 @@
 #include "../fiber.h"
 
 #include "bytecodes.h"
-#include "environment.h"
 #include "frame.h"
 #include "send.h"
 

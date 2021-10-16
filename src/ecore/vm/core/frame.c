@@ -2,8 +2,6 @@
 
 #include <ecore/vm/memory/gc/gc.h>
 
-#include "environment.h"
-
 
 void Eco_Frame_Mark(struct Eco_GC_State* state, struct Eco_Frame* frame)
 {
