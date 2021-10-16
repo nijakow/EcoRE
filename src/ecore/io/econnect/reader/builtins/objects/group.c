@@ -1,7 +1,7 @@
 #include "group.h"
 
-#include "../../parser.h"
-#include "../../../../../objects/group/group.h"
+#include <ecore/io/econnect/reader/parser.h>
+#include <ecore/objects/group/group.h>
 
 
 bool Eco_EConnect_Builtin_GetGroup(struct Eco_EConnect_Reader* reader,

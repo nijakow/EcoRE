@@ -1,8 +1,8 @@
 #include "key.h"
 
-#include "../../parser.h"
+#include <ecore/io/econnect/reader/parser.h>
 
-#include "../../../../../objects/misc/key/key.h"
+#include <ecore/objects/misc/key/key.h>
 
 
 bool Eco_EConnect_Builtin_GetKey(struct Eco_EConnect_Reader* reader,

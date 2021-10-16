@@ -1,7 +1,7 @@
 #include "uint.h"
 
-#include "../../parser.h"
-#include "../../../../logging/log.h"
+#include <ecore/io/econnect/reader/parser.h>
+#include <ecore/io/logging/log.h>
 
 
 bool Eco_EConnect_Builtin_GetUInt(struct Eco_EConnect_Reader* reader,

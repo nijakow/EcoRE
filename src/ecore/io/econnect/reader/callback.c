@@ -1,7 +1,7 @@
 #include "callback.h"
 
-#include "../../../objects/misc/key/key.h"
-#include "../../../vm/memory/gc/gc.h"
+#include <ecore/objects/misc/key/key.h>
+#include <ecore/vm/memory/gc/gc.h>
 
 
 void Eco_EConnect_InstallCallback(char* key_name, Eco_EConnect_Callback callback)

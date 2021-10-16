@@ -1,7 +1,7 @@
 #ifndef ECO_IO_ECONNECT_READER_RESULT_H
 #define ECO_IO_ECONNECT_READER_RESULT_H
 
-#include "../../../eco.h"
+#include <ecore/eco.h>
 
 
 enum Eco_EConnect_Result_Type

@@ -2,10 +2,10 @@
 #define ECO_IO_ECONNECT_READER_READER_H
 
 
-#include "../instance.h"
+#include <ecore/io/econnect/instance.h>
 #include "result.h"
 
-#include "../../streams/bytestream.h"
+#include <ecore/io/streams/bytestream.h>
 
 
 struct Eco_EConnect_Reader

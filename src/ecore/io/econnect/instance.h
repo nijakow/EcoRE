@@ -1,7 +1,7 @@
 #ifndef ECO_IO_ECONNECT_INSTANCE_H
 #define ECO_IO_ECONNECT_INSTANCE_H
 
-#include "../../eco.h"
+#include <ecore/eco.h>
 
 
 struct Eco_EConnect_Instance

@@ -2,8 +2,8 @@
 
 #include "object_body.h"
 
-#include "../../parser.h"
-#include "../../../../../objects/base/object.h"
+#include <ecore/io/econnect/reader/parser.h>
+#include <ecore/objects/base/object.h>
 
 
 bool Eco_EConnect_Builtin_GetObject(struct Eco_EConnect_Reader* reader,

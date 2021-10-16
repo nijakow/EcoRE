@@ -1,7 +1,7 @@
 #ifndef ECO_IO_ECONNECT_READER_CALLBACK_H
 #define ECO_IO_ECONNECT_READER_CALLBACK_H
 
-#include "../../../eco.h"
+#include <ecore/eco.h>
 
 #include "reader.h"
 #include "result.h"

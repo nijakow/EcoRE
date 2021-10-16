@@ -1,6 +1,6 @@
 #include "econnect.h"
 
-#include "reader/builtins/builtins.h"
+#include <ecore/io/econnect/reader/builtins/builtins.h>
 
 
 void Eco_EConnect_Init()

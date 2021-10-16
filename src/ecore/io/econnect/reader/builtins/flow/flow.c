@@ -1,6 +1,6 @@
 #include "flow.h"
 
-#include "../../parser.h"
+#include <ecore/io/econnect/reader/parser.h>
 
 
 bool Eco_EConnect_Builtin_Block(struct Eco_EConnect_Reader* reader,

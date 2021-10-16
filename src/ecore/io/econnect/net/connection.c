@@ -4,15 +4,15 @@
 
 #include "connection.h"
 
-#include "../econnect.h"
-#include "../reader/reader.h"
-#include "../reader/parser.h"
-#include "../reader/result.h"
+#include <ecore/io/econnect/econnect.h>
+#include <ecore/io/econnect/reader/reader.h>
+#include <ecore/io/econnect/reader/parser.h>
+#include <ecore/io/econnect/reader/result.h>
 
-#include "../../net/socket.h"
-#include "../../net/scheduler.h"
+#include <ecore/io/net/socket.h>
+#include <ecore/io/net/scheduler.h>
 
-#include "../../../vm/memory/memory.h"
+#include <ecore/vm/memory/memory.h>
 
 
 struct Eco_EConnect_Connection

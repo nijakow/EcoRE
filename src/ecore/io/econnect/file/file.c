@@ -2,9 +2,9 @@
 
 #include "file.h"
 
-#include "../instance.h"
+#include <ecore/io/econnect/instance.h>
 
-#include "../../../vm/memory/memory.h"
+#include <ecore/vm/memory/memory.h>
 
 
 bool Eco_EConnect_ReadFile(const char* filename, struct Eco_EConnect_Result* result)

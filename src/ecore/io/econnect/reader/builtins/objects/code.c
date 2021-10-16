@@ -2,9 +2,9 @@
 
 #include "object_body.h"
 
-#include "../../parser.h"
-#include "../../../../../objects/vm/code/code.h"
-#include "../../../../../vm/memory/memory.h"
+#include <ecore/io/econnect/reader/parser.h>
+#include <ecore/objects/vm/code/code.h>
+#include <ecore/vm/memory/memory.h>
 
 
 bool Eco_EConnect_Builtin_GetCode(struct Eco_EConnect_Reader* reader,

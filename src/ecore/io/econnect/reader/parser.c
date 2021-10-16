@@ -1,6 +1,6 @@
 #include "parser.h"
 
-#include "../../../objects/misc/key/key.h"
+#include <ecore/objects/misc/key/key.h>
 
 
 unsigned char Eco_EConnect_ParseByte(struct Eco_IO_ByteInputStream* stream)

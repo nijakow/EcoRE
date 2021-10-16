@@ -9,7 +9,7 @@
 #include "id/id.h"
 #include "flow/flow.h"
 
-#include "../callback.h"
+#include <ecore/io/econnect/reader/callback.h>
 
 
 void Eco_EConnect_InitReaderBuiltins()

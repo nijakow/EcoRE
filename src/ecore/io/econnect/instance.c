@@ -1,7 +1,7 @@
 #include "instance.h"
 
-#include "../../objects/misc/key/key.h"
-#include "../../vm/memory/memory.h"
+#include <ecore/objects/misc/key/key.h>
+#include <ecore/vm/memory/memory.h>
 
 
 void Eco_EConnect_Instance_Create(struct Eco_EConnect_Instance* instance)
