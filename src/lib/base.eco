@@ -12,17 +12,17 @@
 },
 
 {
-    Object = {
+    Object = #=base/object: {
         with trait = #=base/shared_behavior: {
         }.
     },
 
-    Oddball = {
-        with* parent = Object;
+    Oddball = #=base/oddball: {
+        with* parent = #<:base/object>;
     },
 
     true = {
-        with* parent = Oddball;
+        with* parent = #<:base/oddball>;
 
         ifTrue:  b => b execute.
         ifFalse: b => nil.
@@ -32,7 +32,7 @@
     },
 
     false = {
-        with* parent = Oddball;
+        with* parent = #<:base/oddball>;
 
         ifTrue:  b => nil.
         ifFalse: b => b execute.
@@ -42,7 +42,7 @@
     },
 
     nil = {
-        with* parent = Oddball;
+        with* parent = #<:base/oddball>;
 
         isNil => true.
     }
