@@ -6,7 +6,7 @@ NAME = master.ebf
 
 
 %.ebf: %.eco
-	PYTHONPATH=../py2 $(PYTHON) -m ecosphere.bootstrapper $< $@
+	PYTHONPATH=../bootstrapper $(PYTHON) -m ecosphere.bootstrapper $< $@
 
 all: $(NAME)
 
