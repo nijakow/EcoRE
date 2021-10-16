@@ -14,11 +14,13 @@ class EcoValueSlot(EcoSlot):
 
     def serialize(self, serializer):
         flags = 0x00
-        if self._is_inherited: flags |= 0x02
-        if self._is_part:      flags |= 0x04
+        if self._value is None: flags |= 0x02
+        if self._is_inherited:  flags |= 0x04
+        if self._is_part:       flags |= 0x08
         serializer.write_vlq(flags)
         serializer.write_object(self._name)
-        serializer.write_object(self._value)
+        if self._value is not None:
+            serializer.write_object(self._value)
 
     def set_value(self, value):
         self._value = value

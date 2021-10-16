@@ -83,9 +83,11 @@ class Parser:
                     self.expect(TokenType.SEPARATOR)
         if self.check(TokenType.RARROW):
             flags.add('code')
+            value = self.parse_expression()
+        elif self.check(TokenType.ASSIGNMENT):
+            value = self.parse_expression()
         else:
-            self.expect(TokenType.ASSIGNMENT)
-        value = self.parse_expression()
+            value = None
         return ASTSlot(ecosphere.objects.misc.EcoKey.Get(name), the_type, args, flags, value)
 
     def parse_object(self):
