@@ -193,6 +193,9 @@ class CodeGenerator:
     
     def _transfer_last_value(self, target):
         if not self._last_value:
+            if target is None:
+                # We're transferring None to None -> do nothing
+                return
             self.load_self()
         f = self._last_value
         self._last_value = None
@@ -205,6 +208,7 @@ class CodeGenerator:
         self._set_last_value(self._scope.get_storage_manager().get_stack())
 
     def load_self(self):
+        self._drop_last_value()
         self._set_last_value(self._scope.get_storage_manager().get_self())
 
     def load_constant(self, c):

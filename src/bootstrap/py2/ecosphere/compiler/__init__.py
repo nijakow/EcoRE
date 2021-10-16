@@ -10,9 +10,10 @@ class Compiler:
 def compile_ast(the_ast, loader, parameters=list(), has_varargs=False, parent_env=None):
     environment = ecosphere.compiler.scopes.RootEnvironment(parent_env)
     for param in parameters:
-        environment.add_parameter(param)
+        environment.add_parameter(param[0])  # Ignore type and default value info
     writer = ecosphere.compiler.codegen.CodeWriter()
     codegen = ecosphere.compiler.codegen.CodeGenerator(writer, environment)
     visitor = ecosphere.compiler.visitors.ASTCompilerVisitor(codegen, environment, loader)
     the_ast.accept(visitor)
-    return codegen.finish()
+    result = codegen.finish()
+    return result
