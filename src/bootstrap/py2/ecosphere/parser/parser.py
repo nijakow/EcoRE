@@ -25,7 +25,7 @@ class Parser:
         varargs = False
         while True:
             if self.check(TokenType.COLON):
-                parameters.append(ecosphere.objects.misc.EcoKey.Get(self.expect(TokenType.IDENTIFIER).get_text()))
+                parameters.append((ecosphere.objects.misc.EcoKey.Get(self.expect(TokenType.IDENTIFIER).get_text()),))
                 if not self.check(TokenType.RARROW):
                     self.expect(TokenType.SEPARATOR)
                 continue

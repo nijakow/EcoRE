@@ -14,6 +14,8 @@ def compile_ast(the_ast, loader, parameters=list(), has_varargs=False, parent_en
     environment = ecosphere.compiler.scopes.RootEnvironment(parent_env)
     for param in parameters:
         environment.add_parameter(param[0])  # Ignore type and default value info
+    if has_varargs:
+        environment.enable_varargs()
     writer = ecosphere.compiler.codegen.CodeWriter()
     codegen = ecosphere.compiler.codegen.CodeGenerator(writer, environment)
     visitor = ecosphere.compiler.visitors.ASTCompilerVisitor(codegen, environment, loader)

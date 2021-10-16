@@ -78,7 +78,7 @@ class CodeWriter:
         self._u8(Bytecodes.L2R)
         self._u8(dest)
         self._u8(src)
-        self._u8(src)
+        self._u8(depth)
 
     def write_builtin(self, args, key):
         self._u8(Bytecodes.BUILTIN)
@@ -278,7 +278,7 @@ class CodeGenerator:
                                               constants,
                                               objects,
                                               self._scope.get_storage_manager().get_max_register_count(),
-                                              self._scope.get_parameter_count(),
+                                              self._scope.get_parameter_count() + 1,  # One more for "self"
                                               self._scope.has_varargs())
 
     def __init__(self, writer: CodeWriter, scope):

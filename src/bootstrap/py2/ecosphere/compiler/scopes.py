@@ -42,7 +42,7 @@ class RootEnvironment(Environment):
         if self._indirect_parent is not None:
             storage_location = self._indirect_parent.get_binding(var)
             if storage_location is not None:
-                inc = storage_location.increment_depth()
+                inc = storage_location.increase_depth()
                 self.bind(var, inc)  # Keep a reference to the object to allow for comparisons
                 return inc
         return None

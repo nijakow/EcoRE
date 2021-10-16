@@ -49,9 +49,9 @@ class ASTCompilerVisitor(ASTVisitor):
             arg.accept(self)
             self._code_generator.push()
         if ast.has_varargs():
-            self._code_generator.op_sendv(arg_count, ast.get_key()) # TODO: Add one because of the subject?
+            self._code_generator.op_sendv(arg_count + 1, ast.get_key())
         else:
-            self._code_generator.op_send(arg_count, ast.get_key())  # TODO: Add one because of the subject?
+            self._code_generator.op_send(arg_count + 1, ast.get_key())
 
     def visit_assignment(self, ast):
         ast.get_rhs().accept(self)
@@ -76,7 +76,11 @@ class ASTCompilerVisitor(ASTVisitor):
             expr.accept(self)
 
     def visit_block(self, ast):
-        code = ecosphere.compiler.compile_ast(ast.get_body(), parameters=ast.get_parameters(), has_varargs=ast.has_varargs(), parent_env=self._environment)
+        code = ecosphere.compiler.compile_ast(ast.get_body(),
+                                              self._loader,
+                                              parameters=ast.get_parameters(),
+                                              has_varargs=ast.has_varargs(),
+                                              parent_env=self._environment)
         self._code_generator.op_closure(code)
     
     def visit_object(self, ast):
