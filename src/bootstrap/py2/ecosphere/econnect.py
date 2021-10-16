@@ -38,7 +38,7 @@ class EConnectWriter:
         self.write_bytes(bytes(string, 'UTF-8'))
 
     def finish(self):
-        return bytes(self._encode_vlq(len(self._bytes)) + self._bytes)
+        return bytes(self._bytes)
 
     def __init__(self):
         self._bytes = bytearray()
