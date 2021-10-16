@@ -1,16 +1,17 @@
 #include "type.h"
 
 #include "object.h"
-#include "../group/group.h"
-#include "../misc/key/key.h"
-#include "../vm/code/code.h"
-#include "../vm/code/closure.h"
-#include "../../vm/core/send.h"
-#include "../../vm/fiber.h"
-#include "../../vm/core/interpreter.h"
-#include "../../vm/memory/memory.h"
-#include "../../vm/memory/gc/gc.h"
-#include "../../io/logging/log.h"
+
+#include <ecore/objects/group/group.h>
+#include <ecore/objects/misc/key/key.h>
+#include <ecore/objects/vm/code/code.h>
+#include <ecore/objects/vm/code/closure.h>
+#include <ecore/vm/core/send.h>
+#include <ecore/vm/fiber.h>
+#include <ecore/vm/core/interpreter.h>
+#include <ecore/vm/memory/memory.h>
+#include <ecore/vm/memory/gc/gc.h>
+#include <ecore/io/logging/log.h>
 
 
 struct Eco_Type*  Eco_TYPES = NULL;

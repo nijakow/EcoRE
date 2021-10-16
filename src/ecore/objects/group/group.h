@@ -1,7 +1,7 @@
 #ifndef ECO_OBJECTS_GROUP_GROUP_H
 #define ECO_OBJECTS_GROUP_GROUP_H
 
-#include "../base/object.h"
+#include <ecore/objects/base/object.h>
 
 
 struct Eco_Message;

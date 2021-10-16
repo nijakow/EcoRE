@@ -1,8 +1,8 @@
-#include "../../eco.h"
+#include <ecore/eco.h>
 
 #include "object_payload.h"
 
-#include "../../vm/memory/memory.h"
+#include <ecore/vm/memory/memory.h>
 
 
 struct Eco_Object_Payload* Eco_Object_Payload_New(unsigned int size)

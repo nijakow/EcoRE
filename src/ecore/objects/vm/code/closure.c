@@ -1,9 +1,10 @@
 #include "closure.h"
 
 #include "code.h"
-#include "../../base/type.h"
-#include "../../../vm/core/frame.h"
-#include "../../../vm/memory/memory.h"
+
+#include <ecore/objects/base/type.h>
+#include <ecore/vm/core/frame.h>
+#include <ecore/vm/memory/memory.h>
 
 
 /*

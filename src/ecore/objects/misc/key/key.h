@@ -1,12 +1,12 @@
 #ifndef ECO_OBJECTS_MISC_KEY_KEY_H
 #define ECO_OBJECTS_MISC_KEY_KEY_H
 
-#include "../../../eco.h"
+#include <ecore/eco.h>
 
-#include "../../base/object.h"
+#include <ecore/objects/base/object.h>
 
-#include "../../../io/econnect/reader/callback.h"
-#include "../../../vm/builtins/builtin.h"
+#include <ecore/io/econnect/reader/callback.h>
+#include <ecore/vm/builtins/builtin.h>
 
 
 struct Eco_Key

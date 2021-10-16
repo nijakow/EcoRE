@@ -1,4 +1,4 @@
-#include "../../eco.h"
+#include <ecore/eco.h>
 
 #include "typecore.h"
 

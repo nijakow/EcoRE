@@ -2,7 +2,8 @@
 
 #include "object.h"
 #include "type.h"
-#include "../misc/key/key.h"
+
+#include <ecore/objects/misc/key/key.h>
 
 
 static void Eco_Object_ResizePayload(struct Eco_Object* object, unsigned int new_size)

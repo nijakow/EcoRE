@@ -1,9 +1,9 @@
 #ifndef ECO_OBJECTS_VM_CODE_CODE_H
 #define ECO_OBJECTS_VM_CODE_CODE_H
 
-#include "../../../eco.h"
+#include <ecore/eco.h>
 
-#include "../../base/object.h"
+#include <ecore/objects/base/object.h>
 
 struct Eco_GC_State;
 

@@ -1,7 +1,7 @@
 #ifndef ECO_OBJECTS_BASE_TYPECORE_H
 #define ECO_OBJECTS_BASE_TYPECORE_H
 
-#include "../../eco.h"
+#include <ecore/eco.h>
 
 struct Eco_Object;
 struct Eco_Message;

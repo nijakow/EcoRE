@@ -1,7 +1,7 @@
 #ifndef ECO_OBJECTS_BASE_TYPE_H
 #define ECO_OBJECTS_BASE_TYPE_H
 
-#include "../../eco.h"
+#include <ecore/eco.h>
 
 #include "object.h"
 #include "slot_info.h"

@@ -1,8 +1,8 @@
 #include "code.h"
 
-#include "../../base/type.h"
-#include "../../../vm/memory/memory.h"
-#include "../../../vm/memory/gc/gc.h"
+#include <ecore/objects/base/type.h>
+#include <ecore/vm/memory/memory.h>
+#include <ecore/vm/memory/gc/gc.h>
 
 
 /*

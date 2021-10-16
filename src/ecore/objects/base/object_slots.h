@@ -1,7 +1,8 @@
 #ifndef ECO_OBJECTS_BASE_OBJECT_SLOTS_H
 #define ECO_OBJECTS_BASE_OBJECT_SLOTS_H
 
-#include "../../eco.h"
+#include <ecore/eco.h>
+
 #include "slot_info.h"
 
 struct Eco_Code;

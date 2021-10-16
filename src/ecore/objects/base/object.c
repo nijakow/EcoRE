@@ -5,9 +5,10 @@
 
 #include "object_payload.h"
 #include "type.h"
-#include "../../vm/core/send.h"
-#include "../../vm/memory/memory.h"
-#include "../../vm/memory/gc/gc.h"
+
+#include <ecore/vm/core/send.h>
+#include <ecore/vm/memory/memory.h>
+#include <ecore/vm/memory/gc/gc.h>
 
 
 /*

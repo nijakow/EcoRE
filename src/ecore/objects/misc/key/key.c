@@ -2,7 +2,7 @@
 
 #include "key.h"
 
-#include "../../base/type.h"
+#include <ecore/objects/base/type.h>
 
 
 /*
