@@ -3,6 +3,7 @@
 #include "../../parser.h"
 #include "../../../../../objects/base/object_slots.h"
 #include "../../../../../objects/base/slot_info.h"
+#include "../../../../../objects/misc/key/key.h"
 
 
 bool Eco_EConnect_Reader_ReadObjectBody(struct Eco_EConnect_Reader* reader,

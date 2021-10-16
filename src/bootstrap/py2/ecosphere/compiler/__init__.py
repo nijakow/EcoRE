@@ -2,6 +2,9 @@ import ecosphere.compiler.scopes
 import ecosphere.compiler.visitors
 import ecosphere.compiler.codegen
 
+from ecosphere.parser.ast import ASTCompound
+
+
 class Compiler:
 
     def __init__(self, ast, parent_env=None):
@@ -17,3 +20,6 @@ def compile_ast(the_ast, loader, parameters=list(), has_varargs=False, parent_en
     the_ast.accept(visitor)
     result = codegen.finish()
     return result
+
+def compile_thunk(the_asts, loader):
+    return compile_ast(ASTCompound(the_asts), loader)
