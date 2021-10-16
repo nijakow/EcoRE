@@ -8,8 +8,6 @@
 #include "../../objects/misc/key/key.h"
 #include "../../objects/vm/code/closure.h"
 
-#include "../../io/logging/log.h"
-
 
 bool Eco_Fiber_EnterThunk(struct Eco_Fiber* fiber, Eco_Any* lobby, struct Eco_Code* code)
 {

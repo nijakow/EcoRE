@@ -50,6 +50,7 @@ bool Eco_EConnect_Reader_ReadObjectBody(struct Eco_EConnect_Reader* reader,
             Eco_Object_AddSlot(object, -1, slot_info, &any);
         } else {
             slot_info.is_inherited = false;
+            slot_info.is_part      = false;
             if (!Eco_EConnect_Reader_ReadObject(reader, result, (struct Eco_Object**) &code))
                 return false;
             Eco_Object_AddCodeSlot(object, -1, slot_info, code);
