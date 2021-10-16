@@ -1,15 +1,15 @@
-#include "eco.h"
+#include <ecore/eco.h>
 
-#include "objects/objects.h"
-#include "objects/base/type.h"
-#include "objects/base/object.h"
-#include "objects/group/group.h"
+#include <ecore/objects/objects.h>
+#include <ecore/objects/base/type.h>
+#include <ecore/objects/base/object.h>
+#include <ecore/objects/group/group.h>
 
-#include "vm/vm.h"
-#include "vm/builtins/builtins.h"
-#include "vm/memory/gc/gc.h"
+#include <ecore/vm/vm.h>
+#include <ecore/vm/builtins/builtins.h>
+#include <ecore/vm/memory/gc/gc.h>
 
-#include "io/econnect/econnect.h"
+#include <ecore/io/econnect/econnect.h>
 
 
 
