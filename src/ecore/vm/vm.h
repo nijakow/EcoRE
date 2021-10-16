@@ -30,6 +30,6 @@ void Eco_VM_Mark(struct Eco_GC_State*, struct Eco_VM*);
 struct Eco_Fiber* Eco_VM_SpawnThunk(struct Eco_VM*, struct Eco_Code*);
 void Eco_VM_Run(struct Eco_VM*);
 
-bool Eco_VM_LoadImage(struct Eco_VM*, const char*);
+bool Eco_VM_LoadImageFromFile(struct Eco_VM*, const char*);
 
 #endif

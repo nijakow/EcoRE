@@ -101,7 +101,7 @@ void Eco_VM_Run(struct Eco_VM* vm)
 }
 
 
-bool Eco_VM_LoadImage(struct Eco_VM* vm, const char* file)
+bool Eco_VM_LoadImageFromFile(struct Eco_VM* vm, const char* file)
 {
     struct Eco_EConnect_Result  result;
     struct Eco_Code*            code;

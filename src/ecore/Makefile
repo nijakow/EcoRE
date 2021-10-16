@@ -83,6 +83,11 @@ run: $(EXECUTABLE)
 	$(MAKE) -C ../lib
 	$(EXECUTABLE) ../lib/master.ebf
 
+.phony: test
+test: $(EXECUTABLE)
+	$(MAKE) -C $(BOOTSTRAP_ENVIRONMENT)
+	$(EXECUTABLE) '$(BOOTSTRAP_MASTER)'
+
 .phony: debug
 debug: $(EXECUTABLE)
 	gdb $(EXECUTABLE)
@@ -97,9 +102,5 @@ clean:
 
 .phony: re
 re: clean all
-
-.phony: test
-test: $(EXECUTABLE)
-	$(EXECUTABLE) '$(BOOTSTRAP_MASTER)'
 
 -include $(DEPENDS)

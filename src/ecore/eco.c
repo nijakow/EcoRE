@@ -13,9 +13,9 @@
 
 
 
-void Eco_LoadImage(const char* file)
+void Eco_LoadImageFromFile(const char* file)
 {
-    Eco_VM_LoadImage(&Eco_THE_VM, file);
+    Eco_VM_LoadImageFromFile(&Eco_THE_VM, file);
 }
 
 void Eco_Run()

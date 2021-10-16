@@ -25,7 +25,7 @@ void Eco_Main(int argc, char *argv[])
     if (argc != 2) {
         Eco_Log_Error("Usage: %s <filename.ebf>\n", argv[0]);
     } else {
-        Eco_LoadImage(argv[1]);
+        Eco_LoadImageFromFile(argv[1]);
         Eco_Run();
     }
 
