@@ -1,7 +1,7 @@
 #ifndef ECO_VM_MEMORY_GC_GC_STATE_H
 #define ECO_VM_MEMORY_GC_GC_STATE_H
 
-#include "../../../eco.h"
+#include <ecore/eco.h>
 
 struct Eco_GC_Page;
 

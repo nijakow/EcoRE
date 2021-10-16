@@ -2,11 +2,12 @@
 
 
 #include "gc_state.h"
-#include "../memory.h"
-#include "../../vm.h"
-#include "../../builtins/builtins.h"
-#include "../../../objects/base/object.h"
-#include "../../../objects/base/type.h"
+
+#include <ecore/vm/vm.h>
+#include <ecore/vm/memory/memory.h>
+#include <ecore/vm/builtins/builtins.h>
+#include <ecore/objects/base/object.h>
+#include <ecore/objects/base/type.h>
 
 
 extern struct Eco_Object* Eco_OBJECTS;

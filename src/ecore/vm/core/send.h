@@ -1,7 +1,7 @@
 #ifndef ECO_VM_CORE_SEND_H
 #define ECO_VM_CORE_SEND_H
 
-#include "../../eco.h"
+#include <ecore/eco.h>
 
 struct Eco_Fiber;
 

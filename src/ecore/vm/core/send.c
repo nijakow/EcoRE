@@ -1,7 +1,7 @@
 #include "send.h"
 
-#include "../../objects/base/object.h"
-#include "../../objects/base/type.h"
+#include <ecore/objects/base/object.h>
+#include <ecore/objects/base/type.h>
 
 
 bool Eco_Send(struct Eco_Message* message, Eco_Any* target)

@@ -1,10 +1,12 @@
 #include "vm.h"
 
 #include "fiber.h"
+
 #include "builtins/builtins.h"
 #include "core/interpreter.h"
-#include "../io/econnect/file/file.h"
-#include "../io/logging/log.h"
+
+#include <ecore/io/econnect/file/file.h>
+#include <ecore/io/logging/log.h>
 
 
 struct Eco_VM Eco_THE_VM;

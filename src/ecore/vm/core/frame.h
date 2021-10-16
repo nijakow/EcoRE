@@ -1,8 +1,8 @@
 #ifndef ECO_VM_CORE_FRAME_H
 #define ECO_VM_CORE_FRAME_H
 
-#include "../../eco.h"
-#include "../../objects/vm/code/code.h"
+#include <ecore/eco.h>
+#include <ecore/objects/vm/code/code.h>
 
 
 struct Eco_Environment;

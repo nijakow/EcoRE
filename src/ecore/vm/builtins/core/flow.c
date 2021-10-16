@@ -1,8 +1,8 @@
 #include "flow.h"
 
-#include "../../../objects/vm/code/closure.h"
-#include "../../core/interpreter.h"
-#include "../../core/frame.h"
+#include <ecore/objects/vm/code/closure.h>
+#include <ecore/vm/core/interpreter.h>
+#include <ecore/vm/core/frame.h>
 
 
 bool Eco_VM_Builtin_Value(struct Eco_Fiber* fiber, unsigned int args)

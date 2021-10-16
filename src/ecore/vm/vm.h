@@ -2,7 +2,9 @@
 #define ECO_VM_VM_H
 
 #include "fiber.h"
-#include "../io/net/scheduler.h"
+
+#include <ecore/io/net/scheduler.h>
+
 
 struct Eco_GC_State;
 struct Eco_Code;

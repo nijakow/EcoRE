@@ -7,9 +7,9 @@
 #include "core/math.h"
 #include "core/slots.h"
 
-#include "../fiber.h"
-#include "../../objects/misc/key/key.h"
-#include "../../io/logging/log.h"
+#include <ecore/vm/fiber.h>
+#include <ecore/objects/misc/key/key.h>
+#include <ecore/io/logging/log.h>
 
 
 struct Eco_Object* Eco_VM_Builtin_LOBBY = NULL;

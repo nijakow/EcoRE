@@ -5,8 +5,8 @@
 #include "frame.h"
 #include "send.h"
 
-#include "../../objects/misc/key/key.h"
-#include "../../objects/vm/code/closure.h"
+#include <ecore/objects/misc/key/key.h>
+#include <ecore/objects/vm/code/closure.h>
 
 
 bool Eco_Fiber_EnterThunk(struct Eco_Fiber* fiber, Eco_Any* lobby, struct Eco_Code* code)

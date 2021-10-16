@@ -1,7 +1,7 @@
 #ifndef ECO_VM_FIBER_H
 #define ECO_VM_FIBER_H
 
-#include "../eco.h"
+#include <ecore/eco.h>
 
 #include "fiber_states.h"
 

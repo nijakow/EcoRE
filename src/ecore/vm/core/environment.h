@@ -1,10 +1,10 @@
 #ifndef ECO_VM_CORE_ENVIRONMENT_H
 #define ECO_VM_CORE_ENVIRONMENT_H
 
-#include "../../eco.h"
+#include <ecore/eco.h>
 
-#include "../memory/memory.h"
-#include "../memory/gc/gc.h"
+#include <ecore/vm/memory/memory.h>
+#include <ecore/vm/memory/gc/gc.h>
 
 
 struct Eco_Environment

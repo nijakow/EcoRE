@@ -1,5 +1,4 @@
 #include "memory.h"
 
-#include "../../objects/base/object.h"
-#include "../../objects/base/type.h"
-
+#include <ecore/objects/base/object.h>
+#include <ecore/objects/base/type.h>

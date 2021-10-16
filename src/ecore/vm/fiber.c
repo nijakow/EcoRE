@@ -4,9 +4,9 @@
 #include "memory/gc/gc.h"
 
 #include "core/frame.h"
-#include "../objects/vm/code/closure.h"
 
-#include "../io/logging/log.h"
+#include <ecore/objects/vm/code/closure.h>
+#include <ecore/io/logging/log.h>
 
 
 struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)

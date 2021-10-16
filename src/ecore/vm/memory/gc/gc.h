@@ -3,8 +3,8 @@
 
 #include "gc_state.h"
 
-#include "../../../eco.h"
-#include "../../../objects/base/object.h"
+#include <ecore/eco.h>
+#include <ecore/objects/base/object.h>
 
 
 static inline void Eco_GC_State_MarkObject(struct Eco_GC_State* state, void* object)

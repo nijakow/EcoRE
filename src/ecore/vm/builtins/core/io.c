@@ -1,6 +1,6 @@
 #include "io.h"
 
-#include "../../../io/logging/log.h"
+#include <ecore/io/logging/log.h>
 
 
 bool Eco_VM_Builtin_Print(struct Eco_Fiber* fiber, unsigned int args)

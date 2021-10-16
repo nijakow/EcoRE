@@ -1,6 +1,6 @@
 #include "slots.h"
 
-#include "../../../objects/base/object_slots.h"
+#include <ecore/objects/base/object_slots.h>
 
 
 /*
