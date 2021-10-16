@@ -158,8 +158,11 @@ class Parser:
             value = self.parse_expression()
         else:
             value = ASTSelf()
-        self.expect(TokenType.BAR)
-        return ASTVar(varname, value, self.parse_expression())
+        self.check(TokenType.SEPARATOR)
+        if self.check(TokenType.BAR):
+            return ASTVar(varname, value, self.parse_expression())
+        else:
+            return ASTVar(varname, value, self.parse_var())
 
     def parse_expression(self, allow_followups:bool=True) -> ASTExpression:
         if allow_followups and self.check(TokenType.CARET):

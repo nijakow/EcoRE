@@ -2,7 +2,7 @@ ifeq ($(PYTHON),)
 PYTHON := python3
 endif
 
-NAME = test_v2.ebf
+NAME = master.ebf
 
 
 %.ebf: %.eco

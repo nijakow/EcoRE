@@ -27,6 +27,9 @@ class Environment:
             return self._direct_parent.get_binding(var)
         else:
             return None
+    
+    def get_depth(self):
+        return self._direct_parent.get_depth()
 
     def __init__(self, storage_manager, parent):
         self._storage = storage_manager
@@ -56,6 +59,12 @@ class RootEnvironment(Environment):
     
     def has_varargs(self):
         return self._has_varargs
+    
+    def get_depth(self):
+        if self._indirect_parent is None:
+            return 0
+        else:
+            return self._indirect_parent.get_depth() + 1
 
     def __init__(self, parent=None):
         super().__init__(ecosphere.compiler.storage.StorageManager(), None)

@@ -35,9 +35,9 @@ class ASTCompilerVisitor(ASTVisitor):
             arg.accept(self)
             self._code_generator.push()
         if ast.has_varargs():
-            self._code_generator.op_builtinv(len(args), arg.get_key())
+            self._code_generator.op_builtinv(len(args), ast.get_key())
         else:
-            self._code_generator.op_builtin(len(args), arg.get_key())
+            self._code_generator.op_builtin(len(args), ast.get_key())
 
     def visit_send(self, ast):
         arg_count = ast.get_arg_count()
@@ -83,9 +83,16 @@ class ASTCompilerVisitor(ASTVisitor):
         d = dict()
         def callback(value):
             d['value'] = value
-        ast.evaluate(None, None, callback)
+        ast.evaluate(None, self._loader, callback)
         self._code_generator.load_constant(d['value'])
+    
+    def visit_proxy(self, ast):
+        self.visit_object(ast)
+    
+    def visit_labeldef(self, ast):
+        self.visit_object(ast)
 
-    def __init__(self, code_generator, environment):
+    def __init__(self, code_generator, environment, loader):
         self._code_generator = code_generator
         self._environment = environment
+        self._loader = loader
