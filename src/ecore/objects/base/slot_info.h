@@ -5,6 +5,7 @@ struct Eco_Object_SlotInfo
 {
     struct Eco_Object*  key;
     unsigned int        is_inherited : 1;
+    unsigned int        is_part      : 1;
 };
 
 #endif

@@ -34,9 +34,18 @@ bool Eco_EConnect_Reader_ReadObjectBody(struct Eco_EConnect_Reader* reader,
         }
 
         if ((flags & 0x01) == 0) {
-            slot_info.is_inherited = flags & 0x02;
-            if (!Eco_EConnect_Reader_ReadAny(reader, result, &any))
-                return false;
+            slot_info.is_inherited = flags & 0x04;
+            slot_info.is_part      = flags & 0x08;
+            if (flags & 0x02) {
+                if (!Eco_EConnect_Reader_ReadAny(reader, result, &any))
+                    return false;
+            } else {
+                /*
+                 * No value was given by default, so we make the slot point
+                 * to the object itself.
+                 */
+                Eco_Any_AssignPointer(&any, object);
+            }
             Eco_Object_AddSlot(object, -1, slot_info, &any);
         } else {
             slot_info.is_inherited = false;
