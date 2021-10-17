@@ -110,16 +110,18 @@ class EcoCode(ecosphere.objects.base.EcoObject):
             self._i = 0
 
     def serialize(self, serializer, id=0):
-        serializer.write_message('ecosphere.object.code')
-        serializer.write_vlq(self._register_count)
-        serializer.write_vlq(self._parameters)
-        if self._has_varargs:
-            serializer.write_vlq(0x01)
-        else:
-            serializer.write_vlq(0x00)
-        serializer.write_objects(self._constants)
-        serializer.write_objects(self._closures)
-        serializer.write_bytes(self._instructions)
+        if not serializer.try_serialize_known_object(self):
+            serializer.write_message('ecosphere.object.code')
+            serializer.write_vlq(serializer.add_object(self))
+            serializer.write_vlq(self._register_count)
+            serializer.write_vlq(self._parameters)
+            if self._has_varargs:
+                serializer.write_vlq(0x01)
+            else:
+                serializer.write_vlq(0x00)
+            serializer.write_objects(self._constants)
+            serializer.write_objects(self._closures)
+            serializer.write_bytes(self._instructions)
 
     def __init__(self, instructions, constants, closures, register_count, parameter_count, has_varargs):
         super().__init__()

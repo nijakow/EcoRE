@@ -10,10 +10,15 @@
 bool Eco_EConnect_Builtin_GetCode(struct Eco_EConnect_Reader* reader,
                                   struct Eco_EConnect_Result* result)
 {
+    unsigned int      id;
     unsigned int      index;
     struct Eco_Code*  the_code;
 
-    the_code       = Eco_Code_New();
+    the_code                      = Eco_Code_New();
+
+    id                            = Eco_EConnect_ParseUInt(&reader->stream);
+
+    Eco_EConnect_Instance_OptionallyBindObject(reader->instance, (struct Eco_Object*) the_code, id);
 
     the_code->register_count      = Eco_EConnect_ParseUInt(&reader->stream);
     the_code->arg_count           = Eco_EConnect_ParseUInt(&reader->stream);
