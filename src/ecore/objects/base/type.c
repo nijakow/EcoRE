@@ -15,9 +15,10 @@
 #include <ecore/io/logging/log.h>
 
 
+struct Eco_Object*  Eco_TYPES = NULL;
+
 struct Eco_TypeCore Eco_Type_TYPECORE;
 struct Eco_Type*    Eco_Type_TYPE;
-
 
 
 bool Eco_Type_Slot_GetValue(struct Eco_Type_Slot* slot, struct Eco_Object* object, Eco_Any* location)
@@ -82,10 +83,11 @@ static struct Eco_Type* Eco_Type_New(unsigned int slot_count)
 {
     struct Eco_Type*  type;
 
-    type = Eco_Object_New_Derived(Eco_Type_TYPE,
-                                  sizeof(struct Eco_Type)
-                                    + sizeof(struct Eco_Type_Slot) * slot_count,
-                                  0);
+    type = Eco_Object_New_Derived_OnList(Eco_Type_TYPE,
+                                         sizeof(struct Eco_Type)
+                                            + sizeof(struct Eco_Type_Slot) * slot_count,
+                                         0,
+                                         &Eco_TYPES);
 
     type->typecore              = NULL;
     type->slot_count            = slot_count;

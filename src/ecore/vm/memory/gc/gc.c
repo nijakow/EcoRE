@@ -12,6 +12,7 @@
 
 
 extern struct Eco_Object* Eco_OBJECTS;
+extern struct Eco_Object* Eco_TYPES;
 
 
 void Eco_GC_MakeSticky(struct Eco_Object* object)
@@ -44,26 +45,29 @@ void Eco_GC_Mark(struct Eco_GC_State* state)
     Eco_GC_MarkLoop(state);
 }
 
-void Eco_GC_Sweep(struct Eco_GC_State* state)
+void Eco_GC_SweepList(struct Eco_GC_State* state, struct Eco_Object** list)
 {
     struct Eco_Object*  object;
-    struct Eco_Object** ptr;
 
-    ptr = &Eco_OBJECTS;
-
-    while (*ptr != NULL)
+    while (*list != NULL)
     {
-        object = *ptr;
+        object = *list;
 
         if (object->header.mark_done) {
             object->header.mark_queued = false;
             object->header.mark_done   = false;
-            ptr = &(object->next);
+            list = &(object->next);
         } else {
-            *ptr = object->next;
+            *list = object->next;
             object->type->typecore->del(object);
         }
     }
+}
+
+void Eco_GC_Sweep(struct Eco_GC_State* state)
+{
+    Eco_GC_SweepList(state, &Eco_OBJECTS);
+    Eco_GC_SweepList(state, &Eco_TYPES);
 }
 
 void Eco_GC_Step(struct Eco_GC_State* state)

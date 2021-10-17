@@ -35,6 +35,7 @@ struct Eco_Object
 
 
 struct Eco_Object* Eco_Object_New();
+void* Eco_Object_New_Derived_OnList(struct Eco_Type*, unsigned int, unsigned int, struct Eco_Object**);
 void* Eco_Object_New_Derived(struct Eco_Type*, unsigned int, unsigned int);
 bool  Eco_Object_Send(struct Eco_Message*, struct Eco_Object*);
 void  Eco_Object_Mark(struct Eco_GC_State*, struct Eco_Object*);

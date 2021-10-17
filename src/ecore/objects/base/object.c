@@ -42,9 +42,10 @@ void Eco_Object_Terminate()
 struct Eco_Object* Eco_OBJECTS = NULL;
 
 
-void* Eco_Object_New_Derived(struct Eco_Type* type,
-                             unsigned int size,
-                             unsigned int payload_size)
+void* Eco_Object_New_Derived_OnList(struct Eco_Type* type,
+                                    unsigned int size,
+                                    unsigned int payload_size,
+                                    struct Eco_Object** list)
 {
     struct Eco_Object* object;
 
@@ -58,10 +59,17 @@ void* Eco_Object_New_Derived(struct Eco_Type* type,
 
     object->payload             = Eco_Object_Payload_New(payload_size);
 
-    object->next                = Eco_OBJECTS;
-    Eco_OBJECTS                 = object;
+    object->next                = *list;
+    *list                       = object;
 
     return object;
+}
+
+void* Eco_Object_New_Derived(struct Eco_Type* type,
+                             unsigned int size,
+                             unsigned int payload_size)
+{
+    return Eco_Object_New_Derived_OnList(type, size, payload_size, &Eco_OBJECTS);
 }
 
 struct Eco_Object*  Eco_Object_New()
