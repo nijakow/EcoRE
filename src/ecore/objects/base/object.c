@@ -50,8 +50,6 @@ void* Eco_Object_New_Derived(struct Eco_Type* type,
 
     object = Eco_Memory_Alloc(size);
 
-    Eco_Type_Incr(type);
-
     object->type                = type;
 
     object->header.mark_queued  = false;
@@ -129,8 +127,6 @@ void Eco_Object_Del(struct Eco_Object* object)
     if (object->payload != NULL) {
         Eco_Object_Payload_Delete(object->payload);
     }
-
-    Eco_Type_Decr(object->type);
 
     Eco_Memory_Free(object);
 }

@@ -1,5 +1,6 @@
 #include "type.h"
 
+#include "ecore/objects/base/typecore.h"
 #include "object.h"
 
 #include <ecore/objects/group/group.h>
@@ -14,7 +15,8 @@
 #include <ecore/io/logging/log.h>
 
 
-struct Eco_Type*  Eco_TYPES = NULL;
+struct Eco_TypeCore Eco_Type_TYPECORE;
+struct Eco_Type*    Eco_Type_TYPE;
 
 
 
@@ -79,32 +81,22 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message* message, struct Eco_Object* object
 static struct Eco_Type* Eco_Type_New(unsigned int slot_count)
 {
     struct Eco_Type*  type;
-    
-    type                        = Eco_Memory_Alloc(sizeof(struct Eco_Type) + sizeof(struct Eco_Type_Slot) * slot_count);
-    type->header.refcount       = 0;
-    type->header.persistent     = false;
+
+    type = Eco_Object_New_Derived(Eco_Type_TYPE,
+                                  sizeof(struct Eco_Type)
+                                    + sizeof(struct Eco_Type_Slot) * slot_count,
+                                  0);
 
     type->typecore              = NULL;
     type->slot_count            = slot_count;
     type->instance_payload_size = 0;
-
-    type->header.next           =  Eco_TYPES;
-    type->header.prev           = &Eco_TYPES;
-    if (Eco_TYPES != NULL)
-        Eco_TYPES->header.prev  = &type->header.next;
-    Eco_TYPES                   = type;
 
     return type;
 }
 
 void Eco_Type_Del(struct Eco_Type* type)
 {
-    if (type->header.next != NULL) {
-        type->header.next->header.prev = type->header.prev;
-    }
-    *(type->header.prev)               = type->header.next;
-
-    Eco_Memory_Free(type);
+    Eco_Object_Del(&type->_);
 }
 
 struct Eco_Type* Eco_Type_NewPrefab(struct Eco_TypeCore* typecore)
@@ -113,7 +105,6 @@ struct Eco_Type* Eco_Type_NewPrefab(struct Eco_TypeCore* typecore)
 
     type = Eco_Type_New(0);
 
-    type->header.persistent     = true;
     type->typecore              = typecore;
     type->instance_payload_size = 0;
 
@@ -230,26 +221,21 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
     }
 }
 
-void Eco_Type_MarkTypes(struct Eco_GC_State* state)
-{
-    struct Eco_Type*  type;
-
-    type = Eco_TYPES;
-    while (type != NULL)
-    {
-        Eco_Type_Mark(state, type);
-        type = type->header.next;
-    }
-}
-
-
 
 void Eco_Types_Init()
 {
+    Eco_TypeCore_Create(&Eco_Type_TYPECORE, "Eco_Type");
+
+    Eco_Type_TYPECORE.send = (Eco_TypeCore_SendFunc) NULL;  // TODO, FIXME, XXX
+    Eco_Type_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_Type_Mark;
+    Eco_Type_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_Type_Del;
+
+    Eco_Type_TYPE          = Eco_Type_NewPrefab(&Eco_Type_TYPECORE);
+
+    Eco_Type_TYPE->_.type  = Eco_Type_TYPE;
 }
 
 void Eco_Types_Terminate()
 {
-    while (Eco_TYPES != NULL)
-        Eco_Type_Del(Eco_TYPES);
+    Eco_TypeCore_Destroy(&Eco_Type_TYPECORE);
 }

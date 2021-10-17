@@ -1,6 +1,7 @@
 #include "gc.h"
 
 
+#include "ecore/io/logging/log.h"
 #include "gc_state.h"
 
 #include <ecore/vm/vm.h>
@@ -20,7 +21,6 @@ void Eco_GC_MakeSticky(struct Eco_Object* object)
 
 void Eco_GC_MarkRoots(struct Eco_GC_State* state)
 {
-    Eco_Type_MarkTypes(state);
     Eco_VM_Mark(state, &Eco_THE_VM);
     Eco_GC_State_MarkObject(state, Eco_VM_Builtin_LOBBY);
 }
