@@ -14,7 +14,7 @@ bool Eco_Fiber_EnterThunk(struct Eco_Fiber* fiber, Eco_Any* lobby, struct Eco_Co
 
     Eco_Fiber_Push(fiber, lobby);
 
-    frame              = Eco_Fiber_AllocFrame(fiber, 1, code->arg_count, code->register_count);
+    frame              = Eco_Fiber_PushFrame(fiber, 1, code->arg_count, code->register_count);
 
     frame->instruction = code->bytecodes;
     frame->code        = code;
@@ -34,7 +34,7 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
         return false;
     }
 
-    frame = Eco_Fiber_AllocFrame(fiber, arg_count, code->arg_count, code->register_count);
+    frame = Eco_Fiber_PushFrame(fiber, arg_count, code->arg_count, code->register_count);
 
     frame->lexical     = lexical;
     frame->code        = code;

@@ -83,10 +83,10 @@ void Eco_Fiber_MoveToQueue(struct Eco_Fiber* fiber, struct Eco_Fiber** queue)
     }
 }
 
-struct Eco_Frame* Eco_Fiber_AllocFrame(struct Eco_Fiber* fiber,
-                                       unsigned int argument_count,
-                                       unsigned int fixed_argument_count,
-                                       unsigned int register_count)
+struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,
+                                      unsigned int argument_count,
+                                      unsigned int fixed_argument_count,
+                                      unsigned int register_count)
 {
     Eco_Any*           arguments;
     Eco_Any*           varargs;
