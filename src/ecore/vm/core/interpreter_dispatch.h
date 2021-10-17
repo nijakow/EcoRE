@@ -30,8 +30,8 @@ inline u16 CONSTRUCT_U16(u8** ptr) { u16 v = *((u16*) *ptr); *ptr += 2; return v
 #define DEFAULT_TARGET()      /* TARGET(DEFAULT) */
 #define DISPATCH(B)           goto *DISPATCH_TABLE[B];
 #define ULTRAFAST_DISPATCH()  DISPATCH(NEXT_U8())
-#define FAST_DISPATCH()       goto short_retry
-#define SLOW_DISPATCH()       goto long_retry
+#define FAST_DISPATCH()       goto fast_retry
+#define SLOW_DISPATCH()       goto slow_retry
 
 #define FAST_PUSH(V)               { Eco_Any_AssignAny((Eco_Any*) sp, V); sp += sizeof(Eco_Any); }
 #define FAST_POP(V)                { sp -= sizeof(Eco_Any); Eco_Any_AssignAny(V, (Eco_Any*) sp); }

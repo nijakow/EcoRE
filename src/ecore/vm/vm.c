@@ -91,7 +91,7 @@ void Eco_VM_Run(struct Eco_VM* vm)
     {
         fiber = vm->fiber_queues.running;
 
-        Eco_Fiber_Run(fiber);
+        Eco_Fiber_Run(fiber, 0x1000);
 
         if (fiber->state == Eco_Fiber_State_RUNNING) {
             Eco_VM_AdvanceQueue(&(vm->fiber_queues.running));
@@ -104,6 +104,7 @@ void Eco_VM_Run(struct Eco_VM* vm)
         }
 
         Eco_VM_HandleEvents(vm);
+        // Eco_GC_Step(&vm->gc_state);
     }
 }
 

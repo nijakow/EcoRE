@@ -44,22 +44,28 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
 }
 
 
-void Eco_Fiber_Run(struct Eco_Fiber* fiber)
+void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
 {
     u8*                instruction;
     Eco_Any*           registers;
     char*              sp;
     struct Eco_Frame*  top;
     struct Eco_Frame*  bottom;
+    unsigned int       instruction_counter;
 
 #include "interpreter_dispatch.h"
 
-  long_retry:
-    top         = Eco_Fiber_Top(fiber);
-    instruction = top->instruction;
-    registers   = top->registers;
-    sp          = fiber->stack_pointer;
-  short_retry:
+    instruction_counter = 0;
+
+  slow_retry:
+    top                 = Eco_Fiber_Top(fiber);
+    instruction         = top->instruction;
+    registers           = top->registers;
+    sp                  = fiber->stack_pointer;
+  fast_retry:
+    instruction_counter = instruction_counter + 1;
+    if (instruction_counter >= steps)
+        goto end;
     if (fiber->state != Eco_Fiber_State_RUNNING)
         goto end;
     DISPATCH(NEXT_U8())
