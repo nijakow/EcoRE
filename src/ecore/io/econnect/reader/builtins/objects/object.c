@@ -13,7 +13,7 @@ bool Eco_EConnect_Builtin_GetObject(struct Eco_EConnect_Reader* reader,
     struct Eco_Object*  the_object;
 
     id         = Eco_EConnect_ParseUInt(&reader->stream);
-    the_object = Eco_Object_New();
+    the_object = Eco_Object_NewPlain();
 
     Eco_EConnect_Instance_OptionallyBindObject(reader->instance, the_object, id);
     if (!Eco_EConnect_Reader_ReadObjectBody(reader, result, the_object))

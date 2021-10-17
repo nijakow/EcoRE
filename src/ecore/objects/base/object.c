@@ -12,14 +12,18 @@
 
 
 /*
- *    T y p e
+ *    B o o k k e e p i n g   a n d   T y p e
  */
+
+struct Eco_Arena Eco_OBJECTS;
 
 static struct Eco_TypeCore Eco_Object_TYPECORE;
 static struct Eco_Type*    Eco_Object_TYPE;
 
 void Eco_Object_Init()
 {
+    Eco_Arena_Create(&Eco_OBJECTS);
+
     Eco_TypeCore_Create(&Eco_Object_TYPECORE, "Eco_Object");
     
     Eco_Object_TYPECORE.send = Eco_Object_Send;
@@ -32,6 +36,7 @@ void Eco_Object_Init()
 void Eco_Object_Terminate()
 {
     Eco_TypeCore_Destroy(&Eco_Object_TYPECORE);
+    Eco_Arena_Destroy(&Eco_OBJECTS);
 }
 
 
@@ -39,13 +44,10 @@ void Eco_Object_Terminate()
  *    B a s i c s
  */
 
-struct Eco_Object* Eco_OBJECTS = NULL;
-
-
-void* Eco_Object_New_Derived_OnList(struct Eco_Type* type,
-                                    unsigned int size,
-                                    unsigned int payload_size,
-                                    struct Eco_Object** list)
+void* Eco_Object_NewInArena(struct Eco_Type* type,
+                            unsigned int size,
+                            unsigned int payload_size,
+                            struct Eco_Arena* arena)
 {
     struct Eco_Object* object;
 
@@ -59,23 +61,25 @@ void* Eco_Object_New_Derived_OnList(struct Eco_Type* type,
 
     object->payload             = Eco_Object_Payload_New(payload_size);
 
-    object->next                = *list;
-    *list                       = object;
+    object->next                = arena->objects;
+    arena->objects              = object;
+    arena->object_count++;
 
     return object;
 }
 
-void* Eco_Object_New_Derived(struct Eco_Type* type,
-                             unsigned int size,
-                             unsigned int payload_size)
+void* Eco_Object_New(struct Eco_Type* type,
+                     unsigned int size,
+                     unsigned int payload_size)
 {
-    return Eco_Object_New_Derived_OnList(type, size, payload_size, &Eco_OBJECTS);
+    return Eco_Object_NewInArena(type, size, payload_size, &Eco_OBJECTS);
 }
 
-struct Eco_Object*  Eco_Object_New()
+struct Eco_Object* Eco_Object_NewPlain()
 {
-    return Eco_Object_New_Derived(Eco_Object_TYPE, sizeof(struct Eco_Object), 0);
+    return Eco_Object_New(Eco_Object_TYPE, sizeof(struct Eco_Object), 0);
 }
+
 
 bool Eco_Object_Send(struct Eco_Message* message, struct Eco_Object* target)
 {

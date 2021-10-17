@@ -5,6 +5,13 @@ struct Eco_Arena
 {
     struct Eco_Object*  objects;
     unsigned int        object_count;
+    
+    /*
+     * We keep these elements at the end to
+     * speed up access to the "objects" element
+     */
+    struct Eco_Arena**  prev;
+    struct Eco_Arena*   next;
 };
 
 void Eco_Arena_Create(struct Eco_Arena*);

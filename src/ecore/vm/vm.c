@@ -33,6 +33,11 @@ void Eco_VM_Create(struct Eco_VM* vm)
     Eco_GC_State_Create(&vm->gc_state);
 }
 
+void Eco_VM_FreeAll(struct Eco_VM* vm)
+{
+    Eco_GC_FreeAll(&vm->gc_state);
+}
+
 void Eco_VM_Destroy(struct Eco_VM* vm)
 {
     while (vm->fiber_queues.running != NULL) Eco_Fiber_Delete(vm->fiber_queues.running);
@@ -40,7 +45,6 @@ void Eco_VM_Destroy(struct Eco_VM* vm)
 
     Eco_Net_Scheduler_Delete(vm->net_scheduler);
 
-    Eco_GC_FreeAll(&vm->gc_state);
     Eco_GC_State_Destroy(&vm->gc_state);
 }
 

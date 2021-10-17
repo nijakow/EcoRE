@@ -41,7 +41,7 @@ struct Eco_Group* Eco_Group_New()
 {
     struct Eco_Group* group;
 
-    group = Eco_Object_New_Derived(Eco_Group_TYPE, sizeof(struct Eco_Group), 0);
+    group = Eco_Object_New(Eco_Group_TYPE, sizeof(struct Eco_Group), 0);
 
     group->object_alloc    = 0;
     group->body.single[0]  = NULL;

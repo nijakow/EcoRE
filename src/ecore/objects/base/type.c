@@ -1,6 +1,7 @@
 #include "type.h"
 
 #include "ecore/objects/base/typecore.h"
+#include "ecore/vm/memory/arena.h"
 #include "object.h"
 
 #include <ecore/objects/group/group.h>
@@ -15,7 +16,7 @@
 #include <ecore/io/logging/log.h>
 
 
-struct Eco_Object*  Eco_TYPES = NULL;
+struct Eco_Arena  Eco_TYPES;
 
 struct Eco_TypeCore Eco_Type_TYPECORE;
 struct Eco_Type*    Eco_Type_TYPE;
@@ -83,11 +84,10 @@ static struct Eco_Type* Eco_Type_New(unsigned int slot_count)
 {
     struct Eco_Type*  type;
 
-    type = Eco_Object_New_Derived_OnList(Eco_Type_TYPE,
-                                         sizeof(struct Eco_Type)
-                                            + sizeof(struct Eco_Type_Slot) * slot_count,
-                                         0,
-                                         &Eco_TYPES);
+    type = Eco_Object_NewInArena(Eco_Type_TYPE,
+                                 sizeof(struct Eco_Type) + sizeof(struct Eco_Type_Slot) * slot_count,
+                                 0,
+                                 &Eco_TYPES);
 
     type->typecore              = NULL;
     type->slot_count            = slot_count;
@@ -226,6 +226,7 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
 
 void Eco_Types_Init()
 {
+    Eco_Arena_Create(&Eco_TYPES);
     Eco_TypeCore_Create(&Eco_Type_TYPECORE, "Eco_Type");
 
     Eco_Type_TYPECORE.send = (Eco_TypeCore_SendFunc) NULL;  // TODO, FIXME, XXX
@@ -240,4 +241,5 @@ void Eco_Types_Init()
 void Eco_Types_Terminate()
 {
     Eco_TypeCore_Destroy(&Eco_Type_TYPECORE);
+    Eco_Arena_Destroy(&Eco_TYPES);
 }

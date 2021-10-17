@@ -44,7 +44,7 @@ struct Eco_Key* Eco_Key_New(const char* name)
     struct Eco_Key*  key;
 
     namelen                = strlen(name);
-    key                    = Eco_Object_New_Derived(Eco_Key_TYPE, sizeof(struct Eco_Key) + (namelen + 1) * sizeof(char), 0);
+    key                    = Eco_Object_New(Eco_Key_TYPE, sizeof(struct Eco_Key) + (namelen + 1) * sizeof(char), 0);
 
     key->econnect_callback = NULL;
     key->builtin           = Eco_VM_Builtin_Trap;
