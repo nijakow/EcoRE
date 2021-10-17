@@ -72,9 +72,8 @@ void Eco_GC_Sweep(struct Eco_GC_State* state)
 
 void Eco_GC_Step(struct Eco_GC_State* state)
 {
-    /*
-     * TODO, FIXME, XXX!
-     */
+    Eco_GC_Mark(state);
+    Eco_GC_Sweep(state);
 }
 
 void Eco_GC_FreeAll(struct Eco_GC_State* state)
