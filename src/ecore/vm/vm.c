@@ -47,10 +47,15 @@ void Eco_VM_Destroy(struct Eco_VM* vm)
 
 static void Eco_VM_MarkQueue(struct Eco_GC_State* state, struct Eco_Fiber* queue)
 {
-    while (queue != NULL)
-    {
-        Eco_Fiber_Mark(state, queue);
-        queue = queue->queue_next;
+    struct Eco_Fiber*  start;
+
+    start = queue;
+    if (queue != NULL) {
+        do
+        {
+            Eco_Fiber_Mark(state, queue);
+            queue = queue->queue_next;
+        } while (queue != start);
     }
 }
 
@@ -104,7 +109,7 @@ void Eco_VM_Run(struct Eco_VM* vm)
         }
 
         Eco_VM_HandleEvents(vm);
-        // Eco_GC_Step(&vm->gc_state);
+        Eco_GC_Step(&vm->gc_state); // TODO: Only call this if necessary!
     }
 }
 
