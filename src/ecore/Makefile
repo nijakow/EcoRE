@@ -7,7 +7,7 @@ else
   RM = rm
 endif
 
-EXECUTABLE = ./ecore.exe
+EXECUTABLE = ./ecore.app
 BOOTSTRAP_ENVIRONMENT = ../bootstrap/env_test
 BOOTSTRAP_MASTER      = $(BOOTSTRAP_ENVIRONMENT)/master.ebf
 
@@ -76,6 +76,8 @@ $(EXECUTABLE): $(OBJECTS)
 
 all: $(EXECUTABLE)
 
+compile_commands.json:
+	bear -- make all
 
 .phony: run
 run: $(EXECUTABLE)
