@@ -28,7 +28,7 @@ static inline void Eco_GC_State_MarkAny(struct Eco_GC_State* state, Eco_Any* any
 
 void Eco_GC_MakeSticky(struct Eco_Object* object);
 
-void Eco_GC();
-void Eco_FreeAll();
+void Eco_GC_Step(struct Eco_GC_State*);
+void Eco_GC_FreeAll(struct Eco_GC_State*);
 
 #endif

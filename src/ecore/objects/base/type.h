@@ -46,17 +46,17 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message*, struct Eco_Object*, struct Eco_Ty
 struct Eco_Type
 {
     struct {
-        struct Eco_Type*  next;
-        struct Eco_Type*  prev;
-        unsigned int      refcount;
-        bool              persistent;
-    }                     header;
+        struct Eco_Type*   next;
+        struct Eco_Type**  prev;
+        unsigned int       refcount;
+        bool               persistent;
+    }                      header;
 
-    struct Eco_TypeCore*  typecore;
+    struct Eco_TypeCore*   typecore;
 
-    unsigned int          slot_count;
-    unsigned int          instance_payload_size;
-    struct Eco_Type_Slot  slots[];
+    unsigned int           slot_count;
+    unsigned int           instance_payload_size;
+    struct Eco_Type_Slot   slots[];
 };
 
 void Eco_Type_Del(struct Eco_Type*);

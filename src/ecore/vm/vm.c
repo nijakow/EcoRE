@@ -7,6 +7,8 @@
 
 #include <ecore/io/econnect/file/file.h>
 #include <ecore/io/logging/log.h>
+#include <ecore/vm/memory/gc/gc.h>
+#include <ecore/vm/memory/gc/gc_state.h>
 
 
 struct Eco_VM Eco_THE_VM;
@@ -26,7 +28,9 @@ void Eco_VM_Create(struct Eco_VM* vm)
     vm->fiber_queues.running = NULL;
     vm->fiber_queues.paused  = NULL;
 
-    vm->net_scheduler = Eco_Net_Scheduler_New(4096);
+    vm->net_scheduler        = Eco_Net_Scheduler_New(4096);
+
+    Eco_GC_State_Create(&vm->gc_state);
 }
 
 void Eco_VM_Destroy(struct Eco_VM* vm)
@@ -35,6 +39,9 @@ void Eco_VM_Destroy(struct Eco_VM* vm)
     while (vm->fiber_queues.paused != NULL)  Eco_Fiber_Delete(vm->fiber_queues.paused);
 
     Eco_Net_Scheduler_Delete(vm->net_scheduler);
+
+    Eco_GC_FreeAll(&vm->gc_state);
+    Eco_GC_State_Destroy(&vm->gc_state);
 }
 
 

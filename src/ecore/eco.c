@@ -37,7 +37,6 @@ void Eco_Terminate()
 {
     Eco_VM_Builtins_Terminate();
     Eco_EConnect_Terminate();
-    Eco_FreeAll();
     Eco_Objects_Terminate();
     Eco_Types_Terminate();
     Eco_VM_Destroy(&Eco_THE_VM);

@@ -88,11 +88,10 @@ static struct Eco_Type* Eco_Type_New(unsigned int slot_count)
     type->slot_count            = slot_count;
     type->instance_payload_size = 0;
 
-    type->header.prev           = NULL;
-    type->header.next           = Eco_TYPES;
-    if (Eco_TYPES != NULL) {
-        Eco_TYPES->header.prev  = type;
-    }
+    type->header.next           =  Eco_TYPES;
+    type->header.prev           = &Eco_TYPES;
+    if (Eco_TYPES != NULL)
+        Eco_TYPES->header.prev  = &type->header.next;
     Eco_TYPES                   = type;
 
     return type;
@@ -100,13 +99,10 @@ static struct Eco_Type* Eco_Type_New(unsigned int slot_count)
 
 void Eco_Type_Del(struct Eco_Type* type)
 {
-    if (Eco_TYPES == type) {
-        if (type->header.prev != NULL) Eco_TYPES = type->header.prev;
-        else                           Eco_TYPES = type->header.next;
+    if (type->header.next != NULL) {
+        type->header.next->header.prev = type->header.prev;
     }
-
-    if (type->header.prev != NULL) type->header.prev->header.next = type->header.next;
-    if (type->header.next != NULL) type->header.next->header.prev = type->header.prev;
+    *(type->header.prev)               = type->header.next;
 
     Eco_Memory_Free(type);
 }
