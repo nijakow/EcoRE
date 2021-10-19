@@ -35,8 +35,8 @@ bool Eco_EConnect_Reader_ReadObjectBody(struct Eco_EConnect_Reader* reader,
         }
 
         if ((flags & 0x01) == 0) {
-            slot_info.is_inherited = flags & 0x04;
-            slot_info.is_part      = flags & 0x08;
+            slot_info.is_inherited = (flags & 0x04) != 0;
+            slot_info.is_part      = (flags & 0x08) != 0;
             if (flags & 0x02) {
                 if (!Eco_EConnect_Reader_ReadAny(reader, result, &any))
                     return false;
