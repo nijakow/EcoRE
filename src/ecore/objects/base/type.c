@@ -217,10 +217,11 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
             case Eco_Type_Slot_Type_INLINED:
                 break;
             case Eco_Type_Slot_Type_CODE:
-                Eco_Code_Mark(state, type->slots[i].body.code);
+                Eco_GC_State_MarkObject(state, type->slots[i].body.code);
                 break;
         }
     }
+    Eco_Object_Mark(state, &type->_);
 }
 
 
