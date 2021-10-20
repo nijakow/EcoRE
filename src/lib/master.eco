@@ -11,9 +11,12 @@
     Select: bool => bool ifTrue: [ ^ 42 ] ifFalse: [ ^ 1 ];
 
     Init => (
+        #'ecosphere.ecore.init.set_lobby'(self).
         #'ecosphere.ecore.init.set_block_family'(#<base/block_family@base.eco>).
-        #'ecosphere.ecore.io.print'(Select: true).
-        #'ecosphere.ecore.io.print'(Select: false).
+        [ true ] whileTrue: [
+            #'ecosphere.ecore.io.print'(Select: true).
+            #'ecosphere.ecore.io.print'(Select: false).
+        ].
     );
 }.
 
