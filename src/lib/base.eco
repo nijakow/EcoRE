@@ -3,10 +3,10 @@
 "
 
 #=base/block_family: {
-    execute(...)  => #'ecosphere.ecore.flow.value'(self, ...).
-    repeat        => ( self execute. #'ecosphere.ecore.flow.reset'() ).
-    whileTrue: b  => ( (self execute) ifFalse: [ ^ nil ]. #'ecosphere.ecore.flow.reset'() ).
-    untilTrue: b  => ( (self execute) ifTrue:  [ ^ nil ]. #'ecosphere.ecore.flow.reset'() ).
+    value(...)    => #'ecosphere.ecore.flow.value'(self, ...).
+    repeat        => ( self value. #'ecosphere.ecore.flow.reset'() ).
+    whileTrue: b  => ( (self value) ifFalse: [ ^ nil ]. #'ecosphere.ecore.flow.reset'() ).
+    untilTrue: b  => ( (self value) ifTrue:  [ ^ nil ]. #'ecosphere.ecore.flow.reset'() ).
     whileFalse: b => untilTrue: b.
     untilFalse: b => whileTrue: b.
 },
@@ -25,20 +25,20 @@
     true = {
         with* parent = #<:base/oddball>;
 
-        ifTrue:  b => b execute.
+        ifTrue:  b => b value.
         ifFalse: b => nil.
         ifTrue:  t
-        ifFalse: f => t execute.
+        ifFalse: f => t value.
         isNil      => false.
     },
 
     false = {
         with* parent = #<:base/oddball>;
 
-        ifTrue:  b => lobby fortytwo.
-        ifFalse: b => b execute.
+        ifTrue:  b => nil.
+        ifFalse: b => b value.
         ifTrue:  t
-        ifFalse: f => f execute.
+        ifFalse: f => f value.
         isNil      => false.
     },
 
