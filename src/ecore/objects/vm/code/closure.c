@@ -4,8 +4,9 @@
 
 #include <ecore/objects/base/type.h>
 #include <ecore/vm/core/frame.h>
-#include <ecore/vm/memory/memory.h>
 #include <ecore/vm/core/send.h>
+#include <ecore/vm/memory/memory.h>
+#include <ecore/vm/memory/gc/gc.h>
 
 
 /*
@@ -69,7 +70,7 @@ struct Eco_Closure* Eco_Closure_New(struct Eco_Code* code, struct Eco_Frame* lex
 
 void Eco_Closure_Mark(struct Eco_GC_State* state, struct Eco_Closure* closure)
 {
-    Eco_Code_Mark(state, closure->code);
+    Eco_GC_State_MarkObject(state, closure->code);
     Eco_Object_Mark(state, &(closure->_));
 }
 
