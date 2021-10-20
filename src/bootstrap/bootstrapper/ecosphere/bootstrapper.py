@@ -68,6 +68,7 @@ class FileLoader:
 class SharedBootstrappingInfo:
 
     def load(self, path):
+        path = path.resolve()
         as_posix = path.as_posix()
         if as_posix not in self._loaded_files:
             loader = FileLoader(self, path)
