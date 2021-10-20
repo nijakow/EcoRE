@@ -134,6 +134,7 @@ void Eco_Object_Mark(struct Eco_GC_State* state, struct Eco_Object* object)
      * Eco_GC_State_MarkObject(...) - as it should be!
      */
     assert(object->header.mark_queued);
+    Eco_GC_State_MarkObject(state, object->type);
 }
 
 void Eco_Object_Del(struct Eco_Object* object)
