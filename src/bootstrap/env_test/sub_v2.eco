@@ -1,7 +1,0 @@
-"
-    sub_v2.eco - A test submodule for the V2 Bootstrapper
-"
-
-{
-    xyzzy = 42
-}

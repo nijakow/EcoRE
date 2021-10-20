@@ -8,7 +8,7 @@ else
 endif
 
 EXECUTABLE = ./ecore.app
-BOOTSTRAP_ENVIRONMENT = ../bootstrap/env_test
+BOOTSTRAP_ENVIRONMENT = ../lib
 BOOTSTRAP_MASTER      = $(BOOTSTRAP_ENVIRONMENT)/master.ebf
 
 
@@ -83,13 +83,8 @@ compile_commands.json:
 
 .phony: run
 run: $(EXECUTABLE)
-	$(MAKE) -C ../lib
-	$(EXECUTABLE) ../lib/master.ebf
-
-.phony: test
-test: $(EXECUTABLE)
 	$(MAKE) -C $(BOOTSTRAP_ENVIRONMENT)
-	$(EXECUTABLE) '$(BOOTSTRAP_MASTER)'
+	$(EXECUTABLE) $(BOOTSTRAP_MASTER)
 
 .phony: debug
 debug: $(EXECUTABLE)
