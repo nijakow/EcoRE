@@ -76,6 +76,11 @@ static inline Eco_Any* Eco_Fiber_Nth(struct Eco_Fiber* fiber, unsigned int n)
     return (Eco_Any*) (fiber->stack_pointer - n * sizeof(Eco_Any));
 }
 
+static inline Eco_Any* Eco_Fiber_Peek(struct Eco_Fiber* fiber)
+{
+    return Eco_Fiber_Nth(fiber, 1);
+}
+
 
 struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM*, unsigned int);
 void Eco_Fiber_Delete(struct Eco_Fiber*);

@@ -3,6 +3,7 @@
 #include "builtin.h"
 
 #include "core/flow.h"
+#include "core/init.h"
 #include "core/io.h"
 #include "core/math.h"
 #include "core/slots.h"
@@ -43,6 +44,8 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add_integers", Eco_VM_Builtin_AddIntegers);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add", Eco_VM_Builtin_Add);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.slots.add_value_slot", Eco_VM_Builtin_AddValueSlot);
+
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_block_family", Eco_VM_Builtin_SetBlockFamily);
 }
 
 void Eco_VM_Builtins_Terminate()

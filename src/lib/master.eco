@@ -2,10 +2,13 @@
     master.eco - The Master Object
 "
 
-{
+#=lobby: {
     with Packages = {
-        with Base = #<file:base.eco>;
+        with Base = #<@base.eco>;
     };
 
-    Init => ;
-}
+    Init => (
+        #'ecosphere.ecore.init.set_block_family'(#<base/block_family@base.eco>).
+        true ifTrue: [ #'ecosphere.ecore.io.print'(42) ].
+    );
+} Init.

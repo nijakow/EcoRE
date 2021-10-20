@@ -26,6 +26,7 @@ objects/vm/code/code.c \
 objects/vm/code/closure.c \
 vm/builtins/builtins.c \
 vm/builtins/core/flow.c \
+vm/builtins/core/init.c \
 vm/builtins/core/io.c \
 vm/builtins/core/math.c \
 vm/builtins/core/slots.c \
