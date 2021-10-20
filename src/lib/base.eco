@@ -5,8 +5,8 @@
 #=base/block_family: {
     value(...)    => #'ecosphere.ecore.flow.value'(self, ...).
     repeat        => ( self value. #'ecosphere.ecore.flow.reset'() ).
-    whileTrue: b  => ( (self value) ifFalse: [ ^ nil ]. #'ecosphere.ecore.flow.reset'() ).
-    untilTrue: b  => ( (self value) ifTrue:  [ ^ nil ]. #'ecosphere.ecore.flow.reset'() ).
+    whileTrue: b  => ( (self value) ifFalse: [ ^ nil ]. b value. #'ecosphere.ecore.flow.reset'() ).
+    untilTrue: b  => ( (self value) ifTrue:  [ ^ nil ]. b value. #'ecosphere.ecore.flow.reset'() ).
     whileFalse: b => untilTrue: b.
     untilFalse: b => whileTrue: b.
 },
