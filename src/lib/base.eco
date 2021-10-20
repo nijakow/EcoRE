@@ -13,6 +13,7 @@
 
 {
     Object = #=base/object: {
+        with lobby = #<:lobby@master.eco>.
         with trait = #=base/shared_behavior: {
         }.
     },
@@ -34,7 +35,7 @@
     false = {
         with* parent = #<:base/oddball>;
 
-        ifTrue:  b => nil.
+        ifTrue:  b => lobby fortytwo.
         ifFalse: b => b execute.
         ifTrue:  t
         ifFalse: f => f execute.
