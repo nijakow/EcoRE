@@ -251,10 +251,17 @@ class ASTProxy(ASTExpression):
     
     def evaluate(self, subject, environment, the_callback):
         if self._proxy_type == '':
-            environment.when_label_defined(self._address, the_callback)
-        elif self._proxy_type == 'file':
-            loader = environment.load_file(self._address)
-            the_callback(loader.evaluate())
+            try:
+                index = self._address.index('@')
+                label = self._address[:index]
+                filename = self._address[index+1:]
+                loader = environment.load_file(filename)
+                if label:
+                    loader.when_label_defined(label, the_callback)
+                else:
+                    the_callback(loader.evaluate())
+            except:
+                environment.when_label_defined(self._address, the_callback)
         else:
             raise Exception('Can\'t evaluate ASTProxy: Proxy type not recognized!')
 

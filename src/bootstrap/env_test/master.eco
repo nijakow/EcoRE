@@ -10,7 +10,7 @@ x <- {
 
 | y |
 
-y <- #<file:sub.eco>,
+y <- #<:@sub.eco>,
 
 y bar({}, {}, {});
 
