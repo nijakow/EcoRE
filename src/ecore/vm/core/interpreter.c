@@ -155,7 +155,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             top->instruction            = instruction;
             fiber->stack_pointer        = sp;
 
-            if (!Eco_Send(&message, Eco_Fiber_Nth(fiber, message.body.send.arg_count))) {
+            if (!Eco_Send(&message, NULL, Eco_Fiber_Nth(fiber, message.body.send.arg_count))) {
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
                 goto end;
             }
@@ -177,7 +177,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             top->instruction            = instruction;
             fiber->stack_pointer        = sp;
 
-            if (!Eco_Send(&message, Eco_Fiber_Nth(fiber, message.body.send.arg_count))) {
+            if (!Eco_Send(&message, NULL, Eco_Fiber_Nth(fiber, message.body.send.arg_count))) {
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
                 goto end;
             }
@@ -192,7 +192,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
 
             Eco_Fiber_Pop(fiber, &message.body.assign.value);
 
-            if (!Eco_Send(&message, Eco_Fiber_Nth(fiber, 1))) {
+            if (!Eco_Send(&message, NULL, Eco_Fiber_Nth(fiber, 1))) {
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ASSIGNFAILED);
                 goto error;
             }

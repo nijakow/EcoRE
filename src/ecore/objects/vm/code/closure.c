@@ -5,6 +5,7 @@
 #include <ecore/objects/base/type.h>
 #include <ecore/vm/core/frame.h>
 #include <ecore/vm/memory/memory.h>
+#include <ecore/vm/core/send.h>
 
 
 /*
@@ -15,10 +16,12 @@ static struct Eco_TypeCore Eco_Closure_TYPECORE;
 static struct Eco_Type*    Eco_Closure_TYPE;
        struct Eco_Object*  Eco_Closure_PROXY = NULL;
 
-bool Eco_Closure_Send(struct Eco_Message* message, struct Eco_Closure* closure)
+bool Eco_Closure_Send(struct Eco_Message* message,
+                      struct Eco_SendLink* link,
+                      struct Eco_Closure* closure)
 {
     if (Eco_Closure_PROXY != NULL)
-        return Eco_Object_Send(message, Eco_Closure_PROXY);
+        return Eco_Send_ToObject(message, link, Eco_Closure_PROXY);
     else
         return false;
 }

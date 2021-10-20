@@ -5,6 +5,7 @@
 #include <ecore/objects/base/typecore.h>
 #include <ecore/vm/memory/memory.h>
 #include <ecore/vm/memory/gc/gc.h>
+#include <ecore/vm/core/send.h>
 
 
 /*
@@ -50,12 +51,14 @@ struct Eco_Group* Eco_Group_New()
     return group;
 }
 
-bool Eco_Group_Send(struct Eco_Message* message, struct Eco_Group* group)
+bool Eco_Group_Send(struct Eco_Message* message,
+                    struct Eco_SendLink* link,
+                    struct Eco_Group* group)
 {
     if (group->object_alloc == 0) {
-        return Eco_Object_Send(message, group->body.single[0]);
+        return Eco_Send_ToObject(message, link, group->body.single[0]);
     } else {
-        return Eco_Object_Send(message, group->body.multi.objects[0]);
+        return Eco_Send_ToObject(message, link, group->body.multi.objects[0]);
     }
 }
 

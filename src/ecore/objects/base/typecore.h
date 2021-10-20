@@ -5,10 +5,11 @@
 
 struct Eco_Object;
 struct Eco_Message;
+struct Eco_SendLink;
 struct Eco_GC_State;
 
 
-typedef bool (*Eco_TypeCore_SendFunc)(struct Eco_Message*, struct Eco_Object*);
+typedef bool (*Eco_TypeCore_SendFunc)(struct Eco_Message*, struct Eco_SendLink*, struct Eco_Object*);
 typedef void (*Eco_TypeCore_MarkFunc)(struct Eco_GC_State*, struct Eco_Object*);
 typedef void (*Eco_TypeCore_DelFunc)(struct Eco_Object*);
 

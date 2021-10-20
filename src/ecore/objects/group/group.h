@@ -5,6 +5,7 @@
 
 
 struct Eco_Message;
+struct Eco_SendLink;
 struct Eco_GC_State;
 
 
@@ -43,7 +44,7 @@ static inline void Eco_Group_GetMembers(struct Eco_Group*     group,
 
 
 struct Eco_Group* Eco_Group_New();
-bool Eco_Group_Send(struct Eco_Message*, struct Eco_Group*);
+bool Eco_Group_Send(struct Eco_Message*, struct Eco_SendLink*, struct Eco_Group*);
 void Eco_Group_Mark(struct Eco_GC_State*, struct Eco_Group*);
 void Eco_Group_Del(struct Eco_Group*);
 

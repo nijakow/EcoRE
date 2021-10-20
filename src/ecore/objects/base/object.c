@@ -81,7 +81,9 @@ struct Eco_Object* Eco_Object_NewPlain()
 }
 
 
-bool Eco_Object_Send(struct Eco_Message* message, struct Eco_Object* target)
+bool Eco_Object_Send(struct Eco_Message* message,
+                     struct Eco_SendLink* link,
+                     struct Eco_Object* target)
 {
     unsigned int           i;
     Eco_Any                value;
@@ -110,7 +112,7 @@ bool Eco_Object_Send(struct Eco_Message* message, struct Eco_Object* target)
             case Eco_Type_Slot_Type_INLINED:
                 if (slot->body.inlined.is_inherited) {
                     if (Eco_Type_Slot_GetValue(slot, target, &value)) {
-                        if (Eco_Send(message, &value)) {
+                        if (Eco_Send(message, link, &value)) {
                             return true;
                         }
                     }
