@@ -30,6 +30,7 @@ static void Eco_VM_Builtins_AddBuiltin(const char* name, Eco_Builtin builtin)
     
     if (key != NULL) {
         key->builtin = builtin;
+        Eco_Object_MakeSticky((struct Eco_Object*) key);
     } else {
         Eco_Log_Critical("Unable to install builtin '%s': Key search returned NULL!\n");
     }
@@ -45,6 +46,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add", Eco_VM_Builtin_Add);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.slots.add_value_slot", Eco_VM_Builtin_AddValueSlot);
 
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_lobby", Eco_VM_Builtin_SetLobby);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_block_family", Eco_VM_Builtin_SetBlockFamily);
 }
 

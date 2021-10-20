@@ -24,7 +24,8 @@ struct Eco_Object_Header
 {
     unsigned int mark_queued : 1;
     unsigned int mark_done   : 1;
-    unsigned int object_size : 30;
+    unsigned int sticky      : 1;
+    unsigned int object_size : 29;
 };
 
 struct Eco_Object
@@ -43,6 +44,8 @@ struct Eco_Object* Eco_Object_NewPlain();
 bool  Eco_Object_Send(struct Eco_Message*, struct Eco_SendLink*, struct Eco_Object*);
 void  Eco_Object_Mark(struct Eco_GC_State*, struct Eco_Object*);
 void  Eco_Object_Del(struct Eco_Object*);
+
+static inline void Eco_Object_MakeSticky(struct Eco_Object* object) { object->header.sticky = true; }
 
 static inline void* Eco_Object_At(struct Eco_Object* object, unsigned int offset)
 {

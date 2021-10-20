@@ -1,7 +1,6 @@
 #include "gc.h"
 
 
-#include "ecore/io/logging/log.h"
 #include "gc_state.h"
 
 #include <ecore/vm/vm.h>
@@ -14,15 +13,12 @@
 extern struct Eco_Arena* Eco_ARENAS;
 
 
-void Eco_GC_MakeSticky(struct Eco_Object* object)
-{
-    /* TODO, FIXME, XXX: IMPLEMENT THIS! */
-}
-
 void Eco_GC_MarkRoots(struct Eco_GC_State* state)
 {
     Eco_VM_Mark(state, &Eco_THE_VM);
-    // TODO: Eco_GC_State_MarkObject(state, Eco_VM_Builtin_LOBBY);
+    if (Eco_VM_Builtin_LOBBY != NULL) {
+        Eco_GC_State_MarkObject(state, Eco_VM_Builtin_LOBBY);
+    }
 }
 
 void Eco_GC_MarkLoop(struct Eco_GC_State* state)
@@ -55,7 +51,7 @@ void Eco_GC_SweepArena(struct Eco_GC_State* state, struct Eco_Arena* arena)
     {
         object = *ptr;
 
-        if (object->header.mark_done) {
+        if (object->header.mark_done || object->header.sticky) {
             object->header.mark_queued = false;
             object->header.mark_done   = false;
             ptr = &(object->next);

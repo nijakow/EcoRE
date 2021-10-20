@@ -57,6 +57,7 @@ void* Eco_Object_NewInArena(struct Eco_Type* type,
 
     object->header.mark_queued  = false;
     object->header.mark_done    = false;
+    object->header.sticky       = false;
     object->header.object_size  = size;
 
     object->payload             = Eco_Object_Payload_New(payload_size);
@@ -130,10 +131,9 @@ void Eco_Object_Mark(struct Eco_GC_State* state, struct Eco_Object* object)
 {
     /*
      * It's easy to confuse Eco_Object_Mark(...) and Eco_GC_State_MarkObject(...)!
-     * This simple assert statement ensures that this function is only called by
-     * Eco_GC_State_MarkObject(...) - as it should be!
+     * Only call Eco_Object_Mark(...) as the last function in a Eco_<Type>_Mark(...)!
      */
-    assert(object->header.mark_queued);
+    Eco_Type_MarkObject(state, object->type, object);
     Eco_GC_State_MarkObject(state, object->type);
 }
 

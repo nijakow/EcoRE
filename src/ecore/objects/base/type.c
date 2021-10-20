@@ -1,6 +1,7 @@
 #include "type.h"
 
 #include "ecore/objects/base/typecore.h"
+#include "ecore/vm/builtins/builtins.h"
 #include "ecore/vm/memory/arena.h"
 #include "object.h"
 
@@ -109,6 +110,7 @@ struct Eco_Type* Eco_Type_NewPrefab(struct Eco_TypeCore* typecore)
 
     type->typecore              = typecore;
     type->instance_payload_size = 0;
+    type->_.header.sticky       = true;
 
     return type;
 }
@@ -212,6 +214,7 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
 
     for (i = 0; i < type->slot_count; i++)
     {
+        Eco_GC_State_MarkObject(state, type->slots[i].key);
         switch (type->slots[i].type)
         {
             case Eco_Type_Slot_Type_INLINED:
@@ -224,6 +227,25 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
     Eco_Object_Mark(state, &type->_);
 }
 
+
+void Eco_Type_MarkObject(struct Eco_GC_State* state,
+                         struct Eco_Type* type,
+                         struct Eco_Object* object)
+{
+    unsigned int  i;
+
+    for (i = 0; i < type->slot_count; i++)
+    {
+        switch (type->slots[i].type)
+        {
+            case Eco_Type_Slot_Type_INLINED:
+                Eco_GC_State_MarkAny(state, Eco_Object_At(object, type->slots[i].body.inlined.offset));
+                break;
+            case Eco_Type_Slot_Type_CODE:
+                break;
+        }
+    }
+}
 
 void Eco_Types_Init()
 {

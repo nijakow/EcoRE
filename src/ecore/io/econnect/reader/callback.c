@@ -12,6 +12,6 @@ void Eco_EConnect_InstallCallback(char* key_name, Eco_EConnect_Callback callback
 
     if (key != NULL) {
         key->econnect_callback = callback;
-        Eco_GC_MakeSticky((struct Eco_Object*) key);
+        Eco_Object_MakeSticky((struct Eco_Object*) key);
     }
 }
