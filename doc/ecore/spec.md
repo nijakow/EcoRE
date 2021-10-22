@@ -2,11 +2,63 @@
 
 Most names should consist of only one word. In cases where multiple words are needed, these rules apply:
 
- - Slot names and methods are written using `snake_case`: `mirror remove_slot: slot_name`. When continuing split method names, lower case is used: `vector at: 3 put: 'hi'`.
+ - Slot names and methods are written using `snake_case` or `lowerCamelCase`: `mirror remove_slot: slot_name`. When continuing split method names, lower case is used: `vector at: 3 put: 'hi'`. Messages consisting of very short subwords are written using `camelCase`: `5 isEven`, `result ifTrue: b1 ifFalse: b2`.
  - Local variables and parameters are written using `snake_case` or `lowerCamelCase`: `| param_count <- 42 |`, `load: configFilePath`.
  - Function names are written using `UpperCamelCase`: `SquareRoot(x)`, `SquareRoot: x`, `Display: entity On: screen`.
 
 # The Standard Library
+
+## Objects (std Object)
+
+The base for every object.
+
+### Methods available for objects
+
+`init`
+
+Initializes the object.
+
+`clone`
+
+Creates a deep copy of the object.
+
+`mirror`
+
+Returns the mirror of the object.
+
+`[bool] asBool`
+
+Converts the object into either `true` or `false`.
+
+## Booleans (std bool true, std bool false)
+
+Values representing either true or false. Booleans are marked as _atomic_.
+
+### Methods available for booleans
+
+`if: t else: f`
+
+If `self` is `true`, call the first parameter on `self`. If `self` is `false`, call the second parameter on `self`. Return the value of the call.
+
+`if: b`
+
+Same as `if: b else: [ false ]`.
+
+`unless: b`
+
+Same as `if: [ true ] else: b`.
+
+`true: t false: f`
+
+Same as `if: t else: f`.
+
+`true: b`
+
+Same as `if: b`.
+
+`false: b`
+
+Same as `unless: b`.
 
 ## Mirrors
 
