@@ -59,11 +59,7 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message* message, struct Eco_Object* object
                     Eco_Fiber_Push(message->fiber, ((Eco_Any*) Eco_Object_At(object, slot->body.inlined.offset)));
                     return true;
                 case Eco_Type_Slot_Type_CODE:
-                    if (!Eco_Fiber_Enter(message->fiber, NULL, slot->body.code, message->body.send.arg_count)) {
-                        /* TODO: Error */
-                        return false;
-                    }
-                    return true;
+                    return Eco_Fiber_Enter(message->fiber, NULL, slot->body.code, message->body.send.arg_count);
             }
             return false;
         case Eco_Message_Type_ASSIGN:
@@ -151,7 +147,6 @@ static bool Eco_Type_CopyWithNewSlot(struct Eco_Type* self,
 bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type* self,
                                      int pos,
                                      struct Eco_Object_SlotInfo info,
-                                     /* TODO: Flags */
                                      struct Eco_Type** type_loc,
                                      struct Eco_Type_Slot** slot_loc)
 {
