@@ -1,3 +1,11 @@
+# Naming Conventions
+
+Most names should consist of only one word. In cases where multiple words are needed, these rules apply:
+
+ - Slot names and methods are written using `snake_case`: `mirror remove_slot: slot_name`. When continuing split method names, lower case is used: `vector at: 3 put: 'hi'`.
+ - Local variables and parameters are written using `snake_case` or `lowerCamelCase`: `| param_count <- 42 |`, `load: configFilePath`.
+ - Function names are written using `UpperCamelCase`: `SquareRoot(x)`, `SquareRoot: x`, `Display: entity On: screen`.
+
 # The Standard Library
 
 ## Mirrors
