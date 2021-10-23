@@ -131,7 +131,7 @@ class CodeWriter:
         self._add_code_object(code_object)
 
     def finish(self):
-        return bytes(self._instructions), list(self._constants), list(self._code_objects)
+        return bytes(self._instructions), self._constants, list(self._code_objects)
 
     def __init__(self):
         self._instructions = bytearray()

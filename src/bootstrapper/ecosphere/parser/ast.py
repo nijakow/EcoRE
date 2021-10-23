@@ -257,6 +257,7 @@ class ASTProxy(ASTExpression):
                 filename = self._address[index+1:]
                 loader = environment.load_file(filename)
                 if label:
+                    loader.evaluate()
                     loader.when_label_defined(label, the_callback)
                 else:
                     the_callback(loader.evaluate())
