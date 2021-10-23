@@ -9,6 +9,34 @@ import ecosphere.compiler
 import ecosphere.econnect
 
 
+class LabelStorage:
+
+    def when_label_defined(self, label, callback):
+        print('Resolving label', label)
+        if label in self._label_values:
+            print('Found!', label)
+            callback(self._label_values[label])
+            return
+        if label not in self._callbacks:
+            print('Not found!', label)
+            self._callbacks[label] = list()
+        self._callbacks[label].append(callback)
+    
+    def define_label(self, label, value):
+        print('Defining label', label)
+        if label in self._label_values:
+            print('Warning: Redefining label \'', label, '\'!', sep='')
+        self._label_values[label] = value
+        if label in self._callbacks:
+            for callback in self._callbacks[label]:
+                callback(value)
+            del self._callbacks[label]
+
+    def __init__(self):
+        self._label_values = dict()
+        self._callbacks = dict()
+
+
 class FileLoader:
 
     def load_file(self, path):
@@ -41,29 +69,16 @@ class FileLoader:
         return ecosphere.compiler.compile_thunk(self._expressions, self)
     
     def when_label_defined(self, label, callback):
-        if label in self._label_values:
-            callback(self._label_values[label])
-            return
-        if label not in self._callbacks:
-            self._callbacks[label] = list()
-        self._callbacks[label].append(callback)
+        self._shared_info.get_label_storage().when_label_defined(label, callback)
     
     def define_label(self, label, value):
-        if label in self._label_values:
-            print('Warning: Redefining label \'', label, '\'!', sep='')
-        self._label_values[label] = value
-        if label in self._callbacks:
-            for callback in self._callbacks[label]:
-                callback(value)
-            del self._callbacks[label]
+        self._shared_info.get_label_storage().define_label(label, value)
 
     def __init__(self, shared_info, path):
         self._shared_info = shared_info
         self._path = path
         self._expressions = None
         self._evaluated = None
-        self._label_values = dict()
-        self._callbacks = dict()
 
 class SharedBootstrappingInfo:
 
@@ -76,9 +91,13 @@ class SharedBootstrappingInfo:
             return loader
         else:
             return self._loaded_files[as_posix]
+    
+    def get_label_storage(self):
+        return self._label_storage
 
     def __init__(self):
         self._loaded_files = dict()
+        self._label_storage = LabelStorage()
 
 
 def main(srcfile, binfile):
