@@ -5,15 +5,15 @@
 #=lobby: {
 
     with Packages = {
-        with Base = #<@base.eco>;
+        with std = #<:@std/std.eco>;
     };
 
-    Select: bool => bool ifTrue: [ ^ 42 ] ifFalse: [ ^ 1 ];
+    Select: b => b if: [ ^ 42 ] else: [ ^ 1 ];
 
     Init => (
         #'ecosphere.ecore.init.set_lobby'(self).
-        #'ecosphere.ecore.init.set_block_family'(#<base/block_family@base.eco>).
-        [ true ] whileTrue: [
+        #'ecosphere.ecore.init.set_block_family'(#<:init/block_family@init.eco>).
+        [ true ] while: [
             #'ecosphere.ecore.io.print'(Select: true).
             #'ecosphere.ecore.io.print'(Select: false).
         ].

@@ -1,0 +1,46 @@
+"
+    std.eco - The std part of the Ecosphere Standard Library
+"
+
+{
+    Object = #=std/Object: {
+        with lobby = #<:lobby>;
+        with trait = {
+            init => ;
+            clone => ;    "TODO"
+            mirror => ;   "TODO"
+            asBool => #<:std/bool/true>;
+            @ second => ; "TODO"
+        };
+    },
+
+    with bool = {
+        true = #=std/bool/true: {
+            with own parent = #<:std/Object>;
+
+            with trait = {
+                asBool           => self;
+                if: t else: f    => t value;
+                if: t            => t value;
+                unless: f        => #<:std/bool/false>;
+                true: t false: f => if: t else: f;
+                true: t          => if: t;
+                false: f         => unless: f;
+            };
+        },
+
+        false = #=std/bool/false: {
+            with own parent = #<:std/Object>;
+
+            with trait = {
+                asBool           => self;
+                if: t else: f    => f value;
+                if: t            => self;
+                unless: f        => f value;
+                true: t false: f => if: t else: f;
+                true: t          => if: t;
+                false: f         => unless: f;
+            };
+        }
+    }
+}
