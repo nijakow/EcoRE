@@ -32,6 +32,14 @@ class CodeWriter:
     def _add_constant(self, c):
         self._u16(len(self._constants))
         self._constants.append(c)
+    
+    def _add_cb_constant(self):
+        index = len(self._constants)
+        self._u16(index)
+        self._constants.append(None)
+        def callback(value):
+            self._constants[index] = value
+        return callback
 
     def _add_code_object(self, c):
         self._u16(len(self._code_objects))
@@ -44,10 +52,19 @@ class CodeWriter:
         self._u8(Bytecodes.CONST)
         self._u8(r)
         self._add_constant(c)
+    
+    def write_const_cb(self, r):
+        self._u8(Bytecodes.CONST)
+        self._u8(r)
+        return self._add_cb_constant()
 
     def write_pushc(self, c):
         self._u8(Bytecodes.PUSHC)
         self._add_constant(c)
+    
+    def write_pushc_cb(self):
+        self._u8(Bytecodes.PUSHC)
+        return self._add_cb_constant()
 
     def write_push(self, r):
         self._u8(Bytecodes.PUSH)
@@ -146,7 +163,8 @@ class CodeGenerator:
                 else:
                     self._writer.write_push(src.get_register_number())
             elif src.is_constant():
-                self._writer.write_pushc(src.get_value())
+                cb = self._writer.write_pushc_cb()
+                src.with_value(cb)
             else:
                 pass # TODO: Error
         elif dst.is_register():
@@ -177,7 +195,8 @@ class CodeGenerator:
                     self._transfer_value(v, dst)
                     v.free()
                 else:
-                    self._writer.write_const(dst.get_register_number(), src.get_value())
+                    cb = self._writer.write_const_cb(dst.get_register_number())
+                    src.with_value(cb)
             elif src.is_closure():
                 if dst.get_depth() > 0:
                     v = self._scope.get_storage_manager().allocate()
@@ -211,8 +230,15 @@ class CodeGenerator:
         self._drop_last_value()
         self._set_last_value(self._scope.get_storage_manager().get_self())
 
+    def load_constant_cb(self):
+        constant = self._scope.get_storage_manager().get_constant()
+        self._set_last_value(constant)
+        return constant
+
     def load_constant(self, c):
-        self._set_last_value(self._scope.get_storage_manager().get_constant(c))
+        constant = self._scope.get_storage_manager().get_constant()
+        constant(c)
+        self._set_last_value(constant)
 
     def load_var(self, name):
         self._drop_last_value()

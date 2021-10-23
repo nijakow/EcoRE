@@ -12,18 +12,14 @@ import ecosphere.econnect
 class LabelStorage:
 
     def when_label_defined(self, label, callback):
-        print('Resolving label', label)
         if label in self._label_values:
-            print('Found!', label)
             callback(self._label_values[label])
             return
         if label not in self._callbacks:
-            print('Not found!', label)
             self._callbacks[label] = list()
         self._callbacks[label].append(callback)
     
     def define_label(self, label, value):
-        print('Defining label', label)
         if label in self._label_values:
             print('Warning: Redefining label \'', label, '\'!', sep='')
         self._label_values[label] = value

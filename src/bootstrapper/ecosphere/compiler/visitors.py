@@ -84,11 +84,8 @@ class ASTCompilerVisitor(ASTVisitor):
         self._code_generator.op_closure(code)
     
     def visit_object(self, ast):
-        d = dict()
-        def callback(value):
-            d['value'] = value
+        callback = self._code_generator.load_constant_cb()
         ast.evaluate(None, self._loader, callback)
-        self._code_generator.load_constant(d['value'])
     
     def visit_proxy(self, ast):
         self.visit_object(ast)

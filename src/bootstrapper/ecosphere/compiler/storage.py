@@ -48,11 +48,22 @@ class Constant(StorageLocation):
     def is_constant(self):
         return True
 
-    def get_value(self):
-        return self._value
-
-    def __init__(self, value):
+    def with_value(self, callback):
+        if self._value is not None:
+            callback(self._value)
+        else:
+            self._callbacks.append(callback)
+    
+    def __call__(self, value):
         self._value = value
+        cpy = list(self._callbacks)
+        self._callbacks.clear()
+        for cb in cpy:
+            cb(value)
+
+    def __init__(self):
+        self._value = None
+        self._callbacks = list()
 
 
 class StorageManager:
@@ -64,8 +75,8 @@ class StorageManager:
     def get_register(self, i):
         return self._registers[i]  # TODO: Allocate it if it does not exist
 
-    def get_constant(self, c):
-        return Constant(c)
+    def get_constant(self):
+        return Constant()
     
     def get_stack(self):
         return StorageManager._STACK
