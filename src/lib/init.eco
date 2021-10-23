@@ -2,6 +2,7 @@
 #=init/block_family: {
     value(...)    => #'ecosphere.ecore.flow.value'(self, ...).
     repeat        => ( self value. #'ecosphere.ecore.flow.reset'() ).
-    while: b  => ( (self value) false: [ ^ nil ]. b value. #'ecosphere.ecore.flow.reset'() ).
-    until: b  => ( (self value) true:  [ ^ nil ]. b value. #'ecosphere.ecore.flow.reset'() ).
+    while: b  => ( (self value) false: [ ^ #<:std/bool/false> ]. b value. #'ecosphere.ecore.flow.reset'() ).
+    until: b  => ( (self value) true:  [ ^ #<:std/bool/true> ]. b value. #'ecosphere.ecore.flow.reset'() ).
+    with lobby = #<:lobby>;
 },
