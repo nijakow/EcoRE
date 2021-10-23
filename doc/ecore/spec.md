@@ -2,13 +2,13 @@
 
 Most names should consist of only one word. In cases where multiple words are needed, these rules apply:
 
- - Slot names and methods are written using `snake_case` or `lowerCamelCase`: `mirror remove_slot: slot_name`. When continuing split method names, lower case is used: `vector at: 3 put: 'hi'`. Messages consisting of very short subwords are written using `camelCase`: `5 isEven`, `result ifTrue: b1 ifFalse: b2`.
+ - Slot names and methods are written using `snake_case` or `lowerCamelCase`: `mirror remove_slot: slot_name`. When continuing split method names, lower case is used: `vector at: 3 put: 'hi'`. Messages consisting of very short subwords are written using `lowerCamelCase`: `5 isEven`.
  - Local variables and parameters are written using `snake_case` or `lowerCamelCase`: `| param_count <- 42 |`, `load: configFilePath`.
  - Function names are written using `UpperCamelCase`: `SquareRoot(x)`, `SquareRoot: x`, `Display: entity On: screen`.
 
 # The Standard Library
 
-## Objects (std Object)
+## Objects (`std Object`)
 
 The base for every object.
 
@@ -30,7 +30,11 @@ Returns the mirror of the object.
 
 Converts the object into either `true` or `false`.
 
-## Booleans (std bool true, std bool false)
+`@ []`
+
+Creates a new _Pair_, with the receiver being the first and the parameter being the second argument.
+
+## Booleans (`std bool true`, `std bool false`)
 
 Values representing either true or false. Booleans are marked as _atomic_.
 
@@ -60,7 +64,7 @@ Same as `if: b`.
 
 Same as `unless: b`.
 
-## Mirrors
+## Mirrors (`std reflect Mirror`)
 
 Every object possesses exactly one _mirror_, a special kind of object by which the structure and properties of the mirrored object can be modified.
 
@@ -99,3 +103,18 @@ Add a new slot. Its name is specified as a parameter. The slot is _invisible_ by
 `remove_slot: [key]`
 
 The same as `(slot: key) remove`.
+
+## Pairs (`std util Pair`)
+
+An ordered pair of two objects.
+
+### Methods available for pairs
+
+`first`
+
+Get the first object of the pair.
+
+`second`
+
+Get the second object of the pair.
+
