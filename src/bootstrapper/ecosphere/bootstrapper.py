@@ -96,14 +96,31 @@ class SharedBootstrappingInfo:
         self._label_storage = LabelStorage()
 
 
+def banner():
+    print('''
+     ______          _____  ______   _                 _    ____  
+    |  ____|        |  __ \|  ____| | |               | |  / /\ \ 
+    | |__   ___ ___ | |__) | |__    | |__   ___   ___ | |_| |  | |
+    |  __| / __/ _ \|  _  /|  __|   | '_ \ / _ \ / _ \| __| |  | |
+    | |___| (_| (_) | | \ \| |____ _| |_) | (_) | (_) | |_| |  | |
+    |______\___\___/|_|  \_\______(_)_.__/ \___/ \___/ \__| |  | |
+                                                           \_\/_/ 
+
+  Compiling ...
+''')
+
+
 def main(srcfile, binfile):
+    banner()
     shared = SharedBootstrappingInfo()
     loader = shared.load(pathlib.Path(srcfile))
     result = loader.compile()
     serializer = ecosphere.econnect.Serializer()
     serializer.write_object(result)
     with open(binfile, 'wb') as out:
-        out.write(serializer.finish())
+        serialized = serializer.finish()
+        print('Writing', len(serialized), 'bytes to', binfile, '...')
+        out.write(serialized)
 
 if __name__ == '__main__':
     main(sys.argv[1], sys.argv[2])
