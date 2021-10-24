@@ -40,6 +40,10 @@ Values representing either true or false. Booleans are marked as _atomic_.
 
 ### Methods available for booleans
 
+`not`
+
+Inverts the boolean.
+
 `if: t else: f`
 
 If `self` is `true`, call the first parameter on `self`. If `self` is `false`, call the second parameter on `self`. Return the value of the call.
