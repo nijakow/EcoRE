@@ -272,13 +272,13 @@ void Eco_Types_Init()
     Eco_Arena_Create(&Eco_TYPES);
     Eco_TypeCore_Create(&Eco_Type_TYPECORE, "Eco_Type");
 
-    Eco_Type_TYPECORE.send = (Eco_TypeCore_SendFunc) NULL;  // TODO, FIXME, XXX
-    Eco_Type_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_Type_Mark;
-    Eco_Type_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_Type_Del;
+    Eco_Type_TYPECORE.send  = (Eco_TypeCore_SendFunc) NULL;  // TODO, FIXME, XXX
+    Eco_Type_TYPECORE.mark  = (Eco_TypeCore_MarkFunc) Eco_Type_Mark;
+    Eco_Type_TYPECORE.del   = (Eco_TypeCore_DelFunc) Eco_Type_Del;
 
-    Eco_Type_TYPE          = Eco_Type_NewPrefab(&Eco_Type_TYPECORE);
+    Eco_Type_TYPE           = Eco_Type_NewPrefab(&Eco_Type_TYPECORE);
 
-    Eco_Type_TYPE->_.type  = Eco_Type_TYPE;
+    Eco_Type_TYPE->_.type   = Eco_Type_TYPE;
 }
 
 void Eco_Types_Terminate()
