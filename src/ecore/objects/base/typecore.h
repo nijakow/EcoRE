@@ -7,20 +7,23 @@ struct Eco_Object;
 struct Eco_Message;
 struct Eco_SendLink;
 struct Eco_GC_State;
+struct Eco_CloneState;
 
 
 typedef bool (*Eco_TypeCore_SendFunc)(struct Eco_Message*, struct Eco_SendLink*, struct Eco_Object*);
 typedef void (*Eco_TypeCore_MarkFunc)(struct Eco_GC_State*, struct Eco_Object*);
+typedef struct Eco_Object* (*Eco_TypeCore_CloneFunc)(struct Eco_CloneState*, struct Eco_Object*);
 typedef void (*Eco_TypeCore_DelFunc)(struct Eco_Object*);
 
 
 struct Eco_TypeCore
 {
-    Eco_TypeCore_SendFunc  send;    
-    Eco_TypeCore_MarkFunc  mark;
-    Eco_TypeCore_DelFunc   del;
+    Eco_TypeCore_SendFunc   send;    
+    Eco_TypeCore_MarkFunc   mark;
+    Eco_TypeCore_CloneFunc  clone;
+    Eco_TypeCore_DelFunc    del;
 
-    const char*            name;
+    const char*             name;
 };
 
 

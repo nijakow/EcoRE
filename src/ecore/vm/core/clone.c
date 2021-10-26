@@ -1,5 +1,7 @@
 #include "clone.h"
 
+#include <ecore/objects/base/object.h>
+#include <ecore/objects/base/type.h>
 #include <ecore/vm/memory/memory.h>
 
 
@@ -55,4 +57,28 @@ struct Eco_Object* Eco_ObjectMap_Get(struct Eco_ObjectMap* self,
     }
 
     return NULL;
+}
+
+
+void Eco_CloneState_Create(struct Eco_CloneState* self)
+{
+    Eco_ObjectMap_Create(&self->map);
+}
+
+void Eco_CloneState_Destroy(struct Eco_CloneState* self)
+{
+    Eco_ObjectMap_Destroy(&self->map);
+}
+
+struct Eco_Object* Eco_CloneObject(struct Eco_CloneState* state, struct Eco_Object* object)
+{
+    struct Eco_Object*  result;
+
+    result = Eco_ObjectMap_Get(&state->map, object);
+
+    if (result == NULL) {
+        result = object->type->typecore->clone(state, object);
+    }
+
+    return result;
 }

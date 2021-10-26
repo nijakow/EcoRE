@@ -34,5 +34,15 @@ struct Eco_CloneState
     struct Eco_ObjectMap  map;
 };
 
+void Eco_CloneState_Create(struct Eco_CloneState*);
+void Eco_CloneState_Destroy(struct Eco_CloneState*);
+struct Eco_Object* Eco_CloneObject(struct Eco_CloneState*, struct Eco_Object*);
+
+static inline void Eco_CloneState_RegisterClone(struct Eco_CloneState* state,
+                                                struct Eco_Object* object,
+                                                struct Eco_Object* clone)
+{
+    Eco_ObjectMap_Put(&state->map, object, clone);
+}
 
 #endif
