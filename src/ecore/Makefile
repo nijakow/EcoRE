@@ -36,6 +36,7 @@ vm/memory/gc/gc_state.c \
 vm/memory/gc/gc.c \
 vm/core/frame.c \
 vm/core/send.c \
+vm/core/clone.c \
 vm/core/interpreter.c \
 vm/fiber.c \
 vm/vm.c \
