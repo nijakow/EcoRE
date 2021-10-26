@@ -9,6 +9,7 @@
 #include <ecore/objects/misc/key/key.h>
 #include <ecore/objects/vm/code/code.h>
 #include <ecore/objects/vm/code/closure.h>
+#include <ecore/vm/core/clone.h>
 #include <ecore/vm/core/send.h>
 #include <ecore/vm/fiber.h>
 #include <ecore/vm/core/interpreter.h>
@@ -241,6 +242,30 @@ void Eco_Type_MarkObject(struct Eco_GC_State* state,
         }
     }
 }
+
+
+void Eco_Type_Subclone(struct Eco_CloneState* state,
+                       struct Eco_Type* type,
+                       struct Eco_Object* original,
+                       struct Eco_Object* clone)
+{
+    unsigned int  i;
+
+    for (i = 0; i < type->slot_count; i++)
+    {
+        switch (type->slots[i].type)
+        {
+            case Eco_Type_Slot_Type_INLINED:
+                Eco_CloneState_CloneAny(state,
+                                        Eco_Object_At(clone, type->slots[i].body.inlined.offset),
+                                        Eco_Object_At(original, type->slots[i].body.inlined.offset));
+                break;
+            case Eco_Type_Slot_Type_CODE:
+                break;
+        }
+    }
+}
+
 
 void Eco_Types_Init()
 {

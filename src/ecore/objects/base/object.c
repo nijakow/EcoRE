@@ -6,6 +6,7 @@
 #include "object_payload.h"
 #include "type.h"
 
+#include <ecore/vm/core/clone.h>
 #include <ecore/vm/core/send.h>
 #include <ecore/vm/memory/memory.h>
 #include <ecore/vm/memory/gc/gc.h>
@@ -135,6 +136,20 @@ void Eco_Object_Mark(struct Eco_GC_State* state, struct Eco_Object* object)
      */
     Eco_Type_MarkObject(state, object->type, object);
     Eco_GC_State_MarkObject(state, object->type);
+}
+
+struct Eco_Object* Eco_Object_Clone(struct Eco_CloneState* state, struct Eco_Object* object)
+{
+    struct Eco_Object*  clone;
+
+    clone = Eco_CloneState_QueryClone(state, object);
+
+    if (clone == NULL) {
+        clone = Eco_Object_New(object->type, object->header.object_size, object->payload->size);
+        Eco_Type_Subclone(state, object->type, object, clone);
+    }
+
+    return clone;
 }
 
 void Eco_Object_Del(struct Eco_Object* object)

@@ -11,6 +11,7 @@
 struct Eco_Message;
 struct Eco_SendLink;
 struct Eco_GC_State;
+struct Eco_CloneState;
 struct Eco_Code;
 
 
@@ -43,6 +44,7 @@ struct Eco_Object* Eco_Object_NewPlain();
 
 bool  Eco_Object_Send(struct Eco_Message*, struct Eco_SendLink*, struct Eco_Object*);
 void  Eco_Object_Mark(struct Eco_GC_State*, struct Eco_Object*);
+struct Eco_Object* Eco_Object_Clone(struct Eco_CloneState*, struct Eco_Object*);
 void  Eco_Object_Del(struct Eco_Object*);
 
 static inline void Eco_Object_MakeSticky(struct Eco_Object* object) { object->header.sticky = true; }

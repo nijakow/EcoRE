@@ -36,7 +36,14 @@ struct Eco_CloneState
 
 void Eco_CloneState_Create(struct Eco_CloneState*);
 void Eco_CloneState_Destroy(struct Eco_CloneState*);
-struct Eco_Object* Eco_CloneObject(struct Eco_CloneState*, struct Eco_Object*);
+struct Eco_Object* Eco_CloneState_Object(struct Eco_CloneState*, struct Eco_Object*);
+void Eco_CloneState_CloneAny(struct Eco_CloneState*, Eco_Any*, Eco_Any*);
+
+static inline struct Eco_Object* Eco_CloneState_QueryClone(struct Eco_CloneState* state,
+                                                           struct Eco_Object* object)
+{
+    return Eco_ObjectMap_Get(&state->map, object);
+}
 
 static inline void Eco_CloneState_RegisterClone(struct Eco_CloneState* state,
                                                 struct Eco_Object* object,
