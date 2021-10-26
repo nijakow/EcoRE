@@ -6,7 +6,7 @@
     Object = #=std/Object: {
         with trait = {
             init => ;
-            clone => ;    "TODO"
+            clone => #'ecosphere.ecore.clone'(self);
             mirror => ;   "TODO"
             asBool => true;
             @ second => (std util Pair) new_with_first: self second: second;

@@ -164,6 +164,7 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type* self,
         the_slot->type                      = Eco_Type_Slot_Type_INLINED;
         the_slot->key                       = info.key;
         the_slot->body.inlined.is_inherited = info.is_inherited;
+        the_slot->body.inlined.is_part      = info.is_part;
         the_slot->body.inlined.value_size   = slot_value_size;
         the_slot->body.inlined.offset       = the_copy->instance_payload_size - slot_value_size;
 
@@ -256,9 +257,14 @@ void Eco_Type_Subclone(struct Eco_CloneState* state,
         switch (type->slots[i].type)
         {
             case Eco_Type_Slot_Type_INLINED:
-                Eco_CloneState_CloneAny(state,
-                                        Eco_Object_At(clone, type->slots[i].body.inlined.offset),
-                                        Eco_Object_At(original, type->slots[i].body.inlined.offset));
+                if (type->slots[i].body.inlined.is_part) {
+                    Eco_CloneState_CloneAny(state,
+                                            Eco_Object_At(clone, type->slots[i].body.inlined.offset),
+                                            Eco_Object_At(original, type->slots[i].body.inlined.offset));
+                } else {
+                    Eco_Any_AssignAny(Eco_Object_At(clone, type->slots[i].body.inlined.offset),
+                                      Eco_Object_At(original, type->slots[i].body.inlined.offset));
+                }
                 break;
             case Eco_Type_Slot_Type_CODE:
                 break;
