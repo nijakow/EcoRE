@@ -8,34 +8,31 @@
             init => ;
             clone => ;    "TODO"
             mirror => ;   "TODO"
-            asBool => #<:std/bool/true>;
-            @ second => ; "TODO"
+            asBool => true;
+            @ second => (std util Pair) new_with_first: self second: second;
         };
         with lobby = #<:lobby>;
     },
 
     with bool = {
         true = #=std/bool/true: {
-            with own parent = #<:std/Object>;
-
             with trait = {
                 asBool           => self;
-                not              => #<:std/bool/false>;
+                not              => false;
                 if: t else: f    => t value;
                 if: t            => t value;
-                unless: f        => #<:std/bool/false>;
+                unless: f        => false;
                 true: t false: f => if: t else: f;
                 true: t          => if: t;
                 false: f         => unless: f;
             };
+            with own parent = #<:std/Object>;
         },
 
         false = #=std/bool/false: {
-            with own parent = #<:std/Object>;
-
             with trait = {
                 asBool           => self;
-                not              => #<:std/bool/true>;
+                not              => true;
                 if: t else: f    => f value;
                 if: t            => self;
                 unless: f        => f value;
@@ -43,6 +40,9 @@
                 true: t          => if: t;
                 false: f         => unless: f;
             };
+            with own parent = #<:std/Object>;
         }
-    }
+    },
+
+    util = #<:@util.eco>;
 }

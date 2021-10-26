@@ -122,3 +122,6 @@ Get the first object of the pair.
 
 Get the second object of the pair.
 
+`isPair`
+
+Returns true.

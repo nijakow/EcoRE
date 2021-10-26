@@ -1,0 +1,21 @@
+"
+    util.eco - The `std util` package of the Ecosphere
+"
+
+{
+    Pair = {
+        first, second;
+
+        with trait = {
+            isPair => true;
+            first: f second: s => (
+                first  <- f.
+                second <- s.
+              ^ self
+            );
+            new_with_first: f second: s => clone first: f second: s;
+        };
+
+        with own parent = #<:std/Object>;
+    }
+}
