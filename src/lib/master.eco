@@ -19,7 +19,7 @@
             #'ecosphere.ecore.io.print'(obj x). obj inc.
             #'ecosphere.ecore.io.print'(Select: true).
             #'ecosphere.ecore.io.print'(Select: false).
-            "#'ecosphere.ecore.io.print'(obj @ obj)."
+            #'ecosphere.ecore.io.print'(obj @ obj).
         ].
     );
 }.

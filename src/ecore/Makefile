@@ -69,7 +69,7 @@ OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
 DEPENDS = $(patsubst %.c,%.d,$(SOURCES))
 
 LDFLAGS = -lasan
-CFLAGS = -fsanitize=address -I.. -Wall -Wextra -Werror -Wno-unused-parameter -g -Ofast
+CFLAGS = -fsanitize=address -I.. -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-label -g -Ofast
 
 
 %.o: %.c
