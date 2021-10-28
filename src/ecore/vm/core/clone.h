@@ -29,9 +29,15 @@ void Eco_ObjectMap_Put(struct Eco_ObjectMap*, struct Eco_Object*, struct Eco_Obj
 struct Eco_Object* Eco_ObjectMap_Get(struct Eco_ObjectMap*, struct Eco_Object*);
 
 
+#define Eco_CloneState_FAST_ENTRIES 8
+
 struct Eco_CloneState
 {
-    struct Eco_ObjectMap  map;
+    struct Eco_ObjectMap           map;
+    struct {
+        unsigned int               fill;
+        struct Eco_ObjectMapEntry  entries[Eco_CloneState_FAST_ENTRIES];
+    }                              fast;
 };
 
 void Eco_CloneState_Create(struct Eco_CloneState*);
@@ -42,6 +48,11 @@ void Eco_CloneState_CloneAny(struct Eco_CloneState*, Eco_Any*, Eco_Any*);
 static inline struct Eco_Object* Eco_CloneState_QueryClone(struct Eco_CloneState* state,
                                                            struct Eco_Object* object)
 {
+    unsigned int  i;
+
+    for (i = 0; i < state->fast.fill; i++)
+        if (state->fast.entries[i].key == object)
+            return state->fast.entries[i].value;
     return Eco_ObjectMap_Get(&state->map, object);
 }
 
@@ -49,7 +60,13 @@ static inline void Eco_CloneState_RegisterClone(struct Eco_CloneState* state,
                                                 struct Eco_Object* object,
                                                 struct Eco_Object* clone)
 {
-    Eco_ObjectMap_Put(&state->map, object, clone);
+    if (state->fast.fill < Eco_CloneState_FAST_ENTRIES) {
+        state->fast.entries[state->fast.fill].key   = object;
+        state->fast.entries[state->fast.fill].value = clone;
+        state->fast.fill++;
+    } else {
+        Eco_ObjectMap_Put(&state->map, object, clone);
+    }
 }
 
 #endif

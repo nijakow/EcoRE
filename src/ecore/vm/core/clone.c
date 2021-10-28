@@ -63,6 +63,7 @@ struct Eco_Object* Eco_ObjectMap_Get(struct Eco_ObjectMap* self,
 void Eco_CloneState_Create(struct Eco_CloneState* self)
 {
     Eco_ObjectMap_Create(&self->map);
+    self->fast.fill = 0;
 }
 
 void Eco_CloneState_Destroy(struct Eco_CloneState* self)
