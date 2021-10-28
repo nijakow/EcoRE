@@ -252,5 +252,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
 
   error:
   end:
+    top->instruction      = instruction;
+    fiber->stack_pointer  = sp;
     return;
 }

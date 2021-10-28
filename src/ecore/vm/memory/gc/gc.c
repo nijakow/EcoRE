@@ -15,6 +15,22 @@ extern struct Eco_Arena* Eco_ARENAS;
 
 void Eco_GC_MarkRoots(struct Eco_GC_State* state)
 {
+    struct Eco_Arena*   arena;
+    struct Eco_Object*  object;
+
+    /*
+     * This is a very, very inelegant way of marking all "sticky" objects :/
+     */
+    for (arena = Eco_ARENAS; arena != NULL; arena = arena->next)
+    {
+        for (object = arena->objects; object != NULL; object = object->next)
+        {
+            if (object->header.sticky) {
+                Eco_GC_State_MarkObject(state, object);
+            }
+        }
+    }
+
     Eco_VM_Mark(state, &Eco_THE_VM);
     if (Eco_VM_Builtin_LOBBY != NULL) {
         Eco_GC_State_MarkObject(state, Eco_VM_Builtin_LOBBY);
