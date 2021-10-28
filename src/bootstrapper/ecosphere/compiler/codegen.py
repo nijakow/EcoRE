@@ -248,6 +248,9 @@ class CodeGenerator:
             return True
         else:
             return False
+    
+    def is_var(self, name):
+        return self._scope.get_binding(name) is not None
 
     def store_var(self, name):
         storage_location = self._scope.get_binding(name)

@@ -13,12 +13,21 @@ class ASTAssignmentVisitor(ASTVisitor):
 
     def visit_send(self, ast):
         assert ast.get_arg_count() == 0
-        if not self._code_generator.store_var(ast.get_key()):
+        if self._code_generator.is_var(ast.get_key()):
+            self._rhs.accept(self._parent_visitor)
             self._code_generator.push()
-            self._code_generator.op_assign(ast.get_key())  # TODO, FIXME, XXX: What's with the subject?
+            assert self._code_generator.store_var(ast.get_key())
+        else:
+            ast.get_subject().accept(self._parent_visitor)
+            self._code_generator.push()
+            self._rhs.accept(self._parent_visitor)
+            self._code_generator.push()
+            self._code_generator.op_assign(ast.get_key())
 
-    def __init__(self, code_generator):
+    def __init__(self, code_generator, parent_visitor, rhs_ast):
         self._code_generator = code_generator
+        self._parent_visitor = parent_visitor
+        self._rhs = rhs_ast
 
 
 class ASTCompilerVisitor(ASTVisitor):
@@ -54,8 +63,8 @@ class ASTCompilerVisitor(ASTVisitor):
             self._code_generator.op_send(arg_count + 1, ast.get_key())
 
     def visit_assignment(self, ast):
-        ast.get_rhs().accept(self)
-        assignment_visitor = ASTAssignmentVisitor(self._code_generator)
+        # ast.get_rhs().accept(self)
+        assignment_visitor = ASTAssignmentVisitor(self._code_generator, self, ast.get_rhs())
         ast.get_lhs().accept(assignment_visitor)
 
     def visit_var(self, ast):

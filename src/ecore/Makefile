@@ -68,8 +68,8 @@ main.c
 OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
 DEPENDS = $(patsubst %.c,%.d,$(SOURCES))
 
-LDFLAGS =
-CFLAGS = -I.. -Wall -Wextra -Werror -Wno-unused-parameter -g -Ofast
+LDFLAGS = -lasan
+CFLAGS = -fsanitize=address -I.. -Wall -Wextra -Werror -Wno-unused-parameter -g -Ofast
 
 
 %.o: %.c
