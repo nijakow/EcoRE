@@ -15,7 +15,6 @@ class ASTAssignmentVisitor(ASTVisitor):
         assert ast.get_arg_count() == 0
         if self._code_generator.is_var(ast.get_key()):
             self._rhs.accept(self._parent_visitor)
-            self._code_generator.push()
             assert self._code_generator.store_var(ast.get_key())
         else:
             ast.get_subject().accept(self._parent_visitor)
