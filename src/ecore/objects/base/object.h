@@ -52,6 +52,7 @@ static inline void Eco_Object_MakeSticky(struct Eco_Object* object) { object->he
 
 static inline void* Eco_Object_At(struct Eco_Object* object, unsigned int offset)
 {
+    /* TODO, FIXME, XXX: Add a debug setting: If out-of-bounds, return NULL! */
     return (void*) &(object->payload->data[offset]);
 }
 

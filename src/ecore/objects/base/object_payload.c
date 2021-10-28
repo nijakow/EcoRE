@@ -24,12 +24,17 @@ void Eco_Object_Payload_Delete(struct Eco_Object_Payload* payload)
 
 struct Eco_Object_Payload* Eco_Object_Payload_Resize(struct Eco_Object_Payload* payload, unsigned int new_size)
 {
+    struct Eco_Object_Payload*  new_payload;
+
     if (payload == NULL) {
-        return Eco_Object_Payload_New(new_size);
+        new_payload = Eco_Object_Payload_New(new_size);
     } else if (new_size == 0) {
         Eco_Object_Payload_Delete(payload);
-        return NULL;
+        new_payload = NULL;
     } else {
-        return Eco_Memory_Realloc(payload, sizeof(struct Eco_Object_Payload) + new_size);
+        new_payload       = Eco_Memory_Realloc(payload, sizeof(struct Eco_Object_Payload) + new_size);
+        new_payload->size = new_size;
     }
+
+    return new_payload;
 }
