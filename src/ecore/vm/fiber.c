@@ -134,17 +134,20 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,
 
 void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
 {
-    Eco_Any*           result;
-    struct Eco_Frame*  frame;
+    Eco_Any*             result;
+    struct Eco_Frame*    frame;
+    struct Eco_Closure*  closure;
 
     frame  = Eco_Fiber_Top(fiber);
     result = Eco_Fiber_Nth(fiber, 1);
 
     while (frame->closures != NULL)
     {
-        frame->closures->lexical = NULL;
-        frame->closures->prev    = NULL;
-        frame->closures = frame->closures->next;
+        closure          = frame->closures;
+        frame->closures  = frame->closures->next;
+        closure->lexical = NULL;
+        closure->prev    = NULL;
+        closure->next    = NULL;
     }
 
     fiber->top           = frame->previous;

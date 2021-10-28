@@ -79,7 +79,7 @@ void Eco_Closure_Del(struct Eco_Closure* closure)
     if (closure->prev != NULL)
         *(closure->prev) = closure->next;
     if (closure->next != NULL)
-        closure->next->prev = NULL;
+        closure->next->prev = closure->prev;
 
     Eco_Object_Del(&(closure->_));
 }
