@@ -13,7 +13,6 @@
                 second <- s.
               ^ self
             );
-            new_with_first: f second: s => clone first: f second: s;
         };
 
         with own parent = #<:std/Object>;

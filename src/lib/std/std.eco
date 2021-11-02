@@ -7,9 +7,10 @@
         with trait = {
             init => ;
             clone => #'ecosphere.ecore.clone'(self);
+            new => clone;
             mirror => ;   "TODO"
             asBool => true;
-            @ second => (std util Pair) new_with_first: self second: second;
+            @ second => ((std util Pair) new) first: self second: second;
         };
         with lobby = #<:lobby>;
     },
