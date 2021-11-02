@@ -18,7 +18,8 @@ enum Eco_EConnect_Result_ErrorType
     Eco_EConnect_Result_ErrorType_INVALID_MESSAGE_HEADER,
     Eco_EConnect_ErrorType_KEY_NOT_FOUND,
     Eco_EConnect_ErrorType_TYPE_ERROR,
-    Eco_EConnect_ErrorType_UNBOUND_OBJECT
+    Eco_EConnect_ErrorType_UNBOUND_OBJECT,
+    Eco_EConnect_ErrorType_INSTANTIATION_ERROR
 };
 
 struct Eco_EConnect_Result

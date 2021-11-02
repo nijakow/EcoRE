@@ -1,6 +1,7 @@
 #include "builtins.h"
 
 #include "objects/key.h"
+#include "objects/string.h"
 #include "objects/uint.h"
 #include "objects/object.h"
 #include "objects/group.h"
@@ -21,6 +22,7 @@ void Eco_EConnect_InitReaderBuiltins()
     Eco_EConnect_InstallCallback("ecosphere.econnect.block", Eco_EConnect_Builtin_Block);
     Eco_EConnect_InstallCallback("ecosphere.econnect.unwind", Eco_EConnect_Builtin_Unwind);
     Eco_EConnect_InstallCallback("ecosphere.object.key", Eco_EConnect_Builtin_GetKey);
+    Eco_EConnect_InstallCallback("ecosphere.object.string", Eco_EConnect_Builtin_GetString);
     Eco_EConnect_InstallCallback("ecosphere.object.uint", Eco_EConnect_Builtin_GetUInt);
     Eco_EConnect_InstallCallback("ecosphere.object.int", Eco_EConnect_Builtin_GetUInt);    // TODO: Parse a real Int
     Eco_EConnect_InstallCallback("ecosphere.object.object", Eco_EConnect_Builtin_GetObject);
