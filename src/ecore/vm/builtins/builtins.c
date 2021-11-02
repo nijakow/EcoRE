@@ -49,7 +49,8 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.slots.add_value_slot", Eco_VM_Builtin_AddValueSlot);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_lobby", Eco_VM_Builtin_SetLobby);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_block_family", Eco_VM_Builtin_SetBlockFamily);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_block_proxy", Eco_VM_Builtin_SetBlockProxy);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_integer_proxy", Eco_VM_Builtin_SetIntegerProxy);
 }
 
 void Eco_VM_Builtins_Terminate()
