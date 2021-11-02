@@ -22,6 +22,7 @@ objects/base/object_payload.c \
 objects/base/object_slots.c \
 objects/group/group.c \
 objects/misc/key/key.c \
+objects/misc/string/string.c \
 objects/vm/code/code.c \
 objects/vm/code/closure.c \
 vm/builtins/builtins.c \
