@@ -27,6 +27,17 @@ class EcoKey(ecosphere.objects.base.EcoObject):
     def __init__(self, name):
         self._name = name
 
+class EcoString(ecosphere.objects.base.EcoObject):
+
+    def serialize(self, serializer):
+        if not serializer.try_serialize_known_object(self):
+            serializer.write_message('ecosphere.object.string')
+            serializer.write_vlq(serializer.add_object(self))
+            serializer.write_string(self._string)
+
+    def __init__(self, string):
+        self._string = string
+
 class EcoCode(ecosphere.objects.base.EcoObject):
     class Disassembler:
 

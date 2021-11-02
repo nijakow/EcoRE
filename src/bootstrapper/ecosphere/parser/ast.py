@@ -94,6 +94,15 @@ class ASTKey(ASTObject):
         super().__init__()
         self._key = key
 
+class ASTString(ASTObject):
+
+    def _evaluate(self, the_subject, the_environment, the_callback):
+        the_callback(self._string)
+
+    def __init__(self, string):
+        super().__init__()
+        self._string = string
+
 class ASTBuiltin(ASTExpression):
 
     def accept(self, visitor):

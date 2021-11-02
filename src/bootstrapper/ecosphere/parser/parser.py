@@ -2,7 +2,7 @@ import ecosphere.objects.misc
 import ecosphere.parser.tokenizer
 from ecosphere.parser.tokenizer import TokenType
 
-from ecosphere.parser.ast import ASTExpression, ASTNumber, ASTSelf, ASTGroup, ASTObject, ASTPlainObject, ASTSlot, ASTNumber, ASTKey, ASTBuiltin, ASTSend, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn, ASTLabelDef, ASTProxy
+from ecosphere.parser.ast import ASTExpression, ASTNumber, ASTSelf, ASTGroup, ASTObject, ASTPlainObject, ASTSlot, ASTNumber, ASTKey, ASTString, ASTBuiltin, ASTSend, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn, ASTLabelDef, ASTProxy
 
 
 class ParseException(Exception):
@@ -117,13 +117,14 @@ class Parser:
                 return ASTBuiltin(kw.get_key(), args, varargs)
             else:
                 return ASTKey(kw.get_key())
+        elif kw.is_a(TokenType.STRING):
+            return ASTString(kw.get_string())
         elif kw.is_a(TokenType.NUMBER):
             return ASTNumber(kw.get_value())
         elif kw.is_a(TokenType.LABEL):
             return ASTLabelDef(kw.get_address(), self.parse_simple_expression())
         elif kw.is_a(TokenType.PROXY):
             return ASTProxy(kw.get_proxy_type(), kw.get_proxy_target())
-        # TODO: Strings
         else:
             kw.fail()
             return ASTSelf()

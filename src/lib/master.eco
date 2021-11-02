@@ -3,6 +3,11 @@
 "
 
 #=lobby: {
+    meta = {
+        name    => 'Ecosphere Standard Library',
+        version => '0.1',
+        author  => 'nijakow'
+    };
 
     with packages = {
         with std = #<:@std/std.eco>;

@@ -56,8 +56,8 @@ class IdentifierToken(Token):
 
 class StringToken(Token):
 
-    def get_string(self) -> str:
-        return self._str
+    def get_string(self) -> ecosphere.objects.misc.EcoString:
+        return ecosphere.objects.misc.EcoString(self._str)
 
     def __init__(self, tokenizer: 'Tokenizer', the_str: str):
         super().__init__(tokenizer, TokenType.STRING)
@@ -71,6 +71,15 @@ class KeyToken(Token):
     def __init__(self, tokenizer: 'Tokenizer', key: ecosphere.objects.misc.EcoKey):
         super().__init__(tokenizer, TokenType.KEY)
         self._key = key
+
+class StringToken(Token):
+
+    def get_string(self) -> ecosphere.objects.misc.EcoString:
+        return ecosphere.objects.misc.EcoString(self._string)
+    
+    def __init__(self, tokenizer: 'Tokenizer', string: ecosphere.objects.misc.EcoString):
+        super().__init__(tokenizer, TokenType.STRING)
+        self._string = string
 
 class NumberToken(Token):
 
