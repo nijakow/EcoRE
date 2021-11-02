@@ -1,13 +1,13 @@
 
 #=init/block_proxy: {
-    value(...)    => #'ecosphere.ecore.flow.value'(self, ...).
-    repeat        => ( self value. #'ecosphere.ecore.flow.reset'() ).
-    while: b  => ( (self value) false: [ ^ #<:std/bool/false> ]. b value. #'ecosphere.ecore.flow.reset'() ).
-    until: b  => ( (self value) true:  [ ^ #<:std/bool/true> ]. b value. #'ecosphere.ecore.flow.reset'() ).
-    with lobby = #<:lobby>;
+    value(...) => #'ecosphere.ecore.flow.value'(self, ...).
+    repeat     => ( self value. #'ecosphere.ecore.flow.reset'() ).
+    while: b   => ( (self value) false: [ ^ #<:std/bool/false> ]. b value. #'ecosphere.ecore.flow.reset'() ).
+    until: b   => ( (self value) true:  [ ^ #<:std/bool/true> ]. b value. #'ecosphere.ecore.flow.reset'() ).
+    with own parent = #<:std/Object@std/std.eco>;
 },
 
 #=init/integer_proxy: {
     + other => #'ecosphere.ecore.math.add'(self, other);
-    with lobby = #<:lobby>;
+    with own parent = #<:std/Object@std/std.eco>;
 },
