@@ -46,6 +46,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.io.print", Eco_VM_Builtin_Print);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add_integers", Eco_VM_Builtin_AddIntegers);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add", Eco_VM_Builtin_Add);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.sub", Eco_VM_Builtin_Subtract2);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.slots.add_value_slot", Eco_VM_Builtin_AddValueSlot);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_lobby", Eco_VM_Builtin_SetLobby);
