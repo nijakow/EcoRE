@@ -92,6 +92,7 @@ static struct Eco_Type* Eco_Type_New(unsigned int slot_count)
                                  &Eco_TYPES);
 
     type->typecore              = NULL;
+    type->proxy                 = NULL;
     type->slot_count            = slot_count;
     type->instance_payload_size = 0;
 

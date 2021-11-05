@@ -55,6 +55,8 @@ struct Eco_Type
 
     struct Eco_TypeCore*   typecore;
 
+    struct Eco_Object*     proxy;
+
     unsigned int           slot_count;
     unsigned int           instance_payload_size;
     struct Eco_Type_Slot   slots[];

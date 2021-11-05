@@ -131,7 +131,11 @@ bool Eco_Object_Send(struct Eco_Message* message,
         }
     }
 
-    return false;
+    if (target->type->proxy != NULL) {
+        return Eco_Send_ToObject(message, link, target->type->proxy);
+    } else {
+        return false;
+    }
 }
 
 void Eco_Object_Mark(struct Eco_GC_State* state, struct Eco_Object* object)
