@@ -1,7 +1,7 @@
-#ifndef ECO_EXTRA_H
-#define ECO_EXTRA_H
+#ifndef ECO_BASE_EXTRA_H
+#define ECO_BASE_EXTRA_H
 
-#include <ecore/eco.h>
+#include <ecore/base/any.h>
 #include <ecore/objects/base/object.h>
 #include <ecore/objects/base/type.h>
 

@@ -1,0 +1,162 @@
+#ifndef ECO_BASE_ANY_H
+#define ECO_BASE_ANY_H
+
+#include <ecore/base/defs.h>
+#include <ecore/base/decls.h>
+
+/*
+ *
+ *    u n i o n   E c o _ V a l u e
+ *
+ */
+
+typedef union Eco_Value
+{
+    struct Eco_Object*  pointer;
+    Eco_Integer         integer;
+    Eco_Floating        floating;
+} Eco_Value;
+
+typedef enum Eco_Value_Type
+{
+    Eco_Value_Type_POINTER = 0,
+    Eco_Value_Type_INTEGER,
+    Eco_Value_Type_FLOATING
+} Eco_Value_Type;
+
+
+/*
+ *
+ *    s t r u c t  E c o _ A n y
+ *
+ */
+
+#if 0
+
+typedef struct Eco_Any
+{
+    Eco_Value       value;
+    Eco_Value_Type  type;
+} Eco_Any;
+
+
+static inline bool Eco_Any_IsPointer(Eco_Any* any)
+{
+    return any->type == Eco_Value_Type_POINTER;
+}
+
+static inline bool Eco_Any_IsInteger(Eco_Any* any)
+{
+    return any->type == Eco_Value_Type_INTEGER;
+}
+
+static inline bool Eco_Any_IsFloating(Eco_Any* any)
+{
+    return any->type == Eco_Value_Type_FLOATING;
+}
+
+
+static inline void Eco_Any_AssignPointer(Eco_Any* any, struct Eco_Object* object)
+{
+    any->value.pointer = object;
+    any->type          = Eco_Value_Type_POINTER;
+}
+
+static inline void Eco_Any_AssignInteger(Eco_Any* any, Eco_Integer integer)
+{
+    any->value.integer = integer;
+    any->type          = Eco_Value_Type_INTEGER;
+}
+
+static inline void Eco_Any_AssignFloating(Eco_Any* any, Eco_Floating floating)
+{
+    any->value.floating = floating;
+    any->type           = Eco_Value_Type_FLOATING;
+}
+
+static inline void Eco_Any_AssignAny(Eco_Any* dest, Eco_Any* src)
+{
+    *dest = *src;
+}
+
+
+static inline struct Eco_Object* Eco_Any_AsPointer(Eco_Any* any)
+{
+    return any->value.pointer;
+}
+
+static inline Eco_Integer Eco_Any_AsInteger(Eco_Any* any)
+{
+    return any->value.integer;
+}
+
+static inline Eco_Floating Eco_Any_AsFloating(Eco_Any* any)
+{
+    return any->value.floating;
+}
+
+#else
+
+typedef struct Eco_Object* Eco_Any;
+
+
+static inline bool Eco_Any_IsPointer(Eco_Any* any)
+{
+    return (((uintptr_t) *any) & 0x03) == Eco_Value_Type_POINTER;
+}
+
+static inline bool Eco_Any_IsInteger(Eco_Any* any)
+{
+    return ((uintptr_t) *any & 0x03) == Eco_Value_Type_INTEGER;
+}
+
+static inline bool Eco_Any_IsFloating(Eco_Any* any)
+{
+    return ((uintptr_t) *any & 0x03) == Eco_Value_Type_FLOATING;
+}
+
+
+static inline void Eco_Any_AssignPointer(Eco_Any* any, struct Eco_Object* object)
+{
+    *any = object;
+}
+
+static inline void Eco_Any_AssignInteger(Eco_Any* any, Eco_Integer integer)
+{
+    uintptr_t  value;
+
+    value = (uintptr_t) integer;
+    value <<= 2;
+    value |= Eco_Value_Type_INTEGER & 0x03;
+    *any = (struct Eco_Object*) value;
+}
+
+static inline void Eco_Any_AssignFloating(Eco_Any* any, Eco_Floating floating)
+{
+    // TODO, FIXME, XXX!
+}
+
+static inline void Eco_Any_AssignAny(Eco_Any* dest, Eco_Any* src)
+{
+    *dest = *src;
+}
+
+
+static inline struct Eco_Object* Eco_Any_AsPointer(Eco_Any* any)
+{
+    return (struct Eco_Object*) *any;
+}
+
+static inline Eco_Integer Eco_Any_AsInteger(Eco_Any* any)
+{
+    return (Eco_Integer) ((uintptr_t) *any >> 2);
+}
+
+static inline Eco_Floating Eco_Any_AsFloating(Eco_Any* any)
+{
+    return 0.0f;    // TODO, FIXME, XXX!
+}
+
+#endif
+
+#endif
