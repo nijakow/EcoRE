@@ -21,6 +21,7 @@
         #'ecosphere.ecore.init.set_lobby'(self).
         #'ecosphere.ecore.init.set_block_proxy'(#<:init/block_proxy@init.eco>).
         #'ecosphere.ecore.init.set_integer_proxy'(#<:init/integer_proxy@init.eco>).
+        #'ecosphere.ecore.init.set_vector_proxy'(#<:init/vector_proxy@init.eco>).
         | obj <- { x <- 0, inc => x <- x + 1, with own parent = #<:std/Object> } |
         [ true ] while: [
             #'ecosphere.ecore.io.print'(obj x). obj inc.

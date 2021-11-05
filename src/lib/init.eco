@@ -12,3 +12,10 @@
     - other => #'ecosphere.ecore.math.sub'(self, other);
     with own parent = #<:std/Object@std/std.eco>;
 },
+
+#=init/vector_proxy: {
+    length => #'ecosphere.ecore.object.vector.length'(self);
+    at: index => #'ecosphere.ecore.object.vector.at'(self, index);
+    at: index put: value => #'ecosphere.ecore.object.vector.at_put'(self, index, value);
+    with own parent = #<:std/Object@std/std.eco>;
+}
