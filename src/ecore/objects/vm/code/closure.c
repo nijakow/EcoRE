@@ -14,25 +14,14 @@
  */
 
 static struct Eco_TypeCore Eco_Closure_TYPECORE;
-static struct Eco_Type*    Eco_Closure_TYPE;
-       struct Eco_Object*  Eco_Closure_PROXY = NULL;
-
-bool Eco_Closure_Send(struct Eco_Message* message,
-                      struct Eco_SendLink* link,
-                      struct Eco_Closure* closure)
-{
-    if (Eco_Closure_PROXY != NULL)
-        return Eco_Send_ToObject(message, link, Eco_Closure_PROXY);
-    else
-        return false;
-}
+       struct Eco_Type*    Eco_Closure_TYPE;
 
 
 void Eco_Closure_Init()
 {
     Eco_TypeCore_Create(&Eco_Closure_TYPECORE, "Eco_Closure");
 
-    Eco_Closure_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Closure_Send;
+    Eco_Closure_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
     Eco_Closure_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_Closure_Mark;
     Eco_Closure_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_Closure_Del;
 

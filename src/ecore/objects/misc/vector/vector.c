@@ -10,25 +10,14 @@
  */
 
 static struct Eco_TypeCore Eco_Vector_TYPECORE;
-static struct Eco_Type*    Eco_Vector_TYPE;
-       struct Eco_Object*  Eco_Vector_PROXY = NULL;
-
-bool Eco_Vector_Send(struct Eco_Message* message,
-                     struct Eco_SendLink* link,
-                     struct Eco_Vector* vector)
-{
-    if (Eco_Vector_PROXY != NULL)
-        return Eco_Send_ToObject(message, link, Eco_Vector_PROXY);
-    else
-        return false;
-}
+       struct Eco_Type*    Eco_Vector_TYPE;
 
 
 void Eco_Vector_Init()
 {
     Eco_TypeCore_Create(&Eco_Vector_TYPECORE, "Eco_Vector");
 
-    Eco_Vector_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Vector_Send;
+    Eco_Vector_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
     Eco_Vector_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_Vector_Mark;
     Eco_Vector_TYPECORE.del  = (Eco_TypeCore_DelFunc)  Eco_Vector_Del;
 
