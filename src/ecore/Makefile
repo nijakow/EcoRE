@@ -33,6 +33,7 @@ vm/builtins/core/init.c \
 vm/builtins/core/io.c \
 vm/builtins/core/math.c \
 vm/builtins/core/slots.c \
+vm/builtins/core/vector.c \
 vm/memory/memory.c \
 vm/memory/arena.c \
 vm/memory/gc/gc_state.c \

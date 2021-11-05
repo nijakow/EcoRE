@@ -17,6 +17,11 @@ struct Eco_Vector* Eco_Vector_New(unsigned int);
 void Eco_Vector_Mark(struct Eco_GC_State*, struct Eco_Vector*);
 void Eco_Vector_Del(struct Eco_Vector*);
 
+static inline Eco_Any* Eco_Vector_At(struct Eco_Vector* vector, unsigned int index)
+{
+    return &vector->elements[index];
+}
+
 static inline void Eco_Vector_Put(struct Eco_Vector* vector, unsigned int index, Eco_Any* value)
 {
     Eco_Any_AssignAny(&vector->elements[index], value);

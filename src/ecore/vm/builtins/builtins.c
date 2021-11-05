@@ -8,6 +8,7 @@
 #include "core/io.h"
 #include "core/math.h"
 #include "core/slots.h"
+#include "core/vector.h"
 
 #include <ecore/vm/fiber.h>
 #include <ecore/objects/misc/key/key.h>
@@ -48,6 +49,9 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add", Eco_VM_Builtin_Add);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.sub", Eco_VM_Builtin_Subtract2);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.slots.add_value_slot", Eco_VM_Builtin_AddValueSlot);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.vector.at", Eco_VM_Builtin_VectorAt);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.vector.at_put", Eco_VM_Builtin_VectorAtPut);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.vector.length", Eco_VM_Builtin_VectorLength);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_lobby", Eco_VM_Builtin_SetLobby);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_block_proxy", Eco_VM_Builtin_SetBlockProxy);
