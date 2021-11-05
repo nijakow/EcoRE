@@ -56,6 +56,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_lobby", Eco_VM_Builtin_SetLobby);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_block_proxy", Eco_VM_Builtin_SetBlockProxy);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_integer_proxy", Eco_VM_Builtin_SetIntegerProxy);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_vector_proxy", Eco_VM_Builtin_SetVectorProxy);
 }
 
 void Eco_VM_Builtins_Terminate()
