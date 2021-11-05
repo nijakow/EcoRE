@@ -17,6 +17,7 @@ struct Eco_GC_State;
 enum Eco_Type_Slot_Type
 {
     Eco_Type_Slot_Type_INLINED,
+    Eco_Type_Slot_Type_SHARED,
     Eco_Type_Slot_Type_CODE
 };
 
@@ -34,6 +35,10 @@ struct Eco_Type_Slot
             bool is_inherited;
             bool is_part;
         } inlined;
+        struct {
+            bool is_inherited;
+            Eco_Any value;
+        } shared;
         struct Eco_Code*     code;
     } body;
 };

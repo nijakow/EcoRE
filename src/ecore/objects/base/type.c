@@ -59,6 +59,10 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message* message, struct Eco_Object* object
                     Eco_Fiber_Drop(message->fiber);  /* Drop self */
                     Eco_Fiber_Push(message->fiber, ((Eco_Any*) Eco_Object_At(object, slot->body.inlined.offset)));
                     return true;
+                case Eco_Type_Slot_Type_SHARED:
+                    Eco_Fiber_Drop(message->fiber);
+                    Eco_Fiber_Push(message->fiber, &slot->body.shared.value);
+                    return true;
                 case Eco_Type_Slot_Type_CODE:
                     return Eco_Fiber_Enter(message->fiber, NULL, slot->body.code, message->body.send.arg_count);
             }
@@ -216,6 +220,9 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
         {
             case Eco_Type_Slot_Type_INLINED:
                 break;
+            case Eco_Type_Slot_Type_SHARED:
+                Eco_GC_State_MarkAny(state, &type->slots[i].body.shared.value);
+                break;
             case Eco_Type_Slot_Type_CODE:
                 Eco_GC_State_MarkObject(state, type->slots[i].body.code);
                 break;
@@ -238,7 +245,7 @@ void Eco_Type_MarkObject(struct Eco_GC_State* state,
             case Eco_Type_Slot_Type_INLINED:
                 Eco_GC_State_MarkAny(state, Eco_Object_At(object, type->slots[i].body.inlined.offset));
                 break;
-            case Eco_Type_Slot_Type_CODE:
+            default:
                 break;
         }
     }
@@ -266,7 +273,7 @@ void Eco_Type_Subclone(struct Eco_CloneState* state,
                                       Eco_Object_At(original, type->slots[i].body.inlined.offset));
                 }
                 break;
-            case Eco_Type_Slot_Type_CODE:
+            default:
                 break;
         }
     }

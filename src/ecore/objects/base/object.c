@@ -121,6 +121,11 @@ bool Eco_Object_Send(struct Eco_Message* message,
                     }
                 }
                 break;
+            case Eco_Type_Slot_Type_SHARED:
+                if (slot->body.shared.is_inherited) {
+                    return Eco_Send(message, link, &slot->body.shared.value);
+                }
+                break;
             default:
                 break;
         }
