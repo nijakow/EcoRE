@@ -15,6 +15,8 @@
 
     Select: b => b if: [ ^ 42 ] else: [ ^ 1 ];
 
+    v = #(1, 2, 3, 'hello', #(#'world'));
+
     Init => (
         #'ecosphere.ecore.init.set_lobby'(self).
         #'ecosphere.ecore.init.set_block_proxy'(#<:init/block_proxy@init.eco>).

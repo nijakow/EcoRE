@@ -2,7 +2,7 @@ import ecosphere.objects.misc
 import ecosphere.parser.tokenizer
 from ecosphere.parser.tokenizer import TokenType
 
-from ecosphere.parser.ast import ASTExpression, ASTNumber, ASTSelf, ASTGroup, ASTObject, ASTPlainObject, ASTSlot, ASTNumber, ASTKey, ASTString, ASTBuiltin, ASTSend, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn, ASTLabelDef, ASTProxy
+from ecosphere.parser.ast import ASTExpression, ASTNumber, ASTSelf, ASTGroup, ASTObject, ASTPlainObject, ASTSlot, ASTNumber, ASTKey, ASTString, ASTVector, ASTBuiltin, ASTSend, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn, ASTLabelDef, ASTProxy
 
 
 class ParseException(Exception):
@@ -97,6 +97,9 @@ class Parser:
             if self.check(TokenType.RCURLY): break
             self.expect(TokenType.SEPARATOR)
         return ASTPlainObject(slots)
+    
+    def parse_vector(self):
+        return ASTVector(self.parse_expressions(TokenType.RPAREN))
 
     def parse_simple_expression(self, allow_followups=True) -> ASTExpression:
         if self.check(TokenType.SELF):
@@ -110,6 +113,8 @@ class Parser:
                 return self.parse_group()
             else:
                 return self.parse_object()
+        elif self.check(TokenType.HASHLPAREN):
+            return self.parse_vector()
         kw = self._t.read()
         if kw.is_a(TokenType.KEY):
             if allow_followups and self.check(TokenType.LPAREN):

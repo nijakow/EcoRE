@@ -4,7 +4,6 @@
 
 #include <ecore/objects/misc/vector/vector.h>
 
-
 bool Eco_EConnect_Builtin_GetVector(struct Eco_EConnect_Reader* reader,
                                     struct Eco_EConnect_Result* result)
 {
@@ -15,7 +14,6 @@ bool Eco_EConnect_Builtin_GetVector(struct Eco_EConnect_Reader* reader,
     Eco_Any             value;
 
     id        = Eco_EConnect_ParseUInt(&reader->stream);
-
     elements  = Eco_EConnect_ParseUInt(&reader->stream);
 
     vector    = Eco_Vector_New(elements);
