@@ -2,7 +2,6 @@
 #define ECO_BASE_ANY_H
 
 #include <ecore/base/defs.h>
-#include <ecore/base/decls.h>
 
 /*
  *
@@ -12,14 +11,14 @@
 
 typedef union Eco_Value
 {
-    struct Eco_Object*  pointer;
-    Eco_Integer         integer;
-    Eco_Floating        floating;
+    Eco_Ref       ref;
+    Eco_Integer   integer;
+    Eco_Floating  floating;
 } Eco_Value;
 
 typedef enum Eco_Value_Type
 {
-    Eco_Value_Type_POINTER = 0,
+    Eco_Value_Type_REF = 0,
     Eco_Value_Type_INTEGER,
     Eco_Value_Type_FLOATING
 } Eco_Value_Type;
@@ -40,9 +39,9 @@ typedef struct Eco_Any
 } Eco_Any;
 
 
-static inline bool Eco_Any_IsPointer(Eco_Any* any)
+static inline bool Eco_Any_IsRef(Eco_Any* any)
 {
-    return any->type == Eco_Value_Type_POINTER;
+    return any->type == Eco_Value_Type_REF;
 }
 
 static inline bool Eco_Any_IsInteger(Eco_Any* any)
@@ -56,10 +55,10 @@ static inline bool Eco_Any_IsFloating(Eco_Any* any)
 }
 
 
-static inline void Eco_Any_AssignPointer(Eco_Any* any, struct Eco_Object* object)
+static inline void Eco_Any_AssignRef(Eco_Any* any, Eco_Ref ref)
 {
-    any->value.pointer = object;
-    any->type          = Eco_Value_Type_POINTER;
+    any->value.ref = ref;
+    any->type      = Eco_Value_Type_REF;
 }
 
 static inline void Eco_Any_AssignInteger(Eco_Any* any, Eco_Integer integer)
@@ -80,9 +79,9 @@ static inline void Eco_Any_AssignAny(Eco_Any* dest, Eco_Any* src)
 }
 
 
-static inline struct Eco_Object* Eco_Any_AsPointer(Eco_Any* any)
+static inline struct Eco_Ref Eco_Any_AsRef(Eco_Any* any)
 {
-    return any->value.pointer;
+    return any->value.ref;
 }
 
 static inline Eco_Integer Eco_Any_AsInteger(Eco_Any* any)
@@ -97,12 +96,12 @@ static inline Eco_Floating Eco_Any_AsFloating(Eco_Any* any)
 
 #else
 
-typedef struct Eco_Object* Eco_Any;
+typedef Eco_Ref Eco_Any;
 
 
-static inline bool Eco_Any_IsPointer(Eco_Any* any)
+static inline bool Eco_Any_IsRef(Eco_Any* any)
 {
-    return (((uintptr_t) *any) & 0x03) == Eco_Value_Type_POINTER;
+    return (((uintptr_t) *any) & 0x03) == Eco_Value_Type_REF;
 }
 
 static inline bool Eco_Any_IsInteger(Eco_Any* any)
@@ -116,9 +115,9 @@ static inline bool Eco_Any_IsFloating(Eco_Any* any)
 }
 
 
-static inline void Eco_Any_AssignPointer(Eco_Any* any, struct Eco_Object* object)
+static inline void Eco_Any_AssignRef(Eco_Any* any, Eco_Ref ref)
 {
-    *any = object;
+    *any = ref;
 }
 
 static inline void Eco_Any_AssignInteger(Eco_Any* any, Eco_Integer integer)
@@ -142,9 +141,9 @@ static inline void Eco_Any_AssignAny(Eco_Any* dest, Eco_Any* src)
 }
 
 
-static inline struct Eco_Object* Eco_Any_AsPointer(Eco_Any* any)
+static inline Eco_Ref Eco_Any_AsRef(Eco_Any* any)
 {
-    return (struct Eco_Object*) *any;
+    return *any;
 }
 
 static inline Eco_Integer Eco_Any_AsInteger(Eco_Any* any)
@@ -158,5 +157,20 @@ static inline Eco_Floating Eco_Any_AsFloating(Eco_Any* any)
 }
 
 #endif
+
+static inline bool Eco_Any_IsPointer(Eco_Any* any)
+{
+    return Eco_Any_IsRef(any);
+}
+
+static inline struct Eco_Object* Eco_Any_AsPointer(Eco_Any* any)
+{
+    return Eco_DEREF(struct Eco_Object, Eco_Any_AsRef(any));
+}
+
+static inline void Eco_Any_AssignPointer(Eco_Any* any, struct Eco_Object* object)
+{
+    Eco_Any_AssignRef(any, Eco_REF(object));
+}
 
 #endif
