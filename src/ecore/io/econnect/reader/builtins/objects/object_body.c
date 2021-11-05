@@ -6,9 +6,9 @@
 #include <ecore/objects/misc/key/key.h>
 
 
-bool Eco_EConnect_Reader_ReadObjectBody(struct Eco_EConnect_Reader* reader,
-                                        struct Eco_EConnect_Result* result,
-                                        struct Eco_Object* object)
+bool Eco_EConnect_Reader_ReadMoleculeBody(struct Eco_EConnect_Reader* reader,
+                                          struct Eco_EConnect_Result* result,
+                                          struct Eco_Molecule* object)
 {
     unsigned int                slot_def_current;
     unsigned int                slot_def_max;
@@ -45,15 +45,15 @@ bool Eco_EConnect_Reader_ReadObjectBody(struct Eco_EConnect_Reader* reader,
                  * No value was given by default, so we make the slot point
                  * to the object itself.
                  */
-                Eco_Any_AssignPointer(&any, object);
+                Eco_Any_AssignPointer(&any, (struct Eco_Object*) object);
             }
-            Eco_Object_AddSlot(object, -1, slot_info, &any);
+            Eco_Molecule_AddSlot(object, -1, slot_info, &any);
         } else {
             slot_info.is_inherited = false;
             slot_info.is_part      = false;
             if (!Eco_EConnect_Reader_ReadObject(reader, result, (struct Eco_Object**) &code))
                 return false;
-            Eco_Object_AddCodeSlot(object, -1, slot_info, code);
+            Eco_Molecule_AddCodeSlot(object, -1, slot_info, code);
         }
     }
 

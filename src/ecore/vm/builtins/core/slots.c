@@ -1,7 +1,7 @@
 #include "slots.h"
 
 #include <ecore/objects/base/object_slots.h>
-
+#include <ecore/objects/base/molecule.h>
 
 /*
  * TODO, FIXME, XXX!
@@ -31,10 +31,10 @@ bool Eco_VM_Builtin_AddValueSlot(struct Eco_Fiber* fiber, unsigned int args)
     info.is_inherited = false;
     info.key          = Eco_Any_AsPointer(&key);
 
-    Eco_Object_AddSlot(Eco_Any_AsPointer(&object),
-                       Eco_Any_AsInteger(&index),
-                       info,
-                       &value);
+    Eco_Molecule_AddSlot((struct Eco_Molecule*) Eco_Any_AsPointer(&object),
+                         Eco_Any_AsInteger(&index),
+                         info,
+                        &value);
 
     Eco_Fiber_Push(fiber, &object);
 

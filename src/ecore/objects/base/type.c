@@ -1,10 +1,11 @@
 #include "type.h"
 
-#include "ecore/objects/base/typecore.h"
-#include "ecore/vm/builtins/builtins.h"
-#include "ecore/vm/memory/arena.h"
-#include "object.h"
+#include <ecore/objects/base/typecore.h>
+#include <ecore/vm/builtins/builtins.h>
+#include <ecore/vm/memory/arena.h>
 
+#include <ecore/objects/base/object.h>
+#include <ecore/objects/base/molecule.h>
 #include <ecore/objects/group/group.h>
 #include <ecore/objects/misc/key/key.h>
 #include <ecore/objects/vm/code/code.h>
@@ -29,7 +30,7 @@ bool Eco_Type_Slot_GetValue(struct Eco_Type_Slot* slot, struct Eco_Object* objec
     switch (slot->type)
     {
         case Eco_Type_Slot_Type_INLINED:
-            *location = *((Eco_Any*) Eco_Object_At(object, slot->body.inlined.offset));
+            *location = *((Eco_Any*) Eco_Molecule_At((struct Eco_Molecule*) object, slot->body.inlined.offset));
             return true;
         default:
             return false;
@@ -41,7 +42,7 @@ bool Eco_Type_Slot_SetValue(struct Eco_Type_Slot* slot, struct Eco_Object* objec
     switch (slot->type)
     {
         case Eco_Type_Slot_Type_INLINED:
-            *((Eco_Any*) Eco_Object_At(object, slot->body.inlined.offset)) = *value;
+            *((Eco_Any*) Eco_Molecule_At((struct Eco_Molecule*) object, slot->body.inlined.offset)) = *value;
             return true;
         default:
             return false;
@@ -57,7 +58,7 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message* message, struct Eco_Object* object
             {
                 case Eco_Type_Slot_Type_INLINED:
                     Eco_Fiber_Drop(message->fiber);  /* Drop self */
-                    Eco_Fiber_Push(message->fiber, ((Eco_Any*) Eco_Object_At(object, slot->body.inlined.offset)));
+                    Eco_Fiber_Push(message->fiber, ((Eco_Any*) Eco_Molecule_At((struct Eco_Molecule*) object, slot->body.inlined.offset)));
                     return true;
                 case Eco_Type_Slot_Type_SHARED:
                     Eco_Fiber_Drop(message->fiber);
@@ -71,7 +72,7 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message* message, struct Eco_Object* object
             switch (slot->type)
             {
                 case Eco_Type_Slot_Type_INLINED:
-                    Eco_Any_AssignAny((Eco_Any*) Eco_Object_At(object, slot->body.inlined.offset), &message->body.assign.value);
+                    Eco_Any_AssignAny((Eco_Any*) Eco_Molecule_At((struct Eco_Molecule*) object, slot->body.inlined.offset), &message->body.assign.value);
                     return true;
                 default:
                     return false;
@@ -229,13 +230,15 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
                 break;
         }
     }
+    if (type->proxy != NULL)
+        Eco_GC_State_MarkObject(state, type->proxy);
     Eco_Object_Mark(state, &type->_);
 }
 
 
-void Eco_Type_MarkObject(struct Eco_GC_State* state,
-                         struct Eco_Type* type,
-                         struct Eco_Object* object)
+void Eco_Type_MarkMolecule(struct Eco_GC_State* state,
+                           struct Eco_Type* type,
+                           struct Eco_Molecule* molecule)
 {
     unsigned int  i;
 
@@ -244,7 +247,7 @@ void Eco_Type_MarkObject(struct Eco_GC_State* state,
         switch (type->slots[i].type)
         {
             case Eco_Type_Slot_Type_INLINED:
-                Eco_GC_State_MarkAny(state, Eco_Object_At(object, type->slots[i].body.inlined.offset));
+                Eco_GC_State_MarkAny(state, Eco_Molecule_At(molecule, type->slots[i].body.inlined.offset));
                 break;
             default:
                 break;
@@ -255,8 +258,8 @@ void Eco_Type_MarkObject(struct Eco_GC_State* state,
 
 void Eco_Type_Subclone(struct Eco_CloneState* state,
                        struct Eco_Type* type,
-                       struct Eco_Object* original,
-                       struct Eco_Object* clone)
+                       struct Eco_Molecule* original,
+                       struct Eco_Molecule* clone)
 {
     unsigned int  i;
 
@@ -267,11 +270,11 @@ void Eco_Type_Subclone(struct Eco_CloneState* state,
             case Eco_Type_Slot_Type_INLINED:
                 if (type->slots[i].body.inlined.is_part) {
                     Eco_CloneState_CloneAny(state,
-                                            Eco_Object_At(clone, type->slots[i].body.inlined.offset),
-                                            Eco_Object_At(original, type->slots[i].body.inlined.offset));
+                                            Eco_Molecule_At(clone, type->slots[i].body.inlined.offset),
+                                            Eco_Molecule_At(original, type->slots[i].body.inlined.offset));
                 } else {
-                    Eco_Any_AssignAny(Eco_Object_At(clone, type->slots[i].body.inlined.offset),
-                                      Eco_Object_At(original, type->slots[i].body.inlined.offset));
+                    Eco_Any_AssignAny(Eco_Molecule_At(clone, type->slots[i].body.inlined.offset),
+                                      Eco_Molecule_At(original, type->slots[i].body.inlined.offset));
                 }
                 break;
             default:

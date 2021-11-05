@@ -1,6 +1,7 @@
 #include "objects.h"
 
 #include "base/object.h"
+#include "base/molecule.h"
 #include "group/group.h"
 #include "misc/key/key.h"
 #include "misc/string/string.h"
@@ -13,6 +14,8 @@
 void Eco_Objects_Init()
 {
     Eco_Object_Init();
+    // Eco_Types_Init();
+    Eco_Molecule_Init();
     Eco_Key_Init();
     Eco_Code_Init();
     Eco_Integer_Init();
@@ -31,5 +34,7 @@ void Eco_Objects_Terminate()
     Eco_Integer_Terminate();
     Eco_Code_Terminate();
     Eco_Key_Terminate();
+    Eco_Molecule_Terminate();
+    // Eco_Types_Terminate();
     Eco_Object_Terminate();
 }

@@ -11,6 +11,7 @@
 struct Eco_Code;
 struct Eco_Message;
 struct Eco_GC_State;
+struct Eco_Molecule;
 
 
 
@@ -67,8 +68,8 @@ struct Eco_Type* Eco_Type_NewPrefab(struct Eco_TypeCore*);
 bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*, int, struct Eco_Object_SlotInfo, struct Eco_Type**, struct Eco_Type_Slot**);
 bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type*, int, struct Eco_Object_SlotInfo, struct Eco_Code*, struct Eco_Type**);
 
-void Eco_Type_MarkObject(struct Eco_GC_State*, struct Eco_Type*, struct Eco_Object*);
-void Eco_Type_Subclone(struct Eco_CloneState*, struct Eco_Type*, struct Eco_Object*, struct Eco_Object*);
+void Eco_Type_MarkMolecule(struct Eco_GC_State*, struct Eco_Type*, struct Eco_Molecule*);
+void Eco_Type_Subclone(struct Eco_CloneState*, struct Eco_Type*, struct Eco_Molecule*, struct Eco_Molecule*);
 
 void Eco_Types_Init();
 void Eco_Types_Terminate();

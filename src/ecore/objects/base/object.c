@@ -27,7 +27,7 @@ void Eco_Object_Init()
 
     Eco_TypeCore_Create(&Eco_Object_TYPECORE, "Eco_Object");
     
-    Eco_Object_TYPECORE.send  = Eco_Object_Send;
+    Eco_Object_TYPECORE.send  = NULL;
     Eco_Object_TYPECORE.mark  = Eco_Object_Mark;
     Eco_Object_TYPECORE.clone = Eco_Object_Clone;
     Eco_Object_TYPECORE.del   = Eco_Object_Del;
@@ -62,8 +62,6 @@ void* Eco_Object_NewInArena(struct Eco_Type* type,
     object->header.sticky       = false;
     object->header.object_size  = size;
 
-    object->payload             = Eco_Object_Payload_New(payload_size);
-
     object->next                = arena->objects;
     arena->objects              = object;
     arena->object_count++;
@@ -83,6 +81,16 @@ struct Eco_Object* Eco_Object_NewPlain()
     return Eco_Object_New(Eco_Object_TYPE, sizeof(struct Eco_Object), 0);
 }
 
+
+
+void Eco_Object_Mark(struct Eco_GC_State* state, struct Eco_Object* object)
+{
+    /*
+     * It's easy to confuse Eco_Object_Mark(...) and Eco_GC_State_MarkObject(...)!
+     * Only call Eco_Object_Mark(...) as the last function in a Eco_<Type>_Mark(...)!
+     */
+    Eco_GC_State_MarkObject(state, object->type);
+}
 
 bool Eco_Object_Send(struct Eco_Message* message,
                      struct Eco_SendLink* link,
@@ -138,42 +146,14 @@ bool Eco_Object_Send(struct Eco_Message* message,
     }
 }
 
-void Eco_Object_Mark(struct Eco_GC_State* state, struct Eco_Object* object)
-{
-    /*
-     * It's easy to confuse Eco_Object_Mark(...) and Eco_GC_State_MarkObject(...)!
-     * Only call Eco_Object_Mark(...) as the last function in a Eco_<Type>_Mark(...)!
-     */
-    Eco_Type_MarkObject(state, object->type, object);
-    Eco_GC_State_MarkObject(state, object->type);
-}
 
-struct Eco_Object* Eco_Object_Clone(struct Eco_CloneState* state, struct Eco_Object* object)
-{
-    struct Eco_Object*  clone;
-
-    clone = Eco_CloneState_QueryClone(state, object);
-
-    if (clone == NULL) {
-        clone = Eco_Object_New(object->type, object->header.object_size, object->payload->size);
-        Eco_CloneState_RegisterClone(state, object, clone);
-        Eco_Type_Subclone(state, object->type, object, clone);
-    }
-
-    return clone;
-}
-
-struct Eco_Object* Eco_Object_NoClone(struct Eco_CloneState* state,
-                                      struct Eco_Object* original)
+struct Eco_Object* Eco_Object_Clone(struct Eco_CloneState* state,
+                                    struct Eco_Object* original)
 {
     return original;
 }
 
 void Eco_Object_Del(struct Eco_Object* object)
 {
-    if (object->payload != NULL) {
-        Eco_Object_Payload_Delete(object->payload);
-    }
-
     Eco_Memory_Free(object);
 }

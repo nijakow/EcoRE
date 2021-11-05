@@ -34,7 +34,6 @@ struct Eco_Object
     struct Eco_Object*          next;
     struct Eco_Type*            type;
     struct Eco_Object_Header    header;
-    struct Eco_Object_Payload*  payload;
 };
 
 
@@ -49,12 +48,6 @@ struct Eco_Object* Eco_Object_NoClone(struct Eco_CloneState*, struct Eco_Object*
 void  Eco_Object_Del(struct Eco_Object*);
 
 static inline void Eco_Object_MakeSticky(struct Eco_Object* object) { object->header.sticky = true; }
-
-static inline void* Eco_Object_At(struct Eco_Object* object, unsigned int offset)
-{
-    /* TODO, FIXME, XXX: Add a debug setting: If out-of-bounds, return NULL! */
-    return (void*) &(object->payload->data[offset]);
-}
 
 void Eco_Object_Init();
 void Eco_Object_Terminate();
