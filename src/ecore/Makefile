@@ -60,6 +60,7 @@ io/econnect/reader/builtins/objects/object.c \
 io/econnect/reader/builtins/objects/object_body.c \
 io/econnect/reader/builtins/objects/key.c \
 io/econnect/reader/builtins/objects/string.c \
+io/econnect/reader/builtins/objects/vector.c \
 io/econnect/reader/builtins/objects/code.c \
 io/econnect/reader/builtins/objects/group.c \
 io/econnect/reader/builtins/id/id.c \
