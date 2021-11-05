@@ -5,8 +5,8 @@
 
 bool Eco_VM_Builtin_SetLobby(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_SetProxy(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_GetIntegerType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetBlockType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetVectorType(struct Eco_Fiber*, unsigned int);
-bool Eco_VM_Builtin_SetIntegerProxy(struct Eco_Fiber*, unsigned int);
 
 #endif

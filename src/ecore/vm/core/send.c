@@ -2,10 +2,7 @@
 
 #include <ecore/objects/base/object.h>
 #include <ecore/objects/base/type.h>
-
-
-struct Eco_Object*  Eco_Integer_PROXY = NULL;
-
+#include <ecore/objects/pseudo/integer.h>
 
 
 bool Eco_Send_ToObject(struct Eco_Message* message,
@@ -45,8 +42,8 @@ bool Eco_Send(struct Eco_Message* message, struct Eco_SendLink* link, Eco_Any* t
     if (Eco_Any_IsPointer(target)) {
         return Eco_Send_ToObject(message, link, Eco_Any_AsPointer(target));
     } else if (Eco_Any_IsInteger(target)) {
-        if (Eco_Integer_PROXY != NULL)
-            return Eco_Send_ToObject(message, link, Eco_Integer_PROXY);
+        if (Eco_Integer_TYPE->proxy != NULL)
+            return Eco_Send_ToObject(message, link, Eco_Integer_TYPE->proxy);
         else
             return false;
     } else {
