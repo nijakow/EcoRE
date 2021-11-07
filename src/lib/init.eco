@@ -11,20 +11,21 @@
     + other => #'ecosphere.ecore.math.add'(self, other);
     - other => #'ecosphere.ecore.math.sub'(self, other);
     < other => #'ecosphere.ecore.math.less'(self, other);
-    to: upper do: body => (
+    for: upper do: body => (
         | i <- self |
         [ i < upper ] while: [
             body value(i).
             i <- i + 1.
         ].
     );
-    upto: upper do: body => to: (upper + 1) do: body;
+    to: upper do: body => for: (upper + 1) do: body;
     with own parent = #<:std/Object@std/std.eco>;
 },
 
 #=init/vector_proxy: {
-    length => #'ecosphere.ecore.object.vector.length'(self);
+    size => #'ecosphere.ecore.object.vector.length'(self);
     at: index => #'ecosphere.ecore.object.vector.at'(self, index);
     at: index put: value => #'ecosphere.ecore.object.vector.at_put'(self, index, value);
+    do: body => 0 for: size do: [ :i => body value(at: i) ];
     with own parent = #<:std/Object@std/std.eco>;
 }
