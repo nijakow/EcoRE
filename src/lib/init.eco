@@ -11,6 +11,14 @@
     + other => #'ecosphere.ecore.math.add'(self, other);
     - other => #'ecosphere.ecore.math.sub'(self, other);
     < other => #'ecosphere.ecore.math.less'(self, other);
+    to: upper do: body => (
+        | i <- self |
+        [ i < upper ] while: [
+            body value(i).
+            i <- i + 1.
+        ].
+    );
+    upto: upper do: body => to: (upper + 1) do: body;
     with own parent = #<:std/Object@std/std.eco>;
 },
 
