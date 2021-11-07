@@ -26,6 +26,10 @@ Creates a deep copy of the object.
 
 Returns the mirror of the object.
 
+`accept_visitor: [Visitor]`
+
+Accepts a visitor.
+
 `[bool] asBool`
 
 Converts the object into either `true` or `false`.
@@ -125,3 +129,17 @@ Get the second object of the pair.
 `isPair`
 
 Returns true.
+
+## TextWriters (`std io TextWriter`)
+
+An object for serializing other objects as readable data.
+
+### Methods available for TextWriters
+
+`char<< [char]`
+
+Appends a char.
+
+`<< e`
+
+Appends the object `e` by sending it the `write_on:` message with the writer as its parameter.
