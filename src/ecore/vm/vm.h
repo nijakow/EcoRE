@@ -21,6 +21,13 @@ struct Eco_VM
     struct Eco_Net_Scheduler*  net_scheduler;
 
     struct Eco_GC_State        gc_state;
+
+    struct {
+        Eco_Any  lobby;
+        
+        Eco_Any  ctrue;
+        Eco_Any  cfalse;
+    }                          constants;
 };
 
 extern struct Eco_VM Eco_THE_VM;

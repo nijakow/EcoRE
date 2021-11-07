@@ -6,5 +6,6 @@
 bool Eco_VM_Builtin_AddIntegers(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_Add(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_Subtract2(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_Less2(struct Eco_Fiber*, unsigned int);
 
 #endif

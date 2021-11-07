@@ -1,8 +1,7 @@
 #include "init.h"
 
 #include <ecore/objects/base/type.h>
-
-extern struct Eco_Object*  Eco_VM_Builtin_LOBBY;
+#include <ecore/vm/vm.h>
 
 /*
  * TODO: Include headers for this!
@@ -14,15 +13,25 @@ extern struct Eco_Type*    Eco_Vector_TYPE;
 
 bool Eco_VM_Builtin_SetLobby(struct Eco_Fiber* fiber, unsigned int args)
 {
-    Eco_Any  any;
-
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Any_AssignAny(&any, Eco_Fiber_Peek(fiber));
-    if (Eco_Any_IsPointer(&any))
-        Eco_VM_Builtin_LOBBY = Eco_Any_AsPointer(&any);
-    else
+    Eco_Any_AssignAny(&fiber->vm->constants.lobby, Eco_Fiber_Peek(fiber));
+    return true;
+}
+
+bool Eco_VM_Builtin_SetTrue(struct Eco_Fiber* fiber, unsigned int args)
+{
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
+    Eco_Any_AssignAny(&fiber->vm->constants.ctrue, Eco_Fiber_Peek(fiber));
+    return true;
+}
+
+bool Eco_VM_Builtin_SetFalse(struct Eco_Fiber* fiber, unsigned int args)
+{
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Any_AssignAny(&fiber->vm->constants.cfalse, Eco_Fiber_Peek(fiber));
     return true;
 }
 
