@@ -116,15 +116,12 @@ static inline Eco_Floating Eco_Any_AsFloating(Eco_Any* any)
 
 typedef uintptr_t Eco_Any;
 
-enum
-{
-    Eco_Any_Mask_POINTER   = 0x0000000000000000,
-    Eco_Any_Mask_CHARACTER = 0xc000000000000000,
-    Eco_Any_Mask_INTEGER   = 0x8000000000000000,
-    Eco_Any_Mask_FLOATING  = 0x4000000000000000
-};
+#define Eco_Any_MASK            (((Eco_Any) 0x3) << 62)
+#define Eco_Any_Mask_POINTER    (((Eco_Any) Eco_Value_Type_POINTER)   << 62)
+#define Eco_Any_Mask_CHARACTER  (((Eco_Any) Eco_Value_Type_CHARACTER) << 62)
+#define Eco_Any_Mask_INTEGER    (((Eco_Any) Eco_Value_Type_INTEGER)   << 62)
+#define Eco_Any_Mask_FLOATING   (((Eco_Any) Eco_Value_Type_FLOATING)  << 62)
 
-#define Eco_Any_MASK 0xc000000000000000
 
 static inline bool Eco_Any_IsPointer(Eco_Any* any)
 {
