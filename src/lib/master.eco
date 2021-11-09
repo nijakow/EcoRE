@@ -4,7 +4,7 @@
 
 #=lobby: {
     meta = {
-        name    => 'Ecößphere Standard Library',
+        name    => 'Ecosphere Standard Library',
         version => '0.1',
         author  => 'nijakow'
     };
