@@ -126,7 +126,7 @@ static inline void Eco_Any_AssignRef(Eco_Any* any, Eco_Ref ref)
     *any = ref;
 }
 
-static inline void Eco_Any_AssignCharacter(Eco_Any* any, Eco_Integer character)
+static inline void Eco_Any_AssignCharacter(Eco_Any* any, Eco_Codepoint character)
 {
     uintptr_t  value;
 
@@ -162,9 +162,9 @@ static inline Eco_Ref Eco_Any_AsRef(Eco_Any* any)
     return *any;
 }
 
-static inline Eco_Integer Eco_Any_AsCharacter(Eco_Any* any)
+static inline Eco_Codepoint Eco_Any_AsCharacter(Eco_Any* any)
 {
-    return (Eco_Integer) ((uintptr_t) *any >> 2);
+    return (Eco_Codepoint) ((uintptr_t) *any >> 2);
 }
 
 static inline Eco_Integer Eco_Any_AsInteger(Eco_Any* any)

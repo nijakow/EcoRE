@@ -39,10 +39,12 @@ struct Eco_String* Eco_String_New(const char* text)
     unsigned int        textlen;
     struct Eco_String*  string;
 
-    textlen = strlen(text);
-    string  = Eco_Object_New(Eco_String_TYPE, sizeof(struct Eco_String) + (textlen + 1) * sizeof(char), 0);
+    textlen                 = strlen(text);
+    string                  = Eco_Object_New(Eco_String_TYPE, sizeof(struct Eco_String) + textlen * sizeof(char), 0);
+    string->byte_count      = textlen;
+    string->character_count = textlen;  // TODO: Count UTF-8 code points!
 
-    memcpy(&string->bytes, text, textlen + 1);
+    memcpy(&string->bytes, text, textlen);
 
     return string;
 }

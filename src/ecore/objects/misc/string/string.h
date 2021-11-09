@@ -9,12 +9,32 @@
 struct Eco_String
 {
     struct Eco_Object  _;
+    unsigned int       byte_count;
+    unsigned int       character_count;
     char               bytes[];
 };
 
 struct Eco_String* Eco_String_New(const char*);
 void Eco_String_Mark(struct Eco_GC_State*, struct Eco_String*);
 void Eco_String_Del(struct Eco_String*);
+
+static inline unsigned int Eco_String_ByteCount(struct Eco_String* string)
+{
+    return string->byte_count;
+}
+
+static inline unsigned int Eco_String_CharacterCount(struct Eco_String* string)
+{
+    return string->character_count;
+}
+
+static inline Eco_Codepoint Eco_String_At(struct Eco_String* string, unsigned int index)
+{
+    /*
+     * TODO: This function has no UTF-8 support yet!
+     */
+    return (Eco_Codepoint) (string->bytes[index]);
+}
 
 void Eco_String_Init();
 void Eco_String_Terminate();
