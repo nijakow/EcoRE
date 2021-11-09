@@ -194,6 +194,33 @@ bool Eco_VM_Builtin_Divide2(struct Eco_Fiber* fiber, unsigned int args)
     return false;
 }
 
+bool Eco_VM_Builtin_Modulo2(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any       arg1;
+    Eco_Any       arg2;
+    Eco_Any       result;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+
+    /*
+     * To avoid "uninitialized variable" warnings
+     */
+    Eco_Any_Initialize(&result);
+
+    Eco_Fiber_Pop(fiber, &arg2);
+    Eco_Fiber_Pop(fiber, &arg1);
+
+    if (Eco_Any_IsInteger(&arg1) && Eco_Any_IsInteger(&arg2)) {
+        Eco_Any_AssignInteger(&result, Eco_Any_AsInteger(&arg1) % Eco_Any_AsInteger(&arg2));
+        Eco_Fiber_Push(fiber, &result);
+        return true;
+    } else {
+        // TODO: Set error type
+        return false;
+    }
+}
+
 bool Eco_VM_Builtin_Less2(struct Eco_Fiber* fiber, unsigned int args)
 {
     Eco_Any       arg1;

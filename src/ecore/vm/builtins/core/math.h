@@ -8,6 +8,7 @@ bool Eco_VM_Builtin_Add(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_Subtract2(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_Multiply2(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_Divide2(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_Modulo2(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_Less2(struct Eco_Fiber*, unsigned int);
 
 #endif

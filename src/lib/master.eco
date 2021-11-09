@@ -14,6 +14,7 @@
     };
 
     Select: b => b if: [ ^ 42 ] else: [ ^ 1 ];
+    Square(x) => x * x;
 
     v = #(1, 2, 3, 'hello', #(#'world'));
 
@@ -32,7 +33,7 @@
             #'ecosphere.ecore.io.print'(Select: false).
             #'ecosphere.ecore.io.print'(obj @ obj).
         ].
-        1 to: 10 do: [ :i => #'ecosphere.ecore.io.print'(i) ].
+        1 to: 10 do: [ :i => #'ecosphere.ecore.io.print'(Square(i)) ].
         v do: [ :e => #'ecosphere.ecore.io.print'(e) ].
     );
 }.

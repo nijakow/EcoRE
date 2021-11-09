@@ -12,6 +12,7 @@
     - other => #'ecosphere.ecore.math.sub'(self, other);
     * other => #'ecosphere.ecore.math.mul'(self, other);
     / other => #'ecosphere.ecore.math.div'(self, other);
+    mod: other => #'ecosphere.ecore.math.mod'(self, other);
     < other => #'ecosphere.ecore.math.less'(self, other);
     for: upper do: body => (
         | i <- self |
