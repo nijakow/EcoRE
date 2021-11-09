@@ -9,6 +9,8 @@ bool Eco_VM_Builtin_Print(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, ECO_VM_BUILTIN_INFINITE_ARGS))
         return false;
+    
+    Eco_Any_Initialize(&any);
 
     while (args --> 0)
     {
