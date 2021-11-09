@@ -38,21 +38,22 @@ bool Eco_Send_ToObject(struct Eco_Message* message,
     return object->type->typecore->send(message, &next_link, object);
 }
 
+
+static struct Eco_Type** Eco_Send_JUMPS[] = {
+    [Eco_Value_Type_POINTER]   =  NULL,
+    [Eco_Value_Type_INTEGER]   = &Eco_Integer_TYPE,
+    [Eco_Value_Type_CHARACTER] = &Eco_Character_TYPE,
+    [Eco_Value_Type_FLOATING]  =  NULL
+};
+
 bool Eco_Send(struct Eco_Message* message, struct Eco_SendLink* link, Eco_Any* target)
 {
+    struct Eco_Object*  object;
+
     if (Eco_Any_IsPointer(target)) {
-        return Eco_Send_ToObject(message, link, Eco_Any_AsPointer(target));
-    } else if (Eco_Any_IsInteger(target)) {
-        if (Eco_Integer_TYPE->proxy != NULL)
-            return Eco_Send_ToObject(message, link, Eco_Integer_TYPE->proxy);
-        else
-            return false;
-    } else if (Eco_Any_IsCharacter(target)) {
-        if (Eco_Character_TYPE->proxy != NULL)
-            return Eco_Send_ToObject(message, link, Eco_Character_TYPE->proxy);
-        else
-            return false;
+        object = Eco_Any_AsPointer(target);
     } else {
-        return false;   // TODO
+        object = (*Eco_Send_JUMPS[Eco_Any_GetValueType(target)])->proxy;
     }
+    return Eco_Send_ToObject(message, link, object);
 }
