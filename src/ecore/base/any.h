@@ -36,8 +36,8 @@ typedef enum Eco_Value_Type
 
 typedef struct Eco_Any
 {
-    Eco_Value_Type  type;
     Eco_Value       value;
+    Eco_Value_Type  type;
 } Eco_Any;
 
 
