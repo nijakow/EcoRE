@@ -19,6 +19,22 @@ bool Eco_VM_Builtin_StringAtByte(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_StringStepAtByte(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  string;
+    Eco_Any  index;
+    Eco_Any  result;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    Eco_Fiber_Pop(fiber, &index);
+    Eco_Fiber_Pop(fiber, &string);
+    // TODO: Type checks!
+    Eco_Any_AssignInteger(&result, Eco_String_StepAt((struct Eco_String*) Eco_Any_AsPointer(&string), Eco_Any_AsInteger(&index)));
+    Eco_Fiber_Push(fiber, &result);
+    return true;
+}
+
 bool Eco_VM_Builtin_StringByteLength(struct Eco_Fiber* fiber, unsigned int args)
 {
     Eco_Any  string;

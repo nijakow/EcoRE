@@ -41,6 +41,18 @@ static inline Eco_Codepoint Eco_String_At(struct Eco_String* string, unsigned in
     }
 }
 
+static inline unsigned int Eco_String_StepAt(struct Eco_String* string, unsigned int index)
+{
+    Eco_Codepoint  codepoint;
+    unsigned int   length;
+
+    if (Eco_Utf8_Decode(&string->bytes[index], &codepoint, &length)) {
+        return length;
+    } else {
+        return 1;
+    }
+}
+
 void Eco_String_Init();
 void Eco_String_Terminate();
 
