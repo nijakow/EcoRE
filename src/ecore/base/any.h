@@ -116,25 +116,34 @@ static inline Eco_Floating Eco_Any_AsFloating(Eco_Any* any)
 
 typedef uintptr_t Eco_Any;
 
+enum
+{
+    Eco_Any_Mask_POINTER   = 0x0000000000000000,
+    Eco_Any_Mask_CHARACTER = 0xc000000000000000,
+    Eco_Any_Mask_INTEGER   = 0x8000000000000000,
+    Eco_Any_Mask_FLOATING  = 0x8000000000000000
+};
+
+#define Eco_Any_MASK 0xc000000000000000
 
 static inline bool Eco_Any_IsPointer(Eco_Any* any)
 {
-    return (((uintptr_t) *any) & 0x03) == Eco_Value_Type_POINTER;
+    return (((uintptr_t) *any) & Eco_Any_MASK) == Eco_Any_Mask_POINTER;
 }
 
 static inline bool Eco_Any_IsCharacter(Eco_Any* any)
 {
-    return ((uintptr_t) *any & 0x03) == Eco_Value_Type_CHARACTER;
+    return ((uintptr_t) *any & Eco_Any_MASK) == Eco_Any_Mask_CHARACTER;
 }
 
 static inline bool Eco_Any_IsInteger(Eco_Any* any)
 {
-    return ((uintptr_t) *any & 0x03) == Eco_Value_Type_INTEGER;
+    return ((uintptr_t) *any & Eco_Any_MASK) == Eco_Any_Mask_INTEGER;
 }
 
 static inline bool Eco_Any_IsFloating(Eco_Any* any)
 {
-    return ((uintptr_t) *any & 0x03) == Eco_Value_Type_FLOATING;
+    return ((uintptr_t) *any & Eco_Any_MASK) == Eco_Any_Mask_FLOATING;
 }
 
 
@@ -148,8 +157,7 @@ static inline void Eco_Any_AssignCharacter(Eco_Any* any, Eco_Codepoint character
     uintptr_t  value;
 
     value = (uintptr_t) character;
-    value <<= 2;
-    value |= Eco_Value_Type_CHARACTER & 0x03;
+    value |= Eco_Any_Mask_CHARACTER;
     *any = (uintptr_t) value;
 }
 
@@ -158,8 +166,7 @@ static inline void Eco_Any_AssignInteger(Eco_Any* any, Eco_Integer integer)
     uintptr_t  value;
 
     value = (uintptr_t) integer;
-    value <<= 2;
-    value |= Eco_Value_Type_INTEGER & 0x03;
+    value |= Eco_Any_Mask_INTEGER;
     *any = (uintptr_t) value;
 }
 
@@ -181,12 +188,12 @@ static inline struct Eco_Object* Eco_Any_AsPointer(Eco_Any* any)
 
 static inline Eco_Codepoint Eco_Any_AsCharacter(Eco_Any* any)
 {
-    return (Eco_Codepoint) ((uintptr_t) *any >> 2);
+    return (Eco_Codepoint) *any;
 }
 
 static inline Eco_Integer Eco_Any_AsInteger(Eco_Any* any)
 {
-    return (Eco_Integer) ((uintptr_t) *any >> 2);
+    return (Eco_Integer) *any;
 }
 
 static inline Eco_Floating Eco_Any_AsFloating(Eco_Any* any)
