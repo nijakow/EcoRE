@@ -36,8 +36,7 @@
         | i <- 0. s <- size. |
         [ i < s ] while: [
             body value(#'ecosphere.ecore.object.string.at_byte'(self, i)).
-            | j <- #'ecosphere.ecore.object.string.step_at_byte'(self, i) |
-            i <- i + j.
+            i <- i + (#'ecosphere.ecore.object.string.step_at_byte'(self, i)).
         ].
       ^ self
     );
