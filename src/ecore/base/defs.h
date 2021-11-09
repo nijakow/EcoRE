@@ -26,11 +26,6 @@ typedef i32         Eco_Integer;
 typedef f32         Eco_Floating;
 typedef Eco_Integer Eco_Codepoint;
 
-typedef void*       Eco_Ref;
-
-#define Eco_DEREF(T, REF)  ((T*) (REF))
-#define Eco_REF(REF)       ((Eco_Ref) REF)
-
 struct Eco_Object;
 struct Eco_Type;
 
