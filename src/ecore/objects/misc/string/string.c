@@ -10,7 +10,7 @@
  */
 
 static struct Eco_TypeCore Eco_String_TYPECORE;
-static struct Eco_Type*    Eco_String_TYPE;
+       struct Eco_Type*    Eco_String_TYPE;
 
 
 void Eco_String_Init()

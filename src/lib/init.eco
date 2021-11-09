@@ -25,6 +25,13 @@
     with own parent = #<:std/Object@std/std.eco>;
 },
 
+#=init/string_proxy: {
+    size => #'ecosphere.ecore.object.string.byte_length'(self);
+    at: index => #'ecosphere.ecore.object.string.at_byte'(self, index);
+    do: body => 0 for: size do: [ :i => body value(at: i) ];
+    with own parent = #<:std/Object@std/std.eco>;
+},
+
 #=init/vector_proxy: {
     size => #'ecosphere.ecore.object.vector.length'(self);
     at: index => #'ecosphere.ecore.object.vector.at'(self, index);

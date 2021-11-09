@@ -21,6 +21,8 @@ bool Eco_VM_Builtin_Print(struct Eco_Fiber* fiber, unsigned int args)
             Eco_Log_Info("Floating: %f\n", Eco_Any_AsFloating(&any));
         } else if (Eco_Any_IsPointer(&any)) {
             Eco_Log_Info("Pointer: %p\n", Eco_Any_AsPointer(&any));
+        } else if (Eco_Any_IsCharacter(&any)) {
+            Eco_Log_Info("Character: %-10d #\\%c\n", Eco_Any_AsCharacter(&any), Eco_Any_AsCharacter(&any));
         } else {
             Eco_Log_Info("???\n");
         }
