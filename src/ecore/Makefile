@@ -72,6 +72,7 @@ io/econnect/reader/builtins/id/id.c \
 io/econnect/reader/builtins/flow/flow.c \
 io/econnect/file/file.c \
 io/econnect/net/connection.c \
+util/utf8.c \
 main.c
 
 OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
