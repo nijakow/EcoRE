@@ -41,6 +41,11 @@ typedef struct Eco_Any
 } Eco_Any;
 
 
+static inline enum Eco_Value_Type Eco_Any_GetValueType(Eco_Any* any)
+{
+    return any->type;
+}
+
 static inline bool Eco_Any_IsPointer(Eco_Any* any)
 {
     return any->type == Eco_Value_Type_POINTER;
@@ -122,6 +127,11 @@ typedef uintptr_t Eco_Any;
 #define Eco_Any_Mask_INTEGER    (((Eco_Any) Eco_Value_Type_INTEGER)   << 62)
 #define Eco_Any_Mask_FLOATING   (((Eco_Any) Eco_Value_Type_FLOATING)  << 62)
 
+
+static inline enum Eco_Value_Type Eco_Any_GetValueType(Eco_Any* any)
+{
+    return (enum Eco_Value_Type) ((*any) >> 62);
+}
 
 static inline bool Eco_Any_IsPointer(Eco_Any* any)
 {
