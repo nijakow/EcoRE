@@ -71,6 +71,11 @@ bool Eco_VM_Builtin_Subtract2(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
 
+    /*
+     * To avoid "uninitialized variable" warnings
+     */
+    Eco_Any_Initialize(&result);
+
     Eco_Fiber_Pop(fiber, &arg2);
     Eco_Fiber_Pop(fiber, &arg1);
 
@@ -101,6 +106,93 @@ bool Eco_VM_Builtin_Subtract2(struct Eco_Fiber* fiber, unsigned int args)
     return false;
 }
 
+bool Eco_VM_Builtin_Multiply2(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any       arg1;
+    Eco_Any       arg2;
+    Eco_Any       result;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+
+    /*
+     * To avoid "uninitialized variable" warnings
+     */
+    Eco_Any_Initialize(&result);
+
+    Eco_Fiber_Pop(fiber, &arg2);
+    Eco_Fiber_Pop(fiber, &arg1);
+
+    if (Eco_Any_IsInteger(&arg1)) {
+        if (Eco_Any_IsInteger(&arg2)) {
+            Eco_Any_AssignInteger(&result, Eco_Any_AsInteger(&arg1) * Eco_Any_AsInteger(&arg2));
+        } else if (Eco_Any_IsFloating(&arg2)) {
+            Eco_Any_AssignFloating(&result, Eco_Any_AsInteger(&arg1) * Eco_Any_AsFloating(&arg2));
+        } else {
+            goto error;
+        }
+    } else if (Eco_Any_IsFloating(&arg1)) {
+        if (Eco_Any_IsInteger(&arg2)) {
+            Eco_Any_AssignFloating(&result, Eco_Any_AsFloating(&arg1) * Eco_Any_AsInteger(&arg2));
+        } else if (Eco_Any_IsFloating(&arg2)) {
+            Eco_Any_AssignFloating(&result, Eco_Any_AsFloating(&arg1) * Eco_Any_AsFloating(&arg2));
+        } else {
+            goto error;
+        }
+    } else {
+        goto error;
+    }
+
+    Eco_Fiber_Push(fiber, &result);
+    return true;
+  error:
+    // TODO: Set error type
+    return false;
+}
+
+bool Eco_VM_Builtin_Divide2(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any       arg1;
+    Eco_Any       arg2;
+    Eco_Any       result;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+
+    /*
+     * To avoid "uninitialized variable" warnings
+     */
+    Eco_Any_Initialize(&result);
+
+    Eco_Fiber_Pop(fiber, &arg2);
+    Eco_Fiber_Pop(fiber, &arg1);
+
+    if (Eco_Any_IsInteger(&arg1)) {
+        if (Eco_Any_IsInteger(&arg2)) {
+            Eco_Any_AssignInteger(&result, Eco_Any_AsInteger(&arg1) / Eco_Any_AsInteger(&arg2));
+        } else if (Eco_Any_IsFloating(&arg2)) {
+            Eco_Any_AssignFloating(&result, Eco_Any_AsInteger(&arg1) / Eco_Any_AsFloating(&arg2));
+        } else {
+            goto error;
+        }
+    } else if (Eco_Any_IsFloating(&arg1)) {
+        if (Eco_Any_IsInteger(&arg2)) {
+            Eco_Any_AssignFloating(&result, Eco_Any_AsFloating(&arg1) / Eco_Any_AsInteger(&arg2));
+        } else if (Eco_Any_IsFloating(&arg2)) {
+            Eco_Any_AssignFloating(&result, Eco_Any_AsFloating(&arg1) / Eco_Any_AsFloating(&arg2));
+        } else {
+            goto error;
+        }
+    } else {
+        goto error;
+    }
+
+    Eco_Fiber_Push(fiber, &result);
+    return true;
+  error:
+    // TODO: Set error type
+    return false;
+}
 
 bool Eco_VM_Builtin_Less2(struct Eco_Fiber* fiber, unsigned int args)
 {
@@ -110,6 +202,11 @@ bool Eco_VM_Builtin_Less2(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
+
+    /*
+     * To avoid "uninitialized variable" warnings
+     */
+    Eco_Any_Initialize(&result);
 
     Eco_Fiber_Pop(fiber, &arg2);
     Eco_Fiber_Pop(fiber, &arg1);

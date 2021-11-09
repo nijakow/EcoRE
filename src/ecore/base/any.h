@@ -173,4 +173,9 @@ static inline void Eco_Any_AssignPointer(Eco_Any* any, struct Eco_Object* object
     Eco_Any_AssignRef(any, Eco_REF(object));
 }
 
+static inline void Eco_Any_Initialize(Eco_Any* any)
+{
+    Eco_Any_AssignPointer(any, NULL);
+}
+
 #endif
