@@ -3,6 +3,7 @@
 #include <ecore/objects/base/object.h>
 #include <ecore/objects/base/type.h>
 #include <ecore/objects/pseudo/integer.h>
+#include <ecore/objects/pseudo/character.h>
 
 
 bool Eco_Send_ToObject(struct Eco_Message* message,
@@ -44,6 +45,11 @@ bool Eco_Send(struct Eco_Message* message, struct Eco_SendLink* link, Eco_Any* t
     } else if (Eco_Any_IsInteger(target)) {
         if (Eco_Integer_TYPE->proxy != NULL)
             return Eco_Send_ToObject(message, link, Eco_Integer_TYPE->proxy);
+        else
+            return false;
+    } else if (Eco_Any_IsCharacter(target)) {
+        if (Eco_Character_TYPE->proxy != NULL)
+            return Eco_Send_ToObject(message, link, Eco_Character_TYPE->proxy);
         else
             return false;
     } else {
