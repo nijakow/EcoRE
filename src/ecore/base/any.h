@@ -19,6 +19,7 @@ typedef union Eco_Value
 typedef enum Eco_Value_Type
 {
     Eco_Value_Type_REF = 0,
+    Eco_Value_Type_CHARACTER,
     Eco_Value_Type_INTEGER,
     Eco_Value_Type_FLOATING
 } Eco_Value_Type;
@@ -104,6 +105,11 @@ static inline bool Eco_Any_IsRef(Eco_Any* any)
     return (((uintptr_t) *any) & 0x03) == Eco_Value_Type_REF;
 }
 
+static inline bool Eco_Any_IsCharacter(Eco_Any* any)
+{
+    return ((uintptr_t) *any & 0x03) == Eco_Value_Type_CHARACTER;
+}
+
 static inline bool Eco_Any_IsInteger(Eco_Any* any)
 {
     return ((uintptr_t) *any & 0x03) == Eco_Value_Type_INTEGER;
@@ -118,6 +124,16 @@ static inline bool Eco_Any_IsFloating(Eco_Any* any)
 static inline void Eco_Any_AssignRef(Eco_Any* any, Eco_Ref ref)
 {
     *any = ref;
+}
+
+static inline void Eco_Any_AssignCharacter(Eco_Any* any, Eco_Integer character)
+{
+    uintptr_t  value;
+
+    value = (uintptr_t) character;
+    value <<= 2;
+    value |= Eco_Value_Type_CHARACTER & 0x03;
+    *any = (struct Eco_Object*) value;
 }
 
 static inline void Eco_Any_AssignInteger(Eco_Any* any, Eco_Integer integer)
@@ -144,6 +160,11 @@ static inline void Eco_Any_AssignAny(Eco_Any* dest, Eco_Any* src)
 static inline Eco_Ref Eco_Any_AsRef(Eco_Any* any)
 {
     return *any;
+}
+
+static inline Eco_Integer Eco_Any_AsCharacter(Eco_Any* any)
+{
+    return (Eco_Integer) ((uintptr_t) *any >> 2);
 }
 
 static inline Eco_Integer Eco_Any_AsInteger(Eco_Any* any)
