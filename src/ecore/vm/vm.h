@@ -18,8 +18,6 @@ struct Eco_VM
         struct Eco_Fiber*      paused;
     } fiber_queues;
 
-    struct Eco_Net_Scheduler*  net_scheduler;
-
     struct Eco_GC_State        gc_state;
 
     struct {
@@ -28,6 +26,8 @@ struct Eco_VM
         Eco_Any  ctrue;
         Eco_Any  cfalse;
     }                          constants;
+
+    struct Eco_Net_Scheduler   net_scheduler;
 };
 
 extern struct Eco_VM Eco_THE_VM;

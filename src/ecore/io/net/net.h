@@ -11,7 +11,10 @@ typedef void (*Eco_Net_Connection_Destructor)(struct Eco_Net_Connection*);
 struct Eco_Net_Connection
 {
     struct Eco_Net_Scheduler*        scheduler;
-    unsigned int                     fd;
+    struct Eco_Net_Connection**      prev;
+    struct Eco_Net_Connection*       next;
+
+    int                              fd;
     Eco_Net_Connection_ReadCallback  read_callback;
     Eco_Net_Connection_Destructor    del;
 };
