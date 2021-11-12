@@ -12,14 +12,12 @@
     with packages = {
         with std = #<:@std/std.eco>;
     };
+},
 
-    Select: b => b if: [ ^ 42 ] else: [ ^ 1 ];
-    Square(x) => x * x;
-
-    v = #(1, 2, 3, 'hello', #(#'world'));
+#=bootstrapper: {
 
     Init => (
-        #'ecosphere.ecore.init.set_lobby'(self).
+        #'ecosphere.ecore.init.set_lobby'(#<:lobby>).
         #'ecosphere.ecore.init.set_true'(#<:std/bool/true@std/std.eco>).
         #'ecosphere.ecore.init.set_false'(#<:std/bool/false@std/std.eco>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.integer_type'(), #<:init/integer_proxy@init.eco>).
@@ -27,18 +25,9 @@
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.block_type'(), #<:init/block_proxy@init.eco>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.string_type'(), #<:init/string_proxy@init.eco>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.vector_type'(), #<:init/vector_proxy@init.eco>).
-        | obj <- { x <- 0, inc => x <- x + 1, with own parent = #<:std/Object> } |
-        [ obj x < 100 ] while: [
-            #'ecosphere.ecore.io.print'(obj x). obj inc.
-            #'ecosphere.ecore.io.print'(obj x). obj inc.
-            #'ecosphere.ecore.io.print'(Select: true).
-            #'ecosphere.ecore.io.print'(Select: false).
-            #'ecosphere.ecore.io.print'(obj @ obj).
-        ].
-        1 to: 10 do: [ :i => #'ecosphere.ecore.io.print'(Square(i)) ].
-        v do: [ :e => #'ecosphere.ecore.io.print'(e) ].
-        meta name do: [ :e => #'ecosphere.ecore.io.print'(e) ].
     );
-}.
 
-#<:lobby> Init.
+    with parent = #<:lobby>;
+},
+
+#<:bootstrapper> Init.
