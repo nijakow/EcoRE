@@ -6,6 +6,7 @@
 #include "core/flow.h"
 #include "core/init.h"
 #include "core/io.h"
+#include "core/is.h"
 #include "core/math.h"
 #include "core/slots.h"
 #include "core/string.h"
@@ -42,6 +43,7 @@ static void Eco_VM_Builtins_AddBuiltin(const char* name, Eco_Builtin builtin)
 
 void Eco_VM_Builtins_Init()
 {
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.is", Eco_VM_Builtin_Is);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.clone", Eco_VM_Builtin_Clone);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.flow.value", Eco_VM_Builtin_Value);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.flow.reset", Eco_VM_Builtin_Reset);

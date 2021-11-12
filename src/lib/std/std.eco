@@ -5,12 +5,13 @@
 {
     Object = #=std/Object: {
         with trait = {
-            init => ;
-            clone => #'ecosphere.ecore.clone'(self);
-            new => clone init;
-            mirror => ;   "TODO"
-            asBool => true;
-            @ second => ((std util Pair) new) first: self second: second;
+            init      => ;
+            clone     => #'ecosphere.ecore.clone'(self);
+            new       => clone init;
+            mirror    => ;   "TODO"
+            is: other => #'ecosphere.ecore.is'(self, other);
+            asBool    => true;
+            @ second  => ((std util Pair) new) first: self second: second;
         };
         with lobby = #<:lobby>;
     },

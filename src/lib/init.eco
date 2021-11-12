@@ -4,16 +4,28 @@
     repeat     => ( self value. #'ecosphere.ecore.flow.reset'() ).
     while: b   => ( (self value) false: [ ^ #<:std/bool/false> ]. b value. #'ecosphere.ecore.flow.reset'() ).
     until: b   => ( (self value) true:  [ ^ #<:std/bool/true> ]. b value. #'ecosphere.ecore.flow.reset'() ).
+    and:   b   => (
+        | v <- self value |
+        v if: [ ^ b value ] else: [ ^ v ]
+    );
+    or:    b   => (
+        | v <- self value |
+        v if: [ ^ v ] else: [ ^ b value ]
+    );
     with own parent = #<:std/Object@std/std.eco>;
 },
 
 #=init/integer_proxy: {
-    + other => #'ecosphere.ecore.math.add'(self, other);
-    - other => #'ecosphere.ecore.math.sub'(self, other);
-    * other => #'ecosphere.ecore.math.mul'(self, other);
-    / other => #'ecosphere.ecore.math.div'(self, other);
+    + other    => #'ecosphere.ecore.math.add'(self, other);
+    - other    => #'ecosphere.ecore.math.sub'(self, other);
+    * other    => #'ecosphere.ecore.math.mul'(self, other);
+    / other    => #'ecosphere.ecore.math.div'(self, other);
     mod: other => #'ecosphere.ecore.math.mod'(self, other);
-    < other => #'ecosphere.ecore.math.less'(self, other);
+    < other    => #'ecosphere.ecore.math.less'(self, other);
+    == other   => #'ecosphere.ecore.is'(self, other);
+    <= other   => [ self < other ] or: [ self == other ];
+    > other    => (self <= other) not;
+    >= other   => (self < other) not;
     for: upper do: body => (
         | i <- self |
         [ i < upper ] while: [
