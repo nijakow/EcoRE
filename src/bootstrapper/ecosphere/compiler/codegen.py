@@ -264,10 +264,12 @@ class CodeGenerator:
         self._transfer_last_value(self._scope.get_storage_manager().get_stack())
 
     def op_builtin(self, args, key):
+        self._drop_last_value()
         self._writer.write_builtin(args, key)
         self._set_last_value_to_stack()
 
     def op_builtinv(self, args, key):
+        self._drop_last_value()
         self._writer.write_builtinv(args, key)
         self._set_last_value_to_stack()
 
