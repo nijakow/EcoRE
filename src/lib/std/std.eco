@@ -7,7 +7,7 @@
         with trait = {
             init => ;
             clone => #'ecosphere.ecore.clone'(self);
-            new => clone;
+            new => clone init;
             mirror => ;   "TODO"
             asBool => true;
             @ second => ((std util Pair) new) first: self second: second;
