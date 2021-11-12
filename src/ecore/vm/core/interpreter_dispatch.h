@@ -23,7 +23,6 @@ static void* DISPATCH_TABLE[] = {
 
 
 #define NEXT_U8()             *(instruction++)
-inline u16 CONSTRUCT_U16(u8** ptr) { u16 v = *((u16*) *ptr); *ptr += 2; return v; }
 #define NEXT_U16()            CONSTRUCT_U16(&instruction)
 #define NEXT_CONSTANT()       &top->code->constants[NEXT_U16()]
 #define TARGET(T)             dispatch_label_ ## T:

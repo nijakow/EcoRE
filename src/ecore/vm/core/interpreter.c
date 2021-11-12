@@ -44,6 +44,8 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
 }
 
 
+inline u16 CONSTRUCT_U16(u8** ptr) { u16 v = *((u16*) *ptr); *ptr += 2; return v; }
+
 void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
 {
     u8*                instruction;
