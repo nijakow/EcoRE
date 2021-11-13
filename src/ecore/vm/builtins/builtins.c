@@ -63,9 +63,11 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.byte_length", Eco_VM_Builtin_StringByteLength);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.char_length", Eco_VM_Builtin_StringCharLength);
 
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.vector.size", Eco_VM_Builtin_VectorSize);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.vector.at", Eco_VM_Builtin_VectorAt);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.vector.at_put", Eco_VM_Builtin_VectorAtPut);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.vector.length", Eco_VM_Builtin_VectorLength);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.vector.insert", Eco_VM_Builtin_VectorInsert);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.vector.remove", Eco_VM_Builtin_VectorRemove);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type", Eco_VM_Builtin_Clone);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.add_value_slot", Eco_VM_Builtin_AddValueSlot);

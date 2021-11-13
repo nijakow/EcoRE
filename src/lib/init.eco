@@ -26,6 +26,9 @@
     <= other   => [ self < other ] or: [ self == other ];
     > other    => (self <= other) not;
     >= other   => (self < other) not;
+    isZero     => (self == 0);
+    isNegative => (self < 0);
+    negate     => (0 - self);
     for: upper do: body => (
         | i <- self |
         [ i < upper ] while: [
@@ -56,9 +59,12 @@
 },
 
 #=init/vector_proxy: {
-    size => #'ecosphere.ecore.object.vector.length'(self);
+    size => #'ecosphere.ecore.object.vector.size'(self);
+    isEmpty => size isZero;
     at: index => #'ecosphere.ecore.object.vector.at'(self, index);
     at: index put: value => #'ecosphere.ecore.object.vector.at_put'(self, index, value);
+    at: index insert: value => #'ecosphere.ecore.object.vector.insert'(self, index, value);
+    remove: index => #'ecosphere.ecore.object.vector.remove'(self, index);
     do: body => (
         0 for: size do: [ :i => body value(at: i) ].
       ^ self
