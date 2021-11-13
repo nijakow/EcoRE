@@ -39,7 +39,7 @@ bool Eco_VM_Builtin_VectorLength(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     Eco_Fiber_Pop(fiber, &vector);
     // TODO: Type checks!
-    Eco_Any_AssignInteger(&length, ((struct Eco_Vector*) Eco_Any_AsPointer(&vector))->element_count);
+    Eco_Any_AssignInteger(&length, Eco_Vector_Size((struct Eco_Vector*) Eco_Any_AsPointer(&vector)));
     Eco_Fiber_Push(fiber, &length);
     return true;
 }

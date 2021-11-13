@@ -1,12 +1,13 @@
 #include "vector.h"
 
 #include <ecore/objects/base/type.h>
+#include <ecore/vm/memory/memory.h>
 #include <ecore/vm/memory/gc/gc.h>
 #include <ecore/vm/core/send.h>
 
 
 /*
- *    T y p e C o r e
+ *    T y p e
  */
 
 static struct Eco_TypeCore Eco_Vector_TYPECORE;
@@ -31,24 +32,39 @@ void Eco_Vector_Terminate()
 
 
 /*
+ *    P a y l o a d
+ */
+
+static struct Eco_Vector_Payload* Eco_Vector_Payload_New(unsigned int element_count)
+{
+    struct Eco_Vector_Payload*  payload;
+
+    payload = Eco_Memory_Alloc(sizeof(struct Eco_Vector_Payload) + sizeof(Eco_Any) * element_count);
+
+    if (payload != NULL) {
+        payload->alloc = element_count;
+        payload->fill  = 0;
+    }
+
+    return payload;
+}
+
+static void Eco_Vector_Payload_Delete(struct Eco_Vector_Payload* payload)
+{
+    Eco_Memory_Free(payload);
+}
+
+
+/*
  *    B a s i c s
  */
 
 struct Eco_Vector* Eco_Vector_New(unsigned int element_count)
 {
     struct Eco_Vector*  vector;
-    unsigned int        index;
 
-    vector                = Eco_Object_New(Eco_Vector_TYPE,
-                                           sizeof(struct Eco_Vector) + element_count * sizeof(Eco_Any),
-                                           0);
-
-    vector->element_count = element_count;
-
-    for (index = 0; index < element_count; index++)
-    {
-        Eco_Any_AssignPointer(&vector->elements[index], (struct Eco_Object*) vector);
-    }
+    vector          = Eco_Object_New(Eco_Vector_TYPE, sizeof(struct Eco_Vector), 0);
+    vector->payload = Eco_Vector_Payload_New(element_count);
 
     return vector;
 }
@@ -57,12 +73,70 @@ void Eco_Vector_Mark(struct Eco_GC_State* state, struct Eco_Vector* vector)
 {
     unsigned int  index;
 
-    for (index = 0; index < vector->element_count; index++)
-        Eco_GC_State_MarkAny(state, &vector->elements[index]);
+    if (vector->payload != NULL) {
+        for (index = 0; index < vector->payload->fill; index++)
+            Eco_GC_State_MarkAny(state, &vector->payload->elements[index]);
+    }
     Eco_Object_Mark(state, &vector->_);
 }
 
 void Eco_Vector_Del(struct Eco_Vector* vector)
 {
+    Eco_Vector_Payload_Delete(vector->payload);
     Eco_Object_Del(&vector->_);
+}
+
+
+/*
+ *    E l e m e n t   A c c e s s
+ */
+
+static bool Eco_Vector_ResizePayload(struct Eco_Vector* vector, unsigned int new_size)
+{
+    struct Eco_Vector_Payload* new_payload;
+    
+    new_payload = Eco_Memory_Realloc(vector->payload, sizeof(struct Eco_Vector_Payload) + sizeof(Eco_Any) * new_size);
+
+    if (new_payload != NULL) {
+        new_payload->alloc = new_size;
+        vector->payload    = new_payload;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool Eco_Vector_Insert(struct Eco_Vector* vector, unsigned int index, Eco_Any* value)
+{
+    unsigned int  element_index;
+
+    if (vector->payload->fill + 1 >= vector->payload->alloc) {
+        if (!Eco_Vector_ResizePayload(vector, vector->payload->fill + 1 + vector->payload->alloc / 2))
+            return false;
+    }
+
+    vector->payload->fill += 1;
+    for (element_index = vector->payload->fill;
+         element_index > index;
+         element_index--)
+    {
+        Eco_Any_AssignAny(&vector->payload->elements[element_index],
+                          &vector->payload->elements[element_index - 1]);
+    }
+
+    Eco_Any_AssignAny(&vector->payload->elements[index], value);
+
+    return true;
+}
+
+bool Eco_Vector_Remove(struct Eco_Vector* vector, unsigned int index)
+{
+    vector->payload->fill--;
+    while (index < vector->payload->fill)
+    {
+        Eco_Any_AssignAny(&vector->payload->elements[index],
+                          &vector->payload->elements[index + 1]);
+        index++;
+    }
+    return true;
 }
