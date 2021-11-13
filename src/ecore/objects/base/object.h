@@ -26,7 +26,6 @@ struct Eco_Object_Header
     unsigned int mark_queued : 1;
     unsigned int mark_done   : 1;
     unsigned int sticky      : 1;
-    unsigned int object_size : 29;
 };
 
 struct Eco_Object
