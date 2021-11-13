@@ -46,10 +46,10 @@ void Eco_VM_Builtins_Init()
 {
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.is", Eco_VM_Builtin_Is);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.clone", Eco_VM_Builtin_Clone);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.get_type", Eco_VM_Builtin_Clone);
+
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.flow.value", Eco_VM_Builtin_Value);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.flow.reset", Eco_VM_Builtin_Reset);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.io.print", Eco_VM_Builtin_Print);
+    
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add_integers", Eco_VM_Builtin_AddIntegers);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add", Eco_VM_Builtin_Add);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.sub", Eco_VM_Builtin_Subtract2);
@@ -57,25 +57,31 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.div", Eco_VM_Builtin_Divide2);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.mod", Eco_VM_Builtin_Modulo2);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.less", Eco_VM_Builtin_Less2);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.slots.add_value_slot", Eco_VM_Builtin_AddValueSlot);
+
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.at_byte", Eco_VM_Builtin_StringAtByte);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.step_at_byte", Eco_VM_Builtin_StringStepAtByte);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.byte_length", Eco_VM_Builtin_StringByteLength);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.char_length", Eco_VM_Builtin_StringCharLength);
+
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.vector.at", Eco_VM_Builtin_VectorAt);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.vector.at_put", Eco_VM_Builtin_VectorAtPut);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.vector.length", Eco_VM_Builtin_VectorLength);
 
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type", Eco_VM_Builtin_Clone);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.add_value_slot", Eco_VM_Builtin_AddValueSlot);
+
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_lobby", Eco_VM_Builtin_SetLobby);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_true", Eco_VM_Builtin_SetTrue);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_false", Eco_VM_Builtin_SetFalse);
-    
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_proxy", Eco_VM_Builtin_SetProxy);
+
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.integer_type", Eco_VM_Builtin_GetIntegerType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.character_type", Eco_VM_Builtin_GetCharacterType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.block_type", Eco_VM_Builtin_GetBlockType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.string_type", Eco_VM_Builtin_GetStringType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.vector_type", Eco_VM_Builtin_GetVectorType);
+
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.debug.shortlog", Eco_VM_Builtin_Print);
 }
 
 void Eco_VM_Builtins_Terminate()
