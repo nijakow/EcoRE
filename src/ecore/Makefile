@@ -36,6 +36,7 @@ vm/builtins/core/init.c \
 vm/builtins/core/io.c \
 vm/builtins/core/is.c \
 vm/builtins/core/math.c \
+vm/builtins/core/reflection.c \
 vm/builtins/core/slots.c \
 vm/builtins/core/string.c \
 vm/builtins/core/vector.c \
