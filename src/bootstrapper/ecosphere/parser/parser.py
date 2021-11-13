@@ -26,12 +26,12 @@ class Parser:
         while True:
             if self.check(TokenType.COLON):
                 parameters.append((ecosphere.objects.misc.EcoKey.Get(self.expect(TokenType.IDENTIFIER).get_text()),))
-                if not self.check(TokenType.RARROW):
+                if not self.check(TokenType.RARROW) and not self.check(TokenType.BAR):
                     self.expect(TokenType.SEPARATOR)
-                continue
             elif self.check(TokenType.ELLIPSIS):
                 varargs = True
-                self.expect(TokenType.RARROW)
+                if not self.check(TokenType.RARROW):
+                    self.expect(TokenType.BAR)
             break
         return ASTBlock(parameters, varargs, ASTCompound(self.parse_expressions(TokenType.RBRACK)))
     
