@@ -163,7 +163,8 @@ static inline void Eco_Any_AssignCharacter(Eco_Any* any, Eco_Codepoint character
 {
     uintptr_t  value;
 
-    value = (uintptr_t) character;
+    value = 0;
+    value |= character & 0xffffffff;
     value |= Eco_Any_Mask_CHARACTER;
     *any = (uintptr_t) value;
 }
@@ -172,9 +173,10 @@ static inline void Eco_Any_AssignInteger(Eco_Any* any, Eco_Integer integer)
 {
     uintptr_t  value;
 
-    value = (uintptr_t) integer;
+    value = 0;
+    value |= integer & 0xffffffff;
     value |= Eco_Any_Mask_INTEGER;
-    *any = (uintptr_t) value;
+    *any = value;
 }
 
 static inline void Eco_Any_AssignFloating(Eco_Any* any, Eco_Floating floating)

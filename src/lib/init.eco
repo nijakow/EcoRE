@@ -61,13 +61,16 @@
 #=init/vector_proxy: {
     size => #'ecosphere.ecore.object.vector.size'(self);
     isEmpty => size isZero;
-    at: index => #'ecosphere.ecore.object.vector.at'(self, index);
-    at: index put: value => #'ecosphere.ecore.object.vector.at_put'(self, index, value);
-    at: index insert: value => #'ecosphere.ecore.object.vector.insert'(self, index, value);
-    remove: index => #'ecosphere.ecore.object.vector.remove'(self, index);
+    at: index => #'ecosphere.ecore.object.vector.at'(self, _norm(index));
+    at: index put: value => #'ecosphere.ecore.object.vector.at_put'(self, _norm(index), value);
+    at: index insert: value => #'ecosphere.ecore.object.vector.insert'(self, _nnorm(index), value);
+    append: value => at: size insert: value;
+    remove: index => #'ecosphere.ecore.object.vector.remove'(self, _norm(index));
     do: body => (
         0 for: size do: [ :i => body value(at: i) ].
       ^ self
     );
+    _norm(i) => (i isNegative) if: [ size + i ] else: [ i ];
+    _nnorm(i) => (i isNegative) if: [ size + i + 1 ] else: [ i ];
     with own parent = #<:std/Object@std/std.eco>;
 }

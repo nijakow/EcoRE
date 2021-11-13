@@ -116,7 +116,7 @@ bool Eco_Vector_Insert(struct Eco_Vector* vector, unsigned int index, Eco_Any* v
     }
 
     vector->payload->fill += 1;
-    for (element_index = vector->payload->fill;
+    for (element_index = vector->payload->fill - 1;
          element_index > index;
          element_index--)
     {
