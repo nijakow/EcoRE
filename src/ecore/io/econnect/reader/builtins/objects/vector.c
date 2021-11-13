@@ -24,7 +24,7 @@ bool Eco_EConnect_Builtin_GetVector(struct Eco_EConnect_Reader* reader,
         {
             if (!Eco_EConnect_Reader_ReadAny(reader, result, &value))
                 return false;
-            Eco_Vector_Put(vector, index, &value);
+            Eco_Vector_Insert(vector, Eco_Vector_Size(vector), &value);
         }
         Eco_EConnect_Result_Create_Object(result, (struct Eco_Object*) vector);
     } else {
