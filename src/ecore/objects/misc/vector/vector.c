@@ -3,6 +3,7 @@
 #include <ecore/objects/base/type.h>
 #include <ecore/vm/memory/memory.h>
 #include <ecore/vm/memory/gc/gc.h>
+#include <ecore/vm/core/clone.h>
 #include <ecore/vm/core/send.h>
 
 
@@ -18,11 +19,12 @@ void Eco_Vector_Init()
 {
     Eco_TypeCore_Create(&Eco_Vector_TYPECORE, "Eco_Vector");
 
-    Eco_Vector_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
-    Eco_Vector_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_Vector_Mark;
-    Eco_Vector_TYPECORE.del  = (Eco_TypeCore_DelFunc)  Eco_Vector_Del;
+    Eco_Vector_TYPECORE.send  = (Eco_TypeCore_SendFunc)  Eco_Object_Send;
+    Eco_Vector_TYPECORE.mark  = (Eco_TypeCore_MarkFunc)  Eco_Vector_Mark;
+    Eco_Vector_TYPECORE.clone = (Eco_TypeCore_CloneFunc) Eco_Vector_Clone;
+    Eco_Vector_TYPECORE.del   = (Eco_TypeCore_DelFunc)   Eco_Vector_Del;
 
-    Eco_Vector_TYPE          = Eco_Type_NewPrefab(&Eco_Vector_TYPECORE);
+    Eco_Vector_TYPE           = Eco_Type_NewPrefab(&Eco_Vector_TYPECORE);
 }
 
 void Eco_Vector_Terminate()
@@ -78,6 +80,32 @@ void Eco_Vector_Mark(struct Eco_GC_State* state, struct Eco_Vector* vector)
             Eco_GC_State_MarkAny(state, &vector->payload->elements[index]);
     }
     Eco_Object_Mark(state, &vector->_);
+}
+
+struct Eco_Vector* Eco_Vector_Clone(struct Eco_CloneState* state,
+                                    struct Eco_Vector* vector)
+{
+    /*
+     * TODO: This cloning function does not clone the elements in the vector.
+     *       There should be a special bit denoting if the elements of the
+     *       vector should be cloned as well.
+     */
+    struct Eco_Vector*  the_clone;
+    unsigned int        index;
+
+    the_clone = Eco_Vector_New(vector->payload->fill);
+    
+    Eco_CloneState_RegisterClone(state,
+                                 (struct Eco_Object*) vector,
+                                 (struct Eco_Object*) the_clone);
+
+    for (index = 0; index < vector->payload->fill; index++)
+    {
+        Eco_Any_AssignAny(&the_clone->payload->elements[index],
+                          &vector->payload->elements[index]);
+    }
+
+    return the_clone;
 }
 
 void Eco_Vector_Del(struct Eco_Vector* vector)

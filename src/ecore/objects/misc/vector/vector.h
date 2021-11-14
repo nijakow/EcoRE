@@ -21,6 +21,7 @@ struct Eco_Vector
 
 struct Eco_Vector* Eco_Vector_New(unsigned int);
 void Eco_Vector_Mark(struct Eco_GC_State*, struct Eco_Vector*);
+struct Eco_Vector* Eco_Vector_Clone(struct Eco_CloneState*, struct Eco_Vector*);
 void Eco_Vector_Del(struct Eco_Vector*);
 
 static inline unsigned int Eco_Vector_Size(struct Eco_Vector* vector)
