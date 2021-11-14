@@ -23,6 +23,29 @@ unsigned int Eco_EConnect_ParseUInt(struct Eco_IO_ByteInputStream* stream)
     return value;
 }
 
+int Eco_EConnect_ParseInt(struct Eco_IO_ByteInputStream* stream)
+{
+    u8    byte;
+    int   value;
+    int   factor;
+
+    if (Eco_IO_ByteInputStream_Peek(stream) == 0x80) {
+        factor = -1;
+        Eco_IO_ByteInputStream_Read(stream);
+    } else {
+        factor = 1;
+    }
+
+    value = 0;
+    do
+    {
+        byte = Eco_IO_ByteInputStream_Read(stream);
+        value = (value << 7) | (byte & 0b01111111);
+    } while ((byte & 0b10000000) != 0);
+
+    return value * factor;
+}
+
 void Eco_EConnect_ParseBytes(struct Eco_IO_ByteInputStream* stream,
                              char* buffer,
                              unsigned int count)

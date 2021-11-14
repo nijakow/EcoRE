@@ -3,7 +3,7 @@
 #include "objects/key.h"
 #include "objects/string.h"
 #include "objects/vector.h"
-#include "objects/uint.h"
+#include "objects/ints.h"
 #include "objects/object.h"
 #include "objects/group.h"
 #include "objects/code.h"
@@ -26,7 +26,7 @@ void Eco_EConnect_InitReaderBuiltins()
     Eco_EConnect_InstallCallback("ecosphere.object.string", Eco_EConnect_Builtin_GetString);
     Eco_EConnect_InstallCallback("ecosphere.object.vector", Eco_EConnect_Builtin_GetVector);
     Eco_EConnect_InstallCallback("ecosphere.object.uint", Eco_EConnect_Builtin_GetUInt);
-    Eco_EConnect_InstallCallback("ecosphere.object.int", Eco_EConnect_Builtin_GetUInt);    // TODO: Parse a real Int
+    Eco_EConnect_InstallCallback("ecosphere.object.int", Eco_EConnect_Builtin_GetInt);
     Eco_EConnect_InstallCallback("ecosphere.object.object", Eco_EConnect_Builtin_GetMolecule);
     Eco_EConnect_InstallCallback("ecosphere.object.molecule", Eco_EConnect_Builtin_GetMolecule);
     Eco_EConnect_InstallCallback("ecosphere.object.group", Eco_EConnect_Builtin_GetGroup);
