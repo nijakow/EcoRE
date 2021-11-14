@@ -5,6 +5,8 @@
 
 #include <ecore/objects/base/object.h>
 
+struct Eco_String;
+
 
 struct Eco_Vector_Payload
 {
@@ -41,6 +43,8 @@ static inline void Eco_Vector_Put(struct Eco_Vector* vector, unsigned int index,
 
 bool Eco_Vector_Insert(struct Eco_Vector* vector, unsigned int index, Eco_Any* value);
 bool Eco_Vector_Remove(struct Eco_Vector* vector, unsigned int index);
+
+struct Eco_String* Eco_Vector_ToString(struct Eco_Vector*);
 
 void Eco_Vector_Init();
 void Eco_Vector_Terminate();

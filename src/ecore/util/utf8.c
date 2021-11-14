@@ -1,5 +1,40 @@
 #include "utf8.h"
 
+unsigned int Eco_Utf8_Encode(Eco_Codepoint codepoint, char* buffer)
+{
+    if (codepoint < 0) {
+        buffer[0] = 0xef;
+        buffer[1] = 0xbf;
+        buffer[2] = 0xbd;
+        buffer[3] = 0x00;
+        return 0;
+    } else if (codepoint <= 0x7f) {
+        buffer[0] = codepoint;
+        return 1;
+    } else if (codepoint <= 0x7ff) {
+        buffer[0] = ((codepoint >> 6) & 0x1f) | 0xc0;
+        buffer[1] = ((codepoint >> 0) & 0x3f) | 0x80;
+        return 2;
+    } else if (codepoint <= 0xffff) {
+        buffer[0] = ((codepoint >> 12) & 0x0f) | 0xe0;
+        buffer[1] = ((codepoint >>  6) & 0x3f) | 0x80;
+        buffer[2] = ((codepoint >>  0) & 0x3f) | 0x80;
+        return 3;
+    } else if (codepoint <= 0x10ffff) {
+        buffer[0] = ((codepoint >> 18) & 0x07) | 0xf0;
+        buffer[1] = ((codepoint >> 12) & 0x3f) | 0x80;
+        buffer[1] = ((codepoint >>  6) & 0x3f) | 0x80;
+        buffer[1] = ((codepoint >>  0) & 0x3f) | 0x80;
+        return 4;
+    } else {
+        buffer[0] = 0xef;
+        buffer[1] = 0xbf;
+        buffer[2] = 0xbd;
+        buffer[3] = 0x00;
+        return 0;
+    }
+}
+
 bool Eco_Utf8_Decode(const char* str,
                      Eco_Codepoint* result,
                      unsigned int* length)

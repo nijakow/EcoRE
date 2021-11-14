@@ -3,6 +3,7 @@
 
 #include <ecore/base/defs.h>
 
+unsigned int Eco_Utf8_Encode(Eco_Codepoint, char*);
 bool Eco_Utf8_Decode(const char*, Eco_Codepoint*, unsigned int*);
 
 #endif

@@ -1,10 +1,12 @@
 #include "vector.h"
 
 #include <ecore/objects/base/type.h>
+#include <ecore/objects/misc/string/string.h>
 #include <ecore/vm/memory/memory.h>
 #include <ecore/vm/memory/gc/gc.h>
 #include <ecore/vm/core/clone.h>
 #include <ecore/vm/core/send.h>
+#include <ecore/util/utf8.h>
 
 
 /*
@@ -169,4 +171,27 @@ bool Eco_Vector_Remove(struct Eco_Vector* vector, unsigned int index)
         index++;
     }
     return true;
+}
+
+struct Eco_String* Eco_Vector_ToString(struct Eco_Vector* vector)
+{
+    const unsigned int buffer_length = vector->payload->fill * 4 + 1;
+    char               buffer[buffer_length];
+    unsigned int       buffer_index;
+    unsigned int       vector_index;
+
+    buffer_index = 0;
+
+    for (vector_index = 0;
+         vector_index < vector->payload->fill;
+         vector_index++)
+    {
+        if (Eco_Any_IsCharacter(&vector->payload->elements[vector_index])) {
+            buffer_index += Eco_Utf8_Encode(Eco_Any_AsCharacter(&vector->payload->elements[vector_index]), &buffer[buffer_index]);
+        }
+    }
+
+    buffer[buffer_index] = '\0';
+
+    return Eco_String_New(buffer);
 }
