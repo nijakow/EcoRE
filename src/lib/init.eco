@@ -55,6 +55,11 @@
         ].
       ^ self
     );
+    asVector => (
+        | v <- #() clone |
+        self do: [ :c | v append: c ].
+      ^ v
+    );
     with own parent = #<:std/Object@std/std.eco>;
 },
 
@@ -70,6 +75,7 @@
         0 for: size do: [ :i => body value(at: i) ].
       ^ self
     );
+    asString => #'ecosphere.ecore.object.vector.to_string'(self);
     _norm(i) => (i isNegative) if: [ size + i ] else: [ i ];
     _nnorm(i) => (i isNegative) if: [ size + i + 1 ] else: [ i ];
     with own parent = #<:std/Object@std/std.eco>;

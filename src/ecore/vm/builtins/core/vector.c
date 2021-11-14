@@ -85,3 +85,17 @@ bool Eco_VM_Builtin_VectorRemove(struct Eco_Fiber* fiber, unsigned int args)
                       Eco_Any_AsInteger(&index));
     return true;
 }
+
+bool Eco_VM_Builtin_VectorToString(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_String*  string;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+
+    string = Eco_Vector_ToString((struct Eco_Vector*) Eco_Any_AsPointer(Eco_Fiber_Peek(fiber)));
+
+    Eco_Any_AssignPointer(Eco_Fiber_Peek(fiber), (struct Eco_Object*) string);
+    
+    return true;
+}
