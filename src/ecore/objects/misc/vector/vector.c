@@ -99,6 +99,8 @@ struct Eco_Vector* Eco_Vector_Clone(struct Eco_CloneState* state,
                                  (struct Eco_Object*) vector,
                                  (struct Eco_Object*) the_clone);
 
+    the_clone->payload->fill = vector->payload->fill;
+
     for (index = 0; index < vector->payload->fill; index++)
     {
         Eco_Any_AssignAny(&the_clone->payload->elements[index],
