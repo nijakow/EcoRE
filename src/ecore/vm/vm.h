@@ -3,7 +3,6 @@
 
 #include "fiber.h"
 
-#include <ecore/io/net/scheduler.h>
 #include <ecore/vm/memory/gc/gc_state.h>
 
 
@@ -26,8 +25,6 @@ struct Eco_VM
         Eco_Any  ctrue;
         Eco_Any  cfalse;
     }                          constants;
-
-    struct Eco_Net_Scheduler   net_scheduler;
 };
 
 extern struct Eco_VM Eco_THE_VM;

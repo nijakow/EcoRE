@@ -51,9 +51,6 @@ vm/core/interpreter.c \
 vm/fiber.c \
 vm/vm.c \
 io/logging/log.c \
-io/net/net.c \
-io/net/scheduler.c \
-io/net/socket.c \
 io/econnect/econnect.c \
 io/econnect/instance.c \
 io/econnect/reader/callback.c \
@@ -73,7 +70,6 @@ io/econnect/reader/builtins/objects/group.c \
 io/econnect/reader/builtins/id/id.c \
 io/econnect/reader/builtins/flow/flow.c \
 io/econnect/file/file.c \
-io/econnect/net/connection.c \
 util/utf8.c \
 main.c
 

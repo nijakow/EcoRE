@@ -29,7 +29,6 @@ void Eco_VM_Create(struct Eco_VM* vm)
     vm->fiber_queues.paused  = NULL;
 
     Eco_GC_State_Create(&vm->gc_state);    
-    Eco_Net_Scheduler_Create(&vm->net_scheduler);
 }
 
 void Eco_VM_FreeAll(struct Eco_VM* vm)
@@ -43,7 +42,6 @@ void Eco_VM_Destroy(struct Eco_VM* vm)
     while (vm->fiber_queues.paused != NULL)  Eco_Fiber_Delete(vm->fiber_queues.paused);
 
     Eco_GC_State_Destroy(&vm->gc_state);
-    Eco_Net_Scheduler_Destroy(&vm->net_scheduler);
 }
 
 
@@ -69,7 +67,6 @@ void Eco_VM_Mark(struct Eco_GC_State* state, struct Eco_VM* vm)
 
 void Eco_VM_HandleEvents(struct Eco_VM* vm)
 {
-    Eco_Net_Scheduler_Tick(&vm->net_scheduler, vm->fiber_queues.running == NULL ? 1000 : 0);
 }
 
 
