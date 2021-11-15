@@ -16,5 +16,9 @@
         };
 
         with own parent = #<:std/Object>;
+    },
+
+    Vector = {
+        with trait = #<:init/vector_proxy@../init.eco>;
     }
 }
