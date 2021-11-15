@@ -1,9 +1,7 @@
 #ifndef ECO_VM_VM_H
 #define ECO_VM_VM_H
 
-#include "fiber.h"
-#include "scheduler.h"
-
+#include <ecore/vm/scheduler.h>
 #include <ecore/vm/memory/gc/gc_state.h>
 
 

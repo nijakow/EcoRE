@@ -1,9 +1,10 @@
-#include "../fiber.h"
 
 #include "bytecodes.h"
 #include "frame.h"
 #include "send.h"
 
+#include <ecore/vm/fiber/fiber.h>
+#include <ecore/vm/fiber/stackops.h>
 #include <ecore/objects/misc/key/key.h>
 #include <ecore/objects/vm/code/closure.h>
 

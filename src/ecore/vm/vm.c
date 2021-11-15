@@ -1,10 +1,9 @@
 #include "vm.h"
 
-#include "fiber.h"
-
 #include "builtins/builtins.h"
 #include "core/interpreter.h"
 
+#include <ecore/vm/fiber/fiber.h>
 #include <ecore/io/econnect/file/file.h>
 #include <ecore/io/logging/log.h>
 #include <ecore/vm/memory/gc/gc.h>

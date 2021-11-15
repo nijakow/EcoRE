@@ -13,7 +13,6 @@
 #include "core/string.h"
 #include "core/vector.h"
 
-#include <ecore/vm/fiber.h>
 #include <ecore/objects/misc/key/key.h>
 #include <ecore/io/logging/log.h>
 
