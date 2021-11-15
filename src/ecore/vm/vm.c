@@ -13,16 +13,17 @@
 struct Eco_VM Eco_THE_VM;
 
 
+/*
+ *
+ *    C o n s t r u c t o r s   a n d   D e s t r u c t o r s
+ *
+ */
+
 void Eco_VM_Create(struct Eco_VM* vm)
 {
     vm->fibers = NULL;
     Eco_GC_State_Create(&vm->gc_state);
     Eco_Scheduler_Create(&vm->scheduler);
-}
-
-void Eco_VM_FreeAll(struct Eco_VM* vm)
-{
-    Eco_GC_FreeAll(&vm->gc_state);
 }
 
 void Eco_VM_Destroy(struct Eco_VM* vm)
@@ -32,7 +33,6 @@ void Eco_VM_Destroy(struct Eco_VM* vm)
     Eco_Scheduler_Destroy(&vm->scheduler);
     Eco_GC_State_Destroy(&vm->gc_state);
 }
-
 
 void Eco_VM_Mark(struct Eco_GC_State* state, struct Eco_VM* vm)
 {
@@ -44,10 +44,39 @@ void Eco_VM_Mark(struct Eco_GC_State* state, struct Eco_VM* vm)
     }
 }
 
+void Eco_VM_FreeAll(struct Eco_VM* vm)
+{
+    Eco_GC_FreeAll(&vm->gc_state);
+}
+
+
+
+/*
+ *
+ *    M a i n   O p e r a t i o n   F u n c t i o n s
+ *
+ */
+
 void Eco_VM_HandleEvents(struct Eco_VM* vm)
 {
 }
 
+void Eco_VM_Run(struct Eco_VM* vm)
+{
+    while (1)
+    {
+        Eco_Scheduler_Run(&vm->scheduler);
+        Eco_VM_HandleEvents(vm);
+        Eco_GC_Step(&vm->gc_state); // TODO: Only call this if necessary!
+    }
+}
+
+
+/*
+ *
+ *    B o o t s t r a p p i n g
+ *
+ */
 
 struct Eco_Fiber* Eco_VM_SpawnThunk(struct Eco_VM* vm, struct Eco_Code* code)
 {
@@ -64,17 +93,6 @@ struct Eco_Fiber* Eco_VM_SpawnThunk(struct Eco_VM* vm, struct Eco_Code* code)
 
     return fiber;
 }
-
-void Eco_VM_Run(struct Eco_VM* vm)
-{
-    while (1)
-    {
-        Eco_Scheduler_Run(&vm->scheduler);
-        Eco_VM_HandleEvents(vm);
-        Eco_GC_Step(&vm->gc_state); // TODO: Only call this if necessary!
-    }
-}
-
 
 bool Eco_VM_LoadImageFromFile(struct Eco_VM* vm, const char* file)
 {
