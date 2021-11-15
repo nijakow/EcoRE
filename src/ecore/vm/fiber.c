@@ -1,4 +1,5 @@
 #include "fiber.h"
+#include "fiber_sched.h"
 
 #include <ecore/objects/vm/code/closure.h>
 #include <ecore/vm/vm.h>
@@ -8,25 +9,11 @@
 #include <ecore/io/logging/log.h>
 
 
-void Eco_FiberQueue_Create(struct Eco_FiberQueue* queue)
-{
-    queue->fibers = NULL;
-}
-
-void Eco_FiberQueue_Destroy(struct Eco_FiberQueue* queue)
-{
-    while (queue->fibers != NULL)
-        Eco_Fiber_MoveToQueue(queue->fibers, NULL);
-}
-
-
 struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
 {
     struct Eco_Fiber*  fiber;
 
     fiber = Eco_Memory_Alloc(sizeof(struct Eco_Fiber) + stack_size);
-
-    fiber->state            = Eco_Fiber_State_RUNNING;
 
     fiber->vm               =  vm;
     fiber->prev             = &vm->fibers;
@@ -41,6 +28,8 @@ struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
     fiber->top              =  NULL;
     fiber->stack_pointer    = &fiber->stack[0];
     fiber->stack_max        = &fiber->stack[stack_size];
+
+    Eco_Fiber_SetRunning(fiber);    // TODO: Should be 'paused'
 
     return fiber;
 }
@@ -89,35 +78,6 @@ void Eco_Fiber_Mark(struct Eco_GC_State* state, struct Eco_Fiber* fiber)
     }
 }
 
-void Eco_Fiber_MoveToQueue(struct Eco_Fiber* fiber, struct Eco_FiberQueue* queue)
-{
-    if (fiber->queue != queue)
-    {
-        if (fiber->queue != NULL) {
-            if (fiber->queue_next != NULL)
-                fiber->queue_next->prev = fiber->queue_prev;
-            *(fiber->queue_prev) = fiber->queue_next;
-        }
-
-        fiber->queue = queue;
-
-        if (queue != NULL) {
-            fiber->queue_prev = &queue->fibers;
-            fiber->queue_next =  queue->fibers;
-            queue->fibers     =  fiber;
-        }
-    }
-}
-
-void Eco_Fiber_SetRunning(struct Eco_Fiber* fiber)
-{
-    Eco_Fiber_MoveToQueue(fiber, &fiber->scheduler->fiber_queues.running);
-}
-
-void Eco_Fiber_SetPaused(struct Eco_Fiber* fiber)
-{
-    Eco_Fiber_MoveToQueue(fiber, &fiber->scheduler->fiber_queues.paused);
-}
 
 
 struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,

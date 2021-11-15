@@ -3,8 +3,7 @@
 
 #include <ecore/eco.h>
 
-#include "fiber_states.h"
-
+#include "fiber_sched.h"
 
 struct Eco_Frame;
 struct Eco_Message;
@@ -12,16 +11,6 @@ struct Eco_Code;
 struct Eco_Environment;
 struct Eco_VM;
 struct Eco_GC_State;
-
-struct Eco_Fiber;
-
-struct Eco_FiberQueue
-{
-    struct Eco_Fiber* fibers;
-};
-
-void Eco_FiberQueue_Create(struct Eco_FiberQueue*);
-void Eco_FiberQueue_Destroy(struct Eco_FiberQueue*);
 
 
 struct Eco_Fiber
@@ -99,10 +88,6 @@ static inline Eco_Any* Eco_Fiber_Peek(struct Eco_Fiber* fiber)
 struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM*, unsigned int);
 void Eco_Fiber_Delete(struct Eco_Fiber*);
 void Eco_Fiber_Mark(struct Eco_GC_State*, struct Eco_Fiber*);
-
-void Eco_Fiber_MoveToQueue(struct Eco_Fiber*, struct Eco_FiberQueue*);
-void Eco_Fiber_SetRunning(struct Eco_Fiber*);
-void Eco_Fiber_SetPaused(struct Eco_Fiber*);
 
 struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber*, unsigned int, unsigned int, unsigned int);
 void Eco_Fiber_PopFrame(struct Eco_Fiber*);
