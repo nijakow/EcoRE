@@ -25,3 +25,14 @@ bool Eco_EConnect_Builtin_GetInt(struct Eco_EConnect_Reader* reader,
 
     return true;
 }
+
+bool Eco_EConnect_Builtin_GetCharacter(struct Eco_EConnect_Reader* reader,
+                                       struct Eco_EConnect_Result* result)
+{
+    Eco_Codepoint  value;
+
+    value = Eco_EConnect_ParseUInt(&reader->stream);
+    Eco_EConnect_Result_Create_Character(result, value);
+
+    return true;
+}

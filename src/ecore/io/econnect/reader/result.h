@@ -37,6 +37,7 @@ void Eco_EConnect_Result_Create_Error(struct Eco_EConnect_Result*, enum Eco_ECon
 void Eco_EConnect_Result_Create_Any(struct Eco_EConnect_Result*, Eco_Any*);
 void Eco_EConnect_Result_Create_Object(struct Eco_EConnect_Result*, struct Eco_Object*);
 void Eco_EConnect_Result_Create_Integer(struct Eco_EConnect_Result*, Eco_Integer);
+void Eco_EConnect_Result_Create_Character(struct Eco_EConnect_Result*, Eco_Integer);
 void Eco_EConnect_Result_Copy(struct Eco_EConnect_Result*, struct Eco_EConnect_Result*);
 void Eco_EConnect_Result_Destroy(struct Eco_EConnect_Result*);
 

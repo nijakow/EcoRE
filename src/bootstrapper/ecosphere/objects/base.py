@@ -22,7 +22,7 @@ class EcoNumber(EcoObject):
 class EcoCharacter(EcoObject):
 
     def serialize(self, serializer):
-        serializer.write_message('ecosphere.object.character')
+        serializer.write_message('ecosphere.object.char')
         serializer.write_vlq(self._value)
 
     def __init__(self, value):

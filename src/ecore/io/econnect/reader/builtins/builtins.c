@@ -27,6 +27,7 @@ void Eco_EConnect_InitReaderBuiltins()
     Eco_EConnect_InstallCallback("ecosphere.object.vector", Eco_EConnect_Builtin_GetVector);
     Eco_EConnect_InstallCallback("ecosphere.object.uint", Eco_EConnect_Builtin_GetUInt);
     Eco_EConnect_InstallCallback("ecosphere.object.int", Eco_EConnect_Builtin_GetInt);
+    Eco_EConnect_InstallCallback("ecosphere.object.char", Eco_EConnect_Builtin_GetCharacter);
     Eco_EConnect_InstallCallback("ecosphere.object.object", Eco_EConnect_Builtin_GetMolecule);
     Eco_EConnect_InstallCallback("ecosphere.object.molecule", Eco_EConnect_Builtin_GetMolecule);
     Eco_EConnect_InstallCallback("ecosphere.object.group", Eco_EConnect_Builtin_GetGroup);
