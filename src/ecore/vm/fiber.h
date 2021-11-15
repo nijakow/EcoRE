@@ -13,20 +13,34 @@ struct Eco_Environment;
 struct Eco_VM;
 struct Eco_GC_State;
 
+struct Eco_Fiber;
+
+struct Eco_FiberQueue
+{
+    struct Eco_Fiber* fibers;
+};
+
+void Eco_FiberQueue_Create(struct Eco_FiberQueue*);
+void Eco_FiberQueue_Destroy(struct Eco_FiberQueue*);
+
 
 struct Eco_Fiber
 {
     enum Eco_Fiber_State  state;
 
-    struct Eco_VM*        vm;
-    struct Eco_Fiber**    queue;
-    struct Eco_Fiber*     queue_prev;
-    struct Eco_Fiber*     queue_next;
+    struct Eco_VM*          vm;
+    struct Eco_Fiber**      prev;
+    struct Eco_Fiber*       next;
 
-    struct Eco_Frame*     top;
-    char*                 stack_pointer;
-    char*                 stack_max;
-    char                  stack[];
+    struct Eco_Scheduler*   scheduler;
+    struct Eco_FiberQueue*  queue;
+    struct Eco_Fiber**      queue_prev;
+    struct Eco_Fiber*       queue_next;
+
+    struct Eco_Frame*       top;
+    char*                   stack_pointer;
+    char*                   stack_max;
+    char                    stack[];
 };
 
 static inline void Eco_Fiber_SetState(struct Eco_Fiber* fiber, enum Eco_Fiber_State state)
@@ -85,7 +99,10 @@ static inline Eco_Any* Eco_Fiber_Peek(struct Eco_Fiber* fiber)
 struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM*, unsigned int);
 void Eco_Fiber_Delete(struct Eco_Fiber*);
 void Eco_Fiber_Mark(struct Eco_GC_State*, struct Eco_Fiber*);
-void Eco_Fiber_MoveToQueue(struct Eco_Fiber*, struct Eco_Fiber**);
+
+void Eco_Fiber_MoveToQueue(struct Eco_Fiber*, struct Eco_FiberQueue*);
+void Eco_Fiber_SetRunning(struct Eco_Fiber*);
+void Eco_Fiber_SetPaused(struct Eco_Fiber*);
 
 struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber*, unsigned int, unsigned int, unsigned int);
 void Eco_Fiber_PopFrame(struct Eco_Fiber*);

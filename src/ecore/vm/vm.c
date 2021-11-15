@@ -14,21 +14,11 @@
 struct Eco_VM Eco_THE_VM;
 
 
-
-static inline void Eco_VM_AdvanceQueue(struct Eco_Fiber** queue)
-{
-    if (*queue != NULL) {
-        *queue = (*queue)->queue_next;
-    }
-}
-
-
 void Eco_VM_Create(struct Eco_VM* vm)
 {
-    vm->fiber_queues.running = NULL;
-    vm->fiber_queues.paused  = NULL;
-
-    Eco_GC_State_Create(&vm->gc_state);    
+    vm->fibers = NULL;
+    Eco_GC_State_Create(&vm->gc_state);
+    Eco_Scheduler_Create(&vm->scheduler);
 }
 
 void Eco_VM_FreeAll(struct Eco_VM* vm)
@@ -38,31 +28,21 @@ void Eco_VM_FreeAll(struct Eco_VM* vm)
 
 void Eco_VM_Destroy(struct Eco_VM* vm)
 {
-    while (vm->fiber_queues.running != NULL) Eco_Fiber_Delete(vm->fiber_queues.running);
-    while (vm->fiber_queues.paused != NULL)  Eco_Fiber_Delete(vm->fiber_queues.paused);
-
+    while (vm->fibers != NULL)
+        Eco_Fiber_Delete(vm->fibers);
+    Eco_Scheduler_Destroy(&vm->scheduler);
     Eco_GC_State_Destroy(&vm->gc_state);
 }
 
 
-static void Eco_VM_MarkQueue(struct Eco_GC_State* state, struct Eco_Fiber* queue)
-{
-    struct Eco_Fiber*  start;
-
-    start = queue;
-    if (queue != NULL) {
-        do
-        {
-            Eco_Fiber_Mark(state, queue);
-            queue = queue->queue_next;
-        } while (queue != start);
-    }
-}
-
 void Eco_VM_Mark(struct Eco_GC_State* state, struct Eco_VM* vm)
 {
-    Eco_VM_MarkQueue(state, vm->fiber_queues.running);
-    Eco_VM_MarkQueue(state, vm->fiber_queues.paused);
+    struct Eco_Fiber*  fiber;
+
+    for (fiber = vm->fibers; fiber != NULL; fiber = fiber->next)
+    {
+        Eco_Fiber_Mark(state, fiber);
+    }
 }
 
 void Eco_VM_HandleEvents(struct Eco_VM* vm)
@@ -80,31 +60,17 @@ struct Eco_Fiber* Eco_VM_SpawnThunk(struct Eco_VM* vm, struct Eco_Code* code)
     Eco_Any_AssignPointer(&lobby_arg, Eco_VM_Builtin_LOBBY);
 
     Eco_Fiber_EnterThunk(fiber, &lobby_arg, code);
-    Eco_Fiber_MoveToQueue(fiber, &vm->fiber_queues.running);
+
+    Eco_Fiber_SetRunning(fiber);
 
     return fiber;
 }
 
 void Eco_VM_Run(struct Eco_VM* vm)
 {
-    struct Eco_Fiber*  fiber;
-
-    while (vm->fiber_queues.running != NULL)
+    while (1)
     {
-        fiber = vm->fiber_queues.running;
-
-        Eco_Fiber_Run(fiber, 0x1000);
-
-        if (fiber->state == Eco_Fiber_State_RUNNING) {
-            Eco_VM_AdvanceQueue(&(vm->fiber_queues.running));
-        } else if (Eco_Fiber_State_IsError(fiber->state)) {
-            /* TODO: Catch error */
-            Eco_Log_Error("Got a non-TERMINATED state: %d\n", fiber->state);
-            Eco_Fiber_Delete(fiber);
-        } else if (fiber->state == Eco_Fiber_State_TERMINATED) {
-            Eco_Fiber_Delete(fiber);
-        }
-
+        Eco_Scheduler_Run(&vm->scheduler);
         Eco_VM_HandleEvents(vm);
         Eco_GC_Step(&vm->gc_state); // TODO: Only call this if necessary!
     }

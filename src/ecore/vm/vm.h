@@ -2,6 +2,7 @@
 #define ECO_VM_VM_H
 
 #include "fiber.h"
+#include "scheduler.h"
 
 #include <ecore/vm/memory/gc/gc_state.h>
 
@@ -12,19 +13,17 @@ struct Eco_Code;
 
 struct Eco_VM
 {
-    struct {
-        struct Eco_Fiber*      running;
-        struct Eco_Fiber*      paused;
-    } fiber_queues;
+    struct Eco_Scheduler  scheduler;
+    struct Eco_GC_State   gc_state;
 
-    struct Eco_GC_State        gc_state;
+    struct Eco_Fiber*     fibers;
 
     struct {
         Eco_Any  lobby;
         
         Eco_Any  ctrue;
         Eco_Any  cfalse;
-    }                          constants;
+    }                     constants;
 };
 
 extern struct Eco_VM Eco_THE_VM;

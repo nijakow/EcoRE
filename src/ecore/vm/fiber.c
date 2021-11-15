@@ -1,12 +1,23 @@
 #include "fiber.h"
 
-#include "memory/memory.h"
-#include "memory/gc/gc.h"
-
-#include "core/frame.h"
-
 #include <ecore/objects/vm/code/closure.h>
+#include <ecore/vm/vm.h>
+#include <ecore/vm/core/frame.h>
+#include <ecore/vm/memory/memory.h>
+#include <ecore/vm/memory/gc/gc.h>
 #include <ecore/io/logging/log.h>
+
+
+void Eco_FiberQueue_Create(struct Eco_FiberQueue* queue)
+{
+    queue->fibers = NULL;
+}
+
+void Eco_FiberQueue_Destroy(struct Eco_FiberQueue* queue)
+{
+    while (queue->fibers != NULL)
+        Eco_Fiber_MoveToQueue(queue->fibers, NULL);
+}
 
 
 struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
@@ -17,12 +28,17 @@ struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
 
     fiber->state            = Eco_Fiber_State_RUNNING;
 
-    fiber->vm               = vm;
-    fiber->queue            = NULL;
-    fiber->queue_prev       = NULL;
-    fiber->queue_next       = NULL;
+    fiber->vm               =  vm;
+    fiber->prev             = &vm->fibers;
+    fiber->next             =  vm->fibers;
+    vm->fibers              =  fiber;
 
-    fiber->top              = NULL;
+    fiber->scheduler        = &vm->scheduler;
+    fiber->queue            =  NULL;
+    fiber->queue_prev       =  NULL;
+    fiber->queue_next       =  NULL;
+
+    fiber->top              =  NULL;
     fiber->stack_pointer    = &fiber->stack[0];
     fiber->stack_max        = &fiber->stack[stack_size];
 
@@ -37,6 +53,10 @@ void Eco_Fiber_Delete(struct Eco_Fiber* fiber)
     }
 
     Eco_Fiber_MoveToQueue(fiber, NULL);
+
+    if (fiber->next != NULL)
+        fiber->next->prev = fiber->prev;
+    *(fiber->prev) = fiber->next;
 
     Eco_Memory_Free(fiber);
 }
@@ -69,35 +89,36 @@ void Eco_Fiber_Mark(struct Eco_GC_State* state, struct Eco_Fiber* fiber)
     }
 }
 
-void Eco_Fiber_MoveToQueue(struct Eco_Fiber* fiber, struct Eco_Fiber** queue)
+void Eco_Fiber_MoveToQueue(struct Eco_Fiber* fiber, struct Eco_FiberQueue* queue)
 {
-    if (fiber->queue != NULL) {
-        if (*(fiber->queue) == fiber) {
-            if (fiber->queue_next == fiber) {
-                *(fiber->queue) = NULL;
-            } else {
-                *(fiber->queue) = fiber->queue_next;
-            }
+    if (fiber->queue != queue)
+    {
+        if (fiber->queue != NULL) {
+            if (fiber->queue_next != NULL)
+                fiber->queue_next->prev = fiber->queue_prev;
+            *(fiber->queue_prev) = fiber->queue_next;
         }
-        fiber->queue_prev->queue_next = fiber->queue_next;
-        fiber->queue_next->queue_prev = fiber->queue_prev;
-    }
 
-    fiber->queue = queue;
+        fiber->queue = queue;
 
-    if (queue != NULL) {
-        if (*queue == NULL) {
-            fiber->queue_prev = fiber;
-            fiber->queue_next = fiber;
-        } else {
-            fiber->queue_prev = (*queue)->queue_prev;
-            fiber->queue_next = (*queue);
-            fiber->queue_prev->queue_next = fiber;
-            fiber->queue_next->queue_prev = fiber;
+        if (queue != NULL) {
+            fiber->queue_prev = &queue->fibers;
+            fiber->queue_next =  queue->fibers;
+            queue->fibers     =  fiber;
         }
-        *queue = fiber;
     }
 }
+
+void Eco_Fiber_SetRunning(struct Eco_Fiber* fiber)
+{
+    Eco_Fiber_MoveToQueue(fiber, &fiber->scheduler->fiber_queues.running);
+}
+
+void Eco_Fiber_SetPaused(struct Eco_Fiber* fiber)
+{
+    Eco_Fiber_MoveToQueue(fiber, &fiber->scheduler->fiber_queues.paused);
+}
+
 
 struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,
                                       unsigned int argument_count,
