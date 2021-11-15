@@ -18,3 +18,12 @@ class EcoNumber(EcoObject):
 
     def __init__(self, value):
         self._value = value
+
+class EcoCharacter(EcoObject):
+
+    def serialize(self, serializer):
+        serializer.write_message('ecosphere.object.character')
+        serializer.write_vlq(self._value)
+
+    def __init__(self, value):
+        self._value = value

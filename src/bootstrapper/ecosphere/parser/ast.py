@@ -85,6 +85,15 @@ class ASTNumber(ASTObject):
         super().__init__()
         self._value = value
 
+class ASTCharacter(ASTObject):
+
+    def _evaluate(self, the_subject, the_environment, the_callback):
+        the_callback(ecosphere.objects.base.EcoCharacter(self._value))
+
+    def __init__(self, value):
+        super().__init__()
+        self._value = value
+
 class ASTKey(ASTObject):
 
     def _evaluate(self, the_subject, the_environment, the_callback):

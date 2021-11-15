@@ -9,6 +9,7 @@ class TokenType(enum.Enum):
     STRING = enum.auto()
     KEY = enum.auto()
     NUMBER = enum.auto()
+    CHARACTER = enum.auto()
     LABEL = enum.auto()
     PROXY = enum.auto()
     LPAREN = enum.auto()
@@ -91,6 +92,15 @@ class NumberToken(Token):
         super().__init__(tokenizer, TokenType.NUMBER)
         self._value = value
 
+class CharacterToken(Token):
+
+    def get_value(self):
+        return self._value
+    
+    def __init__(self, tokenizer: 'Tokenizer', value):
+        super().__init__(tokenizer, TokenType.CHARACTER)
+        self._value = value
+
 class LabelToken(Token):
 
     def get_address(self):
@@ -137,6 +147,8 @@ class Tokenizer:
                 if e == '\\': c = '\\'
                 elif e == 'n': c = '\n'
                 elif e == 't': c = '\t'
+                elif e == 'r': c = '\r'
+                elif e == 'e': c = '\e'
                 # TODO: More
                 elif e == end: c = end
                 else: c += e
@@ -169,6 +181,9 @@ class Tokenizer:
         elif self._s.peeks('#\''): return KeyToken(self, ecosphere.objects.misc.EcoKey.Get(self.parse_string('\'')))
         elif self._s.peeks('#='): return LabelToken(self, self.parse_string(':'))
         elif self._s.peeks('#<'): return ProxyToken(self, self.parse_string('>'))
+        elif self._s.peeks('#\\'):
+            c = self._s.read()
+            return CharacterToken(self, ord(c))
         elif self._s.peeks('\"'): self.parse_string('\"'); return self.read()  # Comment
 
         c = ''
