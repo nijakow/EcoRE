@@ -10,9 +10,6 @@
 #include <ecore/vm/memory/gc/gc_state.h>
 
 
-struct Eco_VM Eco_THE_VM;
-
-
 /*
  *
  *    C o n s t r u c t o r s   a n d   D e s t r u c t o r s
@@ -22,7 +19,7 @@ struct Eco_VM Eco_THE_VM;
 void Eco_VM_Create(struct Eco_VM* vm)
 {
     vm->fibers = NULL;
-    Eco_GC_State_Create(&vm->gc_state);
+    Eco_GC_State_Create(&vm->gc_state, vm);
     Eco_Scheduler_Create(&vm->scheduler);
 }
 
@@ -48,7 +45,6 @@ void Eco_VM_FreeAll(struct Eco_VM* vm)
 {
     Eco_GC_FreeAll(&vm->gc_state);
 }
-
 
 
 /*
@@ -80,15 +76,11 @@ void Eco_VM_Run(struct Eco_VM* vm)
 
 struct Eco_Fiber* Eco_VM_SpawnThunk(struct Eco_VM* vm, struct Eco_Code* code)
 {
-    Eco_Any            lobby_arg;
     struct Eco_Fiber*  fiber;
 
     fiber = Eco_Fiber_New(vm, 65536);
 
-    Eco_Any_AssignPointer(&lobby_arg, Eco_VM_Builtin_LOBBY);
-
-    Eco_Fiber_EnterThunk(fiber, &lobby_arg, code);
-
+    Eco_Fiber_EnterThunk(fiber, &vm->constants.lobby, code);
     Eco_Fiber_SetRunning(fiber);
 
     return fiber;

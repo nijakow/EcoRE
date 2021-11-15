@@ -12,6 +12,8 @@
 #include <ecore/io/econnect/econnect.h>
 
 
+struct Eco_VM Eco_THE_VM;
+
 
 void Eco_LoadImageFromFile(const char* file)
 {

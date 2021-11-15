@@ -31,10 +31,7 @@ void Eco_GC_MarkRoots(struct Eco_GC_State* state)
         }
     }
 
-    Eco_VM_Mark(state, &Eco_THE_VM);
-    if (Eco_VM_Builtin_LOBBY != NULL) {
-        Eco_GC_State_MarkObject(state, Eco_VM_Builtin_LOBBY);
-    }
+    Eco_VM_Mark(state, state->vm);
 }
 
 void Eco_GC_MarkLoop(struct Eco_GC_State* state)

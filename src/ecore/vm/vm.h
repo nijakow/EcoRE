@@ -24,8 +24,6 @@ struct Eco_VM
     }                     constants;
 };
 
-extern struct Eco_VM Eco_THE_VM;
-
 
 void Eco_VM_Create(struct Eco_VM*);
 void Eco_VM_Destroy(struct Eco_VM*);

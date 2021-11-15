@@ -31,7 +31,7 @@ struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
     fiber->stack_pointer    = &fiber->stack[0];
     fiber->stack_max        = &fiber->stack[stack_size];
 
-    Eco_Fiber_SetRunning(fiber);    // TODO: Should be 'paused'
+    Eco_Fiber_SetPaused(fiber);
 
     return fiber;
 }
