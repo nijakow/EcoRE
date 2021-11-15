@@ -12,7 +12,8 @@
 #include <ecore/objects/vm/code/closure.h>
 #include <ecore/vm/core/clone.h>
 #include <ecore/vm/core/send.h>
-#include <ecore/vm/fiber.h>
+#include <ecore/vm/fiber/fiber.h>
+#include <ecore/vm/fiber/stackops.h>
 #include <ecore/vm/core/interpreter.h>
 #include <ecore/vm/memory/memory.h>
 #include <ecore/vm/memory/gc/gc.h>

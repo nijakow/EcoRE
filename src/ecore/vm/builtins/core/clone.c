@@ -1,6 +1,8 @@
 #include "clone.h"
 
 #include <ecore/vm/core/clone.h>
+#include <ecore/vm/fiber/fiber.h>
+#include <ecore/vm/fiber/stackops.h>
 
 
 bool Eco_VM_Builtin_Clone(struct Eco_Fiber* fiber, unsigned int args)

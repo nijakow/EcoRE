@@ -1,5 +1,5 @@
-#include "fiber_sched.h"
 #include "fiber.h"
+#include "sched.h"
 
 #include <ecore/eco.h>
 #include <ecore/vm/scheduler.h>
@@ -45,4 +45,12 @@ void Eco_Fiber_SetRunning(struct Eco_Fiber* fiber)
 void Eco_Fiber_SetPaused(struct Eco_Fiber* fiber)
 {
     Eco_Fiber_MoveToQueue(fiber, &fiber->scheduler->fiber_queues.paused);
+}
+
+/*
+ * TODO, FIXME, XXX: Deprecate this!
+ */
+void Eco_Fiber_SetState(struct Eco_Fiber* fiber, enum Eco_Fiber_State state)
+{
+    fiber->state = state;
 }

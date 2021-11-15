@@ -3,7 +3,9 @@
 
 #include <ecore/eco.h>
 
-#include <ecore/vm/fiber.h>
+#include <ecore/vm/fiber/fiber.h>
+#include <ecore/vm/fiber/sched.h>
+#include <ecore/vm/fiber/stackops.h>
 
 
 typedef bool (*Eco_Builtin)(struct Eco_Fiber*, unsigned int);

@@ -1,7 +1,7 @@
 #ifndef ECO_VM_SCHEDULER_H
 #define ECO_VM_SCHEDULER_H
 
-#include <ecore/vm/fiber.h>
+#include <ecore/vm/fiber/sched.h>
 
 
 struct Eco_Scheduler

@@ -48,8 +48,8 @@ vm/core/frame.c \
 vm/core/send.c \
 vm/core/clone.c \
 vm/core/interpreter.c \
-vm/fiber.c \
-vm/fiber_sched.c \
+vm/fiber/fiber.c \
+vm/fiber/sched.c \
 vm/scheduler.c \
 vm/vm.c \
 io/logging/log.c \

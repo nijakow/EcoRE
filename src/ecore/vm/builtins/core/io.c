@@ -1,5 +1,6 @@
 #include "io.h"
 
+#include <ecore/vm/fiber/stackops.h>
 #include <ecore/io/logging/log.h>
 
 

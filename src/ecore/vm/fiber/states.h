@@ -1,19 +1,7 @@
-#ifndef ECO_VM_FIBER_SCHED_H
-#define ECO_VM_FIBER_SCHED_H
+#ifndef ECO_VM_FIBER_STATES_H
+#define ECO_VM_FIBER_STATES_H
 
-#include <ecore/eco.h>
-
-
-struct Eco_Fiber;
-
-struct Eco_FiberQueue
-{
-    struct Eco_Fiber*  fibers;
-};
-
-void Eco_FiberQueue_Create(struct Eco_FiberQueue*);
-void Eco_FiberQueue_Destroy(struct Eco_FiberQueue*);
-
+#include <ecore/base/defs.h>
 
 enum Eco_Fiber_State
 {
@@ -33,9 +21,5 @@ static inline bool Eco_Fiber_State_IsError(enum Eco_Fiber_State state)
 {
     return state >= Eco_Fiber_State_ERROR;
 }
-
-void Eco_Fiber_MoveToQueue(struct Eco_Fiber*, struct Eco_FiberQueue*);
-void Eco_Fiber_SetRunning(struct Eco_Fiber*);
-void Eco_Fiber_SetPaused(struct Eco_Fiber*);
 
 #endif

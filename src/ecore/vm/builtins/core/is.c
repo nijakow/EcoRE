@@ -1,6 +1,7 @@
 #include "is.h"
 
 #include <ecore/vm/vm.h>
+#include <ecore/vm/fiber/stackops.h>
 #include <ecore/io/logging/log.h>
 
 

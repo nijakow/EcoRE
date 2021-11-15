@@ -2,6 +2,7 @@
 
 #include <ecore/objects/base/type.h>
 #include <ecore/vm/vm.h>
+#include <ecore/vm/fiber/stackops.h>
 
 /*
  * TODO: Include headers for this!

@@ -1,5 +1,7 @@
 #include "fiber.h"
-#include "fiber_sched.h"
+#include "states.h"
+#include "sched.h"
+#include "stackops.h"
 
 #include <ecore/objects/vm/code/closure.h>
 #include <ecore/vm/vm.h>
