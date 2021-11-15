@@ -3,11 +3,14 @@
 unsigned int Eco_Utf8_Encode(Eco_Codepoint codepoint, char* buffer)
 {
     if (codepoint < 0) {
+        /*
+         * Insert Unicode's REPLACEMENT CHARACTER
+         */
         buffer[0] = 0xef;
         buffer[1] = 0xbf;
         buffer[2] = 0xbd;
         buffer[3] = 0x00;
-        return 0;
+        return 3;
     } else if (codepoint <= 0x7f) {
         buffer[0] = codepoint;
         return 1;
@@ -27,11 +30,14 @@ unsigned int Eco_Utf8_Encode(Eco_Codepoint codepoint, char* buffer)
         buffer[1] = ((codepoint >>  0) & 0x3f) | 0x80;
         return 4;
     } else {
+        /*
+         * Insert Unicode's REPLACEMENT CHARACTER
+         */
         buffer[0] = 0xef;
         buffer[1] = 0xbf;
         buffer[2] = 0xbd;
         buffer[3] = 0x00;
-        return 0;
+        return 3;
     }
 }
 

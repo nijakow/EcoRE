@@ -37,7 +37,7 @@ static inline Eco_Codepoint Eco_String_At(struct Eco_String* string, unsigned in
     if (Eco_Utf8_Decode(&string->bytes[index], &codepoint, &length)) {
         return codepoint;
     } else {
-        return -1;  // TODO: Make a special constant for this
+        return Eco_Utf8_REPLACEMENT_CHAR;
     }
 }
 
