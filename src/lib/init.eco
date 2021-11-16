@@ -29,6 +29,7 @@
     isZero     => (self == 0);
     isNegative => (self < 0);
     negate     => (0 - self);
+    asChar     => #'ecosphere.ecore.int.as_char'(self);
     for: upper do: body => (
         | i <- self |
         [ i < upper ] while: [
@@ -41,6 +42,7 @@
 },
 
 #=init/character_proxy: {
+    asInt => #'ecosphere.ecore.char.as_int'(self);
     with own parent = #<:std/Object@std/std.eco>;
 },
 

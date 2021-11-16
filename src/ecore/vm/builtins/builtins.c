@@ -54,6 +54,9 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.mod", Eco_VM_Builtin_Modulo2);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.less", Eco_VM_Builtin_Less2);
 
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.int.as_char", Eco_VM_Builtin_IntAsChar);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.char.as_int", Eco_VM_Builtin_CharAsInt);
+
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.at_byte", Eco_VM_Builtin_StringAtByte);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.step_at_byte", Eco_VM_Builtin_StringStepAtByte);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.byte_length", Eco_VM_Builtin_StringByteLength);

@@ -25,8 +25,6 @@
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.block_type'(), #<:init/block_proxy@init.eco>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.string_type'(), #<:init/string_proxy@init.eco>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.vector_type'(), #<:init/vector_proxy@init.eco>).
-        | c <- #\* |
-        #'ecosphere.ecore.debug.shortlog'(c)
     );
 
     with parent = #<:lobby>;
