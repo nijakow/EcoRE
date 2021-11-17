@@ -184,7 +184,7 @@ class Parser:
         while ast != next:
             next = ast
             ast = self.parse_send(ast, allow_followups)
-            if allow_followups and self.check(TokenType.LPAREN):
+            if self.check(TokenType.LPAREN):
                 args, varargs = self.parse_arglist()
                 ast = ASTSend(ast, ecosphere.objects.misc.EcoKey.Get('value'), args, varargs)
             elif self.check(TokenType.ASSIGNMENT):
