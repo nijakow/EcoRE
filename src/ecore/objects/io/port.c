@@ -1,6 +1,10 @@
+#include <unistd.h>
+
 #include "port.h"
 
 #include <ecore/objects/base/type.h>
+#include <ecore/util/utf8.h>
+
 
 /*
  *    T y p e C o r e
@@ -31,14 +35,14 @@ void Eco_Port_Terminate()
  *    B a s i c s
  */
 
-struct Eco_Port* Eco_Port_New()
+struct Eco_Port* Eco_Port_New(unsigned int fd)
 {
     struct Eco_Port*  port;
 
     port = Eco_Object_New(Eco_Port_TYPE, sizeof(struct Eco_Port), 0);
 
     if (port != NULL) {
-
+        port->fd = fd;
     }
 
     return port;
@@ -52,4 +56,39 @@ void Eco_Port_Mark(struct Eco_GC_State* state, struct Eco_Port* port)
 void Eco_Port_Del(struct Eco_Port* port)
 {
     Eco_Object_Del(&port->_);
+}
+
+
+/*
+ *    I / O
+ */
+
+bool Eco_Port_ReadBytes(struct Eco_Port* port, char* c, unsigned int count)
+{
+    return read(port->fd, &c, count) > 0;
+}
+
+bool Eco_Port_WriteBytes(struct Eco_Port* port, char* c, unsigned int count)
+{
+    return write(port->fd, &c, count) > 0;
+}
+
+bool Eco_Port_ReadChar(struct Eco_Port* port, Eco_Codepoint* codepoint)
+{
+    /*
+     * TODO, FIXME, XXX: This function does not process UTF-8 yet!
+     */
+    char  c;
+
+    if (!Eco_Port_ReadBytes(port, &c, 1))
+        return false;
+    *codepoint = (unsigned char) c;
+    return true;
+}
+
+bool Eco_Port_WriteChar(struct Eco_Port* port, Eco_Codepoint codepoint)
+{
+    char bytes[4];
+
+    return Eco_Port_WriteBytes(port, bytes, Eco_Utf8_Encode(codepoint, bytes));
 }

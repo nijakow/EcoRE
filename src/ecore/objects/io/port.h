@@ -7,11 +7,18 @@
 struct Eco_Port
 {
     struct Eco_Object  _;
+    unsigned int       fd;
 };
 
-struct Eco_Port* Eco_Port_New();
+struct Eco_Port* Eco_Port_New(unsigned int);
 void Eco_Port_Mark(struct Eco_GC_State*, struct Eco_Port*);
 void Eco_Port_Del(struct Eco_Port*);
+
+bool Eco_Port_ReadBytes(struct Eco_Port*, char*, unsigned int);
+bool Eco_Port_WriteBytes(struct Eco_Port*, char*, unsigned int);
+
+bool Eco_Port_ReadChar(struct Eco_Port*, Eco_Codepoint*);
+bool Eco_Port_WriteChar(struct Eco_Port*, Eco_Codepoint);
 
 void Eco_Port_Init();
 void Eco_Port_Terminate();
