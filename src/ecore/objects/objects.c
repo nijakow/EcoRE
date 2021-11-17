@@ -3,6 +3,7 @@
 #include "base/object.h"
 #include "base/molecule.h"
 #include "group/group.h"
+#include "io/port.h"
 #include "misc/key/key.h"
 #include "misc/string/string.h"
 #include "misc/vector/vector.h"
@@ -25,10 +26,12 @@ void Eco_Objects_Init()
     Eco_Closure_Init();
     Eco_Group_Init();
     Eco_Vector_Init();
+    Eco_Port_Init();
 }
 
 void Eco_Objects_Terminate()
 {
+    Eco_Port_Terminate();
     Eco_Vector_Terminate();
     Eco_Group_Terminate();
     Eco_Closure_Terminate();

@@ -22,6 +22,7 @@ objects/base/object_payload.c \
 objects/base/object_slots.c \
 objects/base/molecule.c \
 objects/group/group.c \
+objects/io/port.c \
 objects/misc/key/key.c \
 objects/misc/string/string.c \
 objects/misc/vector/vector.c \
