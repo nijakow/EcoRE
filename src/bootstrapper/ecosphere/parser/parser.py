@@ -117,7 +117,7 @@ class Parser:
             return self.parse_vector()
         kw = self._t.read()
         if kw.is_a(TokenType.KEY):
-            if allow_followups and self.check(TokenType.LPAREN):
+            if self.check(TokenType.LPAREN):
                 args, varargs = self.parse_arglist()
                 return ASTBuiltin(kw.get_key(), args, varargs)
             else:
