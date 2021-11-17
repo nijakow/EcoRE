@@ -30,6 +30,10 @@
         | p <- #'ecosphere.ecore.object.port.new'(1) |
         p << -4274995;
         p << 'Hello, ' << 'world!';
+        1 to: 100000 do: [ :i |
+            p << (10 asChar).
+            p << i
+        ]
     );
 
     with parent = #<:lobby>;

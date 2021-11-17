@@ -19,6 +19,9 @@
 void Eco_VM_Create(struct Eco_VM* vm)
 {
     vm->fibers = NULL;
+    Eco_Any_Initialize(&vm->constants.lobby);
+    Eco_Any_Initialize(&vm->constants.ctrue);
+    Eco_Any_Initialize(&vm->constants.cfalse);
     Eco_GC_State_Create(&vm->gc_state, vm);
     Eco_Scheduler_Create(&vm->scheduler);
 }

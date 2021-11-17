@@ -104,6 +104,10 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,
         Eco_Any_AssignAny(&varargs[i], &arguments[i + fixed_argument_count]);
     }
 
+    for (i = argument_count; i < register_count; i++) {
+        Eco_Any_Initialize(&arguments[i]);
+    }
+
     the_frame->previous       = fiber->top;
     the_frame->lexical        = NULL;
     the_frame->closures       = NULL;

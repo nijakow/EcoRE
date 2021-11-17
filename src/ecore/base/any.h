@@ -214,7 +214,7 @@ static inline Eco_Floating Eco_Any_AsFloating(Eco_Any* any)
 
 static inline void Eco_Any_Initialize(Eco_Any* any)
 {
-    Eco_Any_AssignPointer(any, NULL);
+    Eco_Any_AssignInteger(any, 0);
 }
 
 #endif
