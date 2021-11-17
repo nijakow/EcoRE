@@ -42,7 +42,8 @@
 },
 
 #=init/character_proxy: {
-    asInt => #'ecosphere.ecore.char.as_int'(self);
+    asInt           => #'ecosphere.ecore.char.as_int'(self);
+    writeOn: writer => writer char<< self;
     with own parent = #<:std/Object@std/std.eco>;
 },
 
@@ -62,6 +63,7 @@
         self do: [ :c | v append: c ].
       ^ v
     );
+    writeOn: writer => do: [ :c | writer << c ];
     with own parent = #<:std/Object@std/std.eco>;
 },
 
@@ -84,6 +86,7 @@
 },
 
 #=init/port_proxy: {
-    char<< c => #'ecosphere.ecore.object.port.write_char'(self, c);
+    char<< c  => #'ecosphere.ecore.object.port.write_char'(self, c);
+    << object => ( object writeOn: self; ^ self );
     with own parent = #<:std/Object@std/std.eco>;
 }

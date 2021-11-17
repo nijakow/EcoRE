@@ -28,7 +28,7 @@
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.port_type'(), #<:init/port_proxy@init.eco>).
 
         | p <- #'ecosphere.ecore.object.port.new'(1) |
-        p char<< #\*;
+        p << 'Hello, ' << 'world!';
     );
 
     with parent = #<:lobby>;
