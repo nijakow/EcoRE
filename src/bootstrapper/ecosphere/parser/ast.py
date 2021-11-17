@@ -144,6 +144,18 @@ class ASTBuiltin(ASTExpression):
         self._args = args
         self._varargs = varargs
 
+class ASTVarAccess(ASTExpression):
+
+    def accept(self, visitor):
+        visitor.visit_var_access(self)
+    
+    def get_key(self):
+        return self._key
+    
+    def __init__(self, key):
+        super().__init__()
+        self._key = key
+
 class ASTSend(ASTExpression):
     
     def accept(self, visitor):

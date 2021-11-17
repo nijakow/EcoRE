@@ -42,16 +42,16 @@
         |
             lib <- {
                 Digit(n) => ((#\0 asInt) + n) asChar;
-                WriteNumLoop(writer, num) => (
+                WriteNumLoop(writer, num, base, digit_func) => (
                     (num isZero) unless: [
-                        WriteNumLoop(writer, num / 10).
-                        writer << Digit(num mod: 10).
+                        WriteNumLoop(writer, num / base, base, digit_func).
+                        writer << digit_func(num mod: base).
                     ].
                 );
                 WriteNum(writer, num) => (
                     (num isNegative) if:   [ writer << #\-. num <- num negate ].
                     (num isZero)     if:   [ writer << #\0 ]
-                                     else: [ WriteNumLoop(writer, num) ]
+                                     else: [ WriteNumLoop(writer, num, 10, [ :i, Digit(i) ]) ]
                 );
             }
         |

@@ -45,7 +45,7 @@ class FileLoader:
         s = ecosphere.parser.stream.StringStream(text)
         t = ecosphere.parser.tokenizer.Tokenizer(s)
         p = ecosphere.parser.parser.Parser(t)
-        expressions = p.parse_expressions(ecosphere.parser.tokenizer.TokenType.EOF)
+        expressions = p.parse()
         return expressions
     
     def evaluate(self):

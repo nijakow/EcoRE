@@ -12,16 +12,24 @@ class ASTVisitor:
 class ASTAssignmentVisitor(ASTVisitor):
 
     def visit_send(self, ast):
+        assert not self._code_generator.is_var(ast.get_key())
         assert ast.get_arg_count() == 0
-        if self._code_generator.is_var(ast.get_key()):
-            self._rhs.accept(self._parent_visitor)
-            assert self._code_generator.store_var(ast.get_key())
-        else:
-            ast.get_subject().accept(self._parent_visitor)
-            self._code_generator.push()
-            self._rhs.accept(self._parent_visitor)
-            self._code_generator.push()
-            self._code_generator.op_assign(ast.get_key())
+        ast.get_subject().accept(self._parent_visitor)
+        self._code_generator.push()
+        self._rhs.accept(self._parent_visitor)
+        self._code_generator.push()
+        self._code_generator.op_assign(ast.get_key())
+    
+    def visit_var_access(self, ast):
+        assert self._code_generator.is_var(ast.get_key())
+        self._rhs.accept(self._parent_visitor)
+        assert self._code_generator.store_var(ast.get_key())
+        # else:
+        #     self._code_generator.load_self()
+        #     self._code_generator.push()
+        #     self._rhs.accept(self._parent_visitor)
+        #     self._code_generator.push()
+        #     self._code_generator.op_assign(ast.get_key())
 
     def __init__(self, code_generator, parent_visitor, rhs_ast):
         self._code_generator = code_generator
@@ -60,6 +68,14 @@ class ASTCompilerVisitor(ASTVisitor):
             self._code_generator.op_sendv(arg_count + 1, ast.get_key())
         else:
             self._code_generator.op_send(arg_count + 1, ast.get_key())
+
+    def visit_var_access(self, ast):
+        if self._code_generator.load_var(ast.get_key()):
+            return
+        else:
+            self._code_generator.load_self()
+            self._code_generator.push()
+            self._code_generator.op_send(1, ast.get_key())
 
     def visit_assignment(self, ast):
         # ast.get_rhs().accept(self)
