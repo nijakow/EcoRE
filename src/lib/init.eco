@@ -38,6 +38,25 @@
         ].
     );
     to: upper do: body => for: (upper + 1) do: body;
+    writeOn: writer => (
+        |
+            lib <- {
+                Digit(n) => ((#\0 asInt) + n) asChar;
+                WriteNumLoop(writer, num) => (
+                    (num isZero) unless: [
+                        WriteNumLoop(writer, num / 10).
+                        writer << (Digit(num mod: 10)).
+                    ].
+                );
+                WriteNum(writer, num) => (
+                    (num isNegative) if:   [ writer << #\-. num <- num negate ].
+                    (num isZero)     if:   [ writer << #\0 ]
+                                     else: [ WriteNumLoop(writer, num) ]
+                );
+            }
+        |
+        lib WriteNum(writer, self);
+    );
     with own parent = #<:std/Object@std/std.eco>;
 },
 
