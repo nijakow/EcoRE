@@ -45,7 +45,7 @@
                 WriteNumLoop(writer, num) => (
                     (num isZero) unless: [
                         WriteNumLoop(writer, num / 10).
-                        writer << (Digit(num mod: 10)).
+                        writer << Digit(num mod: 10).
                     ].
                 );
                 WriteNum(writer, num) => (

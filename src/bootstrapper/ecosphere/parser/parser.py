@@ -141,11 +141,13 @@ class Parser:
         args = []
         varargs = False
         kw = self.check(TokenType.IDENTIFIER)
+        bin = False
         if not kw:
             return ast
         while kw:
             name += kw.get_text()
             if self._is_bin(name[-1]):
+                bin = True
                 if not allow_followups:
                     kw.fail()
                     return ast
@@ -154,7 +156,7 @@ class Parser:
             if name[-1] != ':':
                 break
             kw = self.check(TokenType.IDENTIFIER)
-        if allow_followups and self.check(TokenType.LPAREN):
+        if (not bin) and self.check(TokenType.LPAREN):
             par_args, varargs = self.parse_arglist()
             for e in par_args:
                 args.append(e)
