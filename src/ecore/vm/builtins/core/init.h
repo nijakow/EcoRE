@@ -12,5 +12,6 @@ bool Eco_VM_Builtin_GetCharacterType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetBlockType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetStringType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetVectorType(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_GetPortType(struct Eco_Fiber*, unsigned int);
 
 #endif

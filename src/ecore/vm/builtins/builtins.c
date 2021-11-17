@@ -8,6 +8,7 @@
 #include "core/io.h"
 #include "core/is.h"
 #include "core/math.h"
+#include "core/port.h"
 #include "core/reflection.h"
 #include "core/slots.h"
 #include "core/string.h"
@@ -69,6 +70,10 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.vector.remove", Eco_VM_Builtin_VectorRemove);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.vector.to_string", Eco_VM_Builtin_VectorToString);
 
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.port.new", Eco_VM_Builtin_NewPort);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.port.read_char", Eco_VM_Builtin_PortReadChar);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.port.write_char", Eco_VM_Builtin_PortWriteChar);
+
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type", Eco_VM_Builtin_Clone);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.add_value_slot", Eco_VM_Builtin_AddValueSlot);
 
@@ -82,6 +87,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.block_type", Eco_VM_Builtin_GetBlockType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.string_type", Eco_VM_Builtin_GetStringType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.vector_type", Eco_VM_Builtin_GetVectorType);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.port_type", Eco_VM_Builtin_GetPortType);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.debug.shortlog", Eco_VM_Builtin_Print);
 }

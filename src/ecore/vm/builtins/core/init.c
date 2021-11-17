@@ -12,6 +12,7 @@ extern struct Eco_Type*    Eco_Character_TYPE;
 extern struct Eco_Type*    Eco_Closure_TYPE;
 extern struct Eco_Type*    Eco_String_TYPE;
 extern struct Eco_Type*    Eco_Vector_TYPE;
+extern struct Eco_Type*    Eco_Port_TYPE;
 
 
 bool Eco_VM_Builtin_SetLobby(struct Eco_Fiber* fiber, unsigned int args)
@@ -100,6 +101,17 @@ bool Eco_VM_Builtin_GetVectorType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     Eco_Any_AssignPointer(&value, (struct Eco_Object*) Eco_Vector_TYPE);
+    Eco_Fiber_Push(fiber, &value);
+    return true;
+}
+
+bool Eco_VM_Builtin_GetPortType(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  value;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
+        return false;
+    Eco_Any_AssignPointer(&value, (struct Eco_Object*) Eco_Port_TYPE);
     Eco_Fiber_Push(fiber, &value);
     return true;
 }
