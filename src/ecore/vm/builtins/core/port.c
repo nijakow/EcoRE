@@ -14,6 +14,14 @@ bool Eco_VM_Builtin_NewPort(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_PortFlushOutput(struct Eco_Fiber* fiber, unsigned int args)
+{
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Port_FlushOutput((struct Eco_Port*) Eco_Any_AsPointer(Eco_Fiber_Peek(fiber)));
+    return true;
+}
+
 bool Eco_VM_Builtin_PortReadChar(struct Eco_Fiber* fiber, unsigned int args)
 {
     Eco_Codepoint  codepoint;

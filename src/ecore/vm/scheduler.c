@@ -28,7 +28,7 @@ void Eco_Scheduler_Run(struct Eco_Scheduler* scheduler)
     {
         next = fiber->next;
 
-        Eco_Fiber_Run(fiber, 0x1000);
+        Eco_Fiber_Run(fiber, 0x100000);
 
         if (fiber->state == Eco_Fiber_State_RUNNING) {
             /* Do nothing */

@@ -42,7 +42,8 @@ struct Eco_Port* Eco_Port_New(unsigned int fd)
     port = Eco_Object_New(Eco_Port_TYPE, sizeof(struct Eco_Port), 0);
 
     if (port != NULL) {
-        port->fd = fd;
+        port->fd                 = fd;
+        port->output_buffer_fill = 0;
     }
 
     return port;
@@ -63,6 +64,16 @@ void Eco_Port_Del(struct Eco_Port* port)
  *    I / O
  */
 
+bool Eco_Port_FlushOutput(struct Eco_Port* port)
+{
+    bool  result;
+
+    result                   = write(port->fd, port->output_buffer, port->output_buffer_fill);
+    port->output_buffer_fill = 0;
+
+    return result;
+}
+
 bool Eco_Port_ReadBytes(struct Eco_Port* port, char* c, unsigned int count)
 {
     return read(port->fd, c, count) > 0;
@@ -70,7 +81,18 @@ bool Eco_Port_ReadBytes(struct Eco_Port* port, char* c, unsigned int count)
 
 bool Eco_Port_WriteBytes(struct Eco_Port* port, char* c, unsigned int count)
 {
-    return write(port->fd, c, count) > 0;
+    unsigned int  i;
+
+    for (i = 0; i < count; i++)
+    {
+        if (port->output_buffer_fill == Eco_Port_OUTPUT_BUFFER_SIZE) {
+            Eco_Port_FlushOutput(port);
+            port->output_buffer_fill = 0;
+        }
+        port->output_buffer[port->output_buffer_fill++] = c[i];
+    }
+
+    return true;
 }
 
 bool Eco_Port_ReadChar(struct Eco_Port* port, Eco_Codepoint* codepoint)

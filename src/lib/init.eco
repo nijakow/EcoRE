@@ -105,7 +105,8 @@
 },
 
 #=init/port_proxy: {
-    char<< c  => #'ecosphere.ecore.object.port.write_char'(self, c);
+    char<< c  => (#'ecosphere.ecore.object.port.write_char'(self, c). ^ self);
     << object => ( object writeOn: self; ^ self );
+    flush     => #'ecosphere.ecore.object.port.flush_output'(self);
     with own parent = #<:std/Object@std/std.eco>;
 }
