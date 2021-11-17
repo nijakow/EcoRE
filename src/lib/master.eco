@@ -29,11 +29,14 @@
 
         | p <- #'ecosphere.ecore.object.port.new'(1) |
         p << -4274995;
-        p << 'Hello, ' << 'world!';
-        1 to: 100000 do: [ :i |
-            p << (10 asChar).
-            p << i
-        ]
+        p << '\e[3m\e[31mHello, ' << 'world!\e[0m';
+        p << (10 asChar).
+        0 to: 8 do: [ :x |
+            0 to: 8 do: [ :y |
+                p << '🔥\t' << x << ' + ' << y << ' = ' << (x + y) << (10 asChar).
+            ]
+        ].
+        #'ecosphere.ecore.debug.shortlog'(#\📦 asInt)
     );
 
     with parent = #<:lobby>;

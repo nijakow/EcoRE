@@ -148,7 +148,7 @@ class Tokenizer:
                 elif e == 'n': c = '\n'
                 elif e == 't': c = '\t'
                 elif e == 'r': c = '\r'
-                elif e == 'e': c = '\e'
+                elif e == 'e': c = '\033'
                 # TODO: More
                 elif e == end: c = end
                 else: c += e
