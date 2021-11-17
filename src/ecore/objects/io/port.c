@@ -65,12 +65,12 @@ void Eco_Port_Del(struct Eco_Port* port)
 
 bool Eco_Port_ReadBytes(struct Eco_Port* port, char* c, unsigned int count)
 {
-    return read(port->fd, &c, count) > 0;
+    return read(port->fd, c, count) > 0;
 }
 
 bool Eco_Port_WriteBytes(struct Eco_Port* port, char* c, unsigned int count)
 {
-    return write(port->fd, &c, count) > 0;
+    return write(port->fd, c, count) > 0;
 }
 
 bool Eco_Port_ReadChar(struct Eco_Port* port, Eco_Codepoint* codepoint)

@@ -81,4 +81,9 @@
     _norm(i) => (i isNegative) if: [ size + i ] else: [ i ];
     _nnorm(i) => (i isNegative) if: [ size + i + 1 ] else: [ i ];
     with own parent = #<:std/Object@std/std.eco>;
+},
+
+#=init/port_proxy: {
+    char<< c => #'ecosphere.ecore.object.port.write_char'(self, c);
+    with own parent = #<:std/Object@std/std.eco>;
 }

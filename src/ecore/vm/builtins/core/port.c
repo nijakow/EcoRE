@@ -29,7 +29,7 @@ bool Eco_VM_Builtin_PortWriteChar(struct Eco_Fiber* fiber, unsigned int args)
 {
     Eco_Any  character;
 
-    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
     Eco_Fiber_Pop(fiber, &character);
     Eco_Port_WriteChar((struct Eco_Port*) Eco_Any_AsPointer(Eco_Fiber_Peek(fiber)), Eco_Any_AsCharacter(&character));
