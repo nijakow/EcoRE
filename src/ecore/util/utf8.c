@@ -26,8 +26,8 @@ unsigned int Eco_Utf8_Encode(Eco_Codepoint codepoint, char* buffer)
     } else if (codepoint <= 0x10ffff) {
         buffer[0] = ((codepoint >> 18) & 0x07) | 0xf0;
         buffer[1] = ((codepoint >> 12) & 0x3f) | 0x80;
-        buffer[1] = ((codepoint >>  6) & 0x3f) | 0x80;
-        buffer[1] = ((codepoint >>  0) & 0x3f) | 0x80;
+        buffer[2] = ((codepoint >>  6) & 0x3f) | 0x80;
+        buffer[3] = ((codepoint >>  0) & 0x3f) | 0x80;
         return 4;
     } else {
         /*
