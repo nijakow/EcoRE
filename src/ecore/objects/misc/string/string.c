@@ -3,6 +3,7 @@
 #include "string.h"
 
 #include <ecore/objects/base/type.h>
+#include <ecore/objects/misc/key/key.h>
 
 
 /*
@@ -40,11 +41,11 @@ struct Eco_String* Eco_String_New(const char* text)
     struct Eco_String*  string;
 
     textlen                 = strlen(text);
-    string                  = Eco_Object_New(Eco_String_TYPE, sizeof(struct Eco_String) + textlen * sizeof(char));
+    string                  = Eco_Object_New(Eco_String_TYPE, sizeof(struct Eco_String) + (textlen + 1) * sizeof(char));
     string->byte_count      = textlen;
     string->character_count = textlen;  // TODO: Count UTF-8 code points!
 
-    memcpy(&string->bytes, text, textlen);
+    memcpy(&string->bytes, text, textlen + 1);
 
     return string;
 }
@@ -57,4 +58,14 @@ void Eco_String_Mark(struct Eco_GC_State* state, struct Eco_String* string)
 void Eco_String_Del(struct Eco_String* string)
 {
     Eco_Object_Del(&string->_);
+}
+
+
+/*
+ *    C o n v e r s i o n
+ */
+
+struct Eco_Key* Eco_String_AsKey(struct Eco_String* string)
+{
+    return Eco_Key_Find(string->bytes);
 }

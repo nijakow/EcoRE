@@ -53,6 +53,10 @@ static inline unsigned int Eco_String_StepAt(struct Eco_String* string, unsigned
     }
 }
 
+
+struct Eco_Key;
+struct Eco_Key* Eco_String_AsKey(struct Eco_String* string);
+
 void Eco_String_Init();
 void Eco_String_Terminate();
 

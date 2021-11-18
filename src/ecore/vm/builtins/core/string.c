@@ -62,3 +62,11 @@ bool Eco_VM_Builtin_StringCharLength(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Push(fiber, &length);
     return true;
 }
+
+bool Eco_VM_Builtin_StringAsKey(struct Eco_Fiber* fiber, unsigned int args)
+{
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Any_AssignPointer(Eco_Fiber_Peek(fiber), (struct Eco_Object*) Eco_String_AsKey((struct Eco_String*) Eco_Any_AsPointer(Eco_Fiber_Peek(fiber))));
+    return true;
+}

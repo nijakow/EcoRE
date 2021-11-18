@@ -7,5 +7,6 @@ bool Eco_VM_Builtin_StringAtByte(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_StringStepAtByte(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_StringByteLength(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_StringCharLength(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_StringAsKey(struct Eco_Fiber*, unsigned int);
 
 #endif

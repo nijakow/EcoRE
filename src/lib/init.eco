@@ -83,6 +83,7 @@
       ^ v
     );
     writeOn: writer => do: [ :c | writer << c ];
+    asKey => #'ecosphere.ecore.object.string.as_key'(self);
     with own parent = #<:std/Object@std/std.eco>;
 },
 
