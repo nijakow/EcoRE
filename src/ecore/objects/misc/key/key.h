@@ -32,6 +32,9 @@ static inline bool Eco_Key_CallBuiltin(struct Eco_Key* key, struct Eco_Fiber* fi
     return key->builtin(fiber, args);
 }
 
+struct Eco_String;
+struct Eco_String* Eco_Key_AsString(struct Eco_Key*);
+
 void Eco_Key_Init();
 void Eco_Key_Terminate();
 

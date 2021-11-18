@@ -66,6 +66,11 @@
     with own parent = #<:std/Object@std/std.eco>;
 },
 
+#=init/key_proxy: {
+    asString => #'ecosphere.ecore.object.key.as_string'(self);
+    with own parent = #<:std/Object@std/std.eco>;
+},
+
 #=init/string_proxy: {
     size => #'ecosphere.ecore.object.string.byte_length'(self);
     at: index => #'ecosphere.ecore.object.string.at_byte'(self, index);

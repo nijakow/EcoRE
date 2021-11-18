@@ -3,6 +3,7 @@
 #include "key.h"
 
 #include <ecore/objects/base/type.h>
+#include <ecore/objects/misc/string/string.h>
 
 
 /*
@@ -10,7 +11,7 @@
  */
 
 static struct Eco_TypeCore Eco_Key_TYPECORE;
-static struct Eco_Type*    Eco_Key_TYPE;
+       struct Eco_Type*    Eco_Key_TYPE;
 
 
 void Eco_Key_Init()
@@ -28,7 +29,6 @@ void Eco_Key_Terminate()
 {
     Eco_TypeCore_Destroy(&Eco_Key_TYPECORE);
 }
-
 
 
 /*
@@ -88,4 +88,14 @@ void Eco_Key_Del(struct Eco_Key*  key)
     if (key->next != NULL) key->next->prev = key->prev;
 
     Eco_Object_Del(&(key->_));
+}
+
+
+/*
+ *    C o n v e r s i o n
+ */
+
+struct Eco_String* Eco_Key_AsString(struct Eco_Key* key)
+{
+    return Eco_String_New(key->name);
 }
