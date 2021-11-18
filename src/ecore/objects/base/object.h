@@ -49,6 +49,8 @@ void  Eco_Object_Del(struct Eco_Object*);
 
 static inline void Eco_Object_MakeSticky(struct Eco_Object* object) { object->bits.sticky = true; }
 
+bool Eco_Object_IsBlessedBy(struct Eco_Object*, struct Eco_Object*);
+
 void Eco_Object_Init();
 void Eco_Object_Terminate();
 

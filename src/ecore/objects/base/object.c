@@ -159,3 +159,17 @@ void Eco_Object_Del(struct Eco_Object* object)
 {
     Eco_Memory_Free(object);
 }
+
+
+bool Eco_Object_IsBlessedBy(struct Eco_Object* object, struct Eco_Object* root)
+{
+    if (root != NULL) {
+        while (object != NULL)
+        {
+            if (object->up == root)
+                return true;
+            object = object->up;
+        }
+    }
+    return false;
+}

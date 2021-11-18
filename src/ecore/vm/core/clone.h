@@ -38,11 +38,12 @@ struct Eco_CloneState
         unsigned int               fill;
         struct Eco_ObjectMapEntry  entries[Eco_CloneState_FAST_ENTRIES];
     }                              fast;
+    struct Eco_Object*             root;
 };
 
-void Eco_CloneState_Create(struct Eco_CloneState*);
+void Eco_CloneState_Create(struct Eco_CloneState*, struct Eco_Object*);
 void Eco_CloneState_Destroy(struct Eco_CloneState*);
-struct Eco_Object* Eco_CloneState_Object(struct Eco_CloneState*, struct Eco_Object*);
+struct Eco_Object* Eco_CloneState_CloneObject(struct Eco_CloneState*, struct Eco_Object*);
 void Eco_CloneState_CloneAny(struct Eco_CloneState*, Eco_Any*, Eco_Any*);
 
 static inline struct Eco_Object* Eco_CloneState_QueryClone(struct Eco_CloneState* state,
