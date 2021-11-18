@@ -3,7 +3,7 @@
 #include "object_body.h"
 
 #include <ecore/io/econnect/reader/parser.h>
-#include <ecore/objects/base/molecule.h>
+#include <ecore/objects/molecule/molecule.h>
 
 
 bool Eco_EConnect_Builtin_GetMolecule(struct Eco_EConnect_Reader* reader,

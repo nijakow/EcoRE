@@ -4,8 +4,9 @@
 #include <ecore/eco.h>
 
 #include "object.h"
-#include "slot_info.h"
 #include "typecore.h"
+
+#include <ecore/objects/molecule/slot_info.h>
 
 
 struct Eco_Code;

@@ -4,10 +4,6 @@
 #include <ecore/eco.h>
 #include <ecore/vm/memory/arena.h>
 
-#include "object_payload.h"
-#include "slot_info.h"
-
-
 struct Eco_Message;
 struct Eco_SendLink;
 struct Eco_GC_State;

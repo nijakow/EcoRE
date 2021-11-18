@@ -1,7 +1,7 @@
 #include "slots.h"
 
-#include <ecore/objects/base/object_slots.h>
-#include <ecore/objects/base/molecule.h>
+#include <ecore/objects/molecule/object_slots.h>
+#include <ecore/objects/molecule/molecule.h>
 
 /*
  * TODO, FIXME, XXX!

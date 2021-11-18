@@ -3,7 +3,6 @@
 #include <ecore/eco.h>
 
 #include <ecore/objects/base/object.h>
-#include <ecore/objects/base/object_slots.h>
 #include <ecore/objects/base/type.h>
 #include <ecore/io/logging/log.h>
 

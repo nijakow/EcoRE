@@ -1,7 +1,7 @@
 #include "objects.h"
 
 #include "base/object.h"
-#include "base/molecule.h"
+#include "molecule/molecule.h"
 #include "io/port.h"
 #include "misc/key/key.h"
 #include "misc/string/string.h"

@@ -3,7 +3,6 @@
 
 #include "object.h"
 
-#include "object_payload.h"
 #include "type.h"
 
 #include <ecore/vm/core/clone.h>
