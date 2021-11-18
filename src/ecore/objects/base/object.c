@@ -28,7 +28,7 @@ void Eco_Object_Init()
     
     Eco_Object_TYPECORE.send  = NULL;
     Eco_Object_TYPECORE.mark  = Eco_Object_Mark;
-    Eco_Object_TYPECORE.clone = Eco_Object_Clone;
+    Eco_Object_TYPECORE.clone = Eco_Object_NoClone;
     Eco_Object_TYPECORE.del   = Eco_Object_Del;
 
     Eco_Object_TYPE           = Eco_Type_NewPrefab(&Eco_Object_TYPECORE);
@@ -145,9 +145,8 @@ bool Eco_Object_Send(struct Eco_Message* message,
     }
 }
 
-
-struct Eco_Object* Eco_Object_Clone(struct Eco_CloneState* state,
-                                    struct Eco_Object* original)
+struct Eco_Object* Eco_Object_NoClone(struct Eco_CloneState* state,
+                                      struct Eco_Object* original)
 {
     return original;
 }
