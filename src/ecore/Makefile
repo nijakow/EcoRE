@@ -21,7 +21,6 @@ objects/base/object.c \
 objects/base/object_payload.c \
 objects/base/object_slots.c \
 objects/base/molecule.c \
-objects/group/group.c \
 objects/io/port.c \
 objects/misc/key/key.c \
 objects/misc/string/string.c \
@@ -70,7 +69,6 @@ io/econnect/reader/builtins/objects/key.c \
 io/econnect/reader/builtins/objects/string.c \
 io/econnect/reader/builtins/objects/vector.c \
 io/econnect/reader/builtins/objects/code.c \
-io/econnect/reader/builtins/objects/group.c \
 io/econnect/reader/builtins/id/id.c \
 io/econnect/reader/builtins/flow/flow.c \
 io/econnect/file/file.c \

@@ -3,7 +3,6 @@
 #include <ecore/objects/objects.h>
 #include <ecore/objects/base/type.h>
 #include <ecore/objects/base/object.h>
-#include <ecore/objects/group/group.h>
 
 #include <ecore/vm/vm.h>
 #include <ecore/vm/builtins/builtins.h>
