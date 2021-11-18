@@ -68,6 +68,12 @@
 
 #=init/key_proxy: {
     asString => #'ecosphere.ecore.object.key.as_string'(self);
+    writeOn: writer => (
+        writer << #\#.
+        writer << #\'.
+        writer << asString.
+        writer << #\'.
+    );
     with own parent = #<:std/Object@std/std.eco>;
 },
 
