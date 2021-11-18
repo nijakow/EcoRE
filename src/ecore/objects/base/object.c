@@ -55,14 +55,15 @@ void* Eco_Object_NewInArena(struct Eco_Type* type,
 
     object = Eco_Memory_Alloc(size);
 
-    object->type                = type;
+    object->type              = type;
+    object->up                = NULL;
 
-    object->header.mark_queued  = false;
-    object->header.mark_done    = false;
-    object->header.sticky       = false;
+    object->bits.mark_queued  = false;
+    object->bits.mark_done    = false;
+    object->bits.sticky       = false;
 
-    object->next                = arena->objects;
-    arena->objects              = object;
+    object->next              = arena->objects;
+    arena->objects            = object;
     arena->object_count++;
 
     return object;

@@ -114,7 +114,7 @@ struct Eco_Type* Eco_Type_NewPrefab(struct Eco_TypeCore* typecore)
 
     type->typecore              = typecore;
     type->instance_payload_size = 0;
-    type->_.header.sticky       = true;
+    type->_.bits.sticky         = true;
 
     return type;
 }

@@ -21,7 +21,7 @@ struct Eco_Code;
  *
  */
 
-struct Eco_Object_Header
+struct Eco_ObjectBits
 {
     unsigned int mark_queued : 1;
     unsigned int mark_done   : 1;
@@ -30,9 +30,10 @@ struct Eco_Object_Header
 
 struct Eco_Object
 {
-    struct Eco_Object*          next;
-    struct Eco_Type*            type;
-    struct Eco_Object_Header    header;
+    struct Eco_Type*       type;
+    struct Eco_Object*     up;
+    struct Eco_ObjectBits  bits;
+    struct Eco_Object*     next;
 };
 
 
@@ -46,7 +47,7 @@ struct Eco_Object* Eco_Object_Clone(struct Eco_CloneState*, struct Eco_Object*);
 struct Eco_Object* Eco_Object_NoClone(struct Eco_CloneState*, struct Eco_Object*);
 void  Eco_Object_Del(struct Eco_Object*);
 
-static inline void Eco_Object_MakeSticky(struct Eco_Object* object) { object->header.sticky = true; }
+static inline void Eco_Object_MakeSticky(struct Eco_Object* object) { object->bits.sticky = true; }
 
 void Eco_Object_Init();
 void Eco_Object_Terminate();

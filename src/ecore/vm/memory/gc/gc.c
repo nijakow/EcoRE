@@ -25,7 +25,7 @@ void Eco_GC_MarkRoots(struct Eco_GC_State* state)
     {
         for (object = arena->objects; object != NULL; object = object->next)
         {
-            if (object->header.sticky) {
+            if (object->bits.sticky) {
                 Eco_GC_State_MarkObject(state, object);
             }
         }
@@ -42,7 +42,7 @@ void Eco_GC_MarkLoop(struct Eco_GC_State* state)
     {
         object = Eco_GC_State_NextObjectToMark(state);
 
-        object->header.mark_done = true;
+        object->bits.mark_done = true;
         object->type->typecore->mark(state, object);
     }
 }
@@ -64,9 +64,9 @@ void Eco_GC_SweepArena(struct Eco_GC_State* state, struct Eco_Arena* arena)
     {
         object = *ptr;
 
-        if (object->header.mark_done || object->header.sticky) {
-            object->header.mark_queued = false;
-            object->header.mark_done   = false;
+        if (object->bits.mark_done || object->bits.sticky) {
+            object->bits.mark_queued = false;
+            object->bits.mark_done   = false;
             ptr = &(object->next);
         } else {
             *ptr = object->next;
