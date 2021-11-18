@@ -90,6 +90,8 @@ void Eco_Object_Mark(struct Eco_GC_State* state, struct Eco_Object* object)
      * Only call Eco_Object_Mark(...) as the last function in a Eco_<Type>_Mark(...)!
      */
     Eco_GC_State_MarkObject(state, object->type);
+    if (object->up != NULL)
+        Eco_GC_State_MarkObject(state, object->up);
 }
 
 bool Eco_Object_Send(struct Eco_Message* message,
