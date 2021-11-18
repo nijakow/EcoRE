@@ -16,7 +16,7 @@ struct Eco_Molecule* Eco_Molecule_New(struct Eco_Type* type)
 {
     struct Eco_Molecule*  molecule;
 
-    molecule          = Eco_Object_New(type, sizeof(struct Eco_Molecule), 0);
+    molecule          = Eco_Object_New(type, sizeof(struct Eco_Molecule));
 
     molecule->payload = Eco_Object_Payload_New(type->instance_payload_size);
 

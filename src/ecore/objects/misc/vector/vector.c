@@ -67,7 +67,7 @@ struct Eco_Vector* Eco_Vector_New(unsigned int element_count)
 {
     struct Eco_Vector*  vector;
 
-    vector          = Eco_Object_New(Eco_Vector_TYPE, sizeof(struct Eco_Vector), 0);
+    vector          = Eco_Object_New(Eco_Vector_TYPE, sizeof(struct Eco_Vector));
     vector->payload = Eco_Vector_Payload_New(element_count);
 
     return vector;

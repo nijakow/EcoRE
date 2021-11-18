@@ -39,7 +39,7 @@ struct Eco_Port* Eco_Port_New(unsigned int fd)
 {
     struct Eco_Port*  port;
 
-    port = Eco_Object_New(Eco_Port_TYPE, sizeof(struct Eco_Port), 0);
+    port = Eco_Object_New(Eco_Port_TYPE, sizeof(struct Eco_Port));
 
     if (port != NULL) {
         port->fd                 = fd;

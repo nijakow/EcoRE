@@ -47,7 +47,6 @@ void Eco_Object_Terminate()
 
 void* Eco_Object_NewInArena(struct Eco_Type* type,
                             unsigned int size,
-                            unsigned int payload_size,
                             struct Eco_Arena* arena)
 {
     struct Eco_Object* object;
@@ -69,15 +68,14 @@ void* Eco_Object_NewInArena(struct Eco_Type* type,
 }
 
 void* Eco_Object_New(struct Eco_Type* type,
-                     unsigned int size,
-                     unsigned int payload_size)
+                     unsigned int size)
 {
-    return Eco_Object_NewInArena(type, size, payload_size, &Eco_OBJECTS);
+    return Eco_Object_NewInArena(type, size, &Eco_OBJECTS);
 }
 
 struct Eco_Object* Eco_Object_NewPlain()
 {
-    return Eco_Object_New(Eco_Object_TYPE, sizeof(struct Eco_Object), 0);
+    return Eco_Object_New(Eco_Object_TYPE, sizeof(struct Eco_Object));
 }
 
 

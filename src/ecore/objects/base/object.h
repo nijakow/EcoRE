@@ -33,8 +33,8 @@ struct Eco_Object
 };
 
 
-void* Eco_Object_New(struct Eco_Type*, unsigned int, unsigned int);
-void* Eco_Object_NewInArena(struct Eco_Type*, unsigned int, unsigned int, struct Eco_Arena*);
+void* Eco_Object_New(struct Eco_Type*, unsigned int);
+void* Eco_Object_NewInArena(struct Eco_Type*, unsigned int, struct Eco_Arena*);
 struct Eco_Object* Eco_Object_NewPlain();
 
 bool  Eco_Object_Send(struct Eco_Message*, struct Eco_SendLink*, struct Eco_Object*);

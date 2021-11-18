@@ -89,7 +89,6 @@ static struct Eco_Type* Eco_Type_New(unsigned int slot_count)
 
     type = Eco_Object_NewInArena(Eco_Type_TYPE,
                                  sizeof(struct Eco_Type) + sizeof(struct Eco_Type_Slot) * slot_count,
-                                 0,
                                  &Eco_TYPES);
 
     type->typecore              = NULL;

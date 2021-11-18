@@ -43,7 +43,7 @@ struct Eco_Closure* Eco_Closure_New(struct Eco_Code* code, struct Eco_Frame* lex
 {
     struct Eco_Closure* closure;
 
-    closure = Eco_Object_New(Eco_Closure_TYPE, sizeof(struct Eco_Closure), 0);
+    closure = Eco_Object_New(Eco_Closure_TYPE, sizeof(struct Eco_Closure));
 
     closure->code       = code;
     closure->lexical    = lexical;
