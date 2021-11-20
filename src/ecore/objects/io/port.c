@@ -166,7 +166,7 @@ void Eco_Port_Reactivate(struct Eco_Port* port)
 
     if (port->waiting_fiber != NULL) {
         if (Eco_Port_ReadByte(port, &c)) {
-            Eco_Any_AssignInteger(&value, (unsigned int) c);
+            Eco_Any_AssignInteger(&value, (unsigned char) c);
         } else {
             Eco_Any_AssignInteger(&value, -1);
         }

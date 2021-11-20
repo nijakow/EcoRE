@@ -27,7 +27,7 @@ bool Eco_VM_Builtin_PortReadByte(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Pop(fiber, &any);
     port = (struct Eco_Port*) Eco_Any_AsPointer(&any);
     if (Eco_Port_ReadByte(port, &byte)) {
-        Eco_Any_AssignInteger(&any, (unsigned int) byte);
+        Eco_Any_AssignInteger(&any, ((unsigned char) byte));
         Eco_Fiber_Push(fiber, &any);
     } else {
         /*
