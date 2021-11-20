@@ -1,6 +1,7 @@
 #include "port.h"
 
 #include <ecore/objects/io/port.h>
+#include <ecore/vm/fiber/sched.h>
 #include <ecore/vm/vm.h>
 
 
@@ -12,6 +13,34 @@ bool Eco_VM_Builtin_NewPort(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     fd = Eco_Any_AsInteger(Eco_Fiber_Peek(fiber));
     Eco_Any_AssignPointer(Eco_Fiber_Peek(fiber), (struct Eco_Object*) Eco_Port_New(Eco_VM_GetScheduler(fiber->vm), fd));
+    return true;
+}
+
+bool Eco_VM_Builtin_PortReadByte(struct Eco_Fiber* fiber, unsigned int args)
+{
+    char              byte;
+    Eco_Any           any;
+    struct Eco_Port*  port;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    port = (struct Eco_Port*) Eco_Any_AsPointer(&any);
+    if (Eco_Port_ReadByte(port, &byte)) {
+        Eco_Any_AssignInteger(&any, (unsigned int) byte);
+        Eco_Fiber_Push(fiber, &any);
+    } else {
+        /*
+         * TODO, FIXME, XXX: This can lead to pretty bad race conditions!
+         */
+        if (Eco_Port_SetWaitingFiber(port, fiber)) {
+            Eco_Fiber_Pause(fiber);
+            Eco_Port_RequestUpdate(port);
+        } else {
+            Eco_Any_AssignInteger(&any, -1);
+            Eco_Fiber_Push(fiber, &any);
+        }
+    }
     return true;
 }
 

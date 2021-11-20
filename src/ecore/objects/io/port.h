@@ -40,6 +40,7 @@ bool Eco_Port_WriteChar(struct Eco_Port*, Eco_Codepoint);
 
 bool Eco_Port_SetWaitingFiber(struct Eco_Port*, struct Eco_Fiber*);
 void Eco_Port_Reactivate(struct Eco_Port*);
+void Eco_Port_RequestUpdate(struct Eco_Port*);
 
 void Eco_Port_Init();
 void Eco_Port_Terminate();

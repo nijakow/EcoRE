@@ -4,6 +4,7 @@
 
 #include <ecore/objects/base/type.h>
 #include <ecore/vm/fiber/sched.h>
+#include <ecore/vm/scheduler.h>
 #include <ecore/util/utf8.h>
 
 
@@ -171,4 +172,13 @@ void Eco_Port_Reactivate(struct Eco_Port* port)
         Eco_Fiber_ReactivateWithValue(port->waiting_fiber, &value);
         port->waiting_fiber = NULL;
     }
+}
+
+void Eco_Port_RequestUpdate(struct Eco_Port* port)
+{
+    /*
+     * TODO, FIXME, XXX: This is dangerous!
+     */
+    port->next                     = port->scheduler->waiting_ports;
+    port->scheduler->waiting_ports = port;
 }

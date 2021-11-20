@@ -44,7 +44,15 @@ void Eco_Fiber_SetRunning(struct Eco_Fiber* fiber)
     Eco_Fiber_MoveToQueue(fiber, &fiber->scheduler->fiber_queues.running);
 }
 
+/*
+ * TODO, FIXME, XXX: Deprecate this!
+ */
 void Eco_Fiber_SetPaused(struct Eco_Fiber* fiber)
+{
+    Eco_Fiber_Pause(fiber);
+}
+
+void Eco_Fiber_Pause(struct Eco_Fiber* fiber)
 {
     Eco_Fiber_MoveToQueue(fiber, &fiber->scheduler->fiber_queues.paused);
 }
