@@ -42,8 +42,7 @@ static void Eco_Scheduler_Select(struct Eco_Scheduler* scheduler)
         port = *iter;
         if (FD_ISSET(port->fd, &inputs)) {
             *iter = port->next;
-            Eco_Port_Read(port);
-            Eco_Port_Reactivate(port);
+            Eco_Port_RefillInputBuffer(port);
         }
     }
 }

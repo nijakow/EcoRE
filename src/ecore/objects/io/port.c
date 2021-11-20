@@ -44,7 +44,6 @@ struct Eco_Port* Eco_Port_New(struct Eco_Scheduler* scheduler, unsigned int fd)
 
     if (port != NULL) {
         port->scheduler              = scheduler;
-        port->waiting_fiber          = NULL;
         port->next                   = NULL;
         port->fd                     = fd;
         port->input_buffer_read_head = 0;
@@ -65,24 +64,12 @@ void Eco_Port_Del(struct Eco_Port* port)
     Eco_Object_Del(&port->_);
 }
 
-/*
- *    S c h e d u l i n g
- */
-
-void Eco_Port_Reactivate(struct Eco_Port* port)
-{
-    if (port->waiting_fiber_func != NULL) {
-        port->waiting_fiber_func(port->waiting_fiber, port);
-        port->waiting_fiber_func = NULL;
-    }
-}
-
 
 /*
  *    I / O
  */
 
-void Eco_Port_Read(struct Eco_Port* port)
+void Eco_Port_RefillInputBuffer(struct Eco_Port* port)
 {
     ssize_t  bytes_read;
 
