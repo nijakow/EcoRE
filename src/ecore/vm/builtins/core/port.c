@@ -1,6 +1,7 @@
 #include "port.h"
 
 #include <ecore/objects/io/port.h>
+#include <ecore/vm/vm.h>
 
 
 bool Eco_VM_Builtin_NewPort(struct Eco_Fiber* fiber, unsigned int args)
@@ -10,7 +11,7 @@ bool Eco_VM_Builtin_NewPort(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
     fd = Eco_Any_AsInteger(Eco_Fiber_Peek(fiber));
-    Eco_Any_AssignPointer(Eco_Fiber_Peek(fiber), (struct Eco_Object*) Eco_Port_New(fd));
+    Eco_Any_AssignPointer(Eco_Fiber_Peek(fiber), (struct Eco_Object*) Eco_Port_New(Eco_VM_GetScheduler(fiber->vm), fd));
     return true;
 }
 

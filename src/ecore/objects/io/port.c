@@ -35,13 +35,16 @@ void Eco_Port_Terminate()
  *    B a s i c s
  */
 
-struct Eco_Port* Eco_Port_New(unsigned int fd)
+struct Eco_Port* Eco_Port_New(struct Eco_Scheduler* scheduler, unsigned int fd)
 {
     struct Eco_Port*  port;
 
     port = Eco_Object_New(Eco_Port_TYPE, sizeof(struct Eco_Port));
 
     if (port != NULL) {
+        port->scheduler          = scheduler;
+        port->waiting_fiber      = NULL;
+        port->next               = NULL;
         port->fd                 = fd;
         port->output_buffer_fill = 0;
     }

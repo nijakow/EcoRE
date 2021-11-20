@@ -2,6 +2,7 @@
 #include "sched.h"
 
 #include <ecore/eco.h>
+#include <ecore/objects/io/port.h>
 #include <ecore/vm/scheduler.h>
 
 
