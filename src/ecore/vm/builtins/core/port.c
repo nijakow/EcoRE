@@ -28,19 +28,10 @@ bool Eco_VM_Builtin_PortReadByte(struct Eco_Fiber* fiber, unsigned int args)
     port = (struct Eco_Port*) Eco_Any_AsPointer(&any);
     if (Eco_Port_ReadByte(port, &byte)) {
         Eco_Any_AssignInteger(&any, ((unsigned char) byte));
-        Eco_Fiber_Push(fiber, &any);
     } else {
-        /*
-         * TODO, FIXME, XXX: This can lead to pretty bad race conditions!
-         */
-        if (Eco_Port_SetWaitingFiber(port, fiber)) {
-            Eco_Fiber_Pause(fiber);
-            Eco_Port_RequestUpdate(port);
-        } else {
-            Eco_Any_AssignInteger(&any, -1);
-            Eco_Fiber_Push(fiber, &any);
-        }
+        Eco_Any_AssignAny(&any, &fiber->vm->constants.cfalse);
     }
+    Eco_Fiber_Push(fiber, &any);
     return true;
 }
 
@@ -60,5 +51,13 @@ bool Eco_VM_Builtin_PortWriteChar(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     Eco_Fiber_Pop(fiber, &character);
     Eco_Port_WriteChar((struct Eco_Port*) Eco_Any_AsPointer(Eco_Fiber_Peek(fiber)), Eco_Any_AsCharacter(&character));
+    return true;
+}
+
+bool Eco_VM_Builtin_PortNotifyMe(struct Eco_Fiber* fiber, unsigned int args)
+{
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Port_QueueFiber((struct Eco_Port*) Eco_Any_AsPointer(Eco_Fiber_Peek(fiber)), fiber); // TODO: Handle failure
     return true;
 }

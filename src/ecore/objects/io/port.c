@@ -44,9 +44,9 @@ struct Eco_Port* Eco_Port_New(struct Eco_Scheduler* scheduler, unsigned int fd)
     port = Eco_Object_New(Eco_Port_TYPE, sizeof(struct Eco_Port));
 
     if (port != NULL) {
+        Eco_FiberQueue_Create(&port->fibers);
         port->scheduler              = scheduler;
         port->next                   = NULL;
-        port->waiting_fiber          = NULL;
         port->fd                     = fd;
         port->input_buffer_read_head = 0;
         port->input_buffer_fill      = 0;
@@ -63,6 +63,7 @@ void Eco_Port_Mark(struct Eco_GC_State* state, struct Eco_Port* port)
 
 void Eco_Port_Del(struct Eco_Port* port)
 {
+    Eco_FiberQueue_Destroy(&port->fibers);
     Eco_Object_Del(&port->_);
 }
 
@@ -147,32 +148,11 @@ bool Eco_Port_WriteChar(struct Eco_Port* port, Eco_Codepoint codepoint)
  *    S c h e d u l i n g
  */
 
-bool Eco_Port_SetWaitingFiber(struct Eco_Port* port, struct Eco_Fiber* fiber)
-{
-    if (port->waiting_fiber == NULL) {
-        port->waiting_fiber = fiber;
-        return true;
-    } else {
-        return false;
-    }
-}
-
 void Eco_Port_Reactivate(struct Eco_Port* port)
 {
-    char     c;
-    Eco_Any  value;
-
+    port->next = NULL;
     Eco_Port_RefillInputBuffer(port);
-
-    if (port->waiting_fiber != NULL) {
-        if (Eco_Port_ReadByte(port, &c)) {
-            Eco_Any_AssignInteger(&value, (unsigned char) c);
-        } else {
-            Eco_Any_AssignInteger(&value, -1);
-        }
-        Eco_Fiber_ReactivateWithValue(port->waiting_fiber, &value);
-        port->waiting_fiber = NULL;
-    }
+    Eco_FiberQueue_ActivateAll(&port->fibers);
 }
 
 void Eco_Port_RequestUpdate(struct Eco_Port* port)
@@ -180,6 +160,15 @@ void Eco_Port_RequestUpdate(struct Eco_Port* port)
     /*
      * TODO, FIXME, XXX: This is dangerous!
      */
-    port->next                     = port->scheduler->waiting_ports;
-    port->scheduler->waiting_ports = port;
+    if (port->next == NULL) {
+        port->next                     = port->scheduler->waiting_ports;
+        port->scheduler->waiting_ports = port;
+    }
+}
+
+bool Eco_Port_QueueFiber(struct Eco_Port* port, struct Eco_Fiber* fiber)
+{
+    Eco_Fiber_WaitOn(fiber, &port->fibers);
+    Eco_Port_RequestUpdate(port);
+    return true;
 }

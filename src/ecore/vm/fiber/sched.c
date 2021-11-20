@@ -18,6 +18,14 @@ void Eco_FiberQueue_Destroy(struct Eco_FiberQueue* queue)
         Eco_Fiber_MoveToQueue(queue->fibers, NULL);
 }
 
+void Eco_FiberQueue_ActivateAll(struct Eco_FiberQueue* queue)
+{
+    while (queue->fibers != NULL)
+    {
+        Eco_Fiber_SetRunning(queue->fibers);
+    }
+}
+
 
 void Eco_Fiber_MoveToQueue(struct Eco_Fiber* fiber, struct Eco_FiberQueue* queue)
 {
@@ -57,6 +65,12 @@ void Eco_Fiber_Pause(struct Eco_Fiber* fiber)
 {
     Eco_Fiber_MoveToQueue(fiber, &fiber->scheduler->fiber_queues.paused);
     Eco_Fiber_SetState(fiber, Eco_Fiber_State_PAUSED);
+}
+
+void Eco_Fiber_WaitOn(struct Eco_Fiber* fiber, struct Eco_FiberQueue* queue)
+{
+    Eco_Fiber_MoveToQueue(fiber, queue);
+    Eco_Fiber_SetState(fiber, Eco_Fiber_State_WAITING);
 }
 
 void Eco_Fiber_ReactivateWithValue(struct Eco_Fiber* fiber, Eco_Any* value)
