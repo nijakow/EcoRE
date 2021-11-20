@@ -25,6 +25,7 @@ static void Eco_Scheduler_Select(struct Eco_Scheduler* scheduler)
     unsigned int       maxfd;
     fd_set             inputs;
     struct Eco_Port*   port;
+    struct Eco_Port**  next;
     struct Eco_Port**  iter;
 
     maxfd = 0;
@@ -37,13 +38,18 @@ static void Eco_Scheduler_Select(struct Eco_Scheduler* scheduler)
         FD_SET(port->fd, &inputs);
     }
 
-    for (iter = &scheduler->waiting_ports; *iter != NULL; iter = &((*iter)->next))
+    iter = &scheduler->waiting_ports;
+    next = iter;
+    while (*iter != NULL)
     {
         port = *iter;
         if (FD_ISSET(port->fd, &inputs)) {
             *iter = port->next;
             Eco_Port_Reactivate(port);
+        } else {
+            next = &(port->next);
         }
+        iter = next;
     }
 }
 

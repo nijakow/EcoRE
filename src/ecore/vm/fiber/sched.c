@@ -42,6 +42,7 @@ void Eco_Fiber_MoveToQueue(struct Eco_Fiber* fiber, struct Eco_FiberQueue* queue
 void Eco_Fiber_SetRunning(struct Eco_Fiber* fiber)
 {
     Eco_Fiber_MoveToQueue(fiber, &fiber->scheduler->fiber_queues.running);
+    Eco_Fiber_SetState(fiber, Eco_Fiber_State_RUNNING);
 }
 
 /*
@@ -55,6 +56,7 @@ void Eco_Fiber_SetPaused(struct Eco_Fiber* fiber)
 void Eco_Fiber_Pause(struct Eco_Fiber* fiber)
 {
     Eco_Fiber_MoveToQueue(fiber, &fiber->scheduler->fiber_queues.paused);
+    Eco_Fiber_SetState(fiber, Eco_Fiber_State_PAUSED);
 }
 
 void Eco_Fiber_ReactivateWithValue(struct Eco_Fiber* fiber, Eco_Any* value)

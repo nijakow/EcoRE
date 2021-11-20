@@ -46,6 +46,7 @@ struct Eco_Port* Eco_Port_New(struct Eco_Scheduler* scheduler, unsigned int fd)
     if (port != NULL) {
         port->scheduler              = scheduler;
         port->next                   = NULL;
+        port->waiting_fiber          = NULL;
         port->fd                     = fd;
         port->input_buffer_read_head = 0;
         port->input_buffer_fill      = 0;

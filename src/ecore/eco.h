@@ -3,6 +3,7 @@
 
 #include <ecore/base/defs.h>
 #include <ecore/base/any.h>
+#include <ecore/io/logging/log.h>
 
 /*
  *

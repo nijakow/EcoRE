@@ -37,6 +37,11 @@
         "0 to: 10000000 do: [ :n | p << n. p << 10 asChar ]."
         p << #\📦.
         p flush.
+        [
+            p << (p readByte).
+            p << (10 asChar).
+            p flush.
+        ] repeat.
     );
 
     with parent = #<:lobby>;
