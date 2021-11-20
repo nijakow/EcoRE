@@ -9,7 +9,9 @@ struct Eco_Scheduler
     struct {
         struct Eco_FiberQueue  running;
         struct Eco_FiberQueue  paused;
-    } fiber_queues;
+    }                 fiber_queues;
+
+    struct Eco_Port*  waiting_ports;
 };
 
 void Eco_Scheduler_Create(struct Eco_Scheduler*);

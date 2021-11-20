@@ -3,6 +3,7 @@
 #include "port.h"
 
 #include <ecore/objects/base/type.h>
+#include <ecore/vm/fiber/sched.h>
 #include <ecore/util/utf8.h>
 
 
@@ -42,11 +43,13 @@ struct Eco_Port* Eco_Port_New(struct Eco_Scheduler* scheduler, unsigned int fd)
     port = Eco_Object_New(Eco_Port_TYPE, sizeof(struct Eco_Port));
 
     if (port != NULL) {
-        port->scheduler          = scheduler;
-        port->waiting_fiber      = NULL;
-        port->next               = NULL;
-        port->fd                 = fd;
-        port->output_buffer_fill = 0;
+        port->scheduler              = scheduler;
+        port->waiting_fiber          = NULL;
+        port->next                   = NULL;
+        port->fd                     = fd;
+        port->input_buffer_read_head = 0;
+        port->input_buffer_fill      = 0;
+        port->output_buffer_fill     = 0;
     }
 
     return port;
@@ -62,10 +65,36 @@ void Eco_Port_Del(struct Eco_Port* port)
     Eco_Object_Del(&port->_);
 }
 
+/*
+ *    S c h e d u l i n g
+ */
+
+void Eco_Port_Reactivate(struct Eco_Port* port)
+{
+    if (port->waiting_fiber_func != NULL) {
+        port->waiting_fiber_func(port->waiting_fiber, port);
+        port->waiting_fiber_func = NULL;
+    }
+}
+
 
 /*
  *    I / O
  */
+
+void Eco_Port_Read(struct Eco_Port* port)
+{
+    ssize_t  bytes_read;
+
+    bytes_read = read(port->fd, port->input_buffer, Eco_Port_INPUT_BUFFER_SIZE);
+
+    if (bytes_read <= 0) {
+        // TODO: Error
+    } else {
+        port->input_buffer_read_head = 0;
+        port->input_buffer_fill      = bytes_read;
+    }
+}
 
 bool Eco_Port_FlushOutput(struct Eco_Port* port)
 {
@@ -77,9 +106,15 @@ bool Eco_Port_FlushOutput(struct Eco_Port* port)
     return result;
 }
 
-bool Eco_Port_ReadBytes(struct Eco_Port* port, char* c, unsigned int count)
+bool Eco_Port_ReadByte(struct Eco_Port* port, char* c)
 {
-    return read(port->fd, c, count) > 0;
+    if (port->input_buffer_read_head < port->input_buffer_fill) {
+        *c = port->input_buffer[port->input_buffer_read_head];
+        port->input_buffer_read_head++;
+        return true;
+    } else {
+        return false;
+    }
 }
 
 bool Eco_Port_WriteBytes(struct Eco_Port* port, char* c, unsigned int count)
@@ -95,19 +130,6 @@ bool Eco_Port_WriteBytes(struct Eco_Port* port, char* c, unsigned int count)
         port->output_buffer[port->output_buffer_fill++] = c[i];
     }
 
-    return true;
-}
-
-bool Eco_Port_ReadChar(struct Eco_Port* port, Eco_Codepoint* codepoint)
-{
-    /*
-     * TODO, FIXME, XXX: This function does not process UTF-8 yet!
-     */
-    char  c;
-
-    if (!Eco_Port_ReadBytes(port, &c, 1))
-        return false;
-    *codepoint = (unsigned char) c;
     return true;
 }
 

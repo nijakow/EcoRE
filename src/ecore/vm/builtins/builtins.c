@@ -76,7 +76,6 @@ void Eco_VM_Builtins_Init()
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.new", Eco_VM_Builtin_NewPort);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.flush_output", Eco_VM_Builtin_PortFlushOutput);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.read_char", Eco_VM_Builtin_PortReadChar);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.write_char", Eco_VM_Builtin_PortWriteChar);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type", Eco_VM_Builtin_Clone);
