@@ -9,6 +9,10 @@ bool Eco_VM_Builtin_Subtract2(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_Multiply2(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_Divide2(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_Modulo2(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_BitOr2(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_BitAnd2(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_BitXor2(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_Shift2(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_Less2(struct Eco_Fiber*, unsigned int);
 
 #endif

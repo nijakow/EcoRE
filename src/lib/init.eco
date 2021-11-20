@@ -21,6 +21,10 @@
     * other    => #'ecosphere.ecore.math.mul'(self, other);
     / other    => #'ecosphere.ecore.math.div'(self, other);
     mod: other => #'ecosphere.ecore.math.mod'(self, other);
+    bitOr: other => #'ecosphere.ecore.math.bit_or'(self, other);
+    bitAnd: other => #'ecosphere.ecore.math.bit_and'(self, other);
+    bitXOR: other => #'ecosphere.ecore.math.bit_xor'(self, other);
+    shiftBy: other => #'ecosphere.ecore.math.shift'(self, other);
     < other    => #'ecosphere.ecore.math.less'(self, other);
     == other   => #'ecosphere.ecore.is'(self, other);
     <= other   => [ self < other ] or: [ self == other ];
