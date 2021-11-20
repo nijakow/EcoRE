@@ -69,17 +69,30 @@ void Eco_Port_Del(struct Eco_Port* port)
  *    I / O
  */
 
-void Eco_Port_RefillInputBuffer(struct Eco_Port* port)
+bool Eco_Port_HasInput(struct Eco_Port* port)
+{
+    return port->input_buffer_read_head < port->input_buffer_fill;
+}
+
+bool Eco_Port_HasOutput(struct Eco_Port* port)
+{
+    return port->output_buffer_fill > 0;
+}
+
+static bool Eco_Port_RefillInputBuffer(struct Eco_Port* port)
 {
     ssize_t  bytes_read;
 
     bytes_read = read(port->fd, port->input_buffer, Eco_Port_INPUT_BUFFER_SIZE);
 
+    port->input_buffer_read_head = 0;
+
     if (bytes_read <= 0) {
-        // TODO: Error
+        port->input_buffer_fill = 0;
+        return false;
     } else {
-        port->input_buffer_read_head = 0;
-        port->input_buffer_fill      = bytes_read;
+        port->input_buffer_fill = bytes_read;
+        return true;
     }
 }
 
@@ -125,4 +138,37 @@ bool Eco_Port_WriteChar(struct Eco_Port* port, Eco_Codepoint codepoint)
     char bytes[4];
 
     return Eco_Port_WriteBytes(port, bytes, Eco_Utf8_Encode(codepoint, bytes));
+}
+
+
+/*
+ *    S c h e d u l i n g
+ */
+
+bool Eco_Port_SetWaitingFiber(struct Eco_Port* port, struct Eco_Fiber* fiber)
+{
+    if (port->waiting_fiber == NULL) {
+        port->waiting_fiber = fiber;
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void Eco_Port_Reactivate(struct Eco_Port* port)
+{
+    char     c;
+    Eco_Any  value;
+
+    Eco_Port_RefillInputBuffer(port);
+
+    if (port->waiting_fiber != NULL) {
+        if (Eco_Port_ReadByte(port, &c)) {
+            Eco_Any_AssignInteger(&value, (unsigned int) c);
+        } else {
+            Eco_Any_AssignInteger(&value, -1);
+        }
+        Eco_Fiber_ReactivateWithValue(port->waiting_fiber, &value);
+        port->waiting_fiber = NULL;
+    }
 }

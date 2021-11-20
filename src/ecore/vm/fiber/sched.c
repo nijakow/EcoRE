@@ -1,5 +1,6 @@
 #include "fiber.h"
 #include "sched.h"
+#include "stackops.h"
 
 #include <ecore/eco.h>
 #include <ecore/objects/io/port.h>
@@ -46,6 +47,12 @@ void Eco_Fiber_SetRunning(struct Eco_Fiber* fiber)
 void Eco_Fiber_SetPaused(struct Eco_Fiber* fiber)
 {
     Eco_Fiber_MoveToQueue(fiber, &fiber->scheduler->fiber_queues.paused);
+}
+
+void Eco_Fiber_ReactivateWithValue(struct Eco_Fiber* fiber, Eco_Any* value)
+{
+    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetRunning(fiber);
 }
 
 /*
