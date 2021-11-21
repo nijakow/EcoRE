@@ -192,7 +192,12 @@ class Tokenizer:
             c += self._s.read()
 
         try:
-            return NumberToken(self, int(c))
+            if c.startswith('0x'):
+                return NumberToken(self, int(c, 16))
+            elif c.startswith('0b'):
+                return NumberToken(self, int(c, 2))
+            else:
+                return NumberToken(self, int(c))
         except:
             pass
 
