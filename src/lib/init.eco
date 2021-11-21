@@ -31,7 +31,9 @@
     > other    => (self <= other) not;
     >= other   => (self < other) not;
     isZero     => (self == 0);
+    isNotZero  => isZero not;
     isNegative => (self < 0);
+    isNotNegative => isNegative not;
     negate     => (0 - self);
     asChar     => #'ecosphere.ecore.int.as_char'(self);
     for: upper do: body => (
