@@ -37,8 +37,7 @@
         p << #\📦.
         p flush.
         [
-            p << (p readByte).
-            p << (10 asChar).
+            p << (p readChar).
             p flush.
         ] repeat.
     );

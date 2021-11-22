@@ -24,9 +24,10 @@
     bitOr: other => #'ecosphere.ecore.math.bit_or'(self, other);
     bitAnd: other => #'ecosphere.ecore.math.bit_and'(self, other);
     bitXOR: other => #'ecosphere.ecore.math.bit_xor'(self, other);
-    shiftBy: other => #'ecosphere.ecore.math.shift'(self, other);
+    shift:  other => #'ecosphere.ecore.math.shift'(self, other);
     < other    => #'ecosphere.ecore.math.less'(self, other);
     == other   => #'ecosphere.ecore.is'(self, other);
+    != other   => (self == other) not;
     <= other   => [ self < other ] or: [ self == other ];
     > other    => (self <= other) not;
     >= other   => (self < other) not;
@@ -133,6 +134,20 @@
             b <- #'ecosphere.ecore.object.port.read_byte'(self)
         ].
       ^ b
+    );
+    readChar => (
+        | b <- readByte, bytes, v |
+        ((b bitAnd: 0b10000000) isZero) if: [ ^ b asChar ].
+        ((b bitAnd: 0b11000000) == 0b10000000) if: [ ^ 0xfffd asChar ].
+        ((b bitAnd: 0b11100000) == 0b11000000) if: [ v <- b bitAnd: 0b00011111. bytes <- 1 ].
+        ((b bitAnd: 0b11110000) == 0b11100000) if: [ v <- b bitAnd: 0b00001111. bytes <- 2 ].
+        ((b bitAnd: 0b11111000) == 0b11110000) if: [ v <- b bitAnd: 0b00000111. bytes <- 3 ].
+        1 to: bytes do: [ :i |
+            b <- readByte.
+            ((b bitAnd: 0b11000000) != (0b10000000)) if: [ ^ 0xfffd asChar ].
+            v <- ((v shift: 6) bitOr: (b bitAnd: 0b00111111)).
+        ].
+      ^ v asChar
     );
     with own parent = #<:std/Object@std/std.eco>;
 }
