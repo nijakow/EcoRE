@@ -29,12 +29,12 @@
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.port_type'(), #<:init/port_proxy@init.eco>).
 
         var p <- #'ecosphere.ecore.object.port.new'(1);
-        
+
         p << -4274995;
         p << '\e[6m\e[31mHello, ' << 'world!\e[0m';
-        p << (10 asChar).
+        p newline.
         p << #'hello'.
-        p << (10 asChar).
+        p newline.
         p << #\📦.
         p flush.
         [

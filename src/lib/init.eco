@@ -125,7 +125,8 @@
 
 #=init/port_proxy: {
     char<< c  => (#'ecosphere.ecore.object.port.write_char'(self, c). ^ self);
-    << object => ( object writeOn: self; ^ self );
+    << object => ( object writeOn: self. ^ self );
+    newline   => ( self << (10 asChar).  ^ self );
     flush     => #'ecosphere.ecore.object.port.flush_output'(self);
     readByte  => (
         | b <- #'ecosphere.ecore.object.port.read_byte'(self) |
