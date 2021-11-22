@@ -30,6 +30,10 @@ class TokenType(enum.Enum):
     WITH = enum.auto()
     WITHSTAR = enum.auto()
     OWN = enum.auto()
+    IF = enum.auto()
+    ELSE = enum.auto()
+    WHILE = enum.auto()
+    UNTIL = enum.auto()
 
 
 class Token:
@@ -207,6 +211,10 @@ class Tokenizer:
         elif c == 'with*': return Token(self, TokenType.WITHSTAR)
         elif c == 'own': return Token(self, TokenType.OWN)
         elif c == '=': return Token(self, TokenType.ASSIGNMENT)
+        elif c == 'if': return Token(self, TokenType.IF)
+        elif c == 'else': return Token(self, TokenType.ELSE)
+        elif c == 'while': return Token(self, TokenType.WHILE)
+        elif c == 'until': return Token(self, TokenType.UNTIL)
         else: return IdentifierToken(self, c)
     
     def unread(self, token: Token):

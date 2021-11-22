@@ -205,12 +205,29 @@ class Parser:
         else:
             return ASTVar(varname, value, self.parse_var(env))
 
+    def maybe_parse_curly_block(self, env, allow_followups:bool=False):
+        if self.check(TokenType.LCURLY):
+            return ASTBlock([], False, ASTCompound(self.parse_expressions(env, TokenType.RCURLY)))
+        else:
+            return ASTBlock([], False, self.parse_expression(env, allow_followups))
+
     def parse_expression(self, env, allow_followups:bool=True) -> ASTExpression:
         if allow_followups and self.check(TokenType.CARET):
             return ASTReturn(self.parse_expression(env, allow_followups))
         elif allow_followups and self.check(TokenType.BAR):
             return self.parse_var(env)
-        ast = self.parse_simple_expression(env, allow_followups)
+        elif self.check(TokenType.IF):
+            self.expect(TokenType.LPAREN)
+            condition = self.parse_expression(env)
+            self.expect(TokenType.RPAREN)
+            body = self.maybe_parse_curly_block(env, allow_followups)
+            if self.check(TokenType.ELSE):
+                alternative = self.maybe_parse_curly_block(env, allow_followups)
+                ast = ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:else:'), [body, alternative], False)
+            else:
+                ast = ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:'), [body], False)
+        else:
+            ast = self.parse_simple_expression(env, allow_followups)
         next = None
         while ast != next:
             next = ast
