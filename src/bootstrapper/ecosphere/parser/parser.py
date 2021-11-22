@@ -192,7 +192,7 @@ class Parser:
                 args.append(e)
         return ASTSend(ast, ecosphere.objects.misc.EcoKey.Get(name), args, varargs)
 
-    def parse_var(self, env, terminator=TokenType.BAR):
+    def parse_bar(self, env, terminator=TokenType.BAR):
         varname = self.expect(TokenType.IDENTIFIER).get_key()
         env.bind(varname)
         if self.check(TokenType.ASSIGNMENT):
@@ -203,7 +203,17 @@ class Parser:
         if self.check(terminator):
             return ASTVar(varname, value, self.parse_expression(env))
         else:
-            return ASTVar(varname, value, self.parse_var(env))
+            return ASTVar(varname, value, self.parse_bar(env))
+    
+    def parse_var(self, env):
+        varname = self.expect(TokenType.IDENTIFIER).get_key()
+        env.bind(varname)
+        if self.check(TokenType.ASSIGNMENT):
+            value = self.parse_expression(env)
+        else:
+            value = ASTSelf()
+        self.expect(TokenType.SEPARATOR)
+        return ASTVar(varname, value, self.parse_expression(env))
 
     def maybe_parse_curly_block(self, env, allow_followups:bool=False):
         if self.check(TokenType.LCURLY):
@@ -215,9 +225,9 @@ class Parser:
         if allow_followups and self.check(TokenType.CARET):
             return ASTReturn(self.parse_expression(env, allow_followups))
         elif allow_followups and self.check(TokenType.BAR):
-            return self.parse_var(env)
+            return self.parse_bar(env)
         elif allow_followups and self.check(TokenType.VAR):
-            return self.parse_var(env, TokenType.SEPARATOR)
+            return self.parse_var(env)
         elif self.check(TokenType.IF):
             self.expect(TokenType.LPAREN)
             condition = self.parse_expression(env)
