@@ -34,7 +34,15 @@
         p << (10 asChar).
         p << #'hello'.
         p << (10 asChar).
-        0 to: 100 do: [ :n | if ((n mod: 2) isZero) { #'ecosphere.ecore.debug.shortlog'(n) } ].
+        0 to: 100 do: [ :n |
+            if ((n mod: 2) isZero) {
+                #'ecosphere.ecore.debug.shortlog'(n)
+            } else if ((n mod: 3) isZero) {
+                #'ecosphere.ecore.debug.shortlog'(-3)
+            } else {
+                #'ecosphere.ecore.debug.shortlog'(-42)
+            }
+        ].
         p << #\📦.
         p flush.
         [
