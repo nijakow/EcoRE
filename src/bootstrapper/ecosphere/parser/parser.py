@@ -43,7 +43,7 @@ class Parser:
     def parse_compound(self, env, terminator=TokenType.RPAREN):
         return ASTCompound(self.parse_expressions(env.subenvironment(), terminator))
     
-    def parse_block(self, env):
+    def parse_block(self, env, terminator=TokenType.RBRACK):
         parameters = []
         varargs = False
         while True:
@@ -58,7 +58,7 @@ class Parser:
                 if not self.check(TokenType.RARROW):
                     self.expect(TokenType.BAR)
             break
-        return ASTBlock(parameters, varargs, self.parse_compound(env, TokenType.RBRACK))
+        return ASTBlock(parameters, varargs, self.parse_compound(env, terminator))
     
     def parse_group(self, env):
         return ASTGroup(self.parse_expressions(env, TokenType.RCURLY))
@@ -226,6 +226,18 @@ class Parser:
                 return ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:else:'), [body, alternative], False)
             else:
                 return ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:'), [body], False)
+        elif self.check(TokenType.WHILE):
+            self.expect(TokenType.LPAREN)
+            condition = self.parse_expression(env)
+            self.expect(TokenType.RPAREN)
+            body = self.maybe_parse_curly_block(env)
+            return ASTSend(ASTBlock([], False, condition), ecosphere.objects.misc.EcoKey.Get('while:'), [body], False)
+        elif self.check(TokenType.UNTIL):
+            self.expect(TokenType.LPAREN)
+            condition = self.parse_expression(env)
+            self.expect(TokenType.RPAREN)
+            body = self.maybe_parse_curly_block(env)
+            return ASTSend(ASTBlock([], False, condition), ecosphere.objects.misc.EcoKey.Get('until:'), [body], False)
         ast = self.parse_simple_expression(env, allow_followups)
         next = None
         while ast != next:
