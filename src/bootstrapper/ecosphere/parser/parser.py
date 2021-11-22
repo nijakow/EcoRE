@@ -223,11 +223,10 @@ class Parser:
             body = self.maybe_parse_curly_block(env, allow_followups)
             if self.check(TokenType.ELSE):
                 alternative = self.maybe_parse_curly_block(env, allow_followups)
-                ast = ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:else:'), [body, alternative], False)
+                return ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:else:'), [body, alternative], False)
             else:
-                ast = ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:'), [body], False)
-        else:
-            ast = self.parse_simple_expression(env, allow_followups)
+                return ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:'), [body], False)
+        ast = self.parse_simple_expression(env, allow_followups)
         next = None
         while ast != next:
             next = ast
