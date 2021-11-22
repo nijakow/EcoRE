@@ -192,7 +192,7 @@ class Parser:
                 args.append(e)
         return ASTSend(ast, ecosphere.objects.misc.EcoKey.Get(name), args, varargs)
 
-    def parse_var(self, env):
+    def parse_var(self, env, terminator=TokenType.BAR):
         varname = self.expect(TokenType.IDENTIFIER).get_key()
         env.bind(varname)
         if self.check(TokenType.ASSIGNMENT):
@@ -200,7 +200,7 @@ class Parser:
         else:
             value = ASTSelf()
         self.check(TokenType.SEPARATOR)
-        if self.check(TokenType.BAR):
+        if self.check(terminator):
             return ASTVar(varname, value, self.parse_expression(env))
         else:
             return ASTVar(varname, value, self.parse_var(env))
@@ -216,6 +216,8 @@ class Parser:
             return ASTReturn(self.parse_expression(env, allow_followups))
         elif allow_followups and self.check(TokenType.BAR):
             return self.parse_var(env)
+        elif allow_followups and self.check(TokenType.VAR):
+            return self.parse_var(env, TokenType.SEPARATOR)
         elif self.check(TokenType.IF):
             self.expect(TokenType.LPAREN)
             condition = self.parse_expression(env)
