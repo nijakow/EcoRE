@@ -151,7 +151,7 @@
             bytes <- 3.
         } else {
             ^ 0xfffd asChar
-        }
+        }.
         1 to: bytes do: [ :i |
             b <- readByte.
             ((b bitAnd: 0b11000000) != (0b10000000)) if: [ ^ 0xfffd asChar ].

@@ -235,9 +235,9 @@ class Parser:
             body = self.maybe_parse_curly_block(env, allow_followups)
             if self.check(TokenType.ELSE):
                 alternative = self.maybe_parse_curly_block(env, allow_followups)
-                return ASTSeq(ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:else:'), [body, alternative], False), self.parse_expression(env))
+                return ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:else:'), [body, alternative], False)
             else:
-                return ASTSeq(ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:'), [body], False), self.parse_expression(env))
+                return ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:'), [body], False)
         elif self.check(TokenType.WHILE) and allow_followups:
             self.expect(TokenType.LPAREN)
             condition = self.parse_expression(env)
