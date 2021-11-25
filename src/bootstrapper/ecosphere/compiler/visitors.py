@@ -94,6 +94,11 @@ class ASTCompilerVisitor(ASTVisitor):
         ast.get_expr().accept(self)
         self._code_generator.op_return(self._environment.get_depth())
 
+    def visit_seq(self, ast):
+        self._code_generator.load_self()
+        for expr in ast.get_instructions():
+            expr.accept(self)
+
     def visit_compound(self, ast):
         self._code_generator.load_self()
         for expr in ast.get_instructions():

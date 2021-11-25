@@ -238,6 +238,18 @@ class ASTReturn(ASTExpression):
         super().__init__()
         self._value = value
 
+class ASTSeq(ASTExpression):
+
+    def accept(self, visitor):
+        visitor.visit_seq(self)
+    
+    def get_instructions(self):
+        return self._instructions
+
+    def __init__(self, *instructions):
+        super().__init__()
+        self._instructions = instructions
+
 class ASTCompound(ASTExpression):
 
     def accept(self, visitor):

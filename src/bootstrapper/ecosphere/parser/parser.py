@@ -2,7 +2,7 @@ import ecosphere.objects.misc
 import ecosphere.parser.tokenizer
 from ecosphere.parser.tokenizer import TokenType
 
-from ecosphere.parser.ast import ASTExpression, ASTNumber, ASTCharacter, ASTSelf, ASTGroup, ASTObject, ASTPlainObject, ASTSlot, ASTNumber, ASTKey, ASTString, ASTVector, ASTBuiltin, ASTSend, ASTVarAccess, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn, ASTLabelDef, ASTProxy
+from ecosphere.parser.ast import ASTExpression, ASTNumber, ASTCharacter, ASTSelf, ASTGroup, ASTObject, ASTPlainObject, ASTSlot, ASTNumber, ASTKey, ASTString, ASTVector, ASTBuiltin, ASTSend, ASTVarAccess, ASTSeq, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn, ASTLabelDef, ASTProxy
 
 
 class ParseException(Exception):
@@ -228,28 +228,28 @@ class Parser:
             return self.parse_bar(env)
         elif allow_followups and self.check(TokenType.VAR):
             return self.parse_var(env)
-        elif self.check(TokenType.IF):
+        elif self.check(TokenType.IF) and allow_followups:
             self.expect(TokenType.LPAREN)
             condition = self.parse_expression(env)
             self.expect(TokenType.RPAREN)
             body = self.maybe_parse_curly_block(env, allow_followups)
             if self.check(TokenType.ELSE):
                 alternative = self.maybe_parse_curly_block(env, allow_followups)
-                return ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:else:'), [body, alternative], False)
+                return ASTSeq(ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:else:'), [body, alternative], False), self.parse_expression(env))
             else:
-                return ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:'), [body], False)
-        elif self.check(TokenType.WHILE):
+                return ASTSeq(ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:'), [body], False), self.parse_expression(env))
+        elif self.check(TokenType.WHILE) and allow_followups:
             self.expect(TokenType.LPAREN)
             condition = self.parse_expression(env)
             self.expect(TokenType.RPAREN)
             body = self.maybe_parse_curly_block(env)
-            return ASTSend(ASTBlock([], False, condition), ecosphere.objects.misc.EcoKey.Get('while:'), [body], False)
-        elif self.check(TokenType.UNTIL):
+            return ASTSeq(ASTSend(ASTBlock([], False, condition), ecosphere.objects.misc.EcoKey.Get('while:'), [body], False), self.parse_expression(env))
+        elif self.check(TokenType.UNTIL) and allow_followups:
             self.expect(TokenType.LPAREN)
             condition = self.parse_expression(env)
             self.expect(TokenType.RPAREN)
             body = self.maybe_parse_curly_block(env)
-            return ASTSend(ASTBlock([], False, condition), ecosphere.objects.misc.EcoKey.Get('until:'), [body], False)
+            return ASTSeq(ASTSend(ASTBlock([], False, condition), ecosphere.objects.misc.EcoKey.Get('until:'), [body], False), self.parse_expression(env))
         ast = self.parse_simple_expression(env, allow_followups)
         next = None
         while ast != next:
