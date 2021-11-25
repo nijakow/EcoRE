@@ -19,6 +19,5 @@
     },
 
     Vector = {
-        with trait = #<:init/vector_proxy@../init.eco>;
     }
 }

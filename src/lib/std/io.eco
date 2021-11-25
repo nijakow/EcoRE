@@ -1,0 +1,14 @@
+"
+    io.eco - The `std io` package of the Ecosphere
+"
+
+{
+    Writer = {
+
+        with trait = {
+            
+        };
+
+        with own parent = #<:std/Object>;
+    }
+}
