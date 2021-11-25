@@ -252,7 +252,7 @@ class Parser:
             return ASTSeq(ASTSend(ASTBlock([], False, condition), ecosphere.objects.misc.EcoKey.Get('until:'), [body], False), self.parse_expression(env))
         ast = self.parse_simple_expression(env, allow_followups)
         next = None
-        while ast != next:
+        while True:
             next = ast
             ast = self.parse_send(env, ast, allow_followups)
             if self.check(TokenType.LPAREN):
@@ -260,6 +260,10 @@ class Parser:
                 ast = ASTSend(ast, ecosphere.objects.misc.EcoKey.Get('value'), args, varargs)
             elif self.check(TokenType.ASSIGNMENT):
                 ast = ASTAssignment(ast, self.parse_expression(env, allow_followups))
+            elif allow_followups and self.check(TokenType.TILDE):
+                pass
+            elif ast == next:
+                break
         return ast
 
     def parse_expressions(self, env, terminator: TokenType) -> list:
