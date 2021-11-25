@@ -204,16 +204,6 @@ class Parser:
             return ASTVar(varname, value, self.parse_expression(env))
         else:
             return ASTVar(varname, value, self.parse_bar(env))
-    
-    def parse_var(self, env):
-        varname = self.expect(TokenType.IDENTIFIER).get_key()
-        env.bind(varname)
-        if self.check(TokenType.ASSIGNMENT):
-            value = self.parse_expression(env)
-        else:
-            value = ASTSelf()
-        self.expect(TokenType.SEPARATOR)
-        return ASTVar(varname, value, self.parse_expression(env))
 
     def maybe_parse_curly_block(self, env, allow_followups:bool=False):
         if self.check(TokenType.LCURLY):
@@ -226,30 +216,6 @@ class Parser:
             return ASTReturn(self.parse_expression(env, allow_followups))
         elif allow_followups and self.check(TokenType.BAR):
             return self.parse_bar(env)
-        elif allow_followups and self.check(TokenType.VAR):
-            return self.parse_var(env)
-        elif self.check(TokenType.IF) and allow_followups:
-            self.expect(TokenType.LPAREN)
-            condition = self.parse_expression(env)
-            self.expect(TokenType.RPAREN)
-            body = self.maybe_parse_curly_block(env, allow_followups)
-            if self.check(TokenType.ELSE):
-                alternative = self.maybe_parse_curly_block(env, allow_followups)
-                return ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:else:'), [body, alternative], False)
-            else:
-                return ASTSend(condition, ecosphere.objects.misc.EcoKey.Get('if:'), [body], False)
-        elif self.check(TokenType.WHILE) and allow_followups:
-            self.expect(TokenType.LPAREN)
-            condition = self.parse_expression(env)
-            self.expect(TokenType.RPAREN)
-            body = self.maybe_parse_curly_block(env)
-            return ASTSeq(ASTSend(ASTBlock([], False, condition), ecosphere.objects.misc.EcoKey.Get('while:'), [body], False), self.parse_expression(env))
-        elif self.check(TokenType.UNTIL) and allow_followups:
-            self.expect(TokenType.LPAREN)
-            condition = self.parse_expression(env)
-            self.expect(TokenType.RPAREN)
-            body = self.maybe_parse_curly_block(env)
-            return ASTSeq(ASTSend(ASTBlock([], False, condition), ecosphere.objects.misc.EcoKey.Get('until:'), [body], False), self.parse_expression(env))
         ast = self.parse_simple_expression(env, allow_followups)
         next = None
         while True:
