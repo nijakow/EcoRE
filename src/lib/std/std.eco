@@ -28,6 +28,8 @@
                 true: t false: f => if: t else: f;
                 true: t          => if: t;
                 false: f         => unless: f;
+                if: c then: b    => ( (c value asBool) if: [ b value. ^ false ] else: [ ^ self ] );
+                default: b       => ( b value. ^ self );
             };
             with own parent = #<:std/Object>;
         },
@@ -42,10 +44,14 @@
                 true: t false: f => if: t else: f;
                 true: t          => if: t;
                 false: f         => unless: f;
+                if: c then: b    => self;
+                default: b       => self;
             };
             with own parent = #<:std/Object>;
         }
     },
+
+    begin = #<:std/bool/true>;
 
     io = #<:@io.eco>;
     util = #<:@util.eco>;
