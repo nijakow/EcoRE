@@ -24,7 +24,9 @@
     bitOr: other => #'ecosphere.ecore.math.bit_or'(self, other);
     bitAnd: other => #'ecosphere.ecore.math.bit_and'(self, other);
     bitXOR: other => #'ecosphere.ecore.math.bit_xor'(self, other);
-    shift:  other => #'ecosphere.ecore.math.shift'(self, other);
+    lshift: other => #'ecosphere.ecore.math.bitshift_left'(self, other);
+    rshift: other => #'ecosphere.ecore.math.bitshift_right'(self, other);
+    shift:  other => (other isNegative) if: [ ^ self rshift: (other negate) ] else: [ ^ self lshift: other ];
     < other    => #'ecosphere.ecore.math.less'(self, other);
     == other   => #'ecosphere.ecore.is'(self, other);
     != other   => (self == other) not;
@@ -124,10 +126,6 @@
 },
 
 #=init/port_proxy: {
-    char<< c  => (#'ecosphere.ecore.object.port.write_char'(self, c). ^ self);
-    << object => ( object writeOn: self. ^ self );
-    newline   => ( self << (10 asChar).  ^ self );
-    flush     => #'ecosphere.ecore.object.port.flush_output'(self);
     readByte  => (
         | b <- #'ecosphere.ecore.object.port.read_byte'(self) |
         [ b asBool ] until: [
@@ -136,6 +134,8 @@
         ].
       ^ b
     );
+    writeByte: b  => (#'ecosphere.ecore.object.port.write_byte'(self, b). ^ self);
+    flush     => #'ecosphere.ecore.object.port.flush_output'(self);
     readChar => (
         | b <- readByte, bytes, v |
         begin
@@ -151,5 +151,25 @@
         ].
       ^ v asChar
     );
+    writeChar: c => (
+        | v <- c asInt |
+        begin
+          if: [ v <= 0        ] then: [ writeByte: 0xef. writeByte: 0xbf. writeByte: 0xbd. ] ~
+          if: [ v <= 0x7f     ] then: [ writeByte: v ] ~
+          if: [ v <= 0x7ff    ] then: [ writeByte: (((v rshift: 6) bitAnd: 0x1f) bitOr: 0xc0).
+                                        writeByte: (((v)           bitAnd: 0x3f) bitOr: 0x80). ] ~
+          if: [ v <= 0xffff   ] then: [ writeByte: (((v rshift: 12) bitAnd: 0x0f) bitOr: 0xe0).
+                                        writeByte: (((v rshift:  6) bitAnd: 0x3f) bitOr: 0x80).
+                                        writeByte: (((v)            bitAnd: 0x3f) bitOr: 0x80). ] ~
+          if: [ v <= 0x10ffff ] then: [ writeByte: (((v rshift: 18) bitAnd: 0x07) bitOr: 0xf0).
+                                        writeByte: (((v rshift: 12) bitAnd: 0x3f) bitOr: 0x80).
+                                        writeByte: (((v rshift:  6) bitAnd: 0x3f) bitOr: 0x80).
+                                        writeByte: (((v rshift:  0) bitAnd: 0x3f) bitOr: 0x80). ] ~
+          default: [ writeByte: 0xef. writeByte: 0xbf. writeByte: 0xbd. ].
+      ^ self
+    );
+    char<< c  => writeChar: c;
+    << object => ( object writeOn: self. ^ self );
+    newline   => ( self << (10 asChar).  ^ self );
     with own parent = #<:std/Object@std/std.eco>;
 }
