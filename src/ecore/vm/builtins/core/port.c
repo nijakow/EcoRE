@@ -54,6 +54,17 @@ bool Eco_VM_Builtin_PortWriteChar(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_PortWriteByte(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  byte;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    Eco_Fiber_Pop(fiber, &byte);
+    Eco_Port_WriteByte((struct Eco_Port*) Eco_Any_AsPointer(Eco_Fiber_Peek(fiber)), Eco_Any_AsInteger(&byte));
+    return true;
+}
+
 bool Eco_VM_Builtin_PortNotifyMe(struct Eco_Fiber* fiber, unsigned int args)
 {
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))

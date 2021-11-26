@@ -136,6 +136,11 @@ bool Eco_Port_WriteBytes(struct Eco_Port* port, char* c, unsigned int count)
     return true;
 }
 
+bool Eco_Port_WriteByte(struct Eco_Port* port, char c)
+{
+    return Eco_Port_WriteBytes(port, &c, 1);
+}
+
 bool Eco_Port_WriteChar(struct Eco_Port* port, Eco_Codepoint codepoint)
 {
     char bytes[4];

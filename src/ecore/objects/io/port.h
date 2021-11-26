@@ -34,8 +34,8 @@ bool Eco_Port_HasInput(struct Eco_Port*);
 bool Eco_Port_HasOutput(struct Eco_Port*);
 
 bool Eco_Port_ReadByte(struct Eco_Port*, char*);
+bool Eco_Port_WriteByte(struct Eco_Port*, char);
 bool Eco_Port_WriteBytes(struct Eco_Port*, char*, unsigned int);
-
 bool Eco_Port_WriteChar(struct Eco_Port*, Eco_Codepoint);
 
 void Eco_Port_Reactivate(struct Eco_Port*);

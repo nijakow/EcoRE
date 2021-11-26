@@ -6,6 +6,7 @@
 bool Eco_VM_Builtin_NewPort(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_PortReadByte(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_PortFlushOutput(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_PortWriteByte(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_PortWriteChar(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_PortNotifyMe(struct Eco_Fiber*, unsigned int);
 
