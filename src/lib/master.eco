@@ -38,8 +38,9 @@
         p << #\📦.
         p flush.
         [
-            p << (p readChar).
-            p flush.
+            p << '> '. p flush.
+            (p readLine) do: [ :c | p << c ].
+            p newline.
         ] repeat.
     );
 
