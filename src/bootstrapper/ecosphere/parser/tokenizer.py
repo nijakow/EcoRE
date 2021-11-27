@@ -31,6 +31,7 @@ class TokenType(enum.Enum):
     WITH = enum.auto()
     WITHSTAR = enum.auto()
     OWN = enum.auto()
+    DELEGATE = enum.auto()
 
 
 class Token:
@@ -164,6 +165,7 @@ class Tokenizer:
         
         if self._s.peeks('...'): return Token(self, TokenType.ELLIPSIS)
         elif self._s.peeks('<-'): return Token(self, TokenType.ASSIGNMENT)
+        elif self._s.peeks('->'): return Token(self, TokenType.DELEGATE)
         elif self._s.peeks('=>'): return Token(self, TokenType.RARROW)
         elif self._s.peeks('('): return Token(self, TokenType.LPAREN)
         elif self._s.peeks(')'): return Token(self, TokenType.RPAREN)

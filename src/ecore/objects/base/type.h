@@ -35,6 +35,7 @@ struct Eco_Type_Slot
             unsigned int offset;
             unsigned int value_size;
             bool is_inherited;
+            bool is_delegate;
             bool is_part;
         } inlined;
         struct {

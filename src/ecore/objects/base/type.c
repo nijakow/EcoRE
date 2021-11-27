@@ -169,6 +169,7 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type* self,
         the_slot->type                      = Eco_Type_Slot_Type_INLINED;
         the_slot->key                       = info.key;
         the_slot->body.inlined.is_inherited = info.is_inherited;
+        the_slot->body.inlined.is_delegate  = info.is_delegate;
         the_slot->body.inlined.is_part      = info.is_part;
         the_slot->body.inlined.value_size   = slot_value_size;
         the_slot->body.inlined.offset       = the_copy->instance_payload_size - slot_value_size;
