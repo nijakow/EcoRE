@@ -16,7 +16,7 @@ class EcoValueSlot(EcoSlot):
         flags = 0x00
         if self._value is not None: flags |= 0x02
         if self._is_inherited:      flags |= 0x04
-        if self._is_delegate:       flags |= 0x08
+        if self._is_no_delegate:    flags |= 0x08
         if self._is_part:           flags |= 0x10
         serializer.write_vlq(flags)
         serializer.write_object(self._name)
@@ -36,11 +36,11 @@ class EcoValueSlot(EcoSlot):
         else:
             self._callbacks.append(the_callback)
 
-    def __init__(self, name, is_inherited, is_delegate, is_part):
+    def __init__(self, name, is_inherited, is_no_delegate, is_part):
         super().__init__(name)
         self._is_inherited = is_inherited
         self._is_part = is_part
-        self._is_delegate = is_delegate
+        self._is_no_delegate = is_no_delegate
         self._value = None
         self._callbacks = list()
 

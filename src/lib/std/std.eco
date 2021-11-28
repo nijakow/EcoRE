@@ -4,7 +4,7 @@
 
 {
     Object = #=std/Object: {
-        with trait = {
+        with inherited trait = {
             init        => ^ self;
             clone       => #'ecosphere.ecore.clone'(self);
             new         => clone init;
@@ -19,7 +19,7 @@
 
     with bool = {
         true = #=std/bool/true: {
-            with trait = {
+            with inherited trait = {
                 asBool           => self;
                 not              => false;
                 if: t else: f    => t value;
@@ -31,11 +31,11 @@
                 if: c then: b    => ( (c value asBool) if: [ b value. ^ false ] else: [ ^ self ] );
                 default: b       => ( b value. ^ self );
             };
-            with own parent = #<:std/Object>;
+            with inherited own parent = #<:std/Object>;
         },
 
         false = #=std/bool/false: {
-            with trait = {
+            with inherited trait = {
                 asBool           => self;
                 not              => true;
                 if: t else: f    => f value;
@@ -47,7 +47,7 @@
                 if: c then: b    => self;
                 default: b       => self;
             };
-            with own parent = #<:std/Object>;
+            with inherited own parent = #<:std/Object>;
         }
     },
 

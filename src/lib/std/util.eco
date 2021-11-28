@@ -6,7 +6,7 @@
     Pair = {
         first, second;
 
-        with trait = {
+        with inherited trait = {
             isPair => true;
             first: f second: s => (
                 first  <- f.
@@ -15,7 +15,7 @@
             );
         };
 
-        with own parent = #<:std/Object>;
+        with inherited own parent = #<:std/Object>;
     },
 
     Vector = {

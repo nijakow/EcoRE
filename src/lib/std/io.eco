@@ -3,12 +3,4 @@
 "
 
 {
-    Writer = {
-
-        with trait = {
-            
-        };
-
-        with own parent = #<:std/Object>;
-    }
 }

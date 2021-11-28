@@ -12,7 +12,7 @@
         | v <- self value |
         v if: [ ^ v ] else: [ ^ b value ]
     );
-    with own parent = #<:std/Object@std/std.eco>;
+    with inherited own parent = #<:std/Object@std/std.eco>;
 },
 
 #=init/integer_proxy: {
@@ -66,7 +66,7 @@
         |
         lib WriteNum(writer, self);
     );
-    with own parent = #<:std/Object@std/std.eco>;
+    with inherited own parent = #<:std/Object@std/std.eco>;
 },
 
 #=init/character_proxy: {
@@ -74,7 +74,7 @@
     writeOn: writer => writer char<< self;
     == other        => #'ecosphere.ecore.is'(self, other);
     != other        => (self == other) not;
-    with own parent = #<:std/Object@std/std.eco>;
+    with inherited own parent = #<:std/Object@std/std.eco>;
 },
 
 #=init/key_proxy: {
@@ -85,7 +85,7 @@
         writer << asString.
         writer << #\'.
     );
-    with own parent = #<:std/Object@std/std.eco>;
+    with inherited own parent = #<:std/Object@std/std.eco>;
 },
 
 #=init/string_proxy: {
@@ -106,7 +106,7 @@
     );
     writeOn: writer => do: [ :c | writer << c ];
     asKey => #'ecosphere.ecore.object.string.as_key'(self);
-    with own parent = #<:std/Object@std/std.eco>;
+    with inherited own parent = #<:std/Object@std/std.eco>;
 },
 
 #=init/vector_proxy: {
@@ -124,7 +124,7 @@
     asString => #'ecosphere.ecore.object.vector.to_string'(self);
     _norm(i) => (i isNegative) if: [ size + i ] else: [ i ];
     _nnorm(i) => (i isNegative) if: [ size + i + 1 ] else: [ i ];
-    with own parent = #<:std/Object@std/std.eco>;
+    with inherited own parent = #<:std/Object@std/std.eco>;
 },
 
 #=init/port_proxy: {
@@ -181,5 +181,5 @@
     char<< c  => writeChar: c;
     << object => ( object writeOn: self. ^ self );
     newline   => ( self << (10 asChar).  ^ self );
-    with own parent = #<:std/Object@std/std.eco>;
+    with inherited own parent = #<:std/Object@std/std.eco>;
 }
