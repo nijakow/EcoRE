@@ -29,11 +29,11 @@ struct Eco_Message
 
 struct Eco_SendLink
 {
-    struct Eco_SendLink*     previous;
-    struct Eco_Object*   object;
+    struct Eco_SendLink*  previous;
+    struct Eco_Object*    object;
 };
 
-bool Eco_Send_ToObject(struct Eco_Message*, struct Eco_SendLink*, struct Eco_Object*);
-bool Eco_Send(struct Eco_Message*, struct Eco_SendLink*, Eco_Any*);
+bool Eco_Send_ToObject(struct Eco_Message*, struct Eco_SendLink*, struct Eco_Object*, Eco_Any*);
+bool Eco_Send(struct Eco_Message*, struct Eco_SendLink*, Eco_Any*, Eco_Any*);
 
 #endif

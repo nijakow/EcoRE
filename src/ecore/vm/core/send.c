@@ -8,7 +8,8 @@
 
 bool Eco_Send_ToObject(struct Eco_Message* message,
                        struct Eco_SendLink* link,
-                       struct Eco_Object* object)
+                       struct Eco_Object* object,
+                       Eco_Any* self)
 {
     struct Eco_SendLink  next_link;
 
@@ -35,7 +36,7 @@ bool Eco_Send_ToObject(struct Eco_Message* message,
     /*
      * Dispatch to the local send handler.
      */
-    return object->type->typecore->send(message, &next_link, object);
+    return object->type->typecore->send(message, &next_link, object, self);
 }
 
 
@@ -46,7 +47,7 @@ static struct Eco_Type** Eco_Send_JUMPS[] = {
     [Eco_Value_Type_FLOATING]  =  NULL
 };
 
-bool Eco_Send(struct Eco_Message* message, struct Eco_SendLink* link, Eco_Any* target)
+bool Eco_Send(struct Eco_Message* message, struct Eco_SendLink* link, Eco_Any* target, Eco_Any* self)
 {
     struct Eco_Object*  object;
 
@@ -55,5 +56,5 @@ bool Eco_Send(struct Eco_Message* message, struct Eco_SendLink* link, Eco_Any* t
     } else {
         object = (*Eco_Send_JUMPS[Eco_Any_GetValueType(target)])->proxy;
     }
-    return Eco_Send_ToObject(message, link, object);
+    return Eco_Send_ToObject(message, link, object, self);
 }

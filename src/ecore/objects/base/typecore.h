@@ -10,7 +10,7 @@ struct Eco_GC_State;
 struct Eco_CloneState;
 
 
-typedef bool (*Eco_TypeCore_SendFunc)(struct Eco_Message*, struct Eco_SendLink*, struct Eco_Object*);
+typedef bool (*Eco_TypeCore_SendFunc)(struct Eco_Message*, struct Eco_SendLink*, struct Eco_Object*, Eco_Any*);
 typedef void (*Eco_TypeCore_MarkFunc)(struct Eco_GC_State*, struct Eco_Object*);
 typedef struct Eco_Object* (*Eco_TypeCore_CloneFunc)(struct Eco_CloneState*, struct Eco_Object*);
 typedef void (*Eco_TypeCore_DelFunc)(struct Eco_Object*);

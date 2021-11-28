@@ -49,7 +49,10 @@ bool Eco_Type_Slot_SetValue(struct Eco_Type_Slot* slot, struct Eco_Object* objec
     }
 }
 
-bool Eco_Type_Slot_Invoke(struct Eco_Message* message, struct Eco_Object* object, struct Eco_Type_Slot* slot)
+bool Eco_Type_Slot_Invoke(struct Eco_Message*    message,
+                          struct Eco_Object*     object,
+                          struct Eco_Type_Slot*  slot,
+                          Eco_Any*               self)
 {
     switch (message->type)
     {
@@ -65,6 +68,7 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message* message, struct Eco_Object* object
                     Eco_Fiber_Push(message->fiber, &slot->body.shared.value);
                     return true;
                 case Eco_Type_Slot_Type_CODE:
+                    Eco_Any_AssignAny(Eco_Fiber_Nth(message->fiber, message->body.send.arg_count), self);   // Assign the new self
                     return Eco_Fiber_Enter(message->fiber, NULL, slot->body.code, message->body.send.arg_count);
             }
             return false;
