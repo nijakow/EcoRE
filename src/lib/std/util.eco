@@ -15,7 +15,7 @@
             );
         };
 
-        with inherited own parent = #<:std/Object>;
+        with inherited parent = #<:std/Clonable>;
     },
 
     Vector = {

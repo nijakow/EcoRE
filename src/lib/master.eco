@@ -35,7 +35,7 @@
             };
 
             with lensed;
-            with inherited own parent = #<:std/Object@std/std.eco>;
+            with inherited parent = #<:std/Clonable@std/std.eco>;
         } |
 
         | p <- #'ecosphere.ecore.object.port.new'(1), q <- p lens: d |

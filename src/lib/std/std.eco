@@ -3,18 +3,20 @@
 "
 
 {
+    Clonable = #=std/Clonable: {
+        init        => ^ self;
+        clone       => #'ecosphere.ecore.clone'(self);
+        new         => clone init;
+        lens: other => (other clone) init: self;
+        mirror      => ;   "TODO"
+        is: other   => #'ecosphere.ecore.is'(self, other);
+        asBool      => true;
+        @ second    => ((std util Pair) new) first: self second: second;
+        with lobby  = #<:lobby>;
+    };
+
     Object = #=std/Object: {
-        with inherited trait = {
-            init        => ^ self;
-            clone       => #'ecosphere.ecore.clone'(self);
-            new         => clone init;
-            lens: other => (other clone) init: self;
-            mirror      => ;   "TODO"
-            is: other   => #'ecosphere.ecore.is'(self, other);
-            asBool      => true;
-            @ second    => ((std util Pair) new) first: self second: second;
-        };
-        with lobby = #<:lobby>;
+        with inherited trait = #<:std/Clonable>;
     },
 
     with bool = {
@@ -31,7 +33,7 @@
                 if: c then: b    => ( (c value asBool) if: [ b value. ^ false ] else: [ ^ self ] );
                 default: b       => ( b value. ^ self );
             };
-            with inherited own parent = #<:std/Object>;
+            with inherited parent = #<:std/Clonable>;
         },
 
         false = #=std/bool/false: {
@@ -47,7 +49,7 @@
                 if: c then: b    => self;
                 default: b       => self;
             };
-            with inherited own parent = #<:std/Object>;
+            with inherited parent = #<:std/Clonable>;
         }
     },
 
