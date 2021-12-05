@@ -3,4 +3,66 @@
 "
 
 {
+    PortInput => {
+        _br;
+
+        with inherited trait = {
+            init: byteReader => (
+                _br <- byteReader.
+              ^ self
+            );
+
+            readByte => _br readByte;
+            readChar => (
+                | b <- readByte, bytes, v |
+                begin
+                  if: [ (b bitAnd: 0b10000000) isZero        ] then: [ ^ b asChar                             ] ~
+                  if: [ (b bitAnd: 0b11100000) == 0b11000000 ] then: [ v <- b bitAnd: 0b00011111. bytes <- 1. ] ~
+                  if: [ (b bitAnd: 0b11110000) == 0b11100000 ] then: [ v <- b bitAnd: 0b00001111. bytes <- 2. ] ~
+                  if: [ (b bitAnd: 0b11111000) == 0b11110000 ] then: [ v <- b bitAnd: 0b00000111. bytes <- 3. ] ~
+                  default: [ ^ 0xfffd asChar ].
+                1 to: bytes do: [ :i |
+                    b <- readByte.
+                    ((b bitAnd: 0b11000000) != (0b10000000)) if: [ ^ 0xfffd asChar ].
+                    v <- ((v shift: 6) bitOr: (b bitAnd: 0b00111111)).
+                ].
+              ^ v asChar
+            );
+        };
+
+        with inherited parent = #<:std/Clonable@std.eco>;
+    },
+
+    PortOutput = {
+        _port;
+
+        with inherited trait = {
+            init: port => (
+                _port <- port.
+                ^ self
+            );
+
+            flush      => _port flush;
+            byte<< b   => _port byte<< b;
+            << object  => ( object writeOn: self. ^ self );
+            <<newline  => ( self << (10 asChar). ^ self );
+        };
+
+        with inherited parent = #<:std/Clonable@std.eco>;
+    },
+
+    PortIO = {
+        with inherited trait = {
+            init: port => (
+                in  <- port lens: (std io PortInput);
+                out <- port lens: (std io PortOutput);
+              ^ self
+            );
+        };
+
+        with inherited parent = #<:std/Clonable@std.eco>;
+
+        with in,
+        with out;
+    }
 }
