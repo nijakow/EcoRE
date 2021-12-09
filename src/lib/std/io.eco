@@ -28,6 +28,14 @@
                 ].
               ^ v asChar
             );
+            readLine => (
+                | v <- Vector new, c <- readChar |
+                [ c == (10 asChar) ] until: [
+                    v append: c.
+                    c <- readChar
+                ].
+              ^ v asString
+            );
         };
 
         with inherited parent = #<:std/Clonable@std.eco>;
@@ -53,7 +61,7 @@
 
     PortIO = {
         in, out;
-        
+
         with inherited trait = {
             init: port => (
                 in  <- port lens: (std io PortInput);

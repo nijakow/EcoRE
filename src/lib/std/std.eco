@@ -53,6 +53,10 @@
         }
     },
 
+    Vector = {
+        new => #() clone;
+    };
+
     begin = #<:std/bool/true>;
 
     io = #<:@io.eco>;

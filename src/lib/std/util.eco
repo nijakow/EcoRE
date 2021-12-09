@@ -16,8 +16,5 @@
         };
 
         with inherited parent = #<:std/Clonable>;
-    },
-
-    Vector = {
     }
 }
