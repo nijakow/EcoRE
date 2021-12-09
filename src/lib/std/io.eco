@@ -30,7 +30,7 @@
             );
             readLine => (
                 | v <- Vector new, c <- readChar |
-                [ c == (10 asChar) ] until: [
+                [ c == (char newline) ] until: [
                     v append: c.
                     c <- readChar
                 ].
@@ -53,7 +53,7 @@
             flush      => _port flush;
             byte<< b   => _port byte<< b;
             << object  => ( object writeOn: self. ^ self );
-            <<newline  => ( self << (10 asChar). ^ self );
+            <<newline  => ( self << (char newline). ^ self );
         };
 
         with inherited parent = #<:std/Clonable@std.eco>;

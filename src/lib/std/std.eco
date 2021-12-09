@@ -3,6 +3,18 @@
 "
 
 {
+    with globals = {
+        with char = {
+            backspace => 8 asChar;
+            tab       =>  9 asChar;
+            newline   => 10 asChar;
+            return    => 13 asChar;
+            escape    => 27 asChar;
+        };
+
+        begin = #<:std/bool/true>;
+    };
+
     Clonable = #=std/Clonable: {
         init        => ^ self;
         clone       => #'ecosphere.ecore.clone'(self);
@@ -56,8 +68,6 @@
     Vector = {
         new => #() clone;
     };
-
-    begin = #<:std/bool/true>;
 
     io = #<:@io.eco>;
     util = #<:@util.eco>;
