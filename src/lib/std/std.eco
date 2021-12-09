@@ -5,7 +5,7 @@
 {
     with globals = {
         with char = {
-            backspace => 8 asChar;
+            backspace =>  8 asChar;
             tab       =>  9 asChar;
             newline   => 10 asChar;
             return    => 13 asChar;
