@@ -32,10 +32,10 @@
 
         io out << 'Hello, world!'.
         io out <<newline.
-        io out flush.
+        io out commit.
         [
             io out << '> '.
-            io out flush.
+            io out commit.
             io out << (io in readLine).
             io out <<newline
         ] repeat.
