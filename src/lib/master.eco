@@ -30,9 +30,9 @@
 
         | p <- #'ecosphere.ecore.object.port.new'(1), io <- p lens: (std io PortIO) |
 
-        io << 'Hello, world!'.
-        io <<newline.
-        io flush.
+        io out << 'Hello, world!'.
+        io out <<newline.
+        io out flush.
     );
 
     with parent = #<:lobby>;

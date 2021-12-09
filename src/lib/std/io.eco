@@ -52,6 +52,8 @@
     },
 
     PortIO = {
+        in, out;
+        
         with inherited trait = {
             init: port => (
                 in  <- port lens: (std io PortInput);
@@ -61,8 +63,5 @@
         };
 
         with inherited parent = #<:std/Clonable@std.eco>;
-
-        with in,
-        with out;
     }
 }
