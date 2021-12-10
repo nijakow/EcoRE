@@ -123,7 +123,7 @@ class EcoCode(ecosphere.objects.base.EcoObject):
                 elif op == Bytecodes.ASSIGN:
                     self._op('ASGN', self._const())
                 elif op == Bytecodes.AS:
-                    self._op('AS', self._const())
+                    self._op('AS')
                 elif op == Bytecodes.RETURN:
                     self._op('RET ', self._u8())
                 elif op == Bytecodes.CLOSURE:
@@ -140,6 +140,7 @@ class EcoCode(ecosphere.objects.base.EcoObject):
 
     def serialize(self, serializer, id=0):
         if not serializer.try_serialize_known_object(self):
+            print(EcoCode.Disassembler(self).disassemble())
             serializer.write_message('ecosphere.object.code')
             serializer.write_vlq(serializer.add_object(self))
             serializer.write_vlq(self._register_count)
