@@ -39,9 +39,6 @@
             io out << (io in readLine).
             io out <<newline
         ] repeat.
-
-        | [42] x <- 5 |
-        x <- x * 7.
     );
 
     with parent = #<:lobby>;
