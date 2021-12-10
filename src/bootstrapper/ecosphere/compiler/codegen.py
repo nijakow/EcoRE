@@ -294,7 +294,11 @@ class CodeGenerator:
     def op_assign(self, key):
         self._writer.write_assign(key)
 
-    def op_return(self, depth):
+    def op_return(self, depth, the_type, visitor):
+        if the_type is not None:
+            self.push()
+            the_type.accept(visitor)
+            self.op_as()
         self.push()
         self._writer.write_return(depth)
 
@@ -316,8 +320,8 @@ class CodeGenerator:
         self._writer.write_as()
         self._set_last_value_to_stack()
     
-    def finish(self):
-        self.op_return(0)
+    def finish(self, the_type, visitor):
+        self.op_return(0, the_type, visitor)
         instructions, constants, objects = self._writer.finish()
         self._writer = None
         return ecosphere.objects.misc.EcoCode(instructions,

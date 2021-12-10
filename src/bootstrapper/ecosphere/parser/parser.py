@@ -59,7 +59,7 @@ class Parser:
                 if not self.check(TokenType.RARROW):
                     self.expect(TokenType.BAR)
             break
-        return ASTBlock(parameters, varargs, self.parse_compound(env, terminator))
+        return ASTBlock(None, parameters, varargs, self.parse_compound(env, terminator)) # TODO: Parse type
     
     def parse_group(self, env):
         return ASTGroup(self.parse_expressions(env, TokenType.RCURLY))
@@ -209,9 +209,9 @@ class Parser:
 
     def maybe_parse_curly_block(self, env, allow_followups:bool=False):
         if self.check(TokenType.LCURLY):
-            return ASTBlock([], False, ASTCompound(self.parse_expressions(env, TokenType.RCURLY)))
+            return ASTBlock(None, [], False, ASTCompound(self.parse_expressions(env, TokenType.RCURLY)))
         else:
-            return ASTBlock([], False, self.parse_expression(env, allow_followups))
+            return ASTBlock(None, [], False, self.parse_expression(env, allow_followups))
 
     def parse_expression(self, env, allow_followups:bool=True) -> ASTExpression:
         if allow_followups and self.check(TokenType.CARET):

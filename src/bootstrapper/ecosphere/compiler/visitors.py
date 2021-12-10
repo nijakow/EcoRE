@@ -86,7 +86,7 @@ class ASTCompilerVisitor(ASTVisitor):
 
     def visit_return(self, ast):
         ast.get_expr().accept(self)
-        self._code_generator.op_return(self._environment.get_depth())
+        self._code_generator.op_return(self._environment.get_depth(), self._type, self)
 
     def visit_seq(self, ast):
         self._code_generator.load_self()
@@ -101,6 +101,7 @@ class ASTCompilerVisitor(ASTVisitor):
     def visit_block(self, ast):
         code = ecosphere.compiler.compile_ast(ast.get_body(),
                                               self._loader,
+                                              ast.get_type(),
                                               parameters=ast.get_parameters(),
                                               has_varargs=ast.has_varargs(),
                                               parent_env=self._environment)
@@ -122,7 +123,8 @@ class ASTCompilerVisitor(ASTVisitor):
         ast.get_right().accept(self)
         self._code_generator.op_as()
 
-    def __init__(self, code_generator, environment, loader):
+    def __init__(self, code_generator, environment, loader, the_type):
         self._code_generator = code_generator
         self._environment = environment
         self._loader = loader
+        self._type = the_type

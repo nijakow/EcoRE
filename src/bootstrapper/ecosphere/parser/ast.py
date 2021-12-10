@@ -61,7 +61,7 @@ class ASTSlot:
 
     def create_on(self, plain_object, the_environment):
         if 'code' in self._flags:
-            code = ecosphere.compiler.compile_ast(self._value, the_environment, self._args, 'varargs' in self._flags)
+            code = ecosphere.compiler.compile_ast(self._value, the_environment, self._type, self._args, 'varargs' in self._flags)
             slot = ecosphere.objects.plain.EcoCodeSlot(self._name, code)
         else:
             slot = ecosphere.objects.plain.EcoValueSlot(self._name, 'inherited' in self._flags, 'nodelegate' in self._flags, 'part' in self._flags)
@@ -271,6 +271,9 @@ class ASTBlock(ASTExpression):
     def accept(self, visitor):
         visitor.visit_block(self)
 
+    def get_type(self):
+        return self._type
+
     def get_parameters(self):
         return self._parameters
     
@@ -280,8 +283,9 @@ class ASTBlock(ASTExpression):
     def get_body(self):
         return self._body
 
-    def __init__(self, parameters, varargs, body):
+    def __init__(self, the_type, parameters, varargs, body):
         super().__init__()
+        self._type = the_type
         self._parameters = parameters
         self._varargs = varargs
         self._body = body
