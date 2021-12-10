@@ -325,7 +325,7 @@ class ASTProxy(ASTExpression):
         self._proxy_type = proxy_type
         self._address = address
 
-def ASTAs(ASTExpression):
+class ASTAs(ASTExpression):
 
     def get_left(self):
         return self._left
