@@ -257,13 +257,14 @@ class CodeGenerator:
         the_type, storage_location = self._scope.get_binding(name)
         return storage_location is not None
 
-    def store_var(self, name):
+    def store_var(self, name, loader):
         the_type, storage_location = self._scope.get_binding(name)
         if storage_location is not None:
             # If the_type is not None, do a type check before assigning
             if the_type is not None:
                 self.push()
-                self.load_constant(the_type)
+                callback = self.load_constant_cb()
+                the_type.evaluate(None, loader, callback)
                 self.op_as()
             self._transfer_last_value(storage_location)
             return True

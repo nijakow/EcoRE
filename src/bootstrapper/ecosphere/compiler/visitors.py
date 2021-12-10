@@ -23,9 +23,10 @@ class ASTAssignmentVisitor(ASTVisitor):
     def visit_var_access(self, ast):
         assert self._code_generator.is_var(ast.get_key())
         self._rhs.accept(self._parent_visitor)
-        assert self._code_generator.store_var(ast.get_key())
+        assert self._code_generator.store_var(ast.get_key(), self._loader)
 
-    def __init__(self, code_generator, parent_visitor, rhs_ast):
+    def __init__(self, loader, code_generator, parent_visitor, rhs_ast):
+        self._loader = loader
         self._code_generator = code_generator
         self._parent_visitor = parent_visitor
         self._rhs = rhs_ast
@@ -72,15 +73,16 @@ class ASTCompilerVisitor(ASTVisitor):
             self._code_generator.op_send(1, ast.get_key())
 
     def visit_assignment(self, ast):
-        assignment_visitor = ASTAssignmentVisitor(self._code_generator, self, ast.get_rhs())
+        assignment_visitor = ASTAssignmentVisitor(self._loader, self._code_generator, self, ast.get_rhs())
         ast.get_lhs().accept(assignment_visitor)
 
     def visit_var(self, ast):
+        the_type = ast.get_type()
         varname = ast.get_var()
         value = ast.get_var_value()
         value.accept(self)
-        self._environment.bind(varname, ast.get_type())
-        self._code_generator.store_var(varname)
+        self._environment.bind(varname, the_type)
+        self._code_generator.store_var(varname, self._loader)
         ast.get_followup_expression().accept(self)
 
     def visit_return(self, ast):
@@ -120,7 +122,6 @@ class ASTCompilerVisitor(ASTVisitor):
         self._code_generator.push()
         ast.get_right().accept(self)
         self._code_generator.op_as()
-
 
     def __init__(self, code_generator, environment, loader):
         self._code_generator = code_generator
