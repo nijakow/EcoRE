@@ -48,9 +48,10 @@ class Parser:
         varargs = False
         while True:
             if self.check(TokenType.COLON):
+                the_type = self.parse_optional_type(env)
                 key = ecosphere.objects.misc.EcoKey.Get(self.expect(TokenType.IDENTIFIER).get_text())
                 env.bind(key)
-                parameters.append((key,))
+                parameters.append((key, the_type))
                 if not self.check(TokenType.RARROW) and not self.check(TokenType.BAR):
                     self.expect(TokenType.SEPARATOR)
             elif self.check(TokenType.ELLIPSIS):
@@ -193,17 +194,18 @@ class Parser:
         return ASTSend(ast, ecosphere.objects.misc.EcoKey.Get(name), args, varargs)
 
     def parse_bar(self, env, terminator=TokenType.BAR):
+        the_type = self.parse_optional_type(env)
         varname = self.expect(TokenType.IDENTIFIER).get_key()
-        env.bind(varname)
+        env.bind(varname)  # Don't bind the type
         if self.check(TokenType.ASSIGNMENT):
             value = self.parse_expression(env)
         else:
             value = ASTSelf()
         self.check(TokenType.SEPARATOR)
         if self.check(terminator):
-            return ASTVar(varname, value, self.parse_expression(env))
+            return ASTVar(the_type, varname, value, self.parse_expression(env))
         else:
-            return ASTVar(varname, value, self.parse_bar(env))
+            return ASTVar(the_type, varname, value, self.parse_bar(env))
 
     def maybe_parse_curly_block(self, env, allow_followups:bool=False):
         if self.check(TokenType.LCURLY):

@@ -195,6 +195,9 @@ class ASTVar(ASTExpression):
     def accept(self, visitor):
         visitor.visit_var(self)
     
+    def get_type(self):
+        return self._type
+
     def get_var(self):
         return self._var
     
@@ -204,8 +207,9 @@ class ASTVar(ASTExpression):
     def get_followup_expression(self):
         return self._next
 
-    def __init__(self, variable, value, next_expr):
+    def __init__(self, the_type, variable, value, next_expr):
         super().__init__()
+        self._type = the_type
         self._var = variable
         self._value = value
         self._next = next_expr

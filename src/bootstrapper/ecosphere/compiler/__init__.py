@@ -13,7 +13,7 @@ class Compiler:
 def compile_ast(the_ast, loader, parameters=list(), has_varargs=False, parent_env=None):
     environment = ecosphere.compiler.scopes.RootEnvironment(parent_env)
     for param in parameters:
-        environment.add_parameter(param[0])  # Ignore type and default value info
+        environment.add_parameter(param[0], param[1])
     if has_varargs:
         environment.enable_varargs()
     writer = ecosphere.compiler.codegen.CodeWriter()

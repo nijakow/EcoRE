@@ -246,7 +246,7 @@ class CodeGenerator:
 
     def load_var(self, name):
         self._drop_last_value()
-        storage_location = self._scope.get_binding(name)
+        the_type, storage_location = self._scope.get_binding(name)
         if storage_location is not None:
             self._set_last_value(storage_location)
             return True
@@ -254,11 +254,13 @@ class CodeGenerator:
             return False
     
     def is_var(self, name):
-        return self._scope.get_binding(name) is not None
+        the_type, storage_location = self._scope.get_binding(name)
+        return storage_location is not None
 
     def store_var(self, name):
-        storage_location = self._scope.get_binding(name)
+        the_type, storage_location = self._scope.get_binding(name)
         if storage_location is not None:
+            # TODO: if the_type is not None, do a Type check
             self._transfer_last_value(storage_location)
             return True
         else:
