@@ -19,6 +19,10 @@ def compile_ast(the_ast, loader, parameters=list(), has_varargs=False, parent_en
     writer = ecosphere.compiler.codegen.CodeWriter()
     codegen = ecosphere.compiler.codegen.CodeGenerator(writer, environment)
     visitor = ecosphere.compiler.visitors.ASTCompilerVisitor(codegen, environment, loader)
+    for param in parameters:
+        if param[1] is not None:
+            codegen.load_var(param[0])
+            codegen.store_var(param[0], visitor)
     the_ast.accept(visitor)
     result = codegen.finish()
     return result
