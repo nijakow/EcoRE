@@ -214,6 +214,28 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
 
             SLOW_DISPATCH();
         }
+        TARGET(AS) {
+            struct Eco_Message  message;
+
+            message.key               = Eco_Any_AsPointer(NEXT_CONSTANT());
+            message.fiber             = fiber;
+            message.type              = Eco_Message_Type_AS;
+
+            FAST_POP(&message.body.as.value);
+
+            top->instruction          = instruction;
+            fiber->stack_pointer      = sp;
+
+            if (!Eco_Send(&message,
+                           NULL,
+                           Eco_Fiber_Nth(fiber, 1),
+                           Eco_Fiber_Nth(fiber, 1))) {
+                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ASFAILED);
+                goto error;
+            }
+
+            SLOW_DISPATCH();
+        }
         TARGET(RETURN) {
             u8                 depth;
             struct Eco_Frame*  target;

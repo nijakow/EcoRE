@@ -9,7 +9,8 @@ struct Eco_Fiber;
 enum Eco_Message_Type
 {
     Eco_Message_Type_SEND,
-    Eco_Message_Type_ASSIGN
+    Eco_Message_Type_ASSIGN,
+    Eco_Message_Type_AS
 };
 
 struct Eco_Message
@@ -21,6 +22,9 @@ struct Eco_Message
         struct {
             Eco_Any        value;
         } assign;
+        struct {
+            Eco_Any        value;
+        } as;
     }                      body;
     struct Eco_Fiber*      fiber;
     struct Eco_Object*     key;

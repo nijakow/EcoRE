@@ -28,6 +28,8 @@ class TokenType(enum.Enum):
     RARROW = enum.auto()
     ELLIPSIS = enum.auto()
     SELF = enum.auto()
+    IS = enum.auto()
+    AS = enum.auto()
     WITH = enum.auto()
     INHERITED = enum.auto()
     OWN = enum.auto()
@@ -206,6 +208,8 @@ class Tokenizer:
 
         if c == '': return Token(self, TokenType.EOF)
         elif c == 'self': return Token(self, TokenType.SELF)
+        elif c == 'is': return Token(self, TokenType.IS)
+        elif c == 'as': return Token(self, TokenType.AS)
         elif c == 'with': return Token(self, TokenType.WITH)
         elif c == 'inherited': return Token(self, TokenType.INHERITED)
         elif c == 'own': return Token(self, TokenType.OWN)

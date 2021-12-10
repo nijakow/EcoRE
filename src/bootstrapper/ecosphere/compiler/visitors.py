@@ -24,12 +24,6 @@ class ASTAssignmentVisitor(ASTVisitor):
         assert self._code_generator.is_var(ast.get_key())
         self._rhs.accept(self._parent_visitor)
         assert self._code_generator.store_var(ast.get_key())
-        # else:
-        #     self._code_generator.load_self()
-        #     self._code_generator.push()
-        #     self._rhs.accept(self._parent_visitor)
-        #     self._code_generator.push()
-        #     self._code_generator.op_assign(ast.get_key())
 
     def __init__(self, code_generator, parent_visitor, rhs_ast):
         self._code_generator = code_generator
@@ -78,7 +72,6 @@ class ASTCompilerVisitor(ASTVisitor):
             self._code_generator.op_send(1, ast.get_key())
 
     def visit_assignment(self, ast):
-        # ast.get_rhs().accept(self)
         assignment_visitor = ASTAssignmentVisitor(self._code_generator, self, ast.get_rhs())
         ast.get_lhs().accept(assignment_visitor)
 
@@ -121,6 +114,13 @@ class ASTCompilerVisitor(ASTVisitor):
     
     def visit_labeldef(self, ast):
         self.visit_object(ast)
+    
+    def visit_as(self, ast):
+        ast.get_left().accept(self)
+        self._code_generator.push()
+        ast.get_right().accept(self)
+        self._code_generator.op_as()
+
 
     def __init__(self, code_generator, environment, loader):
         self._code_generator = code_generator

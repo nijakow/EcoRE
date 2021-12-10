@@ -15,6 +15,7 @@ enum Eco_Fiber_State
     Eco_Fiber_State_ERROR_ARGERROR,
     Eco_Fiber_State_ERROR_SENDFAILED,
     Eco_Fiber_State_ERROR_ASSIGNFAILED,
+    Eco_Fiber_State_ERROR_ASFAILED,
     Eco_Fiber_State_ERROR_RETURNFAILED,
 };
 

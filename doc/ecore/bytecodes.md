@@ -17,5 +17,6 @@
 | SEND     | `0x0c <args:u8> <key:u16>`           | `self, a0, ..., aN` | `return_value` |
 | SENDV    | `0x0d <args:u8> <key:u16>`           | `self, a0, ..., aN` | `return_value` |
 | ASSIGN   | `0x0e <key:u16>`                     | `target, value`     | `target`       |
-| RETURN   | `0x0f <depth:u8>`                    |                     |                |
-| CLOSURE  | `0x10 <dest:u8> <code_id:u16>`       |                     |                |
+| AS       | `0x0f`                               | `object, type`      | `object'`      |
+| RETURN   | `0x10 <depth:u8>`                    |                     |                |
+| CLOSURE  | `0x11 <dest:u8> <code_id:u16>`       |                     |                |

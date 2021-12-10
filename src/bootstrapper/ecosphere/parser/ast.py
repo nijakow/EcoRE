@@ -324,3 +324,19 @@ class ASTProxy(ASTExpression):
         super().__init__()
         self._proxy_type = proxy_type
         self._address = address
+
+def ASTAs(ASTExpression):
+
+    def get_left(self):
+        return self._left
+    
+    def get_right(self):
+        return self._right
+
+    def accept(self, visitor):
+        visitor.visit_as(self)
+    
+    def __init__(self, left, right):
+        super().__init__()
+        self._left = left
+        self._right = right

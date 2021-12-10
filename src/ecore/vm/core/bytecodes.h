@@ -18,6 +18,7 @@ enum Eco_Bytecode
     Eco_Bytecode_SEND,
     Eco_Bytecode_SENDV,
     Eco_Bytecode_ASSIGN,
+    Eco_Bytecode_AS,
     Eco_Bytecode_RETURN,
     Eco_Bytecode_MAKE_CLOSURE,
 };

@@ -16,8 +16,9 @@ class Bytecodes:
     SEND = 0x0c
     SENDV = 0x0d
     ASSIGN = 0x0e
-    RETURN = 0x0f
-    CLOSURE = 0x10
+    AS = 0x0f
+    RETURN = 0x10
+    CLOSURE = 0x11
 
 
 class CodeWriter:
@@ -120,6 +121,9 @@ class CodeWriter:
     def write_assign(self, key):
         self._u8(Bytecodes.ASSIGN)
         self._add_constant(key)
+    
+    def write_as(self):
+        self._u8(Bytecodes.AS)
 
     def write_return(self, depth):
         self._u8(Bytecodes.RETURN)
@@ -300,6 +304,10 @@ class CodeGenerator:
                     self._transfer_value(v, target)
                     v.free()
         self._last_value = writer
+    
+    def op_as(self):
+        self.push()
+        self._writer.write_as()
     
     def finish(self):
         self.op_return(0)

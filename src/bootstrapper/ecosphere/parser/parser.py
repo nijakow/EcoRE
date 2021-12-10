@@ -2,7 +2,7 @@ import ecosphere.objects.misc
 import ecosphere.parser.tokenizer
 from ecosphere.parser.tokenizer import TokenType
 
-from ecosphere.parser.ast import ASTExpression, ASTNumber, ASTCharacter, ASTSelf, ASTGroup, ASTObject, ASTPlainObject, ASTSlot, ASTNumber, ASTKey, ASTString, ASTVector, ASTBuiltin, ASTSend, ASTVarAccess, ASTSeq, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn, ASTLabelDef, ASTProxy
+from ecosphere.parser.ast import ASTExpression, ASTNumber, ASTCharacter, ASTSelf, ASTGroup, ASTObject, ASTPlainObject, ASTSlot, ASTNumber, ASTKey, ASTString, ASTVector, ASTBuiltin, ASTSend, ASTVarAccess, ASTSeq, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn, ASTLabelDef, ASTProxy, ASTAs
 
 
 class ParseException(Exception):
@@ -224,6 +224,8 @@ class Parser:
             if self.check(TokenType.LPAREN):
                 args, varargs = self.parse_arglist(env)
                 ast = ASTSend(ast, ecosphere.objects.misc.EcoKey.Get('value'), args, varargs)
+            elif self.check(TokenType.AS):
+                ast = ASTAs(ast, self.parse_expression(env, False))
             elif self.check(TokenType.ASSIGNMENT):
                 ast = ASTAssignment(ast, self.parse_expression(env, allow_followups))
             elif allow_followups and self.check(TokenType.TILDE):
