@@ -260,7 +260,11 @@ class CodeGenerator:
     def store_var(self, name):
         the_type, storage_location = self._scope.get_binding(name)
         if storage_location is not None:
-            # TODO: if the_type is not None, do a Type check
+            # If the_type is not None, do a type check before assigning
+            if the_type is not None:
+                self.push()
+                self.load_constant(the_type)
+                self.op_as()
             self._transfer_last_value(storage_location)
             return True
         else:
@@ -310,6 +314,7 @@ class CodeGenerator:
     def op_as(self):
         self.push()
         self._writer.write_as()
+        self._set_last_value_to_stack()
     
     def finish(self):
         self.op_return(0)

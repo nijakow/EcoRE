@@ -122,6 +122,8 @@ class EcoCode(ecosphere.objects.base.EcoObject):
                     self._op('SNDV', args, self._const())
                 elif op == Bytecodes.ASSIGN:
                     self._op('ASGN', self._const())
+                elif op == Bytecodes.AS:
+                    self._op('AS', self._const())
                 elif op == Bytecodes.RETURN:
                     self._op('RET ', self._u8())
                 elif op == Bytecodes.CLOSURE:
