@@ -3,10 +3,16 @@ PYTHON := python3
 endif
 
 NAME = master.ebf
+SOURCES = \
+init.eco \
+std/std.eco \
+std/io.eco \
+std/util.eco \
+master.eco
 
 
-%.ebf: %.eco
-	PYTHONPATH=../bootstrapper $(PYTHON) -m ecosphere.bootstrapper $< $@
+$(NAME): $(SOURCES)
+	PYTHONPATH=../bootstrapper $(PYTHON) -m ecosphere.bootstrapper $(NAME) $(SOURCES)
 
 all: $(NAME)
 

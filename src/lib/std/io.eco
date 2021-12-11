@@ -2,7 +2,7 @@
     io.eco - The `std io` package of the Ecosphere
 "
 
-{
+#=std/io: {
     PortInput => {
         _br;
 
@@ -38,7 +38,7 @@
             );
         };
 
-        with inherited parent = #<:std/Clonable@std.eco>;
+        with inherited parent = #<:std/Clonable>;
     },
 
     PortOutput = {
@@ -56,7 +56,7 @@
             <<newline  => ( self << (char newline). ^ self );
         };
 
-        with inherited parent = #<:std/Clonable@std.eco>;
+        with inherited parent = #<:std/Clonable>;
     },
 
     PortIO = {
@@ -70,6 +70,6 @@
             );
         };
 
-        with inherited parent = #<:std/Clonable@std.eco>;
+        with inherited parent = #<:std/Clonable>;
     }
 }

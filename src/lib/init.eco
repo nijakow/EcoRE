@@ -12,7 +12,7 @@
         | v <- self value |
         v if: [ ^ v ] else: [ ^ b value ]
     );
-    with inherited parent = #<:std/Clonable@std/std.eco>;
+    with inherited parent = #<:std/Clonable>;
 },
 
 #=init/integer_proxy: {
@@ -66,7 +66,7 @@
         |
         lib WriteNum(writer, self);
     );
-    with inherited parent = #<:std/Clonable@std/std.eco>;
+    with inherited parent = #<:std/Clonable>;
 },
 
 #=init/character_proxy: {
@@ -91,7 +91,7 @@
             default: [ writer byte<< 0xef. writer byte<< 0xbf. writer byte<< 0xbd. ].
       ^ self
     );
-    with inherited parent = #<:std/Clonable@std/std.eco>;
+    with inherited parent = #<:std/Clonable>;
 },
 
 #=init/key_proxy: {
@@ -102,7 +102,7 @@
         writer << asString.
         writer << #\'.
     );
-    with inherited parent = #<:std/Clonable@std/std.eco>;
+    with inherited parent = #<:std/Clonable>;
 },
 
 #=init/string_proxy: {
@@ -123,7 +123,7 @@
     );
     writeOn: writer => do: [ :c | writer << c ];
     asKey => #'ecosphere.ecore.object.string.as_key'(self);
-    with inherited parent = #<:std/Clonable@std/std.eco>;
+    with inherited parent = #<:std/Clonable>;
 },
 
 #=init/vector_proxy: {
@@ -141,7 +141,7 @@
     asString => #'ecosphere.ecore.object.vector.to_string'(self);
     _norm(i) => (i isNegative) if: [ size + i ] else: [ i ];
     _nnorm(i) => (i isNegative) if: [ size + i + 1 ] else: [ i ];
-    with inherited parent = #<:std/Clonable@std/std.eco>;
+    with inherited parent = #<:std/Clonable>;
 },
 
 #=init/port_proxy: {
@@ -159,5 +159,5 @@
 
     commit => #'ecosphere.ecore.object.port.flush_output'(self);
 
-    with inherited parent = #<:std/Clonable@std/std.eco>;
+    with inherited parent = #<:std/Clonable>;
 }

@@ -110,11 +110,13 @@ def banner():
 ''')
 
 
-def main(srcfile, binfile):
+def main(binfile, srcfiles):
     banner()
     shared = SharedBootstrappingInfo()
-    loader = shared.load(pathlib.Path(srcfile))
-    result = loader.compile()
+    result = None
+    for srcfile in srcfiles:
+        loader = shared.load(pathlib.Path(srcfile))
+        result = loader.compile()
     serializer = ecosphere.econnect.Serializer()
     serializer.write_object(result)
     with open(binfile, 'wb') as out:
@@ -123,4 +125,6 @@ def main(srcfile, binfile):
         out.write(serialized)
 
 if __name__ == '__main__':
-    main(sys.argv[1], sys.argv[2])
+    ofile = sys.argv[1]
+    ifiles = sys.argv[2:]
+    main(ofile, ifiles)

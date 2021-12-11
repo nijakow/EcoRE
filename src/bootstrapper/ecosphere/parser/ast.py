@@ -314,15 +314,7 @@ class ASTProxy(ASTExpression):
     def evaluate(self, subject, environment, the_callback):
         if self._proxy_type == '':
             if '@' in self._address:
-                index = self._address.index('@')
-                label = self._address[:index]
-                filename = self._address[index+1:]
-                loader = environment.load_file(filename)
-                if label:
-                    loader.evaluate()
-                    loader.when_label_defined(label, the_callback)
-                else:
-                    the_callback(loader.evaluate())
+                raise Exception('The use of the \'@\' sign in proxies is now forbidden!')
             else:
                 environment.when_label_defined(self._address, the_callback)
         else:

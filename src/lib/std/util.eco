@@ -2,7 +2,7 @@
     util.eco - The `std util` package of the Ecosphere
 "
 
-{
+#=std/util: {
     Pair = {
         first, second;
 

@@ -2,7 +2,7 @@
     std.eco - The std part of the Ecosphere Standard Library
 "
 
-{
+#=std: {
     with globals = {
         with char = {
             backspace =>  8 asChar;
@@ -69,6 +69,6 @@
         new => #() clone;
     };
 
-    io = #<:@io.eco>;
-    util = #<:@util.eco>;
+    io = #<:std/io>;
+    util = #<:std/util>;
 }
