@@ -73,7 +73,6 @@
 
 #=init/character_proxy: {
     asInt           => #'ecosphere.ecore.char.as_int'(self);
-    writeOn: writer => writer char<< self;
     == other        => #'ecosphere.ecore.is'(self, other);
     != other        => (self == other) not;
     writeOn: writer => (

@@ -32,6 +32,11 @@
 
         io out << 'Hello, world!'.
         io out newline.
+
+        | l <- ((std util List) clone) init |
+        io out << (l size).
+        io out newline.
+
         io out commit.
         [
             io out << '> '.

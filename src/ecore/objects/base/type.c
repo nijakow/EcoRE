@@ -133,7 +133,7 @@ static bool Eco_Type_CopyWithNewSlot(struct Eco_Type* self,
     const unsigned int  new_slot_count = self->slot_count + 1;
 
     if (pos >= 0) adjusted_pos =  pos;
-    else          adjusted_pos = -pos; 
+    else          adjusted_pos = self->slot_count + pos + 1;
 
     if (adjusted_pos >= new_slot_count) adjusted_pos = new_slot_count - 1;
 

@@ -16,15 +16,17 @@
     };
 
     Clonable = #=std/Clonable: {
-        init        => ^ self;
-        clone       => #'ecosphere.ecore.clone'(self);
-        new         => clone init;
-        lens: other => (other clone) init: self;
-        mirror      => ;   "TODO"
-        is: other   => #'ecosphere.ecore.is'(self, other);
-        asBool      => true;
-        @ second    => ((std util Pair) new) first: self second: second;
-        with lobby  = #<:lobby>;
+        init         => ^ self;
+        clone        => #'ecosphere.ecore.clone'(self);
+        new          => clone init;
+        lens: other  => (other clone) init: self;
+        mirror       => ;   "TODO"
+        is: other    => #'ecosphere.ecore.is'(self, other);
+        == other     => is: other;
+        != other     => (== other) not;
+        asBool       => true;
+        @ second     => ((std util Pair) new) first: self second: second;
+        with lobby   = #<:lobby>;
     };
 
     Object = #=std/Object: {
