@@ -16,5 +16,58 @@
         };
 
         with inherited parent = #<:std/Clonable>;
-    }
+    },
+
+    Link = {
+        own next,
+        own prev,
+        value;
+
+        with inherited trait = {
+            init => (next: self prev: self) value: self;
+            next: value => ( next <- value. ^ self );
+            prev: value => ( prev <- value. ^ self );
+            next: nv prev: pv => (next: nv) prev: pv;
+            value: nv => ( value <- nv. ^ self );
+        };
+
+        with inherited parent = #<:std/Clonable>;
+    },
+
+    List = {
+        own elements;
+
+        with inherited trait = {
+            init => ( elements <- (std util Link) clone init. ^ self );
+            size => (
+                | s <- 0, p <- elements next |
+                [ p != elements ] while: [ s <- s inc. p <- p next. ].
+              ^ s
+            );
+            isEmpty => size isZero;
+            do: block => (
+                | p <- elements next |
+                [ p != elements ] while: [ block value(p value). p <- p next. ].
+              ^ self
+            );
+            at: i => (
+                | p <- elements next |
+                [ i isZero ] until: [
+                    "TODO: Error if (p == elements)"
+                    p <- p next.
+                    i <- i - 1.
+                ].
+              ^ p value
+            );
+            append: value => (
+                | link <- (std util Link) clone init |
+                link next: elements prev: elements prev.
+                (elements prev) next: link.
+                elements prev: link.
+              ^ self
+            );
+        };
+
+        with inherited parent = #<:std/Clonable>;
+    };
 }
