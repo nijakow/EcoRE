@@ -61,6 +61,7 @@
             );
             append: value => (
                 | link <- (std util Link) clone init |
+                link value: value.
                 link next: elements prev: elements prev.
                 (elements prev) next: link.
                 elements prev: link.

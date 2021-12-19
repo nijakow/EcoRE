@@ -34,8 +34,11 @@
         io out newline.
 
         | l <- ((std util List) clone) init |
-        io out << (l size).
-        io out newline.
+        io out << (l size). io out newline.
+        l append: 42.
+        io out << (l size) << ' ' << (l at: 0). io out newline.
+        l append: -21.
+        l do: [ :e | io out << e ]. io out newline.
 
         io out commit.
         [
