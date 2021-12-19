@@ -31,13 +31,13 @@
         | p <- #'ecosphere.ecore.object.port.new'(1), io <- p lens: (std io PortIO) |
 
         io out << 'Hello, world!'.
-        io out <<newline.
+        io out newline.
         io out commit.
         [
             io out << '> '.
             io out commit.
             io out << (io in readLine).
-            io out <<newline
+            io out newline
         ] repeat.
     );
 

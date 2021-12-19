@@ -53,7 +53,7 @@
             commit     => _port commit;
             byte<< b   => _port byte<< b;
             << object  => ( object writeOn: self. ^ self );
-            <<newline  => ( self << (char newline). ^ self );
+            newline  => ( self << (char newline). ^ self );
         };
 
         with inherited parent = #<:std/Clonable>;

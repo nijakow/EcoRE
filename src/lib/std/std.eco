@@ -4,7 +4,7 @@
 
 #=std: {
     with globals = {
-        with char = {
+        char = {
             backspace =>  8 asChar;
             tab       =>  9 asChar;
             newline   => 10 asChar;
