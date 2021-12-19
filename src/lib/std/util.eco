@@ -92,6 +92,29 @@
             prev:  p => ( prev  <- p. ^ self );
             index: i => ( index <- i. ^ self );
             value: v => ( value <- v. ^ self );
+            doBackwards: block => (
+                | p <- self |
+                [
+                    block value(index, value).
+                    [ p prev == p ] if: [ ^ self ].
+                ] repeat.
+            );
+            do: block => (
+                [ prev == self ] unless: [ prev do: block ].
+                block value(index, value).
+            );
+
+            asList => (
+                | list <- ((std util List) clone) init |
+                do: [ :index, :value | list append: value ].
+              ^ list
+            );
+
+            asVector => (
+                | vector <- (std Vector) new |
+                do: [ :index, :value | vector append: value ].
+              ^ vector
+            );
         };
 
         with inherited parent = #<:std/Clonable>;

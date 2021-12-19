@@ -54,6 +54,7 @@ class Parser:
                 parameters.append((key, the_type))
                 if not self.check(TokenType.RARROW) and not self.check(TokenType.BAR):
                     self.expect(TokenType.SEPARATOR)
+                    continue
             elif self.check(TokenType.ELLIPSIS):
                 varargs = True
                 if not self.check(TokenType.RARROW):
