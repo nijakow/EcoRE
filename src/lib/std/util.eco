@@ -79,12 +79,13 @@
 
         with inherited trait = {
             init: v => (
+                prev <- self.
                 index <- 0.
-                value <- value.
+                value <- v.
               ^ self
             );
             & v => (
-                | next <- Collector clone init: v |
+                | next <- (std util Collector) clone init: v |
                 next prev: self.
                 next index: index inc.
               ^ next
@@ -100,13 +101,13 @@
                 ] repeat.
             );
             do: block => (
-                [ prev == self ] unless: [ prev do: block ].
+                (prev == self) unless: [ prev do: block ].
                 block value(index, value).
             );
 
             asList => (
                 | list <- ((std util List) clone) init |
-                do: [ :index, :value | list append: value ].
+                do: [ :index, :value | list append: value. ].
               ^ list
             );
 
