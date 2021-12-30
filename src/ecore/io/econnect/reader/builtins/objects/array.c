@@ -1,4 +1,4 @@
-#include "vector.h"
+#include "array.h"
 
 #include <ecore/io/econnect/reader/parser.h>
 

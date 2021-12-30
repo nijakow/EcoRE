@@ -1,4 +1,4 @@
-#include "vector.h"
+#include "array.h"
 
 #include <ecore/objects/misc/array/array.h>
 

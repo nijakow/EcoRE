@@ -25,7 +25,6 @@ objects/io/port.c \
 objects/misc/array/array.c \
 objects/misc/key/key.c \
 objects/misc/string/string.c \
-objects/misc/vector/vector.c \
 objects/pseudo/character.c \
 objects/pseudo/integer.c \
 objects/vm/code/code.c \
@@ -43,7 +42,6 @@ vm/builtins/core/port.c \
 vm/builtins/core/reflection.c \
 vm/builtins/core/slots.c \
 vm/builtins/core/string.c \
-vm/builtins/core/vector.c \
 vm/memory/memory.c \
 vm/memory/arena.c \
 vm/memory/gc/gc_state.c \
@@ -71,7 +69,6 @@ io/econnect/reader/builtins/objects/object.c \
 io/econnect/reader/builtins/objects/object_body.c \
 io/econnect/reader/builtins/objects/key.c \
 io/econnect/reader/builtins/objects/string.c \
-io/econnect/reader/builtins/objects/vector.c \
 io/econnect/reader/builtins/objects/code.c \
 io/econnect/reader/builtins/id/id.c \
 io/econnect/reader/builtins/flow/flow.c \
