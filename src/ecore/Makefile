@@ -22,6 +22,7 @@ objects/molecule/molecule.c \
 objects/molecule/object_payload.c \
 objects/molecule/object_slots.c \
 objects/io/port.c \
+objects/misc/array/array.c \
 objects/misc/key/key.c \
 objects/misc/string/string.c \
 objects/misc/vector/vector.c \
