@@ -31,6 +31,7 @@ objects/pseudo/integer.c \
 objects/vm/code/code.c \
 objects/vm/code/closure.c \
 vm/builtins/builtins.c \
+vm/builtins/core/array.c \
 vm/builtins/core/clone.c \
 vm/builtins/core/flow.c \
 vm/builtins/core/init.c \

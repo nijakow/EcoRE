@@ -2,6 +2,7 @@
 
 #include "builtin.h"
 
+#include "core/array.h"
 #include "core/clone.h"
 #include "core/flow.h"
 #include "core/init.h"
@@ -71,6 +72,11 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.byte_length", Eco_VM_Builtin_StringByteLength);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.char_length", Eco_VM_Builtin_StringCharLength);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.as_key", Eco_VM_Builtin_StringAsKey);
+
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.array.size", Eco_VM_Builtin_ArraySize);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.array.at", Eco_VM_Builtin_ArrayAt);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.array.at_put", Eco_VM_Builtin_ArrayAtPut);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.array.to_string", Eco_VM_Builtin_ArrayToString);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.vector.size", Eco_VM_Builtin_VectorSize);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.vector.at", Eco_VM_Builtin_VectorAt);
