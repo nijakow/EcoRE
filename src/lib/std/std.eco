@@ -68,10 +68,6 @@
         }
     },
 
-    Vector = {
-        new => #() clone;
-    };
-
     io = #<:std/io>;
     util = #<:std/util>;
 }

@@ -133,28 +133,13 @@
     at: index => #'ecosphere.ecore.object.array.at'(self, _norm(index));
     at: index put: value => #'ecosphere.ecore.object.array.at_put'(self, _norm(index), value);
     do: body => (
-        0 for: size do: [ :i => body value(at: i) ].
+        0 for: size do: [ :i | body value(at: i) ].
       ^ self
+    );
+    iter: body => (
+        0 for: size do: [ :i | body value(i, at: i) ].
     );
     asString => #'ecosphere.ecore.object.array.to_string'(self);
-    _norm(i) => (i isNegative) if: [ size + i ] else: [ i ];
-    _nnorm(i) => (i isNegative) if: [ size + i + 1 ] else: [ i ];
-    with inherited parent = #<:std/Clonable>;
-},
-
-#=init/vector_proxy: {
-    size => #'ecosphere.ecore.object.vector.size'(self);
-    isEmpty => size isZero;
-    at: index => #'ecosphere.ecore.object.vector.at'(self, _norm(index));
-    at: index put: value => #'ecosphere.ecore.object.vector.at_put'(self, _norm(index), value);
-    at: index insert: value => #'ecosphere.ecore.object.vector.insert'(self, _nnorm(index), value);
-    append: value => at: size insert: value;
-    remove: index => #'ecosphere.ecore.object.vector.remove'(self, _norm(index));
-    do: body => (
-        0 for: size do: [ :i => body value(at: i) ].
-      ^ self
-    );
-    asString => #'ecosphere.ecore.object.vector.to_string'(self);
     _norm(i) => (i isNegative) if: [ size + i ] else: [ i ];
     _nnorm(i) => (i isNegative) if: [ size + i + 1 ] else: [ i ];
     with inherited parent = #<:std/Clonable>;

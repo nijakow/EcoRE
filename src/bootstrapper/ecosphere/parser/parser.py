@@ -2,7 +2,7 @@ import ecosphere.objects.misc
 import ecosphere.parser.tokenizer
 from ecosphere.parser.tokenizer import TokenType
 
-from ecosphere.parser.ast import ASTExpression, ASTNumber, ASTCharacter, ASTSelf, ASTGroup, ASTObject, ASTPlainObject, ASTSlot, ASTNumber, ASTKey, ASTString, ASTVector, ASTBuiltin, ASTSend, ASTVarAccess, ASTSeq, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn, ASTLabelDef, ASTProxy, ASTAs
+from ecosphere.parser.ast import ASTExpression, ASTNumber, ASTCharacter, ASTSelf, ASTGroup, ASTObject, ASTPlainObject, ASTSlot, ASTNumber, ASTKey, ASTString, ASTArray, ASTBuiltin, ASTSend, ASTVarAccess, ASTSeq, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn, ASTLabelDef, ASTProxy, ASTAs
 
 
 class ParseException(Exception):
@@ -128,8 +128,8 @@ class Parser:
             self.expect(TokenType.SEPARATOR)
         return ASTPlainObject(slots)
     
-    def parse_vector(self, env):
-        return ASTVector(self.parse_expressions(env, TokenType.RPAREN))
+    def parse_array(self, env):
+        return ASTArray(self.parse_expressions(env, TokenType.RPAREN))
 
     def parse_simple_expression(self, env, allow_followups=True) -> ASTExpression:
         if self.check(TokenType.SELF):
@@ -141,7 +141,7 @@ class Parser:
         elif self.check(TokenType.LCURLY):
             return self.parse_object(env)
         elif self.check(TokenType.HASHLPAREN):
-            return self.parse_vector(env)
+            return self.parse_array(env)
         kw = self._t.read()
         if kw.is_a(TokenType.KEY):
             if self.check(TokenType.LPAREN):

@@ -73,6 +73,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.char_length", Eco_VM_Builtin_StringCharLength);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.as_key", Eco_VM_Builtin_StringAsKey);
 
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.array.new", Eco_VM_Builtin_ArrayNew);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.array.size", Eco_VM_Builtin_ArraySize);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.array.at", Eco_VM_Builtin_ArrayAt);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.array.at_put", Eco_VM_Builtin_ArrayAtPut);

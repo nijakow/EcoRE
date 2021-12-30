@@ -38,7 +38,7 @@ class EcoString(ecosphere.objects.base.EcoObject):
     def __init__(self, string):
         self._string = string
 
-class EcoVector(ecosphere.objects.base.EcoObject):
+class EcoArray(ecosphere.objects.base.EcoObject):
 
     def get_setter(self, index):
         def func(value):
@@ -47,7 +47,7 @@ class EcoVector(ecosphere.objects.base.EcoObject):
 
     def serialize(self, serializer):
         if not serializer.try_serialize_known_object(self):
-            serializer.write_message('ecosphere.object.vector')
+            serializer.write_message('ecosphere.object.array')
             serializer.write_vlq(serializer.add_object(self))
             serializer.write_objects(self._elements)
 

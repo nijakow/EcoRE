@@ -112,10 +112,10 @@ class ASTString(ASTObject):
         super().__init__()
         self._string = string
 
-class ASTVector(ASTObject):
+class ASTArray(ASTObject):
 
     def _evaluate(self, the_subject, the_environment, the_callback):
-        v = ecosphere.objects.misc.EcoVector(len(self._elements))
+        v = ecosphere.objects.misc.EcoArray(len(self._elements))
         the_callback(v)
         for i in range(0, len(self._elements)):
             self._elements[i].evaluate(the_subject, the_environment, v.get_setter(i))

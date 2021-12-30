@@ -3,6 +3,22 @@
 #include <ecore/objects/misc/array/array.h>
 
 
+bool Eco_VM_Builtin_ArrayNew(struct Eco_Fiber* fiber, unsigned int args)
+{
+    /*
+     * TODO: Type checks
+     */
+    Eco_Any  length;
+    Eco_Any  array;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &length);
+    Eco_Any_AssignPointer(&array, (struct Eco_Object*) Eco_Array_New(Eco_Any_AsInteger(&length)));
+    Eco_Fiber_Push(fiber, &array);
+    return true;
+}
+
 bool Eco_VM_Builtin_ArraySize(struct Eco_Fiber* fiber, unsigned int args)
 {
     /*

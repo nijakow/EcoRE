@@ -29,7 +29,7 @@
               ^ v asChar
             );
             readLine => (
-                | v <- Vector new, c <- readChar |
+                | v <- (std util Vector) new, c <- readChar |
                 [ c == (char newline) ] until: [
                     v append: c.
                     c <- readChar
