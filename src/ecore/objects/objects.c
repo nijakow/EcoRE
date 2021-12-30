@@ -10,6 +10,7 @@
 #include "pseudo/integer.h"
 #include "vm/code/code.h"
 #include "vm/code/closure.h"
+#include "vm/interface/interface.h"
 
 
 void Eco_Objects_Init()
@@ -18,6 +19,7 @@ void Eco_Objects_Init()
     // Eco_Types_Init();
     Eco_Molecule_Init();
     Eco_Key_Init();
+    Eco_Interface_Init();
     Eco_Code_Init();
     Eco_Integer_Init();
     Eco_Character_Init();
@@ -36,6 +38,7 @@ void Eco_Objects_Terminate()
     Eco_Character_Terminate();
     Eco_Integer_Terminate();
     Eco_Code_Terminate();
+    Eco_Interface_Terminate();
     Eco_Key_Terminate();
     Eco_Molecule_Terminate();
     // Eco_Types_Terminate();

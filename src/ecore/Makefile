@@ -29,6 +29,7 @@ objects/pseudo/character.c \
 objects/pseudo/integer.c \
 objects/vm/code/code.c \
 objects/vm/code/closure.c \
+objects/vm/interface/interface.c \
 vm/builtins/builtins.c \
 vm/builtins/core/array.c \
 vm/builtins/core/clone.c \
