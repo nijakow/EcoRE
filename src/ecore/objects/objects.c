@@ -3,6 +3,7 @@
 #include "base/object.h"
 #include "molecule/molecule.h"
 #include "io/port.h"
+#include "misc/array/array.h"
 #include "misc/key/key.h"
 #include "misc/string/string.h"
 #include "misc/vector/vector.h"
@@ -24,6 +25,7 @@ void Eco_Objects_Init()
     Eco_String_Init();
     Eco_Closure_Init();
     Eco_Vector_Init();
+    Eco_Array_Init();
     Eco_Port_Init();
 }
 
@@ -31,6 +33,7 @@ void Eco_Objects_Terminate()
 {
     Eco_Port_Terminate();
     Eco_Vector_Terminate();
+    Eco_Array_Terminate();
     Eco_Closure_Terminate();
     Eco_String_Terminate();
     Eco_Character_Terminate();
