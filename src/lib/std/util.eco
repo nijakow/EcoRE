@@ -21,21 +21,53 @@
     },
 
     Vector = {
+        size = 0,
         own elements = #();
 
         with inherited trait = {
-            size => elements size;
-            isEmpty => elements isEmpty;
+            capacity => elements size;
+            isEmpty => size isZero;
+
             at: index => elements at: index;
             at: index put: value => elements at: index put: value;
-            do: body => elements do: body;
-            asString => elements asString;
+
+            do: body => (
+                0 for: size do: [ :i | body value(at: i) ].
+              ^ self
+            );
+            iter: body => (
+                0 for: size do: [ :i | body value(i, at: i) ].
+              ^ self
+            );
+
+            asArray  => (
+                | arr <- std util Array(size) |
+                iter: [ :index, :value | arr at: index put: value ].
+              ^ arr
+            );
+
+            asString => asArray asString;
+
+            resize: cap => (
+                | new_elements = std util Array(cap) |
+                (cap < capacity) if: [
+                    0 for: cap do: [ :i | new_elements at: i put: (at: i) ]
+                ] else: [
+                    iter: [ :index, :value | new_elements at: index put: value ]
+                ].
+                elements <- new_elements.
+              ^ self
+            );
+
+            resizeToAtLeast: cap => (
+                (cap > capacity) if: [ resize: cap ].
+              ^ self
+            );
 
             append: element => (
-                | new_elements = std util Array(size + 1) | 
-                elements iter: [ :index, :value | new_elements at: index put: value ].
-                new_elements at: (elements size) put: element.
-                elements <- new_elements.
+                resizeToAtLeast: (size + 1).
+                elements at: size put: element.
+                size <- size + 1.
               ^ self
             );
         };

@@ -138,6 +138,7 @@
     );
     iter: body => (
         0 for: size do: [ :i | body value(i, at: i) ].
+      ^ self
     );
     asString => #'ecosphere.ecore.object.array.to_string'(self);
     _norm(i) => (i isNegative) if: [ size + i ] else: [ i ];
