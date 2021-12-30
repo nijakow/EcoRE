@@ -24,6 +24,7 @@
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.character_type'(), #<:init/character_proxy>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.block_type'(), #<:init/block_proxy>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.key_type'(), #<:init/key_proxy>).
+        #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.array_type'(), #<:init/array_proxy>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.string_type'(), #<:init/string_proxy>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.vector_type'(), #<:init/vector_proxy>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.port_type'(), #<:init/port_proxy>).
