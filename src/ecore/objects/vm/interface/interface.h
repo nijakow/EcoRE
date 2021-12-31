@@ -9,8 +9,9 @@ struct Eco_Interface;
 struct Eco_InterfaceEntry
 {
     struct Eco_Key*        key;
-    struct Eco_Interface*  return_type;
     unsigned int           arg_count;
+    bool                   has_varargs;
+    struct Eco_Interface*  return_type;
     struct Eco_Interface*  arg_types[];
 };
 
