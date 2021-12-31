@@ -118,7 +118,7 @@
       ^ self
     );
     asVector => (
-        | v <- #() clone |
+        | v <- (std util Vector) clone |
         self do: [ :c | v append: c ].
       ^ v
     );
