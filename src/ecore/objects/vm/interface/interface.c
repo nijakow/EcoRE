@@ -85,6 +85,14 @@ void Eco_Interface_Del(struct Eco_Interface* interface)
  *    M o d i f i c a t i o n
  */
 
+void Eco_Interface_EstablishSuperSubRelation(struct Eco_Interface* super_interface,
+                                             struct Eco_Interface* sub_interface)
+{
+    /*
+     *    TODO: Create a link between these two instances
+     */
+}
+
 struct Eco_Interface* Eco_Interface_AddEntry(struct Eco_Interface* old_interface,
                                              struct Eco_InterfaceEntry* entry)
 {
@@ -98,6 +106,11 @@ struct Eco_Interface* Eco_Interface_AddEntry(struct Eco_Interface* old_interface
         for (i = 0; i < old_interface->entry_count; i++)
             new_interface->entries[i] = old_interface->entries[i];
         new_interface->entries[i] = *entry;
+        Eco_Interface_EstablishSuperSubRelation(old_interface, new_interface);
+        /*
+         * TODO: Look for other interfaces that are supers to new_interface
+         *       and establish the same relation.
+         */
     }
 
     return new_interface;
