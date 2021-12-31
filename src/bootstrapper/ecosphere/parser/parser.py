@@ -2,7 +2,7 @@ import ecosphere.objects.misc
 import ecosphere.parser.tokenizer
 from ecosphere.parser.tokenizer import TokenType
 
-from ecosphere.parser.ast import ASTExpression, ASTNumber, ASTCharacter, ASTSelf, ASTGroup, ASTObject, ASTPlainObject, ASTSlot, ASTNumber, ASTKey, ASTString, ASTArray, ASTBuiltin, ASTSend, ASTVarAccess, ASTSeq, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn, ASTLabelDef, ASTProxy, ASTAs
+from ecosphere.parser.ast import ASTExpression, ASTNumber, ASTCharacter, ASTSelf, ASTGroup, ASTObject, ASTPlainObject, ASTSlot, ASTInterface, ASTInterfaceEntry, ASTNumber, ASTKey, ASTString, ASTArray, ASTBuiltin, ASTSend, ASTVarAccess, ASTSeq, ASTCompound, ASTBlock, ASTVar, ASTAssignment, ASTReturn, ASTLabelDef, ASTProxy, ASTAs
 
 
 class ParseException(Exception):
@@ -130,6 +130,29 @@ class Parser:
     
     def parse_array(self, env):
         return ASTArray(self.parse_expressions(env, TokenType.RPAREN))
+    
+    def parse_interface(self, env):
+        slots = []
+        while not self.check(TokenType.RBRACK):
+            return_type = self.parse_optional_type()
+            name = self.expect(TokenType.KEY).get_key()
+            args = []
+            has_varargs = False
+            if self.check(TokenType.LPAREN):
+                if not self.check(TokenType.RPAREN):
+                    while True:
+                        if self.check(TokenType.ELLIPSIS):
+                            has_varargs = True
+                            self.expect(TokenType.RPAREN)
+                            break
+                        the_type = self.parse_optional_type
+                        the_expr = self.parse_expression(env)
+                        args.append((the_type, the_expr))
+                        if self.check(TokenType.RPAREN): break
+                        self.expect(TokenType.SEPARATOR)
+            slots.append(ASTInterfaceEntry(name, return_type, args, has_varargs))
+            self.check(TokenType.SEPARATOR)
+        return ASTInterface(slots)
 
     def parse_simple_expression(self, env, allow_followups=True) -> ASTExpression:
         if self.check(TokenType.SELF):
@@ -142,6 +165,8 @@ class Parser:
             return self.parse_object(env)
         elif self.check(TokenType.HASHLPAREN):
             return self.parse_array(env)
+        elif self.check(TokenType.PERCLBRACK):
+            return self.parse_interface(env)
         kw = self._t.read()
         if kw.is_a(TokenType.KEY):
             if self.check(TokenType.LPAREN):

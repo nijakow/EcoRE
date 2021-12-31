@@ -1,4 +1,5 @@
 import ecosphere.objects.plain
+import ecosphere.objects.interface
 import ecosphere.compiler
 
 
@@ -75,6 +76,33 @@ class ASTSlot:
         self._args = args
         self._flags = flags
         self._value = value
+
+class ASTInterface(ASTObject):
+
+    def _evaluate(self, the_subject, the_environment, the_callback):
+        interf = ecosphere.objects.interface.EcoInterface()
+        the_callback(interf)
+        for entry in self._entries:
+            entry.create_on(the_subject, interf, the_environment)
+
+    def __init__(self, entries):
+        super().__init__()
+        self._entries = entries
+
+class ASTInterfaceEntry:
+
+    def create_on(self, the_subject, interf, the_environment):
+        entry = ecosphere.objects.interface.EcoInterfaceEntry(self._name, len(self._args), self._has_varargs)
+        self._return_type.evaluate(the_subject, the_environment, lambda value: entry.set_return_type(value))
+        for i in range(0, len(self._args)):
+            our_i = i
+            self._args[i][0].evaluate(the_subject, the_environment, lambda value: entry.set_arg_type(our_i, value))
+
+    def __init__(self, return_type, name, args, has_varargs):
+        self._return_type = return_type
+        self._name = name
+        self._args = args
+        self._has_varargs = has_varargs
 
 class ASTNumber(ASTObject):
 
