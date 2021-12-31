@@ -16,14 +16,16 @@ struct Eco_InterfaceEntry
 
 struct Eco_Interface
 {
-    struct Eco_Object           _;
-    unsigned int                entry_count;
-    struct Eco_InterfaceEntry*  entries[];
+    struct Eco_Object          _;
+    unsigned int               entry_count;
+    struct Eco_InterfaceEntry  entries[];
 };
 
 struct Eco_Interface* Eco_Interface_New(unsigned int);
 void Eco_Interface_Mark(struct Eco_GC_State*, struct Eco_Interface*);
 void Eco_Interface_Del(struct Eco_Interface*);
+
+struct Eco_Interface* Eco_Interface_AddEntry(struct Eco_Interface*, struct Eco_InterfaceEntry*);
 
 void Eco_Interface_Init();
 void Eco_Interface_Terminate();

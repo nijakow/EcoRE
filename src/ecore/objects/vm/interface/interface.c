@@ -40,13 +40,13 @@ struct Eco_Interface* Eco_Interface_New(unsigned int entry_count)
     struct Eco_Interface*  interface;
     unsigned int           i;
 
-    interface = Eco_Object_New(Eco_Interface_TYPE, sizeof(struct Eco_Interface) + sizeof(struct Eco_InterfaceEntry*) * entry_count);
+    interface = Eco_Object_New(Eco_Interface_TYPE, sizeof(struct Eco_Interface) + sizeof(struct Eco_InterfaceEntry) * entry_count);
 
     if (interface != NULL)
     {
         interface->entry_count = entry_count;
         for (i = 0; i < entry_count; i++)
-            interface->entries[i] = NULL;   // TODO: Use a sentinel for this to speed up marking
+            interface->entries[i].key = NULL;   // TODO: Use a sentinel for this to speed up marking
     }
 
     return interface;
@@ -60,8 +60,8 @@ void Eco_Interface_Mark(struct Eco_GC_State* state, struct Eco_Interface* interf
 
     for (i = 0; i < interface->entry_count; i++)
     {
-        entry = interface->entries[i];
-        if (entry != NULL)
+        entry = &interface->entries[i];
+        if (entry != NULL && entry->key != NULL)
         {
             Eco_GC_State_MarkObject(state, (struct Eco_Object*) entry->key);
             Eco_GC_State_MarkObject(state, (struct Eco_Object*) entry->return_type);
@@ -77,12 +77,28 @@ void Eco_Interface_Mark(struct Eco_GC_State* state, struct Eco_Interface* interf
 
 void Eco_Interface_Del(struct Eco_Interface* interface)
 {
-    unsigned int  i;
-
-    for (i = 0; i < interface->entry_count; i++)
-    {
-        if (interface->entries[i] != NULL)
-            Eco_Memory_Free(interface->entries[i]);
-    }
     Eco_Object_Del(&(interface->_));
+}
+
+
+/*
+ *    M o d i f i c a t i o n
+ */
+
+struct Eco_Interface* Eco_Interface_AddEntry(struct Eco_Interface* old_interface,
+                                             struct Eco_InterfaceEntry* entry)
+{
+    struct Eco_Interface*  new_interface;
+    unsigned int           i;
+
+    new_interface = Eco_Interface_New(old_interface->entry_count + 1);
+
+    if (new_interface != NULL)
+    {
+        for (i = 0; i < old_interface->entry_count; i++)
+            new_interface->entries[i] = old_interface->entries[i];
+        new_interface->entries[i] = *entry;
+    }
+
+    return new_interface;
 }
