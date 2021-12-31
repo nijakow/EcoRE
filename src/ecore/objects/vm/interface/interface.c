@@ -10,8 +10,8 @@
  *    T y p e
  */
 
-static struct Eco_TypeCore Eco_Interface_TYPECORE;
-static struct Eco_Type*    Eco_Interface_TYPE;
+static struct Eco_TypeCore  Eco_Interface_TYPECORE;
+static struct Eco_Type*     Eco_Interface_TYPE;
 
 
 void Eco_Interface_Init()
@@ -35,6 +35,9 @@ void Eco_Interface_Terminate()
  *    B a s i c s
  */
 
+static struct Eco_Interface* Eco_INTERFACES = NULL;
+
+
 struct Eco_Interface* Eco_Interface_New(unsigned int entry_count)
 {
     struct Eco_Interface*  interface;
@@ -47,6 +50,16 @@ struct Eco_Interface* Eco_Interface_New(unsigned int entry_count)
         interface->entry_count = entry_count;
         for (i = 0; i < entry_count; i++)
             interface->entries[i].key = NULL;   // TODO: Use a sentinel for this to speed up marking
+        /*
+         * Link the interface into the global list of interfaces
+         */
+        {
+            interface->prev = &Eco_INTERFACES;
+            interface->next =  Eco_INTERFACES;
+            if (Eco_INTERFACES != NULL)
+                Eco_INTERFACES->prev = &interface->next;
+            Eco_INTERFACES = interface;
+        }
     }
 
     return interface;
@@ -77,6 +90,9 @@ void Eco_Interface_Mark(struct Eco_GC_State* state, struct Eco_Interface* interf
 
 void Eco_Interface_Del(struct Eco_Interface* interface)
 {
+    if (interface->next != NULL)
+        interface->next->prev = interface->prev;
+    *interface->prev = interface->next;
     Eco_Object_Del(&(interface->_));
 }
 

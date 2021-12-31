@@ -17,6 +17,8 @@ struct Eco_InterfaceEntry
 struct Eco_Interface
 {
     struct Eco_Object          _;
+    struct Eco_Interface**     prev;
+    struct Eco_Interface*      next;
     unsigned int               entry_count;
     struct Eco_InterfaceEntry  entries[];
 };
