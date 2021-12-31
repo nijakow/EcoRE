@@ -93,12 +93,15 @@ class ASTInterfaceEntry:
 
     def create_on(self, the_subject, interf, the_environment):
         entry = ecosphere.objects.interface.EcoInterfaceEntry(self._name, len(self._args), self._has_varargs)
-        self._return_type.evaluate(the_subject, the_environment, lambda value: entry.set_return_type(value))
+        if self._return_type is not None:
+            self._return_type.evaluate(the_subject, the_environment, lambda value: entry.set_return_type(value))
         for i in range(0, len(self._args)):
-            our_i = i
-            self._args[i][0].evaluate(the_subject, the_environment, lambda value: entry.set_arg_type(our_i, value))
+            if self._args[i][0] is not None:
+                our_i = i
+                self._args[i][0].evaluate(the_subject, the_environment, lambda value: entry.set_arg_type(our_i, value))
+        interf.add_entry(entry)
 
-    def __init__(self, return_type, name, args, has_varargs):
+    def __init__(self, name, return_type, args, has_varargs):
         self._return_type = return_type
         self._name = name
         self._args = args

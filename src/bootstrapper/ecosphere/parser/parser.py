@@ -134,7 +134,7 @@ class Parser:
     def parse_interface(self, env):
         slots = []
         while not self.check(TokenType.RBRACK):
-            return_type = self.parse_optional_type()
+            return_type = self.parse_optional_type(env)
             name = self.expect(TokenType.KEY).get_key()
             args = []
             has_varargs = False
@@ -145,7 +145,7 @@ class Parser:
                             has_varargs = True
                             self.expect(TokenType.RPAREN)
                             break
-                        the_type = self.parse_optional_type
+                        the_type = self.parse_optional_type(env)
                         the_expr = self.parse_expression(env)
                         args.append((the_type, the_expr))
                         if self.check(TokenType.RPAREN): break

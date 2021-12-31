@@ -70,7 +70,10 @@ class Serializer(EConnectWriter):
             return False
 
     def write_object(self, object):
-        object.serialize(self)
+        if object is None:
+            self.write_message('ecosphere.econnect.null')
+        else:
+            object.serialize(self)
     
     def write_objects(self, objects):
         self.write_vlq(len(objects))
