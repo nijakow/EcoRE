@@ -214,6 +214,35 @@ bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type* self,
     }
 }
 
+bool Eco_Type_CopyWithRemovedSlot(struct Eco_Type* self,
+                                  unsigned int pos,
+                                  struct Eco_Type** type_loc)
+{
+    unsigned int      i;
+    unsigned int      adjusted_pos;
+    struct Eco_Type*  the_copy;
+
+    const unsigned int  new_slot_count = self->slot_count - 1;
+
+    if (pos >= self->slot_count) adjusted_pos = self->slot_count - 1;
+    else                         adjusted_pos = pos;
+
+    the_copy                        = Eco_Type_New(new_slot_count);
+    *type_loc                       = the_copy;
+    the_copy->typecore              = self->typecore;
+    the_copy->instance_payload_size = self->instance_payload_size;
+
+    for (i = 0; i < self->slot_count; i++) {
+        if (i < adjusted_pos) the_copy->slots[i] = self->slots[i];
+        else if (i == adjusted_pos) continue;
+        else the_copy->slots[i - 1] = self->slots[i];
+    }
+
+    *type_loc = the_copy;
+
+    return true;
+}
+
 
 void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
 {

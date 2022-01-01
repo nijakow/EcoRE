@@ -53,3 +53,15 @@ bool Eco_Molecule_AddCodeSlot(struct Eco_Molecule* self,
         return false;
     }
 }
+
+bool Eco_Molecule_RemoveSlot(struct Eco_Molecule* self, unsigned int pos)
+{
+    struct Eco_Type*  new_type;
+
+    if (Eco_Type_CopyWithRemovedSlot(self->_.type, pos, &new_type)) {
+        Eco_Molecule_SwitchType(self, new_type);
+        return true;
+    } else {
+        return false;
+    }
+}

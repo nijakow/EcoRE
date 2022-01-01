@@ -43,3 +43,22 @@ bool Eco_VM_Builtin_AddValueSlot(struct Eco_Fiber* fiber, unsigned int args)
 
     return true;
 }
+
+bool Eco_VM_Builtin_RemoveSlot(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any                     object;
+    Eco_Any                     index;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    
+    Eco_Fiber_Pop(fiber, &index);
+    Eco_Fiber_Pop(fiber, &object);
+
+    Eco_Molecule_RemoveSlot((struct Eco_Molecule*) Eco_Any_AsPointer(&object),
+                            Eco_Any_AsInteger(&index));
+
+    Eco_Fiber_Push(fiber, &object);
+
+    return true;
+}
