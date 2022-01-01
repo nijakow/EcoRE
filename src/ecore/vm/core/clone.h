@@ -43,8 +43,8 @@ struct Eco_CloneState
 
 void Eco_CloneState_Create(struct Eco_CloneState*, struct Eco_Object*);
 void Eco_CloneState_Destroy(struct Eco_CloneState*);
-struct Eco_Object* Eco_CloneState_CloneObject(struct Eco_CloneState*, struct Eco_Object*);
-void Eco_CloneState_CloneAny(struct Eco_CloneState*, Eco_Any*, Eco_Any*);
+struct Eco_Object* Eco_CloneState_CloneObject(struct Eco_CloneState*, struct Eco_Object*, bool);
+void Eco_CloneState_CloneAny(struct Eco_CloneState*, Eco_Any*, Eco_Any*, bool);
 
 static inline struct Eco_Object* Eco_CloneState_QueryClone(struct Eco_CloneState* state,
                                                            struct Eco_Object* object)

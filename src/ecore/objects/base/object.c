@@ -156,7 +156,8 @@ bool Eco_Object_Send(struct Eco_Message* message,
 }
 
 struct Eco_Object* Eco_Object_NoClone(struct Eco_CloneState* state,
-                                      struct Eco_Object* original)
+                                      struct Eco_Object* original,
+                                      bool forced)
 {
     return original;
 }

@@ -72,15 +72,20 @@ void Eco_CloneState_Destroy(struct Eco_CloneState* self)
     Eco_ObjectMap_Destroy(&self->map);
 }
 
-struct Eco_Object* Eco_CloneState_CloneObject(struct Eco_CloneState* state, struct Eco_Object* object)
+struct Eco_Object* Eco_CloneState_CloneObject(struct Eco_CloneState* state,
+                                              struct Eco_Object* object,
+                                              bool forced)
 {
-    return object->type->typecore->clone(state, object);
+    return object->type->typecore->clone(state, object, forced);
 }
 
-void Eco_CloneState_CloneAny(struct Eco_CloneState* state, Eco_Any* dst, Eco_Any* src)
+void Eco_CloneState_CloneAny(struct Eco_CloneState* state,
+                             Eco_Any* dst,
+                             Eco_Any* src,
+                             bool forced)
 {
     if (Eco_Any_IsPointer(src)) {
-        Eco_Any_AssignPointer(dst, Eco_CloneState_CloneObject(state, Eco_Any_AsPointer(src)));
+        Eco_Any_AssignPointer(dst, Eco_CloneState_CloneObject(state, Eco_Any_AsPointer(src), forced));
     } else {
         Eco_Any_AssignAny(dst, src);
     }

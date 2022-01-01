@@ -44,14 +44,23 @@ void Eco_Molecule_Mark(struct Eco_GC_State* state, struct Eco_Molecule* molecule
 
 
 
-struct Eco_Molecule* Eco_Molecule_Clone(struct Eco_CloneState* state, struct Eco_Molecule* molecule)
+struct Eco_Molecule* Eco_Molecule_Clone(struct Eco_CloneState* state,
+                                        struct Eco_Molecule* molecule,
+                                        bool forced)
 {
+    struct Eco_Object*    up;
     struct Eco_Molecule*  clone;
+
+    up = molecule->_.up == NULL ? NULL : Eco_CloneState_QueryClone(state, molecule->_.up);
+
+    if (up == NULL && !forced)
+        return molecule;
 
     clone = (struct Eco_Molecule*) Eco_CloneState_QueryClone(state, (struct Eco_Object*) molecule);
 
     if (clone == NULL) {
         clone = Eco_Molecule_New(molecule->_.type);
+        clone->_.up = up;
         Eco_CloneState_RegisterClone(state, (struct Eco_Object*) molecule, (struct Eco_Object*) clone);
         Eco_Type_Subclone(state, molecule->_.type, molecule, clone);
     }

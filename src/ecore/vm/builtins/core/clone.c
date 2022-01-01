@@ -13,7 +13,7 @@ bool Eco_VM_Builtin_Clone(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     if (Eco_Any_IsPointer(Eco_Fiber_Peek(fiber))) {
         Eco_CloneState_Create(&state, Eco_Any_AsPointer(Eco_Fiber_Peek(fiber)));
-        Eco_CloneState_CloneAny(&state, Eco_Fiber_Peek(fiber), Eco_Fiber_Peek(fiber));
+        Eco_CloneState_CloneAny(&state, Eco_Fiber_Peek(fiber), Eco_Fiber_Peek(fiber), true);
         Eco_CloneState_Destroy(&state);
     }
     return true;

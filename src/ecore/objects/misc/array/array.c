@@ -72,7 +72,8 @@ void Eco_Array_Mark(struct Eco_GC_State* state, struct Eco_Array* array)
 }
 
 struct Eco_Array* Eco_Array_Clone(struct Eco_CloneState* state,
-                                  struct Eco_Array* array)
+                                  struct Eco_Array* array,
+                                  bool forced)
 {
     /*
      * TODO: This function just creates a plain copy of the array.
@@ -81,6 +82,8 @@ struct Eco_Array* Eco_Array_Clone(struct Eco_CloneState* state,
      */
     struct Eco_Array*  the_clone;
     unsigned int        index;
+
+    if (!forced) return array;
 
     the_clone = Eco_Array_New(Eco_Array_Size(array));
     

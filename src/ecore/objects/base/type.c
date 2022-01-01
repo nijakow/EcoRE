@@ -272,14 +272,10 @@ void Eco_Type_Subclone(struct Eco_CloneState* state,
         switch (type->slots[i].type)
         {
             case Eco_Type_Slot_Type_INLINED:
-                if (type->slots[i].body.inlined.is_part) {
-                    Eco_CloneState_CloneAny(state,
-                                            Eco_Molecule_At(clone, type->slots[i].body.inlined.offset),
-                                            Eco_Molecule_At(original, type->slots[i].body.inlined.offset));
-                } else {
-                    Eco_Any_AssignAny(Eco_Molecule_At(clone, type->slots[i].body.inlined.offset),
-                                      Eco_Molecule_At(original, type->slots[i].body.inlined.offset));
-                }
+                Eco_CloneState_CloneAny(state,
+                                        Eco_Molecule_At(clone, type->slots[i].body.inlined.offset),
+                                        Eco_Molecule_At(original, type->slots[i].body.inlined.offset),
+                                        type->slots[i].body.inlined.is_part);
                 break;
             default:
                 break;
