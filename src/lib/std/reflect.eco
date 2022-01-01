@@ -3,5 +3,16 @@
 "
 
 #=std/reflect: {
-    
+    Mirror = {
+        reflectee;
+
+        with inherited trait = {
+            init: the_reflectee => (
+                reflectee <- the_reflectee.
+              ^ self
+            );
+        };
+
+        with inherited parent = #<:std/Clonable>;
+    }
 }

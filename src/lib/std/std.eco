@@ -20,7 +20,7 @@
         clone        => #'ecosphere.ecore.clone'(self);
         new          => clone init;
         lens: other  => (other clone) init: self;
-        mirror       => ;   "TODO"
+        mirror       => (std reflect Mirror) clone init: self;
         is: other    => #'ecosphere.ecore.is'(self, other);
         == other     => is: other;
         != other     => (== other) not;
