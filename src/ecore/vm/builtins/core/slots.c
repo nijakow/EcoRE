@@ -9,26 +9,29 @@
  * This function has multiple weaknesses:
  *   - It doesn't check for the argument types
  *   - AddSlot might trigger a GC that collects the arguments before they can be used
- *   - There is no way to set the slot flags (e.g. inheritance)
  *   - The return value is set in an inefficient way
  */
 bool Eco_VM_Builtin_AddValueSlot(struct Eco_Fiber* fiber, unsigned int args)
 {
     Eco_Any                     object;
     Eco_Any                     index;
+    Eco_Any                     flags;
     Eco_Any                     key;
     Eco_Any                     value;
     struct Eco_Object_SlotInfo  info;
 
-    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 4, 4))
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 5, 5))
         return false;
     
     Eco_Fiber_Pop(fiber, &value);
     Eco_Fiber_Pop(fiber, &key);
+    Eco_Fiber_Pop(fiber, &flags);
     Eco_Fiber_Pop(fiber, &index);
     Eco_Fiber_Pop(fiber, &object);
 
-    info.is_inherited = false;
+    info.is_delegate  = (Eco_Any_AsInteger(&flags) & 0x01) != 0;
+    info.is_inherited = (Eco_Any_AsInteger(&flags) & 0x02) != 0;
+    info.is_part      = (Eco_Any_AsInteger(&flags) & 0x04) != 0;
     info.key          = Eco_Any_AsPointer(&key);
 
     Eco_Molecule_AddSlot((struct Eco_Molecule*) Eco_Any_AsPointer(&object),
