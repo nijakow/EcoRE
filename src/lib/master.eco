@@ -40,6 +40,10 @@
         l append: -21.
         l do: [ :e | io out << e << ' ' ]. io out newline.
 
+        #'ecosphere.ecore.reflect.get_type_slot_names'(#'ecosphere.ecore.reflect.get_type'(lobby meta)) do: [
+            :name | io out << name. io out newline.
+        ].
+
         io out commit.
         [
             io out << '> '.
@@ -49,7 +53,7 @@
         ] repeat.
     );
 
-    with parent = #<:lobby>;
+    with lobby = #<:lobby>;
 },
 
 #<:bootstrapper> Init.
