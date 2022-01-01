@@ -77,10 +77,12 @@ void Eco_Interface_Mark(struct Eco_GC_State* state, struct Eco_Interface* interf
         if (entry != NULL && entry->key != NULL)
         {
             Eco_GC_State_MarkObject(state, (struct Eco_Object*) entry->key);
-            Eco_GC_State_MarkObject(state, (struct Eco_Object*) entry->return_type);
+            if (entry->return_type != NULL)
+                Eco_GC_State_MarkObject(state, (struct Eco_Object*) entry->return_type);
             for (j = 0; j < entry->arg_count; j++)
             {
-                Eco_GC_State_MarkObject(state, (struct Eco_Object*) entry->arg_types[j]);
+                if (entry->arg_types[j] != NULL)
+                    Eco_GC_State_MarkObject(state, (struct Eco_Object*) entry->arg_types[j]);
             }
         }
     }

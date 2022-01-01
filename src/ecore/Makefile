@@ -65,6 +65,7 @@ io/econnect/reader/result.c \
 io/econnect/reader/builtins/builtins.c \
 io/econnect/reader/builtins/protocol/protocol.c \
 io/econnect/reader/builtins/objects/array.c \
+io/econnect/reader/builtins/objects/interface.c \
 io/econnect/reader/builtins/objects/ints.c \
 io/econnect/reader/builtins/objects/object.c \
 io/econnect/reader/builtins/objects/object_body.c \

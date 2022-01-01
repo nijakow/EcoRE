@@ -4,6 +4,11 @@
 #include <ecore/objects/base/object.h>
 #include <ecore/objects/misc/key/key.h>
 
+/*
+ * TODO, FIXME, XXX: Make this dynamic
+ */
+#define Eco_InterfaceEntry_MAXARGS 8
+
 struct Eco_Interface;
 
 struct Eco_InterfaceEntry
@@ -12,7 +17,7 @@ struct Eco_InterfaceEntry
     unsigned int           arg_count;
     bool                   has_varargs;
     struct Eco_Interface*  return_type;
-    struct Eco_Interface*  arg_types[];
+    struct Eco_Interface*  arg_types[Eco_InterfaceEntry_MAXARGS];
 };
 
 struct Eco_Interface
