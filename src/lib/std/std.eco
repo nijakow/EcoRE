@@ -70,4 +70,5 @@
 
     io = #<:std/io>;
     util = #<:std/util>;
+    reflect = #<:std/reflect>;
 }

@@ -8,6 +8,7 @@ init.eco \
 std/std.eco \
 std/io.eco \
 std/util.eco \
+std/reflect.eco \
 master.eco
 
 
