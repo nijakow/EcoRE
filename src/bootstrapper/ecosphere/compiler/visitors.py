@@ -51,8 +51,8 @@ class ASTCompilerVisitor(ASTVisitor):
 
     def visit_send(self, ast):
         arg_count = ast.get_arg_count()
-        if (arg_count == 0) and (self._code_generator.load_var(ast.get_key())):
-            return
+        #if (arg_count == 0) and ast.get_subject().is_self() and (self._code_generator.load_var(ast.get_key())):
+        #    return
         ast.get_subject().accept(self)
         self._code_generator.push()
         for arg in ast.get_args():

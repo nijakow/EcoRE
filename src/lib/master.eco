@@ -18,7 +18,14 @@
 
     interf = %[ #'x' ];
 
-    up = { ^ #<:std> };
+    px = #=foo: {
+        with inherited parent = #<:std/Clonable>
+    };
+
+    bar = #=bar: {
+        p = #<:foo>;
+        with inherited parent = #<:std/Clonable>;
+    };
 
     Init => (
         #'ecosphere.ecore.init.set_lobby'(#<:lobby>).
@@ -42,7 +49,7 @@
         l append: -21.
         l do: [ :e | io out << e << ' ' ]. io out newline.
 
-        #'ecosphere.ecore.reflect.get_type_slot_names'(#'ecosphere.ecore.reflect.get_type'(lobby meta)) do: [
+        #'ecosphere.ecore.reflect.get_type_slot_names'(#'ecosphere.ecore.reflect.get_type'(bar p)) do: [
             :name | io out << name. io out newline.
         ].
 
