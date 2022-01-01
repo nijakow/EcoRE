@@ -85,7 +85,8 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.write_char", Eco_VM_Builtin_PortWriteChar);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.notify_me", Eco_VM_Builtin_PortNotifyMe);
 
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type", Eco_VM_Builtin_Clone);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type", Eco_VM_Builtin_GetType);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type_slot_names", Eco_VM_Builtin_GetTypeSlotNames);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.add_value_slot", Eco_VM_Builtin_AddValueSlot);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_lobby", Eco_VM_Builtin_SetLobby);
