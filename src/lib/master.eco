@@ -16,17 +16,6 @@
 
 #=bootstrapper: {
 
-    interf = %[ #'x' ];
-
-    px = #=foo: {
-        with inherited parent = #<:std/Clonable>
-    };
-
-    bar = #=bar: {
-        p = #<:foo>;
-        with inherited parent = #<:std/Clonable>;
-    };
-
     Init => (
         #'ecosphere.ecore.init.set_lobby'(#<:lobby>).
         #'ecosphere.ecore.init.set_true'(#<:std/bool/true>).
