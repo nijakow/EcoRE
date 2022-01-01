@@ -73,6 +73,9 @@ class EcoPlainObject(ecosphere.objects.base.EcoObject):
     def lookup_key(self, key):
         return self.find_slot_by_name(key)
     
+    def add_up(self, value):
+        self._ups.append(value)
+
     def add_slot(self, slot):
         self._slots.append(slot)
     
@@ -80,10 +83,14 @@ class EcoPlainObject(ecosphere.objects.base.EcoObject):
         if not serializer.try_serialize_known_object(self):
             serializer.write_message('ecosphere.object.molecule')
             serializer.write_vlq(serializer.add_object(self))
+            serializer.write_vlq(len(self._ups))
+            for up in self._ups:
+                serializer.write_object(up)
             serializer.write_vlq(len(self._slots))
             for slot in self._slots:
                 slot.serialize(serializer)
 
     def __init__(self):
-        super().__init__
+        super().__init__()
+        self._ups = list()
         self._slots = list()

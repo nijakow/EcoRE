@@ -18,6 +18,8 @@
 
     interf = %[ #'x' ];
 
+    up = { ^ #<:std> };
+
     Init => (
         #'ecosphere.ecore.init.set_lobby'(#<:lobby>).
         #'ecosphere.ecore.init.set_true'(#<:std/bool/true>).

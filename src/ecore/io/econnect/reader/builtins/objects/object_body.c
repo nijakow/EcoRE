@@ -10,12 +10,26 @@ bool Eco_EConnect_Reader_ReadMoleculeBody(struct Eco_EConnect_Reader* reader,
                                           struct Eco_EConnect_Result* result,
                                           struct Eco_Molecule* object)
 {
+    unsigned int                ups;
     unsigned int                slot_def_current;
     unsigned int                slot_def_max;
     unsigned char               flags;
     struct Eco_Object_SlotInfo  slot_info;
     Eco_Any                     any;
     struct Eco_Code*            code;
+
+    ups = Eco_EConnect_ParseUInt(&reader->stream);
+
+    while (ups --> 0)
+    {
+        if (!Eco_EConnect_Reader_Read(reader, result))
+            return false;
+        if (!Eco_EConnect_Result_ExpectObject(result, &object->_.up)) {
+            Eco_EConnect_Result_Destroy(result);
+            Eco_EConnect_Result_Create_Error(result, Eco_EConnect_ErrorType_TYPE_ERROR);
+            return false;
+        }
+    }
 
     slot_def_max = Eco_EConnect_ParseUInt(&reader->stream);
 

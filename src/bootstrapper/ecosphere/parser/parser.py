@@ -122,11 +122,15 @@ class Parser:
 
     def parse_object(self, env):
         slots = []
+        ups = []
         while not self.check(TokenType.RCURLY):
-            slots.append(self.parse_object_slot(env))
+            if self.check(TokenType.CARET):
+                ups.append(self.parse_expression(env))
+            else:
+                slots.append(self.parse_object_slot(env))
             if self.check(TokenType.RCURLY): break
             self.expect(TokenType.SEPARATOR)
-        return ASTPlainObject(slots)
+        return ASTPlainObject(ups, slots)
     
     def parse_array(self, env):
         return ASTArray(self.parse_expressions(env, TokenType.RPAREN))

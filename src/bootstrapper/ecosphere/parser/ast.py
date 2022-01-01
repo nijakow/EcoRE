@@ -51,11 +51,14 @@ class ASTPlainObject(ASTObject):
     def _evaluate(self, the_subject, the_environment, the_callback):
         plain = ecosphere.objects.plain.EcoPlainObject()
         the_callback(plain)
+        for up in self._ups:
+            up.evaluate(the_subject, the_environment, lambda value: plain.add_up(value))
         for slot in self._slots:
             slot.create_on(plain, the_environment)
 
-    def __init__(self, slots):
+    def __init__(self, ups, slots):
         super().__init__()
+        self._ups = ups
         self._slots = slots
 
 class ASTSlot:
