@@ -38,7 +38,7 @@
         l append: -21.
         l do: [ :e | io out << e << ' ' ]. io out newline.
 
-        #'ecosphere.ecore.reflect.get_type_slot_names'(#'ecosphere.ecore.reflect.get_type'(bar p)) do: [
+        #'ecosphere.ecore.reflect.get_type_slot_names'(#'ecosphere.ecore.reflect.get_type'(lobby)) do: [
             :name | io out << name. io out newline.
         ].
 
