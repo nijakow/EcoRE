@@ -5,5 +5,7 @@
 
 bool Eco_EConnect_Builtin_GetInterface(struct Eco_EConnect_Reader* reader,
                                        struct Eco_EConnect_Result* result);
+bool Eco_EConnect_Builtin_GetDefaultInterface(struct Eco_EConnect_Reader* reader,
+                                              struct Eco_EConnect_Result* result);
 
 #endif

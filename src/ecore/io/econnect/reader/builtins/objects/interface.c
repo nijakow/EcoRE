@@ -41,3 +41,10 @@ bool Eco_EConnect_Builtin_GetInterface(struct Eco_EConnect_Reader* reader,
 
     return true;
 }
+
+bool Eco_EConnect_Builtin_GetDefaultInterface(struct Eco_EConnect_Reader* reader,
+                                              struct Eco_EConnect_Result* result)
+{
+    Eco_EConnect_Result_Create_Object(result, (struct Eco_Object*) Eco_Interface_GetDefaultInterface());
+    return true;
+}

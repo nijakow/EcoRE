@@ -25,9 +25,12 @@ struct Eco_Interface
     struct Eco_Object          _;
     struct Eco_Interface**     prev;
     struct Eco_Interface*      next;
+    bool                       allow_all;
     unsigned int               entry_count;
     struct Eco_InterfaceEntry  entries[];
 };
+
+struct Eco_Interface* Eco_Interface_GetDefaultInterface();
 
 struct Eco_Interface* Eco_Interface_New(unsigned int);
 void Eco_Interface_Mark(struct Eco_GC_State*, struct Eco_Interface*);

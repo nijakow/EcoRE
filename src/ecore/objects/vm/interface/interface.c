@@ -35,7 +35,8 @@ void Eco_Interface_Terminate()
  *    B a s i c s
  */
 
-static struct Eco_Interface* Eco_INTERFACES = NULL;
+static struct Eco_Interface* Eco_INTERFACES        = NULL;
+static struct Eco_Interface* Eco_Interface_DEFAULT = NULL;
 
 
 struct Eco_Interface* Eco_Interface_New(unsigned int entry_count)
@@ -47,6 +48,7 @@ struct Eco_Interface* Eco_Interface_New(unsigned int entry_count)
 
     if (interface != NULL)
     {
+        interface->allow_all   = false;
         interface->entry_count = entry_count;
         for (i = 0; i < entry_count; i++)
             interface->entries[i].key = NULL;   // TODO: Use a sentinel for this to speed up marking
@@ -77,12 +79,10 @@ void Eco_Interface_Mark(struct Eco_GC_State* state, struct Eco_Interface* interf
         if (entry != NULL && entry->key != NULL)
         {
             Eco_GC_State_MarkObject(state, (struct Eco_Object*) entry->key);
-            if (entry->return_type != NULL)
-                Eco_GC_State_MarkObject(state, (struct Eco_Object*) entry->return_type);
+            Eco_GC_State_MarkObject(state, (struct Eco_Object*) entry->return_type);
             for (j = 0; j < entry->arg_count; j++)
             {
-                if (entry->arg_types[j] != NULL)
-                    Eco_GC_State_MarkObject(state, (struct Eco_Object*) entry->arg_types[j]);
+                Eco_GC_State_MarkObject(state, (struct Eco_Object*) entry->arg_types[j]);
             }
         }
     }
@@ -98,6 +98,14 @@ void Eco_Interface_Del(struct Eco_Interface* interface)
     Eco_Object_Del(&(interface->_));
 }
 
+struct Eco_Interface* Eco_Interface_GetDefaultInterface()
+{
+    if (Eco_Interface_DEFAULT == NULL) {
+        Eco_Interface_DEFAULT = Eco_Interface_New(0);
+        Eco_Interface_DEFAULT->allow_all = true;
+    }
+    return Eco_Interface_DEFAULT;
+}
 
 /*
  *    M o d i f i c a t i o n

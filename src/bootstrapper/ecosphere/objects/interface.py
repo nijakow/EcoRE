@@ -11,14 +11,20 @@ class EcoInterfaceEntry:
 
     def serialize(self, serializer):
         serializer.write_object(self._name)
-        serializer.write_object(self._return_type)
+        if self._return_type is None:
+            serializer.write_message('ecosphere.object.interface.default')
+        else:
+            serializer.write_object(self._return_type)
         if self._has_varargs:
             serializer.write_vlq(1)
         else:
             serializer.write_vlq(0)
         serializer.write_vlq(len(self._arg_types))
         for at in self._arg_types:
-            serializer.write_object(at)
+            if at is None:
+                serializer.write_message('ecosphere.object.interface.default')
+            else:
+                serializer.write_object(at)
 
     def __init__(self, name, arg_count, has_varargs):
         self._return_type = None
