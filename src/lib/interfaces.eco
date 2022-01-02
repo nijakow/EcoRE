@@ -14,18 +14,26 @@
     ];
 
     IIterable = #=IIterable: %[
-        #'do:'(body)
+        #'do:'(body),
+        #'forEach:'(body)
     ];
 
-    ISequence = #=ISequence: %[
-        with #<:IIndexable>;
+    ICollection = #=ICollection: %[
         with #<:IIterable>;
+        #'add:'(element),
+        #'addAll:'([ICollection] collection),
+        #'remove:'(element),
+        #'removeAll:'([ICollection] collection),
+        #'isEmpty',
         #'size',
-        #'isEmpty'
+        #'asArray'
     ];
 
-    IContainer = %[
-        #'append:'(value)
+    IList = #=IList: %[
+        with #<:IIterable>,
+        with #<:ICollection>;
+        #'at:'(index),
+        #'at:put:'(index, value)
     ];
 
     IInputPort = #=IInputPort: %[
