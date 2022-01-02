@@ -13,12 +13,19 @@
         #'at:put:'(index, value)
     ];
 
-    IIterable = %[
+    IIterable = #=IIterable: %[
         #'do:'(body)
     ];
 
+    ISequence = #=ISequence: %[
+        with #<:IIndexable>;
+        with #<:IIterable>;
+        #'size',
+        #'isEmpty'
+    ];
+
     IContainer = %[
-        #'append:'
+        #'append:'(value)
     ];
 
     IInputPort = #=IInputPort: %[
