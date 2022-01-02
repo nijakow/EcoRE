@@ -8,7 +8,7 @@
         #'at:'(index)
     ];
 
-    IMutableIndexable = %[
+    IRandomAccess = #=IRandomAccess: %[
         with #<:IIndexable>;
         #'at:put:'(index, value)
     ];
@@ -18,22 +18,29 @@
         #'forEach:'(body)
     ];
 
-    ICollection = #=ICollection: %[
+    IFixedCollection = #=IFixedCollection: %[
         with #<:IIterable>;
-        #'add:'(element),
-        #'addAll:'([ICollection] collection),
-        #'remove:'(element),
-        #'removeAll:'([ICollection] collection),
         #'isEmpty',
         #'size',
         #'asArray'
     ];
 
+    ICollection = #=ICollection: %[
+        with #<:IFixedCollection>;
+        #'add:'(element),
+        #'addAll:'([IFixedCollection] collection),
+        #'remove:'(element),
+        #'removeAll:'([IFixedCollection] collection),
+    ];
+
+    IArray = #=IArray: %[
+        with #<:IFixedCollection>,
+        with #<:IRandomAccess>;
+    ];
+
     IList = #=IList: %[
-        with #<:IIterable>,
-        with #<:ICollection>;
-        #'at:'(index),
-        #'at:put:'(index, value)
+        with #<:ICollection>,
+        with #<:IRandomAccess>;
     ];
 
     IInputPort = #=IInputPort: %[
