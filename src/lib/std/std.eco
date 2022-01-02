@@ -5,6 +5,7 @@
 #=std: {
     with globals = {
         char = {
+            space     => 32 asChar;
             backspace =>  8 asChar;
             tab       =>  9 asChar;
             newline   => 10 asChar;

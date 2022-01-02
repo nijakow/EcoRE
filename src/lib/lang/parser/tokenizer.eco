@@ -1,0 +1,69 @@
+
+{
+    in, pushbacks;
+
+    IsSpace(c) => (
+        (c == (char space))   if: [ ^ true ].
+        (c == (char tab))     if: [ ^ true ].
+        (c == (char newline)) if: [ ^ true ].
+        (c == (char return))  if: [ ^ true ].
+      ^ false
+    );
+
+    skipWhitespace => (
+        [ IsSpace(in peekChar) ] while: [ in advance ]
+    );
+
+    peeks: str => (
+        "TODO"
+      ^ false
+    );
+
+    newTokenWithType: type Payload: pl => "TODO";
+    newTokenWithType: type => "TODO";
+
+    nextToken => (
+        (pushbacks isEmpty) unless: [ ^ pushbacks pop ].
+
+        skipWhitespace.
+
+        (peeks: '...') if: [ ^ newTokenWithType: #'ellipsis'   ].
+        (peeks: '<-')  if: [ ^ newTokenWithType: #'assignment' ].
+        (peeks: '->')  if: [ ^ newTokenWithType: #'delegate'   ].
+        (peeks: '=>')  if: [ ^ newTokenWithType: #'rarrow'     ].
+        (peeks: '(')   if: [ ^ newTokenWithType: #'lparen'     ].
+        (peeks: ')')   if: [ ^ newTokenWithType: #'rparen'     ].
+        (peeks: '[')   if: [ ^ newTokenWithType: #'lbrack'     ].
+        (peeks: ']')   if: [ ^ newTokenWithType: #'rbrack'     ].
+        (peeks: '{')   if: [ ^ newTokenWithType: #'lcurly'     ].
+        (peeks: '}')   if: [ ^ newTokenWithType: #'rcurly'     ].
+        (peeks: '#(')  if: [ ^ newTokenWithType: #'hashlparen' ].
+        (peeks: '%[')  if: [ ^ newTokenWithType: #'perclbrack' ].
+        (peeks: '.')   if: [ ^ newTokenWithType: #'separator'  ].
+        (peeks: ',')   if: [ ^ newTokenWithType: #'separator'  ].
+        (peeks: ';')   if: [ ^ newTokenWithType: #'separator'  ].
+        (peeks: ':')   if: [ ^ newTokenWithType: #'colon'      ].
+        (peeks: '~')   if: [ ^ newTokenWithType: #'tilde'      ].
+        (peeks: '|')   if: [ ^ newTokenWithType: #'bar'        ].
+        (peeks: '^')   if: [ ^ newTokenWithType: #'caret'      ].
+        (peeks: '\'')  if: [ ^ newTokenWithType: #'string'  Payload: (parseString: #\') ].
+        (peeks: '#\'') if: [ ^ newTokenWithType: #'keyword' Payload: ((parseString: #\') asKey) ].
+        (peeks: '#=')  if: [ ^ newTokenWithType: #'label'   Payload: (parseString: #\:) ].
+        (peeks: '#<')  if: [ ^ newTokenWithType: #'proxy'   Payload: (parseString: #\>) ].
+        (peeks: '#\\') if: [ ^ newTokenWithType: #'char' Payload: (in nextChar) ].
+        (peeks: '#=')  if: [ ^ newTokenWithType: #'label'   Payload: (parseString: #\:) ].
+        (peeks: '#"')  if: [ parseString: #\". ^ nextToken ].
+        
+        | sb <- (std util StringBuilder) new |
+
+        [ [in hasNext ] and: [ IsSpecial(in peekChar) not ] ] while: [
+            sb append: (in nextChar)
+        ].
+
+        sb <- sb asString.
+
+        "TODO"
+    );
+
+    with inherited parent = #<:std/Clonable>;
+}
