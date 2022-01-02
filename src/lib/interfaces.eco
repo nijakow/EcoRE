@@ -13,4 +13,30 @@
         #'at:put:'(index, value)
     ];
 
+    IIterable = %[
+        #'do:'(body)
+    ];
+
+    IContainer = %[
+        #'append:'
+    ];
+
+    IInputPort = #=IInputPort: %[
+        #'readByte',
+        #'readChar',
+        #'readLine'
+    ];
+
+    IOutputPort = #=IOutputPort: %[
+        #'commit',
+        #'byte<<'(b),
+        #'<<'(object),
+        #'newline'
+    ];
+
+    IPortIO = %[
+        [#<:IInputPort>] #'in',
+        [#<:IOutputPort>] #'out'
+    ];
+
 }
