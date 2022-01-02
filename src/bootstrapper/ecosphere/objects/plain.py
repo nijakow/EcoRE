@@ -5,6 +5,12 @@ class EcoSlot:
 
     def serialize(self, serializer):
         raise Exception('Can\'t serialize this slot!')
+    
+    def get_name(self):
+        return self._name
+    
+    def add_value_callback(self, cb):
+        raise Exception('Can\'t put a callback on this slot!')
 
     def __init__(self, name):
         self._name = name
@@ -31,10 +37,13 @@ class EcoValueSlot(EcoSlot):
             e(self._value)
     
     def evaluate(self, the_subject, the_environment, the_callback, args=None):
-        if self._callbacks is None:
-            the_callback(self._value) # TODO: Wait for the value, in case it wasn't set yet
+        self.add_value_callback(the_callback)
+
+    def add_value_callback(self, cb):
+        if self._value is not None:
+            cb(self._value)
         else:
-            self._callbacks.append(the_callback)
+            self._callbacks.append(cb)
 
     def __init__(self, name, is_inherited, is_no_delegate, is_part):
         super().__init__(name)
@@ -78,6 +87,21 @@ class EcoPlainObject(ecosphere.objects.base.EcoObject):
 
     def add_slot(self, slot):
         self._slots.append(slot)
+        name = slot.get_name()
+        if name in self._callbacks:
+            elems = self._callbacks[name]
+            del self._callbacks[name]
+            for e in elems:
+                slot.add_value_callback(e)
+    
+    def when_defined(self, name, callback):
+        slot = self.find_slot_by_name(name)
+        if slot is not None:
+            slot.add_value_callback(callback)
+        else:
+            if name not in self._callbacks:
+                self._callbacks[name] = []
+            self._callbacks[name].append(callback)
     
     def serialize(self, serializer):
         if not serializer.try_serialize_known_object(self):
@@ -94,3 +118,4 @@ class EcoPlainObject(ecosphere.objects.base.EcoObject):
         super().__init__()
         self._ups = list()
         self._slots = list()
+        self._callbacks = dict()

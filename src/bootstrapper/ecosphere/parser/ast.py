@@ -215,8 +215,9 @@ class ASTSend(ASTExpression):
     
     def evaluate(self, the_subject, the_environment, the_callback):
         def subject_callback(the_new_subject):
-            slot = the_new_subject.lookup_key(self.get_key())
-            slot.evaluate(the_new_subject, the_environment, the_callback)
+            # slot = the_new_subject.lookup_key(self.get_key())
+            # slot.evaluate(the_new_subject, the_environment, the_callback)
+            the_new_subject.when_defined(self.get_key(), the_callback)
         assert self.get_arg_count() == 0
         self.get_subject().evaluate(the_subject, the_environment, subject_callback)
 
