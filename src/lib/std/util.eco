@@ -2,6 +2,38 @@
     util.eco - The `std util` package of the Ecosphere
 "
 
+#=std/util/StandardListIterations: {
+    do: body => (
+        0 for: size do: [ :i | body value(at: i) ].
+      ^ self
+    );
+
+    forEach: body => (
+        0 for: size do: [ :i | body value(i, at: i) ].
+      ^ self
+    );
+},
+
+#=std/util/StandardListConversions: {
+    asArray => (
+        | v <- std util Array(size) |
+        forEach: [ :index, :value | v at: index put: value ].
+      ^ v
+    );
+
+    asVector => (
+        | v <- (std util Vector) new |
+        forEach: [ :value | v append: value ].
+      ^ v
+    );
+
+    asList => (
+        | v <- (std util List) new |
+        do: [ :value | v append: value ].
+      ^ v
+    );
+},
+
 #=std/util: {
     Array(size) => #'ecosphere.ecore.object.array.new'(size);
 
@@ -16,20 +48,8 @@
             at: index => elements at: index;
             at: index put: value => elements at: index put: value;
 
-            do: body => (
-                0 for: size do: [ :i | body value(at: i) ].
-              ^ self
-            );
-            iter: body => (
-                0 for: size do: [ :i | body value(i, at: i) ].
-              ^ self
-            );
-
-            asArray  => (
-                | arr <- std util Array(size) |
-                iter: [ :index, :value | arr at: index put: value ].
-              ^ arr
-            );
+            with inherited iterations = #<:std/util/StandardListIterations>;
+            with inherited conversions = #<:std/util/StandardListConversions>;
 
             asString => asArray asString;
 
@@ -38,7 +58,7 @@
                 (cap < capacity) if: [
                     0 for: cap do: [ :i | new_elements at: i put: (at: i) ]
                 ] else: [
-                    iter: [ :index, :value | new_elements at: index put: value ]
+                    forEach: [ :index, :value | new_elements at: index put: value ]
                 ].
                 elements <- new_elements.
               ^ self
@@ -109,6 +129,8 @@
                 elements prev: link.
               ^ self
             );
+
+            with inherited conversions = #<:std/util/StandardListConversions>;
         };
 
         with inherited parent = #<:std/Clonable>;
@@ -147,17 +169,7 @@
                 block value(index, value).
             );
 
-            asList => (
-                | list <- ((std util List) clone) init |
-                do: [ :index, :value | list append: value. ].
-              ^ list
-            );
-
-            asVector => (
-                | vector <- (std util Vector) new |
-                do: [ :index, :value | vector append: value ].
-              ^ vector
-            );
+            with inherited conversions = #<:std/util/StandardListConversions>;
         };
 
         with inherited parent = #<:std/Clonable>;
