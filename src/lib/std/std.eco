@@ -25,7 +25,6 @@
         == other     => is: other;
         != other     => (== other) not;
         asBool       => true;
-        @ second     => ((std util Pair) new) first: self second: second;
         & value      => (((std util Collector) clone) init: self) & value;
         with lobby   = #<:lobby>;
     };

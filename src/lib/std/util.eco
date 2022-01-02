@@ -5,21 +5,6 @@
 #=std/util: {
     Array(size) => #'ecosphere.ecore.object.array.new'(size);
 
-    Pair = {
-        first, second;
-
-        with inherited trait = {
-            isPair => true;
-            first: f second: s => (
-                first  <- f.
-                second <- s.
-              ^ self
-            );
-        };
-
-        with inherited parent = #<:std/Clonable>;
-    },
-
     Vector = {
         size = 0,
         own elements = #();
