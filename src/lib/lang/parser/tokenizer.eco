@@ -50,13 +50,13 @@
         (peeks: '#\'') if: [ ^ newTokenWithType: #'keyword' Payload: ((parseString: #\') asKey) ].
         (peeks: '#=')  if: [ ^ newTokenWithType: #'label'   Payload: (parseString: #\:) ].
         (peeks: '#<')  if: [ ^ newTokenWithType: #'proxy'   Payload: (parseString: #\>) ].
-        (peeks: '#\\') if: [ ^ newTokenWithType: #'char' Payload: (in nextChar) ].
+        (peeks: '#\\') if: [ ^ newTokenWithType: #'char'    Payload: (in nextChar) ].
         (peeks: '#=')  if: [ ^ newTokenWithType: #'label'   Payload: (parseString: #\:) ].
         (peeks: '#"')  if: [ parseString: #\". ^ nextToken ].
         
         | sb <- (std util StringBuilder) new |
 
-        [ [in hasNext ] and: [ IsSpecial(in peekChar) not ] ] while: [
+        [ [ in hasNext ] and: [ IsSpecial(in peekChar) not ] ] while: [
             sb append: (in nextChar)
         ].
 
