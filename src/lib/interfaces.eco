@@ -1,0 +1,16 @@
+"
+    interfaces.eco - A List of Interfaces
+"
+
+#=interfaces: {
+
+    IIndexable = #=IIndexable: %[
+        #'at:'(index)
+    ];
+
+    IMutableIndexable = %[
+        with #<:IIndexable>;
+        #'at:put:'(index, value)
+    ];
+
+}

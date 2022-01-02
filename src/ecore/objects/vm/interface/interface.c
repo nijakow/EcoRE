@@ -119,6 +119,12 @@ void Eco_Interface_EstablishSuperSubRelation(struct Eco_Interface* super_interfa
      */
 }
 
+void Eco_Interface_AddParent(struct Eco_Interface* interface,
+                             struct Eco_Interface* parent)
+{
+    // TODO
+}
+
 struct Eco_Interface* Eco_Interface_AddEntry(struct Eco_Interface* old_interface,
                                              struct Eco_InterfaceEntry* entry)
 {

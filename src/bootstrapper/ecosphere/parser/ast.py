@@ -85,11 +85,14 @@ class ASTInterface(ASTObject):
     def _evaluate(self, the_subject, the_environment, the_callback):
         interf = ecosphere.objects.interface.EcoInterface()
         the_callback(interf)
+        for parent in self._parents:
+            parent.evaluate(the_subject, the_environment, lambda value: interf.add_parent(value))
         for entry in self._entries:
             entry.create_on(the_subject, interf, the_environment)
 
-    def __init__(self, entries):
+    def __init__(self, parents, entries):
         super().__init__()
+        self._parents = parents
         self._entries = entries
 
 class ASTInterfaceEntry:

@@ -9,6 +9,7 @@ std/std.eco \
 std/io.eco \
 std/util.eco \
 std/reflect.eco \
+interfaces.eco \
 master.eco
 
 

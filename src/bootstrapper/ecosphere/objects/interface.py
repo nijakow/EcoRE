@@ -35,6 +35,9 @@ class EcoInterfaceEntry:
 
 class EcoInterface(ecosphere.objects.base.EcoObject):
     
+    def add_parent(self, parent):
+        self._parents.append(parent)
+
     def add_entry(self, entry):
         self._entries.append(entry)
     
@@ -42,10 +45,14 @@ class EcoInterface(ecosphere.objects.base.EcoObject):
         if not serializer.try_serialize_known_object(self):
             serializer.write_message('ecosphere.object.interface')
             serializer.write_vlq(serializer.add_object(self))
+            serializer.write_vlq(len(self._parents))
             serializer.write_vlq(len(self._entries))
+            for parent in self._parents:
+                serializer.write_object(parent)
             for entry in self._entries:
                 entry.serialize(serializer)
 
     def __init__(self):
         super().__init__
+        self._parents = list()
         self._entries = list()

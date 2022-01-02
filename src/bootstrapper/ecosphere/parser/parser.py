@@ -136,27 +136,31 @@ class Parser:
         return ASTArray(self.parse_expressions(env, TokenType.RPAREN))
     
     def parse_interface(self, env):
+        parents = []
         slots = []
         while not self.check(TokenType.RBRACK):
-            return_type = self.parse_optional_type(env)
-            name = self.expect(TokenType.KEY).get_key()
-            args = []
-            has_varargs = False
-            if self.check(TokenType.LPAREN):
-                if not self.check(TokenType.RPAREN):
-                    while True:
-                        if self.check(TokenType.ELLIPSIS):
-                            has_varargs = True
-                            self.expect(TokenType.RPAREN)
-                            break
-                        the_type = self.parse_optional_type(env)
-                        the_expr = self.parse_expression(env)
-                        args.append((the_type, the_expr))
-                        if self.check(TokenType.RPAREN): break
-                        self.expect(TokenType.SEPARATOR)
-            slots.append(ASTInterfaceEntry(name, return_type, args, has_varargs))
+            if self.check(TokenType.WITH):
+                parents.append(self.parse_expression(env))
+            else:
+                return_type = self.parse_optional_type(env)
+                name = self.expect(TokenType.KEY).get_key()
+                args = []
+                has_varargs = False
+                if self.check(TokenType.LPAREN):
+                    if not self.check(TokenType.RPAREN):
+                        while True:
+                            if self.check(TokenType.ELLIPSIS):
+                                has_varargs = True
+                                self.expect(TokenType.RPAREN)
+                                break
+                            the_type = self.parse_optional_type(env)
+                            the_expr = self.parse_expression(env)
+                            args.append((the_type, the_expr))
+                            if self.check(TokenType.RPAREN): break
+                            self.expect(TokenType.SEPARATOR)
+                slots.append(ASTInterfaceEntry(name, return_type, args, has_varargs))
             self.check(TokenType.SEPARATOR)
-        return ASTInterface(slots)
+        return ASTInterface(parents, slots)
 
     def parse_simple_expression(self, env, allow_followups=True) -> ASTExpression:
         if self.check(TokenType.SELF):
