@@ -34,9 +34,7 @@
         io out << 'Hello, world!'.
         io out newline.
 
-        | l <- (1 & 2 & 3 & 4 & 5) asList |
-        l append: 42.
-        l append: -21.
+        | l <- (1 & 2 & 3 & 4 & 5) asArray |
         l do: [ :e | io out << e << ' ' ]. io out newline.
 
         #'ecosphere.ecore.reflect.get_type_slot_names'(#'ecosphere.ecore.reflect.get_type'(lobby)) do: [

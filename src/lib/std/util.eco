@@ -23,7 +23,7 @@
 
     asVector => (
         | v <- (std util Vector) new |
-        forEach: [ :value | v append: value ].
+        do: [ :value | v append: value ].
       ^ v
     );
 
@@ -157,16 +157,14 @@
             prev:  p => ( prev  <- p. ^ self );
             index: i => ( index <- i. ^ self );
             value: v => ( value <- v. ^ self );
-            doBackwards: block => (
-                | p <- self |
-                [
-                    block value(index, value).
-                    [ p prev == p ] if: [ ^ self ].
-                ] repeat.
-            );
+            size => index + 1;
             do: block => (
                 (prev == self) unless: [ prev do: block ].
-                block value(index, value).
+                block value(value).
+            );
+            forEach: block => (
+                | i <- 0 |
+                do: [ :e | block value(i, e). i <- i + 1. ]
             );
 
             with inherited conversions = #<:std/util/StandardListConversions>;
