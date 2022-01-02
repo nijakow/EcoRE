@@ -36,6 +36,10 @@ class EcoValueSlot(EcoSlot):
         for e in callbacks:
             e(self._value)
     
+    def set_type(self, the_type):
+        # TODO
+        pass
+    
     def evaluate(self, the_subject, the_environment, the_callback, args=None):
         self.add_value_callback(the_callback)
 
