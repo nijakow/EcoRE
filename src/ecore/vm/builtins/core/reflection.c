@@ -63,6 +63,43 @@ bool Eco_VM_Builtin_InterfaceGetEntryNames(struct Eco_Fiber* fiber, unsigned int
     return true;
 }
 
+bool Eco_VM_Builtin_InterfaceGetEntryInfo(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Interface*  interface;
+    Eco_Any                any;
+    int                    index;
+    int                    subindex;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
+        return false;
+    
+    Eco_Fiber_Pop(fiber, &any);
+    subindex = Eco_Any_AsInteger(&any);
+
+    Eco_Fiber_Pop(fiber, &any);
+    index = Eco_Any_AsInteger(&any);
+    
+    Eco_Fiber_Pop(fiber, &any);
+    interface = (struct Eco_Interface*) Eco_Any_AsPointer(&any);
+
+    if (index < 0 || ((unsigned int) index) >= interface->entry_count)
+        Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface);
+    else if (subindex == -1)
+        Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface->entries[index].key);
+    else if (subindex == -2)
+        Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface->entries[index].return_type);
+    else if (subindex == -3)
+        Eco_Any_AssignInteger(&any, interface->entries[index].arg_count);
+    else if (subindex == -4)
+        Eco_Any_AssignInteger(&any, interface->entries[index].has_varargs);
+    else if (subindex < 0 || ((unsigned int) subindex) >= interface->entries[index].arg_count)
+        Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface);
+    else
+        Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface->entries[index].arg_types[subindex]);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 bool Eco_VM_Builtin_InterfaceAddEntry(struct Eco_Fiber* fiber, unsigned int args)
 {
     struct Eco_InterfaceEntry  entry;
