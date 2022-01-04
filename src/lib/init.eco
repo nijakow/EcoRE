@@ -172,4 +172,8 @@
     commit => #'ecosphere.ecore.object.port.flush_output'(self);
 
     with inherited parent = #<:std/Clonable>;
+},
+
+#=init/interface_proxy: {
+    with inherited parent = #<:std/Clonable>;
 }

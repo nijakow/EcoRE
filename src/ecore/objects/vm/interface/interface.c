@@ -11,7 +11,7 @@
  */
 
 static struct Eco_TypeCore  Eco_Interface_TYPECORE;
-static struct Eco_Type*     Eco_Interface_TYPE;
+       struct Eco_Type*     Eco_Interface_TYPE;
 
 
 void Eco_Interface_Init()
