@@ -17,6 +17,7 @@
     };
 
     Clonable = #=std/Clonable: {
+        value        => self.
         init         => ^ self;
         clone        => #'ecosphere.ecore.clone'(self);
         new          => clone init;
