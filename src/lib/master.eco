@@ -42,6 +42,8 @@
             :name | io out << name. io out newline.
         ].
 
+        io out << #'ecosphere.ecore.object.interface.add_entry'(%[ #'hello', #'world' ], %[], #'hey', 0). io out newline.
+
         io out commit.
         [
             io out << '> '.

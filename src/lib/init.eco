@@ -175,5 +175,11 @@
 },
 
 #=init/interface_proxy: {
+    writeOn: writer => (
+        writer << '%[ '.
+        getEntryNames do: [ :name | writer << name << ', ' ].
+        writer << ']'
+    );
+    getEntryNames => #'ecosphere.ecore.object.interface.get_entry_names'(self);
     with inherited parent = #<:std/Clonable>;
 }
