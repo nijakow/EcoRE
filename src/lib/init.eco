@@ -180,6 +180,17 @@
         getEntryNames do: [ :name | writer << name << ', ' ].
         writer << ']'
     );
-    getEntryNames => #'ecosphere.ecore.object.interface.get_entry_names'(self);
+    size => (
+        | c <- 0 |
+        [
+            (#'ecosphere.ecore.object.interface.get_entry_info'(self, c, -1) == self) if: [ ^ c ].
+            c <- c + 1
+        ] repeat
+    );
+    getEntryNames => (
+        | s <- size. arr <- std util Array(s) |
+        0 for: s do: [ :i | arr at: i put: #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -1) ].
+      ^ arr
+    );
     with inherited parent = #<:std/Clonable>;
 }
