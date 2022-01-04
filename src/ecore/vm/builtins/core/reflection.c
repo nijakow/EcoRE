@@ -2,6 +2,8 @@
 
 #include <ecore/base/extra.h>
 #include <ecore/objects/misc/array/array.h>
+#include <ecore/objects/vm/interface/interface.h>
+
 
 bool Eco_VM_Builtin_GetType(struct Eco_Fiber* fiber, unsigned int args)
 {
@@ -31,6 +33,45 @@ bool Eco_VM_Builtin_GetTypeSlotNames(struct Eco_Fiber* fiber, unsigned int args)
         Eco_Array_Put(array, index, &any);
     }
     Eco_Any_AssignPointer(&any, (struct Eco_Object*) array);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_InterfaceAddEntry(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_InterfaceEntry  entry;
+    struct Eco_Interface*      interface;
+    Eco_Any                    any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 4, ECO_VM_BUILTIN_INFINITE_ARGS))
+        return false;
+    
+    entry.arg_count = args - 4;
+    
+    while (args > 4)
+    {
+        Eco_Fiber_Pop(fiber, &any);
+        entry.arg_types[args - 4] = (struct Eco_Interface*) Eco_Any_AsPointer(&any);
+        args--;
+    }
+
+    Eco_Fiber_Pop(fiber, &any);
+    entry.has_varargs = Eco_Any_AsInteger(&any) != 0;
+
+    Eco_Fiber_Pop(fiber, &any);
+    entry.key = (struct Eco_Key*) Eco_Any_AsPointer(&any);
+
+    Eco_Fiber_Pop(fiber, &any);
+    entry.return_type = (struct Eco_Interface*) Eco_Any_AsPointer(&any);
+
+    Eco_Fiber_Pop(fiber, &any);
+    interface = (struct Eco_Interface*) Eco_Any_AsPointer(&any);
+
+    interface = Eco_Interface_AddEntry(interface, &entry);
+
+    // TODO, FIXME, XXX: Check if interface == NULL!
+
+    Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface);
     Eco_Fiber_Push(fiber, &any);
     return true;
 }

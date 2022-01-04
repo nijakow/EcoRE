@@ -6,4 +6,6 @@
 bool Eco_VM_Builtin_GetType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetTypeSlotNames(struct Eco_Fiber*, unsigned int);
 
+bool Eco_VM_Builtin_InterfaceAddEntry(struct Eco_Fiber*, unsigned int);
+
 #endif
