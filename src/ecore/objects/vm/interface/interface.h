@@ -36,6 +36,7 @@ struct Eco_Interface* Eco_Interface_New(unsigned int);
 void Eco_Interface_Mark(struct Eco_GC_State*, struct Eco_Interface*);
 void Eco_Interface_Del(struct Eco_Interface*);
 
+struct Eco_Interface* Eco_Interface_NewAndInit(unsigned int, struct Eco_InterfaceEntry*);
 void Eco_Interface_AddParent(struct Eco_Interface*, struct Eco_Interface*);
 struct Eco_Interface* Eco_Interface_AddEntry(struct Eco_Interface*, struct Eco_InterfaceEntry*);
 

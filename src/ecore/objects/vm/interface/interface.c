@@ -119,6 +119,23 @@ void Eco_Interface_EstablishSuperSubRelation(struct Eco_Interface* super_interfa
      */
 }
 
+struct Eco_Interface* Eco_Interface_NewAndInit(unsigned int size,
+                                               struct Eco_InterfaceEntry* entries)
+{
+    unsigned int           index;
+    struct Eco_Interface*  interface;
+
+    interface = Eco_Interface_New(size);
+
+    if (interface != NULL)
+    {
+        for (index = 0; index < size; index++)
+            interface->entries[index] = entries[index];
+    }
+
+    return interface;
+}
+
 void Eco_Interface_AddParent(struct Eco_Interface* interface,
                              struct Eco_Interface* parent)
 {
