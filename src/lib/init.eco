@@ -1,5 +1,6 @@
 
 #=init/block_proxy: {
+    isBlock    => true;
     value(...) => #'ecosphere.ecore.flow.value'(self, ...).
     repeat     => ( self value. #'ecosphere.ecore.flow.reset'() ).
     while: b   => ( (self value) false: [ ^ #<:std/bool/false> ]. b value. #'ecosphere.ecore.flow.reset'() ).
@@ -16,6 +17,7 @@
 },
 
 #=init/integer_proxy: {
+    isInt      => true;
     + other    => #'ecosphere.ecore.math.add'(self, other);
     - other    => #'ecosphere.ecore.math.sub'(self, other);
     * other    => #'ecosphere.ecore.math.mul'(self, other);
@@ -74,6 +76,7 @@
 },
 
 #=init/character_proxy: {
+    isChar          => true;
     asInt           => #'ecosphere.ecore.char.as_int'(self);
     == other        => #'ecosphere.ecore.is'(self, other);
     != other        => (self == other) not;
@@ -98,6 +101,7 @@
 },
 
 #=init/key_proxy: {
+    isKey    => true;
     asString => #'ecosphere.ecore.object.key.as_string'(self);
     writeOn: writer => (
         writer << #\#.
@@ -119,6 +123,23 @@
         ].
       ^ self
     );
+    forEach: body => (
+        | i <- 0. s <- size. |
+        [ i < s ] while: [
+            body value(i, #'ecosphere.ecore.object.string.at_byte'(self, i)).
+            i <- i + (#'ecosphere.ecore.object.string.step_at_byte'(self, i)).
+        ].
+      ^ self
+    );
+    equals: other => (
+        (other isString)       unless: [ ^ false ].
+        (size == (other size)) unless: [ ^ false ].
+        forEach: [ :index, :value |
+            (value == (other at: index)) unless: [ ^ false ]
+        ].
+      ^ true
+    );
+    isString => true;
     asVector => (
         | v <- (std util Vector) clone |
         self do: [ :c | v append: c ].
@@ -146,6 +167,7 @@
     isEmpty => size isZero;
     at: index => #'ecosphere.ecore.object.array.at'(self, _norm(index));
     at: index put: value => #'ecosphere.ecore.object.array.at_put'(self, _norm(index), value);
+    isArray => true;
     asString => #'ecosphere.ecore.object.array.to_string'(self);
     _norm(i) => (i isNegative) if: [ size + i ] else: [ i ];
     _nnorm(i) => (i isNegative) if: [ size + i + 1 ] else: [ i ];

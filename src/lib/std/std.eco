@@ -27,6 +27,12 @@
         == other     => is: other;
         != other     => (== other) not;
         asBool       => true;
+        isBlock      => false;
+        isInt        => false;
+        isChar       => false;
+        isKey        => false;
+        isString     => false;
+        isArray      => false;
         & value      => (((std util Collector) clone) init: self) & value;
         with lobby   = #<:lobby>;
     };
