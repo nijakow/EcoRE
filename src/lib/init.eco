@@ -139,6 +139,10 @@
         ].
       ^ true
     );
+    contains: character => (
+        do: [ :c | (c == character) if: [ ^ true ] ].
+      ^ false
+    );
     isString => true;
     asVector => (
         | v <- (std util Vector) clone |

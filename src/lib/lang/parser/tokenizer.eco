@@ -10,6 +10,8 @@
       ^ false
     );
 
+    IsSpecial(c) => [ '()[]{}.,;|^' contains: c ] or: [ IsSpace(c) ];
+
     skipWhitespace => (
         [ IsSpace(in peekChar) ] while: [ in advance ]
     );

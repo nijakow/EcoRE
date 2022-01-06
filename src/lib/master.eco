@@ -52,7 +52,14 @@
         [
             io out << '> '.
             io out commit.
-            io out << (io in readLine).
+            | line <- io in readLine |
+            (line equals: 'exit') if: [
+                io out << 'Goodbye!'.
+                io out newline.
+                io out commit.
+              ^ true
+            ].
+            io out << line.
             io out newline
         ] repeat.
     );
