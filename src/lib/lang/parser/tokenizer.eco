@@ -14,10 +14,7 @@
         [ IsSpace(in peekChar) ] while: [ in advance ]
     );
 
-    peeks: str => (
-        "TODO"
-      ^ false
-    );
+    peeks: str => in peeks: str;
 
     newTokenWithType: type Payload: pl => "TODO";
     newTokenWithType: type => "TODO";
@@ -62,7 +59,16 @@
 
         sb <- sb asString.
 
-        "TODO"
+        "TODO: Number parsing"
+
+        (sb equals: '')          if: [ ^ newTokenWithType: #'eof'       ].
+        (sb equals: 'self')      if: [ ^ newTokenWithType: #'self'      ].
+        (sb equals: 'as')        if: [ ^ newTokenWithType: #'as'        ].
+        (sb equals: 'with')      if: [ ^ newTokenWithType: #'with'      ].
+        (sb equals: 'inherited') if: [ ^ newTokenWithType: #'inherited' ].
+        (sb equals: 'own')       if: [ ^ newTokenWithType: #'own'       ].
+        (sb equals: '=')         if: [ ^ newTokenWithType: #'='         ].
+        ^ newTokenWithType: #'ident' Payload: sb
     );
 
     with inherited parent = #<:std/Clonable>;

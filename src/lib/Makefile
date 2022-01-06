@@ -10,6 +10,7 @@ std/io.eco \
 std/util.eco \
 std/reflect.eco \
 interfaces.eco \
+lang/parser/tokenizer.eco \
 master.eco
 
 
