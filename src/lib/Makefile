@@ -11,6 +11,7 @@ std/util.eco \
 std/reflect.eco \
 interfaces.eco \
 lang/parser/tokenizer.eco \
+lang/parser/parser.eco \
 master.eco
 
 

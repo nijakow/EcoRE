@@ -1,0 +1,30 @@
+{
+    tokenizer;
+
+    parseExpression => parseExpressionWithFollowups: true;
+    parseExpressions => parseExpressionsWithTerminator: TokenType RPAREN;
+
+    parseExpressionsWithTerminator: terminator => (
+        | exprs <- (std util Vector) new |
+        [ check: terminator ] until: [
+            exprs append: parseExpression.
+            (check: terminator) if: [ ^ exprs ].
+            expect: TokenType SEPARATOR
+        ].
+      ^ exprs
+    );
+
+    parseArglist => (
+        | exprs <- (std util Vector) new |
+        [ check: TokenType RPAREN ] until: [
+            (check: TokenType ELLIPSIS) if: [
+                expect: TokenType RPAREN.
+              ^ exprs & true
+            ].
+            exprs append: (parseExpression).
+            (check: TokenType RPAREN) if: [ ^ exprs & false ].
+            expect: TokenType SEPARATOR
+        ].
+      ^ exprs & false
+    );
+}
