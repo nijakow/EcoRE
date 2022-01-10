@@ -18,6 +18,7 @@
 
     Clonable = #=std/Clonable: {
         value        => self.
+        let: block   => block value(self);
         init         => ^ self;
         clone        => #'ecosphere.ecore.clone'(self);
         new          => clone init;
