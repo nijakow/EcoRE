@@ -1,6 +1,8 @@
 {
     tokenizer;
 
+    IsBin(c) => false;  "TODO"
+
     parseExpression => parseExpressionWithFollowups: true;
     parseExpressions => parseExpressionsWithTerminator: TokenType RPAREN;
 
@@ -13,7 +15,43 @@
     );
 
     parseSendWithAST: ast Followups: followups => (
+        |
+            name    <- '',
+            args    <- (std util Vector) new,
+            varargs <- false,
+            bin     <- false,
+            kw      <- check: TokenType IDENTIFIER
+        |
 
+        kw unless: [ ^ ast ].
+
+        [ kw ] while: [
+            name <- name + (kw payload asString).
+            | lastchar <- name asVector at: -1 |
+            IsBin(lastchar) if: [
+                bin <- true.
+                allow_followups if: [
+                    args append: (parseExpressionWithFollowups: false)
+                ] else: [
+                    kw fail.
+                  ^ ast
+                ].
+            ].
+            (lastchar == #\:) if: [
+                kw <- false
+            ] else: [
+                kw <- check: TokenType IDENTIFIER
+            ]
+        ].
+
+        ([ bin not ] and: [ check: TokenType LPAREN ]) if: [
+            parseArglist bind: [ :arglist |
+                arglist first do: [ :e | args append: e ].
+                varargs <- arglist second
+            ]
+        ].
+
+      ^ ASTSend newWithSubject: ast Key: (name asKey) Args: args Varargs: (arglist second)
     );
 
     parseExpressionWithFollowups: followups => (
@@ -33,7 +71,7 @@
             begin
               if: [ check: TokenType LPAREN ] then: [
                 parseArglist bind: [
-                  :arglist | ast <- ASTSend newWithSubject: #'value' Args: (arglist first) Varargs: (arglist second)
+                  :arglist | ast <- ASTSend newWithSubject: ast Key: #'value' Args: (arglist first) Varargs: (arglist second)
                 ]
               ] ~
               if: [ check: TokenType AS ] then: [
