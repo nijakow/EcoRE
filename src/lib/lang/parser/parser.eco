@@ -4,6 +4,54 @@
     parseExpression => parseExpressionWithFollowups: true;
     parseExpressions => parseExpressionsWithTerminator: TokenType RPAREN;
 
+    parseBar => (
+        "TODO"
+    );
+
+    parseSimpleExpressionWithFollowups: followups => (
+
+    );
+
+    parseSendWithAST: ast Followups: followups => (
+
+    );
+
+    parseExpressionWithFollowups: followups => (
+        ([ allow_followups ] and: [ check: TokenType CARET ]) if: [
+          ^ ASTReturn newWithValue: (parseExpressionWithFollowups: followups)
+        ].
+        ([ allow_followups ] and: [ check: TokenType BAR ]) if: [ ^ parseBar ].
+
+        |
+            ast <- parseSimpleExpressionWithFollowups: followups,
+            next <- false
+        |
+
+        [
+            next <- ast.
+            ast  <- parseSendWithAST: ast Followups: followups.
+            begin
+              if: [ check: TokenType LPAREN ] then: [
+                parseArglist bind: [
+                  :arglist | ast <- ASTSend newWithSubject: #'value' Args: (arglist first) Varargs: (arglist second)
+                ]
+              ] ~
+              if: [ check: TokenType AS ] then: [
+                  ast <- ASTAs newWithSubject: ast Type: (parseExpressionWithFollowups: false)
+              ] ~
+              if: [ check: TokenType ASSIGNMENT ] then: [
+                  ast <- ASTAssignment newWithLHS: ast RHS: (parseExpressionWithFollowups: followups)
+              ] ~
+              if: [ check: TokenType TILDE ] then: [
+
+              ] ~
+              if: [ ast is: next ] then: [
+                ^ ast
+              ] ~
+            default: []
+        ] repeat.
+    );
+
     parseExpressionsWithTerminator: terminator => (
         | exprs <- (std util Vector) new |
         [ check: terminator ] until: [
