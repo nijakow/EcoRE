@@ -26,7 +26,7 @@
                 parseArglist bind: [ :arglist |
                   ^ ASTBuiltin newWithKey: (kw payload) Args: (arglist first) Varargs: (arglist second)
                 ]
-            ]
+            ].
           ^ kw payload
         ].
 
