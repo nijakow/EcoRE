@@ -11,7 +11,41 @@
     );
 
     parseSimpleExpressionWithFollowups: followups => (
+        | kw |
 
+        (check: TokenType SELF)       if: [ ^ ASTSelf new    ].
+        (check: TokenType LPAREN)     if: [ ^ parseCompound  ].
+        (check: TokenType LBRACK)     if: [ ^ parseBlock     ].
+        (check: TokenType LCURLY)     if: [ ^ parseObject    ].
+        (check: TokenType HASHLPAREN) if: [ ^ parseArray     ].
+        (check: TokenType PERCLBRACK) if: [ ^ parseInterface ].
+
+        kw <- check: TokenType KEY.
+        kw if: [
+            (check: TokenType LPAREN) if: [
+                parseArglist bind: [ :arglist |
+                  ^ ASTBuiltin newWithKey: (kw payload) Args: (arglist first) Varargs: (arglist second)
+                ]
+            ]
+          ^ kw payload
+        ].
+
+        kw <- check: TokenType STRING.
+        kw if: [ ^ ASTString newWithValue: (kw payload) ].
+
+        kw <- check: TokenType NUMBER.
+        kw if: [ ^ ASTNumber newWithValue: (kw payload) ].
+
+        kw <- check: TokenType CHARACTER.
+        kw if: [ ^ ASTCharacter newWithValue: (kw payload) ].
+
+        kw <- check: TokenType IDENTIFIER.
+        kw if: [
+            | key <- kw payload |
+            " TODO "
+        ].
+
+      ^ ASTSelf new
     );
 
     parseSendWithAST: ast Followups: followups => (
