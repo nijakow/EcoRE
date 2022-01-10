@@ -71,7 +71,7 @@
                   ^ ast
                 ].
             ].
-            (lastchar == #\:) if: [
+            (lastchar != #\:) if: [
                 kw <- false
             ] else: [
                 kw <- check: TokenType IDENTIFIER
