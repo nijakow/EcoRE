@@ -4,6 +4,16 @@
 
 #=interfaces: {
 
+    IBoolean = #=IBoolean: %[
+        #'not',
+        #'if:else:'(tblock, fblock),
+        #'if:'(block),
+        #'unless:'(block),
+        #'true:'(block),
+        #'false:'(block),
+        #'true:false:'(tblock, fblock)
+    ];
+
     IIndexable = #=IIndexable: %[
         #'at:'(index)
     ];
