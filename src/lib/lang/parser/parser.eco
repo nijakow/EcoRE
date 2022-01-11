@@ -6,6 +6,15 @@
     parseExpression => parseExpressionWithFollowups: true;
     parseExpressions => parseExpressionsWithTerminator: TokenType RPAREN;
 
+    parseOptionalType => (
+        | the_type <- false |  "TODO: Find a better value"
+        (check: TokenType LBRACK) if: [
+            the_type <- parseExpression.
+            expect: TokenType RBRACK
+        ].
+      ^ the_type
+    );
+
     parseBar => (
         |
           type    <- parseOptionalType,
