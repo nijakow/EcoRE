@@ -1,177 +1,180 @@
-{
-    tokenizer;
+#=lang/parser: {
 
-    IsBin(c) => false;  "TODO"
+    Parser = {
+        tokenizer;
 
-    parseExpression => parseExpressionWithFollowups: true;
-    parseExpressions => parseExpressionsWithTerminator: TokenType RPAREN;
+        IsBin(c) => false;  "TODO"
 
-    parseOptionalType => (
-        | the_type <- false |  "TODO: Find a better value"
-        (check: TokenType LBRACK) if: [
-            the_type <- parseExpression.
-            expect: TokenType RBRACK
-        ].
-      ^ the_type
-    );
+        parseExpression => parseExpressionWithFollowups: true;
+        parseExpressions => parseExpressionsWithTerminator: TokenType RPAREN;
 
-    parseBar => (
-        |
-          type    <- parseOptionalType,
-          varname <- (expect: TokenType IDENTIFIER) payload,
-          value
-        |
-
-        (check: TokenType ASSIGNMENT) if: [
-            value <- parseExpression
-        ] else: [
-            value <- ASTSelf new
-        ].
-
-        check: TokenType SEPARATOR.
-
-        (check: TokenType BAR) if: [
-          ^ ASTBar newWithType: type Varname: varname Value: value Body: parseExpression
-        ] else: [
-          ^ ASTBar newWithType: type Varname: varname Value: value Body: parseBar
-        ]
-    );
-
-    parseSimpleExpressionWithFollowups: followups => (
-        | kw |
-
-        (check: TokenType SELF)       if: [ ^ ASTSelf new    ].
-        (check: TokenType LPAREN)     if: [ ^ parseCompound  ].
-        (check: TokenType LBRACK)     if: [ ^ parseBlock     ].
-        (check: TokenType LCURLY)     if: [ ^ parseObject    ].
-        (check: TokenType HASHLPAREN) if: [ ^ parseArray     ].
-        (check: TokenType PERCLBRACK) if: [ ^ parseInterface ].
-
-        kw <- check: TokenType KEY.
-        kw if: [
-            (check: TokenType LPAREN) if: [
-                parseArglist let: [ :arglist |
-                  ^ ASTBuiltin newWithKey: (kw payload) Args: (arglist first) Varargs: (arglist second)
-                ]
+        parseOptionalType => (
+            | the_type <- false |  "TODO: Find a better value"
+            (check: TokenType LBRACK) if: [
+                the_type <- parseExpression.
+                expect: TokenType RBRACK
             ].
-          ^ kw payload
-        ].
+          ^ the_type
+        );
 
-        kw <- check: TokenType STRING.
-        kw if: [ ^ ASTString newWithValue: (kw payload) ].
+        parseBar => (
+            |
+              type    <- parseOptionalType,
+              varname <- (expect: TokenType IDENTIFIER) payload,
+              value
+            |
 
-        kw <- check: TokenType NUMBER.
-        kw if: [ ^ ASTNumber newWithValue: (kw payload) ].
-
-        kw <- check: TokenType CHARACTER.
-        kw if: [ ^ ASTCharacter newWithValue: (kw payload) ].
-
-        kw <- check: TokenType IDENTIFIER.
-        kw if: [
-            | key <- kw payload |
-            " TODO "
-        ].
-
-      ^ ASTSelf new
-    );
-
-    parseSendWithAST: ast Followups: followups => (
-        |
-            name    <- '',
-            args    <- (std util Vector) new,
-            varargs <- false,
-            bin     <- false,
-            kw      <- check: TokenType IDENTIFIER
-        |
-
-        kw unless: [ ^ ast ].
-
-        [ kw ] while: [
-            name <- name + (kw payload asString).
-            | lastchar <- name asVector at: -1 |
-            IsBin(lastchar) if: [
-                bin <- true.
-                allow_followups if: [
-                    args append: (parseExpressionWithFollowups: false)
-                ] else: [
-                    kw fail.
-                  ^ ast
-                ].
-            ].
-            (lastchar != #\:) if: [
-                kw <- false
+            (check: TokenType ASSIGNMENT) if: [
+                value <- parseExpression
             ] else: [
-                kw <- check: TokenType IDENTIFIER
-            ]
-        ].
-
-        ([ bin not ] and: [ check: TokenType LPAREN ]) if: [
-            parseArglist let: [ :arglist |
-                arglist first do: [ :e | args append: e ].
-                varargs <- arglist second
-            ]
-        ].
-
-      ^ ASTSend newWithSubject: ast Key: (name asKey) Args: args Varargs: (arglist second)
-    );
-
-    parseExpressionWithFollowups: followups => (
-        ([ allow_followups ] and: [ check: TokenType CARET ]) if: [
-          ^ ASTReturn newWithValue: (parseExpressionWithFollowups: followups)
-        ].
-        ([ allow_followups ] and: [ check: TokenType BAR ]) if: [ ^ parseBar ].
-
-        |
-            ast <- parseSimpleExpressionWithFollowups: followups,
-            next <- false
-        |
-
-        [
-            next <- ast.
-            ast  <- parseSendWithAST: ast Followups: followups.
-            begin
-              if: [ check: TokenType LPAREN ] then: [
-                parseArglist let: [
-                  :arglist | ast <- ASTCall newWithAST: ast Args: (arglist first) Varargs: (arglist second)
-                ]
-              ] ~
-              if: [ check: TokenType AS ] then: [
-                  ast <- ASTAs newWithSubject: ast Type: (parseExpressionWithFollowups: false)
-              ] ~
-              if: [ check: TokenType ASSIGNMENT ] then: [
-                  ast <- ASTAssignment newWithLHS: ast RHS: (parseExpressionWithFollowups: followups)
-              ] ~
-              if: [ check: TokenType TILDE ] then: [
-
-              ] ~
-              if: [ ast is: next ] then: [
-                ^ ast
-              ] ~
-            default: []
-        ] repeat.
-    );
-
-    parseExpressionsWithTerminator: terminator => (
-        | exprs <- (std util Vector) new |
-        [ check: terminator ] until: [
-            exprs append: parseExpression.
-            (check: terminator) if: [ ^ exprs ].
-            expect: TokenType SEPARATOR
-        ].
-      ^ exprs
-    );
-
-    parseArglist => (
-        | exprs <- (std util Vector) new |
-        [ check: TokenType RPAREN ] until: [
-            (check: TokenType ELLIPSIS) if: [
-                expect: TokenType RPAREN.
-              ^ exprs & true
+                value <- ASTSelf new
             ].
-            exprs append: (parseExpression).
-            (check: TokenType RPAREN) if: [ ^ exprs & false ].
-            expect: TokenType SEPARATOR
-        ].
-      ^ exprs & false
-    );
+
+            check: TokenType SEPARATOR.
+
+            (check: TokenType BAR) if: [
+              ^ ASTBar newWithType: type Varname: varname Value: value Body: parseExpression
+            ] else: [
+              ^ ASTBar newWithType: type Varname: varname Value: value Body: parseBar
+            ]
+        );
+
+        parseSimpleExpressionWithFollowups: followups => (
+            | kw |
+
+            (check: TokenType SELF)       if: [ ^ ASTSelf new    ].
+            (check: TokenType LPAREN)     if: [ ^ parseCompound  ].
+            (check: TokenType LBRACK)     if: [ ^ parseBlock     ].
+            (check: TokenType LCURLY)     if: [ ^ parseObject    ].
+            (check: TokenType HASHLPAREN) if: [ ^ parseArray     ].
+            (check: TokenType PERCLBRACK) if: [ ^ parseInterface ].
+
+            kw <- check: TokenType KEY.
+            kw if: [
+                (check: TokenType LPAREN) if: [
+                    parseArglist let: [ :arglist |
+                      ^ ASTBuiltin newWithKey: (kw payload) Args: (arglist first) Varargs: (arglist second)
+                    ]
+                ].
+              ^ kw payload
+            ].
+
+            kw <- check: TokenType STRING.
+            kw if: [ ^ ASTString newWithValue: (kw payload) ].
+
+            kw <- check: TokenType NUMBER.
+            kw if: [ ^ ASTNumber newWithValue: (kw payload) ].
+
+            kw <- check: TokenType CHARACTER.
+            kw if: [ ^ ASTCharacter newWithValue: (kw payload) ].
+
+            kw <- check: TokenType IDENTIFIER.
+            kw if: [
+                | key <- kw payload |
+                " TODO "
+            ].
+
+          ^ ASTSelf new
+        );
+
+        parseSendWithAST: ast Followups: followups => (
+            |
+                name    <- '',
+                args    <- (std util Vector) new,
+                varargs <- false,
+                bin     <- false,
+                kw      <- check: TokenType IDENTIFIER
+            |
+
+            kw unless: [ ^ ast ].
+
+            [ kw ] while: [
+                name <- name + (kw payload asString).
+                | lastchar <- name asVector at: -1 |
+                IsBin(lastchar) if: [
+                    bin <- true.
+                    allow_followups if: [
+                        args append: (parseExpressionWithFollowups: false)
+                    ] else: [
+                        kw fail.
+                      ^ ast
+                    ].
+                ].
+                (lastchar != #\:) if: [
+                    kw <- false
+                ] else: [
+                    kw <- check: TokenType IDENTIFIER
+                ]
+            ].
+
+            ([ bin not ] and: [ check: TokenType LPAREN ]) if: [
+                parseArglist let: [ :arglist |
+                    arglist first do: [ :e | args append: e ].
+                    varargs <- arglist second
+                ]
+            ].
+
+          ^ ASTSend newWithSubject: ast Key: (name asKey) Args: args Varargs: (arglist second)
+        );
+
+        parseExpressionWithFollowups: followups => (
+            ([ allow_followups ] and: [ check: TokenType CARET ]) if: [
+              ^ ASTReturn newWithValue: (parseExpressionWithFollowups: followups)
+            ].
+            ([ allow_followups ] and: [ check: TokenType BAR ]) if: [ ^ parseBar ].
+
+            |
+                ast <- parseSimpleExpressionWithFollowups: followups,
+                next <- false
+            |
+
+            [
+                next <- ast.
+                ast  <- parseSendWithAST: ast Followups: followups.
+                begin
+                  if: [ check: TokenType LPAREN ] then: [
+                    parseArglist let: [
+                      :arglist | ast <- ASTCall newWithAST: ast Args: (arglist first) Varargs: (arglist second)
+                    ]
+                  ] ~
+                  if: [ check: TokenType AS ] then: [
+                      ast <- ASTAs newWithSubject: ast Type: (parseExpressionWithFollowups: false)
+                  ] ~
+                  if: [ check: TokenType ASSIGNMENT ] then: [
+                      ast <- ASTAssignment newWithLHS: ast RHS: (parseExpressionWithFollowups: followups)
+                  ] ~
+                  if: [ check: TokenType TILDE ] then: [
+
+                  ] ~
+                  if: [ ast is: next ] then: [
+                    ^ ast
+                  ] ~
+                default: []
+            ] repeat.
+        );
+
+        parseExpressionsWithTerminator: terminator => (
+            | exprs <- (std util Vector) new |
+            [ check: terminator ] until: [
+                exprs append: parseExpression.
+                (check: terminator) if: [ ^ exprs ].
+                expect: TokenType SEPARATOR
+            ].
+          ^ exprs
+        );
+
+        parseArglist => (
+            | exprs <- (std util Vector) new |
+            [ check: TokenType RPAREN ] until: [
+                (check: TokenType ELLIPSIS) if: [
+                    expect: TokenType RPAREN.
+                  ^ exprs & true
+                ].
+                exprs append: (parseExpression).
+                (check: TokenType RPAREN) if: [ ^ exprs & false ].
+                expect: TokenType SEPARATOR
+            ].
+          ^ exprs & false
+        );
+    }
 }

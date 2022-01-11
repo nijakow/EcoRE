@@ -14,6 +14,8 @@
         };
 
         begin = #<:std/bool/true>;
+
+        io = #<:std/bool/false>;
     };
 
     Clonable = #=std/Clonable: {

@@ -1,0 +1,8 @@
+"
+    lang.eco - The lang package of the Ecosphere Standard Library
+"
+
+#=lang: {
+    tokenizer = #<:lang/tokenizer>;
+    parser = #<:lang/parser>;
+}

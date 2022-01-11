@@ -1,77 +1,79 @@
+#=lang/tokenizer: {
+    
+    Tokenizer = {
+        in, pushbacks;
 
-{
-    in, pushbacks;
+        IsSpace(c) => (
+            (c == (char space))   if: [ ^ true ].
+            (c == (char tab))     if: [ ^ true ].
+            (c == (char newline)) if: [ ^ true ].
+            (c == (char return))  if: [ ^ true ].
+        ^ false
+        );
 
-    IsSpace(c) => (
-        (c == (char space))   if: [ ^ true ].
-        (c == (char tab))     if: [ ^ true ].
-        (c == (char newline)) if: [ ^ true ].
-        (c == (char return))  if: [ ^ true ].
-      ^ false
-    );
+        IsSpecial(c) => [ '()[]{}.,;|^' contains: c ] or: [ IsSpace(c) ];
 
-    IsSpecial(c) => [ '()[]{}.,;|^' contains: c ] or: [ IsSpace(c) ];
+        skipWhitespace => (
+            [ IsSpace(in peekChar) ] while: [ in advance ]
+        );
 
-    skipWhitespace => (
-        [ IsSpace(in peekChar) ] while: [ in advance ]
-    );
+        peeks: str => in peeks: str;
 
-    peeks: str => in peeks: str;
+        newTokenWithType: type Payload: pl => "TODO";
+        newTokenWithType: type => "TODO";
 
-    newTokenWithType: type Payload: pl => "TODO";
-    newTokenWithType: type => "TODO";
+        nextToken => (
+            (pushbacks isEmpty) unless: [ ^ pushbacks pop ].
 
-    nextToken => (
-        (pushbacks isEmpty) unless: [ ^ pushbacks pop ].
+            skipWhitespace.
 
-        skipWhitespace.
+            (peeks: '...') if: [ ^ newTokenWithType: #'ellipsis'   ].
+            (peeks: '<-')  if: [ ^ newTokenWithType: #'assignment' ].
+            (peeks: '->')  if: [ ^ newTokenWithType: #'delegate'   ].
+            (peeks: '=>')  if: [ ^ newTokenWithType: #'rarrow'     ].
+            (peeks: '(')   if: [ ^ newTokenWithType: #'lparen'     ].
+            (peeks: ')')   if: [ ^ newTokenWithType: #'rparen'     ].
+            (peeks: '[')   if: [ ^ newTokenWithType: #'lbrack'     ].
+            (peeks: ']')   if: [ ^ newTokenWithType: #'rbrack'     ].
+            (peeks: '{')   if: [ ^ newTokenWithType: #'lcurly'     ].
+            (peeks: '}')   if: [ ^ newTokenWithType: #'rcurly'     ].
+            (peeks: '#(')  if: [ ^ newTokenWithType: #'hashlparen' ].
+            (peeks: '%[')  if: [ ^ newTokenWithType: #'perclbrack' ].
+            (peeks: '.')   if: [ ^ newTokenWithType: #'separator'  ].
+            (peeks: ',')   if: [ ^ newTokenWithType: #'separator'  ].
+            (peeks: ';')   if: [ ^ newTokenWithType: #'separator'  ].
+            (peeks: ':')   if: [ ^ newTokenWithType: #'colon'      ].
+            (peeks: '~')   if: [ ^ newTokenWithType: #'tilde'      ].
+            (peeks: '|')   if: [ ^ newTokenWithType: #'bar'        ].
+            (peeks: '^')   if: [ ^ newTokenWithType: #'caret'      ].
+            (peeks: '\'')  if: [ ^ newTokenWithType: #'string'  Payload: (parseString: #\') ].
+            (peeks: '#\'') if: [ ^ newTokenWithType: #'keyword' Payload: ((parseString: #\') asKey) ].
+            (peeks: '#=')  if: [ ^ newTokenWithType: #'label'   Payload: (parseString: #\:) ].
+            (peeks: '#<')  if: [ ^ newTokenWithType: #'proxy'   Payload: (parseString: #\>) ].
+            (peeks: '#\\') if: [ ^ newTokenWithType: #'char'    Payload: (in nextChar) ].
+            (peeks: '#=')  if: [ ^ newTokenWithType: #'label'   Payload: (parseString: #\:) ].
+            (peeks: '#"')  if: [ parseString: #\". ^ nextToken ].
+            
+            | sb <- (std util StringBuilder) new |
 
-        (peeks: '...') if: [ ^ newTokenWithType: #'ellipsis'   ].
-        (peeks: '<-')  if: [ ^ newTokenWithType: #'assignment' ].
-        (peeks: '->')  if: [ ^ newTokenWithType: #'delegate'   ].
-        (peeks: '=>')  if: [ ^ newTokenWithType: #'rarrow'     ].
-        (peeks: '(')   if: [ ^ newTokenWithType: #'lparen'     ].
-        (peeks: ')')   if: [ ^ newTokenWithType: #'rparen'     ].
-        (peeks: '[')   if: [ ^ newTokenWithType: #'lbrack'     ].
-        (peeks: ']')   if: [ ^ newTokenWithType: #'rbrack'     ].
-        (peeks: '{')   if: [ ^ newTokenWithType: #'lcurly'     ].
-        (peeks: '}')   if: [ ^ newTokenWithType: #'rcurly'     ].
-        (peeks: '#(')  if: [ ^ newTokenWithType: #'hashlparen' ].
-        (peeks: '%[')  if: [ ^ newTokenWithType: #'perclbrack' ].
-        (peeks: '.')   if: [ ^ newTokenWithType: #'separator'  ].
-        (peeks: ',')   if: [ ^ newTokenWithType: #'separator'  ].
-        (peeks: ';')   if: [ ^ newTokenWithType: #'separator'  ].
-        (peeks: ':')   if: [ ^ newTokenWithType: #'colon'      ].
-        (peeks: '~')   if: [ ^ newTokenWithType: #'tilde'      ].
-        (peeks: '|')   if: [ ^ newTokenWithType: #'bar'        ].
-        (peeks: '^')   if: [ ^ newTokenWithType: #'caret'      ].
-        (peeks: '\'')  if: [ ^ newTokenWithType: #'string'  Payload: (parseString: #\') ].
-        (peeks: '#\'') if: [ ^ newTokenWithType: #'keyword' Payload: ((parseString: #\') asKey) ].
-        (peeks: '#=')  if: [ ^ newTokenWithType: #'label'   Payload: (parseString: #\:) ].
-        (peeks: '#<')  if: [ ^ newTokenWithType: #'proxy'   Payload: (parseString: #\>) ].
-        (peeks: '#\\') if: [ ^ newTokenWithType: #'char'    Payload: (in nextChar) ].
-        (peeks: '#=')  if: [ ^ newTokenWithType: #'label'   Payload: (parseString: #\:) ].
-        (peeks: '#"')  if: [ parseString: #\". ^ nextToken ].
-        
-        | sb <- (std util StringBuilder) new |
+            [ [ in hasNext ] and: [ IsSpecial(in peekChar) not ] ] while: [
+                sb append: (in nextChar)
+            ].
 
-        [ [ in hasNext ] and: [ IsSpecial(in peekChar) not ] ] while: [
-            sb append: (in nextChar)
-        ].
+            sb <- sb asString.
 
-        sb <- sb asString.
+            "TODO: Number parsing"
 
-        "TODO: Number parsing"
+            (sb equals: '')          if: [ ^ newTokenWithType: #'eof'       ].
+            (sb equals: 'self')      if: [ ^ newTokenWithType: #'self'      ].
+            (sb equals: 'as')        if: [ ^ newTokenWithType: #'as'        ].
+            (sb equals: 'with')      if: [ ^ newTokenWithType: #'with'      ].
+            (sb equals: 'inherited') if: [ ^ newTokenWithType: #'inherited' ].
+            (sb equals: 'own')       if: [ ^ newTokenWithType: #'own'       ].
+            (sb equals: '=')         if: [ ^ newTokenWithType: #'='         ].
+            ^ newTokenWithType: #'ident' Payload: sb
+        );
 
-        (sb equals: '')          if: [ ^ newTokenWithType: #'eof'       ].
-        (sb equals: 'self')      if: [ ^ newTokenWithType: #'self'      ].
-        (sb equals: 'as')        if: [ ^ newTokenWithType: #'as'        ].
-        (sb equals: 'with')      if: [ ^ newTokenWithType: #'with'      ].
-        (sb equals: 'inherited') if: [ ^ newTokenWithType: #'inherited' ].
-        (sb equals: 'own')       if: [ ^ newTokenWithType: #'own'       ].
-        (sb equals: '=')         if: [ ^ newTokenWithType: #'='         ].
-        ^ newTokenWithType: #'ident' Payload: sb
-    );
-
-    with inherited parent = #<:std/Clonable>;
+        with inherited parent = #<:std/Clonable>;
+    }
 }

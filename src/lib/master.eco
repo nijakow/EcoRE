@@ -12,12 +12,13 @@
     with packages = {
         with std = #<:std>;
         with interfaces = #<:interfaces>;
+        lang = #<:lang>;
     };
 },
 
 #=bootstrapper: {
 
-    Init => (
+    InitTypes => (
         #'ecosphere.ecore.init.set_lobby'(#<:lobby>).
         #'ecosphere.ecore.init.set_true'(#<:std/bool/true>).
         #'ecosphere.ecore.init.set_false'(#<:std/bool/false>).
@@ -29,39 +30,17 @@
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.string_type'(), #<:init/string_proxy>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.port_type'(), #<:init/port_proxy>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.interface_type'(), #<:init/interface_proxy>).
+    );
 
-        | p <- #'ecosphere.ecore.object.port.new'(1), io <- p lens: (std io PortIO) |
+    InitIO => io <- #'ecosphere.ecore.object.port.new'(1) lens: (std io PortIO);
 
-        io out << 'Hello, world!'.
+    Init => (
+        InitTypes.
+        InitIO.
+
+        io out << 'EcoRE image online and ready.'.
         io out newline.
-
-        | l <- (1 & 2 & 3 & 4 & 5) asArray |
-        l do: [ :e | io out << e << ' ' ]. io out newline.
-
-        #'ecosphere.ecore.reflect.get_type_slot_names'(#'ecosphere.ecore.reflect.get_type'(lobby)) do: [
-            :name | io out << name. io out newline.
-        ].
-
-        io out << #'ecosphere.ecore.object.interface.add_entry'(%[ #'hello', #'world' ], %[], #'hey', 0).
-        io out newline.
-
-        io out << (true if: 42 else: 21).
-        io out newline.
-
         io out commit.
-        [
-            io out << '> '.
-            io out commit.
-            | line <- io in readLine |
-            (line equals: 'exit') if: [
-                io out << 'Goodbye!'.
-                io out newline.
-                io out commit.
-              ^ true
-            ].
-            io out << line.
-            io out newline
-        ] repeat.
     );
 
     with lobby = #<:lobby>;
