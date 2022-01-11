@@ -57,6 +57,7 @@
                 false: f         => unless: f;
                 if: c then: b    => ( (c value asBool) if: [ b value. ^ false ] else: [ ^ self ] );
                 default: b       => ( b value. ^ self );
+                writeOn: writer  => writer << 'true';
             };
             with inherited parent = #<:std/Clonable>;
         },
@@ -73,6 +74,7 @@
                 false: f         => unless: f;
                 if: c then: b    => self;
                 default: b       => self;
+                writeOn: writer  => writer << 'false';
             };
             with inherited parent = #<:std/Clonable>;
         }

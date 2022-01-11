@@ -43,7 +43,7 @@
         io out commit.
 
         | reader <- 'Hello' lens: (lang tokenizer StringReader) |
-        [ reader hasNext ] while: [ io out << (reader readChar) ].
+        [ reader hasNext ] while: [ io out << (reader readChar) << (reader peeks: 'ell'). io out newline. ].
         io out newline.
         io out commit.
     );
