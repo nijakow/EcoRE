@@ -23,7 +23,7 @@
         kw <- check: TokenType KEY.
         kw if: [
             (check: TokenType LPAREN) if: [
-                parseArglist bind: [ :arglist |
+                parseArglist let: [ :arglist |
                   ^ ASTBuiltin newWithKey: (kw payload) Args: (arglist first) Varargs: (arglist second)
                 ]
             ].
@@ -79,7 +79,7 @@
         ].
 
         ([ bin not ] and: [ check: TokenType LPAREN ]) if: [
-            parseArglist bind: [ :arglist |
+            parseArglist let: [ :arglist |
                 arglist first do: [ :e | args append: e ].
                 varargs <- arglist second
             ]
@@ -104,7 +104,7 @@
             ast  <- parseSendWithAST: ast Followups: followups.
             begin
               if: [ check: TokenType LPAREN ] then: [
-                parseArglist bind: [
+                parseArglist let: [
                   :arglist | ast <- ASTSend newWithSubject: ast Key: #'value' Args: (arglist first) Varargs: (arglist second)
                 ]
               ] ~
