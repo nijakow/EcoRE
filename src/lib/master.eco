@@ -41,6 +41,11 @@
         io out << 'EcoRE image online and ready.'.
         io out newline.
         io out commit.
+
+        | reader <- 'Hello' lens: (lang tokenizer StringReader) |
+        [ reader hasNext ] while: [ io out << (reader readChar) ].
+        io out newline.
+        io out commit.
     );
 
     with lobby = #<:lobby>;
