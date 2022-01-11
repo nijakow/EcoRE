@@ -7,7 +7,25 @@
     parseExpressions => parseExpressionsWithTerminator: TokenType RPAREN;
 
     parseBar => (
-        "TODO"
+        |
+          type    <- parseOptionalType,
+          varname <- (expect: TokenType IDENTIFIER) payload,
+          value
+        |
+
+        (check: TokenType ASSIGNMENT) if: [
+            value <- parseExpression
+        ] else: [
+            value <- ASTSelf new
+        ].
+
+        check: TokenType SEPARATOR.
+
+        (check: TokenType BAR) if: [
+          ^ ASTBar newWithType: type Varname: varname Value: value Body: parseExpression
+        ] else: [
+          ^ ASTBar newWithType: type Varname: varname Value: value Body: parseBar
+        ]
     );
 
     parseSimpleExpressionWithFollowups: followups => (
