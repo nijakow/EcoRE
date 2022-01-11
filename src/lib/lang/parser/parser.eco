@@ -132,7 +132,7 @@
             begin
               if: [ check: TokenType LPAREN ] then: [
                 parseArglist let: [
-                  :arglist | ast <- ASTSend newWithSubject: ast Key: #'value' Args: (arglist first) Varargs: (arglist second)
+                  :arglist | ast <- ASTCall newWithAST: ast Args: (arglist first) Varargs: (arglist second)
                 ]
               ] ~
               if: [ check: TokenType AS ] then: [
