@@ -33,6 +33,13 @@
         #'removeAll:'([IFixedCollection] collection),
     ];
 
+    IStack = #=IStack: %[
+        #'isEmpty',
+        #'push:'(element),
+        #'pop',
+        #'peek'
+    ];
+
     IArray = #=IArray: %[
         with #<:IFixedCollection>,
         with #<:IRandomAccess>;
@@ -41,6 +48,9 @@
     IList = #=IList: %[
         with #<:ICollection>,
         with #<:IRandomAccess>;
+        #'insert:at:'(element, index),
+        #'remove:'(element),
+        #'removeAt:'(index)
     ];
 
     IInputPort = #=IInputPort: %[
