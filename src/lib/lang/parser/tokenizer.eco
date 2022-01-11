@@ -30,6 +30,11 @@
     Tokenizer = {
         in, pushbacks;
 
+        init: reader => (
+            in <- reader.
+          ^ self
+        );
+
         IsSpace(c) => (
             (c == (char space))   if: [ ^ true ].
             (c == (char tab))     if: [ ^ true ].
@@ -46,11 +51,23 @@
 
         peeks: str => in peeks: str;
 
-        newTokenWithType: type Payload: pl => "TODO";
-        newTokenWithType: type => "TODO";
+        newTokenWithType: type Payload: pl => ( io out << type << ' ' << pl. io out newline. );
+        newTokenWithType: type => ( io out << type. io out newline. );
+
+        parseString: terminator => (
+            | sb <- (std util StringBuilder) new |
+
+            [ in peekChar == terminator ] until: [
+                sb append: (in readChar)
+            ].
+
+            in readChar.
+
+          ^ sb asString
+        );
 
         nextToken => (
-            (pushbacks isEmpty) unless: [ ^ pushbacks pop ].
+            "(pushbacks isEmpty) unless: [ ^ pushbacks pop ]."
 
             skipWhitespace.
 
@@ -79,12 +96,12 @@
             (peeks: '#<')  if: [ ^ newTokenWithType: #'proxy'   Payload: (parseString: #\>) ].
             (peeks: '#\\') if: [ ^ newTokenWithType: #'char'    Payload: (in nextChar) ].
             (peeks: '#=')  if: [ ^ newTokenWithType: #'label'   Payload: (parseString: #\:) ].
-            (peeks: '#"')  if: [ parseString: #\". ^ nextToken ].
+            (peeks: '"')   if: [ parseString: #\". ^ nextToken ].
             
             | sb <- (std util StringBuilder) new |
 
             [ [ in hasNext ] and: [ IsSpecial(in peekChar) not ] ] while: [
-                sb append: (in nextChar)
+                sb append: (in readChar).
             ].
 
             sb <- sb asString.

@@ -42,9 +42,12 @@
         io out newline.
         io out commit.
 
-        | reader <- 'Hello' lens: (lang tokenizer StringReader) |
-        [ reader hasNext ] while: [ io out << (reader readChar) << (reader peeks: 'ell'). io out newline. ].
-        io out newline.
+        |
+            reader <- '( lang tokenizer "Hello" StringReader )' lens: (lang tokenizer StringReader),
+            tok    <- reader lens: (lang tokenizer Tokenizer)
+        |
+        
+        1 to: 5 do: [ :i | tok nextToken ].
         io out commit.
     );
 
