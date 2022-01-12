@@ -26,6 +26,25 @@
 
         with inherited parent = #<:std/Clonable>;
     },
+
+    Token = {
+        tokenizer, type, payload;
+
+        with inherited trait = {
+            writeOn: writer => writer << 'Token: ' << type.
+
+            tokenizer: tok type: t payload: p => (
+                tokenizer <- tok.
+                type <- t.
+                payload <- p.
+              ^ self
+            );
+
+            fail => tokenizer unread: self;
+        },
+
+        with inherited parent = #<:std/Clonable>;
+    },
     
     Tokenizer = {
         in, pushbacks;
@@ -40,7 +59,7 @@
             (c == (char tab))     if: [ ^ true ].
             (c == (char newline)) if: [ ^ true ].
             (c == (char return))  if: [ ^ true ].
-        ^ false
+          ^ false
         );
 
         IsSpecial(c) => [ '()[]{}.,;|^' contains: c ] or: [ IsSpace(c) ];
@@ -51,8 +70,8 @@
 
         peeks: str => in peeks: str;
 
-        newTokenWithType: type Payload: pl => ( io out << type << ' ' << pl. io out newline. );
-        newTokenWithType: type => ( io out << type. io out newline. );
+        newTokenWithType: type Payload: pl => (lang tokenizer Token) new tokenizer: self type: type payload: pl;
+        newTokenWithType: type => newTokenWithType: type Payload: false;
 
         parseString: terminator => (
             | sb <- (std util StringBuilder) new |

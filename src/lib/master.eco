@@ -47,7 +47,7 @@
             tok    <- reader lens: (lang tokenizer Tokenizer)
         |
         
-        1 to: 13 do: [ :i | tok nextToken ].
+        1 to: 13 do: [ :i | io out << tok nextToken. io out newline. ].
         io out commit.
     );
 
