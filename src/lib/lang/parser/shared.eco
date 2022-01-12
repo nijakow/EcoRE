@@ -1,0 +1,33 @@
+#=lang/parser/SharedBehavior: {
+
+    TokenType = {
+        EOF = #'eof',
+        IDENTIFIER = #'ident',
+        STRING = #'string',
+        KEY = #'key',
+        NUMBER = #'number',
+        CHARACTER = #'character',
+        LPAREN = #'lparen',
+        RPAREN = #'rparen',
+        LBRACK = #'lbrack',
+        RBRACK = #'rbrack',
+        LCURLY = #'lcurly',
+        RCURLY = #'rcurly',
+        HASHLPAREN = #'hashlparen',
+        PERCLBRACK = #'perclbrack',
+        SEPARATOR = #'separator',
+        COLON = #'colon',
+        TILDE = #'tilde',
+        CARET = #'caret',
+        BAR = #'bar',
+        ASSIGNMENT = #'assignment',
+        RARROW = #'rarrow',
+        ELLIPSIS = #'ellipsis',
+        SELF = #'self',
+        IS = #'is',
+        AS = #'as',
+        WITH = #'with',
+        INHERITED = #'inherited',
+        OWN = #'own'
+    }
+}

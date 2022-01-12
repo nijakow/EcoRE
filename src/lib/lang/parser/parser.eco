@@ -176,5 +176,8 @@
             ].
           ^ exprs & false
         );
+
+        with inherited shared = #<:lang/parser/SharedBehavior>;
+        with inherited parent = #<:std/Clonable>;
     }
 }

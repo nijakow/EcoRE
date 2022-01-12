@@ -115,9 +115,10 @@
             (sb equals: 'inherited') if: [ ^ newTokenWithType: #'inherited' ].
             (sb equals: 'own')       if: [ ^ newTokenWithType: #'own'       ].
             (sb equals: '=')         if: [ ^ newTokenWithType: #'='         ].
-            ^ newTokenWithType: #'ident' Payload: sb
+          ^ newTokenWithType: #'ident' Payload: (sb asKey)
         );
 
+        with inherited shared = #<:lang/parser/SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     }
 }
