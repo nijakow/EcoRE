@@ -71,31 +71,30 @@
 
             skipWhitespace.
 
-            (peeks: '...') if: [ ^ newTokenWithType: #'ellipsis'   ].
-            (peeks: '<-')  if: [ ^ newTokenWithType: #'assignment' ].
-            (peeks: '->')  if: [ ^ newTokenWithType: #'delegate'   ].
-            (peeks: '=>')  if: [ ^ newTokenWithType: #'rarrow'     ].
-            (peeks: '(')   if: [ ^ newTokenWithType: #'lparen'     ].
-            (peeks: ')')   if: [ ^ newTokenWithType: #'rparen'     ].
-            (peeks: '[')   if: [ ^ newTokenWithType: #'lbrack'     ].
-            (peeks: ']')   if: [ ^ newTokenWithType: #'rbrack'     ].
-            (peeks: '{')   if: [ ^ newTokenWithType: #'lcurly'     ].
-            (peeks: '}')   if: [ ^ newTokenWithType: #'rcurly'     ].
-            (peeks: '#(')  if: [ ^ newTokenWithType: #'hashlparen' ].
-            (peeks: '%[')  if: [ ^ newTokenWithType: #'perclbrack' ].
-            (peeks: '.')   if: [ ^ newTokenWithType: #'separator'  ].
-            (peeks: ',')   if: [ ^ newTokenWithType: #'separator'  ].
-            (peeks: ';')   if: [ ^ newTokenWithType: #'separator'  ].
-            (peeks: ':')   if: [ ^ newTokenWithType: #'colon'      ].
-            (peeks: '~')   if: [ ^ newTokenWithType: #'tilde'      ].
-            (peeks: '|')   if: [ ^ newTokenWithType: #'bar'        ].
-            (peeks: '^')   if: [ ^ newTokenWithType: #'caret'      ].
-            (peeks: '\'')  if: [ ^ newTokenWithType: #'string'  Payload: (parseString: #\') ].
-            (peeks: '#\'') if: [ ^ newTokenWithType: #'keyword' Payload: ((parseString: #\') asKey) ].
-            (peeks: '#=')  if: [ ^ newTokenWithType: #'label'   Payload: (parseString: #\:) ].
-            (peeks: '#<')  if: [ ^ newTokenWithType: #'proxy'   Payload: (parseString: #\>) ].
-            (peeks: '#\\') if: [ ^ newTokenWithType: #'char'    Payload: (in nextChar) ].
-            (peeks: '#=')  if: [ ^ newTokenWithType: #'label'   Payload: (parseString: #\:) ].
+            (peeks: '...') if: [ ^ newTokenWithType: TokenType ELLIPSIS   ].
+            (peeks: '<-')  if: [ ^ newTokenWithType: TokenType ASSIGNMENT ].
+            (peeks: '->')  if: [ ^ newTokenWithType: TokenType DELEGATE   ].
+            (peeks: '=>')  if: [ ^ newTokenWithType: TokenType RARROW     ].
+            (peeks: '(')   if: [ ^ newTokenWithType: TokenType LPAREN     ].
+            (peeks: ')')   if: [ ^ newTokenWithType: TokenType RPAREN     ].
+            (peeks: '[')   if: [ ^ newTokenWithType: TokenType LBRACK     ].
+            (peeks: ']')   if: [ ^ newTokenWithType: TokenType RBRACK     ].
+            (peeks: '{')   if: [ ^ newTokenWithType: TokenType LCURLY     ].
+            (peeks: '}')   if: [ ^ newTokenWithType: TokenType RCURLY     ].
+            (peeks: '#(')  if: [ ^ newTokenWithType: TokenType HASHLPAREN ].
+            (peeks: '%[')  if: [ ^ newTokenWithType: TokenType PERCLBRACK ].
+            (peeks: '.')   if: [ ^ newTokenWithType: TokenType SEPARATOR  ].
+            (peeks: ',')   if: [ ^ newTokenWithType: TokenType SEPARATOR  ].
+            (peeks: ';')   if: [ ^ newTokenWithType: TokenType SEPARATOR  ].
+            (peeks: ':')   if: [ ^ newTokenWithType: TokenType COLON      ].
+            (peeks: '~')   if: [ ^ newTokenWithType: TokenType TILDE      ].
+            (peeks: '|')   if: [ ^ newTokenWithType: TokenType BAR        ].
+            (peeks: '^')   if: [ ^ newTokenWithType: TokenType CARET      ].
+            (peeks: '\'')  if: [ ^ newTokenWithType: TokenType STRING Payload: (parseString: #\') ].
+            (peeks: '#\'') if: [ ^ newTokenWithType: TokenType KEY    Payload: ((parseString: #\') asKey) ].
+            (peeks: '#=')  if: [ ^ newTokenWithType: TokenType LABEL  Payload: (parseString: #\:) ].
+            (peeks: '#<')  if: [ ^ newTokenWithType: TokenType PROXY  Payload: (parseString: #\>) ].
+            (peeks: '#\\') if: [ ^ newTokenWithType: TokenType CHARACTER  Payload: (in nextChar) ].
             (peeks: '"')   if: [ parseString: #\". ^ nextToken ].
             
             | sb <- (std util StringBuilder) new |
