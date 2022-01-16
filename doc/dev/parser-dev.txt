@@ -1,0 +1,12 @@
+
+newASTConstant   "Works for numbers, strings, keys, interfaces, arrays, objects ..."
+
+newASTSelf
+newASTBuiltin
+newASTSend
+newASTAssignment
+newASTBar
+newASTCompound
+newASTBlock
+newASTReturn
+newASTAs
