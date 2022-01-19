@@ -6,11 +6,13 @@
 
   newASTBuiltinWithName: name Args: args HasVarargs: varargs => "TODO";
 
-  newASTSendWithMessage: msg Args: args HasVarargs: varargs => "TODO";
+  newASTCallWithSubject: subject Args: args HasVarargs: varargs => "TODO";
+
+  newASTSendWithSubject: subject Message: msg Args: args HasVarargs: varargs => "TODO";
 
   newASTAssignmentWithLHS: lhs RHS: rhs => "TODO";
 
-  newASTBarWithVar: var Value: value Followup: followup => "TODO";
+  newASTBarWithType: type Var: var Value: value Followup: followup => "TODO";
 
   newASTCompoundWithInstructions: instructions => "TODO";
 
@@ -50,22 +52,22 @@
             (check: TokenType ASSIGNMENT) if: [
                 value <- parseExpression
             ] else: [
-                value <- ASTSelf new
+                value <- newASTSelf
             ].
 
             check: TokenType SEPARATOR.
 
             (check: TokenType BAR) if: [
-              ^ ASTBar newWithType: type Varname: varname Value: value Body: parseExpression
+              ^ newASTBarWithType: type Var: varname Value: value Followup: parseExpression
             ] else: [
-              ^ ASTBar newWithType: type Varname: varname Value: value Body: parseBar
+              ^ newASTBarWithType: type Var: varname Value: value Followup: parseBar
             ]
         );
 
         parseSimpleExpressionWithFollowups: followups => (
             | kw |
 
-            (check: TokenType SELF)       if: [ ^ ASTSelf new    ].
+            (check: TokenType SELF)       if: [ ^ newASTSelf     ].
             (check: TokenType LPAREN)     if: [ ^ parseCompound  ].
             (check: TokenType LBRACK)     if: [ ^ parseBlock     ].
             (check: TokenType LCURLY)     if: [ ^ parseObject    ].
@@ -76,20 +78,20 @@
             kw if: [
                 (check: TokenType LPAREN) if: [
                     parseArglist let: [ :arglist |
-                      ^ ASTBuiltin newWithKey: (kw payload) Args: (arglist first) Varargs: (arglist second)
+                      ^ newASTBuiltinWithName: (kw payload) Args: (arglist first) HasVarargs: (arglist second)
                     ]
                 ].
               ^ kw payload
             ].
 
             kw <- check: TokenType STRING.
-            kw if: [ ^ ASTString newWithValue: (kw payload) ].
+            kw if: [ ^ newASTConstantWithValue: (kw payload) ].
 
             kw <- check: TokenType NUMBER.
-            kw if: [ ^ ASTNumber newWithValue: (kw payload) ].
+            kw if: [ ^ newASTConstantWithValue: (kw payload) ].
 
             kw <- check: TokenType CHARACTER.
-            kw if: [ ^ ASTCharacter newWithValue: (kw payload) ].
+            kw if: [ ^ newASTConstantWithValue: (kw payload) ].
 
             kw <- check: TokenType IDENTIFIER.
             kw if: [
@@ -97,7 +99,7 @@
                 " TODO "
             ].
 
-          ^ ASTSelf new
+          ^ newASTSelf
         );
 
         parseSendWithAST: ast Followups: followups => (
@@ -137,12 +139,12 @@
                 ]
             ].
 
-          ^ ASTSend newWithSubject: ast Key: (name asKey) Args: args Varargs: (arglist second)
+          ^ newASTSendWithSubject: ast Message: (name asKey) Args: args HasVarargs: (arglist second)
         );
 
         parseExpressionWithFollowups: followups => (
             ([ allow_followups ] and: [ check: TokenType CARET ]) if: [
-              ^ ASTReturn newWithValue: (parseExpressionWithFollowups: followups)
+              ^ newASTReturnWithValue: (parseExpressionWithFollowups: followups)
             ].
             ([ allow_followups ] and: [ check: TokenType BAR ]) if: [ ^ parseBar ].
 
@@ -157,14 +159,14 @@
                 begin
                   if: [ check: TokenType LPAREN ] then: [
                     parseArglist let: [
-                      :arglist | ast <- ASTCall newWithAST: ast Args: (arglist first) Varargs: (arglist second)
+                      :arglist | ast <- newASTCallWithSubjet: ast Args: (arglist first) HasVarargs: (arglist second)
                     ]
                   ] ~
                   if: [ check: TokenType AS ] then: [
-                      ast <- ASTAs newWithSubject: ast Type: (parseExpressionWithFollowups: false)
+                      ast <- newASTAsWithLHS: ast RHS: (parseExpressionWithFollowups: false)
                   ] ~
                   if: [ check: TokenType ASSIGNMENT ] then: [
-                      ast <- ASTAssignment newWithLHS: ast RHS: (parseExpressionWithFollowups: followups)
+                      ast <- newASTAssignmentWithLHS: ast RHS: (parseExpressionWithFollowups: followups)
                   ] ~
                   if: [ check: TokenType TILDE ] then: [
 
@@ -200,6 +202,7 @@
           ^ exprs & false
         );
 
+        with inherited construction = #<:lang/parser/ASTConstruction>;
         with inherited shared = #<:lang/parser/SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     }
