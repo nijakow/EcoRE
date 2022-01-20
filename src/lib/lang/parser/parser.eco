@@ -32,9 +32,10 @@
 
         parseExpression => parseExpressionWithFollowups: true;
         parseExpressions => parseExpressionsWithTerminator: TokenType RPAREN;
+        parseCompound => parseCompoundWithTerminator: TokenType RPAREN;
 
         parseOptionalType => (
-            | the_type <- false |  "TODO: Find a better value"
+            | the_type <- false |  "TODO: Find a better value (maybe 'any')"
             (check: TokenType LBRACK) if: [
                 the_type <- parseExpression.
                 expect: TokenType RBRACK
@@ -68,6 +69,39 @@
                             Value: value
                          Followup: parseBar
             ]
+        );
+
+        parseCompoundWithTerminator: terminator => (
+          ^ newASTCompoundWithInstructions: (parseExpressionsWithTerminator: terminator)
+        );
+
+        parseBlock => (
+            |
+                parameters <- (std util Vector) new,
+                varargs    <- false,
+                the_type,
+                key
+            |
+            [
+              begin
+                if: [check: TokenType COLON] then: [
+                  the_type <- parseOptionalType.
+                  key      <- (expect: TokenType IDENT) payload.
+                  parameters append: (key & the_type).
+                  (check: TokenType BAR) unless: [
+                      expect: TokenType SEPARATOR
+                  ]
+                ] ~
+                if: [check: TokenType ELLIPSIS] then: [
+                    varargs <- true.
+                    expect: TokenType BAR
+                ] ~
+                default: [
+                  ^ newASTBlockWithArgs: (parameters)
+                             HasVarargs: (varargs)
+                                   Body: (parseCompoundWithTerminator: TokenType RBRACK)
+                ]
+            ] repeat.
         );
 
         parseSimpleExpressionWithFollowups: followups => (
