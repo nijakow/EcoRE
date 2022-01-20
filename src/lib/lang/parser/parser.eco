@@ -3,6 +3,7 @@
   newASTSelf => "TODO";
 
   newASTConstantWithValue: value => "TODO";
+  newASTArrayWithExpressions: exprs => "TODO";
 
   newASTBuiltinWithName: name Args: args HasVarargs: varargs => "TODO";
 
@@ -103,6 +104,13 @@
                 ]
             ] repeat.
         );
+
+        parseArray => (
+            newASTArrayWithExpressions: parseExpressions
+        );
+
+        parseInterface => "TODO";
+        parseObject => "TODO";
 
         parseSimpleExpressionWithFollowups: followups => (
             | kw |
