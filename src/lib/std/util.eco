@@ -45,11 +45,18 @@
     eighth => at: 8;
     ninth => at: 9;
     tenth => at: 10;
-    last => at: size;
+    last => at: (size - 1);
 },
+
+#=std/util/StandardStackImpl: {
+    push: e => append: e;
+    peek    => last;
+    pop     => removeLast;
+};
 
 #=std/util: {
     Array(size) => #'ecosphere.ecore.object.array.new'(size);
+    Stack()     => (std util Vector) new;
 
     Vector = {
         size = 0,
@@ -65,6 +72,7 @@
             with inherited iterations = #<:std/util/StandardListIterations>;
             with inherited conversions = #<:std/util/StandardListConversions>;
             with inherited access = #<:std/util/StandardListAccess>;
+            with inherited stack = #<:std/util/StandardStackImpl>;
 
             asString => asArray asString;
 
@@ -90,6 +98,16 @@
                 size <- size + 1.
               ^ self
             );
+
+            remove: index => (
+                | elem <- at: index |
+                index to: (size - 2) do: [ :i | at: i put (at: i + 1) ].
+                size <- size - 1.
+              ^ elem
+            );
+
+            removeFirst => remove: 0;
+            removeLast  => remove: (size - 1);
         };
 
         with inherited parent = #<:std/Clonable>;
