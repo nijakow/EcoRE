@@ -3,7 +3,7 @@
 "
 
 #=interfaces: {
-
+x
     IBoolean = #=IBoolean: %[
         #'not',
         #'if:else:'(tblock, fblock),
@@ -48,6 +48,14 @@
         #'push:'(element),
         #'pop',
         #'peek'
+    ];
+
+    ISet = #=ISet: %[
+        with #<:IIterable>;
+        #'isEmpty',
+        #'contains:'(element),
+        #'addElement:'(element),
+        #'removeElement:'(element)
     ];
 
     IArray = #=IArray: %[
