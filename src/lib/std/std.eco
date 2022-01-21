@@ -27,6 +27,7 @@
         lens: other  => (other clone) init: self;
         mirror       => (std reflect Mirror) clone init: self;
         is: other    => #'ecosphere.ecore.is'(self, other);
+        equals: e    => is: e;
         == other     => is: other;
         != other     => (== other) not;
         asBool       => true;

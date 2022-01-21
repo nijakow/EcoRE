@@ -54,9 +54,27 @@
     pop     => removeLast;
 };
 
+#=std/util/StandardSetImpl: {
+    contains: value => (
+        do: [ :v | (v equals: value) if: [ ^ true ] ].
+      ^ false
+    );
+    addElement: value => append: value;
+    "TODO: removeElement"
+};
+
 #=std/util: {
     Array(size) => #'ecosphere.ecore.object.array.new'(size);
-    Stack()     => (std util Vector) new;
+
+    Stack = {
+      new => (std util Vector) new;
+      with inherited parent = #<:std/Clonable>;
+    };
+
+    Set = {
+      new => (std util Vector) new;
+      with inherited parent = #<:std/Clonable>;
+    };
 
     Vector = {
         size = 0,
@@ -73,6 +91,7 @@
             with inherited conversions = #<:std/util/StandardListConversions>;
             with inherited access = #<:std/util/StandardListAccess>;
             with inherited stack = #<:std/util/StandardStackImpl>;
+            with inherited set = #<:std/util/StandardSetImpl>;
 
             asString => asArray asString;
 
