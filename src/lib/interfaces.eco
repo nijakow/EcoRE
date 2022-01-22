@@ -3,7 +3,7 @@
 "
 
 #=interfaces: {
-x
+
     IBoolean = #=IBoolean: %[
         #'not',
         #'if:else:'(tblock, fblock),
