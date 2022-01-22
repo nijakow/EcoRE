@@ -29,6 +29,15 @@
     Parser = {
         tokenizer;
 
+        check: type => (
+            | t <- tokenizer nextToken |
+            (t hasType: type) if: t else: [ t fail. false ]
+        );
+        
+        expect: type => (
+            check: type  "TODO: Error if false"
+        );
+
         IsBin(c) => false;  "TODO"
 
         parseExpression => parseExpressionWithFollowups: true;
