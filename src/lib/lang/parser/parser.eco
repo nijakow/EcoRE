@@ -4,6 +4,8 @@
 
   newASTConstantWithValue: value => "TODO";
   newASTArrayWithExpressions: exprs => "TODO";
+  newASTInterfaceBuilder => "TODO";
+  newASTObjectBuilder => "TODO";
 
   newASTBuiltinWithName: name Args: args HasVarargs: varargs => "TODO";
 
@@ -29,13 +31,16 @@
     Parser = {
         tokenizer;
 
+        error: msg => "TODO";
+
         check: type => (
             | t <- tokenizer nextToken |
             (t hasType: type) if: t else: [ t fail. false ]
         );
-        
+
         expect: type => (
-            check: type  "TODO: Error if false"
+            (check: type) when: [ :v | ^ v ].
+            error: 'Expected a different token!'
         );
 
         IsBin(c) => false;  "TODO"
@@ -96,7 +101,7 @@
               begin
                 if: [check: TokenType COLON] then: [
                   the_type <- parseOptionalType.
-                  key      <- (expect: TokenType IDENT) payload.
+                  key      <- (expect: TokenType IDENTIFIER) payload.
                   parameters append: (key & the_type).
                   (check: TokenType BAR) unless: [
                       expect: TokenType SEPARATOR
@@ -118,7 +123,34 @@
             newASTArrayWithExpressions: parseExpressions
         );
 
-        parseInterface => "TODO";
+        parseKeyOrIdentifier => (
+            | t |
+            t <- check: TokenType KEY.
+            t if: [ ^ t payload ].
+            t <- check: TokenType IDENTIFIER.
+            t if: [ ^ t payload ].
+            error: 'Expected key or identifier!'
+        );
+
+        parseInterface => (
+            | builder <- newASTInterfaceBuilder |
+            [ check: TokenType RBRACK ] until: [
+                (check: TokenType WITH) if: [
+                    builder addParent: parseExpression
+                ] else: [
+                  |
+                    type <- parseOptionalType,
+                    name <- parseKeyOrIdentifier,
+                    "TODO: Arglist"
+                  |
+                  "TODO: Create entry"
+                ].
+                (check: TokenType RBRACK) if: [ ^ builder commit ].
+                expect: TokenType SEPARATOR
+            ].
+          ^ builder commit
+        );
+
         parseObject => "TODO";
 
         parseSimpleExpressionWithFollowups: followups => (

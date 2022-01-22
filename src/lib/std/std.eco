@@ -30,6 +30,7 @@
         equals: e    => is: e;
         == other     => is: other;
         != other     => (== other) not;
+        when: block  => asBool if: [ block value(self) ];
         asBool       => true;
         isBlock      => false;
         isInt        => false;
