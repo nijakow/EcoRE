@@ -132,6 +132,38 @@
             error: 'Expected key or identifier!'
         );
 
+
+        parseArgdef => (
+            | type <- parseOptionalType,
+              name <- (expect: TokenType IDENTIFIER) payload |
+          ^ type & name
+        );
+
+        parseArgdefs => (
+            |
+                name    <- '',
+                args    <- (std util Vector) new,
+                varargs <- false,
+                kw
+            |
+            kw <- check: TokenType KEY.
+            kw if: [ ^ (kw payload) & args & varargs ].
+
+            kw <- check: TokenType IDENTIFIER.
+            [ kw ] while: [
+                name <- name + (kw payload asString).
+                | lastchar <- name asVector at: -1 |
+                IsBin(lastchar) if: [
+                    args append: parseArgdef
+                ].
+                (lastchar != #\:) if: [
+                    kw <- false
+                ] else: [
+                    kw <- check: TokenType IDENTIFIER
+                ]
+            ].
+        );
+
         parseInterface => (
             | builder <- newASTInterfaceBuilder |
             [ check: TokenType RBRACK ] until: [
