@@ -183,12 +183,25 @@
           ^ builder commit
         );
 
+        parseObjectSlotFlags: flags => (
+            [
+                begin
+                  if: [ check: TokenType WITH      ] then: [ flags setWith      ] ~
+                  if: [ check: TokenType OWN       ] then: [ flags setOwn       ] ~
+                  if: [ check: TokenType INHERITED ] then: [ flags setInherited ] ~
+                default: [ ^ flags ]
+            ] repeat
+        );
+
         parseObject => (
             | builder <- newASTObjectBuilder |
             [ check: TokenType RCURLY ] until: [
                 (check: TokenType CARET) if: [
                     "TODO: Check for ^ marks"
                 ] else: [
+                    | flags <- builder openFlags |
+                    parseObjectSlotFlags: flags.
+
                     |
                         argdefs <- parseArgdefs,
                         arglist <- argdefs first,
