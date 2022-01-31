@@ -183,7 +183,30 @@
           ^ builder commit
         );
 
-        parseObject => "TODO";
+        parseObject => (
+            | builder <- newASTObjectBuilder |
+            [ check: TokenType RCURLY ] until: [
+                (check: TokenType CARET) if: [
+                    "TODO: Check for ^ marks"
+                ] else: [
+                    |
+                        argdefs <- parseArgdefs,
+                        arglist <- argdefs first,
+                        varargs <- argdefs second
+                    |
+                    (check: TokenType RARROW) if: [
+                        | body <- parseExpression |
+                        "TODO: Finish the slot"
+                    ] else: [
+                        | value <- false |
+                        (check: TokenType ASSIGNMENT) if: [ value <- parseExpression ]
+                        "TODO: Finish the slot"
+                    ]
+                ].
+                (check: TokenType RBRACK) if: [ ^ builder commit ].
+                expect: TokenType SEPARATOR
+            ]
+        );
 
         parseSimpleExpressionWithFollowups: followups => (
             | kw |
