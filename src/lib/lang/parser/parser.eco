@@ -162,6 +162,7 @@
                     kw <- check: TokenType IDENTIFIER
                 ]
             ].
+          ^ (name asKey) & args & varargs
         );
 
         parseInterface => (
@@ -197,23 +198,32 @@
             | builder <- newASTObjectBuilder |
             [ check: TokenType RCURLY ] until: [
                 (check: TokenType CARET) if: [
-                    "TODO: Check for ^ marks"
+                    builder addParent: parseExpression
                 ] else: [
                     | flags <- builder openFlags |
                     parseObjectSlotFlags: flags.
 
                     |
-                        argdefs <- parseArgdefs,
-                        arglist <- argdefs first,
-                        varargs <- argdefs second
+                        argdefs  <- parseArgdefs,
+                        slotname <- argdefs first,
+                        arglist  <- argdefs second,
+                        varargs  <- argdefs third
                     |
+
                     (check: TokenType RARROW) if: [
                         | body <- parseExpression |
-                        "TODO: Finish the slot"
+                        builder openCodeSlotWithFlags: flags
+                                                 Name: slotname
+                                                 Args: arglist
+                                              Varargs: varargs
+                                                 Body: body
                     ] else: [
-                        | value <- false |
+                        | value |
                         (check: TokenType ASSIGNMENT) if: [ value <- parseExpression ]
-                        "TODO: Finish the slot"
+                                                    else: [ value <- newASTSelf ].
+                        builder openSlotWithFlags: flags
+                                             Name: slotname
+                                            Value: value
                     ]
                 ].
                 (check: TokenType RBRACK) if: [ ^ builder commit ].
