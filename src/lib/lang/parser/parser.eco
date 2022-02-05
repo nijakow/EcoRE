@@ -163,6 +163,41 @@
 
 #=lang/parser/Parser/Send: {
     parseSendWithAST: ast Followups: followups => (
+        ( | ident <- checkUnaryIdentifier |
+            ident if: [
+                "TODO: Check for left paren and optional args"
+              ^ newASTSendWithSubject: ast
+                              Message: ident payload
+                                 Args: (std util Vector) new
+                              Varargs: false
+            ]
+        ).
+
+        followups unless: [ ^ ast ].
+
+        ( | ident <- checkUnaryIdentifier |
+            ident if: [
+                "TODO: Check for left paren and optional args"
+              ^ newASTSendWithSubject: ast
+                              Message: ident payload
+                                 Args: (std util Vector) new
+                              Varargs: false
+            ]
+        ).
+
+        ( | ident <- checkUnaryIdentifier |
+            ident if: [
+                "TODO: Check for left paren and optional args"
+              ^ newASTSendWithSubject: ast
+                              Message: ident payload
+                                 Args: (std util Vector) new
+                              Varargs: false
+            ]
+        ).
+      ^ ast
+    );
+
+    parseSendWithAST: ast Followups: followups => (
         |
             name    <- '',
             args    <- (std util Vector) new,
