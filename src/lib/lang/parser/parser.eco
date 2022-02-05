@@ -41,9 +41,21 @@
             :token | (token payload asString asVector last) == #\:
         ]
     );
-    checkBinIdentifier => (
+    checkBinaryIdentifier => (
+        check: TokenType IDENTIFIER withProperty: [
+            :token | (token payload asString asVector last) let: [
+                :c | [ IsBin(c) ] and: [ c != #\: ]
+            ]
+        ]
+    );
+    checkNAryIdentifier => (
         check: TokenType IDENTIFIER withProperty: [
             :token | IsBin(token payload asString asVector last)
+        ]
+    );
+    checkUnaryIdentifier => (
+        check: TokenType IDENTIFIER withProperty: [
+            :token | IsBin(token payload asString asVector last) not
         ]
     );
 
