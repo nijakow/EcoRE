@@ -63,8 +63,8 @@
             (check: TokenType LPAREN) if: [
                 parseArglist let: [ :arglist |
                   ^ newASTBuiltinWithName: (kw payload)
-                                      Args: (arglist first)
-                                HasVarargs: (arglist second)
+                                     Args: (arglist first)
+                               HasVarargs: (arglist second)
                 ]
             ].
           ^ kw payload
@@ -100,8 +100,8 @@
               if: [ check: TokenType LPAREN ] then: [
                 parseArglist let: [
                   :arglist | ast <- newASTCallWithSubject: (ast)
-                                                      Args: (arglist first)
-                                                HasVarargs: (arglist second)
+                                                     Args: (arglist first)
+                                               HasVarargs: (arglist second)
                 ]
               ] ~
               if: [ check: TokenType AS ] then: [
@@ -110,7 +110,7 @@
               ] ~
               if: [ check: TokenType ASSIGNMENT ] then: [
                   ast <- newASTAssignmentWithLHS: (ast)
-                                              RHS: (parseExpressionWithFollowups: followups)
+                                             RHS: (parseExpressionWithFollowups: followups)
               ] ~
               if: [ check: TokenType TILDE ] then: [
 
@@ -173,8 +173,8 @@
 
       ^ newASTSendWithSubject: (ast)
                       Message: (name asKey)
-                          Args: (args)
-                    HasVarargs: (arglist second)
+                         Args: (args)
+                   HasVarargs: (arglist second)
     );
 },
 
@@ -208,8 +208,8 @@
             ] ~
             default: [
               ^ newASTBlockWithArgs: (parameters)
-                          HasVarargs: (varargs)
-                                Body: (parseCompoundWithTerminator: TokenType RBRACK)
+                         HasVarargs: (varargs)
+                               Body: (parseCompoundWithTerminator: TokenType RBRACK)
             ]
         ] repeat.
     );
@@ -338,16 +338,16 @@
                 (check: TokenType RARROW) if: [
                     | body <- parseExpression |
                     builder openCodeSlotWithFlags: flags
-                                              Name: slotname
-                                              Args: arglist
+                                             Name: slotname
+                                             Args: arglist
                                           Varargs: varargs
-                                              Body: body
+                                             Body: body
                 ] else: [
                     | value |
                     (check: TokenType ASSIGNMENT) if: [ value <- parseExpression ]
                                                 else: [ value <- newASTSelf ].
                     builder openSlotWithFlags: flags
-                                          Name: slotname
+                                         Name: slotname
                                         Value: value
                 ]
             ].
@@ -377,12 +377,12 @@
           ^ newASTBarWithType: type
                           Var: varname
                         Value: value
-                      Followup: parseExpression
+                     Followup: parseExpression
         ] else: [
           ^ newASTBarWithType: type
                           Var: varname
                         Value: value
-                      Followup: parseBar
+                     Followup: parseBar
         ]
     );
 },
