@@ -80,6 +80,10 @@
     asInt           => #'ecosphere.ecore.char.as_int'(self);
     == other        => #'ecosphere.ecore.is'(self, other);
     != other        => (self == other) not;
+    < other         => (self asInt) < (other asInt);
+    <= other        => (self asInt) <= (other asInt);
+    > other         => (self asInt) > (other asInt);
+    >= other        => (self asInt) >= (other asInt);
     writeOn: writer => (
         | v <- asInt |
         begin
