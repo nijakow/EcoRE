@@ -165,29 +165,29 @@
     parseSendWithAST: ast Followups: followups => (
         ( | ident <- checkUnaryIdentifier |
             ident if: [
-                "TODO: Check for left paren and optional args"
+                | arglist <- parseOptionalArglist |
               ^ newASTSendWithSubject: ast
                               Message: ident payload
-                                 Args: (std util Vector) new
-                              Varargs: false
+                                 Args: arglist first
+                              Varargs: arglist second
             ]
         ).
 
         followups unless: [ ^ ast ].
 
-        ( | ident <- checkUnaryIdentifier |
+        ( | ident <- checkBinaryIdentifier |
             ident if: [
-                "TODO: Check for left paren and optional args"
+                | args <- (std util Vector) new |
+                args append: (parseExpressionWithFollowups: false).
               ^ newASTSendWithSubject: ast
                               Message: ident payload
-                                 Args: (std util Vector) new
+                                 Args: args
                               Varargs: false
             ]
         ).
 
-        ( | ident <- checkUnaryIdentifier |
+        ( | ident <- checkNAryIdentifier |
             ident if: [
-                "TODO: Check for left paren and optional args"
               ^ newASTSendWithSubject: ast
                               Message: ident payload
                                  Args: (std util Vector) new
@@ -343,6 +343,11 @@
             expect: TokenType SEPARATOR
         ].
       ^ exprs & false
+    );
+
+    parseOptionalArglist => (
+        (check: TokenType LPAREN) if: [ parseArglist ]
+                                else: [ ^ (std util Vector) new & false ]
     );
 },
 
