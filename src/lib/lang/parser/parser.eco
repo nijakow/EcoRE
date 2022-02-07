@@ -399,18 +399,18 @@
 },
 
 #=lang/parser/Parser/Instructions: {
+    parseBarAssignmentValue => (
+        (check: TokenType ASSIGNMENT)
+              if: [ ^ parseExpression ]
+            else: [ ^ newASTSelf      ]
+    );
+
     parseBar => (
         |
-          type    <- parseOptionalType,
-          varname <- (expect: TokenType IDENTIFIER) payload,
-          value
+            type    <- parseOptionalType,
+            varname <- (expect: TokenType IDENTIFIER) payload,
+            value   <- parseBarAssignmentValue
         |
-
-        (check: TokenType ASSIGNMENT) if: [
-            value <- parseExpression
-        ] else: [
-            value <- newASTSelf
-        ].
 
         check: TokenType SEPARATOR.
 
