@@ -162,6 +162,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                            NULL,
                            Eco_Fiber_Nth(fiber, message.body.send.arg_count),
                            Eco_Fiber_Nth(fiber, message.body.send.arg_count))) {
+                Eco_Log_Warning("Message send failed: %s\n", ((struct Eco_Key*) message.key)->name);
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
                 goto end;
             }
@@ -187,6 +188,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                            NULL,
                            Eco_Fiber_Nth(fiber, message.body.send.arg_count),
                            Eco_Fiber_Nth(fiber, message.body.send.arg_count))) {
+                Eco_Log_Warning("Message send with varargs failed: %s\n", ((struct Eco_Key*) message.key)->name);
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
                 goto end;
             }
