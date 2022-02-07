@@ -279,29 +279,29 @@
     );
 
     parseArgdefs => (
-        |
-            name    <- '',
-            args    <- (std util Vector) new,
-            varargs <- false,
-            kw
-        |
-        kw <- check: TokenType KEY.
-        kw if: [ ^ (kw payload) & args & varargs ].
-
-        kw <- check: TokenType IDENTIFIER.
-        [ kw ] while: [
-            name <- name + (kw payload asString).
-            | lastchar <- name asVector at: -1 |
-            IsBin(lastchar) if: [
-                args append: parseArgdef
-            ].
-            (lastchar != #\:) if: [
-                kw <- false
-            ] else: [
-                kw <- check: TokenType IDENTIFIER
-            ]
+        ([ check: TokenType KEY ] or: [ check: TokenType IDENTIFIER ]) when: [
+            :tok |  | lst <- parseOptionalArglist |
+            ^ (tok payload) & (lst first) & (lst second)
         ].
-      ^ (name asKey) & args & varargs
+
+        checkBinaryIdentifier when: [
+            :tok |  | args <- (std util Vector) new |
+            args append: parseArgdef.
+          ^ (tok payload) & args & false
+        ].
+
+        |
+            name <- '',
+            args <- (std util Vector) new
+        |
+
+        [
+            | ident <- checkNAryIdentifier |
+
+            ident unless: [ ^ (name asKey) & args & false ].
+            name <- name + (ident payload asString).
+            args append: parseArgdef.
+        ] repeat
     );
 
     parseArglist => (
