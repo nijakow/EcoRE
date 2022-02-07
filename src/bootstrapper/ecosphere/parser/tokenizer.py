@@ -159,6 +159,18 @@ class Tokenizer:
             s += c
         self._s.read()
         return s
+    
+    def parse_nested_comment(self):
+        nesting = 1
+        while nesting:
+            if not self._s.has():
+                break
+            elif self._s.peeks('/\"'):
+                nesting += 1
+            elif self._s.peeks("\"/"):
+                nesting -= 1
+            else:
+                self._s.read()
 
     def read(self) -> Token:
         if self._pushbacks:
@@ -192,6 +204,7 @@ class Tokenizer:
             c = self._s.read()
             return CharacterToken(self, ord(c))
         elif self._s.peeks('\"'): self.parse_string('\"'); return self.read()  # Comment
+        elif self._s.peeks("/\""): self.parse_nested_comment(); return self.read() # Nested comment
 
         c = ''
 
