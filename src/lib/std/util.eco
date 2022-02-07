@@ -219,6 +219,7 @@
                 | i <- 0 |
                 do: [ :e | block value(i, e). i <- i + 1. ]
             );
+            at: index => forEach: [ :i, :v | (i == index) if: [ ^ v ] ];
 
             with inherited conversions = #<:std/util/StandardListConversions>;
             with inherited access = #<:std/util/StandardListAccess>;

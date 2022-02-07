@@ -176,7 +176,7 @@
                       ^ newASTSendWithSubject: ast
                                       Message: nameStr asKey
                                          Args: arglist
-                                      Varargs: false
+                                   HasVarargs: false
                     ]
                 ] repeat
             ]
@@ -191,7 +191,7 @@
               ^ newASTSendWithSubject: ast
                               Message: ident payload
                                  Args: arglist first
-                              Varargs: arglist second
+                           HasVarargs: arglist second
             ]
         ).
 
@@ -204,7 +204,7 @@
               ^ newASTSendWithSubject: ast
                               Message: ident payload
                                  Args: args
-                              Varargs: false
+                           HasVarargs: false
             ]
         ).
 
@@ -321,7 +321,7 @@
 
     parseOptionalArglist => (
         (check: TokenType LPAREN) if: [ parseArglist ]
-                                else: [ ^ (std util Vector) new & false ]
+                                else: [ (std util Vector) new & false ]
     );
 },
 
@@ -382,7 +382,7 @@
                     builder openCodeSlotWithFlags: flags
                                              Name: slotname
                                              Args: arglist
-                                          Varargs: varargs
+                                       HasVarargs: varargs
                                              Body: body
                 ] else: [
                     | value |
