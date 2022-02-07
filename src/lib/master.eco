@@ -43,7 +43,7 @@
         io out commit.
 
         |
-            reader <- '.' lens: (lang tokenizer StringReader),
+            reader <- 'self.' lens: (lang tokenizer StringReader),
             tok    <- reader lens: (lang tokenizer Tokenizer),
             parser <- tok lens: (lang parser Parser)
         |

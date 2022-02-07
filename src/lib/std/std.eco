@@ -19,27 +19,31 @@
     };
 
     Clonable = #=std/Clonable: {
-        value        => self.
-        let: block   => block value(self);
-        init         => ^ self;
-        clone        => #'ecosphere.ecore.clone'(self);
-        new          => clone init;
-        lens: other  => (other clone) init: self;
-        mirror       => (std reflect Mirror) clone init: self;
-        is: other    => #'ecosphere.ecore.is'(self, other);
-        equals: e    => is: e;
-        == other     => is: other;
-        != other     => (== other) not;
-        when: block  => asBool if: [ block value(self) ];
-        asBool       => true;
-        isBlock      => false;
-        isInt        => false;
-        isChar       => false;
-        isKey        => false;
-        isString     => false;
-        isArray      => false;
-        & value      => (((std util Collector) clone) init: self) & value;
-        with lobby   = #<:lobby>;
+        value         => self.
+        let: block    => block value(self);
+        init          => ^ self;
+        clone         => #'ecosphere.ecore.clone'(self);
+        new           => clone init;
+        lens: other   => (other clone) init: self;
+        mirror        => (std reflect Mirror) clone init: self;
+        is: other     => #'ecosphere.ecore.is'(self, other);
+        equals: e     => is: e;
+        == other      => is: other;
+        != other      => (== other) not;
+        if: block     => asBool if: block;
+        unless: block => asBool unless: block;
+        if: t else: f => asBool if: t else: f;
+        not           => asBool not;
+        when: block   => asBool if: [ block value(self) ];
+        asBool        => true;
+        isBlock       => false;
+        isInt         => false;
+        isChar        => false;
+        isKey         => false;
+        isString      => false;
+        isArray       => false;
+        & value       => (((std util Collector) clone) init: self) & value;
+        with lobby    = #<:lobby>;
     };
 
     Object = #=std/Object: {
