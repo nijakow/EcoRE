@@ -240,7 +240,10 @@
             ] ~
             if: [check: TokenType ELLIPSIS] then: [
                 varargs <- true.
-                expect: TokenType BAR
+                expect: TokenType BAR.
+              ^ newASTBlockWithArgs: (parameters)
+                         HasVarargs: (varargs)
+                               Body: (parseCompoundWithTerminator: TokenType RBRACK)
             ] ~
             default: [
               ^ newASTBlockWithArgs: (parameters)
