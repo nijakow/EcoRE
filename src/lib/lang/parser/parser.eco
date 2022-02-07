@@ -436,6 +436,11 @@
     Parser = {
         tokenizer;
 
+        init: _tokenizer => (
+            tokenizer <- _tokenizer.
+          ^ self
+        );
+
         with inherited construction = #<:lang/parser/Parser/ASTConstruction>;
         with inherited checks = #<:lang/parser/Parser/Checks>;
         with inherited stringchecks = #<:lang/parser/Parser/StringChecks>;
