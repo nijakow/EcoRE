@@ -43,11 +43,12 @@
         io out commit.
 
         |
-            reader <- '( lang tokenizer "Hello" StringReader ) foo: [ :x | ^ 42 ]' lens: (lang tokenizer StringReader),
-            tok    <- reader lens: (lang tokenizer Tokenizer)
+            reader <- '.' lens: (lang tokenizer StringReader),
+            tok    <- reader lens: (lang tokenizer Tokenizer),
+            parser <- tok lens: (lang parser Parser)
         |
         
-        1 to: 13 do: [ :i | io out << tok nextToken. io out newline. ].
+        parser parseExpression.
         io out commit.
     );
 

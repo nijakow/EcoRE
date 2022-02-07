@@ -32,7 +32,7 @@
     check: type => check: type withProperty: [ :token | true ];
     check: type withProperty: block => (
         | t <- tokenizer nextToken |
-        ([t hasType: type] and: [block value(t)]) if: t else: [ t fail. false ]
+        ([t hasType: type] and: [block value(t)]) if: [t] else: [ t fail. false ]
     );
 
     checkIdentifier => check: TokenType IDENTIFIER;
@@ -111,10 +111,10 @@
     );
 
     parseExpressionWithFollowups: followups => (
-        ([ allow_followups ] and: [ check: TokenType CARET ]) if: [
+        ([ followups ] and: [ check: TokenType CARET ]) if: [
           ^ newASTReturnWithValue: (parseExpressionWithFollowups: followups)
         ].
-        ([ allow_followups ] and: [ check: TokenType BAR ]) if: [ ^ parseBar ].
+        ([ followups ] and: [ check: TokenType BAR ]) if: [ ^ parseBar ].
 
         |
             ast <- parseSimpleExpressionWithFollowups: followups,

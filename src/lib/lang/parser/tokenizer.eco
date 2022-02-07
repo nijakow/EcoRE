@@ -52,8 +52,11 @@
 
         init: reader => (
             in <- reader.
+            pushbacks <- (std util Vector) new.
           ^ self
         );
+
+        unread: token => pushbacks push: token;
 
         IsSpace(c) => (
             (c == (char space))   if: [ ^ true ].
@@ -87,7 +90,7 @@
         );
 
         nextToken => (
-            "(pushbacks isEmpty) unless: [ ^ pushbacks pop ]."
+            (pushbacks isEmpty) unless: [ ^ pushbacks pop ].
 
             skipWhitespace.
 
