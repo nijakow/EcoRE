@@ -77,8 +77,6 @@
     parseExpressions => parseExpressionsWithTerminator: TokenType RPAREN;
 
     parseSimpleExpressionWithFollowups: followups => (
-        | kw |
-
         (check: TokenType SELF)       if: [ ^ newASTSelf     ].
         (check: TokenType LPAREN)     if: [ ^ parseCompound  ].
         (check: TokenType LBRACK)     if: [ ^ parseBlock     ].
@@ -86,8 +84,7 @@
         (check: TokenType HASHLPAREN) if: [ ^ parseArray     ].
         (check: TokenType PERCLBRACK) if: [ ^ parseInterface ].
 
-        kw <- check: TokenType KEY.
-        kw if: [
+        (check: TokenType KEY) when: [ :kw |
             (check: TokenType LPAREN) if: [
                 parseArglist let: [ :arglist |
                   ^ newASTBuiltinWithName: (kw payload)
@@ -98,14 +95,11 @@
           ^ kw payload
         ].
 
-        kw <- check: TokenType STRING.
-        kw if: [ ^ newASTConstantWithValue: (kw payload) ].
+        (check: TokenType STRING) when: [ :kw | ^ newASTConstantWithValue: (kw payload) ].
 
-        kw <- check: TokenType NUMBER.
-        kw if: [ ^ newASTConstantWithValue: (kw payload) ].
+        (check: TokenType NUMBER) when: [ :kw | ^ newASTConstantWithValue: (kw payload) ].
 
-        kw <- check: TokenType CHARACTER.
-        kw if: [ ^ newASTConstantWithValue: (kw payload) ].
+        (check: TokenType CHARACTER) when: [ :kw | ^ newASTConstantWithValue: (kw payload) ].
 
       ^ newASTSelf
     );
