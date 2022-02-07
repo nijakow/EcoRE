@@ -212,49 +212,6 @@
 
       ^ tryParseNArySendWithAST: ast
     );
-
-    parseSendWithAST: ast Followups: followups => (
-        |
-            name    <- '',
-            args    <- (std util Vector) new,
-            varargs <- false,
-            bin     <- false,
-            kw      <- check: TokenType IDENTIFIER
-        |
-
-        kw unless: [ ^ ast ].
-
-        [ kw ] while: [
-            name <- name + (kw payload asString).
-            | lastchar <- name asVector at: -1 |
-            IsBin(lastchar) if: [
-                bin <- true.
-                allow_followups if: [
-                    args append: (parseExpressionWithFollowups: false)
-                ] else: [
-                    kw fail.
-                  ^ ast
-                ].
-            ].
-            (lastchar != #\:) if: [
-                kw <- false
-            ] else: [
-                kw <- check: TokenType IDENTIFIER
-            ]
-        ].
-
-        ([ bin not ] and: [ check: TokenType LPAREN ]) if: [
-            parseArglist let: [ :arglist |
-                arglist first do: [ :e | args append: e ].
-                varargs <- arglist second
-            ]
-        ].
-
-      ^ newASTSendWithSubject: (ast)
-                      Message: (name asKey)
-                         Args: (args)
-                   HasVarargs: (arglist second)
-    );
 },
 
 #=lang/parser/Parser/Compounds: {
