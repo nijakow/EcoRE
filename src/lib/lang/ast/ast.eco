@@ -36,6 +36,7 @@
             varargs <- _varargs.
           ^ self
         );
+        writeOn: writer => writer << 'ASTCall(' << subject << ', ' << args << ', ' << varargs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     };
@@ -63,6 +64,7 @@
             rhs <- _rhs.
           ^ self
         );
+        writeOn: writer => writer << 'ASTAssignment(' << lhs << ', ' << rhs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     };
@@ -88,6 +90,7 @@
             exprs <- _exprs.
           ^ self
         );
+        writeOn: writer => writer << 'ASTCompound(' << exprs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     };

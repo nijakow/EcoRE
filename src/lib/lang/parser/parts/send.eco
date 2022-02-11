@@ -10,7 +10,7 @@
 
                 [
                     nameStr <- nameStr + (ident payload asString).
-                    arglist append: parseArgdef.
+                    arglist append: (parseExpressionWithFollowups: false).
                     ident <- checkNAryIdentifier.
                     ident unless: [
                       ^ newASTSendWithSubject: ast

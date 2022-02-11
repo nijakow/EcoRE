@@ -229,6 +229,13 @@
             );
             at: index => forEach: [ :i, :v | (i == index) if: [ ^ v ] ];
 
+            writeOn: writer => (
+                (index == 0) if: [ writer << value ]
+                           else: [
+                    writer << value << ' & ' << (prev value)
+                ]
+            );
+
             with inherited conversions = #<:std/util/StandardListConversions>;
             with inherited access = #<:std/util/StandardListAccess>;
         };
