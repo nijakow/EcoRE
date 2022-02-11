@@ -11,4 +11,117 @@
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     };
+
+    ASTBuiltin = {
+        name, args, varargs;
+
+        initWithName: _name Args: _args Varargs: _varargs => (
+            name    <- _name.
+            args    <- _args.
+            varargs <- _varargs.
+          ^ self
+        );
+        with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
+        with inherited parent = #<:std/Clonable>;
+    };
+
+    ASTCall = {
+        subject, args, varargs;
+
+        initWithName: _subject Args: _args Varargs: _varargs => (
+            subject <- _subject.
+            args    <- _args.
+            varargs <- _varargs.
+          ^ self
+        );
+        with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
+        with inherited parent = #<:std/Clonable>;
+    };
+
+    ASTSend = {
+        subject, message, args, varargs;
+
+        initWithName: _subject Message: _message Args: _args Varargs: _varargs => (
+            subject <- _subject.
+            message <- _message.
+            args    <- _args.
+            varargs <- _varargs.
+          ^ self
+        );
+        with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
+        with inherited parent = #<:std/Clonable>;
+    };
+
+    ASTAssignment = {
+        lhs, rhs;
+
+        initWithLHS: _lhs RHS: _rhs => (
+            lhs <- _lhs.
+            rhs <- _rhs.
+          ^ self
+        );
+        with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
+        with inherited parent = #<:std/Clonable>;
+    };
+
+    ASTVariableDeclaration = {
+        type, name, value, followup;
+
+        initWithType: _type Name: _name Value: _value Followup: _followup => (
+            type     <- _type.
+            name     <- _name.
+            value    <- _value.
+            followup <- _followup.
+          ^ self
+        );
+        with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
+        with inherited parent = #<:std/Clonable>;
+    };
+
+    ASTCompound = {
+        exprs;
+
+        initWithExprs: _exprs => (
+            exprs <- _exprs.
+          ^ self
+        );
+        with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
+        with inherited parent = #<:std/Clonable>;
+    };
+
+    ASTBlock = {
+        args, varargs, body;
+
+        initWithArgs: _args Varargs: _varargs Body: _body => (
+            args    <- _args.
+            varargs <- _varargs.
+            body    <- _body.
+          ^ self
+        );
+        with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
+        with inherited parent = #<:std/Clonable>;
+    };
+
+    ASTReturn = {
+        value;
+
+        initWithValue: _value => (
+            value <- _value.
+          ^ self
+        );
+        with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
+        with inherited parent = #<:std/Clonable>;
+    };
+
+    ASTAs = {
+        lhs, rhs;
+
+        initWithLHS: _lhs RHS: _rhs => (
+            lhs <- _lhs.
+            rhs <- _rhs.
+          ^ self
+        );
+        with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
+        with inherited parent = #<:std/Clonable>;
+    };
 }
