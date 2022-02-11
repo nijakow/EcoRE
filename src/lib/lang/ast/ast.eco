@@ -1,0 +1,4 @@
+
+#=lang/ast: {
+    with inherited construction = #<:lang/ast/ASTConstruction>;
+}

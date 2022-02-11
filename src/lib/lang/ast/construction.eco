@@ -1,5 +1,5 @@
 
-#=lang/parser/ast/ASTConstruction: {
+#=lang/ast/ASTConstruction: {
 
   newASTSelf => "TODO";
 

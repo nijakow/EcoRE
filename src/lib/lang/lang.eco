@@ -5,4 +5,5 @@
 #=lang: {
     tokenizer = #<:lang/tokenizer>;
     parser = #<:lang/parser>;
+    ast = #<:lang/ast>;
 }

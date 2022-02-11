@@ -9,7 +9,7 @@
           ^ self
         );
 
-        with inherited construction = #<:lang/parser/ast/ASTConstruction>;
+        with ast = #<:lang/ast>;
         with inherited checks = #<:lang/parser/Parser/Checks>;
         with inherited charchecks = #<:lang/parser/Parser/CharChecks>;
         with inherited expression = #<:lang/parser/Parser/Expression>;
