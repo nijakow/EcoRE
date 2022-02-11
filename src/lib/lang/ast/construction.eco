@@ -1,6 +1,6 @@
 
 #=lang/ast/ASTConstruction: {
-  ast = #<:lang/ast>;
+  with ast = #<:lang/ast>;
 
   newASTSelf => (ast ASTSelf) new;
 
@@ -13,7 +13,7 @@
 
   newASTCallWithSubject: subject Args: args HasVarargs: varargs => (ASTCall new) initWithSubject: subject Args: args Varargs: varargs;
 
-  newASTSendWithSubject: subject Message: msg Args: args HasVarargs: varargs => (ASTSend new) initWithSubject: subject Message: message Args: args Varargs: varargs;
+  newASTSendWithSubject: subject Message: msg Args: args HasVarargs: varargs => (ASTSend new) initWithSubject: subject Message: msg Args: args Varargs: varargs;
 
   newASTAssignmentWithLHS: lhs RHS: rhs => (ASTAssignment new) initWithLHS: lhs RHS: rhs;
 

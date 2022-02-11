@@ -41,7 +41,7 @@
     ASTSend = {
         subject, message, args, varargs;
 
-        initWithName: _subject Message: _message Args: _args Varargs: _varargs => (
+        initWithSubject: _subject Message: _message Args: _args Varargs: _varargs => (
             subject <- _subject.
             message <- _message.
             args    <- _args.
