@@ -66,6 +66,12 @@
 #=std/util: {
     Array(size) => #'ecosphere.ecore.object.array.new'(size);
 
+    WriteIterable: it On: writer => (
+        writer << '#('.
+        it forEach: [ :i, :e | (i > 0) if: [ writer << ', ' ]. writer << e ].
+        writer << ')'
+    );
+
     Stack = {
       new => (std util Vector) new;
       with inherited parent = #<:std/Clonable>;
@@ -124,6 +130,8 @@
                 size <- size - 1.
               ^ elem
             );
+
+            writeOn: writer => (std util) WriteIterable: self On: writer;
 
             removeFirst => remove: 0;
             removeLast  => remove: (size - 1);

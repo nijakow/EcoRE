@@ -48,7 +48,8 @@
             parser <- tok lens: (lang parser Parser)
         |
         
-        parser parseExpression.
+        io out << parser parseExpression.
+        io out newline.
         io out commit.
     );
 

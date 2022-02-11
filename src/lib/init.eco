@@ -180,6 +180,8 @@
     _norm(i) => (i isNegative) if: [ size + i ] else: [ i ];
     _nnorm(i) => (i isNegative) if: [ size + i + 1 ] else: [ i ];
 
+    writeOn: writer => (std util) WriteIterable: self On: writer;
+
     with inherited iterations = #<:std/util/StandardListIterations>;
     with inherited conversions = #<:std/util/StandardListConversions>;
     

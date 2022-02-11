@@ -3,11 +3,12 @@
     with construction = #<:lang/ast/ASTConstruction>;
 
     AST_SharedBehavior = #=lang/ast/AST_SharedBehavior: {
-        "TODO"
+        writeOn: writer => writer << 'AST';
     };
 
     ASTSelf = {
         new => self;
+        writeOn: writer => writer << 'self';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     };
@@ -21,6 +22,7 @@
             varargs <- _varargs.
           ^ self
         );
+        writeOn: writer => writer << 'ASTBuiltin(' << name << ', ' << args << ', ' << varargs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     };
@@ -48,6 +50,7 @@
             varargs <- _varargs.
           ^ self
         );
+        writeOn: writer => writer << 'ASTSend(' << subject << ', ' << message << ', ' << args << ', ' << varargs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     };
