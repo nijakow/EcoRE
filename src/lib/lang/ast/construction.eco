@@ -1,7 +1,8 @@
 
 #=lang/ast/ASTConstruction: {
+  ast = #<:lang/ast>;
 
-  newASTSelf => "TODO";
+  newASTSelf => (ast ASTSelf) new;
 
   newASTConstantWithValue: value => "TODO";
   newASTArrayWithExpressions: exprs => "TODO";

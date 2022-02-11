@@ -1,4 +1,14 @@
 
 #=lang/ast: {
-    with inherited construction = #<:lang/ast/ASTConstruction>;
+    with construction = #<:lang/ast/ASTConstruction>;
+
+    AST_SharedBehavior = #=lang/ast/AST_SharedBehavior: {
+        "TODO"
+    };
+
+    ASTSelf = {
+        new => self;
+        with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
+        with inherited parent = #<:std/Clonable>;
+    };
 }
