@@ -1,0 +1,25 @@
+
+#=lang/parser/Parser/SimpleObjects: {
+    parseArray => (
+        newASTArrayWithExpressions: parseExpressions
+    );
+
+    parseInterface => (
+        | builder <- newASTInterfaceBuilder |
+        [ check: TokenType RBRACK ] until: [
+            (check: TokenType WITH) if: [
+                builder addParent: parseExpression
+            ] else: [
+              |
+                type <- parseOptionalType,
+                name <- parseKeyOrIdentifier,
+                "TODO: Arglist"
+              |
+              "TODO: Create entry"
+            ].
+            (check: TokenType RBRACK) if: [ ^ builder commit ].
+            expect: TokenType SEPARATOR
+        ].
+      ^ builder commit
+    );
+}

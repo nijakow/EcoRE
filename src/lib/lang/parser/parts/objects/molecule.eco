@@ -1,0 +1,49 @@
+
+#=lang/parser/Parser/Molecule: {
+    parseObjectSlotFlags: flags => (
+        [
+            begin
+              if: [ check: TokenType WITH      ] then: [ flags setWith      ] ~
+              if: [ check: TokenType OWN       ] then: [ flags setOwn       ] ~
+              if: [ check: TokenType INHERITED ] then: [ flags setInherited ] ~
+            default: [ ^ flags ]
+        ] repeat
+    );
+
+    parseObject => (
+        | builder <- newASTObjectBuilder |
+        [ check: TokenType RCURLY ] until: [
+            (check: TokenType CARET) if: [
+                builder addParent: parseExpression
+            ] else: [
+                | flags <- builder openFlags |
+                parseObjectSlotFlags: flags.
+
+                |
+                    argdefs  <- parseArgdefs,
+                    slotname <- argdefs first,
+                    arglist  <- argdefs second,
+                    varargs  <- argdefs third
+                |
+
+                (check: TokenType RARROW) if: [
+                    | body <- parseExpression |
+                    builder openCodeSlotWithFlags: flags
+                                             Name: slotname
+                                             Args: arglist
+                                       HasVarargs: varargs
+                                             Body: body
+                ] else: [
+                    | value |
+                    (check: TokenType ASSIGNMENT) if: [ value <- parseExpression ]
+                                                else: [ value <- newASTSelf ].
+                    builder openSlotWithFlags: flags
+                                         Name: slotname
+                                        Value: value
+                ]
+            ].
+            (check: TokenType RBRACK) if: [ ^ builder commit ].
+            expect: TokenType SEPARATOR
+        ]
+    );
+}

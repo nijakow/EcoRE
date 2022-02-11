@@ -1,0 +1,83 @@
+
+#=lang/parser/Parser/Expression: {
+    parseExpression => parseExpressionWithFollowups: true;
+    parseExpressions => parseExpressionsWithTerminator: TokenType RPAREN;
+
+    parseSimpleExpressionWithFollowups: followups => (
+        (check: TokenType SELF)       if: [ ^ newASTSelf     ].
+        (check: TokenType LPAREN)     if: [ ^ parseCompound  ].
+        (check: TokenType LBRACK)     if: [ ^ parseBlock     ].
+        (check: TokenType LCURLY)     if: [ ^ parseObject    ].
+        (check: TokenType HASHLPAREN) if: [ ^ parseArray     ].
+        (check: TokenType PERCLBRACK) if: [ ^ parseInterface ].
+
+        (check: TokenType KEY) when: [ :kw |
+            (check: TokenType LPAREN) if: [
+                parseArglist let: [ :arglist |
+                  ^ newASTBuiltinWithName: (kw payload)
+                                     Args: (arglist first)
+                               HasVarargs: (arglist second)
+                ]
+            ].
+          ^ kw payload
+        ].
+
+        (check: TokenType STRING) when: [ :kw | ^ newASTConstantWithValue: (kw payload) ].
+
+        (check: TokenType NUMBER) when: [ :kw | ^ newASTConstantWithValue: (kw payload) ].
+
+        (check: TokenType CHARACTER) when: [ :kw | ^ newASTConstantWithValue: (kw payload) ].
+
+      ^ newASTSelf
+    );
+
+    parseExpressionWithFollowups: followups => (
+        ([ followups ] and: [ check: TokenType CARET ]) if: [
+          ^ newASTReturnWithValue: (parseExpressionWithFollowups: followups)
+        ].
+        ([ followups ] and: [ check: TokenType BAR ]) if: [ ^ parseBar ].
+
+        |
+            ast <- parseSimpleExpressionWithFollowups: followups,
+            next <- false
+        |
+
+        [
+            next <- ast.
+            ast  <- parseSendWithAST: ast Followups: followups.
+            begin
+              if: [ check: TokenType LPAREN ] then: [
+                parseArglist let: [
+                  :arglist | ast <- newASTCallWithSubject: (ast)
+                                                     Args: (arglist first)
+                                               HasVarargs: (arglist second)
+                ]
+              ] ~
+              if: [ check: TokenType AS ] then: [
+                  ast <- newASTAsWithLHS: (ast)
+                                     RHS: (parseExpressionWithFollowups: false)
+              ] ~
+              if: [ check: TokenType ASSIGNMENT ] then: [
+                  ast <- newASTAssignmentWithLHS: (ast)
+                                             RHS: (parseExpressionWithFollowups: followups)
+              ] ~
+              if: [ check: TokenType TILDE ] then: [
+
+              ] ~
+              if: [ ast is: next ] then: [
+                ^ ast
+              ] ~
+            default: []
+        ] repeat.
+    );
+
+    parseExpressionsWithTerminator: terminator => (
+        | exprs <- (std util Vector) new |
+        [ check: terminator ] until: [
+            exprs append: parseExpression.
+            (check: terminator) if: [ ^ exprs ].
+            expect: TokenType SEPARATOR
+        ].
+      ^ exprs
+    );
+}

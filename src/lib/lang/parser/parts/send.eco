@@ -1,0 +1,53 @@
+
+#=lang/parser/Parser/Send: {
+    tryParseNArySendWithAST: ast => (
+        ( | ident <- checkNAryIdentifier |
+            ident if: [
+                |
+                    nameStr <- '',
+                    arglist <- (std util Vector) new
+                |
+
+                [
+                    nameStr <- nameStr + (ident payload asString).
+                    arglist append: parseArgdef.
+                    ident <- checkNAryIdentifier.
+                    ident unless: [
+                      ^ newASTSendWithSubject: ast
+                                      Message: nameStr asKey
+                                         Args: arglist
+                                   HasVarargs: false
+                    ]
+                ] repeat
+            ]
+        ).
+      ^ ast
+    );
+
+    parseSendWithAST: ast Followups: followups => (
+        ( | ident <- checkUnaryIdentifier |
+            ident if: [
+                | arglist <- parseOptionalArglist |
+              ^ newASTSendWithSubject: ast
+                              Message: ident payload
+                                 Args: arglist first
+                           HasVarargs: arglist second
+            ]
+        ).
+
+        followups unless: [ ^ ast ].
+
+        ( | ident <- checkBinaryIdentifier |
+            ident if: [
+                | args <- (std util Vector) new |
+                args append: (parseExpressionWithFollowups: false).
+              ^ newASTSendWithSubject: ast
+                              Message: ident payload
+                                 Args: args
+                           HasVarargs: false
+            ]
+        ).
+
+      ^ tryParseNArySendWithAST: ast
+    );
+}

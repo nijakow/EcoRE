@@ -1,0 +1,39 @@
+
+#=lang/parser/Parser/Checks: {
+    error: msg => "TODO";
+
+    check: type => check: type withProperty: [ :token | true ];
+    check: type withProperty: block => (
+        | t <- tokenizer nextToken |
+        ([t hasType: type] and: [block value(t)]) if: [t] else: [ t fail. false ]
+    );
+
+    checkIdentifier => check: TokenType IDENTIFIER;
+    checkDotIdentifier => (
+        check: TokenType IDENTIFIER withProperty: [
+            :token | (token payload asString asVector last) == #\:
+        ]
+    );
+    checkBinaryIdentifier => (
+        check: TokenType IDENTIFIER withProperty: [
+            :token | (token payload asString asVector last) let: [
+                :c | [ IsBin(c) ] and: [ c != #\: ]
+            ]
+        ]
+    );
+    checkNAryIdentifier => (
+        check: TokenType IDENTIFIER withProperty: [
+            :token | IsBin(token payload asString asVector last)
+        ]
+    );
+    checkUnaryIdentifier => (
+        check: TokenType IDENTIFIER withProperty: [
+            :token | IsBin(token payload asString asVector last) not
+        ]
+    );
+
+    expect: type => (
+        (check: type) when: [ :v | ^ v ].
+        error: 'Expected a different token!'
+    );
+}

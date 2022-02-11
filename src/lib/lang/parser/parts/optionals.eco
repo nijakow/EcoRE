@@ -1,0 +1,20 @@
+
+#=lang/parser/Parser/Optionals: {
+    parseOptionalType => (
+        | the_type <- false |  "TODO: Find a better value (maybe 'any')"
+        (check: TokenType LBRACK) if: [
+            the_type <- parseExpression.
+            expect: TokenType RBRACK
+        ].
+      ^ the_type
+    );
+
+    parseKeyOrIdentifier => (
+        | t |
+        t <- check: TokenType KEY.
+        t if: [ ^ t payload ].
+        t <- check: TokenType IDENTIFIER.
+        t if: [ ^ t payload ].
+        error: 'Expected key or identifier!'
+    );
+}

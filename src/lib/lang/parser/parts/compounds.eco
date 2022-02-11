@@ -1,0 +1,40 @@
+
+#=lang/parser/Parser/Compounds: {
+    parseCompound => parseCompoundWithTerminator: TokenType RPAREN;
+    
+    parseCompoundWithTerminator: terminator => (
+      ^ newASTCompoundWithInstructions: (parseExpressionsWithTerminator: terminator)
+    );
+
+    parseBlock => (
+        |
+            parameters <- (std util Vector) new,
+            varargs    <- false,
+            the_type,
+            key
+        |
+        [
+          begin
+            if: [check: TokenType COLON] then: [
+              the_type <- parseOptionalType.
+              key      <- (expect: TokenType IDENTIFIER) payload.
+              parameters append: (key & the_type).
+              (check: TokenType BAR) unless: [
+                  expect: TokenType SEPARATOR
+              ]
+            ] ~
+            if: [check: TokenType ELLIPSIS] then: [
+                varargs <- true.
+                expect: TokenType BAR.
+              ^ newASTBlockWithArgs: (parameters)
+                         HasVarargs: (varargs)
+                               Body: (parseCompoundWithTerminator: TokenType RBRACK)
+            ] ~
+            default: [
+              ^ newASTBlockWithArgs: (parameters)
+                         HasVarargs: (varargs)
+                               Body: (parseCompoundWithTerminator: TokenType RBRACK)
+            ]
+        ] repeat.
+    );
+}

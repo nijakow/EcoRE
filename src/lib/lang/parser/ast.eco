@@ -1,0 +1,28 @@
+
+#=lang/parser/ast/ASTConstruction: {
+
+  newASTSelf => "TODO";
+
+  newASTConstantWithValue: value => "TODO";
+  newASTArrayWithExpressions: exprs => "TODO";
+  newASTInterfaceBuilder => "TODO";
+  newASTObjectBuilder => "TODO";
+
+  newASTBuiltinWithName: name Args: args HasVarargs: varargs => "TODO";
+
+  newASTCallWithSubject: subject Args: args HasVarargs: varargs => "TODO";
+
+  newASTSendWithSubject: subject Message: msg Args: args HasVarargs: varargs => "TODO";
+
+  newASTAssignmentWithLHS: lhs RHS: rhs => "TODO";
+
+  newASTBarWithType: type Var: var Value: value Followup: followup => "TODO";
+
+  newASTCompoundWithInstructions: instructions => "TODO";
+
+  newASTBlockWithArgs: args Body: body => "TODO";
+
+  newASTReturnWithValue: value => "TODO";
+
+  newASTAsWithLHS: lhs RHS: rhs => "TODO";
+}

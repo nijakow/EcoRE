@@ -11,9 +11,20 @@ std/util.eco \
 std/reflect.eco \
 interfaces.eco \
 lang/lang.eco \
+lang/parser/parts/objects/molecule.eco \
+lang/parser/parts/objects/simple.eco \
+lang/parser/parts/args.eco \
+lang/parser/parts/bars.eco \
+lang/parser/parts/charchecks.eco \
+lang/parser/parts/checks.eco \
+lang/parser/parts/compounds.eco \
+lang/parser/parts/expressions.eco \
+lang/parser/parts/optionals.eco \
+lang/parser/parts/send.eco \
+lang/parser/ast.eco \
+lang/parser/parser.eco \
 lang/parser/shared.eco \
 lang/parser/tokenizer.eco \
-lang/parser/parser.eco \
 master.eco
 
 
