@@ -4,8 +4,10 @@
 
   newASTSelf => (ast ASTSelf) new;
 
-  newASTConstantWithValue: value => "TODO";
-  newASTArrayWithExpressions: exprs => "TODO";
+  newASTConstantWithValue: value => (ASTConstant new) initWithValue: value;
+
+  newASTArrayWithExpressions: exprs => (ASTArray new) initWithExprs: exprs;
+
   newASTInterfaceBuilder => "TODO";
   newASTObjectBuilder => "TODO";
 

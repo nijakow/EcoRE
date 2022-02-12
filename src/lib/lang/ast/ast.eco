@@ -13,6 +13,30 @@
         with inherited parent = #<:std/Clonable>;
     };
 
+    ASTConstant = {
+        constant;
+
+        initWithValue: value => (
+            constant <- value.
+          ^ self
+        );
+        writeOn: writer => writer << 'ASTConstant(' << constant << ')';
+        with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
+        with inherited parent = #<:std/Clonable>;
+    };
+
+    ASTArray = {
+        exprs;
+
+        initWithExprs: _exprs => (
+            exprs <- _exprs.
+          ^ self
+        );
+        writeOn: writer => writer << 'ASTArray(' << exprs << ')';
+        with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
+        with inherited parent = #<:std/Clonable>;
+    };
+
     ASTBuiltin = {
         name, args, varargs;
 
@@ -79,6 +103,7 @@
             followup <- _followup.
           ^ self
         );
+        writeOn: writer => writer << 'ASTVariableDeclaration(' << type << ', ' << name << ', ' << value << ', ' << followup << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     };
@@ -104,6 +129,7 @@
             body    <- _body.
           ^ self
         );
+        writeOn: writer => writer << 'ASTBlock(' << args << ', ' << varargs << ', ' << body << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     };
@@ -115,6 +141,7 @@
             value <- _value.
           ^ self
         );
+        writeOn: writer => writer << 'ASTReturn(' << value << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     };
@@ -127,6 +154,7 @@
             rhs <- _rhs.
           ^ self
         );
+        writeOn: writer => writer << 'ASTAs(' << lhs << ', ' << rhs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     };
