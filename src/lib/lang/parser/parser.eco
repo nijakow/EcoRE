@@ -18,6 +18,7 @@
         with inherited optionals = #<:lang/parser/Parser/Optionals>;
         with inherited args = #<:lang/parser/Parser/Args>;
         with inherited simpleobjects = #<:lang/parser/Parser/SimpleObjects>;
+        with inherited interface = #<:lang/parser/Parser/Interface>;
         with inherited molecule = #<:lang/parser/Parser/Molecule>;
         with inherited bars = #<:lang/parser/Parser/Bars>;
         with inherited shared = #<:lang/parser/SharedBehavior>;

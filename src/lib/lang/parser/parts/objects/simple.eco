@@ -3,24 +3,4 @@
     parseArray => (
         newASTArrayWithExpressions: parseExpressions
     );
-
-    parseInterface => (
-        | builder <- newASTInterfaceBuilder |
-        [ check: TokenType RBRACK ] until: [
-            (check: TokenType WITH) if: [
-                builder addParent: parseExpression
-            ] else: [
-              | type <- parseOptionalType |
-              parseMethodDeclaration let: [ :decl |
-                  builder addEntryWithType: type
-                                      Name: (decl first)
-                                      Args: (decl second)
-                                   Varargs: (decl third)
-              ]
-            ].
-            (check: TokenType RBRACK) if: [ ^ builder commit ].
-            expect: TokenType SEPARATOR
-        ].
-      ^ builder commit
-    );
 }
