@@ -42,15 +42,19 @@
         io out newline.
         io out commit.
 
-        |
-            reader <- 'self bar: self baz: zip(...) ding.' lens: (lang tokenizer StringReader),
-            tok    <- reader lens: (lang tokenizer Tokenizer),
-            parser <- tok lens: (lang parser Parser)
-        |
-        
-        io out << parser parseExpression.
-        io out newline.
-        io out commit.
+        [
+            io out << 'Eco > '.
+            io out commit.
+
+            |
+                reader <- ((io in readLine) + '.') lens: (lang tokenizer StringReader),
+                tok    <- reader lens: (lang tokenizer Tokenizer),
+                parser <- tok lens: (lang parser Parser)
+            |
+            
+            io out << parser parseExpression.
+            io out newline.
+        ] repeat
     );
 
     with lobby = #<:lobby>;
