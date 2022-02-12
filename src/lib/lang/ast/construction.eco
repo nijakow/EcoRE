@@ -14,10 +14,9 @@
             entries append: (type & name & args & varargs)  "TODO"
         );
 
-        commit => self;  "TODO"
+        commit => ((ast ASTInterface) new) initWithParents: parents Entries: entries;
 
-        writeOn: writer => writer << 'ASTInterfaceBuilder(' << parents << ', ' << entries << ')';
-
+        ast = #<:lang/ast>;
         with inherited parent = #<:std/Clonable>;
     };
 },
@@ -25,7 +24,7 @@
 #=lang/ast/ASTConstruction: {
   with ast = #<:lang/ast>;
 
-  newASTSelf => (ast ASTSelf) new;
+  newASTSelf => (ASTSelf new);
 
   newASTConstantWithValue: value => (ASTConstant new) initWithValue: value;
 

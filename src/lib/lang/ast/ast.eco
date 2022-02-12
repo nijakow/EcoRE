@@ -37,6 +37,20 @@
         with inherited parent = #<:std/Clonable>;
     };
 
+    ASTInterface = {
+        parents, entries;
+
+        initWithParents: _parents Entries: _entries => (
+            parents <- _parents.
+            entries <- _entries.
+          ^ self
+        );
+
+        writeOn: writer => writer << 'ASTInterface(' << parents << ', ' << entries << ')';
+        with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
+        with inherited parent = #<:std/Clonable>;
+    };
+
     ASTBuiltin = {
         name, args, varargs;
 
