@@ -3,8 +3,8 @@
     isBlock    => true;
     value(...) => #'ecosphere.ecore.flow.value'(self, ...).
     repeat     => ( self value. #'ecosphere.ecore.flow.reset'() ).
-    while: b   => ( (self value) false: [ ^ #<:std/bool/false> ]. b value. #'ecosphere.ecore.flow.reset'() ).
-    until: b   => ( (self value) true:  [ ^ #<:std/bool/true> ]. b value. #'ecosphere.ecore.flow.reset'() ).
+    while: b   => ( (self value) unless: [ ^ #<:std/bool/false> ]. b value. #'ecosphere.ecore.flow.reset'() ).
+    until: b   => ( (self value) if: [ ^ #<:std/bool/true> ]. b value. #'ecosphere.ecore.flow.reset'() ).
     and:   b   => (
         | v <- self value |
         v if: [ ^ b value ] else: [ ^ v ]

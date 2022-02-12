@@ -27,12 +27,12 @@
                 varargs <- true.
                 expect: TokenType BAR.
               ^ newASTBlockWithArgs: (parameters)
-                         HasVarargs: (varargs)
+                            Varargs: (varargs)
                                Body: (parseCompoundWithTerminator: TokenType RBRACK)
             ] ~
             default: [
               ^ newASTBlockWithArgs: (parameters)
-                         HasVarargs: (varargs)
+                            Varargs: (varargs)
                                Body: (parseCompoundWithTerminator: TokenType RBRACK)
             ]
         ] repeat.
