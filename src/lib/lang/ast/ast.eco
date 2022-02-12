@@ -6,6 +6,33 @@
         writeOn: writer => writer << 'AST';
     };
 
+    ASTFlags = {
+        is_with, is_inherited, is_own;
+
+        init => (
+            is_with      <- false.
+            is_inherited <- false.
+            is_own       <- false.
+          ^ self
+        );
+
+        isWith      => is_with;
+        isInherited => is_inherited;
+        isOwn       => is_own;
+
+        setWith      => ( is_with <- true. self ).
+        setInherited => ( is_inherited <- true. self ).
+        setOwn       => ( is_own <- true. self ).
+
+        writeOn: writer => (
+            isWith      if: [ writer << 'with '      ].
+            isInherited if: [ writer << 'inherited ' ].
+            isOwn       if: [ writer << 'own '       ].
+        );
+
+        with inherited parent = #<:std/Clonable>;
+    };
+
     ASTSelf = {
         new => self;
         writeOn: writer => writer << 'self';
@@ -47,6 +74,19 @@
         );
 
         writeOn: writer => writer << 'ASTInterface(' << parents << ', ' << entries << ')';
+        with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
+        with inherited parent = #<:std/Clonable>;
+    };
+
+    ASTMolecule = {
+        slots;
+
+        initWithSlots: _slots => (
+            slots <- _slots.
+          ^ self
+        );
+
+        writeOn: writer => writer << 'ASTMolecule(' << slots << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     };

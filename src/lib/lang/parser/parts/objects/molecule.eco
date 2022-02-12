@@ -10,8 +10,8 @@
         ] repeat
     );
 
-    parseObject => (
-        | builder <- newASTObjectBuilder |
+    parseMolecule => (
+        | builder <- newASTMoleculeBuilder |
         [ check: TokenType RCURLY ] until: [
             (check: TokenType CARET) if: [
                 builder addParent: parseExpression
@@ -21,29 +21,33 @@
 
                 |
                     decl     <- parseMethodDeclaration,
-                    slotname <- decl first,
-                    arglist  <- decl second,
-                    varargs  <- decl third
+                    type     <- decl first,
+                    slotname <- decl second,
+                    arglist  <- decl third,
+                    varargs  <- decl fourth
                 |
 
                 (check: TokenType RARROW) if: [
                     | body <- parseExpression |
-                    builder openCodeSlotWithFlags: flags
-                                             Name: slotname
-                                             Args: arglist
-                                       HasVarargs: varargs
-                                             Body: body
+                    builder addCodeSlotWithFlags: flags
+                                            Type: type
+                                            Name: slotname
+                                            Args: arglist
+                                         Varargs: varargs
+                                            Body: body
                 ] else: [
                     | value |
                     (check: TokenType ASSIGNMENT) if: [ value <- parseExpression ]
                                                 else: [ value <- newASTSelf ].
-                    builder openSlotWithFlags: flags
-                                         Name: slotname
-                                        Value: value
+                    builder addValueSlotWithFlags: flags
+                                             Type: type
+                                             Name: slotname
+                                            Value: value
                 ]
             ].
-            (check: TokenType RBRACK) if: [ ^ builder commit ].
+            (check: TokenType RCURLY) if: [ ^ builder commit ].
             expect: TokenType SEPARATOR
-        ]
+        ].
+      ^ builder commit
     );
 }

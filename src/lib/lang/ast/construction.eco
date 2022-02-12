@@ -21,6 +21,32 @@
     };
 },
 
+#=lang/ast/ASTConstruction/ASTMoleculeBuilder: {
+    slots;
+
+    with inherited trait = {
+        init => (
+            slots <- (std util Vector) new.
+          ^ self
+        );
+
+        openFlags => (ast ASTFlags) new;
+
+        addCodeSlotWithFlags: flags Type: type Name: name Args: args Varargs: varargs Body: body => (
+            "TODO"
+        );
+
+        addValueSlotWithFlags: flags Type: type Name: name Value: value => (
+            "TODO"
+        );
+
+        commit => ((ast ASTMolecule) new) initWithSlots: slots;
+
+        ast = #<:lang/ast>;
+        with inherited parent = #<:std/Clonable>;
+    };
+},
+
 #=lang/ast/ASTConstruction: {
   with ast = #<:lang/ast>;
 
@@ -31,7 +57,8 @@
   newASTArrayWithExpressions: exprs => (ASTArray new) initWithExprs: exprs;
 
   newASTInterfaceBuilder => #<:lang/ast/ASTConstruction/ASTInterfaceBuilder> new;
-  newASTObjectBuilder => "TODO";
+
+  newASTMoleculeBuilder => #<:lang/ast/ASTConstruction/ASTMoleculeBuilder> new;
 
   newASTBuiltinWithName: name Args: args HasVarargs: varargs => (ASTBuiltin new) initWithName: name Args: args Varargs: varargs;
 
