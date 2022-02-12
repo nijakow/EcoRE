@@ -6,6 +6,25 @@
       ^ type & name
     );
 
+    parseArglist => (
+        | exprs <- (std util Vector) new |
+        [ check: TokenType RPAREN ] until: [
+            (check: TokenType ELLIPSIS) if: [
+                expect: TokenType RPAREN.
+              ^ exprs & true
+            ].
+            exprs append: (parseExpression).
+            (check: TokenType RPAREN) if: [ ^ exprs & false ].
+            expect: TokenType SEPARATOR
+        ].
+      ^ exprs & false
+    );
+
+    parseOptionalArglist => (
+        (check: TokenType LPAREN) if: [ parseArglist ]
+                                else: [ (std util Vector) new & false ]
+    );
+
     parseArgdefs => (
         ([ check: TokenType KEY ] or: [ check: TokenType IDENTIFIER ]) when: [
             :tok |  | lst <- parseOptionalArglist |
@@ -30,24 +49,5 @@
             name <- name + (ident payload asString).
             args append: parseArgdef.
         ] repeat
-    );
-
-    parseArglist => (
-        | exprs <- (std util Vector) new |
-        [ check: TokenType RPAREN ] until: [
-            (check: TokenType ELLIPSIS) if: [
-                expect: TokenType RPAREN.
-              ^ exprs & true
-            ].
-            exprs append: (parseExpression).
-            (check: TokenType RPAREN) if: [ ^ exprs & false ].
-            expect: TokenType SEPARATOR
-        ].
-      ^ exprs & false
-    );
-
-    parseOptionalArglist => (
-        (check: TokenType LPAREN) if: [ parseArglist ]
-                                else: [ (std util Vector) new & false ]
     );
 }

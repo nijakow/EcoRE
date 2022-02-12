@@ -10,12 +10,13 @@
             (check: TokenType WITH) if: [
                 builder addParent: parseExpression
             ] else: [
-              |
-                type <- parseOptionalType,
-                name <- parseKeyOrIdentifier,
-                "TODO: Arglist"
-              |
-              "TODO: Create entry"
+              | type <- parseOptionalType |
+              parseArgdefs let: [ :argdefs |
+                  builder addEntryWithType: type
+                                      Name: (argdefs first)
+                                      Args: (argdefs second)
+                                   Varargs: (argdefs third)
+              ]
             ].
             (check: TokenType RBRACK) if: [ ^ builder commit ].
             expect: TokenType SEPARATOR
