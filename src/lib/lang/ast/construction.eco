@@ -33,11 +33,12 @@
         openFlags => (ast ASTFlags) new;
 
         addCodeSlotWithFlags: flags Type: type Name: name Args: args Varargs: varargs Body: body => (
-            "TODO"
+            flags setMethod.
+            slots append: (flags & type & name & args & varargs & body) "TODO"
         );
 
         addValueSlotWithFlags: flags Type: type Name: name Value: value => (
-            "TODO"
+            slots append: (flags & type & name & #() & false & value) "TODO"
         );
 
         commit => ((ast ASTMolecule) new) initWithSlots: slots;
