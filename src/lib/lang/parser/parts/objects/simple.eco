@@ -11,11 +11,11 @@
                 builder addParent: parseExpression
             ] else: [
               | type <- parseOptionalType |
-              parseArgdefs let: [ :argdefs |
+              parseMethodDeclaration let: [ :decl |
                   builder addEntryWithType: type
-                                      Name: (argdefs first)
-                                      Args: (argdefs second)
-                                   Varargs: (argdefs third)
+                                      Name: (decl first)
+                                      Args: (decl second)
+                                   Varargs: (decl third)
               ]
             ].
             (check: TokenType RBRACK) if: [ ^ builder commit ].

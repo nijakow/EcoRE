@@ -1,4 +1,27 @@
 
+#=lang/ast/ASTConstruction/ASTInterfaceBuilder: {
+    parents, entries;
+
+    with inherited trait = {
+        init => (
+            parents <- (std util Vector) new.
+            entries <- (std util Vector) new.
+          ^ self
+        );
+
+        addParent: ast => parents append: ast;
+        addEntryWithType: type Name: name Args: args Varargs: varargs => (
+            entries append: (type & name & args & varargs)  "TODO"
+        );
+
+        commit => self;  "TODO"
+
+        writeOn: writer => writer << 'ASTInterfaceBuilder(' << parents << ', ' << entries << ')';
+
+        with inherited parent = #<:std/Clonable>;
+    };
+},
+
 #=lang/ast/ASTConstruction: {
   with ast = #<:lang/ast>;
 
@@ -8,7 +31,7 @@
 
   newASTArrayWithExpressions: exprs => (ASTArray new) initWithExprs: exprs;
 
-  newASTInterfaceBuilder => "TODO";
+  newASTInterfaceBuilder => #<:lang/ast/ASTConstruction/ASTInterfaceBuilder> new;
   newASTObjectBuilder => "TODO";
 
   newASTBuiltinWithName: name Args: args HasVarargs: varargs => (ASTBuiltin new) initWithName: name Args: args Varargs: varargs;

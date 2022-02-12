@@ -6,28 +6,28 @@
       ^ type & name
     );
 
-    parseArglist => (
-        | exprs <- (std util Vector) new |
+    parseArgdefs => (
+        | defs <- (std util Vector) new |
         [ check: TokenType RPAREN ] until: [
             (check: TokenType ELLIPSIS) if: [
                 expect: TokenType RPAREN.
-              ^ exprs & true
+              ^ defs & true
             ].
-            exprs append: (parseExpression).
-            (check: TokenType RPAREN) if: [ ^ exprs & false ].
+            defs append: parseArgdef.
+            (check: TokenType RPAREN) if: [ ^ defs & false ].
             expect: TokenType SEPARATOR
         ].
-      ^ exprs & false
+      ^ defs & false
     );
 
-    parseOptionalArglist => (
-        (check: TokenType LPAREN) if: [ parseArglist ]
+    parseOptionalArgdefs => (
+        (check: TokenType LPAREN) if: [ parseArgdefs ]
                                 else: [ (std util Vector) new & false ]
     );
 
-    parseArgdefs => (
-        ([ check: TokenType KEY ] or: [ check: TokenType IDENTIFIER ]) when: [
-            :tok |  | lst <- parseOptionalArglist |
+    parseMethodDeclaration => (
+        ([ check: TokenType KEY ] or: [ checkUnaryIdentifier ]) when: [
+            :tok |  | lst <- parseOptionalArgdefs |
             ^ (tok payload) & (lst first) & (lst second)
         ].
 
@@ -49,5 +49,24 @@
             name <- name + (ident payload asString).
             args append: parseArgdef.
         ] repeat
+    );
+
+    parseArglist => (
+        | exprs <- (std util Vector) new |
+        [ check: TokenType RPAREN ] until: [
+            (check: TokenType ELLIPSIS) if: [
+                expect: TokenType RPAREN.
+              ^ exprs & true
+            ].
+            exprs append: parseExpression.
+            (check: TokenType RPAREN) if: [ ^ exprs & false ].
+            expect: TokenType SEPARATOR
+        ].
+      ^ exprs & false
+    );
+
+    parseOptionalArglist => (
+        (check: TokenType LPAREN) if: [ parseArglist ]
+                                else: [ (std util Vector) new & false ]
     );
 }

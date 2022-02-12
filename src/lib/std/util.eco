@@ -232,7 +232,7 @@
             writeOn: writer => (
                 (index == 0) if: [ writer << value ]
                            else: [
-                    writer << (prev value) << ' & ' << value
+                    writer << prev << ' & ' << value
                 ]
             );
 
