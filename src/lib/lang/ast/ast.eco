@@ -112,7 +112,7 @@
     ASTCall = {
         subject, args, varargs;
 
-        initWithName: _subject Args: _args Varargs: _varargs => (
+        initWithSubject: _subject Args: _args Varargs: _varargs => (
             subject <- _subject.
             args    <- _args.
             varargs <- _varargs.
