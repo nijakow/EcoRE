@@ -11,7 +11,7 @@
 
         addParent: ast => parents append: ast;
         addEntryWithType: type Name: name Args: args Varargs: varargs => (
-            entries append: (type & name & args & varargs)  "TODO"
+            entries append: ((((ast ASTSlotDef) new) initWithFlags: ((ast ASTFlags) new) Type: type Name: name Args: args Varargs: varargs Body: ((ast ASTSelf) new)))
         );
 
         commit => ((ast ASTInterface) new) initWithParents: parents Entries: entries;
@@ -34,11 +34,11 @@
 
         addCodeSlotWithFlags: flags Type: type Name: name Args: args Varargs: varargs Body: body => (
             flags setMethod.
-            slots append: (flags & type & name & args & varargs & body) "TODO"
+            slots append: (((ast ASTSlotDef) new) initWithFlags: flags Type: type Name: name Args: args Varargs: varargs Body: body)
         );
 
         addValueSlotWithFlags: flags Type: type Name: name Value: value => (
-            slots append: (flags & type & name & #() & false & value) "TODO"
+            slots append: ((((ast ASTSlotDef) new) initWithFlags: flags Type: type Name: name Args: ((std util Vector) new) Varargs: false Body: value))
         );
 
         commit => ((ast ASTMolecule) new) initWithSlots: slots;

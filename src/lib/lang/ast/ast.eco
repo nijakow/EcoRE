@@ -31,9 +31,33 @@
             isWith      if: [ writer << 'with '      ].
             isInherited if: [ writer << 'inherited ' ].
             isOwn       if: [ writer << 'own '       ].
-            isMethod    if: [ writer << '<method>'   ]. "isMethod is usually not printed"
+            isMethod    if: [ writer << '<method> '  ]. "isMethod is usually not printed"
         );
 
+        with inherited parent = #<:std/Clonable>;
+    };
+
+    ASTSlotDef = {
+        flags, type, name, args, varargs, body;
+
+        initWithFlags: f Type: t Name: n Args: a Varargs: v Body: b => (
+            flags   <- f.
+            type    <- t.
+            name    <- n.
+            args    <- a.
+            varargs <- v.
+            body    <- b.
+          ^ self
+        );
+
+        writeOn: writer => (
+            writer << flags.
+            writer << type << ' '.
+            writer << name << ' ('.
+            args forEach: [ :i, :e | (i > 0) if: [ writer << ', ' ]. writer << e ].
+            writer << (varargs if: ', ...) ' else: ') ').
+            writer << body.
+        );
         with inherited parent = #<:std/Clonable>;
     };
 

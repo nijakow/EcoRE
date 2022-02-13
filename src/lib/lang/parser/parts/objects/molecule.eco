@@ -20,11 +20,11 @@
                 parseObjectSlotFlags: flags.
 
                 |
+                    type     <- parseOptionalType,
                     decl     <- parseMethodDeclaration,
-                    type     <- decl first,
-                    slotname <- decl second,
-                    arglist  <- decl third,
-                    varargs  <- decl fourth
+                    slotname <- decl first,
+                    arglist  <- decl second,
+                    varargs  <- decl third
                 |
 
                 (check: TokenType RARROW) if: [
