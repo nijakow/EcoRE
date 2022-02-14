@@ -16,7 +16,7 @@
 
 #=std/util/StandardListConversions: {
     asArray => (
-        | v <- std util Array(size) |
+        | v <- std util newArray: size |
         forEach: [ :index, :value | v at: index put: value ].
       ^ v
     );
@@ -108,7 +108,7 @@
             asString => asArray asString;
 
             resize: cap => (
-                | new_elements = std util Array(cap) |
+                | new_elements = std util newArray: cap |
                 (cap < capacity) if: [
                     0 for: cap do: [ :i | new_elements at: i put: (at: i) ]
                 ] else: [
