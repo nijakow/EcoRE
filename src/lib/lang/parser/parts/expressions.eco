@@ -72,7 +72,7 @@
     );
 
     parseExpressionsWithTerminator: terminator => (
-        | exprs <- (std util Vector) new |
+        | exprs <- std util newVector |
         [ check: terminator ] until: [
             exprs append: parseExpression.
             (check: terminator) if: [ ^ exprs ].

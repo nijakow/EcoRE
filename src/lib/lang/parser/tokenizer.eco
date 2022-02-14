@@ -52,7 +52,7 @@
 
         init: reader => (
             in <- reader.
-            pushbacks <- (std util Vector) new.
+            pushbacks <- std util newVector.
           ^ self
         );
 

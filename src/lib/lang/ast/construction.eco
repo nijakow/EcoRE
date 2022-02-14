@@ -4,8 +4,8 @@
 
     with inherited trait = {
         init => (
-            parents <- (std util Vector) new.
-            entries <- (std util Vector) new.
+            parents <- std util newVector.
+            entries <- std util newVector.
           ^ self
         );
 
@@ -26,7 +26,7 @@
 
     with inherited trait = {
         init => (
-            slots <- (std util Vector) new.
+            slots <- std util newVector.
           ^ self
         );
 
@@ -38,7 +38,7 @@
         );
 
         addValueSlotWithFlags: flags Type: type Name: name Value: value => (
-            slots append: ((((ast ASTSlotDef) new) initWithFlags: flags Type: type Name: name Args: ((std util Vector) new) Varargs: false Body: value))
+            slots append: ((((ast ASTSlotDef) new) initWithFlags: flags Type: type Name: name Args: (std util newVector) Varargs: false Body: value))
         );
 
         commit => ((ast ASTMolecule) new) initWithSlots: slots;

@@ -7,7 +7,7 @@
     );
 
     parseArgdefs => (
-        | defs <- (std util Vector) new |
+        | defs <- std util newVector |
         [ check: TokenType RPAREN ] until: [
             (check: TokenType ELLIPSIS) if: [
                 expect: TokenType RPAREN.
@@ -22,7 +22,7 @@
 
     parseOptionalArgdefs => (
         (check: TokenType LPAREN) if: [ parseArgdefs ]
-                                else: [ (std util Vector) new & false ]
+                                else: [ std util newVector & false ]
     );
 
     parseMethodDeclaration => (
@@ -32,14 +32,14 @@
         ].
 
         checkBinaryIdentifier when: [
-            :tok |  | args <- (std util Vector) new |
+            :tok |  | args <- std util newVector |
             args append: parseArgdef.
           ^ (tok payload) & args & false
         ].
 
         |
             name <- '',
-            args <- (std util Vector) new
+            args <- std util newVector
         |
 
         [
@@ -52,7 +52,7 @@
     );
 
     parseArglist => (
-        | exprs <- (std util Vector) new |
+        | exprs <- std util newVector |
         [ check: TokenType RPAREN ] until: [
             (check: TokenType ELLIPSIS) if: [
                 expect: TokenType RPAREN.
@@ -67,6 +67,6 @@
 
     parseOptionalArglist => (
         (check: TokenType LPAREN) if: [ parseArglist ]
-                                else: [ (std util Vector) new & false ]
+                                else: [ std util newVector & false ]
     );
 }

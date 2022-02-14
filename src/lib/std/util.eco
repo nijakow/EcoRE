@@ -22,7 +22,7 @@
     );
 
     asVector => (
-        | v <- (std util Vector) new |
+        | v <- std util newVector |
         do: [ :value | v append: value ].
       ^ v
     );
@@ -65,6 +65,12 @@
 
 #=std/util: {
     Array(size) => #'ecosphere.ecore.object.array.new'(size);
+
+    newArray: size => #'ecosphere.ecore.object.array.new'(size);
+    newVector      => (#<:std/util> Vector) new;
+    newStack       => (#<:std/util> Stack) new;
+    newSet         => (#<:std/util> Set) new;
+    newList        => (#<:std/util> List) new;
 
     WriteIterable: it On: writer => (
         writer << '#('.
@@ -248,7 +254,7 @@
 
         with inherited trait = {
             init => (
-                chars <- std util Vector new.
+                chars <- std util newVector.
               ^ self
             );
 

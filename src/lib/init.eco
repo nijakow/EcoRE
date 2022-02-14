@@ -149,7 +149,7 @@
     );
     isString => true;
     asVector => (
-        | v <- (std util Vector) clone |
+        | v <- std util newVector |
         self do: [ :c | v append: c ].
       ^ v
     );
@@ -161,7 +161,7 @@
       ^ vec asString
     );
     * count => (
-        | vec <- (std util Vector) new |
+        | vec <- std util newVector |
         count times: [
             do: [ :c | vec append: c ]
         ].

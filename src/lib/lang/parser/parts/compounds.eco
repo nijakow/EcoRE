@@ -8,7 +8,7 @@
 
     parseBlock => (
         |
-            parameters <- (std util Vector) new,
+            parameters <- std util newVector,
             varargs    <- false,
             the_type,
             key

@@ -5,7 +5,7 @@
             ident if: [
                 |
                     nameStr <- '',
-                    arglist <- (std util Vector) new
+                    arglist <- std util newVector
                 |
 
                 [
@@ -39,7 +39,7 @@
 
         ( | ident <- checkBinaryIdentifier |
             ident if: [
-                | args <- (std util Vector) new |
+                | args <- std util newVector |
                 args append: (parseExpressionWithFollowups: false).
               ^ newASTSendWithSubject: ast
                               Message: ident payload
