@@ -47,7 +47,7 @@
             io out commit.
 
             |
-                reader <- ((io in readLine) + '.') lens: (lang tokenizer StringReader),
+                reader <- (io in readLine) lens: (lang tokenizer StringReader),
                 tok    <- reader lens: (lang tokenizer Tokenizer),
                 parser <- tok lens: (lang parser Parser)
             |

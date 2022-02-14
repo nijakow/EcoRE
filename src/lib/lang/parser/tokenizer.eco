@@ -69,7 +69,7 @@
         IsSpecial(c) => [ '()[]{}.,;|^' contains: c ] or: [ IsSpace(c) ];
 
         skipWhitespace => (
-            [ IsSpace(in peekChar) ] while: [ in advance ]
+            [ [ in hasNext ] and: [ IsSpace(in peekChar) ] ] while: [ in advance ]
         );
 
         peeks: str => in peeks: str;
@@ -94,6 +94,7 @@
 
             skipWhitespace.
 
+            (in hasNext) unless: [ ^ newTokenWithType: TokenType EOF ].
             (peeks: '...') if: [ ^ newTokenWithType: TokenType ELLIPSIS   ].
             (peeks: '<-')  if: [ ^ newTokenWithType: TokenType ASSIGNMENT ].
             (peeks: '->')  if: [ ^ newTokenWithType: TokenType DELEGATE   ].
