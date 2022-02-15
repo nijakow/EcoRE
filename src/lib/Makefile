@@ -13,6 +13,7 @@ interfaces.eco \
 lang/lang.eco \
 lang/ast/ast.eco \
 lang/ast/construction.eco \
+lang/ast/visitor.eco \
 lang/compiler/bytecodes.eco \
 lang/compiler/codewriter.eco \
 lang/compiler/compiler.eco \

@@ -1,8 +1,11 @@
 
 #=lang/ast: {
     with construction = #<:lang/ast/ASTConstruction>;
+    
+    IVisitor = #<:lang/ast/IVisitor>;
 
     AST_SharedBehavior = #=lang/ast/AST_SharedBehavior: {
+        acceptVisitor: visitor => visitor visitUnknown: self;
         writeOn: writer => writer << 'AST';
     };
 

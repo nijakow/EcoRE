@@ -1,0 +1,23 @@
+
+#=lang/ast/IVisitor: %[
+
+    #'visitUnknown:'(ast),
+    #'visitSelf:'(ast),
+    #'visitConstant:'(ast),
+
+    #'visitArray:'(ast),
+    #'visitInterface:'(ast),
+    #'visitMolecule:'(ast),
+
+    #'visitCompound:'(ast),
+    #'visitBlock:'(ast),
+
+    #'visitBuiltin:'(ast),
+    #'visitCall:'(ast),
+    #'visitSend:'(ast),
+
+    #'visitReturn:'(ast),
+    #'visitVariableDeclaration:'(ast),
+    #'visitAssignment:'(ast),
+    #'visitAs:'(ast)
+]
