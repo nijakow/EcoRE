@@ -1,0 +1,103 @@
+
+#=lang/compiler/CodeWriter: {
+    bytes, constants;
+
+    init => (
+        bytes     <- std util newVector.
+        constants <- std util newVector.
+      ^ self
+    );
+
+    writeU8: b => bytes append: b;
+    writeU16: s => (
+        bytes append: (s bitAND: 0xff).
+        bytes append: ((s rshift: 8) bitAND: 0xff)
+    );
+    addConstant: c => (
+        "TODO: Don't append if it already exists in the table"
+        writeU16: constants size.
+        constants append: c
+    );
+
+    writeNOOP => writeU8: Bytecodes NOOP;
+
+    writeConst: c ToReg: r => (
+        writeU8: Bytecodes CONST.
+        writeU8: r.
+        addConstant: c
+    );
+
+    writePushConst: c => (
+        writeU8: Bytecodes PUSHC.
+        addConstant: c
+    );
+
+    writePushReg: r => (
+        writeU8: Bytecodes PUSH.
+        writeU8: r
+    );
+
+    writePopReg: r => (
+        writeU8: Bytecodes POP.
+        writeU8: r
+    );
+
+    writeDrop => writeU8: Bytecodes DROP;
+
+    writeDup => writeU8: Bytecodes DUP;
+
+    writeReg: src ToReg: dst => (
+        writeU8: Bytecodes R2R.
+        writeU8: dst.
+        writeU8: src
+    );
+
+    writeReg: src ToReg: dst Depth: depth => (
+        writeU8: Bytecodes L2R.
+        writeU8: dst.
+        writeU8: depth.
+        writeU8: src
+    );
+
+    writeReg: src Depth: depth ToReg: dst => (
+        writeU8: Bytecodes R2L.
+        writeU8: dst.
+        writeU8: src.
+        writeU8: depth
+    );
+
+    writeBuiltin: key Args: args Varargs: varargs => (
+        (varargs) if: [ writeU8: Bytecodes BUILTINV ]
+                else: [ writeU8: Bytecodes BUILTIN  ].
+        writeU8: args.
+        addConstant: key
+    );
+
+    writeBuiltin: key Args: args => writeBuiltin: key Args: args Varargs: false;
+
+    writeSend: message Args: args Varargs: varargs => (
+        (varargs) if: [ writeU8: Bytecodes SENDV ]
+                else: [ writeU8: Bytecodes SEND  ].
+        writeU8: args.
+        addConstant: message
+    );
+
+    writeSend: message Args: args => writeSend: message Args: args Varargs: false;
+
+    writeAssign: key => (
+        writeU8: Bytecodes ASSIGN.
+        addConstant: key
+    );
+
+    writeAs => writeU8: Bytecodes AS;
+
+    writeReturn: depth => (
+        writeU8: Bytecodes RETURN.
+        writeU8: depth
+    );
+
+    "TODO: Closure"
+
+    Bytecodes = #<:lang/compiler/Bytecodes>;
+    with inherited parent = #<:std/Clonable>;
+}

@@ -1,4 +1,5 @@
 
 #=lang/compiler: {
-    
+    Bytecodes = #<:lang/compiler/Bytecodes>;
+    CodeWriter = #<:lang/compiler/CodeWriter>;
 }
