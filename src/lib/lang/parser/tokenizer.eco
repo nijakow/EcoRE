@@ -131,14 +131,14 @@
 
             "TODO: Number parsing"
 
-            (sb equals: '')          if: [ ^ newTokenWithType: #'eof'       ].
-            (sb equals: 'self')      if: [ ^ newTokenWithType: #'self'      ].
-            (sb equals: 'as')        if: [ ^ newTokenWithType: #'as'        ].
-            (sb equals: 'with')      if: [ ^ newTokenWithType: #'with'      ].
-            (sb equals: 'inherited') if: [ ^ newTokenWithType: #'inherited' ].
-            (sb equals: 'own')       if: [ ^ newTokenWithType: #'own'       ].
-            (sb equals: '=')         if: [ ^ newTokenWithType: #'='         ].
-          ^ newTokenWithType: #'ident' Payload: (sb asKey)
+            (sb equals: '')          if: [ ^ newTokenWithType: TokenType EOF        ].
+            (sb equals: 'self')      if: [ ^ newTokenWithType: TokenType SELF       ].
+            (sb equals: 'as')        if: [ ^ newTokenWithType: TokenType AS         ].
+            (sb equals: 'with')      if: [ ^ newTokenWithType: TokenType WITH       ].
+            (sb equals: 'inherited') if: [ ^ newTokenWithType: TokenType INHERITED  ].
+            (sb equals: 'own')       if: [ ^ newTokenWithType: TokenType OWN        ].
+            (sb equals: '=')         if: [ ^ newTokenWithType: TokenType ASSIGNMENT ].
+          ^ newTokenWithType: (TokenType IDENTIFIER) Payload: (sb asKey)
         );
 
         with inherited shared = #<:lang/parser/SharedBehavior>;
