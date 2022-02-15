@@ -51,6 +51,8 @@
 #=lang/ast/ASTConstruction: {
   with ast = #<:lang/ast>;
 
+  newASTType: t AndName: n => (ASTTypeAndName new) initWithType: t Name: n;
+
   newASTSelf => (ASTSelf new);
 
   newASTConstantWithValue: value => (ASTConstant new) initWithValue: value;

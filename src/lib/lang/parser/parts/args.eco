@@ -3,7 +3,7 @@
     parseArgdef => (
         | type <- parseOptionalType,
           name <- (expect: TokenType IDENTIFIER) payload |
-      ^ type & name
+      ^ newASTType: type AndName: name
     );
 
     parseArgdefs => (

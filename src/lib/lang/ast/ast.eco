@@ -37,6 +37,20 @@
         with inherited parent = #<:std/Clonable>;
     };
 
+    ASTTypeAndName = {
+        type, name;
+
+        initWithType: t Name: n => (
+            type <- t.
+            name <- n.
+          ^ self
+        );
+
+        writeOn: writer => writer << '[' << type << '] ' << name;
+
+        with inherited parent = #<:std/Clonable>;
+    };
+
     ASTSlotDef = {
         flags, type, name, args, varargs, body;
 
@@ -52,7 +66,7 @@
 
         writeOn: writer => (
             writer << flags.
-            writer << type << ' '.
+            writer << '[' << type << '] '.
             writer << name << ' ('.
             args forEach: [ :i, :e | (i > 0) if: [ writer << ', ' ]. writer << e ].
             writer << (varargs if: ', ...) ' else: ') ').
