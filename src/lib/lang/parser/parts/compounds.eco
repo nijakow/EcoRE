@@ -16,9 +16,7 @@
         [
           begin
             if: [check: TokenType COLON] then: [
-              the_type <- parseOptionalType.
-              key      <- (expect: TokenType IDENTIFIER) payload.
-              parameters append: (key & the_type).
+              parameters append: parseArgdef.
               (check: TokenType BAR) unless: [
                   expect: TokenType SEPARATOR
               ]
