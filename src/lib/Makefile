@@ -17,6 +17,7 @@ lang/ast/visitor.eco \
 lang/compiler/bytecodes.eco \
 lang/compiler/codewriter.eco \
 lang/compiler/compiler.eco \
+lang/compiler/visitor.eco \
 lang/parser/parts/objects/interface.eco \
 lang/parser/parts/objects/molecule.eco \
 lang/parser/parts/objects/simple.eco \

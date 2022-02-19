@@ -1,0 +1,36 @@
+
+#=lang/compiler/Visitor: {
+
+    visitUnknown: ast => "TODO: Error";
+    
+    visitSelf: ast => "TODO";
+    
+    visitConstant: ast => "TODO";
+
+    visitArray: ast => "TODO";
+
+    visitInterface: ast => "TODO";
+
+    visitMolecule: ast => "TODO";
+
+    visitCompound: ast => "TODO";
+
+    visitBlock: ast => "TODO";
+
+    visitBuiltin: ast => "TODO";
+
+    visitCall: ast => "TODO";
+
+    visitSend: ast => "TODO";
+
+    visitReturn: ast => "TODO";
+
+    visitVariableDeclaration: ast => "TODO";
+
+    visitAssignment: ast => "TODO";
+
+    visitAs: ast => "TODO";
+
+    "TODO: Implements interface lang/ast/IVisitor"
+    with inherited parent = #<:std/Clonable>;
+} 
