@@ -145,6 +145,9 @@
             varargs <- _varargs.
           ^ self
         );
+        getName => name;
+        getArgs => args asArray;
+        getVarargs => varargs;
         writeOn: writer => writer << 'ASTBuiltin(' << name << ', ' << args << ', ' << varargs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
@@ -159,6 +162,9 @@
             varargs <- _varargs.
           ^ self
         );
+        getSubject => subject;
+        getArgs => args asArray;
+        getVarargs => varargs;
         writeOn: writer => writer << 'ASTCall(' << subject << ', ' << args << ', ' << varargs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
@@ -174,6 +180,10 @@
             varargs <- _varargs.
           ^ self
         );
+        getSubject => subject;
+        getMessage => message;
+        getArgs => args asArray;
+        getVarargs => varargs;
         writeOn: writer => writer << 'ASTSend(' << subject << ', ' << message << ', ' << args << ', ' << varargs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
@@ -214,6 +224,7 @@
             exprs <- _exprs.
           ^ self
         );
+        getExprs => exprs asArray;
         writeOn: writer => writer << 'ASTCompound(' << exprs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;

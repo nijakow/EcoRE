@@ -1,29 +1,48 @@
 
 #=lang/compiler/Visitor: {
+    compiler;
+
+    EvaluateAST(ast) => "TODO";
 
     visitUnknown: ast => "TODO: Error";
     
-    visitSelf: ast => "TODO";
+    visitSelf: ast => compiler loadSelf;
     
-    visitConstant: ast => "TODO";
+    visitConstant: ast => compiler loadConstant: EvaluateAST(ast);
 
-    visitArray: ast => "TODO";
+    visitArray: ast => visitConstant: ast;
 
-    visitInterface: ast => "TODO";
+    visitInterface: ast => visitConstant: ast;
 
-    visitMolecule: ast => "TODO";
+    visitMolecule: ast => visitConstant: ast;
 
-    visitCompound: ast => "TODO";
+    visitCompound: ast => ast getExprs do: [ :e | e acceptVisitor: self ];
 
     visitBlock: ast => "TODO";
 
-    visitBuiltin: ast => "TODO";
+    visitBuiltin: ast => (
+        | args <- ast getArgs |
+        args do: [ :arg | arg acceptVisitor: self. compiler push ].
+        compiler builtinWithMessage: ast getName ArgCount: args size Varargs: ast getVarargs
+    );
 
-    visitCall: ast => "TODO";
+    visitCall: ast => (
+        | args <- ast getArgs |
+        getSubject acceptVisitor: self.
+        compiler push.
+        args do: [ :arg | arg acceptVisitor: self. compiler push ].
+        compiler sendWithMessage: #'value' ArgCount: args size Varargs: ast getVarargs
+    );
 
-    visitSend: ast => "TODO";
+    visitSend: ast => (
+        | args <- ast getArgs |
+        getSubject acceptVisitor: self.
+        compiler push.
+        args do: [ :arg | arg acceptVisitor: self. compiler push ].
+        compiler sendWithMessage: ast getMessage ArgCount: args size Varargs: ast getVarargs
+    );
 
-    visitReturn: ast => "TODO";
+    visitReturn: ast => compiler fullReturn;
 
     visitVariableDeclaration: ast => "TODO";
 

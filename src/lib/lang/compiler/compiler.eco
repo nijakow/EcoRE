@@ -1,6 +1,24 @@
 
+#=lang/compiler/Compiler: {
+    loadSelf => "TODO";
+    loadConstant: c => "TODO";
+    loadRegister: r => "TODO";
+
+    push => "TODO";
+    pop => "TODO";
+    drop => "TODO";
+
+    builtinWithMessage: msg ArgCount: args Varargs: varargs => "TODO";
+    sendWithMessage: msg ArgCount: args => "TODO";
+
+    returnWithDepth: depth => "TODO";
+    fullReturn => "TODO";
+},
+
+
 #=lang/compiler: {
     Bytecodes = #<:lang/compiler/Bytecodes>;
     CodeWriter = #<:lang/compiler/CodeWriter>;
     Visitor = #<:lang/compiler/Visitor>;
+    Compiler = #<:lang/compiler/Compiler>;
 }
