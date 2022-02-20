@@ -2,6 +2,14 @@
 #=lang/compiler/Visitor: {
     compiler;
 
+    init: _compiler => (
+        compiler <- _compiler.
+      ^ self
+    );
+
+    compoundSubscope => clone init: (compiler compoundSubscope);
+    blockSubscope => clone init: (compiler blockSubscope);
+
     EvaluateAST(ast) => "TODO";
 
     visitUnknown: ast => "TODO: Error";
@@ -16,7 +24,10 @@
 
     visitMolecule: ast => visitConstant: ast;
 
-    visitCompound: ast => ast getExprs do: [ :e | e acceptVisitor: self ];
+    visitCompound: ast => (
+        | comp <- compoundSubscope |
+        ast getExprs do: [ :e | e acceptVisitor: comp ]
+    );
 
     visitBlock: ast => "TODO";
 

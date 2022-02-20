@@ -1,8 +1,17 @@
 
 #=lang/compiler/Compiler: {
+    writer;
+
+    blockSubscope => "TODO";
+    compoundSubscope => "TODO";
+
+    bindVariable: varname => "TODO";
+
     loadSelf => "TODO";
     loadConstant: c => "TODO";
     loadRegister: r => "TODO";
+    loadVariable: name IfNotPresent: block => "TODO";
+    storeVariable: name IfNotPresent: block => "TODO";
 
     push => "TODO";
     pop => "TODO";

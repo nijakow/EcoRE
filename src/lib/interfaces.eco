@@ -71,6 +71,10 @@
         #'removeAt:'(index)
     ];
 
+    IMap = #=IMap: %[
+        with #<:IRandomAccess>;
+    ];
+
     IInputPort = #=IInputPort: %[
         #'readByte',
         #'readChar',

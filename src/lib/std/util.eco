@@ -71,6 +71,7 @@
     newStack       => (#<:std/util> Stack) new;
     newSet         => (#<:std/util> Set) new;
     newList        => (#<:std/util> List) new;
+    newMap         => (#<:std/util> Map) new;
 
     WriteIterable: it On: writer => (
         writer << '#('.
@@ -244,6 +245,22 @@
 
             with inherited conversions = #<:std/util/StandardListConversions>;
             with inherited access = #<:std/util/StandardListAccess>;
+        };
+
+        with inherited parent = #<:std/Clonable>;
+    },
+
+    Map = {
+        values;
+
+        with inherited trait = {
+            init => (
+                values <- std util newVector.
+              ^ self
+            );
+
+            at: index => "TODO";
+            at: index put: value => "TODO";
         };
 
         with inherited parent = #<:std/Clonable>;
