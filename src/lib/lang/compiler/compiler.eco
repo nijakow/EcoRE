@@ -2,8 +2,9 @@
 #=lang/compiler/Compiler: {
     writer;
 
-    blockSubscope => "TODO";
-    compoundSubscope => "TODO";
+    pushBlockScope => "TODO";
+    pushNormalScope => "TODO";
+    popScope => "TODO";
 
     bindVariable: varname => "TODO";
 
@@ -12,6 +13,7 @@
     loadRegister: r => "TODO";
     loadVariable: name IfNotPresent: block => "TODO";
     storeVariable: name IfNotPresent: block => "TODO";
+    storeVariable: name => storeVariable: name IfNotPresent: [];
 
     push => "TODO";
     pop => "TODO";

@@ -7,9 +7,6 @@
       ^ self
     );
 
-    compoundSubscope => clone init: (compiler compoundSubscope);
-    blockSubscope => clone init: (compiler blockSubscope);
-
     EvaluateAST(ast) => "TODO";
 
     visitUnknown: ast => "TODO: Error";
@@ -25,8 +22,9 @@
     visitMolecule: ast => visitConstant: ast;
 
     visitCompound: ast => (
-        | comp <- compoundSubscope |
-        ast getExprs do: [ :e | e acceptVisitor: comp ]
+        compiler pushNormalScope.
+        ast getExprs do: [ :e | e acceptVisitor: self ].
+        compiler popScope
     );
 
     visitBlock: ast => "TODO";
@@ -55,9 +53,16 @@
 
     visitReturn: ast => compiler fullReturn;
 
-    visitVariableDeclaration: ast => "TODO";
+    visitVariableDeclaration: ast => (
+        compiler bindVariable: ast getName.
+        ast getValue acceptVisitor: self.
+        compiler storeVariable: ast getName.
+        ast getFollowup acceptVisitor: self
+    );
 
-    visitAssignment: ast => "TODO";
+    visitAssignment: ast => (
+        "TODO: Create a special visitor for this!"
+    );
 
     visitAs: ast => "TODO";
 

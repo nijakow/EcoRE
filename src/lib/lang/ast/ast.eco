@@ -212,6 +212,10 @@
             followup <- _followup.
           ^ self
         );
+        getType => type;
+        getName => name;
+        getValue => value;
+        getFollowup => followup;
         writeOn: writer => writer << 'ASTVariableDeclaration(' << type << ', ' << name << ', ' << value << ', ' << followup << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
