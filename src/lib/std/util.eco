@@ -250,6 +250,24 @@
         with inherited parent = #<:std/Clonable>;
     },
 
+    MutablePair = {
+        first, second;
+
+        with inherited trait = {
+            initWithFirst: f Second: s => (
+                first: f second: s.
+              ^ self
+            );
+
+            first: f => first <- f;
+            second: s => second <- s;
+
+            first: f second: s => (
+                first: f. second: s.
+            );
+        };
+    },
+
     Map = {
         values;
 
@@ -259,8 +277,18 @@
               ^ self
             );
 
-            at: index => "TODO";
-            at: index put: value => "TODO";
+            forEach: block => values do: [ :v | block value(v first, v second) ];
+            do: block => forEach: [ :k, :v | block value(k) ];
+
+            at: index ifNotPresent: block => ( forEach: [ :k, :v | (k == index) if: [ ^ v ] ]. ^ block value );
+            at: index default: def => at: index ifNotPresent: [ ^ def ];
+            at: index => at: index default: false;
+
+            at: index put: value => (
+                values do: [ :p | (p first == index) if: [ p second: value. ^ self ] ].
+                values append: (index cons: value).
+              ^ self
+            );
         };
 
         with inherited parent = #<:std/Clonable>;

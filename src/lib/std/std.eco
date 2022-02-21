@@ -43,6 +43,7 @@
         isString      => false;
         isArray       => false;
         & value       => (((std util Collector) clone) init: self) & value;
+        cons: value   => ((std util MutablePair) clone) initWithFirst: self Second: value;
         writeOn: writer => writer << 'clonable';
         with lobby    = #<:lobby>;
     };
