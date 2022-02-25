@@ -1,6 +1,32 @@
 
+#=lang/compiler/Scope: {
+    parent, bindings;
+
+    init => (
+        parent <- self.
+        bindings <- std util newMap.
+        ^ self
+    );
+
+    initWithParent: p => (
+        parent <- p.
+        bindings <- std util newMap.
+      ^ self
+    );
+
+    extend => (#<:lang/compiler/Scope> clone) initWithParent: self;
+
+    with inherited parent = #<:std/Clonable>;
+},
+
 #=lang/compiler/Compiler: {
-    writer;
+    writer, scopes;
+
+    initWithWriter: w => (
+        writer <- w.
+        scopes <- (#<:lang/compiler/Scope> new).
+      ^ self
+    );
 
     pushBlockScope => "TODO";
     pushNormalScope => "TODO";
@@ -24,6 +50,8 @@
 
     returnWithDepth: depth => "TODO";
     fullReturn => "TODO";
+
+    with inherited parent = #<:std/Clonable>;
 },
 
 
