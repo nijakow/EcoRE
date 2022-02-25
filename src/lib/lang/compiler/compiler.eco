@@ -10,8 +10,10 @@
       ^ self
     );
 
-    extend => (#<:lang/compiler/NormalScope> clone) initWithParent: self;
-    extendBlockScope => (#<:lang/compiler/BlockScope> clone) initWithParent: self;
+    createNormalSubscope => (#<:lang/compiler/NormalScope> clone) initWithParent: self;
+    createBlockSubscope => (#<:lang/compiler/BlockScope> clone) initWithParent: self;
+
+    getParentScope => parent_scope;
 
     with inherited parent = #<:std/Clonable>;
 },
@@ -33,9 +35,9 @@
       ^ self
     );
 
-    pushBlockScope => "TODO";
-    pushNormalScope => "TODO";
-    popScope => "TODO";
+    pushNormalScope => scopes <- scopes createNormalSubscope;
+    pushBlockScope => scopes <- scopes createBlockSubscope;
+    popScope => scopes <- scopes getParentScope;
 
     addParameter: p => "TODO";
     bindVariable: varname => "TODO";
