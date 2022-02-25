@@ -49,6 +49,9 @@
           ^ self
         );
 
+        getType => type;
+        getName => name;
+
         writeOn: writer => writer << '[' << type << '] ' << name;
 
         with inherited parent = #<:std/Clonable>;
@@ -243,6 +246,9 @@
             body    <- _body.
           ^ self
         );
+        getArgs => args asArray;
+        hasVarargs => varargs;
+        getBody => body;
         writeOn: writer => writer << 'ASTBlock(' << args << ', ' << varargs << ', ' << body << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;

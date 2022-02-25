@@ -27,7 +27,13 @@
         compiler popScope
     );
 
-    visitBlock: ast => "TODO";
+    visitBlock: ast => (
+        compiler pushBlockScope.
+        ast getArgs do: [ :arg | compiler addParameter: (arg getName) ].
+        ast hasVarargs if: [ compiler enableVarargs ].
+        ast getBody acceptVisitor: self.
+        compiler popScope
+    );
 
     visitBuiltin: ast => (
         | args <- ast getArgs |

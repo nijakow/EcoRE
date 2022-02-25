@@ -32,7 +32,9 @@
     pushNormalScope => "TODO";
     popScope => "TODO";
 
+    addParameter: p => "TODO";
     bindVariable: varname => "TODO";
+    enableVarargs => "TODO";
 
     loadSelf => "TODO";
     loadConstant: c => "TODO";
