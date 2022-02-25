@@ -1,22 +1,27 @@
 
 #=lang/compiler/Scope: {
-    parent, bindings;
+    parent_scope, bindings;
 
-    init => (
-        parent <- self.
-        bindings <- std util newMap.
-        ^ self
-    );
+    init => initWithParent: self;
 
-    initWithParent: p => (
-        parent <- p.
+    initWithParent: p LexicalParent: l => (
+        parent_scope <- p.
         bindings <- std util newMap.
       ^ self
     );
 
-    extend => (#<:lang/compiler/Scope> clone) initWithParent: self;
+    extend => (#<:lang/compiler/NormalScope> clone) initWithParent: self;
+    extendBlockScope => (#<:lang/compiler/BlockScope> clone) initWithParent: self;
 
     with inherited parent = #<:std/Clonable>;
+},
+
+#=lang/compiler/NormalScope: {
+    with inherited own parent = #<:lang/compiler/Scope>;
+},
+
+#=lang/compiler/BlockScope: {
+    with inherited own parent = #<:lang/compiler/Scope>;
 },
 
 #=lang/compiler/Compiler: {
@@ -24,7 +29,7 @@
 
     initWithWriter: w => (
         writer <- w.
-        scopes <- (#<:lang/compiler/Scope> new).
+        scopes <- (#<:lang/compiler/BlockScope> new).
       ^ self
     );
 
