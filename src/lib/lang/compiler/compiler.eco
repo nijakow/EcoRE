@@ -1,47 +1,34 @@
 
 #=lang/compiler/Scope: {
-    parent_scope, bindings;
+    shared, parent_scope, bindings;
 
-    init => initWithParent: self;
+    initWithShared: s => (
+        shared <- s.
+      ^ initWithParent: self
+    );
 
     initWithParent: p => (
+        shared <- p shared.
         parent_scope <- p.
         bindings <- std util newMap.
       ^ self
     );
 
-    createNormalSubscope => (#<:lang/compiler/NormalScope> clone) initWithParent: self;
-    createBlockSubscope => (#<:lang/compiler/BlockScope> clone) initWithParent: self;
+    createSubscope => (#<:lang/compiler/NormalScope> clone) initWithParent: self Lexical: getLexicalScope;
 
     getParentScope => parent_scope;
+
+    bindVariable: varname WithInfo: info => bindings at: varname put: info;
 
     with inherited parent = #<:std/Clonable>;
 },
 
-#=lang/compiler/NormalScope: {
-    initWithParent: p => (
-        
-    );
-    with inherited own parent = #<:lang/compiler/Scope>;
-},
-
-#=lang/compiler/BlockScope: {
-    with inherited own parent = #<:lang/compiler/Scope>;
-
-    lexical_scope;
-    with compiler;
-
-    addParameter: p => "TODO";
-    bindVariable: varname => "TODO";
-    enableVarargs => "TODO";
-},
 
 #=lang/compiler/Compiler: {
     writer;
 
     initWithWriter: w => (
         writer <- w.
-        scopes <- (#<:lang/compiler/BlockScope> new).
       ^ self
     );
 
@@ -65,15 +52,37 @@
     with inherited parent = #<:std/Clonable>;
 },
 
-#=lang/compiler/ScopedCompiler: {
-    with scopes;
+#=lang/compiler/ScopeSharedInfo: {
+    lexical_parent_scope;
 
-    initWithCompiler: compiler => (
-        scopes <- (#<:lang/compiler/BlockScope> clone) init
+    init => (
+        lexical_parent_scope <- self.
+      ^ self
     );
 
-    pushNormalScope => scopes <- scopes createNormalSubscope;
-    pushBlockScope => scopes <- scopes createBlockSubscope;
+    initWithLexicalParentScope: l => (
+        lexical_parent_scope <- l.
+      ^ self
+    );
+
+    with inherited parent = #<:std/Clonable>;
+},
+
+#=lang/compiler/ScopedCompiler: {
+    scopes;
+
+    init => (
+        scopes <- newScope;
+      ^ self
+    );
+
+    newBlockContextWithParent: p => (#<:lang/compiler/ScopeSharedInfo> clone) initWithLexicalParentScope: l;
+    newBlockContext => (#<:lang/compiler/ScopeSharedInfo> clone) init;
+    newScopeFromBlockContext: bc => (#<:lang/compiler/BlockScope> clone) initWithShared: bc;
+    newScope => newScopeFromBlockContext: newBlockContext;
+
+    pushNormalScope => scopes <- scopes createSubscope;
+    pushBlockScope => scopes <- newBlockContextWithParent: scopes;
     popScope => scopes <- scopes getParentScope;
 },
 
