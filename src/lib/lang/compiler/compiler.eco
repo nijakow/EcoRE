@@ -4,7 +4,7 @@
 
     init => initWithParent: self;
 
-    initWithParent: p LexicalParent: l => (
+    initWithParent: p => (
         parent_scope <- p.
         bindings <- std util newMap.
       ^ self
@@ -19,29 +19,31 @@
 },
 
 #=lang/compiler/NormalScope: {
+    initWithParent: p => (
+        
+    );
     with inherited own parent = #<:lang/compiler/Scope>;
 },
 
 #=lang/compiler/BlockScope: {
     with inherited own parent = #<:lang/compiler/Scope>;
+
+    lexical_scope;
+    with compiler;
+
+    addParameter: p => "TODO";
+    bindVariable: varname => "TODO";
+    enableVarargs => "TODO";
 },
 
 #=lang/compiler/Compiler: {
-    writer, scopes;
+    writer;
 
     initWithWriter: w => (
         writer <- w.
         scopes <- (#<:lang/compiler/BlockScope> new).
       ^ self
     );
-
-    pushNormalScope => scopes <- scopes createNormalSubscope;
-    pushBlockScope => scopes <- scopes createBlockSubscope;
-    popScope => scopes <- scopes getParentScope;
-
-    addParameter: p => "TODO";
-    bindVariable: varname => "TODO";
-    enableVarargs => "TODO";
 
     loadSelf => "TODO";
     loadConstant: c => "TODO";
@@ -61,6 +63,18 @@
     fullReturn => "TODO";
 
     with inherited parent = #<:std/Clonable>;
+},
+
+#=lang/compiler/ScopedCompiler: {
+    with scopes;
+
+    initWithCompiler: compiler => (
+        scopes <- (#<:lang/compiler/BlockScope> clone) init
+    );
+
+    pushNormalScope => scopes <- scopes createNormalSubscope;
+    pushBlockScope => scopes <- scopes createBlockSubscope;
+    popScope => scopes <- scopes getParentScope;
 },
 
 
