@@ -26,45 +26,30 @@
 
 #=lang/compiler/ValueType: {
     Register = {
-        number, depth, writer;
+        number, depth;
 
-        initWithNumber: n Depth: d Writer: w => (
+        initWithNumber: n Depth: d => (
             number <- n.
             depth <- d.
-            writer <- w.
           ^ self
         );
 
-        initWithNumber: n Writer: w => initWithNumber: n Depth: 0 Writer: w;
+        initWithNumber: n => initWithNumber: n Depth: 0;
 
-        drop => self;
-        push => writer writePushReg: number;
-        storeIn: r => writer writeReg: number Depth: depth ToReg: r;
+        ifRegister: r ifConstant: c ifStack: s => r value;
     },
     Stack = {
-        writer;
-
-        initWithWriter: w => (
-          writer <- w.
-          ^ self
-        );
-
-        drop => writer writeDrop;
-        push => self;
-        storeIn: r => writer writePopReg: r;
+        ifRegister: r ifConstant: c ifStack: s => s value;
     },
     Constant = {
-        constantValue, writer;
+        constantValue;
 
-        initWithValue: v Writer: w => (
+        initWithValue: v => (
             constantValue <- v.
-            writer <- w.
           ^ self
         );
 
-        drop => self;
-        push => writer writePushConst: constantValue;
-        storeIn: r => writer writeConst: constantValue;
+        ifRegister: r ifConstant: c ifStack: s => c value;
     }
 },
 
@@ -76,19 +61,42 @@
       ^ self
     );
 
-    lastValue: nv => (lastValue drop. lastValue <- nv);
+    lastValue: nv => (dropLastValue. lastValue <- nv);
+    dropLastValue => lastValue isStack if: [ writer writeDrop ];
+    pushLastValue => (
+        lastValue ifRegister: [ (lastValue depth isZero)
+                                     if: [ writer writePushReg: lastValue number ]
+                                   else: [ "TODO" ] ]
+                  ifConstant: [ writer writePushConst: lastValue constantValue ]
+                     ifStack: []
+    );
+    moveLastValueToReg: r Depth: d => (
+        /"
+          TODO: registerAllocator withAllocatedRegister: [ :r | ... ].
+         "/
+        lastValue ifRegister: [ (lastValue depth isZero)
+                                     if: [ writer writeReg: (lastValue number) ToReg: r Depth: d ]
+                                   else: [ "TODO" ] ]
+                  ifConstant: [ (lastValue depth isZero)
+                                     if: [ writer writeConst: lastValue constantValue ]
+                                   else: [ "TODO" ] ]
+                     ifStack: [ (lastValue depth isZero)
+                                     if: [ writer writePopReg: lastValue number ]
+                                   else: [ "TODO" ].
+                                loadRegister: r Depth: d ]
+    );
+    moveLastValueToReg: r => moveLastValueToReg: r Depth: 0;
 
-    constantValue: c => "TODO";
-    registerValue: n => "TODO";
-    stackTopValue => "TODO";
+    constantValue: c => (#<:lang/compiler/ValueType> Constant) clone initWithValue: c;
+    registerValue: n Depth: d => (#<:lang/compiler/ValueType> Register) clone initWithNumber: n Depth: d;
+    stackTopValue => (#<:lang/compiler/ValueType> Stack) clone;
 
     loadSelf => loadRegister: 0;
     loadConstant: c => lastValue: (constantValue: c);
-    loadRegister: r => lastValue: (registerValue: r);
-    storeRegister: r => lastValue storeIn: r;
+    loadRegister: r Depth: d => lastValue: (registerValue: r Depth: d);
+    loadRegister: r => loadRegister: r Depth: 0;
 
-    push => lastValue push;
-    pop => lastValue: stackTopValue;
+    push => pushLastValue;
     drop => loadSelf;
 
     builtinWithMessage: msg ArgCount: args Varargs: varargs => (
