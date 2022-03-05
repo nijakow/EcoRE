@@ -83,10 +83,13 @@
     moveLastValueToReg: r Depth: d => (
         lastValue ifRegister: [ (lastValue depth isZero)
                                      if: [ writer writeReg: (lastValue number) ToReg: r Depth: d ]
-                                   else: [ regAlloc withAllocatedRegister: [
-                                            "FIXME, XXX: This implementation is broken for d > 0"
-                                             :tmpReg | moveLastValueToReg: tmpReg.
-                                                       moveLastValueToReg: r Depth: d
+                                   else: [ (d isZero) if: [
+                                              writer writeReg: (lastValue number) Depth: (lastValue depth) ToReg: r
+                                           ] else: [
+                                              regAlloc withAllocatedRegister: [
+                                                :tmpReg | moveLastValueToReg: tmpReg.
+                                                          moveLastValueToReg: r Depth: d
+                                              ]
                                            ]
                                          ]
                               ]
