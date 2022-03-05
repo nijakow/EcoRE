@@ -137,7 +137,8 @@ class Parser:
     
     def parse_argdef(self, env):
         the_type = self.parse_optional_type(env)
-        the_expr = self.parse_expression(env)
+        # the_expr = self.parse_expression(env)
+        the_expr = self.expect(TokenType.IDENTIFIER).get_key()
         return (the_type, the_expr)
 
     def parse_argdefs(self, env):
@@ -169,6 +170,15 @@ class Parser:
         t = self.check_binary_ident()
         if t:
             return return_type, t.get_key(), [self.parse_argdef(env)], False
+        t = self.check_nary_ident()
+        if t:
+            args = []
+            name = ''
+            while t:
+                name += t.get_text()
+                args.append(self.parse_argdef(env))
+                t = self.check_nary_ident()
+            return return_type, ecosphere.objects.misc.EcoKey.Get(name), args, False
         name = self.expect(TokenType.KEY).get_key()
         args, has_varargs = self.parse_optional_argdefs(env)
         return return_type, name, args, has_varargs
