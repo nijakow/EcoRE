@@ -98,7 +98,7 @@
             isEmpty => size isZero;
 
             at: index => elements at: index;
-            at: index put: value => elements at: index put: value;
+            at: index put: value => elements at: index put: value;  "TODO: Index >= capacity"
 
             with inherited iterations = #<:std/util/StandardListIterations>;
             with inherited conversions = #<:std/util/StandardListConversions>;
@@ -185,13 +185,8 @@
               ^ self
             );
             at: i => (
-                | p <- elements next |
-                [ i isZero ] until: [
-                    "TODO: Error if (p == elements)"
-                    p <- p next.
-                    i <- i - 1.
-                ].
-              ^ p value
+                do: [ :e | (i isZero) if: [ ^ e ]. i <- i - 1 ].
+                invalidIndexError
             );
             append: value => (
                 | link <- (std util Link) clone init |
@@ -239,7 +234,10 @@
                 | i <- 0 |
                 do: [ :e | block value(i, e). i <- i + 1. ]
             );
-            at: index => forEach: [ :i, :v | (i == index) if: [ ^ v ] ];
+            at: index => (
+                forEach: [ :i, :v | (i == index) if: [ ^ v ] ].
+                invalidIndexError
+            );
 
             writeOn: writer => (
                 (index == 0) if: [ writer << value ]
@@ -288,8 +286,8 @@
             at: index do: found else: notfound => ( forEach: [ :k, :v | (k == index) if: [ ^ found value(v) ] ]. ^ notfound value );
             at: index do: found => at: index do: found else: [];
             at: index else: notfound => at: index do: [ :v | ^ v ] else: notfound;
-            at: index else: def => at: index else: [ ^ def ];
-            at: index => at: index default: false;
+            at: index default: def => at: index else: [ ^ def ];
+            at: index => at: index else: [ invalidIndexError ];
 
             at: index put: value => (
                 values do: [ :p | (p first == index) if: [ p second: value. ^ self ] ].
