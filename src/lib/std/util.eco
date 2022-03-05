@@ -55,10 +55,7 @@
 };
 
 #=std/util/StandardSetImpl: {
-    contains: value => (
-        do: [ :v | (v equals: value) if: [ ^ true ] ].
-      ^ false
-    );
+    contains: value => (find: e) yes: [ :i | ^ true ] no: [ ^ false ];
     addElement: e => append: e;
     removeElement: e => (find: e) yes: [ :i | remove: i ];
     take => (
