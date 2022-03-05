@@ -55,10 +55,12 @@
 },
 
 #=lang/compiler/Compiler: {
-    writer, lastValue;
+    writer, regAlloc, lastValue;
 
     initWithWriter: w => (
         writer <- w.
+        regAlloc <- #<:lang/compiler/RegisterAllocator> new.
+        lastValue <- registerValue: 0 Depth: 0.
       ^ self
     );
     init => initWithWriter: (#<:lang/compiler/CodeWriter> new);
@@ -68,24 +70,43 @@
     pushLastValue => (
         lastValue ifRegister: [ (lastValue depth isZero)
                                      if: [ writer writePushReg: lastValue number ]
-                                   else: [ "TODO" ] ]
+                                   else: [ regAlloc withAllocatedRegister: [
+                                             :r | moveLastValueToReg: r.
+                                                  pushLastValue
+                                           ]
+                                         ]
+                              ]
                   ifConstant: [ writer writePushConst: lastValue constantValue ]
-                     ifStack: []
+                     ifStack: [].
+        lastValue <- stackTopValue
     );
     moveLastValueToReg: r Depth: d => (
-        /"
-          TODO: registerAllocator withAllocatedRegister: [ :r | ... ].
-         "/
         lastValue ifRegister: [ (lastValue depth isZero)
                                      if: [ writer writeReg: (lastValue number) ToReg: r Depth: d ]
-                                   else: [ "TODO" ] ]
-                  ifConstant: [ (lastValue depth isZero)
-                                     if: [ writer writeConst: lastValue constantValue ]
-                                   else: [ "TODO" ] ]
-                     ifStack: [ (lastValue depth isZero)
+                                   else: [ regAlloc withAllocatedRegister: [
+                                            "FIXME, XXX: This implementation is broken for d > 0"
+                                             :tmpReg | moveLastValueToReg: tmpReg.
+                                                       moveLastValueToReg: r Depth: d
+                                           ]
+                                         ]
+                              ]
+                  ifConstant: [ (d isZero)
+                                     if: [ writer writeConst: (lastValue constantValue) ToReg: r ]
+                                   else: [ regAlloc withAllocatedRegister: [
+                                             :tmpReg | moveLastValueToReg: tmpReg.
+                                                       moveLastValueToReg: r Depth: d
+                                           ]
+                                         ]
+                              ]
+                     ifStack: [ (d isZero)
                                      if: [ writer writePopReg: lastValue number ]
-                                   else: [ "TODO" ].
-                                loadRegister: r Depth: d ]
+                                   else: [ regAlloc withAllocatedRegister: [
+                                             :tmpReg | moveLastValueToReg: tmpReg.
+                                                       moveLastValueToReg: r Depth: d
+                                           ]
+                                         ]
+                              ].
+        lastValue <- registerValue: r Depth: d
     );
     moveLastValueToReg: r => moveLastValueToReg: r Depth: 0;
 
