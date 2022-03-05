@@ -135,6 +135,30 @@ class Parser:
     def parse_array(self, env):
         return ASTArray(self.parse_expressions(env, TokenType.RPAREN))
     
+    def parse_slot_decl(self, env):
+        return_type = self.parse_optional_type(env)
+        args = []
+        has_varargs = False
+        name = self.expect(TokenType.KEY).get_key()
+        #t = self.check(TokenType.KEY)
+        #if t:
+        #    name = t.get_key()
+        #else:
+        #    pass
+        if self.check(TokenType.LPAREN):
+            if not self.check(TokenType.RPAREN):
+                while True:
+                    if self.check(TokenType.ELLIPSIS):
+                        has_varargs = True
+                        self.expect(TokenType.RPAREN)
+                        break
+                    the_type = self.parse_optional_type(env)
+                    the_expr = self.parse_expression(env)
+                    args.append((the_type, the_expr))
+                    if self.check(TokenType.RPAREN): break
+                    self.expect(TokenType.SEPARATOR)
+        return return_type, name, args, has_varargs
+
     def parse_interface(self, env):
         parents = []
         slots = []
@@ -142,22 +166,7 @@ class Parser:
             if self.check(TokenType.WITH):
                 parents.append(self.parse_expression(env))
             else:
-                return_type = self.parse_optional_type(env)
-                name = self.expect(TokenType.KEY).get_key()
-                args = []
-                has_varargs = False
-                if self.check(TokenType.LPAREN):
-                    if not self.check(TokenType.RPAREN):
-                        while True:
-                            if self.check(TokenType.ELLIPSIS):
-                                has_varargs = True
-                                self.expect(TokenType.RPAREN)
-                                break
-                            the_type = self.parse_optional_type(env)
-                            the_expr = self.parse_expression(env)
-                            args.append((the_type, the_expr))
-                            if self.check(TokenType.RPAREN): break
-                            self.expect(TokenType.SEPARATOR)
+                return_type, name, args, has_varargs = self.parse_slot_decl(env)
                 slots.append(ASTInterfaceEntry(name, return_type, args, has_varargs))
             self.check(TokenType.SEPARATOR)
         return ASTInterface(parents, slots)
@@ -304,6 +313,36 @@ class Parser:
         else:
             t.fail()
             raise ParseException('Expected a token type \'' + str(token_type) + '\'!', t)
+    
+    def check_unary_ident(self):
+        t = self.check(TokenType.IDENTIFIER)
+        if not t: return False
+        name = t.get_text()
+        if not self._is_bin(name[-1]):
+            return name
+        else:
+            t.fail()
+            return False
+    
+    def check_binary_ident(self):
+        t = self.check(TokenType.IDENTIFIER)
+        if not t: return False
+        name = t.get_text()
+        if self._is_bin(name[-1]) and name[-1] != ':':
+            return name
+        else:
+            t.fail()
+            return False
+    
+    def check_nary_ident(self):
+        t = self.check(TokenType.IDENTIFIER)
+        if not t: return False
+        name = t.get_text()
+        if name[-1] == ':':
+            return name
+        else:
+            t.fail()
+            return False
 
     def parse(self, terminator=TokenType.EOF):
         env = ParseEnv()
