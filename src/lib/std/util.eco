@@ -59,8 +59,8 @@
         do: [ :v | (v equals: value) if: [ ^ true ] ].
       ^ false
     );
-    addElement: value => append: value;
-    "TODO: removeElement"
+    addElement: e => append: e;
+    removeElement: e => (find: e) yes: [ :i | remove: i ];
 };
 
 #=std/util: {
@@ -136,6 +136,11 @@
                 index to: (size - 2) do: [ :i | at: i put (at: i + 1) ].
                 size <- size - 1.
               ^ elem
+            );
+
+            find: element => (
+                forEach: [ :i, :v | (v is: element) if: [ ^ Yes: i ] ].
+              ^ No
             );
 
             writeOn: writer => (std util) WriteIterable: self On: writer;
