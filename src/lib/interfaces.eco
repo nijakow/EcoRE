@@ -62,7 +62,8 @@
         #'isEmpty',
         #'contains:'(element),
         #'addElement:'(element),
-        #'removeElement:'(element)
+        #'removeElement:'(element),
+        #'take'()
     ];
 
     IArray = #=IArray: %[

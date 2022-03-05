@@ -1,4 +1,21 @@
 
+#=lang/compiler/RegisterAllocator: {
+    freeSet, counter;
+
+    init => (
+        freeSet <- std util newSet.
+        counter <- 0.
+      ^ self
+    );
+
+    allocate => (
+        (freeSet isEmpty) if: [ allocateN: 1 ]
+                        else: [ freeSet take ]
+    );
+    allocateN: n => ( | c <- counter | counter <- counter + n. ^ c );
+    deallocate: r => freeSet addElement: r;
+},
+
 #=lang/compiler/Scope: {
     shared, parent_scope, bindings;
 
@@ -197,6 +214,7 @@
 
 #=lang/compiler: {
     Bytecodes = #<:lang/compiler/Bytecodes>;
+    RegisterAllocator = #<:lang/compiler/RegisterAllocator>;
     CodeWriter = #<:lang/compiler/CodeWriter>;
     Visitor = #<:lang/compiler/Visitor>;
     Compiler = #<:lang/compiler/Compiler>;
