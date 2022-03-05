@@ -16,49 +16,6 @@
     deallocate: r => freeSet addElement: r;
 },
 
-#=lang/compiler/Scope: {
-    shared, parent_scope, bindings;
-
-    initWithShared: s => (
-        shared <- s.
-      ^ initWithParent: self
-    );
-
-    initWithParent: p => (
-        shared <- p shared.
-        parent_scope <- p.
-        bindings <- std util newMap.
-      ^ self
-    );
-
-    createSubscope => (#<:lang/compiler/NormalScope> clone) initWithParent: self Lexical: getLexicalScope;
-
-    parentScope => parent_scope;
-    compiler => shared compiler;
-
-    bindVariable: varname WithInfo: info => bindings at: varname put: info;
-
-    findVariable: varname IfFound: found IfNotFound: notfound Depth: depth => (
-        bindings at: varname do: [ :info | ^ found value(info, depth) ].
-        (parentScope is: self) if: [
-          (shared lexicalParent) yes: [
-             :lex | lex findVariable: varname
-                             IfFound: found
-                          IfNotFound: notfound
-                               Depth: (depth + 1)
-          ] no: [ ^ notfound value ]
-        ].
-      ^ parentScope findVariable: varname IfFound: found IfNotFound: notfound Depth: depth
-    );
-
-    findVariable: varname IfFound: found IfNotFound: notfound => (
-        findVariable: varname IfFound: found IfNotFound: notfound Depth: 0
-    );
-
-    with inherited parent = #<:std/Clonable>;
-},
-
-
 #=lang/compiler/ValueType: {
     Register = {
         number, depth;
@@ -167,15 +124,54 @@
 #=lang/compiler/ScopeSharedInfo: {
     lexicalParent, compiler;
 
-    init => (
-        lexicalParent <- No.
-        "TODO: Initialize compiler"
+    initWithMaybeLexicalParent: ml => (
+        lexicalParent <- ml.
+        compiler <- #<:lang/compiler/Compiler> new.
       ^ self
     );
-    initWithLexicalParent: l => (
-        lexicalParent <- Yes: l.
-        "TODO: Initialize compiler"
+    initWithLexicalParent: l => initWithMaybeLexicalParent: (Yes: l);
+    init => initWithMaybeLexicalParent: No;
+
+    with inherited parent = #<:std/Clonable>;
+},
+
+#=lang/compiler/Scope: {
+    shared, parent_scope, bindings;
+
+    initWithShared: s => (
+        shared <- s.
+      ^ initWithParent: self
+    );
+
+    initWithParent: p => (
+        shared <- p shared.
+        parent_scope <- p.
+        bindings <- std util newMap.
       ^ self
+    );
+
+    createSubscope => (#<:lang/compiler/NormalScope> clone) initWithParent: self Lexical: getLexicalScope;
+
+    parentScope => parent_scope;
+    compiler => shared compiler;
+
+    bindVariable: varname WithInfo: info => bindings at: varname put: info;
+
+    findVariable: varname IfFound: found IfNotFound: notfound Depth: depth => (
+        bindings at: varname do: [ :info | ^ found value(info, depth) ].
+        (parentScope is: self) if: [
+          (shared lexicalParent) yes: [
+             :lex | lex findVariable: varname
+                             IfFound: found
+                          IfNotFound: notfound
+                               Depth: (depth + 1)
+          ] no: [ ^ notfound value ]
+        ].
+      ^ parentScope findVariable: varname IfFound: found IfNotFound: notfound Depth: depth
+    );
+
+    findVariable: varname IfFound: found IfNotFound: notfound => (
+        findVariable: varname IfFound: found IfNotFound: notfound Depth: 0
     );
 
     with inherited parent = #<:std/Clonable>;
