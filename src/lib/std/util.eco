@@ -61,6 +61,12 @@
     );
     addElement: e => append: e;
     removeElement: e => (find: e) yes: [ :i | remove: i ];
+    take => (
+        isEmpty if: [ invalidIndexError ].
+        | v <- first |
+        removeElement: v.
+      ^ v
+    );
 };
 
 #=std/util: {
