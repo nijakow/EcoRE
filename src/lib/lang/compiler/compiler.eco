@@ -23,7 +23,12 @@
     findVariable: varname IfFound: found IfNotFound: notfound Depth: depth => (
         bindings at: varname do: [ :info | ^ found value(info, depth) ].
         (getParentScope is: self) if: [
-          ^ (shared lexicalParent) findVariable: varname IfFound: found IfNotFound: notfound Depth: (depth + 1)
+          (shared lexicalParent) yes: [
+             :lex | lex findVariable: varname
+                             IfFound: found
+                          IfNotFound: notfound
+                               Depth: (depth + 1)
+          ] no: [ ^ notfound value ]
         ].
       ^ getParentScope findVariable: varname IfFound: found IfNotFound: notfound Depth: depth
     );
