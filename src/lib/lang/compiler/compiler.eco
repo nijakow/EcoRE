@@ -180,8 +180,16 @@
     pushBlockScope => scopes <- newBlockContextWithParent: scopes;
     popScope => scopes <- scopes getParentScope;
 
-    loadVariable: name IfNotPresent: block => "TODO";
-    storeVariable: name IfNotPresent: block => "TODO";
+    loadVariable: name IfNotPresent: block => (
+        scopes findVariable: name
+                    IfFound: [ :info, :depth | scopes compiler loadRegister: (info index) Depth: depth ]
+                 IfNotFound: block
+    );
+    storeVariable: name IfNotPresent: block => (
+        scopes findVariable: name
+                    IfFound: [ :info, :depth | scopes compiler storeRegister: (info index) Depth: depth ]
+                 IfNotFound: block
+    );
     storeVariable: name => storeVariable: name IfNotPresent: [];
 },
 
