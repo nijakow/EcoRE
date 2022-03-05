@@ -37,8 +37,9 @@
     >= other   => (self < other) not;
     isZero     => (self == 0);
     isNotZero  => isZero not;
-    isNegative => (self < 0);
+    isNegative => self < 0;
     isNotNegative => isNegative not;
+    isPositive => self > 0;
     inc        => self + 1;
     dec        => self - 1;
     negate     => (0 - self);
@@ -53,6 +54,17 @@
     to: upper do: body => for: (upper + 1) do: body;
     do: block => 0 for: self do: block;
     times: block => do: [ :i | block value ];
+    countUp: block => (
+        | i <- self |
+        [ block value(i). i <- i + 1 ] repeat
+    );
+    countDown: block => (
+        | i <- self |
+        [ i isPositive ] while: [
+            block value(i).
+            i <- i - 1
+        ]
+    );
     writeOn: writer => (
         |
             lib <- {
