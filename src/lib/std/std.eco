@@ -103,7 +103,7 @@
                     with inherited parent = #<:std/Clonable>;
                 }
             |
-        ^ (maybe clone) init: value
+          ^ (maybe clone) init: value
         );
 
         No => (
@@ -118,7 +118,7 @@
                     with inherited parent = #<:std/Clonable>;
                 }
             |
-        ^ (maybe clone)
+          ^ (maybe clone)
         );
     },
 
