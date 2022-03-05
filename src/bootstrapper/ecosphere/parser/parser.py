@@ -163,6 +163,10 @@ class Parser:
         return_type = self.parse_optional_type(env)
         args = []
         has_varargs = False
+        t = self.check_unary_ident()
+        if t:
+            args, has_varargs = self.parse_optional_argdefs(env)
+            return return_type, t.get_key(), args, has_varargs
         name = self.expect(TokenType.KEY).get_key()
         args, has_varargs = self.parse_optional_argdefs(env)
         return return_type, name, args, has_varargs
@@ -327,7 +331,7 @@ class Parser:
         if not t: return False
         name = t.get_text()
         if not self._is_bin(name[-1]):
-            return name
+            return t
         else:
             t.fail()
             return False
@@ -337,7 +341,7 @@ class Parser:
         if not t: return False
         name = t.get_text()
         if self._is_bin(name[-1]) and name[-1] != ':':
-            return name
+            return t
         else:
             t.fail()
             return False
@@ -347,7 +351,7 @@ class Parser:
         if not t: return False
         name = t.get_text()
         if name[-1] == ':':
-            return name
+            return t
         else:
             t.fail()
             return False
