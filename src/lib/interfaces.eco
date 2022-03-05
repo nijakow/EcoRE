@@ -4,6 +4,13 @@
 
 #=interfaces: {
 
+    IMaybe = #=IMaybe: %[
+        #'value'(),
+        #'yes:'(block),
+        #'no:'(block),
+        #'yes:no:'(yblock, nblock)
+    ];
+
     IBoolean = #=IBoolean: %[
         #'not',
         #'if:else:'(tblock, fblock),

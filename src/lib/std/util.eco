@@ -80,12 +80,12 @@
     );
 
     Stack = {
-      new => (std util Vector) new;
+      new => std util newVector;
       with inherited parent = #<:std/Clonable>;
     };
 
     Set = {
-      new => (std util Vector) new;
+      new => std util newVector;
       with inherited parent = #<:std/Clonable>;
     };
 
