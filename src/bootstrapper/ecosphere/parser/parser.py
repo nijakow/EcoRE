@@ -135,28 +135,36 @@ class Parser:
     def parse_array(self, env):
         return ASTArray(self.parse_expressions(env, TokenType.RPAREN))
     
+    def parse_argdef(self, env):
+        the_type = self.parse_optional_type(env)
+        the_expr = self.parse_expression(env)
+        return (the_type, the_expr)
+
+    def parse_argdefs(self, env):
+        args = []
+        has_varargs = False
+        if not self.check(TokenType.RPAREN):
+            while True:
+                if self.check(TokenType.ELLIPSIS):
+                    has_varargs = True
+                    self.expect(TokenType.RPAREN)
+                    break
+                args.append(self.parse_argdef(env))
+                if self.check(TokenType.RPAREN): break
+                self.expect(TokenType.SEPARATOR)
+        return args, has_varargs
+
+    def parse_optional_argdefs(self, env):
+        if self.check(TokenType.LPAREN):
+            return self.parse_argdefs(env)
+        return [], False
+
     def parse_slot_decl(self, env):
         return_type = self.parse_optional_type(env)
         args = []
         has_varargs = False
         name = self.expect(TokenType.KEY).get_key()
-        #t = self.check(TokenType.KEY)
-        #if t:
-        #    name = t.get_key()
-        #else:
-        #    pass
-        if self.check(TokenType.LPAREN):
-            if not self.check(TokenType.RPAREN):
-                while True:
-                    if self.check(TokenType.ELLIPSIS):
-                        has_varargs = True
-                        self.expect(TokenType.RPAREN)
-                        break
-                    the_type = self.parse_optional_type(env)
-                    the_expr = self.parse_expression(env)
-                    args.append((the_type, the_expr))
-                    if self.check(TokenType.RPAREN): break
-                    self.expect(TokenType.SEPARATOR)
+        args, has_varargs = self.parse_optional_argdefs(env)
         return return_type, name, args, has_varargs
 
     def parse_interface(self, env):
