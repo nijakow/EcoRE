@@ -55,8 +55,8 @@
 };
 
 #=std/util/StandardSetImpl: {
-    contains: value => (find: e) yes: [ :i | ^ true ] no: [ ^ false ];
-    addElement: e => append: e;
+    contains: value => (find: value) yes: [ :i | ^ true ] no: [ ^ false ];
+    addElement: e => (contains: e) unless: [ append: e ];
     removeElement: e => (find: e) yes: [ :i | remove: i ];
     take => (
         isEmpty if: [ invalidIndexError ].
@@ -136,7 +136,7 @@
 
             remove: index => (
                 | elem <- at: index |
-                index to: (size - 2) do: [ :i | at: i put (at: i + 1) ].
+                index to: (size - 2) do: [ :i | at: i put: (at: i + 1) ].
                 size <- size - 1.
               ^ elem
             );
