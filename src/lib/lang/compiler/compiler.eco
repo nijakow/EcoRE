@@ -20,6 +20,18 @@
 
     bindVariable: varname WithInfo: info => bindings at: varname put: info;
 
+    findVariable: varname IfFound: found IfNotFound: notfound Depth: depth => (
+        bindings at: varname do: [ :info | ^ found value(info, depth) ].
+        (getParentScope is: self) if: [
+          ^ (shared lexicalParent) findVariable: varname IfFound: found IfNotFound: notfound Depth: (depth + 1)
+        ].
+      ^ getParentScope findVariable: varname IfFound: found IfNotFound: notfound Depth: depth
+    );
+
+    findVariable: varname IfFound: found IfNotFound: notfound => (
+        findVariable: varname IfFound: found IfNotFound: notfound Depth: 0
+    );
+
     with inherited parent = #<:std/Clonable>;
 },
 
@@ -140,6 +152,8 @@
         lexical_parent_scope <- l.
       ^ self
     );
+
+    lexicalParent => lexical_parent_scope;
 
     with inherited parent = #<:std/Clonable>;
 },

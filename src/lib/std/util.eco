@@ -280,8 +280,10 @@
             forEach: block => values do: [ :v | block value(v first, v second) ];
             do: block => forEach: [ :k, :v | block value(k) ];
 
-            at: index ifNotPresent: block => ( forEach: [ :k, :v | (k == index) if: [ ^ v ] ]. ^ block value );
-            at: index default: def => at: index ifNotPresent: [ ^ def ];
+            at: index do: found else: notfound => ( forEach: [ :k, :v | (k == index) if: [ ^ found value(v) ] ]. ^ notfound value );
+            at: index do: found => at: index do: found else: [];
+            at: index else: notfound => at: index do: [ :v | ^ v ] else: notfound;
+            at: index else: def => at: index else: [ ^ def ];
             at: index => at: index default: false;
 
             at: index put: value => (
