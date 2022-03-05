@@ -88,37 +88,39 @@
         }
     },
 
-    Yes: value => (
-        |
-            maybe <- {
-                value;
+    with maybe = {
+        Yes: value => (
+            |
+                maybe <- {
+                    value;
 
-                with inherited trait = {
-                    init: v => value <- v;
-                    yes: block => block value(value);
-                    no: block => self;
-                    yes: yblock no: nblock => yblock value(value);
-                };
-                with inherited parent = #<:std/Clonable>;
-            }
-        |
-      ^ (maybe clone) init: value
-    );
+                    with inherited trait = {
+                        init: v => value <- v;
+                        yes: block => block value(value);
+                        no: block => self;
+                        yes: yblock no: nblock => yblock value(value);
+                    };
+                    with inherited parent = #<:std/Clonable>;
+                }
+            |
+        ^ (maybe clone) init: value
+        );
 
-    No => (
-        |
-            maybe <- {
-                with inherited trait = {
-                    value => false;
-                    yes: block => self;
-                    no: block => block value;
-                    yes: yblock no: nblock => nblock value;
-                };
-                with inherited parent = #<:std/Clonable>;
-            }
-        |
-      ^ (maybe clone)
-    );
+        No => (
+            |
+                maybe <- {
+                    with inherited trait = {
+                        value => false;
+                        yes: block => self;
+                        no: block => block value;
+                        yes: yblock no: nblock => nblock value;
+                    };
+                    with inherited parent = #<:std/Clonable>;
+                }
+            |
+        ^ (maybe clone)
+        );
+    },
 
     io = #<:std/io>;
     util = #<:std/util>;
