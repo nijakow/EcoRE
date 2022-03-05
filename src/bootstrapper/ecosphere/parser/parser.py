@@ -161,12 +161,14 @@ class Parser:
 
     def parse_slot_decl(self, env):
         return_type = self.parse_optional_type(env)
-        args = []
         has_varargs = False
         t = self.check_unary_ident()
         if t:
             args, has_varargs = self.parse_optional_argdefs(env)
             return return_type, t.get_key(), args, has_varargs
+        t = self.check_binary_ident()
+        if t:
+            return return_type, t.get_key(), [self.parse_argdef(env)], False
         name = self.expect(TokenType.KEY).get_key()
         args, has_varargs = self.parse_optional_argdefs(env)
         return return_type, name, args, has_varargs
