@@ -28,9 +28,15 @@
     );
 
     asList => (
-        | v <- (std util List) new |
+        | v <- std util newList |
         do: [ :value | v append: value ].
       ^ v
+    );
+
+    asBlob => (
+        | b <- std util newBlob: size |
+        forEach: [ :i, :v | b at: i put: v ].
+      ^ b
     );
 },
 

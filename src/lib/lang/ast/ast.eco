@@ -12,7 +12,8 @@
                 compiler <- (lang compiler ScopedCompiler) new,
                 visitor  <- ((lang compiler Visitor) clone) initWithCompiler: compiler
             |
-            acceptVisitor: visitor
+            acceptVisitor: visitor.
+          ^ compiler finish
         );
         isSelfAST => false;
     };

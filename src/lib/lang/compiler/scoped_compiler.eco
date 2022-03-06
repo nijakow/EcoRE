@@ -23,7 +23,7 @@
         loadClosure: c
     );
 
-    finish => "TODO";
+    finish => localCompiler finish;
 
     loadSelf => localCompiler loadSelf;
     loadConstant: c => localCompiler loadConstant: c;

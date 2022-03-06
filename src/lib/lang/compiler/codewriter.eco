@@ -9,6 +9,10 @@
       ^ self
     );
 
+    finish => (
+        #'ecosphere.ecore.object.code.new'(bytes asBlob, constants asArray, closures asArray)
+    );
+
     writeU8: b => ( bytes append: b. io out << b. io out newline );
     writeU16: s => (
         writeU8: (s bitAnd: 0xff).
