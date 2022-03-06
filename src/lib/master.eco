@@ -49,11 +49,14 @@
             |
                 reader <- (io in readLine) lens: (lang tokenizer StringReader),
                 tok    <- reader lens: (lang tokenizer Tokenizer),
-                parser <- tok lens: (lang parser Parser)
+                parser <- tok lens: (lang parser Parser),
+                expr   <- parser parseExpression
             |
             
-            io out << parser parseExpression.
+            io out << expr.
             io out newline.
+
+            expr compileStandalone.
         ] repeat
     );
 

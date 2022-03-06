@@ -40,9 +40,12 @@
         initWithNumber: n => initWithNumber: n Depth: 0;
 
         ifRegister: r ifConstant: c ifStack: s => r value;
+
+        with inherited parent = #<:std/Clonable>;
     },
     Stack = {
         ifRegister: r ifConstant: c ifStack: s => s value;
+        with inherited parent = #<:std/Clonable>;
     },
     Constant = {
         constantValue;
@@ -53,6 +56,7 @@
         );
 
         ifRegister: r ifConstant: c ifStack: s => c value;
+        with inherited parent = #<:std/Clonable>;
     }
 },
 
@@ -216,13 +220,13 @@
     scopes;
 
     init => (
-        scopes <- newScope;
+        scopes <- newScope.
       ^ self
     );
 
     private newBlockContextWithParent: p => (#<:lang/compiler/ScopeSharedInfo> clone) initWithLexicalParent: l;
-    private newBlockContext => (#<:lang/compiler/ScopeSharedInfo> clone) init;
-    private newScopeFromBlockContext: bc => (#<:lang/compiler/BlockScope> clone) initWithShared: bc;
+    private newBlockContext => #<:lang/compiler/ScopeSharedInfo> new;
+    private newScopeFromBlockContext: bc => (#<:lang/compiler/Scope> clone) initWithShared: bc;
     private newScope => newScopeFromBlockContext: newBlockContext;
 
     pushNormalScope => scopes <- scopes createSubscope;
@@ -240,6 +244,8 @@
                  IfNotFound: block
     );
     storeVariable: name => storeVariable: name IfNotPresent: [];
+
+    with inherited parent = #<:std/Clonable>;
 },
 
 
@@ -249,4 +255,5 @@
     CodeWriter = #<:lang/compiler/CodeWriter>;
     Visitor = #<:lang/compiler/Visitor>;
     Compiler = #<:lang/compiler/Compiler>;
+    ScopedCompiler = #<:lang/compiler/ScopedCompiler>;
 }
