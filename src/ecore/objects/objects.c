@@ -2,6 +2,7 @@
 
 #include "base/object.h"
 #include "molecule/molecule.h"
+#include "io/directory.h"
 #include "io/port.h"
 #include "misc/array/array.h"
 #include "misc/blob/blob.h"
@@ -28,10 +29,12 @@ void Eco_Objects_Init()
     Eco_Closure_Init();
     Eco_Array_Init();
     Eco_Port_Init();
+    Eco_Directory_Init();
 }
 
 void Eco_Objects_Terminate()
 {
+    Eco_Directory_Terminate();
     Eco_Port_Terminate();
     Eco_Array_Terminate();
     Eco_Closure_Terminate();

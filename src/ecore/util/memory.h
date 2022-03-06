@@ -3,4 +3,6 @@
 
 void Eco_Memcpy(void* dst, void* src, unsigned long size);
 
+unsigned int Eco_Strlen(char* str);
+
 #endif

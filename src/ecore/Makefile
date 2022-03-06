@@ -21,6 +21,7 @@ objects/base/object.c \
 objects/molecule/molecule.c \
 objects/molecule/object_payload.c \
 objects/molecule/object_slots.c \
+objects/io/directory.c \
 objects/io/port.c \
 objects/misc/array/array.c \
 objects/misc/blob/blob.c \
