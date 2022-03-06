@@ -41,13 +41,22 @@ void Eco_Blob_Terminate()
 
 struct Eco_Blob* Eco_Blob_New(unsigned int element_count)
 {
+    /*
+     * In this case, the blob size is fixed (no swapout, no realloc),
+     * so we can overallocate and make blob->bytes point to blob->payload.
+     */
     struct Eco_Blob*  blob;
 
     blob = Eco_Object_New(Eco_Blob_TYPE, sizeof(struct Eco_Blob) + sizeof(char) * element_count);
 
     if (blob != NULL)
     {
+        /*
+         * The blob is not initialized by default. This could leak information,
+         * but we don't worry about that now (TODO, XXX).
+         */
         blob->size = element_count;
+        blob->bytes = blob->payload;
     }
 
     return blob;

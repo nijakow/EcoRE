@@ -9,7 +9,8 @@ struct Eco_Blob
 {
     struct Eco_Object  _;
     unsigned int       size;
-    char               bytes[];
+    char*              bytes;
+    char               payload[];
 };
 
 struct Eco_Blob* Eco_Blob_New(unsigned int);
