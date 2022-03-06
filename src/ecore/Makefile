@@ -23,6 +23,7 @@ objects/molecule/object_payload.c \
 objects/molecule/object_slots.c \
 objects/io/port.c \
 objects/misc/array/array.c \
+objects/misc/blob/blob.c \
 objects/misc/key/key.c \
 objects/misc/string/string.c \
 objects/pseudo/character.c \
@@ -32,6 +33,7 @@ objects/vm/code/closure.c \
 objects/vm/interface/interface.c \
 vm/builtins/builtins.c \
 vm/builtins/core/array.c \
+vm/builtins/core/blob.c \
 vm/builtins/core/clone.c \
 vm/builtins/core/flow.c \
 vm/builtins/core/init.c \
@@ -75,6 +77,7 @@ io/econnect/reader/builtins/objects/code.c \
 io/econnect/reader/builtins/id/id.c \
 io/econnect/reader/builtins/flow/flow.c \
 io/econnect/file/file.c \
+util/memory.c \
 util/utf8.c \
 main.c
 

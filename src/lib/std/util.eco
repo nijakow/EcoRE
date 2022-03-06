@@ -70,6 +70,7 @@
     Array(size) => #'ecosphere.ecore.object.array.new'(size);
 
     newArray: size => #'ecosphere.ecore.object.array.new'(size);
+    newBlob:  size => #'ecosphere.ecore.object.blob.new'(size);
     newVector      => (#<:std/util> Vector) new;
     newStack       => (#<:std/util> Stack) new;
     newSet         => (#<:std/util> Set) new;

@@ -200,6 +200,15 @@
     with inherited parent = #<:std/Clonable>;
 },
 
+#=init/blob_proxy: {
+    size => #'ecosphere.ecore.object.blob.size'(self);
+    isEmpty => size isZero;
+    
+    writeOn: writer => writer << '<blob>';
+
+    with inherited parent = #<:std/Clonable>;
+},
+
 #=init/port_proxy: {
     readByte => (
         | b <- #'ecosphere.ecore.object.port.read_byte'(self) |

@@ -9,6 +9,7 @@ bool Eco_VM_Builtin_SetFalse(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_SetProxy(struct Eco_Fiber*, unsigned int);
 
 bool Eco_VM_Builtin_GetArrayType(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_GetBlobType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetIntegerType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetCharacterType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetBlockType(struct Eco_Fiber*, unsigned int);

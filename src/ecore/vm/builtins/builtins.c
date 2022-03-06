@@ -3,6 +3,7 @@
 #include "builtin.h"
 
 #include "core/array.h"
+#include "core/blob.h"
 #include "core/clone.h"
 #include "core/flow.h"
 #include "core/init.h"
@@ -78,6 +79,9 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.array.at_put", Eco_VM_Builtin_ArrayAtPut);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.array.to_string", Eco_VM_Builtin_ArrayToString);
 
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.new", Eco_VM_Builtin_BlobNew);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.size", Eco_VM_Builtin_BlobSize);
+
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.new", Eco_VM_Builtin_NewPort);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.read_byte", Eco_VM_Builtin_PortReadByte);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.flush_output", Eco_VM_Builtin_PortFlushOutput);
@@ -99,6 +103,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_proxy", Eco_VM_Builtin_SetProxy);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.array_type", Eco_VM_Builtin_GetArrayType);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.blob_type", Eco_VM_Builtin_GetBlobType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.integer_type", Eco_VM_Builtin_GetIntegerType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.character_type", Eco_VM_Builtin_GetCharacterType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.block_type", Eco_VM_Builtin_GetBlockType);
