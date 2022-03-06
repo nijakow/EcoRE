@@ -77,7 +77,10 @@ void Eco_Code_Del(struct Eco_Code* code)
 
 struct Eco_Code* Eco_Code_ConstructFromEco(struct Eco_Blob* bytecodes,
                                            struct Eco_Array* constants,
-                                           struct Eco_Array* code_instances)
+                                           struct Eco_Array* code_instances,
+                                           unsigned int register_count,
+                                           unsigned int fixed_args,
+                                           bool has_varargs)
 {
     struct Eco_Code*  code;
     unsigned int      index;
@@ -105,6 +108,9 @@ struct Eco_Code* Eco_Code_ConstructFromEco(struct Eco_Blob* bytecodes,
             code_instance               = (struct Eco_Code*) Eco_Any_AsPointer(Eco_Array_At(code_instances, index));
             code->code_instances[index] = code_instance;
         }
+        code->register_count = register_count;
+        code->arg_count      = fixed_args;
+        code->has_varargs    = has_varargs;
     }
 
     return code;

@@ -11,7 +11,10 @@
     );
     init => initWithWriter: (#<:lang/compiler/CodeWriter> new);
 
-    finish => ( returnWithDepth: 0. writer finish );
+    finishWithArgs: args Varargs: varargs => (
+        returnWithDepth: 0.
+      ^ writer finishWithArgs: args Varargs: varargs
+    );
 
     lastValue: nv => (dropLastValue. lastValue <- nv);
     dropLastValue => lastValue isStack if: [ writer writeDrop ];

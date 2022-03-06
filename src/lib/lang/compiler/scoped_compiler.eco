@@ -3,7 +3,7 @@
     scopes;
 
     init => (
-        scopes <- newScope.
+        scopes     <- newScope.
       ^ self
     );
 
@@ -23,7 +23,7 @@
         loadClosure: c
     );
 
-    finish => localCompiler finish;
+    finish => scopes finish;
 
     loadSelf => localCompiler loadSelf;
     loadConstant: c => localCompiler loadConstant: c;

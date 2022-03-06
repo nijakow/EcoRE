@@ -1,17 +1,25 @@
 
 #=lang/compiler/CodeWriter: {
-    bytes, constants, closures;
+    bytes, constants, closures, maxRegister;
 
     init => (
-        bytes     <- std util newVector.
-        constants <- std util newVector.
-        closures  <- std util newVector.
+        bytes       <- std util newVector.
+        constants   <- std util newVector.
+        closures    <- std util newVector.
+        maxRegister <- 0.
       ^ self
     );
 
-    finish => (
-        #'ecosphere.ecore.object.code.new'(bytes asBlob, constants asArray, closures asArray)
+    finishWithArgs: args Varargs: varargs => (
+        #'ecosphere.ecore.object.code.new'(bytes asBlob,
+                                           constants asArray,
+                                           closures asArray,
+                                           maxRegister,
+                                           args,
+                                           varargs if: 1 else: 0)
     );
+
+    private introduceRegister: r => maxRegister <- maxRegister max: r;
 
     writeU8: b => ( bytes append: b. io out << b. io out newline );
     writeU16: s => (
@@ -34,6 +42,7 @@
     writeNOOP => writeU8: Bytecodes NOOP;
 
     writeConst: c ToReg: r => (
+        introduceRegister: r.
         writeU8: Bytecodes CONST.
         writeU8: r.
         addConstant: c
@@ -45,17 +54,20 @@
     );
 
     writeClosure: c ToReg: r => (
+        introduceRegister: r.
         writeU8: Bytecodes CLOSURE.
         writeU8: r.
         addClosure: c
     );
 
     writePushReg: r => (
+        introduceRegister: r.
         writeU8: Bytecodes PUSH.
         writeU8: r
     );
 
     writePopReg: r => (
+        introduceRegister: r.
         writeU8: Bytecodes POP.
         writeU8: r
     );
@@ -65,6 +77,8 @@
     writeDup => writeU8: Bytecodes DUP;
 
     writeReg: src ToReg: dst => (
+        introduceRegister: src.
+        introduceRegister: dst.
         writeU8: Bytecodes R2R.
         writeU8: dst.
         writeU8: src
@@ -73,7 +87,8 @@
     writeReg: src ToReg: dst Depth: depth => (
         (depth isZero)
               if: [ writeReg: src ToReg: dst ]
-            else: [ writeU8: Bytecodes L2R.
+            else: [ introduceRegister: src.
+                    writeU8: Bytecodes L2R.
                     writeU8: dst.
                     writeU8: depth.
                     writeU8: src             ]
@@ -82,7 +97,8 @@
     writeReg: src Depth: depth ToReg: dst => (
         (depth isZero)
               if: [ writeReg: src ToReg: dst ]
-            else: [ writeU8: Bytecodes R2L.
+            else: [ introduceRegister: dst.
+                    writeU8: Bytecodes R2L.
                     writeU8: dst.
                     writeU8: src.
                     writeU8: depth           ]
@@ -117,8 +133,6 @@
         writeU8: Bytecodes RETURN.
         writeU8: depth
     );
-
-    "TODO: Closure"
 
     Bytecodes = #<:lang/compiler/Bytecodes>;
     with inherited parent = #<:std/Clonable>;

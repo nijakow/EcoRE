@@ -1,16 +1,21 @@
 
 #=lang/compiler/ScopeSharedInfo: {
-    lexicalParent, compiler;
+    lexicalParent, compiler, argCount, hasVarargs;
 
     initWithMaybeLexicalParent: ml => (
         lexicalParent <- ml.
-        compiler <- #<:lang/compiler/Compiler> new.
+        compiler      <- #<:lang/compiler/Compiler> new.
+        argCount      <- 0.
+        hasVarargs    <- false.
       ^ self
     );
     initWithLexicalParent: l => initWithMaybeLexicalParent: (Yes: l);
     init => initWithMaybeLexicalParent: No;
 
     depth => lexicalParent yes: [ :p | p depth + 1 ] no: [ 0 ];
+
+    addParameter => argCount <- argCount + 1;
+    enableVarargs => hasVarargs <- true;
 
     with inherited parent = #<:std/Clonable>;
 },
@@ -47,8 +52,15 @@
     compiler => shared compiler;
     depth => shared depth;
 
-    addParameter: varname => bindVariable: varname;
-    enableVarargs => "TODO";
+
+    finish => compiler finishWithArgs: (shared argCount)
+                              Varargs: (shared hasVarargs);
+
+    addParameter: varname => (
+      shared addParameter.
+      bindVariable: varname
+    );
+    enableVarargs => shared enableVarargs;
 
     bindVariable: varname => (
       |

@@ -59,7 +59,8 @@
             io out newline.
             io out commit.
 
-            expr compileStandalone.
+            io out << (expr compileStandalone).
+            io out newline.
         ] repeat
     );
 

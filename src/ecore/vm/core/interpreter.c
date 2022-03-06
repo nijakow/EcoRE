@@ -210,6 +210,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                            NULL,
                            Eco_Fiber_Nth(fiber, 1),
                            Eco_Fiber_Nth(fiber, 1))) {
+                Eco_Log_Warning("Assign failed: %s\n", ((struct Eco_Key*) message.key)->name);
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ASSIGNFAILED);
                 goto error;
             }

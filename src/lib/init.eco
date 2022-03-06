@@ -13,11 +13,13 @@
         | v <- self value |
         v if: [ ^ v ] else: [ ^ b value ]
     );
+    writeOn: writer => writer << '<block>';
     with inherited parent = #<:std/Clonable>;
 },
 
 #=init/code_proxy: {
     execute(...) => #'ecosphere.ecore.object.code.value'(...);
+    writeOn: writer => writer << '<code>';
     with inherited parent = #<:std/Clonable>;
 },
 
@@ -40,6 +42,8 @@
     <= other   => [ self < other ] or: [ self == other ];
     > other    => (self <= other) not;
     >= other   => (self < other) not;
+    min: other => (self < other) if: [ self  ] else: [ other ];
+    max: other => (self < other) if: [ other ] else: [ self  ];
     isZero     => (self == 0);
     isNotZero  => isZero not;
     isNegative => self < 0;
