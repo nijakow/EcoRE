@@ -218,10 +218,10 @@
       ^ self
     );
 
-    newBlockContextWithParent: p => (#<:lang/compiler/ScopeSharedInfo> clone) initWithLexicalParent: l;
-    newBlockContext => (#<:lang/compiler/ScopeSharedInfo> clone) init;
-    newScopeFromBlockContext: bc => (#<:lang/compiler/BlockScope> clone) initWithShared: bc;
-    newScope => newScopeFromBlockContext: newBlockContext;
+    private newBlockContextWithParent: p => (#<:lang/compiler/ScopeSharedInfo> clone) initWithLexicalParent: l;
+    private newBlockContext => (#<:lang/compiler/ScopeSharedInfo> clone) init;
+    private newScopeFromBlockContext: bc => (#<:lang/compiler/BlockScope> clone) initWithShared: bc;
+    private newScope => newScopeFromBlockContext: newBlockContext;
 
     pushNormalScope => scopes <- scopes createSubscope;
     pushBlockScope => scopes <- newBlockContextWithParent: scopes;

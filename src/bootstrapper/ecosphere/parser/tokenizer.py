@@ -33,6 +33,8 @@ class TokenType(enum.Enum):
     AS = enum.auto()
     WITH = enum.auto()
     INHERITED = enum.auto()
+    PRIVATE = enum.auto()
+    FINAL = enum.auto()
     OWN = enum.auto()
 
 
@@ -227,6 +229,8 @@ class Tokenizer:
         elif c == 'as': return Token(self, TokenType.AS)
         elif c == 'with': return Token(self, TokenType.WITH)
         elif c == 'inherited': return Token(self, TokenType.INHERITED)
+        elif c == 'private': return Token(self, TokenType.PRIVATE)
+        elif c == 'final': return Token(self, TokenType.FINAL)
         elif c == 'own': return Token(self, TokenType.OWN)
         elif c == '=': return Token(self, TokenType.ASSIGNMENT)
         else: return IdentifierToken(self, c)
