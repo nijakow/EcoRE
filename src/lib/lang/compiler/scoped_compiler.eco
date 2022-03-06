@@ -37,8 +37,12 @@
     push => localCompiler push;
 
     sendWithMessage: msg ArgCount: args Varargs: varargs => (
-      localCompiler sendWithMessage: msg ArgCount: args Varargs: varargs
+        localCompiler sendWithMessage: msg ArgCount: args Varargs: varargs
     );
+    builtinWithMessage: msg ArgCount: args Varargs: varargs => (
+        localCompiler builtinWithMessage: msg ArgCount: args Varargs: varargs
+    );
+    assignWithKey: key => localCompiler assignWithKey: key;
 
     returnWithDepth: depth => localCompiler returnWithDepth: depth;
     fullReturn => returnWithDepth: scopes depth;
@@ -50,17 +54,21 @@
     loadVariable: name IfPresent: present IfNotPresent: notpresent => (
         scopes findVariable: name
                     IfFound: [ :info, :depth |
-                                scopes compiler loadRegister: (info index) Depth: depth.
+                                localCompiler loadRegister: (info index) Depth: depth.
                                 present value
                              ]
                  IfNotFound: notpresent
     );
-    storeVariable: name IfNotPresent: block => (
+    storeVariable: name IfPresent: present IfNotPresent: notpresent => (
         scopes findVariable: name
-                    IfFound: [ :info, :depth | localCompiler moveLastValueToReg: (info index) Depth: depth ]
-                 IfNotFound: block
+                    IfFound: [ :info, :depth |
+                                localCompiler moveLastValueToReg: (info index) Depth: depth.
+                                present value
+                             ]
+                 IfNotFound: notpresent
     );
-    storeVariable: name => storeVariable: name IfNotPresent: [];
+    storeVariable: name => storeVariable: name IfPresent: [] IfNotPresent: [];
+    isLocal: name => scopes findVariable: name IfFound: [ :info, :depth | ^ true ] IfNotFound: [ ^ false ];
 
     with inherited parent = #<:std/Clonable>;
 }

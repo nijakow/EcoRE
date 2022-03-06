@@ -15,6 +15,7 @@
             acceptVisitor: visitor.
           ^ compiler finish
         );
+        evaluateWithSelf: ourSelf => compileStandalone execute(ourSelf);
         isSelfAST => false;
     };
 

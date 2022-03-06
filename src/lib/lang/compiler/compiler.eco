@@ -110,7 +110,7 @@
 
     assignWithKey: key => (
         writer writeAssign: key.
-        lastValue: stackTopValue
+        lastValue <- stackTopValue
     );
 
     returnWithDepth: depth => (

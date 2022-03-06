@@ -1,4 +1,42 @@
 
+#=lang/compiler/AssignmentVisitor: {
+    compiler, rhs, visitor;
+
+    initWithCompiler: _compiler RHS: _rhs Visitor: v => (
+       compiler <- _compiler.
+       rhs      <- _rhs.
+       visitor  <- v.
+      ^ self
+    );
+
+    visitUnknown: ast => ( io out << 'Visiting unknown AST for assignment'. io out newline. io out commit );
+
+    visitSend: ast => (
+        rhs acceptVisitor: visitor.
+        (ast subject isSelfAST) if: [
+            (compiler isLocal: ast message) if: [
+                compiler storeVariable: ast message
+                             IfPresent: [ ^ ]
+                          IfNotPresent: [
+                              io out << 'Local bound and not bound at the same time!'.
+                              io out newline.
+                              io out commit.
+                            ^
+                          ]
+            ]
+        ].
+        ast subject acceptVisitor: visitor.
+        compiler push.
+        rhs acceptVisitor: visitor.
+        compiler push.
+        compiler assignWithKey: ast message.
+        visitUnknown: self
+    );
+
+    with inherited parent = #<:std/Clonable>;
+},
+
+
 #=lang/compiler/Visitor: {
     compiler;
 
@@ -6,8 +44,6 @@
        compiler <- _compiler.
       ^ self
     );
-
-    EvaluateAST(ast) => "TODO";
 
     visitUnknown: ast => ( io out << 'Visiting unknown AST'. io out newline. io out commit );
     
@@ -75,9 +111,14 @@
 
     visitAssignment: ast => (
         "TODO: Create a special visitor for this!"
+        | v <- (#<:lang/compiler/AssignmentVisitor> clone) initWithCompiler: compiler RHS: ast rhs Visitor: self |
+        ast lhs acceptVisitor: v
     );
 
-    visitAs: ast => "TODO";
+    visitAs: ast => (
+        "TODO"
+        lhs acceptVisitor: self
+    );
 
     "TODO: Implements interface lang/ast/IVisitor"
     with inherited parent = #<:std/Clonable>;
