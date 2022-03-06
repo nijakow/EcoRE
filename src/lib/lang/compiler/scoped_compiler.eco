@@ -4,6 +4,7 @@
 
     init => (
         scopes     <- newScope.
+        addParameter: #'self'.
       ^ self
     );
 
@@ -15,7 +16,10 @@
     private localCompiler => scopes compiler;
 
     pushNormalScope => scopes <- scopes createSubscope;
-    pushBlockScope => scopes <- newScopeFromBlockContext: (newBlockContextWithParent: scopes);
+    pushBlockScope => (
+        scopes <- newScopeFromBlockContext: (newBlockContextWithParent: scopes).
+        addParameter: #'self'
+    );
     popScope => scopes <- scopes parentScope;
     popScopeAndLoadClosure => (
         | c <- finish |

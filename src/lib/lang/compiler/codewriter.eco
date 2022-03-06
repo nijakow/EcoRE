@@ -14,7 +14,7 @@
         #'ecosphere.ecore.object.code.new'(bytes asBlob,
                                            constants asArray,
                                            closures asArray,
-                                           maxRegister,
+                                           maxRegister + 1,
                                            args,
                                            varargs if: 1 else: 0)
     );

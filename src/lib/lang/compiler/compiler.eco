@@ -5,7 +5,6 @@
     initWithWriter: w => (
         writer <- w.
         regAlloc <- #<:lang/compiler/RegisterAllocator> new.
-        regAlloc allocateN: 1.  "For self"
         lastValue <- selfValue.
       ^ self
     );

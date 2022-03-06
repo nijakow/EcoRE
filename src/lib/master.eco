@@ -59,7 +59,13 @@
             io out newline.
             io out commit.
 
-            io out << (expr compileStandalone).
+            | code <- expr compileStandalone |
+            io out commit.
+
+            io out << (code execute({
+                writeOn: writer => writer << '<session>';
+                with inherited parent = #<:std/Clonable>;
+            })).
             io out newline.
         ] repeat
     );
