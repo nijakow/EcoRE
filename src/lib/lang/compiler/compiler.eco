@@ -75,6 +75,7 @@
     initWithWriter: w => (
         writer <- w.
         regAlloc <- #<:lang/compiler/RegisterAllocator> new.
+        regAlloc allocateN: 1.  "For self"
         lastValue <- selfValue.
       ^ self
     );
@@ -117,7 +118,7 @@
                                          ]
                               ]
                      ifStack: [ (d isZero)
-                                     if: [ writer writePopReg: lastValue number ]
+                                     if: [ writer writePopReg: r ]
                                    else: [ regAlloc withAllocatedRegister: [
                                              :tmpReg | moveLastValueToReg: tmpReg.
                                                        moveLastValueToReg: r Depth: d
@@ -186,6 +187,17 @@
     with inherited parent = #<:std/Clonable>;
 },
 
+#=lang/compiler/VariableInfo: {
+    index;
+
+    initWithIndex: i => (
+        index <- i.
+      ^ self
+    );
+
+    with inherited parent = #<:std/Clonable>;
+},
+
 #=lang/compiler/Scope: {
     shared, parent_scope, bindings;
 
@@ -207,7 +219,13 @@
     compiler => shared compiler;
     depth => shared depth;
 
-    bindVariable: varname WithInfo: info => bindings at: varname put: info;
+    bindVariable: varname => (
+      |
+          r    <- compiler regAlloc allocate,
+          info <- (#<:lang/compiler/VariableInfo> clone) initWithIndex: r
+      |
+      bindings at: varname put: info
+    );
 
     findVariable: varname IfFound: found IfNotFound: notfound Depth: depth => (
         bindings at: varname do: [ :info | ^ found value(info, depth) ].
@@ -260,6 +278,7 @@
     returnWithDepth: depth => localCompiler returnWithDepth: depth;
     fullReturn => returnWithDepth: scopes depth;
 
+    bindVariable: name => scopes bindVariable: name;
     loadVariable: name IfNotPresent: block => (
         scopes findVariable: name
                     IfFound: [ :info, :depth | scopes compiler loadRegister: (info index) Depth: depth ]
@@ -267,7 +286,7 @@
     );
     storeVariable: name IfNotPresent: block => (
         scopes findVariable: name
-                    IfFound: [ :info, :depth | scopes compiler storeRegister: (info index) Depth: depth ]
+                    IfFound: [ :info, :depth | localCompiler moveLastValueToReg: (info index) Depth: depth ]
                  IfNotFound: block
     );
     storeVariable: name => storeVariable: name IfNotPresent: [];

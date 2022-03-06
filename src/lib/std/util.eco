@@ -272,6 +272,8 @@
                 first: f. second: s.
             );
         };
+
+        with inherited parent = #<:std/Clonable>;
     },
 
     Map = {

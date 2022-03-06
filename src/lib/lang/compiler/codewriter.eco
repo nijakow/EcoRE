@@ -54,17 +54,21 @@
     );
 
     writeReg: src ToReg: dst Depth: depth => (
-        writeU8: Bytecodes L2R.
-        writeU8: dst.
-        writeU8: depth.
-        writeU8: src
+        (depth isZero)
+              if: [ writeReg: src ToReg: dst ]
+            else: [ writeU8: Bytecodes L2R.
+                    writeU8: dst.
+                    writeU8: depth.
+                    writeU8: src             ]
     );
 
     writeReg: src Depth: depth ToReg: dst => (
-        writeU8: Bytecodes R2L.
-        writeU8: dst.
-        writeU8: src.
-        writeU8: depth
+        (depth isZero)
+              if: [ writeReg: src ToReg: dst ]
+            else: [ writeU8: Bytecodes R2L.
+                    writeU8: dst.
+                    writeU8: src.
+                    writeU8: depth           ]
     );
 
     writeBuiltin: key Args: args Varargs: varargs => (
