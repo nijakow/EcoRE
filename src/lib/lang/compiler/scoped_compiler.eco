@@ -21,9 +21,10 @@
         addParameter: #'self'
     );
     popScope => scopes <- scopes parentScope;
-    popScopeAndLoadClosure => (
+    popBlockScope => (
         | c <- finish |
-        popScope.
+        scopes lexicalParentScope yes: [ :lp | scopes <- lp ]
+                                   no: [ "TODO: Error" ].
         loadClosure: c
     );
 

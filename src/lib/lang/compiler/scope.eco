@@ -49,6 +49,7 @@
     createSubscope => (#<:lang/compiler/Scope> clone) initWithParent: self;
 
     parentScope => parent_scope;
+    lexicalParentScope => shared lexicalParent;
     compiler => shared compiler;
     depth => shared depth;
 
