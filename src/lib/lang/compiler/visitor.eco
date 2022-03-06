@@ -2,14 +2,14 @@
 #=lang/compiler/Visitor: {
     compiler;
 
-    init: _compiler => (
+    initWithCompiler: _compiler => (
         compiler <- _compiler.
       ^ self
     );
 
     EvaluateAST(ast) => "TODO";
 
-    visitUnknown: ast => "TODO: Error";
+    visitUnknown: ast => ( io out << 'Visiting unknown AST'. io out newline. io out commit );
     
     visitSelf: ast => compiler loadSelf;
     

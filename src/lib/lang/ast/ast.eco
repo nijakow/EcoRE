@@ -7,7 +7,13 @@
     AST_SharedBehavior = #=lang/ast/AST_SharedBehavior: {
         acceptVisitor: visitor => visitor visitUnknown: self;
         writeOn: writer => writer << 'AST';
-        compileStandalone => (lang compiler ScopedCompiler) new;
+        compileStandalone => (
+            |
+                compiler <- (lang compiler ScopedCompiler) new,
+                visitor  <- ((lang compiler Visitor) clone) initWithCompiler: compiler
+            |
+            acceptVisitor: visitor
+        );
     };
 
     ASTFlags = {
