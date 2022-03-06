@@ -23,6 +23,11 @@
                                          ]
                               ]
                   ifConstant: [ writer writePushConst: lastValue constantValue ]
+                   ifClosure: [ regAlloc withAllocatedRegister: [
+                                  :r | moveLastValueToReg: r.
+                                       pushLastValue
+                                ]
+                              ]
                      ifStack: [].
         lastValue <- selfValue
     );
@@ -47,6 +52,14 @@
                                            ]
                                          ]
                               ]
+                   ifClosure: [ (d isZero)
+                                     if: [ writer writeClosure: (lastValue closureValue) ToReg: r ]
+                                   else: [ regAlloc withAllocatedRegister: [
+                                             :tmpReg | moveLastValueToReg: tmpReg.
+                                                       moveLastValueToReg: r Depth: d
+                                           ]
+                                         ]
+                              ]
                      ifStack: [ (d isZero)
                                      if: [ writer writePopReg: r ]
                                    else: [ regAlloc withAllocatedRegister: [
@@ -61,11 +74,13 @@
 
     selfValue => registerValue: 0 Depth: 0;
     constantValue: c => (#<:lang/compiler/ValueType> Constant) clone initWithValue: c;
+    closureValue: c => (#<:lang/compiler/ValueType> Closure) clone initWithValue: c;
     registerValue: n Depth: d => (#<:lang/compiler/ValueType> Register) clone initWithNumber: n Depth: d;
     stackTopValue => (#<:lang/compiler/ValueType> Stack) clone;
 
     loadSelf => loadRegister: 0;
     loadConstant: c => lastValue: (constantValue: c);
+    loadClosure: c => lastValue: (closureValue: c);
     loadRegister: r Depth: d => lastValue: (registerValue: r Depth: d);
     loadRegister: r => loadRegister: r Depth: 0;
 

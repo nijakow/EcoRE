@@ -32,7 +32,7 @@
         ast getArgs do: [ :arg | compiler addParameter: (arg getName) ].
         ast hasVarargs if: [ compiler enableVarargs ].
         ast getBody acceptVisitor: self.
-        compiler popScope
+        compiler popScopeAndLoadClosure
     );
 
     visitBuiltin: ast => (

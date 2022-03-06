@@ -17,5 +17,5 @@
     ASSIGN = 14,
     AS = 15,
     RETURN = 16,
-    MAKE_CLOSURE = 17,
+    CLOSURE = 17,
 }

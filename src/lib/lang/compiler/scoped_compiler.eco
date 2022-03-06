@@ -7,7 +7,7 @@
       ^ self
     );
 
-    private newBlockContextWithParent: p => (#<:lang/compiler/ScopeSharedInfo> clone) initWithLexicalParent: l;
+    private newBlockContextWithParent: p => (#<:lang/compiler/ScopeSharedInfo> clone) initWithLexicalParent: p;
     private newBlockContext => #<:lang/compiler/ScopeSharedInfo> new;
     private newScopeFromBlockContext: bc => (#<:lang/compiler/Scope> clone) initWithShared: bc;
     private newScope => newScopeFromBlockContext: newBlockContext;
@@ -15,11 +15,19 @@
     private localCompiler => scopes compiler;
 
     pushNormalScope => scopes <- scopes createSubscope;
-    pushBlockScope => scopes <- newBlockContextWithParent: scopes;
+    pushBlockScope => scopes <- newScopeFromBlockContext: (newBlockContextWithParent: scopes);
     popScope => scopes <- scopes parentScope;
+    popScopeAndLoadClosure => (
+        | c <- finish |
+        popScope.
+        loadClosure: c
+    );
+
+    finish => "TODO";
 
     loadSelf => localCompiler loadSelf;
     loadConstant: c => localCompiler loadConstant: c;
+    loadClosure: c => localCompiler loadClosure: c;
 
     push => localCompiler push;
 
@@ -29,6 +37,9 @@
 
     returnWithDepth: depth => localCompiler returnWithDepth: depth;
     fullReturn => returnWithDepth: scopes depth;
+
+    addParameter: name => scopes addParameter: name;
+    enableVarargs => scopes enableVarargs;
 
     bindVariable: name => scopes bindVariable: name;
     loadVariable: name IfPresent: present IfNotPresent: notpresent => (

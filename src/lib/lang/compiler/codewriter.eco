@@ -1,10 +1,11 @@
 
 #=lang/compiler/CodeWriter: {
-    bytes, constants;
+    bytes, constants, closures;
 
     init => (
         bytes     <- std util newVector.
         constants <- std util newVector.
+        closures  <- std util newVector.
       ^ self
     );
 
@@ -19,6 +20,12 @@
              no: [ writeU16: constants size.
                    constants append: c       ]
     );
+    addClosure: c => (
+        (closures find: c)
+            yes: [ :i | writeU16: i         ]
+             no: [ writeU16: constants size.
+                   closures append: c       ]
+    );
 
     writeNOOP => writeU8: Bytecodes NOOP;
 
@@ -31,6 +38,12 @@
     writePushConst: c => (
         writeU8: Bytecodes PUSHC.
         addConstant: c
+    );
+
+    writeClosure: c ToReg: r => (
+        writeU8: Bytecodes CLOSURE.
+        writeU8: r.
+        addClosure: c
     );
 
     writePushReg: r => (

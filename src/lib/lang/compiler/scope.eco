@@ -47,6 +47,9 @@
     compiler => shared compiler;
     depth => shared depth;
 
+    addParameter: varname => bindVariable: varname;
+    enableVarargs => "TODO";
+
     bindVariable: varname => (
       |
           r    <- compiler regAlloc allocate,

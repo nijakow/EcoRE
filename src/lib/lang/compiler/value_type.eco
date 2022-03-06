@@ -15,7 +15,8 @@
         isRegister => true;
         isConstant => false;
         isStack => false;
-        ifRegister: r ifConstant: c ifStack: s => r value;
+        isClosure => false;
+        ifRegister: r ifConstant: c ifClosure: cl ifStack: s => r value;
 
         with inherited parent = #<:std/Clonable>;
     },
@@ -23,7 +24,8 @@
         isRegister => false;
         isConstant => false;
         isStack => true;
-        ifRegister: r ifConstant: c ifStack: s => s value;
+        isClosure => false;
+        ifRegister: r ifConstant: c ifClosure: cl ifStack: s => s value;
         with inherited parent = #<:std/Clonable>;
     },
     Constant = {
@@ -37,7 +39,23 @@
         isRegister => false;
         isConstant => true;
         isStack => false;
-        ifRegister: r ifConstant: c ifStack: s => c value;
+        isClosure => false;
+        ifRegister: r ifConstant: c ifClosure: cl ifStack: s => c value;
+        with inherited parent = #<:std/Clonable>;
+    },
+    Closure = {
+        closureValue;
+
+        initWithValue: v => (
+            closureValue <- v.
+          ^ self
+        );
+
+        isRegister => false;
+        isConstant => false;
+        isStack => false;
+        isClosure => true;
+        ifRegister: r ifConstant: c ifClosure: cl ifStack: s => cl value;
         with inherited parent = #<:std/Clonable>;
     }
 }
