@@ -53,3 +53,21 @@ bool Eco_VM_Builtin_BlobAt(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Push(fiber, &index);
     return true;
 }
+
+bool Eco_VM_Builtin_BlobAtPutS8(struct Eco_Fiber* fiber, unsigned int args)
+{
+    /*
+     * TODO: Type checks
+     */
+    Eco_Any  index;
+    Eco_Any  value;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
+        return false;
+    Eco_Fiber_Pop(fiber, &value);
+    Eco_Fiber_Pop(fiber, &index);
+    Eco_Blob_AtPutS8(((struct Eco_Blob*) Eco_Any_AsPointer(Eco_Fiber_Peek(fiber))),
+                     Eco_Any_AsInteger(&index),
+                     Eco_Any_AsInteger(&value));
+    return true;
+}

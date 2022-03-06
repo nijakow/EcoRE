@@ -34,6 +34,12 @@ static inline bool Eco_Blob_At(struct Eco_Blob* blob, unsigned int index, char *
     return true;
 }
 
+static inline bool Eco_Blob_AtPutS8(struct Eco_Blob* blob, unsigned int index, char value)
+{
+    *Eco_Blob_At_Unchecked(blob, index) = value;
+    return true;
+}
+
 void Eco_Blob_Init();
 void Eco_Blob_Terminate();
 

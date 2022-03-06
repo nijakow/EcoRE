@@ -82,6 +82,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.new", Eco_VM_Builtin_BlobNew);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.size", Eco_VM_Builtin_BlobSize);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.at", Eco_VM_Builtin_BlobAt);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.at_put_s8", Eco_VM_Builtin_BlobAtPutS8);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.new", Eco_VM_Builtin_NewPort);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.read_byte", Eco_VM_Builtin_PortReadByte);
