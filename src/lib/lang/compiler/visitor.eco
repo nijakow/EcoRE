@@ -46,7 +46,7 @@
         ast subject acceptVisitor: self.
         compiler push.
         args do: [ :arg | arg acceptVisitor: self. compiler push ].
-        compiler sendWithMessage: #'value' ArgCount: args size Varargs: ast getVarargs
+        compiler sendWithMessage: #'value' ArgCount: args size + 1 Varargs: ast getVarargs
     );
 
     visitSend: ast => (
