@@ -6,7 +6,6 @@
 #include "core/blob.h"
 #include "core/clone.h"
 #include "core/code.h"
-#include "core/directory.h"
 #include "core/flow.h"
 #include "core/init.h"
 #include "core/io.h"
@@ -97,8 +96,6 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.write_byte", Eco_VM_Builtin_PortWriteByte);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.write_char", Eco_VM_Builtin_PortWriteChar);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.notify_me", Eco_VM_Builtin_PortNotifyMe);
-
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.directory.open", Eco_VM_Builtin_Directory_Open);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.get_entry_info", Eco_VM_Builtin_InterfaceGetEntryInfo);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.add_entry", Eco_VM_Builtin_InterfaceAddEntry);

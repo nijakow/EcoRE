@@ -21,7 +21,6 @@ objects/base/object.c \
 objects/molecule/molecule.c \
 objects/molecule/object_payload.c \
 objects/molecule/object_slots.c \
-objects/io/directory.c \
 objects/io/port.c \
 objects/misc/array/array.c \
 objects/misc/blob/blob.c \
@@ -37,7 +36,6 @@ vm/builtins/core/array.c \
 vm/builtins/core/blob.c \
 vm/builtins/core/clone.c \
 vm/builtins/core/code.c \
-vm/builtins/core/directory.c \
 vm/builtins/core/flow.c \
 vm/builtins/core/init.c \
 vm/builtins/core/io.c \

@@ -240,6 +240,8 @@ class Parser:
     
     def parse_send(self, env, ast: ASTExpression, allow_followups) -> ASTExpression:
         t = self.check_unary_ident()
+        if not t:
+            t = self.check(TokenType.KEY)
         if t:
             args, varargs = self.parse_optional_arglist(env)
             return ASTSend(ast, t.get_key(), args, varargs)
