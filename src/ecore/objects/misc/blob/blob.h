@@ -27,6 +27,12 @@ static inline char* Eco_Blob_At_Unchecked(struct Eco_Blob* blob, unsigned int in
     return &blob->bytes[index];
 }
 
+static inline bool Eco_Blob_At(struct Eco_Blob* blob, unsigned int index, char *dst)
+{
+    *dst = *Eco_Blob_At_Unchecked(blob, index);
+    return true;
+}
+
 void Eco_Blob_Init();
 void Eco_Blob_Terminate();
 

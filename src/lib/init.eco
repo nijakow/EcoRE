@@ -196,6 +196,7 @@
 
     with inherited iterations = #<:std/util/StandardListIterations>;
     with inherited conversions = #<:std/util/StandardListConversions>;
+    with inherited access = #<:std/util/StandardListAccess>;
     
     with inherited parent = #<:std/Clonable>;
 },
@@ -203,6 +204,11 @@
 #=init/blob_proxy: {
     size => #'ecosphere.ecore.object.blob.size'(self);
     isEmpty => size isZero;
+    at: index => #'ecosphere.ecore.object.blob.at'(self, index);
+
+    with inherited iterations = #<:std/util/StandardListIterations>;
+    with inherited conversions = #<:std/util/StandardListConversions>;
+    with inherited access = #<:std/util/StandardListAccess>;
     
     writeOn: writer => writer << '<blob: ' << size << '>';
 
