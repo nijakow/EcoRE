@@ -13,7 +13,7 @@
     
     visitSelf: ast => compiler loadSelf;
     
-    visitConstant: ast => compiler loadConstant: EvaluateAST(ast);
+    visitConstant: ast => compiler loadConstant: ast constantValue;
 
     visitArray: ast => visitConstant: ast;
 

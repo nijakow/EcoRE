@@ -100,14 +100,14 @@
     };
 
     ASTConstant = {
-        constant;
+        constantValue;
 
-        initWithValue: value => (
-            constant <- value.
+        initWithValue: v => (
+            constantValue <- v.
           ^ self
         );
         acceptVisitor: visitor => visitor visitConstant: self;
-        writeOn: writer => writer << 'ASTConstant(' << constant << ')';
+        writeOn: writer => writer << 'ASTConstant(' << constantValue << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     };

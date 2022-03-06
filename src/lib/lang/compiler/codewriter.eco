@@ -11,6 +11,11 @@
     );
 
     finishWithArgs: args Varargs: varargs => (
+        io out << 'Dumping newly created code object...'. io out newline.
+        io out << bytes. io out newline.
+        io out << constants. io out newline.
+        io out << closures. io out newline.
+        io out commit.
         #'ecosphere.ecore.object.code.new'(bytes asBlob,
                                            constants asArray,
                                            closures asArray,
@@ -21,7 +26,7 @@
 
     private introduceRegister: r => maxRegister <- maxRegister max: r;
 
-    writeU8: b => ( bytes append: b. io out << b. io out newline );
+    writeU8: b => bytes append: b;
     writeU16: s => (
         writeU8: (s bitAnd: 0xff).
         writeU8: ((s rshift: 8) bitAnd: 0xff)
