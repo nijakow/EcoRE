@@ -55,6 +55,7 @@
             
             io out << expr.
             io out newline.
+            io out commit.
 
             expr compileStandalone.
         ] repeat
