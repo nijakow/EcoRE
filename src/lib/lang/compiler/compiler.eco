@@ -75,7 +75,7 @@
     initWithWriter: w => (
         writer <- w.
         regAlloc <- #<:lang/compiler/RegisterAllocator> new.
-        lastValue <- registerValue: 0 Depth: 0.
+        lastValue <- selfValue.
       ^ self
     );
     init => initWithWriter: (#<:lang/compiler/CodeWriter> new);
@@ -93,7 +93,7 @@
                               ]
                   ifConstant: [ writer writePushConst: lastValue constantValue ]
                      ifStack: [].
-        lastValue <- stackTopValue
+        lastValue <- selfValue
     );
     moveLastValueToReg: r Depth: d => (
         lastValue ifRegister: [ (lastValue depth isZero)
@@ -128,6 +128,7 @@
     );
     moveLastValueToReg: r => moveLastValueToReg: r Depth: 0;
 
+    selfValue => registerValue: 0 Depth: 0;
     constantValue: c => (#<:lang/compiler/ValueType> Constant) clone initWithValue: c;
     registerValue: n Depth: d => (#<:lang/compiler/ValueType> Register) clone initWithNumber: n Depth: d;
     stackTopValue => (#<:lang/compiler/ValueType> Stack) clone;
@@ -142,7 +143,7 @@
 
     builtinWithMessage: msg ArgCount: args Varargs: varargs => (
         writer writeBuiltin: msg Args: args Varargs: varargs.
-        lastValue: stackTopValue
+        lastValue <- stackTopValue
     );
     builtinWithMessage: msg ArgCount: args => (
         builtinWithMessage: msg ArgCount: args Varargs: false
@@ -150,7 +151,7 @@
 
     sendWithMessage: msg ArgCount: args Varargs: varargs => (
         writer writeSend: msg Args: args Varargs: varargs.
-        lastValue: stackTopValue
+        lastValue <- stackTopValue
     );
     sendWithMessage: msg ArgCount: args => (
         sendWithMessage: msg ArgCount: args Varargs: false
@@ -248,7 +249,7 @@
     popScope => scopes <- scopes parentScope;
 
     loadSelf => localCompiler loadSelf;
-    loadConstant: c => localCompiler loadConstant;
+    loadConstant: c => localCompiler loadConstant: c;
 
     push => localCompiler push;
 

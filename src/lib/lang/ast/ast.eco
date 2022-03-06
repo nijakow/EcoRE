@@ -274,14 +274,14 @@
     };
 
     ASTReturn = {
-        value;
+        returnValue;
 
         initWithValue: _value => (
-            value <- _value.
+            returnValue <- _value.
           ^ self
         );
         acceptVisitor: visitor => visitor visitReturn: self;
-        writeOn: writer => writer << 'ASTReturn(' << value << ')';
+        writeOn: writer => writer << 'ASTReturn(' << returnValue << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     };

@@ -54,10 +54,13 @@
         ast subject acceptVisitor: self.
         compiler push.
         args do: [ :arg | arg acceptVisitor: self. compiler push ].
-        compiler sendWithMessage: ast getMessage ArgCount: args size Varargs: ast getVarargs
+        compiler sendWithMessage: ast getMessage ArgCount: args size + 1 Varargs: ast getVarargs
     );
 
-    visitReturn: ast => compiler fullReturn;
+    visitReturn: ast => (
+        ast returnValue acceptVisitor: self.
+        compiler fullReturn
+    );
 
     visitVariableDeclaration: ast => (
         compiler bindVariable: ast getName.
