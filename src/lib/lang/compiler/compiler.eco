@@ -39,11 +39,17 @@
 
         initWithNumber: n => initWithNumber: n Depth: 0;
 
+        isRegister => true;
+        isConstant => false;
+        isStack => false;
         ifRegister: r ifConstant: c ifStack: s => r value;
 
         with inherited parent = #<:std/Clonable>;
     },
     Stack = {
+        isRegister => false;
+        isConstant => false;
+        isStack => true;
         ifRegister: r ifConstant: c ifStack: s => s value;
         with inherited parent = #<:std/Clonable>;
     },
@@ -55,6 +61,9 @@
           ^ self
         );
 
+        isRegister => false;
+        isConstant => true;
+        isStack => false;
         ifRegister: r ifConstant: c ifStack: s => c value;
         with inherited parent = #<:std/Clonable>;
     }
@@ -229,9 +238,14 @@
     private newScopeFromBlockContext: bc => (#<:lang/compiler/Scope> clone) initWithShared: bc;
     private newScope => newScopeFromBlockContext: newBlockContext;
 
+    private localCompiler => scopes compiler;
+
     pushNormalScope => scopes <- scopes createSubscope;
     pushBlockScope => scopes <- newBlockContextWithParent: scopes;
     popScope => scopes <- scopes parentScope;
+
+    loadSelf => localCompiler loadSelf;
+    loadConstant: c => localCompiler loadConstant;
 
     loadVariable: name IfNotPresent: block => (
         scopes findVariable: name

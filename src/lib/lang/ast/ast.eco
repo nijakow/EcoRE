@@ -90,6 +90,7 @@
 
     ASTSelf = {
         new => self;
+        acceptVisitor: visitor => visitor visitSelf: self;
         writeOn: writer => writer << 'self';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
@@ -102,6 +103,7 @@
             constant <- value.
           ^ self
         );
+        acceptVisitor: visitor => visitor visitConstant: self;
         writeOn: writer => writer << 'ASTConstant(' << constant << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
@@ -114,6 +116,7 @@
             exprs <- _exprs.
           ^ self
         );
+        acceptVisitor: visitor => visitor visitArray: self;
         writeOn: writer => writer << 'ASTArray(' << exprs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
@@ -128,6 +131,7 @@
           ^ self
         );
 
+        acceptVisitor: visitor => visitor visitInterface: self;
         writeOn: writer => writer << 'ASTInterface(' << parents << ', ' << entries << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
@@ -141,6 +145,7 @@
           ^ self
         );
 
+        acceptVisitor: visitor => visitor visitMolecule: self;
         writeOn: writer => writer << 'ASTMolecule(' << slots << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
@@ -158,6 +163,7 @@
         getName => name;
         getArgs => args asArray;
         getVarargs => varargs;
+        acceptVisitor: visitor => visitor visitBuiltin: self;
         writeOn: writer => writer << 'ASTBuiltin(' << name << ', ' << args << ', ' << varargs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
@@ -175,6 +181,7 @@
         getSubject => subject;
         getArgs => args asArray;
         getVarargs => varargs;
+        acceptVisitor: visitor => visitor visitCall: self;
         writeOn: writer => writer << 'ASTCall(' << subject << ', ' << args << ', ' << varargs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
@@ -194,6 +201,7 @@
         getMessage => message;
         getArgs => args asArray;
         getVarargs => varargs;
+        acceptVisitor: visitor => visitor visitSend: self;
         writeOn: writer => writer << 'ASTSend(' << subject << ', ' << message << ', ' << args << ', ' << varargs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
@@ -207,6 +215,7 @@
             rhs <- _rhs.
           ^ self
         );
+        acceptVisitor: visitor => visitor visitAssignment: self;
         writeOn: writer => writer << 'ASTAssignment(' << lhs << ', ' << rhs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
@@ -226,6 +235,7 @@
         getName => name;
         getValue => value;
         getFollowup => followup;
+        acceptVisitor: visitor => visitor visitVariableDeclaration: self;
         writeOn: writer => writer << 'ASTVariableDeclaration(' << type << ', ' << name << ', ' << value << ', ' << followup << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
@@ -239,6 +249,7 @@
           ^ self
         );
         getExprs => exprs asArray;
+        acceptVisitor: visitor => visitor visitCompound: self;
         writeOn: writer => writer << 'ASTCompound(' << exprs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
@@ -256,6 +267,7 @@
         getArgs => args asArray;
         hasVarargs => varargs;
         getBody => body;
+        acceptVisitor: visitor => visitor visitBlock: self;
         writeOn: writer => writer << 'ASTBlock(' << args << ', ' << varargs << ', ' << body << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
@@ -268,6 +280,7 @@
             value <- _value.
           ^ self
         );
+        acceptVisitor: visitor => visitor visitReturn: self;
         writeOn: writer => writer << 'ASTReturn(' << value << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
@@ -281,6 +294,7 @@
             rhs <- _rhs.
           ^ self
         );
+        acceptVisitor: visitor => visitor visitAs: self;
         writeOn: writer => writer << 'ASTAs(' << lhs << ', ' << rhs << ')';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
