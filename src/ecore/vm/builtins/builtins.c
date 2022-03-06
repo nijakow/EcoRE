@@ -5,6 +5,7 @@
 #include "core/array.h"
 #include "core/blob.h"
 #include "core/clone.h"
+#include "core/code.h"
 #include "core/flow.h"
 #include "core/init.h"
 #include "core/io.h"
@@ -48,6 +49,9 @@ void Eco_VM_Builtins_Init()
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.flow.value", Eco_VM_Builtin_Value);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.flow.reset", Eco_VM_Builtin_Reset);
+
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.code.new", Eco_VM_Builtin_Code_New);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.code.value", Eco_VM_Builtin_Code_Value);
     
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add_integers", Eco_VM_Builtin_AddIntegers);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add", Eco_VM_Builtin_Add);
@@ -108,6 +112,7 @@ void Eco_VM_Builtins_Init()
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.array_type", Eco_VM_Builtin_GetArrayType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.blob_type", Eco_VM_Builtin_GetBlobType);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.code_type", Eco_VM_Builtin_GetCodeType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.integer_type", Eco_VM_Builtin_GetIntegerType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.character_type", Eco_VM_Builtin_GetCharacterType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.block_type", Eco_VM_Builtin_GetBlockType);

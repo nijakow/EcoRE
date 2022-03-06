@@ -9,6 +9,7 @@
  */
 extern struct Eco_Type*  Eco_Array_TYPE;
 extern struct Eco_Type*  Eco_Blob_TYPE;
+extern struct Eco_Type*  Eco_Code_TYPE;
 extern struct Eco_Type*  Eco_Integer_TYPE;
 extern struct Eco_Type*  Eco_Character_TYPE;
 extern struct Eco_Type*  Eco_Closure_TYPE;
@@ -70,6 +71,17 @@ bool Eco_VM_Builtin_GetBlobType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     Eco_Any_AssignPointer(&value, (struct Eco_Object*) Eco_Blob_TYPE);
+    Eco_Fiber_Push(fiber, &value);
+    return true;
+}
+
+bool Eco_VM_Builtin_GetCodeType(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  value;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
+        return false;
+    Eco_Any_AssignPointer(&value, (struct Eco_Object*) Eco_Code_TYPE);
     Eco_Fiber_Push(fiber, &value);
     return true;
 }

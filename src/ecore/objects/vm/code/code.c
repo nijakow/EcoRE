@@ -14,8 +14,7 @@
  */
 
 static struct Eco_TypeCore Eco_Code_TYPECORE;
-static struct Eco_Type*    Eco_Code_TYPE;
-
+       struct Eco_Type*    Eco_Code_TYPE;
 
 void Eco_Code_Init()
 {
@@ -32,7 +31,6 @@ void Eco_Code_Terminate()
 {
     Eco_TypeCore_Destroy(&Eco_Code_TYPECORE);
 }
-
 
 
 /*

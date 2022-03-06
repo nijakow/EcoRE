@@ -16,6 +16,11 @@
     with inherited parent = #<:std/Clonable>;
 },
 
+#=init/code_proxy: {
+    execute(...) => #'ecosphere.ecore.object.code.value'(...);
+    with inherited parent = #<:std/Clonable>;
+},
+
 #=init/integer_proxy: {
     isInt      => true;
     + other    => #'ecosphere.ecore.math.add'(self, other);
