@@ -129,7 +129,7 @@
 
             sb <- sb asString.
 
-            "TODO: Number parsing"
+            sb parseInt yes: [ :v | ^ newTokenWithType: TokenType NUMBER Payload: v ].
 
             (sb equals: '')          if: [ ^ newTokenWithType: TokenType EOF        ].
             (sb equals: 'self')      if: [ ^ newTokenWithType: TokenType SELF       ].
