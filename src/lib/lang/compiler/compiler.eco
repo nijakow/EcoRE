@@ -149,7 +149,7 @@
     );
 
     sendWithMessage: msg ArgCount: args Varargs: varargs => (
-        writer writeSend: msg Args: args varargs: varargs
+        writer writeSend: msg Args: args Varargs: varargs.
         lastValue: stackTopValue
     );
     sendWithMessage: msg ArgCount: args => (
@@ -249,6 +249,12 @@
 
     loadSelf => localCompiler loadSelf;
     loadConstant: c => localCompiler loadConstant;
+
+    push => localCompiler push;
+
+    sendWithMessage: msg ArgCount: args Varargs: varargs => (
+      localCompiler sendWithMessage: msg ArgCount: args Varargs: varargs
+    );
 
     returnWithDepth: depth => localCompiler returnWithDepth: depth;
     fullReturn => returnWithDepth: scopes depth;

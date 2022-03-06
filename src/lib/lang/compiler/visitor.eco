@@ -3,7 +3,7 @@
     compiler;
 
     initWithCompiler: _compiler => (
-        compiler <- _compiler.
+       compiler <- _compiler.
       ^ self
     );
 
@@ -43,7 +43,7 @@
 
     visitCall: ast => (
         | args <- ast getArgs |
-        getSubject acceptVisitor: self.
+        ast subject acceptVisitor: self.
         compiler push.
         args do: [ :arg | arg acceptVisitor: self. compiler push ].
         compiler sendWithMessage: #'value' ArgCount: args size Varargs: ast getVarargs
@@ -51,7 +51,7 @@
 
     visitSend: ast => (
         | args <- ast getArgs |
-        getSubject acceptVisitor: self.
+        ast subject acceptVisitor: self.
         compiler push.
         args do: [ :arg | arg acceptVisitor: self. compiler push ].
         compiler sendWithMessage: ast getMessage ArgCount: args size Varargs: ast getVarargs
