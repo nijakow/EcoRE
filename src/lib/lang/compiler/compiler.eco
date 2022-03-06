@@ -1,14 +1,15 @@
 
 #=lang/compiler/Compiler: {
-    writer, regAlloc, lastValue;
+    writer, depth, regAlloc, lastValue;
 
-    initWithWriter: w => (
-        writer <- w.
-        regAlloc <- #<:lang/compiler/RegisterAllocator> new.
+    initWithWriter: w Depth: d => (
+        writer    <- w.
+        depth     <- d.
+        regAlloc  <- #<:lang/compiler/RegisterAllocator> new.
         lastValue <- selfValue.
       ^ self
     );
-    init => initWithWriter: (#<:lang/compiler/CodeWriter> new);
+    initWithDepth: d => initWithWriter: (#<:lang/compiler/CodeWriter> new) Depth: d;
 
     finishWithArgs: args Varargs: varargs => (
         returnWithDepth: 0.
@@ -82,7 +83,7 @@
     registerValue: n Depth: d => (#<:lang/compiler/ValueType> Register) clone initWithNumber: n Depth: d;
     stackTopValue => (#<:lang/compiler/ValueType> Stack) clone;
 
-    loadSelf => loadRegister: 0;
+    loadSelf => lastValue: selfValue;
     loadConstant: c => lastValue: (constantValue: c);
     loadClosure: c => lastValue: (closureValue: c);
     loadRegister: r Depth: d => lastValue: (registerValue: r Depth: d);

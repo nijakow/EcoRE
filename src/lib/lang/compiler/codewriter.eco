@@ -15,6 +15,7 @@
         io out << bytes. io out newline.
         io out << constants. io out newline.
         io out << closures. io out newline.
+        io out << 'Registers: ' << (maxRegister + 1) << ' Args: ' << args << ' Varargs: ' << varargs. io out newline.
         io out commit.
         #'ecosphere.ecore.object.code.new'(bytes asBlob,
                                            constants asArray,

@@ -4,7 +4,7 @@
 
     initWithMaybeLexicalParent: ml => (
         lexicalParent <- ml.
-        compiler      <- #<:lang/compiler/Compiler> new.
+        compiler      <- (#<:lang/compiler/Compiler> clone) initWithDepth: depth.
         argCount      <- 0.
         hasVarargs    <- false.
       ^ self
