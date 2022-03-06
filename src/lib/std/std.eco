@@ -99,6 +99,7 @@
                         yes: block => block value(value);
                         no: block => self;
                         yes: yblock no: nblock => yblock value(value);
+                        writeOn: writer => writer << 'Yes: ' << value;
                     };
                     with inherited parent = #<:std/Clonable>;
                 }
@@ -114,6 +115,7 @@
                         yes: block => self;
                         no: block => block value;
                         yes: yblock no: nblock => nblock value;
+                        writeOn: writer => writer << 'No';
                     };
                     with inherited parent = #<:std/Clonable>;
                 }

@@ -175,12 +175,16 @@
       ^ v
     );
     parseInt => (
-        | v <- 0 |
-        do: [ :c |
-            ([ (c asInt) >= (#\0 asInt) ] and: [ (c asInt) <= (#\9 asInt) ]) unless: [ ^ No ].
-            v <- (v * 10) + ((c asInt) - (#\0 asInt))
+        | v <- 0, sign <- 1 |
+        (size isZero) if: [ ^ No ].
+        forEach: [ :i, :c |
+            (c == #\-) if: [ (i isZero) if: [ sign <- -1 ] else: [ ^ No ] ]
+                     else: [
+                ([ (c asInt) >= (#\0 asInt) ] and: [ (c asInt) <= (#\9 asInt) ]) unless: [ ^ No ].
+                v <- (v * 10) + ((c asInt) - (#\0 asInt))
+            ]
         ].
-        Yes: v
+        Yes: (v * sign)
     );
     writeOn: writer => do: [ :c | writer << c ];
     asKey => #'ecosphere.ecore.object.string.as_key'(self);
