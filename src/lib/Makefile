@@ -14,9 +14,14 @@ lang/lang.eco \
 lang/ast/ast.eco \
 lang/ast/construction.eco \
 lang/ast/visitor.eco \
+lang/compiler/_.eco \
 lang/compiler/bytecodes.eco \
 lang/compiler/codewriter.eco \
 lang/compiler/compiler.eco \
+lang/compiler/regalloc.eco \
+lang/compiler/scope.eco \
+lang/compiler/scoped_compiler.eco \
+lang/compiler/value_type.eco \
 lang/compiler/visitor.eco \
 lang/parser/parts/objects/interface.eco \
 lang/parser/parts/objects/molecule.eco \

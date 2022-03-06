@@ -1,0 +1,9 @@
+
+#=lang/compiler: {
+    Bytecodes = #<:lang/compiler/Bytecodes>;
+    RegisterAllocator = #<:lang/compiler/RegisterAllocator>;
+    CodeWriter = #<:lang/compiler/CodeWriter>;
+    Visitor = #<:lang/compiler/Visitor>;
+    Compiler = #<:lang/compiler/Compiler>;
+    ScopedCompiler = #<:lang/compiler/ScopedCompiler>;
+}

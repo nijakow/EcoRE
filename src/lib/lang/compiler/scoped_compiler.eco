@@ -1,0 +1,50 @@
+
+#=lang/compiler/ScopedCompiler: {
+    scopes;
+
+    init => (
+        scopes <- newScope.
+      ^ self
+    );
+
+    private newBlockContextWithParent: p => (#<:lang/compiler/ScopeSharedInfo> clone) initWithLexicalParent: l;
+    private newBlockContext => #<:lang/compiler/ScopeSharedInfo> new;
+    private newScopeFromBlockContext: bc => (#<:lang/compiler/Scope> clone) initWithShared: bc;
+    private newScope => newScopeFromBlockContext: newBlockContext;
+
+    private localCompiler => scopes compiler;
+
+    pushNormalScope => scopes <- scopes createSubscope;
+    pushBlockScope => scopes <- newBlockContextWithParent: scopes;
+    popScope => scopes <- scopes parentScope;
+
+    loadSelf => localCompiler loadSelf;
+    loadConstant: c => localCompiler loadConstant: c;
+
+    push => localCompiler push;
+
+    sendWithMessage: msg ArgCount: args Varargs: varargs => (
+      localCompiler sendWithMessage: msg ArgCount: args Varargs: varargs
+    );
+
+    returnWithDepth: depth => localCompiler returnWithDepth: depth;
+    fullReturn => returnWithDepth: scopes depth;
+
+    bindVariable: name => scopes bindVariable: name;
+    loadVariable: name IfPresent: present IfNotPresent: notpresent => (
+        scopes findVariable: name
+                    IfFound: [ :info, :depth |
+                                scopes compiler loadRegister: (info index) Depth: depth.
+                                present value
+                             ]
+                 IfNotFound: notpresent
+    );
+    storeVariable: name IfNotPresent: block => (
+        scopes findVariable: name
+                    IfFound: [ :info, :depth | localCompiler moveLastValueToReg: (info index) Depth: depth ]
+                 IfNotFound: block
+    );
+    storeVariable: name => storeVariable: name IfNotPresent: [];
+
+    with inherited parent = #<:std/Clonable>;
+}

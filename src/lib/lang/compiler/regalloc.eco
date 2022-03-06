@@ -1,0 +1,28 @@
+
+#=lang/compiler/RegisterAllocator: {
+    freeSet, counter;
+
+    init => (
+        freeSet <- std util newSet.
+        counter <- 0.
+      ^ self
+    );
+
+    allocate => (
+        (freeSet isEmpty) if: [ allocateN: 1 ]
+                        else: [ freeSet take ]
+    );
+    allocateN: n => ( | c <- counter | counter <- counter + n. ^ c );
+    deallocate: r => freeSet addElement: r;
+    withAllocatedRegister: block => (
+        "TODO: Unwind-Protect!"
+        |
+          v <- allocate.
+          r <- v let: block
+        |
+        deallocate: v.
+      ^ r
+    );
+
+    with inherited parent = #<:std/Clonable>;
+}

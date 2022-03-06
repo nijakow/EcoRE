@@ -1,0 +1,76 @@
+
+#=lang/compiler/ScopeSharedInfo: {
+    lexicalParent, compiler;
+
+    initWithMaybeLexicalParent: ml => (
+        lexicalParent <- ml.
+        compiler <- #<:lang/compiler/Compiler> new.
+      ^ self
+    );
+    initWithLexicalParent: l => initWithMaybeLexicalParent: (Yes: l);
+    init => initWithMaybeLexicalParent: No;
+
+    depth => lexicalParent yes: [ :p | p depth + 1 ] no: [ 0 ];
+
+    with inherited parent = #<:std/Clonable>;
+},
+
+#=lang/compiler/VariableInfo: {
+    index;
+
+    initWithIndex: i => (
+        index <- i.
+      ^ self
+    );
+
+    with inherited parent = #<:std/Clonable>;
+},
+
+#=lang/compiler/Scope: {
+    shared, parent_scope, bindings;
+
+    initWithShared: s => (
+        shared <- s.
+      ^ initWithParent: self
+    );
+
+    initWithParent: p => (
+        shared <- p shared.
+        parent_scope <- p.
+        bindings <- std util newMap.
+      ^ self
+    );
+
+    createSubscope => (#<:lang/compiler/Scope> clone) initWithParent: self;
+
+    parentScope => parent_scope;
+    compiler => shared compiler;
+    depth => shared depth;
+
+    bindVariable: varname => (
+      |
+          r    <- compiler regAlloc allocate,
+          info <- (#<:lang/compiler/VariableInfo> clone) initWithIndex: r
+      |
+      bindings at: varname put: info
+    );
+
+    findVariable: varname IfFound: found IfNotFound: notfound Depth: depth => (
+        bindings at: varname do: [ :info | ^ found value(info, depth) ].
+        (parentScope is: self) if: [
+          (shared lexicalParent) yes: [
+             :lex | lex findVariable: varname
+                             IfFound: found
+                          IfNotFound: notfound
+                               Depth: (depth + 1)
+          ] no: [ ^ notfound value ]
+        ].
+      ^ parentScope findVariable: varname IfFound: found IfNotFound: notfound Depth: depth
+    );
+
+    findVariable: varname IfFound: found IfNotFound: notfound => (
+        findVariable: varname IfFound: found IfNotFound: notfound Depth: 0
+    );
+
+    with inherited parent = #<:std/Clonable>;
+}

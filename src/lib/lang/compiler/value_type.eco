@@ -1,0 +1,43 @@
+
+
+#=lang/compiler/ValueType: {
+    Register = {
+        number, depth;
+
+        initWithNumber: n Depth: d => (
+            number <- n.
+            depth <- d.
+          ^ self
+        );
+
+        initWithNumber: n => initWithNumber: n Depth: 0;
+
+        isRegister => true;
+        isConstant => false;
+        isStack => false;
+        ifRegister: r ifConstant: c ifStack: s => r value;
+
+        with inherited parent = #<:std/Clonable>;
+    },
+    Stack = {
+        isRegister => false;
+        isConstant => false;
+        isStack => true;
+        ifRegister: r ifConstant: c ifStack: s => s value;
+        with inherited parent = #<:std/Clonable>;
+    },
+    Constant = {
+        constantValue;
+
+        initWithValue: v => (
+            constantValue <- v.
+          ^ self
+        );
+
+        isRegister => false;
+        isConstant => true;
+        isStack => false;
+        ifRegister: r ifConstant: c ifStack: s => c value;
+        with inherited parent = #<:std/Clonable>;
+    }
+}
