@@ -195,7 +195,7 @@ class Parser:
             self.check(TokenType.SEPARATOR)
         return ASTInterface(parents, slots)
 
-    def parse_simple_expression(self, env, allow_followups=True) -> ASTExpression:
+    def parse_simple_expression(self, env, allow_followups=2) -> ASTExpression:
         if self.check(TokenType.SELF):
             return ASTSelf()
         elif self.check(TokenType.LPAREN):
@@ -234,31 +234,32 @@ class Parser:
             kw.fail()
             return ASTSelf()
     
-    def parse_send(self, env, ast: ASTExpression, allow_followups: bool) -> ASTExpression:
-        name = ''
-        args = []
-        varargs = False
-        kw = self.check(TokenType.IDENTIFIER)
-        bin = False
-        if not kw:
+    def parse_send(self, env, ast: ASTExpression, allow_followups) -> ASTExpression:
+        t = self.check_unary_ident()
+        if t:
+            args, varargs = self.parse_optional_arglist(env)
+            return ASTSend(ast, t.get_key(), args, varargs)
+        if allow_followups <= 0:
             return ast
-        while kw:
-            name += kw.get_text()
-            if self._is_bin(name[-1]):
-                bin = True
-                if not allow_followups:
-                    kw.fail()
-                    return ast
-                else:
-                    args.append(self.parse_expression(env, False))
-            if name[-1] != ':':
-                break
-            kw = self.check(TokenType.IDENTIFIER)
-        if (not bin) and self.check(TokenType.LPAREN):
-            par_args, varargs = self.parse_arglist(env)
-            for e in par_args:
-                args.append(e)
-        return ASTSend(ast, ecosphere.objects.misc.EcoKey.Get(name), args, varargs)
+        t = self.check_binary_ident()
+        if t:
+            while t:
+                arg = self.parse_expression(env, 0)
+                ast = ASTSend(ast, t.get_key(), [arg], False)
+                t = self.check_binary_ident()
+            return ast
+        if allow_followups <= 1:
+            return ast
+        t = self.check_nary_ident()
+        if t:
+            name = ''
+            args = []
+            while t:
+                name += t.get_text()
+                args.append(self.parse_expression(env, 1))
+                t = self.check_nary_ident()
+            return ASTSend(ast, ecosphere.objects.misc.EcoKey.Get(name), args, False)
+        return ast
 
     def parse_bar(self, env, terminator=TokenType.BAR):
         the_type = self.parse_optional_type(env)
@@ -274,16 +275,10 @@ class Parser:
         else:
             return ASTVar(the_type, varname, value, self.parse_bar(env))
 
-    def maybe_parse_curly_block(self, env, allow_followups:bool=False):
-        if self.check(TokenType.LCURLY):
-            return ASTBlock(None, [], False, ASTCompound(self.parse_expressions(env, TokenType.RCURLY)))
-        else:
-            return ASTBlock(None, [], False, self.parse_expression(env, allow_followups))
-
-    def parse_expression(self, env, allow_followups:bool=True) -> ASTExpression:
-        if allow_followups and self.check(TokenType.CARET):
+    def parse_expression(self, env, allow_followups=2) -> ASTExpression:
+        if (allow_followups >= 2) and self.check(TokenType.CARET):
             return ASTReturn(self.parse_expression(env, allow_followups))
-        elif allow_followups and self.check(TokenType.BAR):
+        elif (allow_followups >= 2) and self.check(TokenType.BAR):
             return self.parse_bar(env)
         ast = self.parse_simple_expression(env, allow_followups)
         next = None
@@ -297,7 +292,7 @@ class Parser:
                 ast = ASTAs(ast, self.parse_expression(env, False))
             elif self.check(TokenType.ASSIGNMENT):
                 ast = ASTAssignment(ast, self.parse_expression(env, allow_followups))
-            elif allow_followups and self.check(TokenType.TILDE):
+            elif (allow_followups >= 2) and self.check(TokenType.TILDE):
                 pass
             elif ast == next:
                 break
@@ -321,6 +316,11 @@ class Parser:
             if self.check(TokenType.RPAREN): break
             self.expect(TokenType.SEPARATOR)
         return exprs, False
+    
+    def parse_optional_arglist(self, env) -> list:
+        if self.check(TokenType.LPAREN):
+            return self.parse_arglist(env)
+        return [], False
 
     def check(self, token_type: TokenType):
         t = self._t.read()
@@ -336,7 +336,7 @@ class Parser:
             return t
         else:
             t.fail()
-            raise ParseException('Expected a token type \'' + str(token_type) + '\'!', t)
+            raise ParseException('Expected a token type \'' + str(token_type) + '\', got \'' + str(t._type) + '\'!', t)
     
     def check_unary_ident(self):
         t = self.check(TokenType.IDENTIFIER)
