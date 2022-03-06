@@ -8,15 +8,16 @@
       ^ self
     );
 
-    writeU8: b => bytes append: b;
+    writeU8: b => ( bytes append: b. io out << b. io out newline );
     writeU16: s => (
-        bytes append: (s bitAND: 0xff).
-        bytes append: ((s rshift: 8) bitAND: 0xff)
+        writeU8: (s bitAnd: 0xff).
+        writeU8: ((s rshift: 8) bitAnd: 0xff)
     );
     addConstant: c => (
-        "TODO: Don't append if it already exists in the table"
-        writeU16: constants size.
-        constants append: c
+        (constants find: c)
+            yes: [ :i | writeU16: i          ]
+             no: [ writeU16: constants size.
+                   constants append: c       ]
     );
 
     writeNOOP => writeU8: Bytecodes NOOP;
