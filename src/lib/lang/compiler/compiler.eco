@@ -279,10 +279,13 @@
     fullReturn => returnWithDepth: scopes depth;
 
     bindVariable: name => scopes bindVariable: name;
-    loadVariable: name IfNotPresent: block => (
+    loadVariable: name IfPresent: present IfNotPresent: notpresent => (
         scopes findVariable: name
-                    IfFound: [ :info, :depth | scopes compiler loadRegister: (info index) Depth: depth ]
-                 IfNotFound: block
+                    IfFound: [ :info, :depth |
+                                scopes compiler loadRegister: (info index) Depth: depth.
+                                present value
+                             ]
+                 IfNotFound: notpresent
     );
     storeVariable: name IfNotPresent: block => (
         scopes findVariable: name

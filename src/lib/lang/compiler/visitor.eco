@@ -51,10 +51,14 @@
 
     visitSend: ast => (
         | args <- ast getArgs |
+
+        (ast subject isSelfAST) if: [
+            compiler loadVariable: ast message IfPresent: [ ^ ] IfNotPresent: []
+        ].
         ast subject acceptVisitor: self.
         compiler push.
         args do: [ :arg | arg acceptVisitor: self. compiler push ].
-        compiler sendWithMessage: ast getMessage ArgCount: args size + 1 Varargs: ast getVarargs
+        compiler sendWithMessage: ast message ArgCount: args size + 1 Varargs: ast getVarargs
     );
 
     visitReturn: ast => (

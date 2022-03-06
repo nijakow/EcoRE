@@ -14,6 +14,7 @@
             |
             acceptVisitor: visitor
         );
+        isSelfAST => false;
     };
 
     ASTFlags = {
@@ -90,6 +91,7 @@
 
     ASTSelf = {
         new => self;
+        isSelfAST => true;
         acceptVisitor: visitor => visitor visitSelf: self;
         writeOn: writer => writer << 'self';
         with inherited ast_shared = #<:lang/ast/AST_SharedBehavior>;
