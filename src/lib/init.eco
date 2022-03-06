@@ -204,7 +204,7 @@
     size => #'ecosphere.ecore.object.blob.size'(self);
     isEmpty => size isZero;
     
-    writeOn: writer => writer << '<blob>';
+    writeOn: writer => writer << '<blob: ' << size << '>';
 
     with inherited parent = #<:std/Clonable>;
 },
