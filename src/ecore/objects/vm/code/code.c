@@ -103,7 +103,7 @@ struct Eco_Code* Eco_Code_ConstructFromEco(struct Eco_Blob* bytecodes,
         for (index = 0; index < code->constant_count; index++)
             Eco_Any_AssignAny(&code->constants[index], Eco_Array_At(constants, index));
         code->code_instance_count = Eco_Array_Size(code_instances);
-        code->code_instances      = Eco_Memory_Alloc(code->code_instance_count * sizeof(Eco_Any));
+        code->code_instances      = Eco_Memory_Alloc(code->code_instance_count * sizeof(struct Eco_Code*));
         for (index = 0; index < code->code_instance_count; index++) {
             code_instance               = (struct Eco_Code*) Eco_Any_AsPointer(Eco_Array_At(code_instances, index));
             code->code_instances[index] = code_instance;

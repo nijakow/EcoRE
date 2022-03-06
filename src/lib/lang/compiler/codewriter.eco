@@ -41,7 +41,7 @@
     addClosure: c => (
         (closures find: c)
             yes: [ :i | writeU16: i         ]
-             no: [ writeU16: constants size.
+             no: [ writeU16: closures size.
                    closures append: c       ]
     );
 
