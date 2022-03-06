@@ -27,7 +27,7 @@ struct Eco_Message
         } as;
     }                      body;
     struct Eco_Fiber*      fiber;
-    struct Eco_Object*     key;
+    struct Eco_Key*        key;
     enum Eco_Message_Type  type;
 };
 

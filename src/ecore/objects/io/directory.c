@@ -3,6 +3,8 @@
 #include "directory.h"
 
 #include <ecore/objects/base/type.h>
+#include <ecore/objects/misc/key/key.h>
+#include <ecore/vm/core/send.h>
 #include <ecore/util/memory.h>
 
 
@@ -94,7 +96,9 @@ bool Eco_Directory_Send(struct Eco_Message* message,
     {
         while ((dir = readdir(d)) != NULL)
         {
-            Eco_Log_Debug("%s\n", dir->d_name);
+            if (Eco_StrEq(message->key->name, dir->d_name)) {
+                Eco_Log_Debug("%s\n", dir->d_name);
+            }
         }
     }
     closedir(d);

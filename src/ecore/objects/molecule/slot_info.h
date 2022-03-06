@@ -3,7 +3,7 @@
 
 struct Eco_Object_SlotInfo
 {
-    struct Eco_Object*  key;
+    struct Eco_Key*     key;
     unsigned int        is_inherited : 1;
     unsigned int        is_delegate  : 1;
     unsigned int        is_part      : 1;

@@ -29,7 +29,7 @@ bool Eco_VM_Builtin_GetTypeSlotNames(struct Eco_Fiber* fiber, unsigned int args)
     // TODO, FIXME, XXX: Handle array == NULL!
     for (index = 0; index < type->slot_count; index++)
     {
-        Eco_Any_AssignPointer(&any, type->slots[index].key);
+        Eco_Any_AssignPointer(&any, (struct Eco_Object*) type->slots[index].key);
         Eco_Array_Put(array, index, &any);
     }
     Eco_Any_AssignPointer(&any, (struct Eco_Object*) array);

@@ -32,7 +32,7 @@ bool Eco_VM_Builtin_AddValueSlot(struct Eco_Fiber* fiber, unsigned int args)
     info.is_delegate  = (Eco_Any_AsInteger(&flags) & 0x01) != 0;
     info.is_inherited = (Eco_Any_AsInteger(&flags) & 0x02) != 0;
     info.is_part      = (Eco_Any_AsInteger(&flags) & 0x04) != 0;
-    info.key          = Eco_Any_AsPointer(&key);
+    info.key          = (struct Eco_Key*) Eco_Any_AsPointer(&key);
 
     Eco_Molecule_AddSlot((struct Eco_Molecule*) Eco_Any_AsPointer(&object),
                          Eco_Any_AsInteger(&index),

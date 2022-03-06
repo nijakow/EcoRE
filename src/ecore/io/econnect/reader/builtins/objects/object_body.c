@@ -42,7 +42,7 @@ bool Eco_EConnect_Reader_ReadMoleculeBody(struct Eco_EConnect_Reader* reader,
         if (!Eco_EConnect_Reader_Read(reader, result))
             return false;
 
-        if (!Eco_EConnect_Result_ExpectObject(result, &slot_info.key)) {
+        if (!Eco_EConnect_Result_ExpectObject(result, (struct Eco_Object**) &slot_info.key)) {
             Eco_EConnect_Result_Destroy(result);
             Eco_EConnect_Result_Create_Error(result, Eco_EConnect_ErrorType_TYPE_ERROR);
             return false;

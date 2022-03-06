@@ -151,7 +151,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             struct Eco_Message  message;
 
             message.body.send.arg_count = NEXT_U8();
-            message.key                 = Eco_Any_AsPointer(NEXT_CONSTANT());
+            message.key                 = (struct Eco_Key*) Eco_Any_AsPointer(NEXT_CONSTANT());
             message.fiber               = fiber;
             message.type                = Eco_Message_Type_SEND;
 
@@ -177,7 +177,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             }
 
             message.body.send.arg_count = NEXT_U8() + i;
-            message.key                 = Eco_Any_AsPointer(NEXT_CONSTANT());
+            message.key                 = (struct Eco_Key*) Eco_Any_AsPointer(NEXT_CONSTANT());
             message.fiber               = fiber;
             message.type                = Eco_Message_Type_SEND;
 
@@ -197,7 +197,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
         TARGET(ASSIGN) {
             struct Eco_Message  message;
 
-            message.key               = Eco_Any_AsPointer(NEXT_CONSTANT());
+            message.key               = (struct Eco_Key*) Eco_Any_AsPointer(NEXT_CONSTANT());
             message.fiber             = fiber;
             message.type              = Eco_Message_Type_ASSIGN;
 
@@ -220,7 +220,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
         TARGET(AS) {
             struct Eco_Message  message;
 
-            message.key               = Eco_Any_AsPointer(NEXT_CONSTANT());
+            message.key               = (struct Eco_Key*) Eco_Any_AsPointer(NEXT_CONSTANT());
             message.fiber             = fiber;
             message.type              = Eco_Message_Type_AS;
 
