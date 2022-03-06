@@ -23,6 +23,8 @@
         deallocate: v.
       ^ r
     );
+
+    with inherited parent = #<:std/Clonable>;
 },
 
 #=lang/compiler/ValueType: {
