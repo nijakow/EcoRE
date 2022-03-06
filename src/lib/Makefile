@@ -41,7 +41,7 @@ master.eco
 
 
 $(NAME): $(SOURCES)
-	PYTHONPATH=../bootstrapper $(PYTHON) -m ecosphere.bootstrapper $(NAME) $(SOURCES)
+	PYTHONPATH=../bootstrapper $(PYTHON) -m ecosphere.bootstrapper --compressed $(NAME) $(SOURCES)
 
 all: $(NAME)
 

@@ -4,18 +4,20 @@
 #include <ecore/vm/memory/memory.h>
 #include <ecore/util/gz.h>
 
+#include <ctype.h>
+#include <stdio.h>
 
 bool Eco_EConnect_Builtin_GZip(struct Eco_EConnect_Reader* reader,
                                struct Eco_EConnect_Result* result)
 {
     struct Eco_EConnect_Reader  subreader;
-    unsigned int                compressed_length;
     unsigned int                uncompressed_length;
+    unsigned int                compressed_length;
     char*                       bytes;
     bool                        retval;
 
-    compressed_length   = Eco_EConnect_ParseUInt(&reader->stream);
     uncompressed_length = Eco_EConnect_ParseUInt(&reader->stream);
+    compressed_length   = Eco_EConnect_ParseUInt(&reader->stream);
 
     bytes               = Eco_Memory_Alloc(compressed_length + uncompressed_length);
 

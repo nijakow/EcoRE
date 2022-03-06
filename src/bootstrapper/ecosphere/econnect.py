@@ -1,4 +1,7 @@
+import zlib
+
 from ecosphere.objects.misc import EcoKey
+
 
 class EConnectWriter:
 
@@ -39,6 +42,15 @@ class EConnectWriter:
 
     def finish(self):
         return bytes(self._bytes)
+    
+    def finish_compressed(self):
+        b = self.finish()
+        compressed = zlib.compress(b)
+        ser = Serializer()
+        ser.write_message('ecosphere.econnect.compressed.gz')
+        ser.write_vlq(len(b))
+        ser.write_bytes(compressed)
+        return ser.finish()
 
     def __init__(self):
         self._bytes = bytearray()

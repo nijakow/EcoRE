@@ -1,3 +1,4 @@
+from bz2 import compress
 import sys
 import os.path
 import pathlib
@@ -96,7 +97,7 @@ class SharedBootstrappingInfo:
         self._label_storage = LabelStorage()
 
 
-def banner():
+def banner(compressed=False):
     print('''
      ______          _____  ______   _                 _    ____  
     |  ____|        |  __ \|  ____| | |               | |  / /\ \ 
@@ -106,12 +107,16 @@ def banner():
     |______\___\___/|_|  \_\______(_)_.__/ \___/ \___/ \__| |  | |
                                                            \_\/_/ 
 
-  Compiling ...
 ''')
+    if compressed:
+        print('  Compiling (compressed mode active)...')
+    else:
+        print('  Compiling ...')
+    print()
 
 
-def main(binfile, srcfiles):
-    banner()
+def main(binfile, srcfiles, compressed=False):
+    banner(compressed)
     shared = SharedBootstrappingInfo()
     result = None
     for srcfile in srcfiles:
@@ -120,11 +125,19 @@ def main(binfile, srcfiles):
     serializer = ecosphere.econnect.Serializer()
     serializer.write_object(result)
     with open(binfile, 'wb') as out:
-        serialized = serializer.finish()
+        if compressed:
+            serialized = serializer.finish_compressed()
+        else:
+            serialized = serializer.finish()
         print('Writing', len(serialized), 'bytes to', binfile, '...')
         out.write(serialized)
 
 if __name__ == '__main__':
-    ofile = sys.argv[1]
-    ifiles = sys.argv[2:]
-    main(ofile, ifiles)
+    index = 0
+    compressed = False
+    if sys.argv[1] == '--compressed':
+        compressed = True
+        index += 1
+    ofile = sys.argv[index + 1]
+    ifiles = sys.argv[(index + 2):]
+    main(ofile, ifiles, compressed)
