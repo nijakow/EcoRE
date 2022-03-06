@@ -1,10 +1,10 @@
 
 #=init/block_proxy: {
     isBlock    => true;
-    value(...) => #'ecosphere.ecore.flow.value'(self, ...).
-    repeat     => ( self value. #'ecosphere.ecore.flow.reset'() ).
-    while: b   => ( (self value) unless: [ ^ #<:std/bool/false> ]. b value. #'ecosphere.ecore.flow.reset'() ).
-    until: b   => ( (self value) if: [ ^ #<:std/bool/true> ]. b value. #'ecosphere.ecore.flow.reset'() ).
+    value(...) => #'ecosphere.ecore.flow.value'(self, ...);
+    repeat     => ( self value. #'ecosphere.ecore.flow.reset'() );
+    while: b   => ( (self value) unless: [ ^ #<:std/bool/false> ]. b value. #'ecosphere.ecore.flow.reset'() );
+    until: b   => ( (self value) if: [ ^ #<:std/bool/true> ]. b value. #'ecosphere.ecore.flow.reset'() );
     and:   b   => (
         | v <- self value |
         v if: [ ^ b value ] else: [ ^ v ]
@@ -49,7 +49,7 @@
         [ i < upper ] while: [
             body value(i).
             i <- i + 1.
-        ].
+        ]
     );
     to: upper do: body => for: (upper + 1) do: body;
     do: block => 0 for: self do: block;
@@ -189,8 +189,8 @@
     at: index put: value => #'ecosphere.ecore.object.array.at_put'(self, _norm(index), value);
     isArray => true;
     asString => #'ecosphere.ecore.object.array.to_string'(self);
-    _norm(i) => (i isNegative) if: [ size + i ] else: [ i ];
-    _nnorm(i) => (i isNegative) if: [ size + i + 1 ] else: [ i ];
+    private _norm(i) => (i isNegative) if: [ size + i ] else: [ i ];
+    private _nnorm(i) => (i isNegative) if: [ size + i + 1 ] else: [ i ];
 
     writeOn: writer => (std util) WriteIterable: self On: writer;
 
