@@ -37,6 +37,7 @@ vm/builtins/core/array.c \
 vm/builtins/core/blob.c \
 vm/builtins/core/clone.c \
 vm/builtins/core/code.c \
+vm/builtins/core/directory.c \
 vm/builtins/core/flow.c \
 vm/builtins/core/init.c \
 vm/builtins/core/io.c \
