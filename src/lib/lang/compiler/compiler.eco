@@ -162,7 +162,7 @@
     );
 
     returnWithDepth: depth => (
-      lastValue push.
+      pushLastValue.
       writer writeReturn: depth
     );
 
@@ -179,6 +179,8 @@
     );
     initWithLexicalParent: l => initWithMaybeLexicalParent: (Yes: l);
     init => initWithMaybeLexicalParent: No;
+
+    depth => lexicalParent yes: [ :p | p depth + 1 ] no: [ 0 ];
 
     with inherited parent = #<:std/Clonable>;
 },
@@ -202,6 +204,7 @@
 
     parentScope => parent_scope;
     compiler => shared compiler;
+    depth => shared depth;
 
     bindVariable: varname WithInfo: info => bindings at: varname put: info;
 
@@ -246,6 +249,9 @@
 
     loadSelf => localCompiler loadSelf;
     loadConstant: c => localCompiler loadConstant;
+
+    returnWithDepth: depth => localCompiler returnWithDepth: depth;
+    fullReturn => returnWithDepth: scopes depth;
 
     loadVariable: name IfNotPresent: block => (
         scopes findVariable: name
