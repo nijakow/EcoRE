@@ -90,3 +90,16 @@ void Eco_Blob_Del(struct Eco_Blob* blob)
 {
     Eco_Object_Del(&blob->_);
 }
+
+
+/*
+ *    E l e m e n t   A c c e s s
+ */
+
+bool Eco_Blob_AtPut(struct Eco_Blob* blob, unsigned int index, void* data, unsigned int size)
+{
+    if (index + size > Eco_Blob_Size(blob))
+        return false;
+    Eco_Memcpy(Eco_Blob_At_Unchecked(blob, index), data, size);
+    return true;
+}

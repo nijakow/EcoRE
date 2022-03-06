@@ -54,20 +54,65 @@ bool Eco_VM_Builtin_BlobAt(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
-bool Eco_VM_Builtin_BlobAtPutS8(struct Eco_Fiber* fiber, unsigned int args)
+bool Eco_VM_Builtin_BlobAtPutInt8(struct Eco_Fiber* fiber, unsigned int args)
 {
     /*
      * TODO: Type checks
      */
     Eco_Any  index;
     Eco_Any  value;
+    i8       actual_value;
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
         return false;
     Eco_Fiber_Pop(fiber, &value);
     Eco_Fiber_Pop(fiber, &index);
-    Eco_Blob_AtPutS8(((struct Eco_Blob*) Eco_Any_AsPointer(Eco_Fiber_Peek(fiber))),
-                     Eco_Any_AsInteger(&index),
-                     Eco_Any_AsInteger(&value));
+    actual_value = Eco_Any_AsInteger(&value);
+    Eco_Blob_AtPut(((struct Eco_Blob*) Eco_Any_AsPointer(Eco_Fiber_Peek(fiber))),
+                   Eco_Any_AsInteger(&index),
+                   &actual_value,
+                   sizeof(actual_value));
+    return true;
+}
+
+bool Eco_VM_Builtin_BlobAtPutInt16(struct Eco_Fiber* fiber, unsigned int args)
+{
+    /*
+     * TODO: Type checks
+     */
+    Eco_Any  index;
+    Eco_Any  value;
+    i16      actual_value;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
+        return false;
+    Eco_Fiber_Pop(fiber, &value);
+    Eco_Fiber_Pop(fiber, &index);
+    actual_value = Eco_Any_AsInteger(&value);
+    Eco_Blob_AtPut(((struct Eco_Blob*) Eco_Any_AsPointer(Eco_Fiber_Peek(fiber))),
+                   Eco_Any_AsInteger(&index),
+                   &actual_value,
+                   sizeof(actual_value));
+    return true;
+}
+
+bool Eco_VM_Builtin_BlobAtPutInt32(struct Eco_Fiber* fiber, unsigned int args)
+{
+    /*
+     * TODO: Type checks
+     */
+    Eco_Any  index;
+    Eco_Any  value;
+    i32      actual_value;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
+        return false;
+    Eco_Fiber_Pop(fiber, &value);
+    Eco_Fiber_Pop(fiber, &index);
+    actual_value = Eco_Any_AsInteger(&value);
+    Eco_Blob_AtPut(((struct Eco_Blob*) Eco_Any_AsPointer(Eco_Fiber_Peek(fiber))),
+                   Eco_Any_AsInteger(&index),
+                   &actual_value,
+                   sizeof(actual_value));
     return true;
 }
