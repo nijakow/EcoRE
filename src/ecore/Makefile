@@ -66,6 +66,7 @@ io/econnect/reader/parser.c \
 io/econnect/reader/reader.c \
 io/econnect/reader/result.c \
 io/econnect/reader/builtins/builtins.c \
+io/econnect/reader/builtins/compression/gz.c \
 io/econnect/reader/builtins/protocol/protocol.c \
 io/econnect/reader/builtins/objects/array.c \
 io/econnect/reader/builtins/objects/interface.c \
@@ -78,6 +79,7 @@ io/econnect/reader/builtins/objects/code.c \
 io/econnect/reader/builtins/id/id.c \
 io/econnect/reader/builtins/flow/flow.c \
 io/econnect/file/file.c \
+util/gz.c \
 util/memory.c \
 util/utf8.c \
 main.c
@@ -85,7 +87,7 @@ main.c
 OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
 DEPENDS = $(patsubst %.c,%.d,$(SOURCES))
 
-LDFLAGS = 
+LDFLAGS = -lz
 CFLAGS = -I.. -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-label -g -Ofast
 
 
