@@ -1,6 +1,9 @@
-#include <zlib.h>
 
 #include "gz.h"
+
+#ifdef ECO_CONFIG_USE_ZLIB_COMPRESSION
+
+#include <zlib.h>
 
 bool Eco_GZ_Uncompress(char* dst, unsigned int dst_size, char* src, unsigned int src_size)
 {
@@ -21,3 +24,12 @@ bool Eco_GZ_Uncompress(char* dst, unsigned int dst_size, char* src, unsigned int
 
     return true;
 }
+
+#else
+
+bool Eco_GZ_Uncompress(char* dst, unsigned int dst_size, char* src, unsigned int src_size)
+{
+    return false;
+}
+
+#endif

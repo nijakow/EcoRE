@@ -24,4 +24,6 @@
 # endif
 #endif
 
+#define ECO_CONFIG_USE_ZLIB_COMPRESSION
+
 #endif
