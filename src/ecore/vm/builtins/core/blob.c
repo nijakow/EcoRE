@@ -1,6 +1,7 @@
 #include "blob.h"
 
 #include <ecore/objects/misc/blob/blob.h>
+#include <ecore/objects/misc/string/string.h>
 
 
 bool Eco_VM_Builtin_BlobNew(struct Eco_Fiber* fiber, unsigned int args)
@@ -114,5 +115,21 @@ bool Eco_VM_Builtin_BlobAtPutInt32(struct Eco_Fiber* fiber, unsigned int args)
                    Eco_Any_AsInteger(&index),
                    &actual_value,
                    sizeof(actual_value));
+    return true;
+}
+
+bool Eco_VM_Builtin_BlobOpenFile(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any             any;
+    struct Eco_String*  file_name;
+    struct Eco_Blob*    blob;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    file_name = (struct Eco_String*) Eco_Any_AsPointer(&any);
+    blob      = Eco_Blob_NewFromFile(file_name->bytes); // TODO, FIXME, XXX! This is unsafe!
+    Eco_Any_AssignPointer(&any, (struct Eco_Object*) blob);
+    Eco_Fiber_Push(fiber, &any);
     return true;
 }

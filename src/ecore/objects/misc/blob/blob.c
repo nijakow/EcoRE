@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "blob.h"
 
 #include <ecore/objects/base/type.h>
@@ -102,4 +104,32 @@ bool Eco_Blob_AtPut(struct Eco_Blob* blob, unsigned int index, void* data, unsig
         return false;
     Eco_Memcpy(Eco_Blob_At_Unchecked(blob, index), data, size);
     return true;
+}
+
+
+/*
+ *    F i l e   M i r r o r i n g
+ */
+
+struct Eco_Blob* Eco_Blob_NewFromFile(char* path)
+{
+    struct Eco_Blob*  blob;
+    FILE*             f;
+    unsigned int      size;
+
+    f = fopen(path, "r");
+
+    if (f != NULL) {
+        fseek(f, 0L, SEEK_END);
+        size = (unsigned int) ftell(f); // TODO, FIXME, XXX: unsigned int might be too small!
+        fseek(f, 0L, SEEK_SET);
+        blob = Eco_Blob_New(size);
+        if (blob != NULL)
+            fread(blob->bytes, sizeof(char), size, f);
+        fclose(f);
+    } else {
+        blob = Eco_Blob_New(0);
+    }
+
+    return blob;
 }

@@ -10,4 +10,6 @@ bool Eco_VM_Builtin_BlobAtPutInt8(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_BlobAtPutInt16(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_BlobAtPutInt32(struct Eco_Fiber*, unsigned int);
 
+bool Eco_VM_Builtin_BlobOpenFile(struct Eco_Fiber*, unsigned int);
+
 #endif
