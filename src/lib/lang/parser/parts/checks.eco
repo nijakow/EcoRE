@@ -31,6 +31,10 @@
             :token | IsBin(token payload asString asVector last) not
         ]
     );
+    checkUnaryIdentifierOrKey => (
+        checkUnaryIdentifier when: [ :value | ^ value ].
+      ^ check: TokenType KEY
+    );
 
     expect: type => (
         (check: type) when: [ :v | ^ v ].
