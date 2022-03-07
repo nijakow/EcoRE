@@ -19,7 +19,7 @@
                                HasVarargs: (arglist second)
                 ]
             ].
-          ^ kw payload
+          ^ newASTConstantWithValue: kw payload
         ].
 
         (check: TokenType STRING) when: [ :kw | ^ newASTConstantWithValue: (kw payload) ].

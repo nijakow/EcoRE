@@ -63,6 +63,7 @@
             io out commit.
 
             io out << (code execute({
+                addVar: name => #'ecosphere.ecore.reflect.add_value_slot'(self, -1, 0, name, false);
                 writeOn: writer => writer << '<session>';
                 with inherited parent = #<:std/Clonable>;
             })).
