@@ -82,6 +82,7 @@
     newSet         => (#<:std/util> Set) new;
     newList        => (#<:std/util> List) new;
     newMap         => (#<:std/util> Map) new;
+    newStringBuilder => (#:<std/util> StringBuilder) new;
 
     WriteIterable: it On: writer => (
         writer << '#('.

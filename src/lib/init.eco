@@ -206,12 +206,10 @@
 #=init/array_proxy: {
     size => #'ecosphere.ecore.object.array.size'(self);
     isEmpty => size isZero;
-    at: index => #'ecosphere.ecore.object.array.at'(self, _norm(index));
-    at: index put: value => #'ecosphere.ecore.object.array.at_put'(self, _norm(index), value);
+    at: index => #'ecosphere.ecore.object.array.at'(self, index);
+    at: index put: value => #'ecosphere.ecore.object.array.at_put'(self, index, value);
     isArray => true;
     asString => #'ecosphere.ecore.object.array.to_string'(self);
-    private _norm(i) => (i isNegative) if: [ size + i ] else: [ i ];
-    private _nnorm(i) => (i isNegative) if: [ size + i + 1 ] else: [ i ];
 
     writeOn: writer => (std util) WriteIterable: self On: writer;
 
