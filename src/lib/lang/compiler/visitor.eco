@@ -37,10 +37,11 @@
 
 
 #=lang/compiler/Visitor: {
-    compiler;
+    compiler, environment;
 
-    initWithCompiler: _compiler => (
-       compiler <- _compiler.
+    initWithCompiler: _compiler Environment: _env => (
+       compiler    <- _compiler.
+       environment <- _env.
       ^ self
     );
 
@@ -117,6 +118,10 @@
     visitAs: ast => (
         "TODO"
         lhs acceptVisitor: self
+    );
+
+    visitArray: ast => (
+
     );
 
     "TODO: Implements interface lang/ast/IVisitor"

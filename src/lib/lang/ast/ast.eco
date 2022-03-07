@@ -7,15 +7,15 @@
     AST_SharedBehavior = #=lang/ast/AST_SharedBehavior: {
         acceptVisitor: visitor => visitor visitUnknown: self;
         writeOn: writer => writer << 'AST';
-        compileStandalone => (
+        compileInEnv: env => (
             |
                 compiler <- (lang compiler ScopedCompiler) new,
-                visitor  <- ((lang compiler Visitor) clone) initWithCompiler: compiler
+                visitor  <- ((lang compiler Visitor) clone) initWithCompiler: compiler Environment: env
             |
             acceptVisitor: visitor.
           ^ compiler finish
         );
-        evaluateWithSelf: ourSelf => compileStandalone execute(ourSelf);
+        evaluateInEnv: env => (compileInEnv: env) execute(env);
         isSelfAST => false;
     };
 

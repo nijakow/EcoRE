@@ -14,6 +14,8 @@
         with interfaces = #<:interfaces>;
         lang = #<:lang>;
     };
+
+    writeOn: writer => writer << 'lobby';
 },
 
 #=bootstrapper: {
@@ -61,7 +63,7 @@
                 io out commit.
             "/
 
-            | code <- expr compileStandalone |
+            | code <- expr compileInEnv: lobby |
             io out commit.
 
             io out << (code execute({
