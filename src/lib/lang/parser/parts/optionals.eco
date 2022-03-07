@@ -1,7 +1,7 @@
 
 #=lang/parser/Parser/Optionals: {
     parseOptionalType => (
-        | the_type <- false |  "TODO: Find a better value (maybe 'any')"
+        | the_type <- any |
         (check: TokenType LBRACK) if: [
             the_type <- parseExpression.
             expect: TokenType RBRACK

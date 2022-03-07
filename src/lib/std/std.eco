@@ -52,6 +52,8 @@
         with inherited trait = #<:std/Clonable>;
     },
 
+    any = %[],  "TODO"
+
     with bool = {
         true = #=std/bool/true: {
             with inherited trait = {

@@ -258,6 +258,7 @@
 
 #=init/interface_proxy: {
     writeOn: writer => (
+        (self is: any) if: [ writer << 'any'. ^ self ].
         writer << '%[ '.
         getEntryNames do: [ :name | writer << name << ', ' ].
         writer << ']'
