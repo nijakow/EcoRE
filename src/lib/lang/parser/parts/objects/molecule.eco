@@ -3,9 +3,12 @@
     parseObjectSlotFlags: flags => (
         [
             begin
-              if: [ check: TokenType WITH      ] then: [ flags setWith      ] ~
-              if: [ check: TokenType OWN       ] then: [ flags setOwn       ] ~
-              if: [ check: TokenType INHERITED ] then: [ flags setInherited ] ~
+              if: [ check: TokenType DEPRECATED ] then: [ flags setDeprecated ]
+              if: [ check: TokenType PRIVATE    ] then: [ flags setPrivate    ] ~
+              if: [ check: TokenType FINAL      ] then: [ flags setFinal      ] ~
+              if: [ check: TokenType WITH       ] then: [ flags setWith       ] ~
+              if: [ check: TokenType OWN        ] then: [ flags setOwn        ] ~
+              if: [ check: TokenType INHERITED  ] then: [ flags setInherited  ] ~
             default: [ ^ flags ]
         ] repeat
     );

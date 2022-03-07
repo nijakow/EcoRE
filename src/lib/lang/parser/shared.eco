@@ -28,6 +28,9 @@
         AS = #'as',
         WITH = #'with',
         INHERITED = #'inherited',
-        OWN = #'own'
+        OWN = #'own',
+        PRIVATE = #'private',
+        FINAL = #'final',
+        DEPRECATED = #'deprecated'
     }
 }

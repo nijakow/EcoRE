@@ -20,27 +20,30 @@
     };
 
     ASTFlags = {
-        is_with, is_inherited, is_own, is_method;
+        isDeprecated, isPrivate, isFinal, isWith, isInherited, isOwn, isMethod;
 
         init => (
-            is_with      <- false.
-            is_inherited <- false.
-            is_own       <- false.
-            is_method    <- false.
+            isDeprecated <- false.
+            isPrivate    <- false.
+            isFinal      <- false.
+            isWith       <- false.
+            isInherited  <- false.
+            isOwn        <- false.
+            isMethod     <- false.
           ^ self
         );
 
-        isWith      => is_with;
-        isInherited => is_inherited;
-        isOwn       => is_own;
-        isMethod    => is_method;
-
-        setWith      => ( is_with <- true. self ).
-        setInherited => ( is_inherited <- true. self ).
-        setOwn       => ( is_own <- true. self ).
-        setMethod    => ( is_method <- true. self ).
+        setDeprecated => ( isDeprecated <- true. self );
+        setPrivate    => ( isPrivate <- true. self );
+        setFinal      => ( isFinal <- true. self );
+        setWith       => ( isWith <- true. self );
+        setInherited  => ( isInherited <- true. self );
+        setOwn        => ( isOwn <- true. self );
+        setMethod     => ( isMethod <- true. self );
 
         writeOn: writer => (
+            isPrivate   if: [ writer << 'private '   ].
+            isFinal     if: [ writer << 'final '     ].
             isWith      if: [ writer << 'with '      ].
             isInherited if: [ writer << 'inherited ' ].
             isOwn       if: [ writer << 'own '       ].
