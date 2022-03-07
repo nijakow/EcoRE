@@ -29,8 +29,7 @@
         compiler push.
         rhs acceptVisitor: visitor.
         compiler push.
-        compiler assignWithKey: ast message.
-        visitUnknown: self
+        compiler assignWithKey: ast message
     );
 
     with inherited parent = #<:std/Clonable>;
