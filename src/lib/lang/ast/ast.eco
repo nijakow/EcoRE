@@ -42,12 +42,13 @@
         setMethod     => ( isMethod <- true. self );
 
         writeOn: writer => (
-            isPrivate   if: [ writer << 'private '   ].
-            isFinal     if: [ writer << 'final '     ].
-            isWith      if: [ writer << 'with '      ].
-            isInherited if: [ writer << 'inherited ' ].
-            isOwn       if: [ writer << 'own '       ].
-            isMethod    if: [ writer << '<method> '  ]. "isMethod is usually not printed"
+            isDeprecated if: [ writer << '@deprecated ' ].
+            isPrivate    if: [ writer << 'private '     ].
+            isFinal      if: [ writer << 'final '       ].
+            isWith       if: [ writer << 'with '        ].
+            isInherited  if: [ writer << 'inherited '   ].
+            isOwn        if: [ writer << 'own '         ].
+            isMethod     if: [ writer << '<method> '    ]. "isMethod is usually not printed"
         );
 
         with inherited parent = #<:std/Clonable>;
