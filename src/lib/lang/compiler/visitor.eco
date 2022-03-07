@@ -54,7 +54,7 @@
     visitCompound: ast => (
         compiler pushNormalScope.
         ast getExprs do: [ :e | e acceptVisitor: self ].
-        compiler popScope
+        compiler popScope.
     );
 
     visitBlock: ast => (

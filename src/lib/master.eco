@@ -57,11 +57,11 @@
                 expr   <- parser parseExpression
             |
             
-            
+            /"
                 io out << expr.
                 io out newline.
                 io out commit.
-            
+            "/
 
             | code <- expr compileInEnv: lobby |
             io out commit.

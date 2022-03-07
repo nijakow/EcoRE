@@ -76,8 +76,8 @@
         (parentScope is: self) if: [
           (shared lexicalParent) yes: [
              :lex | lex findVariable: varname
-                             IfFound: found
-                          IfNotFound: notfound
+                             IfFound: [ :info, :depth | ^ found value(info, depth) ]
+                          IfNotFound: [ ^ notfound value ]
                                Depth: (depth + 1)
           ] no: [ ^ notfound value ]
         ].
