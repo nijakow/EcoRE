@@ -51,12 +51,6 @@
     
     visitConstant: ast => compiler loadConstant: ast constantValue;
 
-    visitArray: ast => visitConstant: ast;
-
-    visitInterface: ast => visitConstant: ast;
-
-    visitMolecule: ast => visitConstant: ast;
-
     visitCompound: ast => (
         compiler pushNormalScope.
         ast getExprs do: [ :e | e acceptVisitor: self ].
@@ -121,8 +115,14 @@
     );
 
     visitArray: ast => (
-
+        | array <- std util newArray: ast exprs size |
+        ast exprs forEach: [ :i, :v | array at: i put: (v evaluateInEnv: environment) ].
+        compiler loadConstant: array
     );
+
+    visitInterface: ast => visitConstant: ast;
+
+    visitMolecule: ast => visitConstant: ast;
 
     "TODO: Implements interface lang/ast/IVisitor"
     with inherited parent = #<:std/Clonable>;
