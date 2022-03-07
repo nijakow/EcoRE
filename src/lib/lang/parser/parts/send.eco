@@ -10,7 +10,7 @@
 
                 [
                     nameStr <- nameStr + (ident payload asString).
-                    arglist append: (parseExpressionWithFollowups: false).
+                    arglist append: (parseExpressionWithFollowups: #<:lang/parser/Parser/Followups> binary).
                     ident <- checkNAryIdentifier.
                     ident unless: [
                       ^ newASTSendWithSubject: ast
@@ -35,18 +35,20 @@
             ]
         ).
 
-        followups unless: [ ^ ast ].
+        (followups level > 0) unless: [ ^ ast ].
 
         ( | ident <- checkBinaryIdentifier |
             ident if: [
                 | args <- std util newVector |
-                args append: (parseExpressionWithFollowups: false).
+                args append: (parseExpressionWithFollowups: #<:lang/parser/Parser/Followups> unary).
               ^ newASTSendWithSubject: ast
                               Message: ident payload
                                  Args: args
                            HasVarargs: false
             ]
         ).
+
+        (followups level > 1) unless: [ ^ ast ].
 
       ^ tryParseNArySendWithAST: ast
     );

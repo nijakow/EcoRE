@@ -1,6 +1,11 @@
+#=lang/parser/Parser/Followups: {
+    all = { level => 2, dec => #<:lang/parser/Parser/Followups> binary },
+    binary = { level => 1, dec => #<:lang/parser/Parser/Followups> unary },
+    unary = { level => 0, dec => self }
+},
 
 #=lang/parser/Parser/Expression: {
-    parseExpression => parseExpressionWithFollowups: true;
+    parseExpression => parseExpressionWithFollowups: #<:lang/parser/Parser/Followups> all;
     parseExpressions => parseExpressionsWithTerminator: TokenType RPAREN;
 
     parseSimpleExpressionWithFollowups: followups => (
@@ -32,10 +37,10 @@
     );
 
     parseExpressionWithFollowups: followups => (
-        ([ followups ] and: [ check: TokenType CARET ]) if: [
+        ([ followups level > 1 ] and: [ check: TokenType CARET ]) if: [
           ^ newASTReturnWithValue: (parseExpressionWithFollowups: followups)
         ].
-        ([ followups ] and: [ check: TokenType BAR ]) if: [ ^ parseBar ].
+        ([ followups level > 1 ] and: [ check: TokenType BAR ]) if: [ ^ parseBar ].
 
         |
             ast <- parseSimpleExpressionWithFollowups: followups,
