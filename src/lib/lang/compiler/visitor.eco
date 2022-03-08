@@ -120,7 +120,12 @@
         compiler loadConstant: array
     );
 
-    visitInterface: ast => visitConstant: ast;
+    visitInterface: ast => (
+        | i <- %[] |
+        "TODO: Parent entries"
+        ast entries do: [ :e | i <- e addToInterface: i WithEnv: environment ].
+        compiler loadConstant: i
+    );
 
     visitMolecule: ast => visitConstant: ast;
 

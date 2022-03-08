@@ -79,22 +79,25 @@ bool Eco_VM_Builtin_InterfaceAddEntry(struct Eco_Fiber* fiber, unsigned int args
 {
     struct Eco_InterfaceEntry  entry;
     struct Eco_Interface*      interface;
+    struct Eco_Array*          types;
     Eco_Any                    any;
+    unsigned int               index;
 
-    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 4, ECO_VM_BUILTIN_INFINITE_ARGS))
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 5, 5))
         return false;
     
-    entry.arg_count = args - 4;
-    
-    while (args > 4)
-    {
-        Eco_Fiber_Pop(fiber, &any);
-        entry.arg_types[args - 4] = (struct Eco_Interface*) Eco_Any_AsPointer(&any);
-        args--;
-    }
-
     Eco_Fiber_Pop(fiber, &any);
     entry.has_varargs = Eco_Any_AsInteger(&any) != 0;
+
+    Eco_Fiber_Pop(fiber, &any);
+    types = (struct Eco_Array*) Eco_Any_AsPointer(&any);
+
+    entry.arg_count = Eco_Array_Size(types);
+    
+    for (index = 0; index < entry.arg_count; index++)
+    {
+        entry.arg_types[index] = (struct Eco_Interface*) Eco_Any_AsPointer(Eco_Array_At(types, index));
+    }
 
     Eco_Fiber_Pop(fiber, &any);
     entry.key = (struct Eco_Key*) Eco_Any_AsPointer(&any);

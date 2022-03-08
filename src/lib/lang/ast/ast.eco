@@ -92,6 +92,9 @@
             writer << (varargs if: ', ...) ' else: ') ').
             writer << body.
         );
+        addToInterface: interface WithEnv: env => (
+          ^ #'ecosphere.ecore.object.interface.add_entry'(interface, type, name, args asArray, varargs)
+        );
         with inherited parent = #<:std/Clonable>;
     };
 
