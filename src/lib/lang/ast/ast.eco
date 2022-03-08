@@ -93,7 +93,10 @@
             writer << body.
         );
         addToInterface: interface WithEnv: env => (
-          ^ #'ecosphere.ecore.object.interface.add_entry'(interface, type, name, args asArray, varargs)
+            | realType <- type evaluateInEnv: env,
+              realArgs  <- std util newArray: args size |
+            args forEach: [ :i, :v | realArgs at: i put: (v evaluateInEnv: env) ].
+          ^ #'ecosphere.ecore.object.interface.add_entry'(interface, realType, name, realArgs, varargs)
         );
         with inherited parent = #<:std/Clonable>;
     };
