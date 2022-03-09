@@ -16,19 +16,22 @@ bool Eco_VM_Builtin_AddValueSlot(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Any                     object;
     Eco_Any                     index;
     Eco_Any                     flags;
+    Eco_Any                     type;
     Eco_Any                     key;
     Eco_Any                     value;
     struct Eco_Object_SlotInfo  info;
 
-    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 5, 5))
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 6, 6))
         return false;
     
     Eco_Fiber_Pop(fiber, &value);
     Eco_Fiber_Pop(fiber, &key);
+    Eco_Fiber_Pop(fiber, &type);
     Eco_Fiber_Pop(fiber, &flags);
     Eco_Fiber_Pop(fiber, &index);
     Eco_Fiber_Pop(fiber, &object);
 
+    // TODO: More flags
     info.is_delegate  = (Eco_Any_AsInteger(&flags) & 0x01) != 0;
     info.is_inherited = (Eco_Any_AsInteger(&flags) & 0x02) != 0;
     info.is_part      = (Eco_Any_AsInteger(&flags) & 0x04) != 0;

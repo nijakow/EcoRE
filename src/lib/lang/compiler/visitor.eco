@@ -127,7 +127,12 @@
         compiler loadConstant: i
     );
 
-    visitMolecule: ast => visitConstant: ast;
+    visitMolecule: ast => (
+        | m <- #'ecosphere.ecore.clone'({}) |  "TODO: Use a different mechanism, maybe Clone: obj"
+        "TODO: Parent entries"
+        ast slots do: [ :e | e addToMolecule: m WithEnv: environment ].
+        compiler loadConstant: m
+    );
 
     "TODO: Implements interface lang/ast/IVisitor"
     with inherited parent = #<:std/Clonable>;
