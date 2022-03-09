@@ -16,26 +16,28 @@ struct Eco_Molecule;
 
 
 
-enum Eco_Type_Slot_Type
+enum Eco_TypeSlotType
 {
-    Eco_Type_Slot_Type_INLINED,
-    Eco_Type_Slot_Type_SHARED,
-    Eco_Type_Slot_Type_CODE
+    Eco_TypeSlotType_INLINED,
+    Eco_TypeSlotType_SHARED,
+    Eco_TypeSlotType_CODE
 };
 
 
-struct Eco_Type_Slot_Flags
+struct Eco_TypeSlotFlags
 {
     int is_inherited : 1;
     int is_delegate  : 1;
     int is_part      : 1;
 };
 
-struct Eco_Type_Slot
+void Eco_TypeSlot_Flags_Initialize(struct Eco_TypeSlotFlags*);
+
+struct Eco_TypeSlot
 {
-    enum Eco_Type_Slot_Type     type;
-    struct Eco_Type_Slot_Flags  flags;
-    struct Eco_Key*             key;
+    enum   Eco_TypeSlotType   type;
+    struct Eco_TypeSlotFlags  flags;
+    struct Eco_Key*           key;
 
     union {
         struct {
@@ -51,28 +53,28 @@ struct Eco_Type_Slot
     }                           body;
 };
 
-bool Eco_Type_Slot_GetValue(struct Eco_Type_Slot*, struct Eco_Object*, Eco_Any*);
-bool Eco_Type_Slot_SetValue(struct Eco_Type_Slot*, struct Eco_Object*, Eco_Any*);
-bool Eco_Type_Slot_Invoke(struct Eco_Message*, struct Eco_Object*, struct Eco_Type_Slot*, Eco_Any*);
+bool Eco_TypeSlot_GetValue(struct Eco_TypeSlot*, struct Eco_Object*, Eco_Any*);
+bool Eco_TypeSlot_SetValue(struct Eco_TypeSlot*, struct Eco_Object*, Eco_Any*);
+bool Eco_TypeSlot_Invoke(struct Eco_Message*, struct Eco_Object*, struct Eco_TypeSlot*, Eco_Any*);
 
 
 
 struct Eco_Type
 {
-    struct Eco_Object      _;
+    struct Eco_Object     _;
 
-    struct Eco_TypeCore*   typecore;
+    struct Eco_TypeCore*  typecore;
 
-    struct Eco_Object*     proxy;
+    struct Eco_Object*    proxy;
 
-    unsigned int           slot_count;
-    unsigned int           instance_payload_size;
-    struct Eco_Type_Slot   slots[];
+    unsigned int         slot_count;
+    unsigned int         instance_payload_size;
+    struct Eco_TypeSlot  slots[];
 };
 
 struct Eco_Type* Eco_Type_NewPrefab(struct Eco_TypeCore*);
 
-bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*, int, struct Eco_Object_SlotInfo, struct Eco_Type**, struct Eco_Type_Slot**);
+bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*, int, struct Eco_Object_SlotInfo, struct Eco_Type**, struct Eco_TypeSlot**);
 bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type*, int, struct Eco_Object_SlotInfo, struct Eco_Code*, struct Eco_Type**);
 bool Eco_Type_CopyWithRemovedSlot(struct Eco_Type*, unsigned int, struct Eco_Type**);
 

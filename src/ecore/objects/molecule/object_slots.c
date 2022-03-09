@@ -22,17 +22,17 @@ static void Eco_Molecule_SwitchType(struct Eco_Molecule* object, struct Eco_Type
     Eco_Molecule_ResizePayload(object, new_type->instance_payload_size);
 }
 
-bool Eco_Molecule_AddSlot(struct Eco_Molecule* self,
-                          int pos,
+bool Eco_Molecule_AddSlot(struct Eco_Molecule*       self,
+                          int                        pos,
                           struct Eco_Object_SlotInfo info,
-                          Eco_Any* value)
+                          Eco_Any*                   value)
 {
-    struct Eco_Type*       new_type;
-    struct Eco_Type_Slot*  slot;
+    struct Eco_Type*      new_type;
+    struct Eco_TypeSlot*  slot;
 
     if (Eco_Type_CopyWithNewInlinedSlot(self->_.type, pos, info, &new_type, &slot)) {
         Eco_Molecule_SwitchType(self, new_type);
-        Eco_Type_Slot_SetValue(slot, (struct Eco_Object*) self, value);
+        Eco_TypeSlot_SetValue(slot, (struct Eco_Object*) self, value);
         return true;
     } else {
         return false;
