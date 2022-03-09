@@ -10,7 +10,7 @@ extern struct Eco_Type*  Eco_Integer_TYPE;
 
 static inline struct Eco_Type* Eco_Any_GetType(Eco_Any* any)
 {
-    if (Eco_Any_IsPointer(any)) return Eco_Any_AsPointer(any)->type;
+    if (Eco_Any_IsPointer(any)) return ((struct Eco_Object*) Eco_Any_AsPointer(any))->type;
     else if (Eco_Any_IsInteger(any)) return Eco_Integer_TYPE;
     else return NULL;
 }

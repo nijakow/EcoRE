@@ -11,10 +11,10 @@
 
 typedef union Eco_Value
 {
-    struct Eco_Object*  pointer;
-    Eco_Codepoint       character;
-    Eco_Integer         integer;
-    Eco_Floating        floating;
+    void*          pointer;
+    Eco_Codepoint  character;
+    Eco_Integer    integer;
+    Eco_Floating   floating;
 } Eco_Value;
 
 typedef enum Eco_Value_Type
@@ -67,7 +67,7 @@ static inline bool Eco_Any_IsFloating(Eco_Any* any)
 }
 
 
-static inline void Eco_Any_AssignPointer(Eco_Any* any, struct Eco_Object* pointer)
+static inline void Eco_Any_AssignPointer(Eco_Any* any, void* pointer)
 {
     any->value.pointer = pointer;
     any->type          = Eco_Value_Type_POINTER;
@@ -97,7 +97,7 @@ static inline void Eco_Any_AssignAny(Eco_Any* dest, Eco_Any* src)
 }
 
 
-static inline struct Eco_Object* Eco_Any_AsPointer(Eco_Any* any)
+static inline void* Eco_Any_AsPointer(Eco_Any* any)
 {
     return any->value.pointer;
 }
@@ -154,7 +154,7 @@ static inline bool Eco_Any_IsFloating(Eco_Any* any)
 }
 
 
-static inline void Eco_Any_AssignPointer(Eco_Any* any, struct Eco_Object* pointer)
+static inline void Eco_Any_AssignPointer(Eco_Any* any, void* pointer)
 {
     *any = (uintptr_t) pointer;
 }
@@ -190,9 +190,9 @@ static inline void Eco_Any_AssignAny(Eco_Any* dest, Eco_Any* src)
 }
 
 
-static inline struct Eco_Object* Eco_Any_AsPointer(Eco_Any* any)
+static inline void* Eco_Any_AsPointer(Eco_Any* any)
 {
-    return (struct Eco_Object*) *any;
+    return (void*) *any;
 }
 
 static inline Eco_Codepoint Eco_Any_AsCharacter(Eco_Any* any)
