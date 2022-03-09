@@ -1,0 +1,27 @@
+
+#=lang/tokenizer/StringReader: {
+    charVector, index;
+
+    with inherited trait = {
+        init: str => (
+            charVector <- str asVector.
+            index <- 0.
+            ^ self
+        );
+
+        hasNext  => index < (charVector size);
+        advance  => index <- index + 1;
+        peekChar => charVector at: index;
+        readChar => ( | c <- peekChar | advance. ^ c );
+        peeks: s => (
+            | i <- index |
+            s do: [ :c |
+                hasNext unless: [ index <- i. ^ false ].
+                (c != readChar) if: [ index <- i. ^ false ]
+            ].
+            ^ true
+        );
+    };
+
+    with inherited parent = #<:std/Clonable>;
+},

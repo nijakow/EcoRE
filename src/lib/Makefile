@@ -35,6 +35,7 @@ lang/parser/Parser/expressions.eco \
 lang/parser/Parser/optionals.eco \
 lang/parser/Parser/send.eco \
 lang/parser/_.eco \
+lang/parser/reader.eco \
 lang/parser/shared.eco \
 lang/parser/tokenizer.eco \
 master.eco
