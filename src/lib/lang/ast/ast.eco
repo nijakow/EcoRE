@@ -100,16 +100,28 @@
         );
         addToMolecule: molecule WithEnv: env => (
             "TODO: Use Mirrors for this!"
-            "TODO: Code slots"
-            flags isMethod if: [ io out << 'Unable to add method yet!'. ^ molecule ].
 
             | realType  <- type evaluateInEnv: env,
-              realValue <- body evaluateInEnv: env,
               flagBits  <- 0 |
+            
             flags isWith      if: [ flagBits <- flagBits bitOr: 0b001 ].
             flags isInherited if: [ flagBits <- flagBits bitOr: 0b010 ].
             flags isOwn       if: [ flagBits <- flagBits bitOr: 0b100 ].
-            #'ecosphere.ecore.reflect.add_value_slot'(molecule, -1, flagBits, realType, name, realValue).
+
+            flags isMethod if: [
+                "TODO, FIXME, XXX: This approach is totally horrendous"
+                |
+                    compiler <- (lang compiler ScopedCompiler) new,
+                    visitor  <- ((lang compiler Visitor) clone) initWithCompiler: compiler Environment: env
+                |
+                args do: [ :arg | compiler addParameter: arg name "TODO: Also compile and add the type" ].
+                varargs if: [ compiler enableVarargs ].
+                body acceptVisitor: visitor.
+                #'ecosphere.ecore.reflect.add_code_slot'(molecule, -1, flagBits, realType, name, compiler finish).
+            ] else: [
+                | realValue <- body evaluateInEnv: env |
+                #'ecosphere.ecore.reflect.add_value_slot'(molecule, -1, flagBits, realType, name, realValue).
+            ].
           ^ molecule
         );
         with inherited parent = #<:std/Clonable>;
