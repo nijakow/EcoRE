@@ -96,14 +96,11 @@ bool Eco_VM_LoadImageFromFile(struct Eco_VM* vm, const char* file)
     struct Eco_EConnect_Result  result;
     struct Eco_Code*            code;
 
-    Eco_Log_Info("Loading file '%s'...\n", file);
-
     if (Eco_EConnect_ReadFile(file, &result)) {
-        Eco_Log_Info("Loading file '%s' was successful!\n", file);
         if (Eco_EConnect_Result_ExpectObject(&result, (struct Eco_Object**) &code)) {
             Eco_VM_SpawnThunk(vm, code);
         } else {
-            Eco_Log_Error("Expected code, got something different!\n");
+            Eco_Log_Error("Expected code, got something different (while loading file '%s')!\n", file);
         }
         Eco_EConnect_Result_Destroy(&result);
         return true;

@@ -18,7 +18,6 @@ void Eco_Banner()
 
 void Eco_Main(int argc, char *argv[])
 {
-    Eco_Banner();
     Eco_Init();
 
     if (argc != 2) {
