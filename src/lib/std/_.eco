@@ -35,7 +35,7 @@
         if: t else: f => asBool if: t else: f;
         & value       => (((std util Collector) clone) init: self) & value;
         cons: value   => ((std util MutablePair) clone) initWithFirst: self Second: value;
-        writeOn: writer => writer << 'clonable';
+        writeOn: writer => writer << '?';
         with lobby    = #<:lobby>;
     };
 
