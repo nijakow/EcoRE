@@ -25,6 +25,23 @@ struct Eco_TypeCore Eco_Type_TYPECORE;
 struct Eco_Type*    Eco_Type_TYPE;
 
 
+void Eco_TypeSlot_Flags_Initialize(struct Eco_TypeSlotFlags* flags)
+{
+    flags->is_deprecated = false;
+    flags->is_private    = false;
+    flags->is_final      = false;
+    flags->is_inherited  = false;
+    flags->is_delegate   = false;
+    flags->is_part       = false;
+}
+
+void Eco_TypeSlot_Initialize(struct Eco_TypeSlot* slot)
+{
+    // slot->type is currently left uninitialized
+    slot->key = NULL;
+    Eco_TypeSlot_Flags_Initialize(&slot->flags);
+}
+
 bool Eco_TypeSlot_GetValue(struct Eco_TypeSlot* slot, struct Eco_Object* object, Eco_Any* location)
 {
     switch (slot->type)
@@ -145,7 +162,10 @@ static bool Eco_Type_CopyWithNewSlot(struct Eco_Type*      self,
 
     for (i = 0; i < new_slot_count; i++) {
         if (i < adjusted_pos) the_copy->slots[i] = self->slots[i];
-        else if (i == adjusted_pos) *slot_loc = &the_copy->slots[i];
+        else if (i == adjusted_pos) {
+            Eco_TypeSlot_Initialize(&the_copy->slots[i]);
+            *slot_loc = &the_copy->slots[i];
+        }
         else the_copy->slots[i] = self->slots[i - 1];
     }
 

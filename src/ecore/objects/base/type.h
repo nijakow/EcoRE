@@ -26,12 +26,16 @@ enum Eco_TypeSlotType
 
 struct Eco_TypeSlotFlags
 {
-    int is_inherited : 1;
-    int is_delegate  : 1;
-    int is_part      : 1;
+    int is_deprecated : 1;
+    int is_private    : 1;
+    int is_final      : 1;
+    int is_inherited  : 1;
+    int is_delegate   : 1;
+    int is_part       : 1;
 };
 
 void Eco_TypeSlot_Flags_Initialize(struct Eco_TypeSlotFlags*);
+
 
 struct Eco_TypeSlot
 {
@@ -53,10 +57,11 @@ struct Eco_TypeSlot
     }                           body;
 };
 
+void Eco_TypeSlot_Initialize(struct Eco_TypeSlot*);
+
 bool Eco_TypeSlot_GetValue(struct Eco_TypeSlot*, struct Eco_Object*, Eco_Any*);
 bool Eco_TypeSlot_SetValue(struct Eco_TypeSlot*, struct Eco_Object*, Eco_Any*);
 bool Eco_TypeSlot_Invoke(struct Eco_Message*, struct Eco_Object*, struct Eco_TypeSlot*, Eco_Any*);
-
 
 
 struct Eco_Type
