@@ -116,7 +116,7 @@ bool Eco_Interface_ImplementsMessage(struct Eco_Interface* interface, struct Eco
 {
     unsigned int  index;
 
-    if (interface == Eco_Interface_GetDefaultInterface())
+    if (interface->allow_all)
         return true;
     
     for (index = 0; index < interface->entry_count; index++)
@@ -126,7 +126,7 @@ bool Eco_Interface_ImplementsMessage(struct Eco_Interface* interface, struct Eco
     }
 
     // TODO: Check parents
-    return NULL;
+    return false;
 }
 
 

@@ -4,6 +4,7 @@
 #include <ecore/objects/molecule/object_slots.h>
 #include <ecore/objects/molecule/slot_info.h>
 #include <ecore/objects/misc/key/key.h>
+#include <ecore/objects/vm/interface/interface.h>
 
 
 bool Eco_EConnect_Reader_ReadMoleculeBody(struct Eco_EConnect_Reader* reader,
@@ -62,14 +63,14 @@ bool Eco_EConnect_Reader_ReadMoleculeBody(struct Eco_EConnect_Reader* reader,
                  */
                 Eco_Any_AssignPointer(&any, (struct Eco_Object*) object);
             }
-            Eco_Molecule_AddSlot(object, -1, slot_info, &any);
+            Eco_Molecule_AddSlot(object, -1, slot_info, Eco_Interface_GetDefaultInterface(), &any); // TODO, FIXME, XXX: Parse the interface!
         } else {
             slot_info.is_inherited = false;
             slot_info.is_delegate  = true;
             slot_info.is_part      = false;
             if (!Eco_EConnect_Reader_ReadObject(reader, result, (struct Eco_Object**) &code))
                 return false;
-            Eco_Molecule_AddCodeSlot(object, -1, slot_info, code);
+            Eco_Molecule_AddCodeSlot(object, -1, slot_info, Eco_Interface_GetDefaultInterface(), code); // TODO, FIXME, XXX: Parse the interface!
         }
     }
 

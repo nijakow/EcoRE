@@ -40,6 +40,7 @@ bool Eco_VM_Builtin_AddValueSlot(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Molecule_AddSlot((struct Eco_Molecule*) Eco_Any_AsPointer(&object),
                          Eco_Any_AsInteger(&index),
                          info,
+                         (struct Eco_Interface*) Eco_Any_AsPointer(&type),
                         &value);
 
     Eco_Fiber_Push(fiber, &object);
@@ -82,6 +83,7 @@ bool Eco_VM_Builtin_AddCodeSlot(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Molecule_AddCodeSlot((struct Eco_Molecule*) Eco_Any_AsPointer(&object),
                              Eco_Any_AsInteger(&index),
                              info,
+                             (struct Eco_Interface*) Eco_Any_AsPointer(&type),
                              (struct Eco_Code*) Eco_Any_AsPointer(&code));
 
     Eco_Fiber_Push(fiber, &object);

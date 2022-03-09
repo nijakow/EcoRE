@@ -25,12 +25,13 @@ static void Eco_Molecule_SwitchType(struct Eco_Molecule* object, struct Eco_Type
 bool Eco_Molecule_AddSlot(struct Eco_Molecule*       self,
                           int                        pos,
                           struct Eco_Object_SlotInfo info,
+                          struct Eco_Interface*      interface,
                           Eco_Any*                   value)
 {
     struct Eco_Type*      new_type;
     struct Eco_TypeSlot*  slot;
 
-    if (Eco_Type_CopyWithNewInlinedSlot(self->_.type, pos, info, &new_type, &slot)) {
+    if (Eco_Type_CopyWithNewInlinedSlot(self->_.type, pos, info, interface, &new_type, &slot)) {
         Eco_Molecule_SwitchType(self, new_type);
         Eco_TypeSlot_SetValue(slot, (struct Eco_Object*) self, value);
         return true;
@@ -39,14 +40,15 @@ bool Eco_Molecule_AddSlot(struct Eco_Molecule*       self,
     }
 }
 
-bool Eco_Molecule_AddCodeSlot(struct Eco_Molecule* self,
-                              int pos,
+bool Eco_Molecule_AddCodeSlot(struct Eco_Molecule*       self,
+                              int                        pos,
                               struct Eco_Object_SlotInfo info,
-                              struct Eco_Code* code)
+                              struct Eco_Interface*      interface,
+                              struct Eco_Code*           code)
 {
     struct Eco_Type*  new_type;
 
-    if (Eco_Type_CopyWithNewCodeSlot(self->_.type, pos, info, code, &new_type)) {
+    if (Eco_Type_CopyWithNewCodeSlot(self->_.type, pos, info, interface, code, &new_type)) {
         Eco_Molecule_SwitchType(self, new_type);
         return true;
     } else {

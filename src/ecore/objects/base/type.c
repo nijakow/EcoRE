@@ -179,6 +179,7 @@ static bool Eco_Type_CopyWithNewSlot(struct Eco_Type*      self,
 bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*           self,
                                      int                        pos,
                                      struct Eco_Object_SlotInfo info,
+                                     struct Eco_Interface*      interface,
                                      struct Eco_Type**          type_loc,
                                      struct Eco_TypeSlot**      slot_loc)
 {
@@ -197,6 +198,7 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*           self,
         the_slot->flags.is_inherited      = info.is_inherited;
         the_slot->flags.is_delegate       = info.is_delegate;
         the_slot->flags.is_part           = info.is_part;
+        the_slot->interface               = interface;
         the_slot->body.inlined.value_size = slot_value_size;
         the_slot->body.inlined.offset     = the_copy->instance_payload_size - slot_value_size;
 
@@ -212,6 +214,7 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*           self,
 bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type* self,
                                   int pos,
                                   struct Eco_Object_SlotInfo info,
+                                  struct Eco_Interface* interface,
                                   struct Eco_Code* code,
                                   struct Eco_Type** type_loc)
 {
@@ -225,6 +228,7 @@ bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type* self,
         the_copy->instance_payload_size += slot_value_size;
 
         the_slot->type           = Eco_TypeSlotType_CODE;
+        the_slot->interface      = interface;
         the_slot->key            = info.key;
         the_slot->body.code.code = code;
 

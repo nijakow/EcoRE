@@ -1,6 +1,7 @@
 #include "init.h"
 
 #include <ecore/objects/base/type.h>
+#include <ecore/objects/vm/interface/interface.h>
 #include <ecore/vm/vm.h>
 #include <ecore/vm/fiber/stackops.h>
 
@@ -159,6 +160,17 @@ bool Eco_VM_Builtin_GetInterfaceType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     Eco_Any_AssignPointer(&value, (struct Eco_Object*) Eco_Interface_TYPE);
+    Eco_Fiber_Push(fiber, &value);
+    return true;
+}
+
+bool Eco_VM_Builtin_GetDefaultInterface(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  value;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
+        return false;
+    Eco_Any_AssignPointer(&value, (struct Eco_Object*) Eco_Interface_GetDefaultInterface());
     Eco_Fiber_Push(fiber, &value);
     return true;
 }
