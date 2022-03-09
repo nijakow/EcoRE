@@ -24,26 +24,31 @@ enum Eco_Type_Slot_Type
 };
 
 
+struct Eco_Type_Slot_Flags
+{
+    int is_inherited : 1;
+    int is_delegate  : 1;
+    int is_part      : 1;
+};
+
 struct Eco_Type_Slot
 {
-    enum Eco_Type_Slot_Type  type;
-    
-    struct Eco_Key*          key;
+    enum Eco_Type_Slot_Type     type;
+    struct Eco_Type_Slot_Flags  flags;
+    struct Eco_Key*             key;
 
     union {
         struct {
             unsigned int offset;
             unsigned int value_size;
-            bool is_inherited;
-            bool is_delegate;
-            bool is_part;
         } inlined;
         struct {
-            bool is_inherited;
             Eco_Any value;
         } shared;
-        struct Eco_Code*     code;
-    } body;
+        struct {
+            struct Eco_Code* code;
+        } code;
+    }                           body;
 };
 
 bool Eco_Type_Slot_GetValue(struct Eco_Type_Slot*, struct Eco_Object*, Eco_Any*);

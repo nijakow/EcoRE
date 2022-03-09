@@ -69,7 +69,7 @@ bool Eco_Type_Slot_Invoke(struct Eco_Message*    message,
                     return true;
                 case Eco_Type_Slot_Type_CODE:
                     Eco_Any_AssignAny(Eco_Fiber_Nth(message->fiber, message->body.send.arg_count), self);   // Assign the new self
-                    return Eco_Fiber_Enter(message->fiber, NULL, slot->body.code, message->body.send.arg_count);
+                    return Eco_Fiber_Enter(message->fiber, NULL, slot->body.code.code, message->body.send.arg_count);
             }
             return false;
         case Eco_Message_Type_ASSIGN:
@@ -170,16 +170,16 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type* self,
     if (Eco_Type_CopyWithNewSlot(self, pos, &the_copy, &the_slot)) {
         the_copy->instance_payload_size += slot_value_size;
 
-        the_slot->type                      = Eco_Type_Slot_Type_INLINED;
-        the_slot->key                       = info.key;
-        the_slot->body.inlined.is_inherited = info.is_inherited;
-        the_slot->body.inlined.is_delegate  = info.is_delegate;
-        the_slot->body.inlined.is_part      = info.is_part;
-        the_slot->body.inlined.value_size   = slot_value_size;
-        the_slot->body.inlined.offset       = the_copy->instance_payload_size - slot_value_size;
+        the_slot->type                    = Eco_Type_Slot_Type_INLINED;
+        the_slot->key                     = info.key;
+        the_slot->flags.is_inherited      = info.is_inherited;
+        the_slot->flags.is_delegate       = info.is_delegate;
+        the_slot->flags.is_part           = info.is_part;
+        the_slot->body.inlined.value_size = slot_value_size;
+        the_slot->body.inlined.offset     = the_copy->instance_payload_size - slot_value_size;
 
-        *type_loc                           = the_copy;
-        *slot_loc                           = the_slot;
+        *type_loc                         = the_copy;
+        *slot_loc                         = the_slot;
         
         return true;
     } else {
@@ -202,11 +202,11 @@ bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type* self,
     if (Eco_Type_CopyWithNewSlot(self, pos, &the_copy, &the_slot)) {
         the_copy->instance_payload_size += slot_value_size;
 
-        the_slot->type      = Eco_Type_Slot_Type_CODE;
-        the_slot->key       = info.key;
-        the_slot->body.code = code;
+        the_slot->type           = Eco_Type_Slot_Type_CODE;
+        the_slot->key            = info.key;
+        the_slot->body.code.code = code;
 
-        *type_loc           = the_copy;
+        *type_loc                = the_copy;
 
         return true;
     } else {
@@ -259,7 +259,7 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
                 Eco_GC_State_MarkAny(state, &type->slots[i].body.shared.value);
                 break;
             case Eco_Type_Slot_Type_CODE:
-                Eco_GC_State_MarkObject(state, type->slots[i].body.code);
+                Eco_GC_State_MarkObject(state, type->slots[i].body.code.code);
                 break;
         }
     }
@@ -304,7 +304,7 @@ void Eco_Type_Subclone(struct Eco_CloneState* state,
                 Eco_CloneState_CloneAny(state,
                                         Eco_Molecule_At(clone, type->slots[i].body.inlined.offset),
                                         Eco_Molecule_At(original, type->slots[i].body.inlined.offset),
-                                        type->slots[i].body.inlined.is_part);
+                                        type->slots[i].flags.is_part);
                 break;
             default:
                 break;

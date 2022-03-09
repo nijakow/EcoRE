@@ -122,9 +122,9 @@ bool Eco_Object_Send(struct Eco_Message* message,
         switch (slot->type)
         {
             case Eco_Type_Slot_Type_INLINED:
-                if (slot->body.inlined.is_inherited) {
+                if (slot->flags.is_inherited) {
                     if (Eco_Type_Slot_GetValue(slot, target, &value)) {
-                        if (slot->body.inlined.is_delegate) {
+                        if (slot->flags.is_delegate) {
                             result = Eco_Send(message, link, &value, &value);
                         } else {
                             result = Eco_Send(message, link, &value, self);
@@ -134,7 +134,7 @@ bool Eco_Object_Send(struct Eco_Message* message,
                 }
                 break;
             case Eco_Type_Slot_Type_SHARED:
-                if (slot->body.shared.is_inherited) {
+                if (slot->flags.is_inherited) {
                     //if (slot->body.shared.is_delegate) {  // TODO
                         result = Eco_Send(message, link, &slot->body.shared.value, &slot->body.shared.value);
                     /*} else {
