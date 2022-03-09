@@ -63,6 +63,13 @@
         #'peek'
     ];
 
+    IQueue = #=IQueue: %[
+        #'isEmpty',
+        #'enqueue:'(element),
+        #'dequeue',
+        #'front'
+    ];
+
     ISet = #=ISet: %[
         with #<:IIterable>;
         #'isEmpty',

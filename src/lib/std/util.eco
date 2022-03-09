@@ -60,6 +60,12 @@
     pop     => removeLast;
 };
 
+#=std/util/StandardQueueImpl: {
+    enqueue: e => append: e;
+    front      => first;
+    dequeue    => removeFirst;
+};
+
 #=std/util/StandardSetImpl: {
     contains: value => (find: value) yes: [ :i | ^ true ] no: [ ^ false ];
     addElement: e => (contains: e) unless: [ append: e ];
@@ -79,6 +85,7 @@
     newBlob:  size => #'ecosphere.ecore.object.blob.new'(size);
     newVector      => (#<:std/util> Vector) new;
     newStack       => (#<:std/util> Stack) new;
+    newQueue       => (#<:std/util> Queue) new;
     newSet         => (#<:std/util> Set) new;
     newList        => (#<:std/util> List) new;
     newMap         => (#<:std/util> Map) new;
@@ -91,6 +98,11 @@
     );
 
     Stack = {
+      new => std util newVector;
+      with inherited parent = #<:std/Clonable>;
+    };
+
+    Queue = {
       new => std util newVector;
       with inherited parent = #<:std/Clonable>;
     };
@@ -115,6 +127,7 @@
             with inherited conversions = #<:std/util/StandardListConversions>;
             with inherited access = #<:std/util/StandardListAccess>;
             with inherited stack = #<:std/util/StandardStackImpl>;
+            with inherited queue = #<:std/util/StandardQueueImpl>;
             with inherited set = #<:std/util/StandardSetImpl>;
 
             asString => asArray asString;
