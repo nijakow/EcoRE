@@ -260,20 +260,27 @@
     writeOn: writer => (
         (self is: any) if: [ writer << 'any'. ^ self ].
         writer << '%[ '.
-        getEntryNames do: [ :name | writer << name << ', ' ].   "TODO: Also write types"
+        0 for: size do: [ :i |
+            writer << '[' << (returnTypeForSlotIndex: i) << '] '
+                   << (nameForSlotIndex: i) << '('.
+            | count <- (argCountForSlotIndex: i) |
+            0 for: count do: [ :j |
+                (j > 0) if: [ writer << ', ' ].
+                writer << '[' << (argTypeForSlotIndex: i Arg: j) << ']'.
+            ].
+            (hasVarargsForSlotIndex: i) if: [ (count > 0) if: [ writer << ', ' ]. writer << '...' ].
+            writer << ')'.
+            writer << '; '
+        ].
         writer << ']'
     );
-    size => (
-        | c <- 0 |
-        [
-            (#'ecosphere.ecore.object.interface.get_entry_info'(self, c, -1) == self) if: [ ^ c ].
-            c <- c + 1
-        ] repeat
-    );
-    getEntryNames => (
-        | s <- size. arr <- std util newArray: s |
-        0 for: s do: [ :i | arr at: i put: #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -1) ].
-      ^ arr
-    );
+
+    size => #'ecosphere.ecore.object.interface.get_entry_info'(self, 0, -1);
+    nameForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -2);
+    returnTypeForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -3);
+    argCountForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -4);
+    hasVarargsForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -5) isNotZero;
+    argTypeForSlotIndex: i Arg: ai => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, ai);
+
     with inherited parent = #<:std/Clonable>;
 }

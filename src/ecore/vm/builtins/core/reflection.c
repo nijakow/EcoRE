@@ -57,20 +57,28 @@ bool Eco_VM_Builtin_InterfaceGetEntryInfo(struct Eco_Fiber* fiber, unsigned int 
     Eco_Fiber_Pop(fiber, &any);
     interface = (struct Eco_Interface*) Eco_Any_AsPointer(&any);
 
-    if (index < 0 || ((unsigned int) index) >= interface->entry_count)
-        Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface);
-    else if (subindex == -1)
-        Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface->entries[index].key);
+    if (subindex == -1)
+        Eco_Any_AssignInteger(&any, interface->entry_count);
     else if (subindex == -2)
-        Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface->entries[index].return_type);
-    else if (subindex == -3)
-        Eco_Any_AssignInteger(&any, interface->entries[index].arg_count);
+        Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface->entries[index].key);
+    else if (subindex == -3) {
+        if (interface->entries[index].return_type == NULL)
+            Eco_Any_AssignPointer(&any, (struct Eco_Object*) Eco_Interface_GetDefaultInterface());
+        else
+            Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface->entries[index].return_type);
+    }
     else if (subindex == -4)
+        Eco_Any_AssignInteger(&any, interface->entries[index].arg_count);
+    else if (subindex == -5)
         Eco_Any_AssignInteger(&any, interface->entries[index].has_varargs);
     else if (subindex < 0 || ((unsigned int) subindex) >= interface->entries[index].arg_count)
-        Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface);
-    else
-        Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface->entries[index].arg_types[subindex]);
+        Eco_Any_AssignPointer(&any, (struct Eco_Object*) Eco_Interface_GetDefaultInterface());
+    else {
+        if (interface->entries[index].arg_types[subindex] == NULL)
+            Eco_Any_AssignPointer(&any, (struct Eco_Object*) Eco_Interface_GetDefaultInterface());
+        else
+            Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface->entries[index].arg_types[subindex]);
+    }
     Eco_Fiber_Push(fiber, &any);
     return true;
 }
