@@ -94,7 +94,7 @@
         (depth isZero)
               if: [ writeReg: src ToReg: dst ]
             else: [ introduceRegister: src.
-                    writeU8: Bytecodes L2R.
+                    writeU8: Bytecodes R2L.
                     writeU8: dst.
                     writeU8: depth.
                     writeU8: src             ]
@@ -104,7 +104,7 @@
         (depth isZero)
               if: [ writeReg: src ToReg: dst ]
             else: [ introduceRegister: dst.
-                    writeU8: Bytecodes R2L.
+                    writeU8: Bytecodes L2R.
                     writeU8: dst.
                     writeU8: src.
                     writeU8: depth           ]
