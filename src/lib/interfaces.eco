@@ -35,6 +35,12 @@
         #'forEach:'(body)
     ];
 
+    IIterator = #=IIterator: %[
+        hasNext,
+        current,
+        advance
+    ];
+
     IFixedCollection = #=IFixedCollection: %[
         with #<:IIterable>;
         #'isEmpty',

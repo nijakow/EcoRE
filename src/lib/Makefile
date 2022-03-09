@@ -5,7 +5,7 @@ endif
 NAME = master.ebf
 SOURCES = \
 init.eco \
-std/std.eco \
+std/_.eco \
 std/io.eco \
 std/util.eco \
 std/reflect.eco \
@@ -23,18 +23,18 @@ lang/compiler/scope.eco \
 lang/compiler/scoped_compiler.eco \
 lang/compiler/value_type.eco \
 lang/compiler/visitor.eco \
-lang/parser/parts/objects/interface.eco \
-lang/parser/parts/objects/molecule.eco \
-lang/parser/parts/objects/simple.eco \
-lang/parser/parts/args.eco \
-lang/parser/parts/bars.eco \
-lang/parser/parts/charchecks.eco \
-lang/parser/parts/checks.eco \
-lang/parser/parts/compounds.eco \
-lang/parser/parts/expressions.eco \
-lang/parser/parts/optionals.eco \
-lang/parser/parts/send.eco \
-lang/parser/parser.eco \
+lang/parser/Parser/objects/interface.eco \
+lang/parser/Parser/objects/molecule.eco \
+lang/parser/Parser/objects/simple.eco \
+lang/parser/Parser/args.eco \
+lang/parser/Parser/bars.eco \
+lang/parser/Parser/charchecks.eco \
+lang/parser/Parser/checks.eco \
+lang/parser/Parser/compounds.eco \
+lang/parser/Parser/expressions.eco \
+lang/parser/Parser/optionals.eco \
+lang/parser/Parser/send.eco \
+lang/parser/_.eco \
 lang/parser/shared.eco \
 lang/parser/tokenizer.eco \
 master.eco
