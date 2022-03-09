@@ -5,6 +5,7 @@
 
 #include "type.h"
 
+#include <ecore/objects/vm/interface/interface.h>
 #include <ecore/vm/core/clone.h>
 #include <ecore/vm/core/send.h>
 #include <ecore/vm/memory/memory.h>
@@ -109,8 +110,9 @@ bool Eco_Object_Send(struct Eco_Message* message,
 
     for (i = 0; i < type->slot_count; i++)
     {
-        if (type->slots[i].key == message->key) {
-            Eco_TypeSlot_Invoke(message, target, &(type->slots[i]), self);
+        slot = &type->slots[i];
+        if (slot->key == message->key) {
+            Eco_TypeSlot_Invoke(message, target, slot, self);
             return true;
         }
     }
@@ -122,7 +124,7 @@ bool Eco_Object_Send(struct Eco_Message* message,
         switch (slot->type)
         {
             case Eco_TypeSlotType_INLINED:
-                if (slot->flags.is_inherited) {
+                if (slot->flags.is_inherited && Eco_Interface_ImplementsMessage(slot->interface, message->key)) {
                     if (Eco_TypeSlot_GetValue(slot, target, &value)) {
                         if (slot->flags.is_delegate) {
                             result = Eco_Send(message, link, &value, &value);
@@ -134,7 +136,7 @@ bool Eco_Object_Send(struct Eco_Message* message,
                 }
                 break;
             case Eco_TypeSlotType_SHARED:
-                if (slot->flags.is_inherited) {
+                if (slot->flags.is_inherited && Eco_Interface_ImplementsMessage(slot->interface, message->key)) {
                     //if (slot->body.shared.is_delegate) {  // TODO
                         result = Eco_Send(message, link, &slot->body.shared.value, &slot->body.shared.value);
                     /*} else {

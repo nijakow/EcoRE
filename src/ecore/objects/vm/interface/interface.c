@@ -107,6 +107,29 @@ struct Eco_Interface* Eco_Interface_GetDefaultInterface()
     return Eco_Interface_DEFAULT;
 }
 
+
+/*
+ *    C h e c k s
+ */
+
+bool Eco_Interface_ImplementsMessage(struct Eco_Interface* interface, struct Eco_Key* message)
+{
+    unsigned int  index;
+
+    if (interface == Eco_Interface_GetDefaultInterface())
+        return true;
+    
+    for (index = 0; index < interface->entry_count; index++)
+    {
+        if (interface->entries[index].key == message)
+            return true;
+    }
+
+    // TODO: Check parents
+    return NULL;
+}
+
+
 /*
  *    M o d i f i c a t i o n
  */

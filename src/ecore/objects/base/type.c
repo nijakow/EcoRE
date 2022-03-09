@@ -9,6 +9,7 @@
 #include <ecore/objects/misc/key/key.h>
 #include <ecore/objects/vm/code/code.h>
 #include <ecore/objects/vm/code/closure.h>
+#include <ecore/objects/vm/interface/interface.h>
 #include <ecore/vm/core/clone.h>
 #include <ecore/vm/core/send.h>
 #include <ecore/vm/fiber/fiber.h>
@@ -38,6 +39,7 @@ void Eco_TypeSlot_Flags_Initialize(struct Eco_TypeSlotFlags* flags)
 void Eco_TypeSlot_Initialize(struct Eco_TypeSlot* slot)
 {
     // slot->type is currently left uninitialized
+    slot->interface = Eco_Interface_GetDefaultInterface();
     slot->key = NULL;
     Eco_TypeSlot_Flags_Initialize(&slot->flags);
 }

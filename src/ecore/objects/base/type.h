@@ -41,6 +41,7 @@ struct Eco_TypeSlot
 {
     enum   Eco_TypeSlotType   type;
     struct Eco_TypeSlotFlags  flags;
+    struct Eco_Interface*     interface;
     struct Eco_Key*           key;
 
     union {
