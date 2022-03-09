@@ -35,10 +35,8 @@
         writeU8: ((s rshift: 8) bitAnd: 0xff)
     );
     addConstant: c => (
-        (constants find: c)
-            yes: [ :i | writeU16: i          ]
-             no: [ writeU16: constants size.
-                   constants append: c       ]
+        writeU16: constants size.
+        constants append: c
     );
     addClosure: c => (
         (closures find: c)
