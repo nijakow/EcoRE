@@ -55,14 +55,16 @@
 
         parser exprDo: [ :expr |
             |
-                code <- expr compileInEnv: lobby
+                code <- expr compileInEnv: lobby,
+                result
             |
 
-            io out << (code execute({
+            result <- (code execute({
                 addVar: name => #'ecosphere.ecore.reflect.add_value_slot'(self, -1, 0, any, name, false);
                 writeOn: writer => writer << '<session>';
                 with inherited parent = #<:std/Clonable>;
             })).
+            io out << '        ' << result.
             io out newline.
             io out commit.
         ]
