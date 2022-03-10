@@ -35,7 +35,7 @@
         if: t else: f => asBool if: t else: f;
         & value       => (((std util Collector) clone) init: self) & value;
         cons: value   => ((std util MutablePair) clone) initWithFirst: self Second: value;
-        writeOn: writer => writer << '?';
+        writeOn: writer => writer << 'object';
         with lobby    = #<:lobby>;
     };
 
@@ -44,6 +44,7 @@
         init          => ^ self;
         clone         => #'ecosphere.ecore.clone'(self);
         new           => clone init;
+        writeOn: writer => writer << 'clonable';
         isBlock       => false;
         isInt         => false;
         isChar        => false;
