@@ -57,7 +57,16 @@
             | sb <- (std util StringBuilder) new |
 
             [ in peekChar == terminator ] until: [
-                sb append: (in readChar)
+                | c <- in readChar |
+                (c == #\\) if: [
+                    | n <- in readChar |
+                    begin
+                      if: [ n == #\\        ] then: [ sb append: n          ] ~
+                      if: [ n == terminator ] then: [ sb append: terminator ] ~
+                    default: [ sb append: c. sb append: n ]
+                ] else: [
+                    sb append: c
+                ].
             ].
 
             in readChar.
