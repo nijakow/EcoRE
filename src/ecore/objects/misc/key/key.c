@@ -53,6 +53,9 @@ struct Eco_Key* Eco_Key_New(const char* name)
 
     key->next              = Eco_KEYS;
     key->prev              = NULL;
+    if (Eco_KEYS != NULL) {
+        Eco_KEYS->prev     = key;
+    }
     Eco_KEYS               = key;
 
     return key;
