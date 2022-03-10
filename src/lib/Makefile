@@ -6,7 +6,12 @@ NAME = master.ebf
 SOURCES = \
 init.eco \
 std/_.eco \
+std/bool.eco \
+std/clonable.eco \
+std/defaultbehavior.eco \
+std/globals.eco \
 std/io.eco \
+std/maybe.eco \
 std/util.eco \
 std/reflect.eco \
 interfaces.eco \

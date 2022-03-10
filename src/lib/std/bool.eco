@@ -1,0 +1,36 @@
+
+#=std/bool: {
+    true = #=std/bool/true: {
+        with inherited trait = {
+            asBool           => self;
+            not              => false;
+            if: t else: f    => t value;
+            if: t            => t value;
+            unless: f        => false;
+            true: t false: f => if: t else: f;
+            true: t          => if: t;
+            false: f         => unless: f;
+            if: c then: b    => ( (c value asBool) if: [ b value. ^ false ] else: [ ^ self ] );
+            default: b       => ( b value. ^ self );
+            writeOn: writer  => writer << 'true';
+        };
+        with inherited parent = #<:std/Clonable>;
+    },
+
+    false = #=std/bool/false: {
+        with inherited trait = {
+            asBool           => self;
+            not              => true;
+            if: t else: f    => f value;
+            if: t            => self;
+            unless: f        => f value;
+            true: t false: f => if: t else: f;
+            true: t          => if: t;
+            false: f         => unless: f;
+            if: c then: b    => self;
+            default: b       => self;
+            writeOn: writer  => writer << 'false';
+        };
+        with inherited parent = #<:std/Clonable>;
+    }
+}

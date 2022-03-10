@@ -1,0 +1,15 @@
+
+#=globals: {
+    char = {
+        space     => 32 asChar;
+        backspace =>  8 asChar;
+        tab       =>  9 asChar;
+        newline   => 10 asChar;
+        return    => 13 asChar;
+        escape    => 27 asChar;
+    };
+
+    begin = #<:std/bool/true>;
+
+    io = #<:std/bool/false>;
+}

@@ -1,0 +1,21 @@
+
+#=std/DefaultBehavior: {
+    value         => self;
+    mirror        => (std reflect Mirror) clone init: self;
+    asBool        => true;
+    not           => asBool not;
+    is: other     => #'ecosphere.ecore.is'(self, other);
+    equals: e     => is: e;
+    == other      => is: other;
+    != other      => (== other) not;
+    lens: other   => (other clone) init: self;
+    let: block    => block value(self);
+    when: block   => asBool if: [ block value(self) ];
+    if: block     => asBool if: block;
+    unless: block => asBool unless: block;
+    if: t else: f => asBool if: t else: f;
+    & value       => (((std util Collector) clone) init: self) & value;
+    cons: value   => ((std util MutablePair) clone) initWithFirst: self Second: value;
+    writeOn: writer => writer << 'object';
+    with lobby    = #<:lobby>;
+}

@@ -1,0 +1,28 @@
+
+#=std/maybe: {
+    Yes = #=std/maybe/Yes: {
+        value;
+
+        with inherited trait = {
+            init: v => value <- v;
+            yes: block => block value(value);
+            no: block => self;
+            yes: yblock no: nblock => yblock value(value);
+            writeOn: writer => writer << 'Yes: ' << value;
+        };
+        with inherited parent = #<:std/Clonable>;
+    };
+
+    Yes: value => (#<:std/maybe/Yes> clone) init: value;
+
+    No = #=std/maybe/No: {
+        with inherited trait = {
+            value => false;
+            yes: block => self;
+            no: block => block value;
+            yes: yblock no: nblock => nblock value;
+            writeOn: writer => writer << 'No';
+        };
+        with inherited parent = #<:std/Clonable>;
+    };
+},
