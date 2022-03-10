@@ -47,25 +47,16 @@
         io out newline.
         io out commit.
 
-        [
-            io out << 'Eco > '.
-            io out commit.
+        |
+            reader <- (io in) lens: (lang tokenizer PortReader),
+            tok    <- reader lens: (lang tokenizer Tokenizer),
+            parser <- tok lens: (lang parser Parser)
+        |
 
+        parser exprDo: [ :expr |
             |
-                reader <- (io in readLine) lens: (lang tokenizer StringReader),
-                tok    <- reader lens: (lang tokenizer Tokenizer),
-                parser <- tok lens: (lang parser Parser),
-                expr   <- parser parseExpression
+                code <- expr compileInEnv: lobby
             |
-            
-            /"
-                io out << expr.
-                io out newline.
-                io out commit.
-            "/
-
-            | code <- expr compileInEnv: lobby |
-            io out commit.
 
             io out << (code execute({
                 addVar: name => #'ecosphere.ecore.reflect.add_value_slot'(self, -1, 0, any, name, false);
@@ -73,7 +64,8 @@
                 with inherited parent = #<:std/Clonable>;
             })).
             io out newline.
-        ] repeat
+            io out commit.
+        ]
     );
 
     with lobby = #<:lobby>;

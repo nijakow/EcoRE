@@ -12,6 +12,7 @@
               ^ self
             );
 
+            hasNext  => true;
             readByte => _br readByte;
             readChar => (
                 | b <- readByte, bytes, v |

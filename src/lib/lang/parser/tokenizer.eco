@@ -1,6 +1,7 @@
 #=lang/tokenizer: {
 
     StringReader = #<:lang/tokenizer/StringReader>,
+    PortReader = #<:lang/tokenizer/PortReader>,
 
     Token = {
         tokenizer, type, payload;

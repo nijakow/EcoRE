@@ -9,6 +9,13 @@
           ^ self
         );
 
+        exprDo: block => (
+            [
+                block value(parseExpression).
+                check: (TokenType SEPARATOR)
+            ] repeat
+        );
+
         with ast = #<:lang/ast>;
         with inherited checks = #<:lang/parser/Parser/Checks>;
         with inherited charchecks = #<:lang/parser/Parser/CharChecks>;

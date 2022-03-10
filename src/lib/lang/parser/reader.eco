@@ -27,24 +27,41 @@
 },
 
 #=lang/tokenizer/PortReader: {
-    charVector, index;
+    inputPort, currentChar, flushed, pushbacks;
 
     with inherited trait = {
-        init: str => (
-            charVector <- str asVector.
-            index <- 0.
+        init: _inputPort => (
+            inputPort <- _inputPort.
+            flushed   <- false.
+            pushbacks <- std util newStack.
             ^ self
         );
 
-        hasNext  => index < (charVector size);
-        advance  => index <- index + 1;
-        peekChar => charVector at: index;
-        readChar => ( | c <- peekChar | advance. ^ c );
+        hasNext  => (
+            flushed if: [ ^ true ].
+          ^ [ pushbacks isEmpty not ] or: [ inputPort hasNext ]
+        );
+        advance  => (
+            (pushbacks isEmpty)
+                  if: [ currentChar <- inputPort readChar ]
+                else: [ currentChar <- pushbacks pop      ].
+            flushed <- true.
+        );
+        peekChar => (
+            flushed unless: [ advance ].
+          ^ currentChar
+        );
+        readChar => ( | c <- peekChar | flushed <- false. ^ c );
         peeks: s => (
-            | i <- index |
+            |
+                p     <- std util newStack,
+                fail  <- [ [ p isEmpty ] until: [ pushbacks push: (p pop) ]. ^ false ]
+            |
             s do: [ :c |
-                hasNext unless: [ index <- i. ^ false ].
-                (c != readChar) if: [ index <- i. ^ false ]
+                hasNext unless: [ fail value ].
+                | c2 <- readChar |
+                p push: c2.
+                (c != c2) if: [ fail value ]
             ].
             ^ true
         );
