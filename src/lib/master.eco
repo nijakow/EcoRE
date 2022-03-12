@@ -56,14 +56,15 @@
         parser exprDo: [ :expr |
             |
                 code <- expr compileInEnv: lobby,
+                env  <- {
+                    addVar: name => #'ecosphere.ecore.reflect.add_value_slot'(self, -1, 0, any, name, false);
+                    writeOn: writer => writer << '<session>';
+                    with inherited parent = #<:std/Clonable>;
+                },
                 result
             |
 
-            result <- (code execute({
-                addVar: name => #'ecosphere.ecore.reflect.add_value_slot'(self, -1, 0, any, name, false);
-                writeOn: writer => writer << '<session>';
-                with inherited parent = #<:std/Clonable>;
-            })).
+            [ result <- (code execute(env)) ] catch: [ result <- 'Error' ].
             io out << '        ' << result.
             io out newline.
             io out commit.
