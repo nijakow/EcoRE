@@ -44,9 +44,48 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
     return true;
 }
 
+bool Eco_Fiber_EnterClosure(struct Eco_Fiber*   fiber,
+                            struct Eco_Closure* closure,
+                            unsigned int        args)
+{
+    /*
+     * TODO, FIXME, XXX: What if arg count is zero?
+     * TODO: Store SELF in the closure!
+     */
+    Eco_Any_AssignAny(Eco_Fiber_Nth(fiber, args), &closure->lexical->registers[0]);
+    return Eco_Fiber_Enter(fiber, closure->lexical, closure->code, args);
+}
+
+
+static struct Eco_Closure* Eco_Fiber_FindExceptionHandler(struct Eco_Fiber* fiber)
+{
+    struct Eco_Frame*  frame;
+
+    frame = Eco_Fiber_Top(fiber);
+
+    while (frame != NULL)
+    {
+        if (frame->handler != NULL)
+            return frame->handler;
+        frame = frame->previous;
+    }
+    return NULL;
+}
 
 bool Eco_Fiber_Unwind(struct Eco_Fiber* fiber)
 {
+    Eco_Any              value;
+    struct Eco_Closure*  handler;
+
+    handler = Eco_Fiber_FindExceptionHandler(fiber);
+    if (handler != NULL) {
+        /*
+         * We push a dummy value for Self
+         */
+        Eco_Any_AssignInteger(&value, 0);
+        Eco_Fiber_Push(fiber, &value);
+        Eco_Fiber_EnterClosure(fiber, handler, 1);
+    }
     return false;
 }
 
