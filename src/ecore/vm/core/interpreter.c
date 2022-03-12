@@ -304,21 +304,12 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             depth                 = NEXT_U8();
             fiber->stack_pointer  = sp;
 
-            while (depth > 0)
-            {
-                depth--;
-                target = Eco_Fiber_Top(fiber)->lexical;
-                while (Eco_Fiber_Top(fiber) != target)
-                {
-                    Eco_Fiber_PopFrame(fiber);
-                    if (!Eco_Fiber_HasTop(fiber)) {
-                        Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_RETURNFAILED);
-                        goto error;
-                    }
-                }
-            }
+            target = Eco_Frame_NthLexical(Eco_Fiber_Top(fiber), depth)->return_to;
 
-            Eco_Fiber_PopFrame(fiber);
+            while (Eco_Fiber_Top(fiber) != target)
+            {
+                Eco_Fiber_PopFrame(fiber);
+            }
 
             if (!Eco_Fiber_HasTop(fiber)) {
                 // Last frame was popped, we can now return
