@@ -45,6 +45,12 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
 }
 
 
+bool Eco_Fiber_Unwind(struct Eco_Fiber* fiber)
+{
+    return false;
+}
+
+
 static inline u16 CONSTRUCT_U16(u8** ptr) { u16 v = *((u16*) *ptr); *ptr += 2; return v; }
 
 void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
@@ -69,8 +75,21 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
     instruction_counter = instruction_counter + 1;
     if (instruction_counter >= steps)
         goto end;
-    if (fiber->state != Eco_Fiber_State_RUNNING)
-        goto end;
+    if (fiber->state != Eco_Fiber_State_RUNNING) {
+        switch (fiber->state)
+        {
+            case Eco_Fiber_State_PAUSED:
+            case Eco_Fiber_State_WAITING:
+            case Eco_Fiber_State_TERMINATED:
+                goto end;
+            default:
+                if (Eco_Fiber_Unwind(fiber))
+                    goto slow_retry;
+                else
+                    goto end;
+        }
+    }
+
     DISPATCH(NEXT_U8())
     {
         TARGET(NOOP) {
