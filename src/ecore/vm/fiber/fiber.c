@@ -109,6 +109,7 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,
     }
 
     the_frame->previous       = fiber->top;
+    the_frame->return_to      = fiber->top;
     the_frame->lexical        = NULL;
     the_frame->closures       = NULL;
     the_frame->handler        = NULL;

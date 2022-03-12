@@ -12,6 +12,7 @@ struct Eco_GC_State;
 struct Eco_Frame
 {
     struct Eco_Frame*    previous;
+    struct Eco_Frame*    return_to;
     struct Eco_Frame*    lexical;
     struct Eco_Closure*  closures;
     struct Eco_Closure*  handler;
