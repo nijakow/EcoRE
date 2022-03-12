@@ -14,6 +14,7 @@ struct Eco_Frame
     struct Eco_Frame*    previous;
     struct Eco_Frame*    lexical;
     struct Eco_Closure*  closures;
+    struct Eco_Closure*  handler;
 
     struct Eco_Code*     code;
     u8*                  instruction;

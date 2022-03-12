@@ -111,6 +111,7 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,
     the_frame->previous       = fiber->top;
     the_frame->lexical        = NULL;
     the_frame->closures       = NULL;
+    the_frame->handler        = NULL;
     the_frame->vararg_count   = vararg_count;
     the_frame->varargs        = varargs;
     the_frame->registers      = arguments;
