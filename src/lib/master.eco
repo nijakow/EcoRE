@@ -64,9 +64,14 @@
                 result
             |
 
-            [ result <- (code execute(env)) ] catch: [ result <- 'Error' ].
-            io out << '        ' << result.
-            io out newline.
+            [
+                result <- (code execute(env)).
+                io out << '        ' << result.
+                io out newline
+            ] catch: [
+                io out << '--== Error Caught ==--'.
+                io out newline.
+            ].
             io out commit.
         ]
     );

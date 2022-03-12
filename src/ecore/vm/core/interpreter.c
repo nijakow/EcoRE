@@ -86,6 +86,8 @@ bool Eco_Fiber_Unwind(struct Eco_Fiber* fiber)
         Eco_Any_AssignInteger(&value, 0);
         Eco_Fiber_Push(fiber, &value);
         Eco_Fiber_EnterClosure(fiber, handler, 1);
+        Eco_Fiber_Top(fiber)->previous = handler->lexical;
+        return true;
     }
     return false;
 }
@@ -113,8 +115,6 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
     sp                  = fiber->stack_pointer;
   fast_retry:
     instruction_counter = instruction_counter + 1;
-    if (instruction_counter >= steps)
-        goto end;
     if (fiber->state != Eco_Fiber_State_RUNNING) {
         switch (fiber->state)
         {
@@ -123,12 +123,11 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             case Eco_Fiber_State_TERMINATED:
                 goto end;
             default:
-                if (Eco_Fiber_Unwind(fiber))
-                    goto slow_retry;
-                else
-                    goto end;
+                goto error;
         }
     }
+    if (instruction_counter >= steps)
+        goto end;
 
     DISPATCH(NEXT_U8())
     {
@@ -223,7 +222,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                            Eco_Fiber_Nth(fiber, message.body.send.arg_count))) {
                 Eco_Log_Warning("Message send failed: %s\n", ((struct Eco_Key*) message.key)->name);
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
-                goto end;
+                goto error;
             }
             SLOW_DISPATCH();
         }
@@ -249,7 +248,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                            Eco_Fiber_Nth(fiber, message.body.send.arg_count))) {
                 Eco_Log_Warning("Message send with varargs failed: %s\n", ((struct Eco_Key*) message.key)->name);
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
-                goto end;
+                goto error;
             }
             SLOW_DISPATCH();
         }
@@ -350,6 +349,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
     }
 
   error:
+    if (Eco_Fiber_Unwind(fiber))
+        goto slow_retry;
   end:
     top->instruction      = instruction;
     fiber->stack_pointer  = sp;
