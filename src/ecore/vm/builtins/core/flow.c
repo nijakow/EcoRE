@@ -31,3 +31,16 @@ bool Eco_VM_Builtin_Reset(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_ResetFrame(fiber);
     return true;
 }
+
+bool Eco_VM_Builtin_SetExceptionHandler(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any              value;
+    struct Eco_Closure*  closure;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &value);
+    closure = Eco_Any_AsPointer(&value);    // TODO: Checks!
+    Eco_Fiber_Top(fiber)->handler = closure;
+    return true;
+}
