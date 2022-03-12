@@ -55,7 +55,6 @@
 
         parser exprDo: [ :expr |
             |
-                code <- expr compileInEnv: lobby,
                 env  <- {
                     addVar: name => #'ecosphere.ecore.reflect.add_value_slot'(self, -1, 0, any, name, false);
                     writeOn: writer => writer << '<session>';
@@ -65,6 +64,7 @@
             |
 
             [
+                | code <- expr compileInEnv: lobby |
                 result <- (code execute(env)).
                 io out << '        ' << result.
                 io out newline

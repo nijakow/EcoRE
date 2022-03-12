@@ -351,6 +351,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
   error:
     if (Eco_Fiber_Unwind(fiber))
         goto slow_retry;
+    else
+        return;
   end:
     top->instruction      = instruction;
     fiber->stack_pointer  = sp;
