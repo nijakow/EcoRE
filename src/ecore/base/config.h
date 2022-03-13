@@ -25,5 +25,6 @@
 #endif
 
 #define ECO_CONFIG_USE_ZLIB_COMPRESSION
+#define ECO_CONFIG_USE_LIBFFI
 
 #endif

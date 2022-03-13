@@ -31,6 +31,7 @@ objects/pseudo/integer.c \
 objects/vm/code/code.c \
 objects/vm/code/closure.c \
 objects/vm/interface/interface.c \
+objects/ffi/ffitype.c \
 vm/builtins/builtins.c \
 vm/builtins/core/array.c \
 vm/builtins/core/blob.c \

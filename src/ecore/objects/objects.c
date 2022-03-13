@@ -12,6 +12,7 @@
 #include "vm/code/code.h"
 #include "vm/code/closure.h"
 #include "vm/interface/interface.h"
+#include "ffi/ffitype.h"
 
 
 void Eco_Objects_Init()
@@ -28,10 +29,12 @@ void Eco_Objects_Init()
     Eco_Closure_Init();
     Eco_Array_Init();
     Eco_Port_Init();
+    Eco_FFIType_Init();
 }
 
 void Eco_Objects_Terminate()
 {
+    Eco_FFIType_Terminate();
     Eco_Port_Terminate();
     Eco_Array_Terminate();
     Eco_Closure_Terminate();
