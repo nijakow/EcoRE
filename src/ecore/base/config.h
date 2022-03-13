@@ -25,6 +25,7 @@
 #endif
 
 #define ECO_CONFIG_USE_ZLIB_COMPRESSION
-#define ECO_CONFIG_USE_LIBFFI
+#define ECO_CONFIG_USE_FFI
+#define ECO_CONFIG_LIBFFI_INCLUDE <ffi.h>
 
 #endif

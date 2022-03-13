@@ -3,9 +3,9 @@
 
 #include <ecore/base/config.h>
 
-#ifdef ECO_CONFIG_USE_LIBFFI
+#ifdef ECO_CONFIG_USE_FFI
 
-#include <ffi.h>
+#include ECO_CONFIG_LIBFFI_INCLUDE
 
 #include <ecore/objects/base/object.h>
 
