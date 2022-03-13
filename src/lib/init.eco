@@ -287,9 +287,11 @@
 },
 
 #=init/ffitype_proxy: {
+    writeOn: writer => writer << '<ffi_type>';
     with inherited parent = #<:std/Clonable>;
 },
 
 #=init/ffifunc_proxy: {
+    writeOn: writer => writer << '<ffi_func>';
     with inherited parent = #<:std/Clonable>;
 }
