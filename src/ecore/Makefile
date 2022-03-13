@@ -90,7 +90,7 @@ OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
 DEPENDS = $(patsubst %.c,%.d,$(SOURCES))
 
 LDFLAGS = -lz -lffi
-CFLAGS = -I.. -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-label -g -Ofast
+CFLAGS = -I.. -I/opt/homebrew/Cellar/libffi/3.4.2/include/ -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-label -g -Ofast
 
 
 %.o: %.c
