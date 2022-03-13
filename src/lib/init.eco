@@ -287,7 +287,8 @@
 },
 
 #=init/ffitype_proxy: {
-    writeOn: writer => writer << '<ffi_type>';
+    sizeof => #'ecosphere.ecore.ffi.type.sizeof'(self);
+    writeOn: writer => writer << '<ffi_type:' << sizeof << '>';
     with inherited parent = #<:std/Clonable>;
 },
 
