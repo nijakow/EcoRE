@@ -284,4 +284,12 @@
     argTypeForSlotIndex: i Arg: ai => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, ai);
 
     with inherited parent = #<:std/Clonable>;
+},
+
+#=init/ffitype_proxy: {
+    with inherited parent = #<:std/Clonable>;
+},
+
+#=init/ffifunc_proxy: {
+    with inherited parent = #<:std/Clonable>;
 }

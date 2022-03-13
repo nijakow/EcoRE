@@ -49,3 +49,38 @@ void Eco_FFIType_Del(struct Eco_FFIType* type)
 {
     Eco_Object_Del(&type->_);
 }
+
+
+/*
+ *    G e t F o r I n d e x
+ */
+
+static ffi_type* Eco_FFIType_BASIC_TYPE_POINTERS[] = {
+    &ffi_type_void,
+    &ffi_type_uint8,
+    &ffi_type_sint8,
+    &ffi_type_uint16,
+    &ffi_type_sint16,
+    &ffi_type_uint32,
+    &ffi_type_sint32,
+    &ffi_type_uint64,
+    &ffi_type_sint64,
+    &ffi_type_float,
+    &ffi_type_double,
+    &ffi_type_uchar,
+    &ffi_type_schar,
+    &ffi_type_ushort,
+    &ffi_type_sshort,
+    &ffi_type_uint,
+    &ffi_type_sint,
+    &ffi_type_ulong,
+    &ffi_type_slong,
+    &ffi_type_longdouble,
+    &ffi_type_pointer
+};
+
+struct Eco_FFIType* Eco_FFIType_GetForIndex(unsigned int index)
+{
+    // TODO: Cache these instances
+    return Eco_FFIType_New(Eco_FFIType_BASIC_TYPE_POINTERS[index]);
+}

@@ -23,6 +23,8 @@ struct Eco_FFIType* Eco_FFIType_New(ffi_type*);
 void Eco_FFIType_Mark(struct Eco_GC_State*, struct Eco_FFIType*);
 void Eco_FFIType_Del(struct Eco_FFIType*);
 
+struct Eco_FFIType* Eco_FFIType_GetForIndex(unsigned int);
+
 #endif
 
 void Eco_FFIType_Init();

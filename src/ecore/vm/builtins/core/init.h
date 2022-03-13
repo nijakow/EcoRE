@@ -19,5 +19,7 @@ bool Eco_VM_Builtin_GetStringType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetPortType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetInterfaceType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetDefaultInterface(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_GetFFITypeType(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_GetFFIFuncType(struct Eco_Fiber*, unsigned int);
 
 #endif
