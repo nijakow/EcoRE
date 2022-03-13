@@ -1,6 +1,6 @@
 #include "ffi.h"
 
-#include <ecore/objects/ffi/ffitype.h>
+#include <ecore/objects/vm/ffi/ffitype.h>
 
 
 bool Eco_VM_Builtin_FFIType_GetForIndex(struct Eco_Fiber* fiber, unsigned int args)

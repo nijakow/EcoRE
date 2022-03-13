@@ -12,8 +12,8 @@
 #include "vm/code/code.h"
 #include "vm/code/closure.h"
 #include "vm/interface/interface.h"
-#include "ffi/ffitype.h"
-#include "ffi/ffifunc.h"
+#include "vm/ffi/ffitype.h"
+#include "vm/ffi/ffifunc.h"
 
 
 void Eco_Objects_Init()
