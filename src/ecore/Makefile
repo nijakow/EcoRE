@@ -11,7 +11,6 @@ EXECUTABLE = ./ecore.app
 BOOTSTRAP_ENVIRONMENT = ../lib
 BOOTSTRAP_MASTER      = $(BOOTSTRAP_ENVIRONMENT)/master.ebf
 
-
 SOURCES = \
 eco.c \
 objects/objects.c \
@@ -32,6 +31,7 @@ objects/vm/code/code.c \
 objects/vm/code/closure.c \
 objects/vm/interface/interface.c \
 objects/ffi/ffitype.c \
+objects/ffi/ffifunc.c \
 vm/builtins/builtins.c \
 vm/builtins/core/array.c \
 vm/builtins/core/blob.c \
@@ -88,7 +88,7 @@ main.c
 OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
 DEPENDS = $(patsubst %.c,%.d,$(SOURCES))
 
-LDFLAGS = -lz
+LDFLAGS = -lz -lffi
 CFLAGS = -I.. -Wall -Wextra -Werror -Wno-unused-parameter -Wno-unused-label -g -Ofast
 
 
