@@ -104,9 +104,9 @@
             | realType  <- type evaluateInEnv: env,
               flagBits  <- 0 |
             
-            flags isWith      if: [ flagBits <- flagBits bitOr: 0b010 ].
-            flags isInherited if: [ flagBits <- flagBits bitOr: 0b001 ].
-            flags isOwn       if: [ flagBits <- flagBits bitOr: 0b100 ].
+            flags isWith          if: [ flagBits <- flagBits bitOr: 0b010 ].
+            flags isInherited unless: [ flagBits <- flagBits bitOr: 0b001 ].
+            flags isOwn           if: [ flagBits <- flagBits bitOr: 0b100 ].
 
             flags isMethod if: [
                 "TODO, FIXME, XXX: This approach is totally horrendous"
