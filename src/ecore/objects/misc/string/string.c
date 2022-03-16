@@ -66,7 +66,7 @@ void Eco_String_Del(struct Eco_String* string)
  *    C - S t r i n g s
  */
 
-bool Eco_String_PutIntoArray(struct Eco_String* string, char* buffer, unsigned int bufsize)
+bool Eco_String_PutIntoByteArray(struct Eco_String* string, char* buffer, unsigned int bufsize)
 {
     unsigned int  byte_count;
 
