@@ -4,6 +4,7 @@
 
 #include <ecore/objects/base/type.h>
 #include <ecore/objects/misc/key/key.h>
+#include <ecore/util/memory.h>
 
 
 /*
@@ -58,6 +59,23 @@ void Eco_String_Mark(struct Eco_GC_State* state, struct Eco_String* string)
 void Eco_String_Del(struct Eco_String* string)
 {
     Eco_Object_Del(&string->_);
+}
+
+
+/*
+ *    C - S t r i n g s
+ */
+
+bool Eco_String_PutIntoArray(struct Eco_String* string, char* buffer, unsigned int bufsize)
+{
+    unsigned int  byte_count;
+
+    byte_count = Eco_String_ByteCount(string);
+    if (bufsize <= byte_count)
+        return false;
+    Eco_Memcpy(buffer, string->bytes, byte_count);
+    buffer[byte_count] = '\0';
+    return true;
 }
 
 

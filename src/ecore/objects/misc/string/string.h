@@ -54,6 +54,9 @@ static inline unsigned int Eco_String_StepAt(struct Eco_String* string, unsigned
 }
 
 
+bool Eco_String_PutIntoArray(struct Eco_String*, char*, unsigned int);
+
+
 struct Eco_Key;
 struct Eco_Key* Eco_String_AsKey(struct Eco_String* string);
 
