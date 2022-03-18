@@ -11,5 +11,5 @@
 
     begin = #<:std/bool/true>;
 
-    io = #<:std/bool/false>;
+    termio = #<:std/bool/false>;
 }

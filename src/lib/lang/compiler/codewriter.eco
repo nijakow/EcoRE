@@ -12,12 +12,12 @@
 
     finishWithArgs: args Varargs: varargs => (
         /"
-            io out << 'Dumping newly created code object...'. io out newline.
-            io out << bytes. io out newline.
-            io out << constants. io out newline.
-            io out << closures. io out newline.
-            io out << 'Registers: ' << (maxRegister + 1) << ' Args: ' << args << ' Varargs: ' << varargs. io out newline.
-            io out commit.
+            termio out << 'Dumping newly created code object...'. termio out newline.
+            termio out << bytes. termio out newline.
+            termio out << constants. termio out newline.
+            termio out << closures. termio out newline.
+            termio out << 'Registers: ' << (maxRegister + 1) << ' Args: ' << args << ' Varargs: ' << varargs. termio out newline.
+            termio out commit.
         "/
         #'ecosphere.ecore.object.code.new'(bytes asBlob,
                                            constants asArray,

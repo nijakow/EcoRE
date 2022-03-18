@@ -2,7 +2,7 @@
     io.eco - The `std io` package of the Ecosphere
 "
 
-#=std/ioutil: {
+#=std/io: {
     PortInput => {
         _br;
 
@@ -44,6 +44,8 @@
                 ].
               ^ v asString
             );
+            close => "TODO";
+            writeOn: w => w << 'PortInput';
         };
 
         with inherited parent = #<:std/Clonable>;
@@ -61,7 +63,10 @@
             commit     => _port commit;
             byte<< b   => _port byte<< b;
             << object  => ( object writeOn: self. ^ self );
-            newline  => ( self << (char newline). ^ self );
+            newline    => ( self << (char newline). ^ self );
+            close      => "TODO";
+
+            writeOn: w => w << 'PortOutput';
         };
 
         with inherited parent = #<:std/Clonable>;
@@ -72,10 +77,14 @@
 
         with inherited trait = {
             init: port => (
-                in  <- port lens: (std ioutil PortInput);
-                out <- port lens: (std ioutil PortOutput);
+                in  <- port lens: (std io PortInput);
+                out <- port lens: (std io PortOutput);
               ^ self
             );
+
+            close => "TODO";
+
+            writeOn: w => w << 'PortIO';
         };
 
         with inherited parent = #<:std/Clonable>;

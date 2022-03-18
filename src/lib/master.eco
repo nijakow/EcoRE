@@ -39,18 +39,18 @@
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.ffifunc_type'(), #<:init/ffifunc_proxy>).
     );
 
-    InitIO => io <- #'ecosphere.ecore.object.port.new'(1) lens: (std ioutil PortIO);
+    InitIO => termio <- std io OpenFileDescriptor: 0;
 
     Init => (
         InitTypes.
         InitIO.
 
-        io out << 'EcoRE image online and ready.'.
-        io out newline.
-        io out commit.
+        termio out << 'EcoRE image online and ready.'.
+        termio out newline.
+        termio out commit.
 
         |
-            reader <- (io in) lens: (lang tokenizer PortReader),
+            reader <- (termio in) lens: (lang tokenizer PortReader),
             tok    <- reader lens: (lang tokenizer Tokenizer),
             parser <- tok lens: (lang parser Parser)
         |
@@ -68,13 +68,13 @@
             [
                 | code <- expr compileInEnv: lobby |
                 result <- (code execute(env)).
-                io out << '        ' << result.
-                io out newline
+                termio out << '        ' << result.
+                termio out newline
             ] catch: [
-                io out << '--== Error Caught ==--'.
-                io out newline.
+                termio out << '--== Error Caught ==--'.
+                termio out newline.
             ].
-            io out commit.
+            termio out commit.
         ]
     );
 

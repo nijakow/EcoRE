@@ -9,7 +9,7 @@
       ^ self
     );
 
-    visitUnknown: ast => ( io out << 'Visiting unknown AST for assignment'. io out newline. io out commit );
+    visitUnknown: ast => ( termio out << 'Visiting unknown AST for assignment'. termio out newline. termio out commit );
 
     visitSend: ast => (
         rhs acceptVisitor: visitor.
@@ -18,9 +18,9 @@
                 compiler storeVariable: ast message
                              IfPresent: [ ^ ]
                           IfNotPresent: [
-                              io out << 'Local bound and not bound at the same time!'.
-                              io out newline.
-                              io out commit.
+                              termio out << 'Local bound and not bound at the same time!'.
+                              termio out newline.
+                              termio out commit.
                             ^
                           ]
             ]
@@ -45,7 +45,7 @@
       ^ self
     );
 
-    visitUnknown: ast => ( io out << 'Visiting unknown AST'. io out newline. io out commit );
+    visitUnknown: ast => ( termio out << 'Visiting unknown AST'. termio out newline. termio out commit );
     
     visitSelf: ast => compiler loadSelf;
     
