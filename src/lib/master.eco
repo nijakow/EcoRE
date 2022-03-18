@@ -39,7 +39,7 @@
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.ffifunc_type'(), #<:init/ffifunc_proxy>).
     );
 
-    InitIO => io <- #'ecosphere.ecore.object.port.new'(1) lens: (std io PortIO);
+    InitIO => io <- #'ecosphere.ecore.object.port.new'(1) lens: (std ioutil PortIO);
 
     Init => (
         InitTypes.

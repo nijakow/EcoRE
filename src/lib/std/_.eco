@@ -13,7 +13,7 @@
     with bool = #<:std/bool>;
     with maybe = #<:std/maybe>;
 
-    io = #<:std/io>;
+    ioutil = #<:std/ioutil>;
     util = #<:std/util>;
     reflect = #<:std/reflect>;
 }

@@ -2,7 +2,7 @@
     io.eco - The `std io` package of the Ecosphere
 "
 
-#=std/io: {
+#=std/ioutil: {
     PortInput => {
         _br;
 
@@ -65,10 +65,13 @@
 
         with inherited trait = {
             init: port => (
-                in  <- port lens: (std io PortInput);
-                out <- port lens: (std io PortOutput);
+                in  <- port lens: (std ioutil PortInput);
+                out <- port lens: (std ioutil PortOutput);
               ^ self
             );
+            OpenFileDescriptor: fd => clone init: #'ecosphere.ecore.object.port.new'(fd);
+            OpenFileForReading: path => OpenFileDescriptor: #'ecosphere.ecore.fd.open_file'(path, 1);
+            OpenFileForWriting: path => OpenFileDescriptor: #'ecosphere.ecore.fd.open_file'(path, 6);
         };
 
         with inherited parent = #<:std/Clonable>;

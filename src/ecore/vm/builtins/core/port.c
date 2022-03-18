@@ -98,8 +98,8 @@ bool Eco_VM_Builtin_OpenFile(struct Eco_Fiber* fiber, unsigned int args)
         if (bits & 0x01) mask |= O_RDONLY;
         if (bits & 0x02) mask |= O_WRONLY;
         if (bits & 0x04) mask |= O_CREAT;
-        if (bits & 0x08) mask |= O_APPEND;
-        fd = open(buffer, mask);
+        if (bits & 0x08) mask |= O_TRUNC;
+        fd = open(buffer, mask, 0744);
     } else {
         fd = -1;
     }
