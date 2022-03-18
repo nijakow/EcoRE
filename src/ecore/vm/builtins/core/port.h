@@ -10,4 +10,6 @@ bool Eco_VM_Builtin_PortWriteByte(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_PortWriteChar(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_PortNotifyMe(struct Eco_Fiber*, unsigned int);
 
+bool Eco_VM_Builtin_OpenFile(struct Eco_Fiber*, unsigned int);
+
 #endif
