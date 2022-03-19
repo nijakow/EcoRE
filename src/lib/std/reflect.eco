@@ -11,6 +11,11 @@
                 reflectee <- the_reflectee.
               ^ self
             );
+
+            slotNames => (
+                | type <- #'ecosphere.ecore.reflect.get_type'(reflectee) |
+                "TODO: Type slot info"
+            );
         };
 
         with inherited parent = #<:std/Clonable>;

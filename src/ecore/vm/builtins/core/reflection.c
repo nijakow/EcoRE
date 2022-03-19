@@ -3,7 +3,7 @@
 #include <ecore/base/extra.h>
 #include <ecore/objects/misc/array/array.h>
 #include <ecore/objects/vm/interface/interface.h>
-
+#include <ecore/vm/vm.h>
 
 bool Eco_VM_Builtin_GetType(struct Eco_Fiber* fiber, unsigned int args)
 {
@@ -37,6 +37,49 @@ bool Eco_VM_Builtin_GetTypeSlotNames(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_GetTypeSlotInfo(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Type*  type;
+    Eco_Any           any;
+    int               index;
+    int               subindex;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
+        return false;
+    
+    Eco_Fiber_Pop(fiber, &any);
+    subindex = Eco_Any_AsInteger(&any);
+
+    Eco_Fiber_Pop(fiber, &any);
+    index = Eco_Any_AsInteger(&any);
+    
+    Eco_Fiber_Pop(fiber, &any);
+    type = Eco_Any_AsPointer(&any);
+
+    if (subindex == -1)
+        Eco_Any_AssignInteger(&any, type->slot_count);
+    else if (subindex == -2)
+        Eco_Any_AssignPointer(&any, type->slots[index].key);
+    else if (subindex == -3) {
+        if (type->slots[index].interface == NULL)
+            Eco_Any_AssignPointer(&any, (struct Eco_Object*) Eco_Interface_GetDefaultInterface());
+        else
+            Eco_Any_AssignPointer(&any, type->slots[index].interface);
+    }
+    else if (subindex == -4) {
+        if (type->slots->type == Eco_TypeSlotType_CODE) {
+            Eco_Any_AssignPointer(&any, type->slots[index].body.code.code);
+        } else if (type->slots->type == Eco_TypeSlotType_INLINED) {
+            Eco_Any_AssignInteger(&any, type->slots[index].body.inlined.offset);
+        } else {
+            Eco_Any_AssignAny(&any, &fiber->vm->constants.cfalse);
+        }
+    }
+    else
+        Eco_Any_AssignAny(&any, &fiber->vm->constants.cfalse);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
 
 bool Eco_VM_Builtin_InterfaceGetEntryInfo(struct Eco_Fiber* fiber, unsigned int args)
 {
