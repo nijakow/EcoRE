@@ -199,7 +199,7 @@
             init => ( elements <- (std util Link) clone init. ^ self );
             size => (
                 | s <- 0, p <- elements next |
-                [ p != elements ] while: [ s <- s inc. p <- p next. ].
+                [ p != elements ] while: [ s <- s + 1. p <- p next. ].
               ^ s
             );
             isEmpty => size isZero;
@@ -243,7 +243,7 @@
             & v => (
                 | next <- (std util Collector) clone init: v |
                 next prev: self.
-                next index: index inc.
+                next index: index + 1.
               ^ next
             );
             prev:  p => ( prev  <- p. ^ self );

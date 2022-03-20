@@ -1,55 +1,81 @@
 
 #=std/reflect/proxies/Int: {
-    isInt      => true;
-    + other    => #'ecosphere.ecore.math.add'(self, other);
-    - other    => #'ecosphere.ecore.math.sub'(self, other);
-    * other    => #'ecosphere.ecore.math.mul'(self, other);
-    / other    => #'ecosphere.ecore.math.div'(self, other);
-    mod: other => #'ecosphere.ecore.math.mod'(self, other);
-    bitOr: other => #'ecosphere.ecore.math.bit_or'(self, other);
-    bitAnd: other => #'ecosphere.ecore.math.bit_and'(self, other);
-    bitXOR: other => #'ecosphere.ecore.math.bit_xor'(self, other);
-    lshift: other => #'ecosphere.ecore.math.bitshift_left'(self, other);
-    rshift: other => #'ecosphere.ecore.math.bitshift_right'(self, other);
-    shift:  other => (other isNegative) if: [ ^ self rshift: (other negate) ] else: [ ^ self lshift: other ];
-    < other    => #'ecosphere.ecore.math.less'(self, other);
-    == other   => #'ecosphere.ecore.is'(self, other);
-    != other   => (self == other) not;
-    <= other   => [ self < other ] or: [ self == other ];
-    > other    => (self <= other) not;
-    >= other   => (self < other) not;
-    min: other => (self < other) if: [ self  ] else: [ other ];
-    max: other => (self < other) if: [ other ] else: [ self  ];
-    isZero     => (self == 0);
-    isNotZero  => isZero not;
-    isNegative => self < 0;
-    isNotNegative => isNegative not;
-    isPositive => self > 0;
-    inc        => self + 1;
-    dec        => self - 1;
-    negate     => (0 - self);
-    asChar     => #'ecosphere.ecore.int.as_char'(self);
-    for: upper do: body => (
-        | i <- self |
-        [ i < upper ] while: [
-            body value(i).
-            i <- i + 1.
-        ]
-    );
-    to: upper do: body => for: (upper + 1) do: body;
-    do: block => 0 for: self do: block;
-    times: block => do: [ :i | block value ];
-    countUp: block => (
-        | i <- self |
-        [ block value(i). i <- i + 1 ] repeat
-    );
-    countDown: block => (
-        | i <- self |
-        [ i isPositive ] while: [
-            block value(i).
-            i <- i - 1
-        ]
-    );
+
+    with inherited basic_math = {
+        +    other => #'ecosphere.ecore.math.add'(self, other);
+        -    other => #'ecosphere.ecore.math.sub'(self, other);
+        *    other => #'ecosphere.ecore.math.mul'(self, other);
+        /    other => #'ecosphere.ecore.math.div'(self, other);
+        mod: other => #'ecosphere.ecore.math.mod'(self, other);
+    };
+
+    with inherited bit_ops = {
+        bitOr:  other => #'ecosphere.ecore.math.bit_or'(self, other);
+        bitAnd: other => #'ecosphere.ecore.math.bit_and'(self, other);
+        bitXOR: other => #'ecosphere.ecore.math.bit_xor'(self, other);
+        lshift: other => #'ecosphere.ecore.math.bitshift_left'(self, other);
+        rshift: other => #'ecosphere.ecore.math.bitshift_right'(self, other);
+        shift:  other => (other isNegative) if: [ ^ self rshift: (other negate) ] else: [ ^ self lshift: other ];
+    };
+
+    with inherited comparisons = {
+        < other    => #'ecosphere.ecore.math.less'(self, other);
+        == other   => #'ecosphere.ecore.is'(self, other);
+        != other   => (self == other) not;
+        <= other   => [ self < other ] or: [ self == other ];
+        > other    => (self <= other) not;
+        >= other   => (self < other) not;
+    };
+
+    with inherited min_max = {
+        min: other => (self < other) if: [ self  ] else: [ other ];
+        max: other => (self < other) if: [ other ] else: [ self  ];
+    };
+
+    with inherited checks = {
+        isZero        => (self == 0);
+        isNotZero     => isZero not;
+        isNegative    => self < 0;
+        isNotNegative => isNegative not;
+        isPositive    => self > 0;
+    };
+
+    with inherited misc = {
+        negate => (0 - self);
+    };
+
+    with inherited conversions = {
+        isInt  => true;
+        asChar => #'ecosphere.ecore.int.as_char'(self);
+    };
+
+    with inherited ranged_loops = {
+        for: upper do: body => (
+            | i <- self |
+            [ i < upper ] while: [
+                body value(i).
+                i <- i + 1.
+            ]
+        );
+        to: upper do: body => for: (upper + 1) do: body;
+    };
+
+    with inherited counting_loops = {
+        do: block => 0 for: self do: block;
+        times: block => do: [ :i | block value ];
+        countUp: block => (
+            | i <- self |
+            [ block value(i). i <- i + 1 ] repeat
+        );
+        countDown: block => (
+            | i <- self |
+            [ i isPositive ] while: [
+                block value(i).
+                i <- i - 1
+            ]
+        );
+    };
+
     writeOn: writer => (
         |
             lib <- {
@@ -69,5 +95,6 @@
         |
         lib WriteNum(writer, self);
     );
+    
     with inherited parent = #<:std/Clonable>;
 }
