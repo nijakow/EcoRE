@@ -4,7 +4,6 @@ endif
 
 NAME = master.ebf
 SOURCES = \
-init.eco \
 std/_.eco \
 std/bool.eco \
 std/clonable.eco \
@@ -26,6 +25,8 @@ std/reflect/proxies/interface.eco \
 std/reflect/proxies/key.eco \
 std/reflect/proxies/port.eco \
 std/reflect/proxies/string.eco \
+std/reflect/proxies/ffi/ffifunc.eco \
+std/reflect/proxies/ffi/ffitype.eco \
 interfaces.eco \
 lang/_.eco \
 lang/eco/_.eco \

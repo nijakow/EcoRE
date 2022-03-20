@@ -10,4 +10,9 @@
     Key       = #<:std/reflect/proxies/Key>;
     Port      = #<:std/reflect/proxies/Port>;
     String    = #<:std/reflect/proxies/String>;
+
+    ffi = {
+        FFIFunc = #<:std/reflect/proxies/FFIFunc>;
+        FFIType = #<:std/reflect/proxies/FFIType>;
+    }
 }
