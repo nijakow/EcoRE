@@ -9,7 +9,7 @@ std/bool.eco \
 std/clonable.eco \
 std/defaultbehavior.eco \
 std/globals.eco \
-std/io.eco \
+std/io/_.eco \
 std/maybe.eco \
 std/reflect/_.eco \
 std/reflect/mirror.eco \
