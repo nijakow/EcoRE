@@ -13,7 +13,9 @@ std/globals.eco \
 std/io.eco \
 std/maybe.eco \
 std/util.eco \
-std/reflect.eco \
+std/reflect/_.eco \
+std/reflect/mirror.eco \
+std/reflect/proxies/_.eco \
 interfaces.eco \
 lang/_.eco \
 lang/eco/_.eco \

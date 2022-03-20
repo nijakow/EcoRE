@@ -1,0 +1,31 @@
+
+#=std/reflect/Mirror: {
+    reflectee;
+
+    with inherited trait = {
+        init: the_reflectee => (
+            reflectee <- the_reflectee.
+            ^ self
+        );
+
+        typeInstance => #'ecosphere.ecore.reflect.get_type'(reflectee);
+
+        slotCount => (
+            #'ecosphere.ecore.reflect.get_type_slot_info'(typeInstance, -1, -1)
+        );
+
+        slotNameForSlot: i => (
+            #'ecosphere.ecore.reflect.get_type_slot_info'(typeInstance, i, -2)
+        );
+
+        slotNames => (
+            | array <- std util newArray: slotCount |
+            0 for: slotCount do: [ :i | array at: i put: (slotNameForSlot: i) ].
+            ^ array
+        );
+
+        writeOn: w => w << 'a mirror';
+    };
+
+    with inherited parent = #<:std/Clonable>;
+}

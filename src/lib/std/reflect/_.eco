@@ -1,0 +1,7 @@
+
+#=std/reflect: {
+    proxies = #<:std/reflect/proxies>;
+
+    Mirror = #<:std/reflect/Mirror>;
+    Mirror: object => #<:std/reflect/Mirror> clone init: object;
+}
