@@ -1,23 +1,4 @@
 
-#=init/block_proxy: {
-    isBlock    => true;
-    value(...) => #'ecosphere.ecore.flow.value'(self, ...);
-    repeat     => ( self value. #'ecosphere.ecore.flow.reset'() );
-    while: b   => ( (self value) unless: [ ^ #<:std/bool/false> ]. b value. #'ecosphere.ecore.flow.reset'() );
-    until: b   => ( (self value) if: [ ^ #<:std/bool/true> ]. b value. #'ecosphere.ecore.flow.reset'() );
-    catch: b   => ( [ #'ecosphere.ecore.flow.set_exception_handler'(b). self value ] value );
-    and:   b   => (
-        | v <- self value |
-        v if: [ ^ b value ] else: [ ^ v ]
-    );
-    or:    b   => (
-        | v <- self value |
-        v if: [ ^ v ] else: [ ^ b value ]
-    );
-    writeOn: writer => writer << '<block>';
-    with inherited parent = #<:std/Clonable>;
-},
-
 #=init/code_proxy: {
     execute(...) => #'ecosphere.ecore.object.code.value'(...);
     writeOn: writer => writer << '<code>';

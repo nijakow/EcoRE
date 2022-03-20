@@ -16,6 +16,7 @@ std/util.eco \
 std/reflect/_.eco \
 std/reflect/mirror.eco \
 std/reflect/proxies/_.eco \
+std/reflect/proxies/block.eco \
 interfaces.eco \
 lang/_.eco \
 lang/eco/_.eco \
@@ -49,7 +50,7 @@ lang/eco/parser/tokenizer.eco \
 master.eco
 
 
-$(NAME): $(SOURCES)
+$(NAME): $(SOURCES) Makefile
 	PYTHONPATH=../bootstrapper $(PYTHON) -m ecosphere.bootstrapper --compressed $(NAME) $(SOURCES)
 
 all: $(NAME)
