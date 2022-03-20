@@ -1,0 +1,74 @@
+
+#=std/reflect/proxies/String: {
+    size => #'ecosphere.ecore.object.string.byte_length'(self);
+    at: index => #'ecosphere.ecore.object.string.at_byte'(self, index);
+    do: body => (
+        | i <- 0. s <- size. |
+        [ i < s ] while: [
+            body value(#'ecosphere.ecore.object.string.at_byte'(self, i)).
+            i <- i + (#'ecosphere.ecore.object.string.step_at_byte'(self, i)).
+        ].
+      ^ self
+    );
+    forEach: body => (
+        | i <- 0. s <- size. |
+        [ i < s ] while: [
+            body value(i, #'ecosphere.ecore.object.string.at_byte'(self, i)).
+            i <- i + (#'ecosphere.ecore.object.string.step_at_byte'(self, i)).
+        ].
+      ^ self
+    );
+    equals: other => (
+        (other isString)       unless: [ ^ false ].
+        (size == (other size)) unless: [ ^ false ].
+        forEach: [ :index, :value |
+            (value == (other at: index)) unless: [ ^ false ]
+        ].
+      ^ true
+    );
+    contains: character => (
+        do: [ :c | (c == character) if: [ ^ true ] ].
+      ^ false
+    );
+    + other => (
+        | vec <- asVector |
+        other do: [ :c | vec append: c ].
+      ^ vec asString
+    );
+    * count => (
+        | vec <- std util newVector |
+        count times: [
+            do: [ :c | vec append: c ]
+        ].
+      ^ vec asString
+    );
+    isString => true;
+    asVector => (
+        | v <- std util newVector |
+        self do: [ :c | v append: c ].
+      ^ v
+    );
+    asKey => #'ecosphere.ecore.object.string.as_key'(self);
+    parseInt => (
+        | v <- 0, sign <- 1 |
+        (size isZero) if: [ ^ No ].
+        forEach: [ :i, :c |
+            (c == #\-) if: [ ( [ i isZero ] and: [ size > 1 ] ) if: [ sign <- -1 ] else: [ ^ No ] ]
+                     else: [
+                ([ (c asInt) >= (#\0 asInt) ] and: [ (c asInt) <= (#\9 asInt) ]) unless: [ ^ No ].
+                v <- (v * 10) + ((c asInt) - (#\0 asInt))
+            ]
+        ].
+        Yes: (v * sign)
+    );
+    parse => (
+        |
+            reader <- self lens: (lang eco tokenizer StringReader),
+            tok    <- reader lens: (lang eco tokenizer Tokenizer),
+            parser <- tok lens: (lang eco parser Parser)
+        |
+      ^ parser parseExpression
+    );
+    writeOn: writer => do: [ :c | writer << c ];
+    with inherited parent = #<:std/Clonable>;
+}
