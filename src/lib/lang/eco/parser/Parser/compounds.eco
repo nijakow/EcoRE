@@ -1,5 +1,5 @@
 
-#=lang/parser/Parser/Compounds: {
+#=lang/eco/parser/Parser/Compounds: {
     parseCompound => parseCompoundWithTerminator: TokenType RPAREN;
     
     parseCompoundWithTerminator: terminator => (

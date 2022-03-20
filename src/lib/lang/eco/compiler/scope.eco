@@ -1,10 +1,10 @@
 
-#=lang/compiler/ScopeSharedInfo: {
+#=lang/eco/compiler/ScopeSharedInfo: {
     lexicalParent, compiler, argCount, hasVarargs;
 
     initWithMaybeLexicalParent: ml => (
         lexicalParent <- ml.
-        compiler      <- (#<:lang/compiler/Compiler> clone) initWithDepth: depth.
+        compiler      <- (#<:lang/eco/compiler/Compiler> clone) initWithDepth: depth.
         argCount      <- 0.
         hasVarargs    <- false.
       ^ self
@@ -20,7 +20,7 @@
     with inherited parent = #<:std/Clonable>;
 },
 
-#=lang/compiler/VariableInfo: {
+#=lang/eco/compiler/VariableInfo: {
     index;
 
     initWithIndex: i => (
@@ -31,7 +31,7 @@
     with inherited parent = #<:std/Clonable>;
 },
 
-#=lang/compiler/Scope: {
+#=lang/eco/compiler/Scope: {
     shared, parent_scope, bindings;
 
     initWithShared: s => (
@@ -46,7 +46,7 @@
       ^ self
     );
 
-    createSubscope => (#<:lang/compiler/Scope> clone) initWithParent: self;
+    createSubscope => (#<:lang/eco/compiler/Scope> clone) initWithParent: self;
 
     parentScope => parent_scope;
     lexicalParentScope => shared lexicalParent;
@@ -66,7 +66,7 @@
     bindVariable: varname => (
       |
           r    <- compiler regAlloc allocate,
-          info <- (#<:lang/compiler/VariableInfo> clone) initWithIndex: r
+          info <- (#<:lang/eco/compiler/VariableInfo> clone) initWithIndex: r
       |
       bindings at: varname put: info
     );

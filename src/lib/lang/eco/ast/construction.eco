@@ -1,5 +1,5 @@
 
-#=lang/ast/ASTConstruction/ASTInterfaceBuilder: {
+#=lang/eco/ast/ASTConstruction/ASTInterfaceBuilder: {
     parents, entries;
 
     with inherited trait = {
@@ -16,12 +16,12 @@
 
         commit => ((ast ASTInterface) new) initWithParents: parents Entries: entries;
 
-        ast = #<:lang/ast>;
+        ast = #<:lang/eco/ast>;
         with inherited parent = #<:std/Clonable>;
     };
 },
 
-#=lang/ast/ASTConstruction/ASTMoleculeBuilder: {
+#=lang/eco/ast/ASTConstruction/ASTMoleculeBuilder: {
     slots;
 
     with inherited trait = {
@@ -43,13 +43,13 @@
 
         commit => ((ast ASTMolecule) new) initWithSlots: slots;
 
-        ast = #<:lang/ast>;
+        ast = #<:lang/eco/ast>;
         with inherited parent = #<:std/Clonable>;
     };
 },
 
-#=lang/ast/ASTConstruction: {
-  with ast = #<:lang/ast>;
+#=lang/eco/ast/ASTConstruction: {
+  with ast = #<:lang/eco/ast>;
 
   newASTType: t AndName: n => (ASTTypeAndName new) initWithType: t Name: n;
 
@@ -59,9 +59,9 @@
 
   newASTArrayWithExpressions: exprs => (ASTArray new) initWithExprs: exprs;
 
-  newASTInterfaceBuilder => #<:lang/ast/ASTConstruction/ASTInterfaceBuilder> new;
+  newASTInterfaceBuilder => #<:lang/eco/ast/ASTConstruction/ASTInterfaceBuilder> new;
 
-  newASTMoleculeBuilder => #<:lang/ast/ASTConstruction/ASTMoleculeBuilder> new;
+  newASTMoleculeBuilder => #<:lang/eco/ast/ASTConstruction/ASTMoleculeBuilder> new;
 
   newASTBuiltinWithName: name Args: args HasVarargs: varargs => (ASTBuiltin new) initWithName: name Args: args Varargs: varargs;
 

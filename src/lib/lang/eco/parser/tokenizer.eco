@@ -1,7 +1,7 @@
-#=lang/tokenizer: {
+#=lang/eco/tokenizer: {
 
-    StringReader = #<:lang/tokenizer/StringReader>,
-    PortReader = #<:lang/tokenizer/PortReader>,
+    StringReader = #<:lang/eco/tokenizer/StringReader>,
+    PortReader = #<:lang/eco/tokenizer/PortReader>,
 
     Token = {
         tokenizer, type, payload;
@@ -50,7 +50,7 @@
 
         peeks: str => in peeks: str;
 
-        newTokenWithType: type Payload: pl => (lang tokenizer Token) new tokenizer: self type: type payload: pl;
+        newTokenWithType: type Payload: pl => (#<:lang/eco/tokenizer> Token) new tokenizer: self type: type payload: pl;
         newTokenWithType: type => newTokenWithType: type Payload: false;
 
         parseString: terminator => (
@@ -129,7 +129,7 @@
           ^ newTokenWithType: (TokenType IDENTIFIER) Payload: (sb asKey)
         );
 
-        with inherited shared = #<:lang/parser/SharedBehavior>;
+        with inherited shared = #<:lang/eco/parser/SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     }
 }

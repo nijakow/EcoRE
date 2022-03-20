@@ -1,5 +1,5 @@
 
-#=lang/parser/Parser/Optionals: {
+#=lang/eco/parser/Parser/Optionals: {
     parseOptionalType => (
         | the_type <- newASTConstantWithValue: any |
         (check: TokenType LBRACK) if: [

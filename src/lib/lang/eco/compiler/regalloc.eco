@@ -1,5 +1,5 @@
 
-#=lang/compiler/RegisterAllocator: {
+#=lang/eco/compiler/RegisterAllocator: {
     freeSet, counter;
 
     init => (

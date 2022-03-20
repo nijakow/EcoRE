@@ -1,5 +1,5 @@
 
-#=lang/compiler/AssignmentVisitor: {
+#=lang/eco/compiler/AssignmentVisitor: {
     compiler, rhs, visitor;
 
     initWithCompiler: _compiler RHS: _rhs Visitor: v => (
@@ -36,7 +36,7 @@
 },
 
 
-#=lang/compiler/Visitor: {
+#=lang/eco/compiler/Visitor: {
     compiler, environment;
 
     initWithCompiler: _compiler Environment: _env => (
@@ -105,7 +105,7 @@
 
     visitAssignment: ast => (
         "TODO: Create a special visitor for this!"
-        | v <- (#<:lang/compiler/AssignmentVisitor> clone) initWithCompiler: compiler RHS: ast rhs Visitor: self |
+        | v <- (#<:lang/eco/compiler/AssignmentVisitor> clone) initWithCompiler: compiler RHS: ast rhs Visitor: self |
         ast lhs acceptVisitor: v
     );
 
@@ -134,6 +134,6 @@
         compiler loadConstant: m
     );
 
-    "TODO: Implements interface lang/ast/IVisitor"
+    "TODO: Implements interface lang/eco/ast/IVisitor"
     with inherited parent = #<:std/Clonable>;
 } 

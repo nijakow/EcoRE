@@ -1,5 +1,5 @@
 
-#=lang/parser/Parser/Bars: {
+#=lang/eco/parser/Parser/Bars: {
     parseBarAssignmentValue => (
         (check: TokenType ASSIGNMENT)
               if: [ ^ parseExpression ]

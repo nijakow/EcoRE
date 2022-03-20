@@ -1,5 +1,5 @@
 
-#=lang/parser/Parser/SimpleObjects: {
+#=lang/eco/parser/Parser/SimpleObjects: {
     parseArray => (
         newASTArrayWithExpressions: parseExpressions
     );

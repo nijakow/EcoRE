@@ -1,0 +1,7 @@
+
+#=lang/eco: {
+    tokenizer = #<:lang/eco/tokenizer>;
+    parser = #<:lang/eco/parser>;
+    ast = #<:lang/eco/ast>;
+    compiler = #<:lang/eco/compiler>;
+}

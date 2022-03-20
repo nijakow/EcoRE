@@ -1,5 +1,5 @@
 
-#=lang/parser: {
+#=lang/eco/parser: {
 
     Parser = {
         tokenizer;
@@ -16,19 +16,19 @@
             ] repeat
         );
 
-        with ast = #<:lang/ast>;
-        with inherited checks = #<:lang/parser/Parser/Checks>;
-        with inherited charchecks = #<:lang/parser/Parser/CharChecks>;
-        with inherited expression = #<:lang/parser/Parser/Expression>;
-        with inherited send = #<:lang/parser/Parser/Send>;
-        with inherited compounds = #<:lang/parser/Parser/Compounds>;
-        with inherited optionals = #<:lang/parser/Parser/Optionals>;
-        with inherited args = #<:lang/parser/Parser/Args>;
-        with inherited simpleobjects = #<:lang/parser/Parser/SimpleObjects>;
-        with inherited interface = #<:lang/parser/Parser/Interface>;
-        with inherited molecule = #<:lang/parser/Parser/Molecule>;
-        with inherited bars = #<:lang/parser/Parser/Bars>;
-        with inherited shared = #<:lang/parser/SharedBehavior>;
+        with ast = #<:lang/eco/ast>;
+        with inherited checks = #<:lang/eco/parser/Parser/Checks>;
+        with inherited charchecks = #<:lang/eco/parser/Parser/CharChecks>;
+        with inherited expression = #<:lang/eco/parser/Parser/Expression>;
+        with inherited send = #<:lang/eco/parser/Parser/Send>;
+        with inherited compounds = #<:lang/eco/parser/Parser/Compounds>;
+        with inherited optionals = #<:lang/eco/parser/Parser/Optionals>;
+        with inherited args = #<:lang/eco/parser/Parser/Args>;
+        with inherited simpleobjects = #<:lang/eco/parser/Parser/SimpleObjects>;
+        with inherited interface = #<:lang/eco/parser/Parser/Interface>;
+        with inherited molecule = #<:lang/eco/parser/Parser/Molecule>;
+        with inherited bars = #<:lang/eco/parser/Parser/Bars>;
+        with inherited shared = #<:lang/eco/parser/SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     }
 }

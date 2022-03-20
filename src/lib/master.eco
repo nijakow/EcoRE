@@ -50,9 +50,9 @@
         termio out commit.
 
         |
-            reader <- (termio in) lens: (lang tokenizer PortReader),
-            tok    <- reader lens: (lang tokenizer Tokenizer),
-            parser <- tok lens: (lang parser Parser)
+            reader <- (termio in) lens: (lang eco tokenizer PortReader),
+            tok    <- reader lens: (lang eco tokenizer Tokenizer),
+            parser <- tok lens: (lang eco parser Parser)
         |
 
         parser exprDo: [ :expr |

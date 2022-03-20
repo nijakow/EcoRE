@@ -1,5 +1,5 @@
 
-#=lang/parser/Parser/Send: {
+#=lang/eco/parser/Parser/Send: {
     tryParseNArySendWithAST: ast => (
         ( | ident <- checkNAryIdentifier |
             ident if: [
@@ -10,7 +10,7 @@
 
                 [
                     nameStr <- nameStr + (ident payload asString).
-                    arglist append: (parseExpressionWithFollowups: #<:lang/parser/Parser/Followups> binary).
+                    arglist append: (parseExpressionWithFollowups: #<:lang/eco/parser/Parser/Followups> binary).
                     ident <- checkNAryIdentifier.
                     ident unless: [
                       ^ newASTSendWithSubject: ast
@@ -40,7 +40,7 @@
         ( | ident <- checkBinaryIdentifier |
             ident if: [
                 | args <- std util newVector |
-                args append: (parseExpressionWithFollowups: #<:lang/parser/Parser/Followups> unary).
+                args append: (parseExpressionWithFollowups: #<:lang/eco/parser/Parser/Followups> unary).
               ^ newASTSendWithSubject: ast
                               Message: ident payload
                                  Args: args

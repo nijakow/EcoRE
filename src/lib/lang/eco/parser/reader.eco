@@ -1,5 +1,5 @@
 
-#=lang/tokenizer/StringReader: {
+#=lang/eco/tokenizer/StringReader: {
     charVector, index;
 
     with inherited trait = {
@@ -26,7 +26,7 @@
     with inherited parent = #<:std/Clonable>;
 },
 
-#=lang/tokenizer/PortReader: {
+#=lang/eco/tokenizer/PortReader: {
     inputPort, currentChar, flushed, pushbacks;
 
     with inherited trait = {

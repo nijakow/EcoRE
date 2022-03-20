@@ -1,0 +1,7 @@
+"
+    lang.eco - The lang package of the Ecosphere Standard Library
+"
+
+#=lang: {
+    eco = #<:lang/eco>;
+}

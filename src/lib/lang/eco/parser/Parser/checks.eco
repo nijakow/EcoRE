@@ -1,5 +1,5 @@
 
-#=lang/parser/Parser/Checks: {
+#=lang/eco/parser/Parser/Checks: {
     error: msg => "TODO";
 
     check: type => check: type withProperty: [ :token | true ];

@@ -1,5 +1,5 @@
 
-#=lang/compiler/Bytecodes: {
+#=lang/eco/compiler/Bytecodes: {
     NOOP = 0,
     CONST = 1,
     PUSHC = 2,

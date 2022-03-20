@@ -1,6 +1,6 @@
 
 
-#=lang/compiler/ValueType: {
+#=lang/eco/compiler/ValueType: {
     Register = {
         number, depth;
 

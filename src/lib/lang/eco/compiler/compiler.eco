@@ -1,15 +1,15 @@
 
-#=lang/compiler/Compiler: {
+#=lang/eco/compiler/Compiler: {
     writer, depth, regAlloc, lastValue;
 
     initWithWriter: w Depth: d => (
         writer    <- w.
         depth     <- d.
-        regAlloc  <- #<:lang/compiler/RegisterAllocator> new.
+        regAlloc  <- #<:lang/eco/compiler/RegisterAllocator> new.
         lastValue <- selfValue.
       ^ self
     );
-    initWithDepth: d => initWithWriter: (#<:lang/compiler/CodeWriter> new) Depth: d;
+    initWithDepth: d => initWithWriter: (#<:lang/eco/compiler/CodeWriter> new) Depth: d;
 
     finishWithArgs: args Varargs: varargs => (
         returnWithDepth: 0.
@@ -78,10 +78,10 @@
     moveLastValueToReg: r => moveLastValueToReg: r Depth: 0;
 
     selfValue => registerValue: 0 Depth: 0;
-    constantValue: c => (#<:lang/compiler/ValueType> Constant) clone initWithValue: c;
-    closureValue: c => (#<:lang/compiler/ValueType> Closure) clone initWithValue: c;
-    registerValue: n Depth: d => (#<:lang/compiler/ValueType> Register) clone initWithNumber: n Depth: d;
-    stackTopValue => (#<:lang/compiler/ValueType> Stack) clone;
+    constantValue: c => (#<:lang/eco/compiler/ValueType> Constant) clone initWithValue: c;
+    closureValue: c => (#<:lang/eco/compiler/ValueType> Closure) clone initWithValue: c;
+    registerValue: n Depth: d => (#<:lang/eco/compiler/ValueType> Register) clone initWithNumber: n Depth: d;
+    stackTopValue => (#<:lang/eco/compiler/ValueType> Stack) clone;
 
     loadSelf => lastValue: selfValue;
     loadConstant: c => lastValue: (constantValue: c);

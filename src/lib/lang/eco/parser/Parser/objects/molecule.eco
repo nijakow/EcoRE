@@ -1,5 +1,5 @@
 
-#=lang/parser/Parser/Molecule: {
+#=lang/eco/parser/Parser/Molecule: {
     parseObjectSlotFlags: flags => (
         [
             begin

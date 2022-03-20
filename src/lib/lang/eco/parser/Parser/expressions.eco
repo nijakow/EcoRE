@@ -1,11 +1,11 @@
-#=lang/parser/Parser/Followups: {
-    all = { level => 2, dec => #<:lang/parser/Parser/Followups> binary },
-    binary = { level => 1, dec => #<:lang/parser/Parser/Followups> unary },
+#=lang/eco/parser/Parser/Followups: {
+    all = { level => 2, dec => #<:lang/eco/parser/Parser/Followups> binary },
+    binary = { level => 1, dec => #<:lang/eco/parser/Parser/Followups> unary },
     unary = { level => 0, dec => self }
 },
 
-#=lang/parser/Parser/Expression: {
-    parseExpression => parseExpressionWithFollowups: #<:lang/parser/Parser/Followups> all;
+#=lang/eco/parser/Parser/Expression: {
+    parseExpression => parseExpressionWithFollowups: #<:lang/eco/parser/Parser/Followups> all;
     parseExpressions => parseExpressionsWithTerminator: TokenType RPAREN;
 
     parseSimpleExpressionWithFollowups: followups => (

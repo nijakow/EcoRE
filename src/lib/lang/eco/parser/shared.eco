@@ -1,4 +1,4 @@
-#=lang/parser/SharedBehavior: {
+#=lang/eco/parser/SharedBehavior: {
 
     TokenType = {
         EOF = #'eof',

@@ -1,5 +1,5 @@
 
-#=lang/parser/Parser/CharChecks: {
+#=lang/eco/parser/Parser/CharChecks: {
     IsBin(c) => (
         "TODO: Rework this function!"
         ([

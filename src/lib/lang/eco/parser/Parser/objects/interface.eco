@@ -1,5 +1,5 @@
 
-#=lang/parser/Parser/Interface: {
+#=lang/eco/parser/Parser/Interface: {
     parseInterface => (
         | builder <- newASTInterfaceBuilder |
         [ check: TokenType RBRACK ] until: [

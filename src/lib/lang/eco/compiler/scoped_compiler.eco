@@ -1,5 +1,5 @@
 
-#=lang/compiler/ScopedCompiler: {
+#=lang/eco/compiler/ScopedCompiler: {
     scopes;
 
     init => (
@@ -8,9 +8,9 @@
       ^ self
     );
 
-    private newBlockContextWithParent: p => (#<:lang/compiler/ScopeSharedInfo> clone) initWithLexicalParent: p;
-    private newBlockContext => #<:lang/compiler/ScopeSharedInfo> new;
-    private newScopeFromBlockContext: bc => (#<:lang/compiler/Scope> clone) initWithShared: bc;
+    private newBlockContextWithParent: p => (#<:lang/eco/compiler/ScopeSharedInfo> clone) initWithLexicalParent: p;
+    private newBlockContext => #<:lang/eco/compiler/ScopeSharedInfo> new;
+    private newScopeFromBlockContext: bc => (#<:lang/eco/compiler/Scope> clone) initWithShared: bc;
     private newScope => newScopeFromBlockContext: newBlockContext;
 
     private localCompiler => scopes compiler;

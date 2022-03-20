@@ -1,5 +1,5 @@
 
-#=lang/parser/Parser/Args: {
+#=lang/eco/parser/Parser/Args: {
     parseArgdef => (
         | type <- parseOptionalType,
           name <- (expect: TokenType IDENTIFIER) payload |

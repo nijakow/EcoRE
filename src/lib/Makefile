@@ -15,7 +15,8 @@ std/maybe.eco \
 std/util.eco \
 std/reflect.eco \
 interfaces.eco \
-lang/lang.eco \
+lang/_.eco \
+lang/eco/_.eco \
 lang/eco/ast/ast.eco \
 lang/eco/ast/construction.eco \
 lang/eco/ast/visitor.eco \

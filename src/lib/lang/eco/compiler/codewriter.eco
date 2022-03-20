@@ -1,5 +1,5 @@
 
-#=lang/compiler/CodeWriter: {
+#=lang/eco/compiler/CodeWriter: {
     bytes, constants, closures, maxRegister;
 
     init => (
@@ -140,6 +140,6 @@
         writeU8: depth
     );
 
-    Bytecodes = #<:lang/compiler/Bytecodes>;
+    Bytecodes = #<:lang/eco/compiler/Bytecodes>;
     with inherited parent = #<:std/Clonable>;
 }
