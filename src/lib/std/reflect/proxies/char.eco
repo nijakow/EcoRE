@@ -1,0 +1,29 @@
+
+#=std/reflect/proxies/Char: {
+    isChar          => true;
+    asInt           => #'ecosphere.ecore.char.as_int'(self);
+    == other        => #'ecosphere.ecore.is'(self, other);
+    != other        => (self == other) not;
+    < other         => (self asInt) < (other asInt);
+    <= other        => (self asInt) <= (other asInt);
+    > other         => (self asInt) > (other asInt);
+    >= other        => (self asInt) >= (other asInt);
+    writeOn: writer => (
+        | v <- asInt |
+        begin
+            if: [ v <= 0        ] then: [ writer byte<< 0xef. writer byte<< 0xbf. writer byte<< 0xbd. ] ~
+            if: [ v <= 0x7f     ] then: [ writer byte<< v ] ~
+            if: [ v <= 0x7ff    ] then: [ writer byte<< (((v rshift: 6) bitAnd: 0x1f) bitOr: 0xc0).
+                                          writer byte<< (((v)           bitAnd: 0x3f) bitOr: 0x80). ] ~
+            if: [ v <= 0xffff   ] then: [ writer byte<< (((v rshift: 12) bitAnd: 0x0f) bitOr: 0xe0).
+                                          writer byte<< (((v rshift:  6) bitAnd: 0x3f) bitOr: 0x80).
+                                          writer byte<< (((v)            bitAnd: 0x3f) bitOr: 0x80). ] ~
+            if: [ v <= 0x10ffff ] then: [ writer byte<< (((v rshift: 18) bitAnd: 0x07) bitOr: 0xf0).
+                                          writer byte<< (((v rshift: 12) bitAnd: 0x3f) bitOr: 0x80).
+                                          writer byte<< (((v rshift:  6) bitAnd: 0x3f) bitOr: 0x80).
+                                          writer byte<< (((v rshift:  0) bitAnd: 0x3f) bitOr: 0x80). ] ~
+            default: [ writer byte<< 0xef. writer byte<< 0xbf. writer byte<< 0xbd. ].
+      ^ self
+    );
+    with inherited parent = #<:std/Clonable>;
+}

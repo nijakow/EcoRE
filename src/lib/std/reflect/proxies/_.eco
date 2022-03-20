@@ -1,5 +1,6 @@
 #=std/reflect/proxies: {
     Block = #<:std/reflect/proxies/Block>;
+    Char  = #<:std/reflect/proxies/Char>;
     Code  = #<:std/reflect/proxies/Code>;
     Int   = #<:std/reflect/proxies/Int>;
 }

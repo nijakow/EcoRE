@@ -17,6 +17,7 @@ std/reflect/_.eco \
 std/reflect/mirror.eco \
 std/reflect/proxies/_.eco \
 std/reflect/proxies/block.eco \
+std/reflect/proxies/char.eco \
 std/reflect/proxies/code.eco \
 std/reflect/proxies/int.eco \
 interfaces.eco \
