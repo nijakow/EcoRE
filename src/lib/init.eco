@@ -1,10 +1,4 @@
 
-#=init/code_proxy: {
-    execute(...) => #'ecosphere.ecore.object.code.value'(...);
-    writeOn: writer => writer << '<code>';
-    with inherited parent = #<:std/Clonable>;
-},
-
 #=init/integer_proxy: {
     isInt      => true;
     + other    => #'ecosphere.ecore.math.add'(self, other);

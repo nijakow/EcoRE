@@ -1,0 +1,6 @@
+
+#=std/reflect/proxies/Code: {
+    execute(...) => #'ecosphere.ecore.object.code.value'(...);
+    writeOn: writer => writer << '<code>';
+    with inherited parent = #<:std/Clonable>;
+}
