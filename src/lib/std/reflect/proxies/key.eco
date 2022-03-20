@@ -1,0 +1,12 @@
+
+#=std/reflect/proxies/Key: {
+    isKey    => true;
+    asString => #'ecosphere.ecore.object.key.as_string'(self);
+    writeOn: writer => (
+        writer << #\#.
+        writer << #\'.
+        writer << asString.
+        writer << #\'.
+    );
+    with inherited parent = #<:std/Clonable>;
+}

@@ -1,15 +1,5 @@
 
-#=init/key_proxy: {
-    isKey    => true;
-    asString => #'ecosphere.ecore.object.key.as_string'(self);
-    writeOn: writer => (
-        writer << #\#.
-        writer << #\'.
-        writer << asString.
-        writer << #\'.
-    );
-    with inherited parent = #<:std/Clonable>;
-},
+#=init/key_proxy: ,
 
 #=init/string_proxy: {
     size => #'ecosphere.ecore.object.string.byte_length'(self);

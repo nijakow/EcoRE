@@ -20,6 +20,7 @@ std/reflect/proxies/block.eco \
 std/reflect/proxies/char.eco \
 std/reflect/proxies/code.eco \
 std/reflect/proxies/int.eco \
+std/reflect/proxies/key.eco \
 interfaces.eco \
 lang/_.eco \
 lang/eco/_.eco \
