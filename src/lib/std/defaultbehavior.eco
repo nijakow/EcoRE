@@ -16,6 +16,7 @@
     if: t else: f => asBool if: t else: f;
     & value       => (((std util Collector) clone) init: self) & value;
     cons: value   => ((std util MutablePair) clone) initWithFirst: self Second: value;
+    -> value      => ((std util MutablePair) clone) initWithFirst: self Second: value;  "TODO: Immutable Pair!"
     writeOn: writer => writer << 'object';
     with lobby    = #<:lobby>;
 }

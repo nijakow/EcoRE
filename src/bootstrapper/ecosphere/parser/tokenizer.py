@@ -181,7 +181,6 @@ class Tokenizer:
         
         if self._s.peeks('...'): return Token(self, TokenType.ELLIPSIS)
         elif self._s.peeks('<-'): return Token(self, TokenType.ASSIGNMENT)
-        elif self._s.peeks('->'): return Token(self, TokenType.DELEGATE)
         elif self._s.peeks('=>'): return Token(self, TokenType.RARROW)
         elif self._s.peeks('('): return Token(self, TokenType.LPAREN)
         elif self._s.peeks(')'): return Token(self, TokenType.RPAREN)

@@ -82,7 +82,6 @@
             (in hasNext) unless: [ ^ newTokenWithType: TokenType EOF ].
             (peeks: '...') if: [ ^ newTokenWithType: TokenType ELLIPSIS   ].
             (peeks: '<-')  if: [ ^ newTokenWithType: TokenType ASSIGNMENT ].
-            (peeks: '->')  if: [ ^ newTokenWithType: TokenType DELEGATE   ].
             (peeks: '=>')  if: [ ^ newTokenWithType: TokenType RARROW     ].
             (peeks: '(')   if: [ ^ newTokenWithType: TokenType LPAREN     ].
             (peeks: ')')   if: [ ^ newTokenWithType: TokenType RPAREN     ].
