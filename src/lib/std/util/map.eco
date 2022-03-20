@@ -14,13 +14,15 @@
         at: index do: found => at: index do: found else: [];
         at: index else: notfound => at: index do: [ :v | ^ v ] else: notfound;
         at: index default: def => at: index else: [ ^ def ];
-        at: index => at: index else: [ invalidIndexError ];
+        at: index => at: index do: [ :v | ^ Yes: v ] else: [ ^ No ];
 
         at: index put: value => (
             values do: [ :p | (p first == index) if: [ p second: value. ^ self ] ].
             values append: (index cons: value).
             ^ self
         );
+
+        writeOn: w => w << values;
     };
 
     with inherited parent = #<:std/Clonable>;
