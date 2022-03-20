@@ -1,0 +1,19 @@
+#=std/util/MutablePair: {
+    first, second;
+
+    with inherited trait = {
+        initWithFirst: f Second: s => (
+            first: f second: s.
+            ^ self
+        );
+
+        first: f => first <- f;
+        second: s => second <- s;
+
+        first: f second: s => (
+            first: f. second: s.
+        );
+    };
+
+    with inherited parent = #<:std/Clonable>;
+}

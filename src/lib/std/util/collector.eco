@@ -1,0 +1,48 @@
+#=std/util/Collector: {
+    prev,
+    index = 0,
+    value;
+
+    with inherited trait = {
+        init: v => (
+            prev <- self.
+            index <- 0.
+            value <- v.
+            ^ self
+        );
+        & v => (
+            | next <- (std util Collector) clone init: v |
+            next prev: self.
+            next index: index + 1.
+            ^ next
+        );
+        prev:  p => ( prev  <- p. ^ self );
+        index: i => ( index <- i. ^ self );
+        value: v => ( value <- v. ^ self );
+        size => index + 1;
+        do: block => (
+            (prev == self) unless: [ prev do: block ].
+            block value(value).
+        );
+        forEach: block => (
+            | i <- 0 |
+            do: [ :e | block value(i, e). i <- i + 1. ]
+        );
+        at: index => (
+            forEach: [ :i, :v | (i == index) if: [ ^ v ] ].
+            invalidIndexError
+        );
+
+        writeOn: writer => (
+            (index == 0) if: [ writer << value ]
+                        else: [
+                writer << prev << ' & ' << value
+            ]
+        );
+
+        with inherited conversions = #<:std/util/StandardListConversions>;
+        with inherited access = #<:std/util/StandardListAccess>;
+    };
+
+    with inherited parent = #<:std/Clonable>;
+}
