@@ -1,0 +1,18 @@
+
+#=std/reflect/proxies/Port: {
+    readByte => (
+        | b <- #'ecosphere.ecore.object.port.read_byte'(self) |
+        [ b asBool ] until: [
+            #'ecosphere.ecore.object.port.notify_me'(self).
+            b <- #'ecosphere.ecore.object.port.read_byte'(self)
+        ].
+      ^ b
+    );
+
+    writeByte: b => (#'ecosphere.ecore.object.port.write_byte'(self, b). ^ self);
+    byte<< b     => writeByte: b;
+
+    commit => #'ecosphere.ecore.object.port.flush_output'(self);
+
+    with inherited parent = #<:std/Clonable>;
+}

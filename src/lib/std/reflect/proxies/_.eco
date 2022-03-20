@@ -6,5 +6,6 @@
     Code   = #<:std/reflect/proxies/Code>;
     Int    = #<:std/reflect/proxies/Int>;
     Key    = #<:std/reflect/proxies/Key>;
+    Port   = #<:std/reflect/proxies/Port>;
     String = #<:std/reflect/proxies/String>;
 }
