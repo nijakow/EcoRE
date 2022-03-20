@@ -24,6 +24,10 @@
             ^ array
         );
 
+        slotNamed: name => (
+          ^ (#<:std/reflect/Slot> clone) initWithReflectee: reflectee Name: name Mirror: self;
+        );
+
         writeOn: w => w << 'a mirror';
     };
 

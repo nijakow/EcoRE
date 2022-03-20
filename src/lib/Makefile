@@ -14,6 +14,7 @@ std/maybe.eco \
 std/util.eco \
 std/reflect/_.eco \
 std/reflect/mirror.eco \
+std/reflect/slot.eco \
 std/reflect/proxies/_.eco \
 std/reflect/proxies/array.eco \
 std/reflect/proxies/blob.eco \

@@ -1,0 +1,19 @@
+
+#=std/reflect/Slot: {
+    reflectee, name;
+
+    private owningMirror;
+
+    with inherited trait = {
+        initWithReflectee: _reflectee Name: _name Mirror: _mirror => (
+            reflectee    <- _reflectee.
+            name         <- _name.
+            owningMirror <- _mirror.
+            ^ self
+        );
+
+        writeOn: w => w << 'slot named ' << name;
+    };
+
+    with inherited parent = #<:std/Clonable>;
+}
