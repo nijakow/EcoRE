@@ -11,7 +11,6 @@ std/defaultbehavior.eco \
 std/globals.eco \
 std/io.eco \
 std/maybe.eco \
-std/util.eco \
 std/reflect/_.eco \
 std/reflect/mirror.eco \
 std/reflect/slot.eco \
@@ -28,6 +27,7 @@ std/reflect/proxies/port.eco \
 std/reflect/proxies/string.eco \
 std/reflect/proxies/ffi/ffifunc.eco \
 std/reflect/proxies/ffi/ffitype.eco \
+std/util/_.eco \
 interfaces.eco \
 lang/_.eco \
 lang/eco/_.eco \
