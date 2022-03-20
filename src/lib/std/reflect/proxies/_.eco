@@ -1,11 +1,13 @@
+
 #=std/reflect/proxies: {
-    Array  = #<:std/reflect/proxies/Array>;
-    Blob   = #<:std/reflect/proxies/Blob>;
-    Block  = #<:std/reflect/proxies/Block>;
-    Char   = #<:std/reflect/proxies/Char>;
-    Code   = #<:std/reflect/proxies/Code>;
-    Int    = #<:std/reflect/proxies/Int>;
-    Key    = #<:std/reflect/proxies/Key>;
-    Port   = #<:std/reflect/proxies/Port>;
-    String = #<:std/reflect/proxies/String>;
+    Array     = #<:std/reflect/proxies/Array>;
+    Blob      = #<:std/reflect/proxies/Blob>;
+    Block     = #<:std/reflect/proxies/Block>;
+    Char      = #<:std/reflect/proxies/Char>;
+    Code      = #<:std/reflect/proxies/Code>;
+    Int       = #<:std/reflect/proxies/Int>;
+    Interface = #<:std/reflect/proxies/Interface>;
+    Key       = #<:std/reflect/proxies/Key>;
+    Port      = #<:std/reflect/proxies/Port>;
+    String    = #<:std/reflect/proxies/String>;
 }

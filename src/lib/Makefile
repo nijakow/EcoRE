@@ -22,6 +22,7 @@ std/reflect/proxies/block.eco \
 std/reflect/proxies/char.eco \
 std/reflect/proxies/code.eco \
 std/reflect/proxies/int.eco \
+std/reflect/proxies/interface.eco \
 std/reflect/proxies/key.eco \
 std/reflect/proxies/port.eco \
 std/reflect/proxies/string.eco \

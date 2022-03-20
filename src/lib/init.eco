@@ -1,34 +1,5 @@
 
 
-#=init/interface_proxy: {
-    writeOn: writer => (
-        (self is: any) if: [ writer << 'any'. ^ self ].
-        writer << '%[ '.
-        0 for: size do: [ :i |
-            writer << '[' << (returnTypeForSlotIndex: i) << '] '
-                   << (nameForSlotIndex: i) << '('.
-            | count <- (argCountForSlotIndex: i) |
-            0 for: count do: [ :j |
-                (j > 0) if: [ writer << ', ' ].
-                writer << '[' << (argTypeForSlotIndex: i Arg: j) << ']'.
-            ].
-            (hasVarargsForSlotIndex: i) if: [ (count > 0) if: [ writer << ', ' ]. writer << '...' ].
-            writer << ')'.
-            writer << '; '
-        ].
-        writer << ']'
-    );
-
-    size => #'ecosphere.ecore.object.interface.get_entry_info'(self, 0, -1);
-    nameForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -2);
-    returnTypeForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -3);
-    argCountForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -4);
-    hasVarargsForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -5) isNotZero;
-    argTypeForSlotIndex: i Arg: ai => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, ai);
-
-    with inherited parent = #<:std/Clonable>;
-},
-
 #=init/ffitype_proxy: {
     sizeof => #'ecosphere.ecore.ffi.type.sizeof'(self);
     writeOn: writer => writer << '<ffi_type:' << sizeof << '>';
