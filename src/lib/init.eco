@@ -169,26 +169,6 @@
         do: [ :c | (c == character) if: [ ^ true ] ].
       ^ false
     );
-    isString => true;
-    asVector => (
-        | v <- std util newVector |
-        self do: [ :c | v append: c ].
-      ^ v
-    );
-    parseInt => (
-        | v <- 0, sign <- 1 |
-        (size isZero) if: [ ^ No ].
-        forEach: [ :i, :c |
-            (c == #\-) if: [ ( [ i isZero ] and: [ size > 1 ] ) if: [ sign <- -1 ] else: [ ^ No ] ]
-                     else: [
-                ([ (c asInt) >= (#\0 asInt) ] and: [ (c asInt) <= (#\9 asInt) ]) unless: [ ^ No ].
-                v <- (v * 10) + ((c asInt) - (#\0 asInt))
-            ]
-        ].
-        Yes: (v * sign)
-    );
-    writeOn: writer => do: [ :c | writer << c ];
-    asKey => #'ecosphere.ecore.object.string.as_key'(self);
     + other => (
         | vec <- asVector |
         other do: [ :c | vec append: c ].
@@ -201,6 +181,34 @@
         ].
       ^ vec asString
     );
+    isString => true;
+    asVector => (
+        | v <- std util newVector |
+        self do: [ :c | v append: c ].
+      ^ v
+    );
+    asKey => #'ecosphere.ecore.object.string.as_key'(self);
+    parseInt => (
+        | v <- 0, sign <- 1 |
+        (size isZero) if: [ ^ No ].
+        forEach: [ :i, :c |
+            (c == #\-) if: [ ( [ i isZero ] and: [ size > 1 ] ) if: [ sign <- -1 ] else: [ ^ No ] ]
+                     else: [
+                ([ (c asInt) >= (#\0 asInt) ] and: [ (c asInt) <= (#\9 asInt) ]) unless: [ ^ No ].
+                v <- (v * 10) + ((c asInt) - (#\0 asInt))
+            ]
+        ].
+        Yes: (v * sign)
+    );
+    parse => (
+        |
+            reader <- self lens: (lang eco tokenizer StringReader),
+            tok    <- reader lens: (lang eco tokenizer Tokenizer),
+            parser <- tok lens: (lang eco parser Parser)
+        |
+      ^ parser parseExpression
+    );
+    writeOn: writer => do: [ :c | writer << c ];
     with inherited parent = #<:std/Clonable>;
 },
 
