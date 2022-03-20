@@ -54,6 +54,13 @@
     last => at: (size - 1);
 },
 
+#=std/util/StandardListSearch: {
+    find: element => (
+        forEach: [ :i, :v | (v is: element) if: [ ^ Yes: i ] ].
+        ^ No
+    );
+},
+
 #=std/util/StandardStackImpl: {
     push: e => append: e;
     peek    => last;

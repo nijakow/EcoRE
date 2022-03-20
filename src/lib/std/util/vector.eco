@@ -13,6 +13,7 @@
         with inherited iterations = #<:std/util/StandardListIterations>;
         with inherited conversions = #<:std/util/StandardListConversions>;
         with inherited access = #<:std/util/StandardListAccess>;
+        with inherited search = #<:std/util/StandardListSearch>;
         with inherited stack = #<:std/util/StandardStackImpl>;
         with inherited queue = #<:std/util/StandardQueueImpl>;
         with inherited set = #<:std/util/StandardSetImpl>;
@@ -47,11 +48,6 @@
             index to: (size - 2) do: [ :i | at: i put: (at: i + 1) ].
             size <- size - 1.
             ^ elem
-        );
-
-        find: element => (
-            forEach: [ :i, :v | (v is: element) if: [ ^ Yes: i ] ].
-            ^ No
         );
 
         writeOn: writer => (std util) WriteIterable: self On: writer;
