@@ -11,6 +11,7 @@
 
         exprDo: block => (
             [
+                (check: TokenType EOF) if: [ ^ false ].
                 block value(parseExpression).
                 check: (TokenType SEPARATOR)
             ] repeat
