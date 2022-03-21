@@ -5,6 +5,8 @@
 #=std/io: {
     in, out;
 
+    FDReader = #<:std/io/FDReader>;
+
     PortInput = #<:std/io/PortInput>;
     PortOutput = #<:std/io/PortOutput>;
     PortIO = #<:std/io/PortIO>;

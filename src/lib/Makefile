@@ -11,6 +11,7 @@ std/defaultbehavior.eco \
 std/globals.eco \
 std/maybe.eco \
 std/io/_.eco \
+std/io/fdreader.eco \
 std/io/portinput.eco \
 std/io/portio.eco \
 std/io/portoutput.eco \

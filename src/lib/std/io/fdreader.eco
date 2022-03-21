@@ -1,0 +1,39 @@
+
+#=std/io/FDReader: {
+    private fd;
+    private buffer;
+    private readHead;
+    private writeHead;
+
+    initWithFileDescriptor: _fd => (
+        fd        <- _fd.
+        buffer    <- std util newBlob: 2.
+        readHead  <- 0.
+        writeHead <- 0.
+      ^ self
+    );
+
+    private bufferEmpty => readHead >= writeHead;
+
+    private refresh => (
+        readHead  <- 0.
+        writeHead <- (buffer readFromFileDescriptor: fd)
+    );
+    private optionalRefresh => (
+        bufferEmpty if: [ refresh ]
+    );
+
+    hasNext => ( optionalRefresh. bufferEmpty not );
+    readByte => (
+        optionalRefresh.
+        bufferEmpty if: [
+          ^ 0
+        ] else: [
+            | b <- buffer at: readHead |
+            readHead <- readHead + 1.
+          ^ b
+        ]
+    );
+
+    with inherited parent = #<:std/Clonable>;
+}
