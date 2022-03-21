@@ -5,7 +5,7 @@
 #=std/io: {
     in, out;
 
-    FDReader = #<:std/io/FDReader>;
+    FDByteReader = #<:std/io/FDByteReader>;
 
     PortInput = #<:std/io/PortInput>;
     PortOutput = #<:std/io/PortOutput>;
