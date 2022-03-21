@@ -91,6 +91,8 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.at_put_int8", Eco_VM_Builtin_BlobAtPutInt8);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.at_put_int16", Eco_VM_Builtin_BlobAtPutInt16);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.at_put_int32", Eco_VM_Builtin_BlobAtPutInt32);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.read_from", Eco_VM_Builtin_BlobReadFrom);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.write_to", Eco_VM_Builtin_BlobWriteTo);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.open_file", Eco_VM_Builtin_BlobOpenFile);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.new", Eco_VM_Builtin_NewPort);

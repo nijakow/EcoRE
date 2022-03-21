@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <unistd.h>
 
 #include "blob.h"
 
@@ -104,6 +105,21 @@ bool Eco_Blob_AtPut(struct Eco_Blob* blob, unsigned int index, void* data, unsig
         return false;
     Eco_Memcpy(Eco_Blob_At_Unchecked(blob, index), data, size);
     return true;
+}
+
+
+/*
+ *    F i l e   D e s c r i p t o r   I / O
+ */
+
+int Eco_Blob_ReadFromFD(struct Eco_Blob* blob, int fd)
+{
+    return read(fd, blob->bytes, Eco_Blob_Size(blob));
+}
+
+int Eco_Blob_WriteToFD(struct Eco_Blob* blob, int fd)
+{
+    return write(fd, blob->bytes, Eco_Blob_Size(blob));
 }
 
 

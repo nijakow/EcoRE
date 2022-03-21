@@ -118,6 +118,40 @@ bool Eco_VM_Builtin_BlobAtPutInt32(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_BlobReadFrom(struct Eco_Fiber* fiber, unsigned int args)
+{
+    int               fd;
+    struct Eco_Blob*  blob;
+    Eco_Any           any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    fd = Eco_Any_AsInteger(&any);
+    Eco_Fiber_Pop(fiber, &any);
+    blob = Eco_Any_AsPointer(&any);
+    Eco_Any_AssignInteger(&any, Eco_Blob_ReadFromFD(blob, fd));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_BlobWriteTo(struct Eco_Fiber* fiber, unsigned int args)
+{
+    int               fd;
+    struct Eco_Blob*  blob;
+    Eco_Any           any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    fd = Eco_Any_AsInteger(&any);
+    Eco_Fiber_Pop(fiber, &any);
+    blob = Eco_Any_AsPointer(&any);
+    Eco_Any_AssignInteger(&any, Eco_Blob_WriteToFD(blob, fd));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 bool Eco_VM_Builtin_BlobOpenFile(struct Eco_Fiber* fiber, unsigned int args)
 {
     Eco_Any             any;
