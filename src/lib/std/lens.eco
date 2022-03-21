@@ -1,0 +1,11 @@
+
+#=std/Lens: {
+    initWithFirst: f Second: s => (
+        first  <- f.
+        second <- s.
+      ^ self
+    );
+
+    with first,
+    with inherited second;
+}

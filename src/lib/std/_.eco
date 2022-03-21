@@ -4,11 +4,12 @@
 
 #=std: {
     with globals = #<:globals>;
+    any = #<:std/bool/false>;
 
     DefaultBehavior = #<:std/DefaultBehavior>;
     Clonable = #<:std/Clonable>;
 
-    any = #<:std/bool/false>;
+    Lens = #<:std/Lens>;
 
     with bool = #<:std/bool>;
     with maybe = #<:std/maybe>;

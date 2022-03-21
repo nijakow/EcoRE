@@ -9,6 +9,7 @@ std/bool.eco \
 std/clonable.eco \
 std/defaultbehavior.eco \
 std/globals.eco \
+std/lens.eco \
 std/maybe.eco \
 std/io/_.eco \
 std/io/fdbytereader.eco \
