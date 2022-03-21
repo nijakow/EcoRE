@@ -12,9 +12,9 @@
     visitUnknown: ast => ( io out << 'Visiting unknown AST for assignment'. io out newline. io out commit );
 
     visitSend: ast => (
-        rhs acceptVisitor: visitor.
         (ast subject isSelfAST) if: [
             (compiler isLocal: ast message) if: [
+                rhs acceptVisitor: visitor.
                 compiler storeVariable: ast message
                              IfPresent: [ ^ ]
                           IfNotPresent: [
