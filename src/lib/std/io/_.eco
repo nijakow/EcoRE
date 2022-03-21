@@ -5,92 +5,9 @@
 #=std/io: {
     in, out;
 
-    PortInput => {
-        _br;
-
-        with inherited trait = {
-            init: byteReader => (
-                _br <- byteReader.
-              ^ self
-            );
-
-            hasNext  => true;
-            readByte => _br readByte;
-            readChar => (
-                | b <- readByte, bytes, v |
-                begin
-                  if: [ (b bitAnd: 0b10000000) isZero        ] then: [ ^ b asChar                             ] ~
-                  if: [ (b bitAnd: 0b11100000) == 0b11000000 ] then: [ v <- b bitAnd: 0b00011111. bytes <- 1. ] ~
-                  if: [ (b bitAnd: 0b11110000) == 0b11100000 ] then: [ v <- b bitAnd: 0b00001111. bytes <- 2. ] ~
-                  if: [ (b bitAnd: 0b11111000) == 0b11110000 ] then: [ v <- b bitAnd: 0b00000111. bytes <- 3. ] ~
-                  default: [ ^ 0xfffd asChar ].
-                1 to: bytes do: [ :i |
-                    b <- readByte.
-                    ((b bitAnd: 0b11000000) != (0b10000000)) if: [ ^ 0xfffd asChar ].
-                    v <- ((v shift: 6) bitOr: (b bitAnd: 0b00111111)).
-                ].
-              ^ v asChar
-            );
-            readLine => (
-                | v <- std util newVector, c <- readChar |
-                [ c == (char newline) ] until: [
-                    v append: c.
-                    c <- readChar
-                ].
-              ^ v asString
-            );
-            readAll => (
-                | v <- std util newVector, c <- readChar |
-                [ hasNext ] while: [
-                    v append: readChar
-                ].
-              ^ v asString
-            );
-            close => "TODO";
-            writeOn: w => w << 'PortInput';
-        };
-
-        with inherited parent = #<:std/Clonable>;
-    },
-
-    PortOutput = {
-        _port;
-
-        with inherited trait = {
-            init: port => (
-                _port <- port.
-                ^ self
-            );
-
-            commit     => _port commit;
-            byte<< b   => _port byte<< b;
-            << object  => ( object writeOn: self. ^ self );
-            newline    => ( self << (char newline). ^ self );
-            close      => "TODO";
-
-            writeOn: w => w << 'PortOutput';
-        };
-
-        with inherited parent = #<:std/Clonable>;
-    },
-
-    PortIO = {
-        in, out;
-
-        with inherited trait = {
-            init: port => (
-                in  <- port lens: (std io PortInput);
-                out <- port lens: (std io PortOutput);
-              ^ self
-            );
-
-            close => "TODO";
-
-            writeOn: w => w << 'PortIO';
-        };
-
-        with inherited parent = #<:std/Clonable>;
-    },
+    PortInput = #<:std/io/PortInput>;
+    PortOutput = #<:std/io/PortOutput>;
+    PortIO = #<:std/io/PortIO>;
 
     OpenFileDescriptor: fd   => PortIO clone init: #'ecosphere.ecore.object.port.new'(fd);
     OpenFileForReading: path => PortInput clone init: #'ecosphere.ecore.object.port.new'(#'ecosphere.ecore.fd.open_file'(path, 1));

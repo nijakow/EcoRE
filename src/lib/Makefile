@@ -9,8 +9,11 @@ std/bool.eco \
 std/clonable.eco \
 std/defaultbehavior.eco \
 std/globals.eco \
-std/io/_.eco \
 std/maybe.eco \
+std/io/_.eco \
+std/io/portinput.eco \
+std/io/portio.eco \
+std/io/portoutput.eco \
 std/reflect/_.eco \
 std/reflect/mirror.eco \
 std/reflect/slot.eco \
@@ -35,7 +38,6 @@ std/util/map.eco \
 std/util/mutablepair.eco \
 std/util/stringbuilder.eco \
 std/util/vector.eco \
-interfaces.eco \
 lang/_.eco \
 lang/eco/_.eco \
 lang/eco/ast/ast.eco \
@@ -65,6 +67,7 @@ lang/eco/parser/_.eco \
 lang/eco/parser/reader.eco \
 lang/eco/parser/shared.eco \
 lang/eco/parser/tokenizer.eco \
+interfaces.eco \
 master.eco
 
 

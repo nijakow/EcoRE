@@ -1,0 +1,18 @@
+
+#=std/io/PortIO: {
+    in, out;
+
+    with inherited trait = {
+        init: port => (
+            in  <- port lens: (std io PortInput);
+            out <- port lens: (std io PortOutput);
+            ^ self
+        );
+
+        close => "TODO";
+
+        writeOn: w => w << 'PortIO';
+    };
+
+    with inherited parent = #<:std/Clonable>;
+}

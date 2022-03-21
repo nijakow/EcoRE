@@ -1,0 +1,21 @@
+
+#=std/io/PortOutput: {
+    _port;
+
+    with inherited trait = {
+        init: port => (
+            _port <- port.
+            ^ self
+        );
+
+        commit     => _port commit;
+        byte<< b   => _port byte<< b;
+        << object  => ( object writeOn: self. ^ self );
+        newline    => ( self << (char newline). ^ self );
+        close      => "TODO";
+
+        writeOn: w => w << 'PortOutput';
+    };
+
+    with inherited parent = #<:std/Clonable>;
+}
