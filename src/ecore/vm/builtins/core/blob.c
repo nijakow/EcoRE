@@ -124,7 +124,7 @@ bool Eco_VM_Builtin_BlobReadFrom(struct Eco_Fiber* fiber, unsigned int args)
     struct Eco_Blob*  blob;
     Eco_Any           any;
 
-    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
     Eco_Fiber_Pop(fiber, &any);
     fd = Eco_Any_AsInteger(&any);
@@ -141,7 +141,7 @@ bool Eco_VM_Builtin_BlobWriteTo(struct Eco_Fiber* fiber, unsigned int args)
     struct Eco_Blob*  blob;
     Eco_Any           any;
 
-    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
     Eco_Fiber_Pop(fiber, &any);
     fd = Eco_Any_AsInteger(&any);

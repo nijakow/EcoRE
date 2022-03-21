@@ -12,6 +12,9 @@
     with inherited conversions = #<:std/util/StandardListConversions>;
     with inherited access = #<:std/util/StandardListAccess>;
     with inherited search = #<:std/util/StandardListSearch>;
+
+    readFromFileDescriptor: fd => #'ecosphere.ecore.object.blob.read_from'(self, fd);
+    writeToFileDescriptor: fd => #'ecosphere.ecore.object.blob.write_to'(self, fd);
     
     writeOn: writer => writer << '<blob: ' << size << '>';
 
