@@ -48,6 +48,7 @@ struct Eco_Port* Eco_Port_New(struct Eco_Scheduler* scheduler, unsigned int fd)
         port->scheduler              = scheduler;
         port->next                   = NULL;
         port->fd                     = fd;
+        port->at_eof                 = false;
         port->input_buffer_read_head = 0;
         port->input_buffer_fill      = 0;
         port->output_buffer_fill     = 0;
@@ -156,7 +157,8 @@ bool Eco_Port_WriteChar(struct Eco_Port* port, Eco_Codepoint codepoint)
 void Eco_Port_Reactivate(struct Eco_Port* port)
 {
     port->next = NULL;
-    Eco_Port_RefillInputBuffer(port);
+    if (!Eco_Port_RefillInputBuffer(port))
+        port->at_eof = true;
     Eco_FiberQueue_ActivateAll(&port->fibers);
 }
 

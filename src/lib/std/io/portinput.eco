@@ -8,7 +8,7 @@
             ^ self
         );
 
-        hasNext  => true;
+        hasNext  => _br hasNext;
         readByte => _br readByte;
         readChar => (
             | b <- readByte, bytes, v |

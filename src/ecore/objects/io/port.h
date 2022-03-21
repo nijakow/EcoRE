@@ -17,10 +17,11 @@ struct Eco_Port
     struct Eco_Port*       next;
     struct Eco_FiberQueue  fibers;
     unsigned int           fd;
+    bool                   at_eof;
     unsigned int           input_buffer_read_head;
     unsigned int           input_buffer_fill;
-    char                   input_buffer[Eco_Port_INPUT_BUFFER_SIZE];
     unsigned int           output_buffer_fill;
+    char                   input_buffer[Eco_Port_INPUT_BUFFER_SIZE];
     char                   output_buffer[Eco_Port_OUTPUT_BUFFER_SIZE];
 };
 

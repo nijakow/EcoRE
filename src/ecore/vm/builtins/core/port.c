@@ -20,6 +20,24 @@ bool Eco_VM_Builtin_NewPort(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_PortAtEOF(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any           any;
+    struct Eco_Port*  port;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    port = Eco_Any_AsPointer(&any);
+    if (port->at_eof) {
+        Eco_Any_AssignAny(&any, &fiber->vm->constants.ctrue);
+    } else {
+        Eco_Any_AssignAny(&any, &fiber->vm->constants.cfalse);
+    }
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 bool Eco_VM_Builtin_PortReadByte(struct Eco_Fiber* fiber, unsigned int args)
 {
     char              byte;

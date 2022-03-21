@@ -1,5 +1,6 @@
 
 #=std/reflect/proxies/Port: {
+    hasNext => #'ecosphere.ecore.object.port.at_eof'(self) not;
     readByte => (
         | b <- #'ecosphere.ecore.object.port.read_byte'(self) |
         [ b asBool ] until: [
