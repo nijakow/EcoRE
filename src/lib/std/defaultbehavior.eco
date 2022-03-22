@@ -5,7 +5,7 @@
     mirror        => (std reflect Mirror) clone init: self;
     asBool        => true;
     not           => asBool not;
-    is: other     => #'ecosphere.ecore.is'(self itself, other itself);
+    is: other     => #'ecosphere.ecore.is'(self, other);
     equals: e     => is: e;
     == other      => is: other;
     != other      => (== other) not;

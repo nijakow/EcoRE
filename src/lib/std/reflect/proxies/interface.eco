@@ -1,11 +1,11 @@
 
 #=std/reflect/proxies/Interface: {
-    size => #'ecosphere.ecore.object.interface.get_entry_info'(self itself, 0, -1);
-    nameForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self itself, i, -2);
-    returnTypeForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self itself, i, -3);
-    argCountForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self itself, i, -4);
-    hasVarargsForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self itself, i, -5) isNotZero;
-    argTypeForSlotIndex: i Arg: ai => #'ecosphere.ecore.object.interface.get_entry_info'(self itself, i, ai);
+    size => #'ecosphere.ecore.object.interface.get_entry_info'(self, 0, -1);
+    nameForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -2);
+    returnTypeForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -3);
+    argCountForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -4);
+    hasVarargsForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -5) isNotZero;
+    argTypeForSlotIndex: i Arg: ai => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, ai);
 
     writeOn: writer => (
         (self is: any) if: [ writer << 'any'. ^ self ].

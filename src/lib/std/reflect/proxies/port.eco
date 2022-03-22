@@ -1,16 +1,16 @@
 
 #=std/reflect/proxies/Port: {
-    hasNext => #'ecosphere.ecore.object.port.at_eof'(self itself) not;
+    hasNext => #'ecosphere.ecore.object.port.at_eof'(self) not;
     readByte => (
-        | b <- #'ecosphere.ecore.object.port.read_byte'(self itself) |
+        | b <- #'ecosphere.ecore.object.port.read_byte'(self) |
         [ b asBool ] until: [
-            #'ecosphere.ecore.object.port.notify_me'(self itself).
-            b <- #'ecosphere.ecore.object.port.read_byte'(self itself)
+            #'ecosphere.ecore.object.port.notify_me'(self).
+            b <- #'ecosphere.ecore.object.port.read_byte'(self)
         ].
       ^ b
     );
 
-    writeByte: b => (#'ecosphere.ecore.object.port.write_byte'(self itself, b itself). ^ self);
+    writeByte: b => (#'ecosphere.ecore.object.port.write_byte'(self, b). ^ self);
     byte<< b     => writeByte: b;
 
     commit => #'ecosphere.ecore.object.port.flush_output'(self);

@@ -2,25 +2,25 @@
 #=std/reflect/proxies/Int: {
 
     with inherited basic_math = {
-        +    other => #'ecosphere.ecore.math.add'(self itself, other itself);
-        -    other => #'ecosphere.ecore.math.sub'(self itself, other itself);
-        *    other => #'ecosphere.ecore.math.mul'(self itself, other itself);
-        /    other => #'ecosphere.ecore.math.div'(self itself, other itself);
-        mod: other => #'ecosphere.ecore.math.mod'(self itself, other itself);
+        +    other => #'ecosphere.ecore.math.add'(self, other);
+        -    other => #'ecosphere.ecore.math.sub'(self, other);
+        *    other => #'ecosphere.ecore.math.mul'(self, other);
+        /    other => #'ecosphere.ecore.math.div'(self, other);
+        mod: other => #'ecosphere.ecore.math.mod'(self, other);
     };
 
     with inherited bit_ops = {
-        bitOr:  other => #'ecosphere.ecore.math.bit_or'(self itself, other itself);
-        bitAnd: other => #'ecosphere.ecore.math.bit_and'(self itself, other itself);
-        bitXOR: other => #'ecosphere.ecore.math.bit_xor'(self itself, other itself);
-        lshift: other => #'ecosphere.ecore.math.bitshift_left'(self itself, other itself);
-        rshift: other => #'ecosphere.ecore.math.bitshift_right'(self itself, other itself);
+        bitOr:  other => #'ecosphere.ecore.math.bit_or'(self, other);
+        bitAnd: other => #'ecosphere.ecore.math.bit_and'(self, other);
+        bitXOR: other => #'ecosphere.ecore.math.bit_xor'(self, other);
+        lshift: other => #'ecosphere.ecore.math.bitshift_left'(self, other);
+        rshift: other => #'ecosphere.ecore.math.bitshift_right'(self, other);
         shift:  other => (other isNegative) if: [ ^ self rshift: (other negate) ] else: [ ^ self lshift: other ];
     };
 
     with inherited comparisons = {
-        < other    => #'ecosphere.ecore.math.less'(self itself, other itself);
-        == other   => #'ecosphere.ecore.is'(self itself, other itself);
+        < other    => #'ecosphere.ecore.math.less'(self, other);
+        == other   => #'ecosphere.ecore.is'(self, other);
         != other   => (self == other) not;
         <= other   => [ self < other ] or: [ self == other ];
         > other    => (self <= other) not;
@@ -46,7 +46,7 @@
 
     with inherited conversions = {
         isInt  => true;
-        asChar => #'ecosphere.ecore.int.as_char'(self itself);
+        asChar => #'ecosphere.ecore.int.as_char'(self);
     };
 
     with inherited ranged_loops = {

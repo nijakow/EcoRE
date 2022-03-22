@@ -2,7 +2,7 @@
 #=std/Clonable: {
     with inherited parent = #<:std/DefaultBehavior>;
     init          => ^ self;
-    clone         => #'ecosphere.ecore.clone'(self itself);
+    clone         => #'ecosphere.ecore.clone'(self);
     new           => clone init;
     writeOn: writer => writer << 'clonable';
     isBlock       => false;
