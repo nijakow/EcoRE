@@ -1,8 +1,8 @@
 
 #=std/reflect/proxies/Char: {
     isChar          => true;
-    asInt           => #'ecosphere.ecore.char.as_int'(self);
-    == other        => #'ecosphere.ecore.is'(self, other);
+    asInt           => #'ecosphere.ecore.char.as_int'(self itself);
+    == other        => #'ecosphere.ecore.is'(self itself, other itself);
     != other        => (self == other) not;
     < other         => (self asInt) < (other asInt);
     <= other        => (self asInt) <= (other asInt);

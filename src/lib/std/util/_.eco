@@ -86,10 +86,10 @@
 };
 
 #=std/util: {
-    Array(size) => #'ecosphere.ecore.object.array.new'(size);
+    Array(size) => #'ecosphere.ecore.object.array.new'(size itself);
 
-    newArray: size => #'ecosphere.ecore.object.array.new'(size);
-    newBlob:  size => #'ecosphere.ecore.object.blob.new'(size);
+    newArray: size => #'ecosphere.ecore.object.array.new'(size itself);
+    newBlob:  size => #'ecosphere.ecore.object.blob.new'(size itself);
     newVector      => (#<:std/util> Vector) new;
     newStack       => (#<:std/util> Stack) new;
     newQueue       => (#<:std/util> Queue) new;

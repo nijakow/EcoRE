@@ -1,6 +1,6 @@
 
 #=std/reflect/proxies/Code: {
-    execute(...) => #'ecosphere.ecore.object.code.value'(...);
+    execute(...) => #'ecosphere.ecore.object.code.value'(...);  "TODO: This can lead to lens-breaks"
     writeOn: writer => writer << '<code>';
     with inherited parent = #<:std/Clonable>;
 }

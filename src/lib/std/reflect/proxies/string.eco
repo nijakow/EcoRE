@@ -1,20 +1,20 @@
 
 #=std/reflect/proxies/String: {
-    size => #'ecosphere.ecore.object.string.byte_length'(self);
-    at: index => #'ecosphere.ecore.object.string.at_byte'(self, index);
+    size => #'ecosphere.ecore.object.string.byte_length'(self itself);
+    at: index => #'ecosphere.ecore.object.string.at_byte'(self itself, index itself);
     do: body => (
         | i <- 0. s <- size. |
         [ i < s ] while: [
-            body value(#'ecosphere.ecore.object.string.at_byte'(self, i)).
-            i <- i + (#'ecosphere.ecore.object.string.step_at_byte'(self, i)).
+            body value(#'ecosphere.ecore.object.string.at_byte'(self itself, i itself)).
+            i <- i + (#'ecosphere.ecore.object.string.step_at_byte'(self itself, i itself)).
         ].
       ^ self
     );
     forEach: body => (
         | i <- 0. s <- size. |
         [ i < s ] while: [
-            body value(i, #'ecosphere.ecore.object.string.at_byte'(self, i)).
-            i <- i + (#'ecosphere.ecore.object.string.step_at_byte'(self, i)).
+            body value(i, #'ecosphere.ecore.object.string.at_byte'(self itself, i itself)).
+            i <- i + (#'ecosphere.ecore.object.string.step_at_byte'(self itself, i itself)).
         ].
       ^ self
     );
@@ -48,7 +48,7 @@
         self do: [ :c | v append: c ].
       ^ v
     );
-    asKey => #'ecosphere.ecore.object.string.as_key'(self);
+    asKey => #'ecosphere.ecore.object.string.as_key'(self itself);
     parseInt => (
         | v <- 0, sign <- 1 |
         (size isZero) if: [ ^ No ].

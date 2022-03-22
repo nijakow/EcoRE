@@ -1,7 +1,7 @@
 
 #=std/reflect/proxies/Key: {
     isKey    => true;
-    asString => #'ecosphere.ecore.object.key.as_string'(self);
+    asString => #'ecosphere.ecore.object.key.as_string'(self itself);
     writeOn: writer => (
         writer << #\#.
         writer << #\'.
