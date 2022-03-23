@@ -2,7 +2,10 @@
 #=std/reflect/proxies/Blob: {
     size => #'ecosphere.ecore.object.blob.size'(self);
     isEmpty => size isZero;
-    at: index => #'ecosphere.ecore.object.blob.at'(self, index);
+    at: index => int8At: index;
+    int8At: index => #'ecosphere.ecore.object.blob.at_int8'(self, index);
+    int16At: index => #'ecosphere.ecore.object.blob.at_int16'(self, index);
+    int32At: index => #'ecosphere.ecore.object.blob.at_int32'(self, index);
     at: index put: value => at: index putInt8: value;
     at: index putInt8: value => #'ecosphere.ecore.object.blob.at_put_int8'(self, index, value);
     at: index putInt16: value => #'ecosphere.ecore.object.blob.at_put_int16'(self, index, value);

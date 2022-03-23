@@ -36,20 +36,58 @@ bool Eco_VM_Builtin_BlobSize(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
-bool Eco_VM_Builtin_BlobAt(struct Eco_Fiber* fiber, unsigned int args)
+bool Eco_VM_Builtin_BlobAtInt8(struct Eco_Fiber* fiber, unsigned int args)
 {
     /*
      * TODO: Type checks
      */
     Eco_Any  blob;
     Eco_Any  index;
-    char     v;
+    i8       v;
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
     Eco_Fiber_Pop(fiber, &index);
     Eco_Fiber_Pop(fiber, &blob);
-    Eco_Blob_At((struct Eco_Blob*) Eco_Any_AsPointer(&blob), Eco_Any_AsInteger(&index), &v);
+    Eco_Blob_AtN((struct Eco_Blob*) Eco_Any_AsPointer(&blob), Eco_Any_AsInteger(&index), &v, sizeof(v));
+    Eco_Any_AssignInteger(&index, v);
+    Eco_Fiber_Push(fiber, &index);
+    return true;
+}
+
+bool Eco_VM_Builtin_BlobAtInt16(struct Eco_Fiber* fiber, unsigned int args)
+{
+    /*
+     * TODO: Type checks
+     */
+    Eco_Any  blob;
+    Eco_Any  index;
+    i16      v;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    Eco_Fiber_Pop(fiber, &index);
+    Eco_Fiber_Pop(fiber, &blob);
+    Eco_Blob_AtN((struct Eco_Blob*) Eco_Any_AsPointer(&blob), Eco_Any_AsInteger(&index), &v, sizeof(v));
+    Eco_Any_AssignInteger(&index, v);
+    Eco_Fiber_Push(fiber, &index);
+    return true;
+}
+
+bool Eco_VM_Builtin_BlobAtInt32(struct Eco_Fiber* fiber, unsigned int args)
+{
+    /*
+     * TODO: Type checks
+     */
+    Eco_Any  blob;
+    Eco_Any  index;
+    i32      v;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    Eco_Fiber_Pop(fiber, &index);
+    Eco_Fiber_Pop(fiber, &blob);
+    Eco_Blob_AtN((struct Eco_Blob*) Eco_Any_AsPointer(&blob), Eco_Any_AsInteger(&index), &v, sizeof(v));
     Eco_Any_AssignInteger(&index, v);
     Eco_Fiber_Push(fiber, &index);
     return true;
