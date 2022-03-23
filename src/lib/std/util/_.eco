@@ -96,7 +96,8 @@
     newSet         => (#<:std/util> Set) new;
     newList        => (#<:std/util> List) new;
     newMap         => (#<:std/util> Map) new;
-    newStringBuilder => (#:<std/util> StringBuilder) new;
+    newStringBuilder => (#<:std/util> StringBuilder) new;
+    newRangeFrom: start To: end => ((#<:std/util> Range) clone) initWithStart: start End: end;
 
     WriteIterable: it On: writer => (
         writer << '#('.
@@ -131,4 +132,6 @@
     Map = #<:std/util/Map>;
 
     StringBuilder = #<:std/util/StringBuilder>;
+
+    Range = #<:std/util/Range>;
 }

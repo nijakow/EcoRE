@@ -50,6 +50,8 @@
     };
 
     with inherited ranged_loops = {
+        to: end => std util newRangeFrom: self To: end;
+
         for: upper do: body => (
             | i <- self |
             [ i < upper ] while: [

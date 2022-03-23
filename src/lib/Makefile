@@ -38,6 +38,7 @@ std/util/link.eco \
 std/util/list.eco \
 std/util/map.eco \
 std/util/mutablepair.eco \
+std/util/range.eco \
 std/util/stringbuilder.eco \
 std/util/vector.eco \
 lang/_.eco \
