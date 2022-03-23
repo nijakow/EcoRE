@@ -9,6 +9,11 @@
             ^ s
         );
         isEmpty => size isZero;
+        forEach: block => (
+            | i <- 0, p <- elements next |
+            [ p != elements ] while: [ block value(i, p value). i <- i + 1. p <- p next. ].
+            ^ self
+        );
         do: block => (
             | p <- elements next |
             [ p != elements ] while: [ block value(p value). p <- p next. ].
