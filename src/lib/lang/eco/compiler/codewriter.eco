@@ -140,6 +140,6 @@
         writeU8: depth
     );
 
-    Bytecodes = #<:lang/eco/compiler/Bytecodes>;
     with inherited parent = #<:std/Clonable>;
+    with inherited module = #<:lang/eco/compiler>;
 }

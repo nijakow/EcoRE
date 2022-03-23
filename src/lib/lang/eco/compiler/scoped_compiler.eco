@@ -10,7 +10,7 @@
 
     private newBlockContextWithParent: p => (#<:lang/eco/compiler/ScopeSharedInfo> clone) initWithLexicalParent: p;
     private newBlockContext => #<:lang/eco/compiler/ScopeSharedInfo> new;
-    private newScopeFromBlockContext: bc => (#<:lang/eco/compiler/Scope> clone) initWithShared: bc;
+    private newScopeFromBlockContext: bc => (Scope clone) initWithShared: bc;
     private newScope => newScopeFromBlockContext: newBlockContext;
 
     private localCompiler => scopes compiler;
@@ -71,4 +71,5 @@
     isLocal: name => scopes findVariable: name IfFound: [ :info, :depth | ^ true ] IfNotFound: [ ^ false ];
 
     with inherited parent = #<:std/Clonable>;
+    with inherited module = #<:lang/eco/compiler>;
 }

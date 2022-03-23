@@ -104,8 +104,7 @@
     );
 
     visitAssignment: ast => (
-        "TODO: Create a special visitor for this!"
-        | v <- (#<:lang/eco/compiler/AssignmentVisitor> clone) initWithCompiler: compiler RHS: ast rhs Visitor: self |
+        | v <- (AssignmentVisitor clone) initWithCompiler: compiler RHS: ast rhs Visitor: self |
         ast lhs acceptVisitor: v
     );
 
@@ -136,4 +135,5 @@
 
     "TODO: Implements interface lang/eco/ast/IVisitor"
     with inherited parent = #<:std/Clonable>;
+    with inherited module = #<:lang/eco/compiler>;
 } 

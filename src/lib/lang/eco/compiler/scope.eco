@@ -4,7 +4,7 @@
 
     initWithMaybeLexicalParent: ml => (
         lexicalParent <- ml.
-        compiler      <- (#<:lang/eco/compiler/Compiler> clone) initWithDepth: depth.
+        compiler      <- (Compiler clone) initWithDepth: depth.
         argCount      <- 0.
         hasVarargs    <- false.
       ^ self
@@ -18,6 +18,7 @@
     enableVarargs => hasVarargs <- true;
 
     with inherited parent = #<:std/Clonable>;
+    with inherited module = #<:lang/eco/compiler>;
 },
 
 #=lang/eco/compiler/VariableInfo: {
@@ -29,6 +30,7 @@
     );
 
     with inherited parent = #<:std/Clonable>;
+    with inherited module = #<:lang/eco/compiler>;
 },
 
 #=lang/eco/compiler/Scope: {
@@ -46,7 +48,7 @@
       ^ self
     );
 
-    createSubscope => (#<:lang/eco/compiler/Scope> clone) initWithParent: self;
+    createSubscope => (Scope clone) initWithParent: self;
 
     parentScope => parent_scope;
     lexicalParentScope => shared lexicalParent;
@@ -89,4 +91,5 @@
     );
 
     with inherited parent = #<:std/Clonable>;
+    with inherited module = #<:lang/eco/compiler>;
 }

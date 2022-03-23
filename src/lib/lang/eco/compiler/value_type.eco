@@ -19,6 +19,7 @@
         ifRegister: r ifConstant: c ifClosure: cl ifStack: s => r value;
 
         with inherited parent = #<:std/Clonable>;
+        with inherited module = #<:lang/eco/compiler>;
     },
     Stack = {
         isRegister => false;
@@ -27,6 +28,7 @@
         isClosure => false;
         ifRegister: r ifConstant: c ifClosure: cl ifStack: s => s value;
         with inherited parent = #<:std/Clonable>;
+        with inherited module = #<:lang/eco/compiler>;
     },
     Constant = {
         constantValue;
@@ -42,6 +44,7 @@
         isClosure => false;
         ifRegister: r ifConstant: c ifClosure: cl ifStack: s => c value;
         with inherited parent = #<:std/Clonable>;
+        with inherited module = #<:lang/eco/compiler>;
     },
     Closure = {
         closureValue;
@@ -57,5 +60,6 @@
         isClosure => true;
         ifRegister: r ifConstant: c ifClosure: cl ifStack: s => cl value;
         with inherited parent = #<:std/Clonable>;
+        with inherited module = #<:lang/eco/compiler>;
     }
 }

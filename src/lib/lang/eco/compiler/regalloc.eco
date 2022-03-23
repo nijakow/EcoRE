@@ -25,4 +25,5 @@
     );
 
     with inherited parent = #<:std/Clonable>;
+    with inherited module = #<:lang/eco/compiler>;
 }

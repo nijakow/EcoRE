@@ -1,9 +1,14 @@
 
 #=lang/eco/compiler: {
+    with inherited lobby = #<:lobby>;
+
     Bytecodes = #<:lang/eco/compiler/Bytecodes>;
     RegisterAllocator = #<:lang/eco/compiler/RegisterAllocator>;
     CodeWriter = #<:lang/eco/compiler/CodeWriter>;
+    AssignmentVisitor = #<:lang/eco/compiler/AssignmentVisitor>;
     Visitor = #<:lang/eco/compiler/Visitor>;
+    ValueType = #<:lang/eco/compiler/ValueType>;
+    Scope = #<:lang/eco/compiler/Scope>;
     Compiler = #<:lang/eco/compiler/Compiler>;
     ScopedCompiler = #<:lang/eco/compiler/ScopedCompiler>;
 }
