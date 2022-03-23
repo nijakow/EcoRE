@@ -73,7 +73,8 @@ void Eco_VM_Builtins_Init()
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.key.as_string", Eco_VM_Builtin_KeyAsString);
 
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.at_byte", Eco_VM_Builtin_StringAtByte);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.byte_at", Eco_VM_Builtin_StringByteAt);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.at_byte", Eco_VM_Builtin_StringCodepointAtByte);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.step_at_byte", Eco_VM_Builtin_StringStepAtByte);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.byte_length", Eco_VM_Builtin_StringByteLength);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.string.char_length", Eco_VM_Builtin_StringCharLength);

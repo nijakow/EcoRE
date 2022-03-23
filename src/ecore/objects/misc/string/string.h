@@ -29,6 +29,12 @@ static inline unsigned int Eco_String_CharacterCount(struct Eco_String* string)
     return string->character_count;
 }
 
+static inline char Eco_String_ByteAt(struct Eco_String* string, unsigned int index)
+{
+    // TODO, FIXME, XXX: Watch out for out-of-bounds and overflow errors!
+    return string->bytes[index];
+}
+
 static inline Eco_Codepoint Eco_String_At(struct Eco_String* string, unsigned int index)
 {
     Eco_Codepoint  codepoint;
