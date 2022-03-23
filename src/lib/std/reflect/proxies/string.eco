@@ -43,11 +43,18 @@
       ^ vec asString
     );
     isString => true;
+    asBlob => (
+        | blob <- std util newBlob: size |
+        0 for: size do: [ :i | blob at: i put: (at: i) ].
+      ^ blob
+    );
     asVector => (
         | v <- std util newVector |
-        self do: [ :c | v append: c ].
+        do: [ :c | v append: c ].
       ^ v
     );
+    asArray => asVector asArray;
+    asList => asVector asList;
     asKey => #'ecosphere.ecore.object.string.as_key'(self);
     parseInt => (
         | v <- 0, sign <- 1 |
