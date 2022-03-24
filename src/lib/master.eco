@@ -45,9 +45,18 @@
         std io out <- ((std io PortOutput) clone) init: port;
     );
 
+    Quote => (
+        io out newline.
+        io out << '      Grant me wings that I might fly'. io out newline.
+        io out << '              - VNV Nation, "Beloved"'. io out newline.
+        io out newline.
+    );
+
     Init => (
         InitTypes.
         InitIO.
+
+        Quote.
 
         io out << 'EcoRE image online and ready.'.
         io out newline.
