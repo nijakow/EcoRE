@@ -26,6 +26,7 @@
             ^ v asChar
         );
         readLine => (
+            "TODO: Checks with hasNext"
             | v <- std util newVector, c <- readChar |
             [ c == (char newline) ] until: [
                 v append: c.
