@@ -16,7 +16,7 @@ eco.c \
 objects/objects.c \
 objects/base/type.c \
 objects/base/typecore.c \
-objects/base/object.c \
+objects/base/object/object.c \
 objects/molecule/molecule.c \
 objects/molecule/object_payload.c \
 objects/molecule/object_slots.c \

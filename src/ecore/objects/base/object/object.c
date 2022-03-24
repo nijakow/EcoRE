@@ -3,7 +3,7 @@
 
 #include "object.h"
 
-#include "type.h"
+#include <ecore/objects/base/type.h>
 
 #include <ecore/objects/vm/interface/interface.h>
 #include <ecore/vm/core/clone.h>
