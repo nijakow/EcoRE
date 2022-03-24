@@ -48,17 +48,44 @@ struct Eco_Molecule* Eco_Molecule_Clone(struct Eco_CloneState* state,
                                         struct Eco_Molecule* molecule,
                                         bool forced)
 {
+    /*
+     * Clone a molecule.
+     * 
+     * The cloning process is quite complex. There are multiple
+     * factors that influence whether the molecule is returned as-is
+     * or if an actual copy is going to be allocated.
+     * 
+     * The rules are:
+     *   - If the object was already cloned before, we always return
+     *     the existing clone. This is important in cases where a
+     *     subcomponent (e.g. a member of a module that's being cloned)
+     *     references back to its parent with a normal ('own' bit not set)
+     *     slot. Since the module has already been cloned, the pointer to
+     *     it will be updated.
+     *   - If the object's UP object has been cloned, we clone this object
+     *     too, since cloning of groups will always imply cloning of children.
+     *   - If the object cloning was "forced" (e.g. if the cloning primitive
+     *     was invoked directly on this object or if this object is the value
+     *     of a slot marked with the 'own' bit), we also clone this object.
+     *   - Otherwise, we don't clone this object.
+     * 
+     *                                                - nijakow
+     * 
+     * TODO: These rules must be followed for all objects. Moving this code
+     *       to src/ecore/vm/core/clone.c might be a better solution.
+     *                                                - nijakow
+     */
     struct Eco_Object*    up;
     struct Eco_Molecule*  clone;
 
-    up = molecule->_.up == NULL ? NULL : Eco_CloneState_QueryClone(state, molecule->_.up);
-
-    if (up == NULL && !forced)
-        return molecule;
-
     clone = (struct Eco_Molecule*) Eco_CloneState_QueryClone(state, (struct Eco_Object*) molecule);
+    if (clone == NULL)
+    {
+        up = molecule->_.up == NULL ? NULL : Eco_CloneState_QueryClone(state, molecule->_.up);
 
-    if (clone == NULL) {
+        if (up == NULL && !forced)
+            return molecule;
+
         clone = Eco_Molecule_New(molecule->_.type);
         clone->_.up = up;
         Eco_CloneState_RegisterClone(state, (struct Eco_Object*) molecule, (struct Eco_Object*) clone);
