@@ -17,6 +17,7 @@ objects/objects.c \
 objects/base/type.c \
 objects/base/typecore.c \
 objects/base/object/object.c \
+objects/base/object/send.c \
 objects/molecule/molecule.c \
 objects/molecule/object_payload.c \
 objects/molecule/object_slots.c \
