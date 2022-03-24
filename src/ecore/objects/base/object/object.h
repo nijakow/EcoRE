@@ -31,7 +31,6 @@ void* Eco_Object_New(struct Eco_Type*, unsigned int);
 void* Eco_Object_NewInArena(struct Eco_Type*, unsigned int, struct Eco_Arena*);
 struct Eco_Object* Eco_Object_NewPlain();
 
-void  Eco_Object_Mark(struct Eco_GC_State*, struct Eco_Object*);
 struct Eco_Object* Eco_Object_NoClone(struct Eco_CloneState*, struct Eco_Object*, bool);
 void  Eco_Object_Del(struct Eco_Object*);
 

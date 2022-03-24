@@ -2,7 +2,6 @@
 
 #include <ecore/objects/base/type.h>
 #include <ecore/vm/memory/memory.h>
-#include <ecore/vm/memory/gc/gc.h>
 
 
 /*
@@ -70,19 +69,6 @@ void* Eco_Object_New(struct Eco_Type* type,
 struct Eco_Object* Eco_Object_NewPlain()
 {
     return Eco_Object_New(Eco_Object_TYPE, sizeof(struct Eco_Object));
-}
-
-
-
-void Eco_Object_Mark(struct Eco_GC_State* state, struct Eco_Object* object)
-{
-    /*
-     * It's easy to confuse Eco_Object_Mark(...) and Eco_GC_State_MarkObject(...)!
-     * Only call Eco_Object_Mark(...) as the last function in a Eco_<Type>_Mark(...)!
-     */
-    Eco_GC_State_MarkObject(state, object->type);
-    if (object->up != NULL)
-        Eco_GC_State_MarkObject(state, object->up);
 }
 
 

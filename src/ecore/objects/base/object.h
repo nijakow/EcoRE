@@ -4,4 +4,5 @@
  */
 
 #include <ecore/objects/base/object/object.h>
+#include <ecore/objects/base/object/gc.h>
 #include <ecore/objects/base/object/send.h>
