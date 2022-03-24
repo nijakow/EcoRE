@@ -5,15 +5,6 @@
 #include <ecore/base/any.h>
 #include <ecore/io/logging/log.h>
 
-/*
- *
- *    O b j e c t   a n d   T y p e   D e c l a r a t i o n s
- *
- */
-
-struct Eco_Object;
-struct Eco_Type;
-
 
 /*
  *
