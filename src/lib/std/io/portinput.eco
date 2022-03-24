@@ -35,7 +35,7 @@
             ^ v asString
         );
         readAll => (
-            | v <- std util newVector, c <- readChar |
+            | v <- std util newVector |
             [ hasNext ] while: [
                 v append: readChar
             ].

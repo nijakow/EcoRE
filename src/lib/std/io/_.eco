@@ -15,4 +15,17 @@
     OpenFileForReading: path => PortInput clone init: ((FDByteReader clone) initWithFileDescriptor: #'ecosphere.ecore.fd.open_file'(path, 1));
     OpenFileForWriting: path => PortOutput clone init: #'ecosphere.ecore.object.port.new'(#'ecosphere.ecore.fd.open_file'(path, 6));
     OpenFile:           path => OpenFileDescriptor: #'ecosphere.ecore.fd.open_file'(path, 7);
+
+    WithOpenFileForReading: path Do: block => (
+        |
+            port <- OpenFileForReading: path,
+            val  <- block value(port)
+        |
+        port close.  "TODO: Unwind-Protect!"
+      ^ val
+    );
+
+    SlurpFile: file => WithOpenFileForReading: file Do: [ :port | port readAll ];
+    ParseFile: file => (SlurpFile: file) parse;
+    LoadFile: file => (ParseFile: file) evaluate;
 }

@@ -19,9 +19,7 @@
         readHead  <- 0.
         writeHead <- (buffer readFromFileDescriptor: fd)
     );
-    private optionalRefresh => (
-        bufferEmpty if: [ refresh ]
-    );
+    private optionalRefresh => bufferEmpty if: [ refresh ];
 
     hasNext => ( optionalRefresh. bufferEmpty not );
     readByte => (
