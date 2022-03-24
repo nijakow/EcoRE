@@ -27,5 +27,5 @@
 
     SlurpFile: file => WithOpenFileForReading: file Do: [ :port | port readAll ];
     ParseFile: file => (SlurpFile: file) parse;
-    LoadFile: file => (ParseFile: file) evaluate;
+    EvaluateFile: file InEnv: env => (ParseFile: file) evaluateInEnv: env;
 }
