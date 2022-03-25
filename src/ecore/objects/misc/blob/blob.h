@@ -43,8 +43,8 @@ static inline bool Eco_Blob_AtPutInt8(struct Eco_Blob* blob, unsigned int index,
 bool Eco_Blob_AtN(struct Eco_Blob* blob, unsigned int index, void* data, unsigned int size);
 bool Eco_Blob_AtPut(struct Eco_Blob* blob, unsigned int index, void* data, unsigned int size);
 
-int Eco_Blob_ReadFromFD(struct Eco_Blob*, int, unsigned long);
-int Eco_Blob_WriteToFD(struct Eco_Blob*, int, unsigned long);
+int Eco_Blob_ReadFromFD(struct Eco_Blob*, int, unsigned long, unsigned long);
+int Eco_Blob_WriteToFD(struct Eco_Blob*, int, unsigned long, unsigned long);
 
 struct Eco_Blob* Eco_Blob_NewFromFile(char*);
 

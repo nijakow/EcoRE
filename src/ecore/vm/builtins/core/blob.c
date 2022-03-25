@@ -159,19 +159,22 @@ bool Eco_VM_Builtin_BlobAtPutInt32(struct Eco_Fiber* fiber, unsigned int args)
 bool Eco_VM_Builtin_BlobReadFrom(struct Eco_Fiber* fiber, unsigned int args)
 {
     int               fd;
+    Eco_Integer       offset;
     Eco_Integer       bytes;
     struct Eco_Blob*  blob;
     Eco_Any           any;
 
-    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 4, 4))
         return false;
     Eco_Fiber_Pop(fiber, &any);
     bytes = (size_t) Eco_Any_AsInteger(&any);
     Eco_Fiber_Pop(fiber, &any);
+    offset = Eco_Any_AsInteger(&any);
+    Eco_Fiber_Pop(fiber, &any);
     fd = Eco_Any_AsInteger(&any);
     Eco_Fiber_Pop(fiber, &any);
     blob = Eco_Any_AsPointer(&any);
-    Eco_Any_AssignInteger(&any, Eco_Blob_ReadFromFD(blob, fd, bytes));
+    Eco_Any_AssignInteger(&any, Eco_Blob_ReadFromFD(blob, fd, offset, bytes));
     Eco_Fiber_Push(fiber, &any);
     return true;
 }
@@ -179,19 +182,22 @@ bool Eco_VM_Builtin_BlobReadFrom(struct Eco_Fiber* fiber, unsigned int args)
 bool Eco_VM_Builtin_BlobWriteTo(struct Eco_Fiber* fiber, unsigned int args)
 {
     int               fd;
+    Eco_Integer       offset;
     Eco_Integer       bytes;
     struct Eco_Blob*  blob;
     Eco_Any           any;
 
-    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 4, 4))
         return false;
     Eco_Fiber_Pop(fiber, &any);
     bytes = Eco_Any_AsInteger(&any);
     Eco_Fiber_Pop(fiber, &any);
+    offset = Eco_Any_AsInteger(&any);
+    Eco_Fiber_Pop(fiber, &any);
     fd = Eco_Any_AsInteger(&any);
     Eco_Fiber_Pop(fiber, &any);
     blob = Eco_Any_AsPointer(&any);
-    Eco_Any_AssignInteger(&any, Eco_Blob_WriteToFD(blob, fd, bytes));
+    Eco_Any_AssignInteger(&any, Eco_Blob_WriteToFD(blob, fd, offset, bytes));
     Eco_Fiber_Push(fiber, &any);
     return true;
 }

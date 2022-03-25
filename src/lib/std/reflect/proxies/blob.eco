@@ -17,10 +17,12 @@
     with inherited search = #<:std/util/StandardListSearch>;
 
 
-    read: b BytesFromFileDescriptor: fd => #'ecosphere.ecore.object.blob.read_from'(self, fd, b);
-    write: b BytesToFileDescriptor: fd => #'ecosphere.ecore.object.blob.write_to'(self, fd, b);
-    readFromFileDescriptor: fd => read: size BytesFromFileDescriptor: fd;
-    writeToFileDescriptor: fd => write: size BytesToFileDescriptor: fd;
+    read: b BytesWithOffset: offset FromFileDescriptor: fd => #'ecosphere.ecore.object.blob.read_from'(self, fd, offset, b);
+    write: b BytesWithOffset: offset ToFileDescriptor: fd => #'ecosphere.ecore.object.blob.write_to'(self, fd, offset, b);
+    read: b BytesFromFileDescriptor: fd => read: b BytesWithOffset: 0 FromFileDescriptor: fd;
+    write: b BytesToFileDescriptor: fd => write: b BytesWithOffset: 0 ToFileDescriptor: fd;
+    readFromFileDescriptor: fd => read: size BytesWithOffset: 0 FromFileDescriptor: fd;
+    writeToFileDescriptor: fd => write: size BytesWithOffset: 0 ToFileDescriptor: fd;
     
     writeOn: writer => writer << '<blob: ' << size << '>';
 
