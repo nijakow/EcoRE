@@ -97,14 +97,6 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.read_from", Eco_VM_Builtin_BlobReadFrom);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.write_to", Eco_VM_Builtin_BlobWriteTo);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.open_file", Eco_VM_Builtin_BlobOpenFile);
-
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.new", Eco_VM_Builtin_NewPort);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.at_eof", Eco_VM_Builtin_PortAtEOF);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.read_byte", Eco_VM_Builtin_PortReadByte);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.flush_output", Eco_VM_Builtin_PortFlushOutput);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.write_byte", Eco_VM_Builtin_PortWriteByte);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.write_char", Eco_VM_Builtin_PortWriteChar);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.port.notify_me", Eco_VM_Builtin_PortNotifyMe);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.fd.open_file", Eco_VM_Builtin_OpenFile);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.get_entry_info", Eco_VM_Builtin_InterfaceGetEntryInfo);

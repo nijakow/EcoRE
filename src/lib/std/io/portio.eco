@@ -9,6 +9,12 @@
             ^ self
         );
 
+        initWithInput: _in Output: _out => (
+            in  <- _in.
+            out <- _out.
+          ^ self
+        );
+
         close => "TODO";
 
         writeOn: w => w << 'PortIO';
