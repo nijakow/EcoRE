@@ -8,7 +8,6 @@
     Int       = #<:std/reflect/proxies/Int>;
     Interface = #<:std/reflect/proxies/Interface>;
     Key       = #<:std/reflect/proxies/Key>;
-    Port      = #<:std/reflect/proxies/Port>;
     String    = #<:std/reflect/proxies/String>;
 
     ffi = {

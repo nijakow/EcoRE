@@ -13,7 +13,6 @@
 #include "core/is.h"
 #include "core/key.h"
 #include "core/math.h"
-#include "core/port.h"
 #include "core/reflection.h"
 #include "core/slots.h"
 #include "core/string.h"
@@ -97,7 +96,6 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.read_from", Eco_VM_Builtin_BlobReadFrom);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.write_to", Eco_VM_Builtin_BlobWriteTo);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.open_file", Eco_VM_Builtin_BlobOpenFile);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.fd.open_file", Eco_VM_Builtin_OpenFile);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.get_entry_info", Eco_VM_Builtin_InterfaceGetEntryInfo);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.add_entry", Eco_VM_Builtin_InterfaceAddEntry);
@@ -126,7 +124,6 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.block_type", Eco_VM_Builtin_GetBlockType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.key_type", Eco_VM_Builtin_GetKeyType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.string_type", Eco_VM_Builtin_GetStringType);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.port_type", Eco_VM_Builtin_GetPortType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.interface_type", Eco_VM_Builtin_GetInterfaceType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.any", Eco_VM_Builtin_GetDefaultInterface);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.ffitype_type", Eco_VM_Builtin_GetFFITypeType);

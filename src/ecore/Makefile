@@ -22,7 +22,6 @@ objects/base/object/send.c \
 objects/molecule/molecule.c \
 objects/molecule/object_payload.c \
 objects/molecule/object_slots.c \
-objects/io/port.c \
 objects/misc/array/array.c \
 objects/misc/blob/blob.c \
 objects/misc/key/key.c \
@@ -46,7 +45,6 @@ vm/builtins/core/io.c \
 vm/builtins/core/is.c \
 vm/builtins/core/key.c \
 vm/builtins/core/math.c \
-vm/builtins/core/port.c \
 vm/builtins/core/reflection.c \
 vm/builtins/core/slots.c \
 vm/builtins/core/string.c \
