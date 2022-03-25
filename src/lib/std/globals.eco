@@ -9,5 +9,7 @@
         escape    => 27 asChar;
     };
 
+    any = #<:std/bool/false>;
+
     begin = #<:std/bool/true>;
 }

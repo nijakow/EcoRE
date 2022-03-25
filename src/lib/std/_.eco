@@ -4,11 +4,10 @@
 
 #=std: {
     with globals = #<:globals>;
-    any = #<:std/bool/false>;
 
     DefaultBehavior = #<:std/DefaultBehavior>;
     Clonable = #<:std/Clonable>;
-
+    Module = #<:std/Module>;
     Lens = #<:std/Lens>;
 
     with bool = #<:std/bool>;

@@ -11,6 +11,7 @@ std/defaultbehavior.eco \
 std/globals.eco \
 std/lens.eco \
 std/maybe.eco \
+std/module.eco \
 std/io/_.eco \
 std/io/fdbytereader.eco \
 std/io/fdbytewriter.eco \
