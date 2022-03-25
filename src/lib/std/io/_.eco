@@ -14,7 +14,7 @@
 
     OpenFileDescriptor: fd   => PortIO clone init: #'ecosphere.ecore.object.port.new'(fd);
     OpenFileForReading: path => PortInput clone init: ((FDByteReader clone) initWithFileDescriptor: #'ecosphere.ecore.fd.open_file'(path, 1));
-    OpenFileForWriting: path => PortOutput clone init: #'ecosphere.ecore.object.port.new'(#'ecosphere.ecore.fd.open_file'(path, 6));
+    OpenFileForWriting: path => PortOutput clone init: ((FDByteWriter clone) initWithFileDescriptor: #'ecosphere.ecore.fd.open_file'(path, 6));
     OpenFile:           path => OpenFileDescriptor: #'ecosphere.ecore.fd.open_file'(path, 7);
 
     WithOpenFileForReading: path Do: block => (
