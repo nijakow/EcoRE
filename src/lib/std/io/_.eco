@@ -6,6 +6,7 @@
     in, out;
 
     FDByteReader = #<:std/io/FDByteReader>;
+    FDByteWriter = #<:std/io/FDByteWriter>;
 
     PortInput = #<:std/io/PortInput>;
     PortOutput = #<:std/io/PortOutput>;

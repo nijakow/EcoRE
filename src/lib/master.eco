@@ -40,9 +40,8 @@
     );
 
     InitIO => (
-        | port <- #'ecosphere.ecore.object.port.new'(0) |
         std io in  <- ((std io PortInput) clone) init: ((std io FDByteReader) clone initWithFileDescriptor: 0);
-        std io out <- ((std io PortOutput) clone) init: port;
+        std io out <- ((std io PortOutput) clone) init: ((std io FDByteWriter) clone initWithFileDescriptor: 1);
     );
 
     Quote => (

@@ -120,14 +120,22 @@ bool Eco_Blob_AtPut(struct Eco_Blob* blob, unsigned int index, void* data, unsig
  *    F i l e   D e s c r i p t o r   I / O
  */
 
-int Eco_Blob_ReadFromFD(struct Eco_Blob* blob, int fd)
+int Eco_Blob_ReadFromFD(struct Eco_Blob* blob, int fd, unsigned long bytes)
 {
-    return read(fd, blob->bytes, Eco_Blob_Size(blob));
+    unsigned long size;
+
+    size = (unsigned long) Eco_Blob_Size(blob);
+    if (size < bytes) bytes = size;
+    return read(fd, blob->bytes, bytes);
 }
 
-int Eco_Blob_WriteToFD(struct Eco_Blob* blob, int fd)
+int Eco_Blob_WriteToFD(struct Eco_Blob* blob, int fd, unsigned long bytes)
 {
-    return write(fd, blob->bytes, Eco_Blob_Size(blob));
+    unsigned long size;
+
+    size = (unsigned long) Eco_Blob_Size(blob);
+    if (size < bytes) bytes = size;
+    return write(fd, blob->bytes, bytes);
 }
 
 

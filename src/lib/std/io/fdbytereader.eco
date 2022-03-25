@@ -7,7 +7,7 @@
 
     initWithFileDescriptor: _fd => (
         fd        <- _fd.
-        buffer    <- std util newBlob: 2.
+        buffer    <- std util newBlob: 1024.
         readHead  <- 0.
         writeHead <- 0.
       ^ self
@@ -32,6 +32,8 @@
           ^ b
         ]
     );
+
+    close => "TODO";
 
     with inherited parent = #<:std/Clonable>;
 }

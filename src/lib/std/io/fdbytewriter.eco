@@ -1,0 +1,29 @@
+
+#=std/io/FDByteWriter: {
+    private fd;
+    private buffer;
+    private writeHead;
+
+    initWithFileDescriptor: _fd => (
+        fd        <- _fd.
+        buffer    <- std util newBlob: 1024.
+        writeHead <- 0.
+      ^ self
+    );
+
+    byte<< b => (
+        buffer at: writeHead put: b.
+        writeHead <- writeHead + 1.
+        (writeHead >= (buffer size)) if: [ commit ].
+      ^ self
+    );
+
+    commit => (
+      buffer write: writeHead BytesToFileDescriptor: fd.
+      writeHead <- 0.
+    );
+
+    close => "TODO";
+
+    with inherited parent = #<:std/Clonable>;
+}

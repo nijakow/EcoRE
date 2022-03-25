@@ -12,7 +12,7 @@
         byte<< b   => _port byte<< b;
         << object  => ( object writeOn: self. ^ self );
         newline    => ( self << (char newline). ^ self );
-        close      => "TODO";
+        close      => _port close;
 
         writeOn: w => w << 'PortOutput';
     };
