@@ -20,5 +20,6 @@
     cons: value   => ((std util MutablePair) clone) initWithFirst: self Second: value;
     % other       => (#'ecosphere.ecore.clone'(std Lens)) initWithFirst: self Second: other;
     writeOn: writer => writer << 'object';
-    with lobby    = #<:lobby>;
+    
+    private with lobby = #<:lobby>;
 }

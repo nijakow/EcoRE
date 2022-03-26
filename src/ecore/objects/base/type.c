@@ -234,8 +234,6 @@ bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type* self,
         the_slot->body.code.code   = code;
         // TODO, FIXME, XXX: Also set the other flags
         the_slot->flags.is_private = info.is_private;
-        if (the_slot->flags.is_private)
-            Eco_Log_Debug("%s: %d\n", the_slot->key->name, the_slot->flags.is_private);
 
         *type_loc                = the_copy;
 
