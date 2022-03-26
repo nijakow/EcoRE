@@ -24,8 +24,8 @@ bool Eco_Object_Send(struct Eco_Message* message,
     {
         slot = &type->slots[i];
         if (slot->key == message->key) {
-            //if (slot->flags.is_private && !message->private_send)
-            //    continue;
+            if (slot->flags.is_private && !message->private_send)
+                continue;
             Eco_TypeSlot_Invoke(message, target, slot, self);
             return true;
         }
@@ -35,8 +35,8 @@ bool Eco_Object_Send(struct Eco_Message* message,
     {
         slot = &(type->slots[i]);
 
-        //if (slot->flags.is_private && !message->private_send)
-        //    continue;
+        if (slot->flags.is_private && !message->private_send)
+            continue;
 
         switch (slot->type)
         {

@@ -53,6 +53,7 @@ bool Eco_EConnect_Reader_ReadMoleculeBody(struct Eco_EConnect_Reader* reader,
             slot_info.is_inherited = (flags & 0x04) != 0;
             slot_info.is_delegate  = (flags & 0x08) == 0;   // The flag 0x08 indicates "no delegate"
             slot_info.is_part      = (flags & 0x10) != 0;
+            slot_info.is_private   = false; // TODO: Reserve a bit for this
             if (flags & 0x02) {
                 if (!Eco_EConnect_Reader_ReadAny(reader, result, &any))
                     return false;
