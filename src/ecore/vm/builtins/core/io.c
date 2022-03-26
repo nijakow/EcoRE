@@ -1,5 +1,8 @@
+#include <fcntl.h>
+
 #include "io.h"
 
+#include <ecore/objects/misc/string/string.h>
 #include <ecore/vm/fiber/stackops.h>
 #include <ecore/io/logging/log.h>
 
@@ -35,3 +38,34 @@ bool Eco_VM_Builtin_Print(struct Eco_Fiber* fiber, unsigned int args)
 
     return true;
 }
+
+bool Eco_VM_Builtin_OpenFile(struct Eco_Fiber* fiber, unsigned int args)
+ {
+     int                 mask;
+     int                 fd;
+     Eco_Any             any;
+     Eco_Integer         bits;
+     struct Eco_String*  path;
+
+     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+         return false;
+     Eco_Fiber_Pop(fiber, &any);
+     bits = Eco_Any_AsInteger(&any);
+     Eco_Fiber_Pop(fiber, &any);
+     path = Eco_Any_AsPointer(&any);
+
+     char buffer[Eco_String_ByteCount(path) + 1];
+     if (Eco_String_PutIntoByteArray(path, buffer, sizeof(buffer))) {
+         mask = 0;
+         if (bits & 0x01) mask |= O_RDONLY;
+         if (bits & 0x02) mask |= O_WRONLY;
+         if (bits & 0x04) mask |= O_CREAT;
+         if (bits & 0x08) mask |= O_TRUNC;
+         fd = open(buffer, mask, 0744);
+     } else {
+         fd = -1;
+     }
+     Eco_Any_AssignInteger(&any, fd);
+     Eco_Fiber_Push(fiber, &any);
+     return true;
+ }
