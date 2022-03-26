@@ -228,10 +228,14 @@ bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type* self,
     if (Eco_Type_CopyWithNewSlot(self, pos, &the_copy, &the_slot)) {
         the_copy->instance_payload_size += slot_value_size;
 
-        the_slot->type           = Eco_TypeSlotType_CODE;
-        the_slot->interface      = interface;
-        the_slot->key            = info.key;
-        the_slot->body.code.code = code;
+        the_slot->type             = Eco_TypeSlotType_CODE;
+        the_slot->interface        = interface;
+        the_slot->key              = info.key;
+        the_slot->body.code.code   = code;
+        // TODO, FIXME, XXX: Also set the other flags
+        the_slot->flags.is_private = info.is_private;
+        if (the_slot->flags.is_private)
+            Eco_Log_Debug("%s: %d\n", the_slot->key->name, the_slot->flags.is_private);
 
         *type_loc                = the_copy;
 

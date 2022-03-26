@@ -69,6 +69,7 @@ bool Eco_EConnect_Reader_ReadMoleculeBody(struct Eco_EConnect_Reader* reader,
             slot_info.is_inherited = false;
             slot_info.is_delegate  = true;
             slot_info.is_part      = false;
+            slot_info.is_private   = false;
             if (!Eco_EConnect_Reader_ReadObject(reader, result, (struct Eco_Object**) &code))
                 return false;
             Eco_Molecule_AddCodeSlot(object, -1, slot_info, Eco_Interface_GetDefaultInterface(), code); // TODO, FIXME, XXX: Parse the interface!
