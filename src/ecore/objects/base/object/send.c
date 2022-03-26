@@ -16,7 +16,6 @@ bool Eco_Object_Send(struct Eco_Message* message,
     struct Eco_TypeSlot*  slot;
     bool                  result;
 
-
     if (target == NULL) return false;
 
     type = target->type;
@@ -25,6 +24,8 @@ bool Eco_Object_Send(struct Eco_Message* message,
     {
         slot = &type->slots[i];
         if (slot->key == message->key) {
+            //if (slot->flags.is_private && !message->private_send)
+            //    continue;
             Eco_TypeSlot_Invoke(message, target, slot, self);
             return true;
         }
@@ -34,15 +35,18 @@ bool Eco_Object_Send(struct Eco_Message* message,
     {
         slot = &(type->slots[i]);
 
+        //if (slot->flags.is_private && !message->private_send)
+        //    continue;
+
         switch (slot->type)
         {
             case Eco_TypeSlotType_INLINED:
                 if (slot->flags.is_inherited && Eco_Interface_ImplementsMessage(slot->interface, message->key)) {
                     if (Eco_TypeSlot_GetValue(slot, target, &value)) {
                         if (slot->flags.is_delegate) {
-                            result = Eco_Send(message, link, &value, &value);
+                            result = Eco_Send(message, link, &value, &value, message->private_send);
                         } else {
-                            result = Eco_Send(message, link, &value, self);
+                            result = Eco_Send(message, link, &value, self, message->private_send);
                         }
                         if (result) return true;
                     }
@@ -51,7 +55,7 @@ bool Eco_Object_Send(struct Eco_Message* message,
             case Eco_TypeSlotType_SHARED:
                 if (slot->flags.is_inherited && Eco_Interface_ImplementsMessage(slot->interface, message->key)) {
                     //if (slot->body.shared.is_delegate) {  // TODO
-                        result = Eco_Send(message, link, &slot->body.shared.value, &slot->body.shared.value);
+                        result = Eco_Send(message, link, &slot->body.shared.value, &slot->body.shared.value, message->private_send);
                     /*} else {
                         result = Eco_Send(message, link, &slot->body.shared.value, self);
                     }*/

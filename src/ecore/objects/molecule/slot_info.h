@@ -7,6 +7,7 @@ struct Eco_Object_SlotInfo
     unsigned int        is_inherited : 1;
     unsigned int        is_delegate  : 1;
     unsigned int        is_part      : 1;
+    unsigned int        is_private   : 1;
 };
 
 #endif

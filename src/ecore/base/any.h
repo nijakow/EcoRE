@@ -128,6 +128,11 @@ typedef uintptr_t Eco_Any;
 #define Eco_Any_Mask_FLOATING   (((Eco_Any) Eco_Value_Type_FLOATING)  << 62)
 
 
+static inline bool Eco_Any_Equals(Eco_Any* a, Eco_Any* b)
+{
+    return *a == *b;
+}
+
 static inline enum Eco_Value_Type Eco_Any_GetValueType(Eco_Any* any)
 {
     return (enum Eco_Value_Type) ((*any) >> 62);
