@@ -12,8 +12,9 @@ class EcoSlot:
     def add_value_callback(self, cb):
         raise Exception('Can\'t put a callback on this slot!')
 
-    def __init__(self, name):
+    def __init__(self, name, is_private):
         self._name = name
+        self._is_private = is_private
 
 
 class EcoValueSlot(EcoSlot):
@@ -24,6 +25,7 @@ class EcoValueSlot(EcoSlot):
         if self._is_inherited:      flags |= 0x04
         if self._is_no_delegate:    flags |= 0x08
         if self._is_part:           flags |= 0x10
+        if self._is_private:        flags |= 0x20
         serializer.write_vlq(flags)
         serializer.write_object(self._name)
         if self._value is not None:
@@ -49,8 +51,8 @@ class EcoValueSlot(EcoSlot):
         else:
             self._callbacks.append(cb)
 
-    def __init__(self, name, is_inherited, is_no_delegate, is_part):
-        super().__init__(name)
+    def __init__(self, name, is_private, is_inherited, is_no_delegate, is_part):
+        super().__init__(name, is_private)
         self._is_inherited = is_inherited
         self._is_part = is_part
         self._is_no_delegate = is_no_delegate
@@ -62,6 +64,7 @@ class EcoCodeSlot(EcoSlot):
 
     def serialize(self, serializer):
         flags = 0x01
+        if self._is_private:        flags |= 0x20
         serializer.write_vlq(flags)
         serializer.write_object(self._name)
         serializer.write_object(self._code)
@@ -70,8 +73,8 @@ class EcoCodeSlot(EcoSlot):
         # TODO, XXX: Handle args, create a new environment
         self._code.get_ast().evaluate(the_subject, the_environment, the_callback)
 
-    def __init__(self, name, code):
-        super().__init__(name)
+    def __init__(self, name, is_private, code):
+        super().__init__(name, is_private)
         self._code = code
 
 
