@@ -14,6 +14,7 @@ memory/memory.c \
 objects/base/object.c \
 objects/pair/pair.c \
 objects/symbol/symbol.c \
+objects/tagged/tagged.c \
 utils/string.c \
 main.c
 
