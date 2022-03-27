@@ -3,8 +3,12 @@
 
 #include <ecore/vm/builtins/builtin.h>
 
+#ifdef ECO_CONFIG_USE_FFI
+
 bool Eco_VM_Builtin_FFIType_GetForIndex(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIType_GetSizeInBytes(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIFunction_New(struct Eco_Fiber*, unsigned int);
+
+#endif
 
 #endif

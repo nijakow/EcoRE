@@ -25,17 +25,21 @@ void Eco_FFIFunc_Terminate()
 
 struct Eco_FFIFunc* Eco_FFIFunc_New(unsigned int args, struct Eco_FFIType* rtype, struct Eco_FFIType** arg_types)
 {
-    unsigned int         index;
     struct Eco_FFIFunc*  func;
+#ifdef ECO_CONFIG_USE_FFI
+    unsigned int         index;
     ffi_type*            actual_args[args];
+#endif
 
     func = Eco_Object_New(Eco_FFIFunc_TYPE, sizeof(struct Eco_FFIFunc));
 
     if (func != NULL)
     {
+#ifdef ECO_CONFIG_USE_FFI
         for (index = 0; index < args; index++)
             actual_args[index] = arg_types[index]->type;
         ffi_prep_cif(&func->cif, FFI_DEFAULT_ABI, args, rtype->type, actual_args);
+#endif
     }
 
     return func;

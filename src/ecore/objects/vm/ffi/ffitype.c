@@ -22,8 +22,11 @@ void Eco_FFIType_Terminate()
     Eco_TypeCore_Destroy(&Eco_FFIType_TYPECORE);
 }
 
-
+#ifdef ECO_CONFIG_USE_FFI
 struct Eco_FFIType* Eco_FFIType_New(ffi_type* ffi_type_ptr)
+#else
+struct Eco_FFIType* Eco_FFIType_New(void* ffi_type_ptr)
+#endif
 {
     struct Eco_FFIType*  type;
 
@@ -31,10 +34,12 @@ struct Eco_FFIType* Eco_FFIType_New(ffi_type* ffi_type_ptr)
 
     if (type != NULL)
     {
+#ifdef ECO_CONFIG_USE_FFI
         if (ffi_type_ptr == NULL)
             type->type = &type->payload;    // TODO: Initialize payload
         else
             type->type = ffi_type_ptr;
+#endif
     }
 
     return type;
@@ -50,6 +55,8 @@ void Eco_FFIType_Del(struct Eco_FFIType* type)
     Eco_Object_Del(&type->_);
 }
 
+
+#ifdef ECO_CONFIG_USE_FFI
 
 /*
  *    G e t F o r I n d e x
@@ -84,3 +91,5 @@ struct Eco_FFIType* Eco_FFIType_GetForIndex(unsigned int index)
     // TODO: Cache these instances
     return Eco_FFIType_New(Eco_FFIType_BASIC_TYPE_POINTERS[index]);
 }
+
+#endif

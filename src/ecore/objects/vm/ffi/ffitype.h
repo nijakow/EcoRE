@@ -4,8 +4,8 @@
 #include <ecore/base/config.h>
 
 #ifdef ECO_CONFIG_USE_FFI
-
-#include ECO_CONFIG_LIBFFI_INCLUDE
+# include ECO_CONFIG_LIBFFI_INCLUDE
+#endif
 
 #include <ecore/objects/base/object.h>
 
@@ -14,14 +14,21 @@ struct Eco_FFIType
 {
     struct Eco_Object     _;
 
+#ifdef ECO_CONFIG_USE_FFI
     ffi_type*             type;
     ffi_type              payload;
+#endif
 };
 
-
+#ifdef ECO_CONFIG_USE_FFI
 struct Eco_FFIType* Eco_FFIType_New(ffi_type*);
+#else
+struct Eco_FFIType* Eco_FFIType_New(void*);
+#endif
 void Eco_FFIType_Mark(struct Eco_GC_State*, struct Eco_FFIType*);
 void Eco_FFIType_Del(struct Eco_FFIType*);
+
+#ifdef ECO_CONFIG_USE_FFI
 
 struct Eco_FFIType* Eco_FFIType_GetForIndex(unsigned int);
 

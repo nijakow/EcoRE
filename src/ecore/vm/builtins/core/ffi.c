@@ -1,5 +1,7 @@
 #include "ffi.h"
 
+#ifdef ECO_CONFIG_USE_FFI
+
 #include <ecore/objects/misc/array/array.h>
 #include <ecore/objects/vm/ffi/ffitype.h>
 #include <ecore/objects/vm/ffi/ffifunc.h>
@@ -61,3 +63,5 @@ bool Eco_VM_Builtin_FFIFunction_New(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Push(fiber, &result);
     return true;
 }
+
+#endif

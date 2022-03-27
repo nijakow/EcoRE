@@ -107,9 +107,11 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.add_code_slot", Eco_VM_Builtin_AddCodeSlot);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.remove_slot", Eco_VM_Builtin_RemoveSlot);
 
+#ifdef ECO_CONFIG_USE_FFI
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.type.by_index", Eco_VM_Builtin_FFIType_GetForIndex);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.type.sizeof", Eco_VM_Builtin_FFIType_GetSizeInBytes);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.function.new", Eco_VM_Builtin_FFIFunction_New);
+#endif
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.io.fd.open_file", Eco_VM_Builtin_OpenFile);
 
