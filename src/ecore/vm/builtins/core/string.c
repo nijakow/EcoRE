@@ -30,7 +30,7 @@ bool Eco_VM_Builtin_StringCodepointAtByte(struct Eco_Fiber* fiber, unsigned int 
     Eco_Fiber_Pop(fiber, &index);
     Eco_Fiber_Pop(fiber, &string);
     // TODO: Type checks!
-    Eco_Any_AssignCharacter(&codepoint, Eco_String_At(Eco_Any_AsPointer(string), Eco_Any_AsInteger(index)));
+    codepoint = Eco_Any_FromCharacter(Eco_String_At(Eco_Any_AsPointer(string), Eco_Any_AsInteger(index)));
     Eco_Fiber_Push(fiber, &codepoint);
     return true;
 }

@@ -228,11 +228,6 @@ static inline void Eco_Any_AssignInteger(Eco_Any* any, Eco_Integer integer)
     *any = Eco_Any_FromInteger(integer);
 }
 
-static inline void Eco_Any_AssignCharacter(Eco_Any* any, Eco_Codepoint character)
-{
-    *any = Eco_Any_FromCharacter(character);
-}
-
 static inline void Eco_Any_AssignPointer(Eco_Any* any, void* ptr)
 {
     *any = Eco_Any_FromPointer(ptr);

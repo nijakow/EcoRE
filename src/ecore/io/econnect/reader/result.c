@@ -34,7 +34,7 @@ void Eco_EConnect_Result_Create_Integer(struct Eco_EConnect_Result* result, Eco_
 void Eco_EConnect_Result_Create_Character(struct Eco_EConnect_Result* result, Eco_Codepoint value)
 {
     result->type = Eco_EConnect_Result_Type_ANY;
-    Eco_Any_AssignCharacter(&(result->body.any), value);
+    result->body.any = Eco_Any_FromCharacter(value);
 }
 
 void Eco_EConnect_Result_Copy(struct Eco_EConnect_Result* dst, struct Eco_EConnect_Result* src)
