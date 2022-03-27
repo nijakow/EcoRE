@@ -57,7 +57,7 @@ bool Eco_VM_Builtin_GetTypeSlotInfo(struct Eco_Fiber* fiber, unsigned int args)
     type = Eco_Any_AsPointer(any);
 
     if (subindex == -1)
-        Eco_Any_AssignInteger(&any, type->slot_count);
+        any = Eco_Any_FromInteger(type->slot_count);
     else if (subindex == -2)
         Eco_Any_AssignPointer(&any, type->slots[index].key);
     else if (subindex == -3) {
@@ -70,7 +70,7 @@ bool Eco_VM_Builtin_GetTypeSlotInfo(struct Eco_Fiber* fiber, unsigned int args)
         if (type->slots->type == Eco_TypeSlotType_CODE) {
             Eco_Any_AssignPointer(&any, type->slots[index].body.code.code);
         } else if (type->slots->type == Eco_TypeSlotType_INLINED) {
-            Eco_Any_AssignInteger(&any, type->slots[index].body.inlined.offset);
+            any = Eco_Any_FromInteger(type->slots[index].body.inlined.offset);
         } else {
             Eco_Any_AssignAny(&any, &fiber->vm->constants.cfalse);
         }
@@ -101,9 +101,9 @@ bool Eco_VM_Builtin_InterfaceGetEntryInfo(struct Eco_Fiber* fiber, unsigned int 
     interface = (struct Eco_Interface*) Eco_Any_AsPointer(any);
 
     if (subindex == -1)
-        Eco_Any_AssignInteger(&any, interface->entry_count);
+        any = Eco_Any_FromInteger(interface->entry_count);
     else if (subindex == -2)
-        Eco_Any_AssignPointer(&any, interface->entries[index].key);
+        any = Eco_Any_FromPointer(interface->entries[index].key);
     else if (subindex == -3) {
         if (interface->entries[index].return_type == NULL)
             Eco_Any_AssignPointer(&any, Eco_Interface_GetDefaultInterface());
@@ -111,9 +111,9 @@ bool Eco_VM_Builtin_InterfaceGetEntryInfo(struct Eco_Fiber* fiber, unsigned int 
             Eco_Any_AssignPointer(&any, interface->entries[index].return_type);
     }
     else if (subindex == -4)
-        Eco_Any_AssignInteger(&any, interface->entries[index].arg_count);
+        any = Eco_Any_FromInteger(interface->entries[index].arg_count);
     else if (subindex == -5)
-        Eco_Any_AssignInteger(&any, interface->entries[index].has_varargs);
+        any = Eco_Any_FromInteger(interface->entries[index].has_varargs);
     else if (subindex < 0 || ((unsigned int) subindex) >= interface->entries[index].arg_count)
         Eco_Any_AssignPointer(&any, Eco_Interface_GetDefaultInterface());
     else {

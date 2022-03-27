@@ -83,7 +83,7 @@ bool Eco_Fiber_Unwind(struct Eco_Fiber* fiber)
          * We push a dummy value for Self
          */
         Eco_Fiber_SetRunning(fiber);
-        Eco_Any_AssignInteger(&value, 0);
+        value = Eco_Any_FromInteger(0);
         Eco_Fiber_Push(fiber, &value);
         Eco_Fiber_EnterClosure(fiber, handler, 1);
         Eco_Fiber_Top(fiber)->return_to = handler->lexical;

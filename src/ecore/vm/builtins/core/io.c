@@ -63,7 +63,7 @@ bool Eco_VM_Builtin_OpenFile(struct Eco_Fiber* fiber, unsigned int args)
      } else {
          fd = -1;
      }
-     Eco_Any_AssignInteger(&any, fd);
+     any = Eco_Any_FromInteger(fd);
      Eco_Fiber_Push(fiber, &any);
      return true;
  }

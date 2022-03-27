@@ -28,7 +28,7 @@ bool Eco_VM_Builtin_FFIType_GetSizeInBytes(struct Eco_Fiber* fiber, unsigned int
         return false;
     Eco_Fiber_Pop(fiber, &value);
     type = Eco_Any_AsPointer(value);
-    Eco_Any_AssignInteger(&value, Eco_FFIType_SizeofCType(type));
+    value = Eco_Any_FromInteger(Eco_FFIType_SizeofCType(type));
     Eco_Fiber_Push(fiber, &value);
     return true;
 }

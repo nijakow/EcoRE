@@ -20,7 +20,7 @@ bool Eco_VM_Builtin_AddIntegers(struct Eco_Fiber* fiber, unsigned int args)
         args--;
     }
 
-    Eco_Any_AssignInteger(&any, value);
+    any = Eco_Any_FromInteger(value);
     Eco_Fiber_Push(fiber, &any);
 
     return true;
@@ -51,7 +51,7 @@ bool Eco_VM_Builtin_Add(struct Eco_Fiber* fiber, unsigned int args)
         }
         else goto error;
     }
-    Eco_Any_AssignInteger(&any, value);
+    any = Eco_Any_FromInteger(value);
 
     success:
     Eco_Fiber_Push(fiber, &any);
@@ -81,7 +81,7 @@ bool Eco_VM_Builtin_Subtract2(struct Eco_Fiber* fiber, unsigned int args)
 
     if (Eco_Any_IsInteger(arg1)) {
         if (Eco_Any_IsInteger(arg2)) {
-            Eco_Any_AssignInteger(&result, Eco_Any_AsInteger(arg1) - Eco_Any_AsInteger(arg2));
+            result = Eco_Any_FromInteger(Eco_Any_AsInteger(arg1) - Eco_Any_AsInteger(arg2));
         } else if (Eco_Any_IsFloating(arg2)) {
             result = Eco_Any_FromFloating(Eco_Any_AsInteger(arg1) - Eco_Any_AsFloating(arg2));
         } else {
@@ -125,7 +125,7 @@ bool Eco_VM_Builtin_Multiply2(struct Eco_Fiber* fiber, unsigned int args)
 
     if (Eco_Any_IsInteger(arg1)) {
         if (Eco_Any_IsInteger(arg2)) {
-            Eco_Any_AssignInteger(&result, Eco_Any_AsInteger(arg1) * Eco_Any_AsInteger(arg2));
+            result = Eco_Any_FromInteger(Eco_Any_AsInteger(arg1) * Eco_Any_AsInteger(arg2));
         } else if (Eco_Any_IsFloating(arg2)) {
             result = Eco_Any_FromFloating(Eco_Any_AsInteger(arg1) * Eco_Any_AsFloating(arg2));
         } else {
@@ -169,7 +169,7 @@ bool Eco_VM_Builtin_Divide2(struct Eco_Fiber* fiber, unsigned int args)
 
     if (Eco_Any_IsInteger(arg1)) {
         if (Eco_Any_IsInteger(arg2)) {
-            Eco_Any_AssignInteger(&result, Eco_Any_AsInteger(arg1) / Eco_Any_AsInteger(arg2));
+            result = Eco_Any_FromInteger(Eco_Any_AsInteger(arg1) / Eco_Any_AsInteger(arg2));
         } else if (Eco_Any_IsFloating(arg2)) {
             result = Eco_Any_FromFloating(Eco_Any_AsInteger(arg1) / Eco_Any_AsFloating(arg2));
         } else {
@@ -212,7 +212,7 @@ bool Eco_VM_Builtin_Modulo2(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Pop(fiber, &arg1);
 
     if (Eco_Any_IsInteger(arg1) && Eco_Any_IsInteger(arg2)) {
-        Eco_Any_AssignInteger(&result, Eco_Any_AsInteger(arg1) % Eco_Any_AsInteger(arg2));
+        result = Eco_Any_FromInteger(Eco_Any_AsInteger(arg1) % Eco_Any_AsInteger(arg2));
         Eco_Fiber_Push(fiber, &result);
         return true;
     } else {
@@ -239,7 +239,7 @@ bool Eco_VM_Builtin_BitOr2(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Pop(fiber, &arg1);
 
     if (Eco_Any_IsInteger(arg1) && Eco_Any_IsInteger(arg2)) {
-        Eco_Any_AssignInteger(&result, Eco_Any_AsInteger(arg1) | Eco_Any_AsInteger(arg2));
+        result = Eco_Any_FromInteger(Eco_Any_AsInteger(arg1) | Eco_Any_AsInteger(arg2));
         Eco_Fiber_Push(fiber, &result);
         return true;
     } else {
@@ -266,7 +266,7 @@ bool Eco_VM_Builtin_BitAnd2(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Pop(fiber, &arg1);
 
     if (Eco_Any_IsInteger(arg1) && Eco_Any_IsInteger(arg2)) {
-        Eco_Any_AssignInteger(&result, Eco_Any_AsInteger(arg1) & Eco_Any_AsInteger(arg2));
+        result = Eco_Any_FromInteger(Eco_Any_AsInteger(arg1) & Eco_Any_AsInteger(arg2));
         Eco_Fiber_Push(fiber, &result);
         return true;
     } else {
@@ -293,7 +293,7 @@ bool Eco_VM_Builtin_BitXor2(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Pop(fiber, &arg1);
 
     if (Eco_Any_IsInteger(arg1) && Eco_Any_IsInteger(arg2)) {
-        Eco_Any_AssignInteger(&result, Eco_Any_AsInteger(arg1) ^ Eco_Any_AsInteger(arg2));
+        result = Eco_Any_FromInteger(Eco_Any_AsInteger(arg1) ^ Eco_Any_AsInteger(arg2));
         Eco_Fiber_Push(fiber, &result);
         return true;
     } else {
@@ -320,7 +320,7 @@ bool Eco_VM_Builtin_LShift2(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Pop(fiber, &arg1);
 
     if (Eco_Any_IsInteger(arg1) && Eco_Any_IsInteger(arg2)) {
-        Eco_Any_AssignInteger(&result, Eco_Any_AsInteger(arg1) << Eco_Any_AsInteger(arg2));
+        result = Eco_Any_FromInteger(Eco_Any_AsInteger(arg1) << Eco_Any_AsInteger(arg2));
         Eco_Fiber_Push(fiber, &result);
         return true;
     } else {
@@ -347,7 +347,7 @@ bool Eco_VM_Builtin_RShift2(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Pop(fiber, &arg1);
 
     if (Eco_Any_IsInteger(arg1) && Eco_Any_IsInteger(arg2)) {
-        Eco_Any_AssignInteger(&result, Eco_Any_AsInteger(arg1) >> Eco_Any_AsInteger(arg2));
+        result = Eco_Any_FromInteger(Eco_Any_AsInteger(arg1) >> Eco_Any_AsInteger(arg2));
         Eco_Fiber_Push(fiber, &result);
         return true;
     } else {

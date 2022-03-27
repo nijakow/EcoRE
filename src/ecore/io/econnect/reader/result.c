@@ -28,7 +28,7 @@ void Eco_EConnect_Result_Create_Object(struct Eco_EConnect_Result* result, struc
 void Eco_EConnect_Result_Create_Integer(struct Eco_EConnect_Result* result, Eco_Integer value)
 {
     result->type = Eco_EConnect_Result_Type_ANY;
-    Eco_Any_AssignInteger(&(result->body.any), value);
+    result->body.any = Eco_Any_FromInteger(value);
 }
 
 void Eco_EConnect_Result_Create_Character(struct Eco_EConnect_Result* result, Eco_Codepoint value)
