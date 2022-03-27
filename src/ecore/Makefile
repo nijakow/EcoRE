@@ -16,6 +16,8 @@ objects/pair/pair.c \
 objects/symbol/symbol.c \
 objects/tagged/tagged.c \
 objects/vm/code/code.c \
+vm/vm.c \
+vm/fiber/fiber.c \
 utils/string.c \
 main.c
 
