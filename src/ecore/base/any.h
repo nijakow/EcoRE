@@ -223,9 +223,4 @@ static inline void Eco_Any_Initialize(Eco_Any* any)
     *any = Eco_Any_FromInteger(0);
 }
 
-static inline void Eco_Any_AssignPointer(Eco_Any* any, void* ptr)
-{
-    *any = Eco_Any_FromPointer(ptr);
-}
-
 #endif

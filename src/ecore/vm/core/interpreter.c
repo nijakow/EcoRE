@@ -337,7 +337,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
 
             closure    = Eco_Closure_New(top->code->code_instances[closure_id], Eco_Fiber_Top(fiber));
 
-            Eco_Any_AssignPointer(&registers[dest], (struct Eco_Object*) closure);
+            registers[dest] = Eco_Any_FromPointer(closure);
 
             FAST_DISPATCH();
         }

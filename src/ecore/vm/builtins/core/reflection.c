@@ -9,8 +9,7 @@ bool Eco_VM_Builtin_GetType(struct Eco_Fiber* fiber, unsigned int args)
 {
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Any_AssignPointer(Eco_Fiber_Peek(fiber),
-                          (struct Eco_Object*) Eco_Any_GetType(Eco_Fiber_Peek(fiber)));
+    *Eco_Fiber_Peek(fiber) = Eco_Any_FromPointer(Eco_Any_GetType(Eco_Fiber_Peek(fiber)));
     return true;
 }
 
@@ -29,10 +28,10 @@ bool Eco_VM_Builtin_GetTypeSlotNames(struct Eco_Fiber* fiber, unsigned int args)
     // TODO, FIXME, XXX: Handle array == NULL!
     for (index = 0; index < type->slot_count; index++)
     {
-        Eco_Any_AssignPointer(&any, type->slots[index].key);
+        any = Eco_Any_FromPointer(type->slots[index].key);
         Eco_Array_Put(array, index, &any);
     }
-    Eco_Any_AssignPointer(&any, array);
+    any = Eco_Any_FromPointer(array);
     Eco_Fiber_Push(fiber, &any);
     return true;
 }
@@ -59,16 +58,16 @@ bool Eco_VM_Builtin_GetTypeSlotInfo(struct Eco_Fiber* fiber, unsigned int args)
     if (subindex == -1)
         any = Eco_Any_FromInteger(type->slot_count);
     else if (subindex == -2)
-        Eco_Any_AssignPointer(&any, type->slots[index].key);
+        any = Eco_Any_FromPointer(type->slots[index].key);
     else if (subindex == -3) {
         if (type->slots[index].interface == NULL)
-            Eco_Any_AssignPointer(&any, Eco_Interface_GetDefaultInterface());
+            any = Eco_Any_FromPointer(Eco_Interface_GetDefaultInterface());
         else
-            Eco_Any_AssignPointer(&any, type->slots[index].interface);
+            any = Eco_Any_FromPointer(type->slots[index].interface);
     }
     else if (subindex == -4) {
         if (type->slots->type == Eco_TypeSlotType_CODE) {
-            Eco_Any_AssignPointer(&any, type->slots[index].body.code.code);
+            any = Eco_Any_FromPointer(type->slots[index].body.code.code);
         } else if (type->slots->type == Eco_TypeSlotType_INLINED) {
             any = Eco_Any_FromInteger(type->slots[index].body.inlined.offset);
         } else {
@@ -106,21 +105,21 @@ bool Eco_VM_Builtin_InterfaceGetEntryInfo(struct Eco_Fiber* fiber, unsigned int 
         any = Eco_Any_FromPointer(interface->entries[index].key);
     else if (subindex == -3) {
         if (interface->entries[index].return_type == NULL)
-            Eco_Any_AssignPointer(&any, Eco_Interface_GetDefaultInterface());
+            any = Eco_Any_FromPointer(Eco_Interface_GetDefaultInterface());
         else
-            Eco_Any_AssignPointer(&any, interface->entries[index].return_type);
+            any = Eco_Any_FromPointer(interface->entries[index].return_type);
     }
     else if (subindex == -4)
         any = Eco_Any_FromInteger(interface->entries[index].arg_count);
     else if (subindex == -5)
         any = Eco_Any_FromInteger(interface->entries[index].has_varargs);
     else if (subindex < 0 || ((unsigned int) subindex) >= interface->entries[index].arg_count)
-        Eco_Any_AssignPointer(&any, Eco_Interface_GetDefaultInterface());
+        any = Eco_Any_FromPointer(Eco_Interface_GetDefaultInterface());
     else {
         if (interface->entries[index].arg_types[subindex] == NULL)
-            Eco_Any_AssignPointer(&any, Eco_Interface_GetDefaultInterface());
+            any = Eco_Any_FromPointer(Eco_Interface_GetDefaultInterface());
         else
-            Eco_Any_AssignPointer(&any, interface->entries[index].arg_types[subindex]);
+            any = Eco_Any_FromPointer(interface->entries[index].arg_types[subindex]);
     }
     Eco_Fiber_Push(fiber, &any);
     return true;
@@ -163,7 +162,7 @@ bool Eco_VM_Builtin_InterfaceAddEntry(struct Eco_Fiber* fiber, unsigned int args
 
     // TODO, FIXME, XXX: Check if interface == NULL!
 
-    Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface);
+    any = Eco_Any_FromPointer(interface);
     Eco_Fiber_Push(fiber, &any);
     return true;
 }

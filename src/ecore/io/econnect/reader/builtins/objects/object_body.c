@@ -62,7 +62,7 @@ bool Eco_EConnect_Reader_ReadMoleculeBody(struct Eco_EConnect_Reader* reader,
                  * No value was given by default, so we make the slot point
                  * to the object itself.
                  */
-                Eco_Any_AssignPointer(&any, (struct Eco_Object*) object);
+                any = Eco_Any_FromPointer(object);
             }
             Eco_Molecule_AddSlot(object, -1, slot_info, Eco_Interface_GetDefaultInterface(), &any); // TODO, FIXME, XXX: Parse the interface!
         } else {

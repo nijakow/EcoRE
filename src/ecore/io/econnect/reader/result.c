@@ -22,7 +22,7 @@ void Eco_EConnect_Result_Create_Any(struct Eco_EConnect_Result* result, Eco_Any*
 void Eco_EConnect_Result_Create_Object(struct Eco_EConnect_Result* result, struct Eco_Object* value)
 {
     result->type = Eco_EConnect_Result_Type_ANY;
-    Eco_Any_AssignPointer(&(result->body.any), value);
+    result->body.any = Eco_Any_FromPointer(value);
 }
 
 void Eco_EConnect_Result_Create_Integer(struct Eco_EConnect_Result* result, Eco_Integer value)

@@ -57,7 +57,7 @@ bool Eco_VM_Builtin_FFIFunction_New(struct Eco_Fiber* fiber, unsigned int args)
     for (index = 0; index < arg_count; index++)
         the_arg_types[index] = Eco_Any_AsPointer(*Eco_Array_At(the_type_array, index));
     the_func = Eco_FFIFunc_New(arg_count, the_return_type, the_arg_types);
-    Eco_Any_AssignPointer(&result, the_func);
+    result = Eco_Any_FromPointer(the_func);
     Eco_Fiber_Push(fiber, &result);
     return true;
 }
