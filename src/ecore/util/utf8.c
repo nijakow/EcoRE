@@ -75,3 +75,19 @@ bool Eco_Utf8_Decode(const char* str,
         return true;
     }
 }
+
+unsigned int Eco_Utf8_StringLength(const char* str)
+{
+    unsigned int  index;
+    unsigned int  count;
+
+    count = 0;
+
+    for (index = 0; str[index] != '\0'; index++)
+    {
+        if ((str[index] & 0xc0) != 0x80)
+            count++;
+    }
+
+    return count;
+}

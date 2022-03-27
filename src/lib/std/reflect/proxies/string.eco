@@ -1,10 +1,11 @@
 
 #=std/reflect/proxies/String: {
-    size => #'ecosphere.ecore.object.string.byte_length'(self);
+    size => #'ecosphere.ecore.object.string.char_length'(self);
+    byteSize => #'ecosphere.ecore.object.string.byte_length'(self);
     byteAt: index => #'ecosphere.ecore.object.string.byte_at'(self, index);
     at: index => #'ecosphere.ecore.object.string.at_byte'(self, index);
     do: body => (
-        | i <- 0. s <- size. |
+        | i <- 0. s <- byteSize. |
         [ i < s ] while: [
             body value(#'ecosphere.ecore.object.string.at_byte'(self, i)).
             i <- i + (#'ecosphere.ecore.object.string.step_at_byte'(self, i)).
@@ -12,7 +13,7 @@
       ^ self
     );
     forEach: body => (
-        | i <- 0. s <- size. |
+        | i <- 0. s <- byteSize. |
         [ i < s ] while: [
             body value(i, #'ecosphere.ecore.object.string.at_byte'(self, i)).
             i <- i + (#'ecosphere.ecore.object.string.step_at_byte'(self, i)).
@@ -45,8 +46,8 @@
     );
     isString => true;
     asBlob => (
-        | blob <- std util newBlob: size |
-        0 for: size do: [ :i | blob at: i put: (byteAt: i) ].
+        | blob <- std util newBlob: byteSize |
+        0 for: byteSize do: [ :i | blob at: i put: (byteAt: i) ].
       ^ blob
     );
     asVector => (

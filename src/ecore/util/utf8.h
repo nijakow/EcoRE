@@ -8,4 +8,6 @@
 unsigned int Eco_Utf8_Encode(Eco_Codepoint, char*);
 bool Eco_Utf8_Decode(const char*, Eco_Codepoint*, unsigned int*);
 
+unsigned int Eco_Utf8_StringLength(const char*);
+
 #endif

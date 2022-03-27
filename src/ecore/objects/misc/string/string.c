@@ -38,15 +38,15 @@ void Eco_String_Terminate()
 
 struct Eco_String* Eco_String_New(const char* text)
 {
-    unsigned int        textlen;
+    unsigned int        byte_count;
     struct Eco_String*  string;
 
-    textlen                 = strlen(text);
-    string                  = Eco_Object_New(Eco_String_TYPE, sizeof(struct Eco_String) + (textlen + 1) * sizeof(char));
-    string->byte_count      = textlen;
-    string->character_count = textlen;  // TODO: Count UTF-8 code points!
+    byte_count              = strlen(text);
+    string                  = Eco_Object_New(Eco_String_TYPE, sizeof(struct Eco_String) + (byte_count + 1) * sizeof(char));
+    string->byte_count      = byte_count;
+    string->character_count = Eco_Utf8_StringLength(text);
 
-    memcpy(&string->bytes, text, textlen + 1);
+    memcpy(&string->bytes, text, byte_count + 1);
 
     return string;
 }
