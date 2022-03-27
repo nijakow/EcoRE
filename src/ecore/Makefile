@@ -12,6 +12,7 @@ EXECUTABLE = ./ecore.app
 SOURCES = \
 memory/memory.c \
 objects/base/object.c \
+objects/pair/pair.c \
 objects/symbol/symbol.c \
 utils/string.c \
 main.c

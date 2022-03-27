@@ -11,10 +11,10 @@
 
 typedef union eco_value
 {
-    void*         pointer;
-    eco_unichar   character;
-    eco_integer   integer;
-    eco_floating  floating;
+    void*        pointer;
+    eco_unichar  character;
+    eco_int      integer;
+    eco_float    floating;
 } eco_value;
 
 typedef enum eco_value_type
@@ -41,7 +41,7 @@ typedef struct eco_any
 } eco_any;
 
 
-static inline eco_any eco_any_from_pointer(const void* ptr)
+static inline eco_any eco_any_from_pointer(void* ptr)
 {
     return (eco_any) { .type = eco_value_type_pointer, .value.pointer = ptr };
 }
@@ -63,17 +63,17 @@ static inline eco_any eco_any_false()
 
 static inline eco_any eco_any_from_unichar(const eco_unichar unichar)
 {
-    return (eco_any) { .type = eco_value_type_unichar, .value.pointer = unichar };
+    return (eco_any) { .type = eco_value_type_unichar, .value.integer = unichar };
 }
 
 static inline eco_any eco_any_from_int(const eco_int integer)
 {
-    return (eco_any) { .type = eco_value_type_int, .value.pointer = integer };
+    return (eco_any) { .type = eco_value_type_int, .value.integer = integer };
 }
 
-static inline eco_any eco_any_from_unichar(const eco_float floating)
+static inline eco_any eco_any_from_float(const eco_float floating)
 {
-    return (eco_any) { .type = eco_value_type_float, .value.pointer = floating };
+    return (eco_any) { .type = eco_value_type_float, .value.integer = floating };
 }
 
 static inline void* eco_any_as_pointer(const eco_any any)
