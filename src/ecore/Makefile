@@ -15,6 +15,7 @@ objects/base/object.c \
 objects/pair/pair.c \
 objects/symbol/symbol.c \
 objects/tagged/tagged.c \
+objects/vm/code/code.c \
 utils/string.c \
 main.c
 
