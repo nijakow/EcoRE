@@ -128,65 +128,66 @@ typedef uintptr_t Eco_Any;
 #define Eco_Any_Mask_FLOATING   (((Eco_Any) Eco_Value_Type_FLOATING)  << 62)
 
 
-static inline bool Eco_Any_Equals(Eco_Any* a, Eco_Any* b)
+static inline bool Eco_Any_Equals(Eco_Any a, Eco_Any b)
 {
-    return *a == *b;
+    return a == b;
 }
 
-static inline enum Eco_Value_Type Eco_Any_GetValueType(Eco_Any* any)
+static inline enum Eco_Value_Type Eco_Any_GetValueType(Eco_Any any)
 {
-    return (enum Eco_Value_Type) ((*any) >> 62);
+    return (enum Eco_Value_Type) ((any) >> 62);
 }
 
-static inline bool Eco_Any_IsPointer(Eco_Any* any)
+static inline bool Eco_Any_IsPointer(Eco_Any any)
 {
-    return (((uintptr_t) *any) & Eco_Any_MASK) == Eco_Any_Mask_POINTER;
+    return (((uintptr_t) any) & Eco_Any_MASK) == Eco_Any_Mask_POINTER;
 }
 
-static inline bool Eco_Any_IsCharacter(Eco_Any* any)
+static inline bool Eco_Any_IsCharacter(Eco_Any any)
 {
-    return ((uintptr_t) *any & Eco_Any_MASK) == Eco_Any_Mask_CHARACTER;
+    return ((uintptr_t) any & Eco_Any_MASK) == Eco_Any_Mask_CHARACTER;
 }
 
-static inline bool Eco_Any_IsInteger(Eco_Any* any)
+static inline bool Eco_Any_IsInteger(Eco_Any any)
 {
-    return ((uintptr_t) *any & Eco_Any_MASK) == Eco_Any_Mask_INTEGER;
+    return ((uintptr_t) any & Eco_Any_MASK) == Eco_Any_Mask_INTEGER;
 }
 
-static inline bool Eco_Any_IsFloating(Eco_Any* any)
+static inline bool Eco_Any_IsFloating(Eco_Any any)
 {
-    return ((uintptr_t) *any & Eco_Any_MASK) == Eco_Any_Mask_FLOATING;
+    return ((uintptr_t) any & Eco_Any_MASK) == Eco_Any_Mask_FLOATING;
 }
 
 
-static inline void Eco_Any_AssignPointer(Eco_Any* any, void* pointer)
+static inline Eco_Any Eco_Any_FromPointer(void* pointer)
 {
-    *any = (uintptr_t) pointer;
+    return (Eco_Any) (uintptr_t) pointer;
 }
 
-static inline void Eco_Any_AssignCharacter(Eco_Any* any, Eco_Codepoint character)
+static inline Eco_Any Eco_Any_FromCharacter(Eco_Codepoint character)
 {
     uintptr_t  value;
 
     value = 0;
     value |= character & 0xffffffff;
     value |= Eco_Any_Mask_CHARACTER;
-    *any = (uintptr_t) value;
+    return (Eco_Any) value;
 }
 
-static inline void Eco_Any_AssignInteger(Eco_Any* any, Eco_Integer integer)
+static inline Eco_Any Eco_Any_FromInteger(Eco_Integer integer)
 {
     uintptr_t  value;
 
     value = 0;
     value |= integer & 0xffffffff;
     value |= Eco_Any_Mask_INTEGER;
-    *any = value;
+    return (Eco_Any) value;
 }
 
-static inline void Eco_Any_AssignFloating(Eco_Any* any, Eco_Floating floating)
+static inline Eco_Any Eco_Any_FromFloating(Eco_Floating floating)
 {
     // TODO, FIXME, XXX!
+    return 0;
 }
 
 static inline void Eco_Any_AssignAny(Eco_Any* dest, Eco_Any* src)
@@ -195,22 +196,22 @@ static inline void Eco_Any_AssignAny(Eco_Any* dest, Eco_Any* src)
 }
 
 
-static inline void* Eco_Any_AsPointer(Eco_Any* any)
+static inline void* Eco_Any_AsPointer(Eco_Any any)
 {
-    return (void*) *any;
+    return (void*) any;
 }
 
-static inline Eco_Codepoint Eco_Any_AsCharacter(Eco_Any* any)
+static inline Eco_Codepoint Eco_Any_AsCharacter(Eco_Any any)
 {
-    return (Eco_Codepoint) *any;
+    return (Eco_Codepoint) any;
 }
 
-static inline Eco_Integer Eco_Any_AsInteger(Eco_Any* any)
+static inline Eco_Integer Eco_Any_AsInteger(Eco_Any any)
 {
-    return (Eco_Integer) *any;
+    return (Eco_Integer) any & 0xffffffff;
 }
 
-static inline Eco_Floating Eco_Any_AsFloating(Eco_Any* any)
+static inline Eco_Floating Eco_Any_AsFloating(Eco_Any any)
 {
     return 0.0f;    // TODO, FIXME, XXX!
 }
@@ -219,7 +220,27 @@ static inline Eco_Floating Eco_Any_AsFloating(Eco_Any* any)
 
 static inline void Eco_Any_Initialize(Eco_Any* any)
 {
-    Eco_Any_AssignInteger(any, 0);
+    *any = Eco_Any_FromInteger(0);
+}
+
+static inline void Eco_Any_AssignInteger(Eco_Any* any, Eco_Integer integer)
+{
+    *any = Eco_Any_FromInteger(integer);
+}
+
+static inline void Eco_Any_AssignFloating(Eco_Any* any, Eco_Floating floating)
+{
+    *any = Eco_Any_FromFloating(floating);
+}
+
+static inline void Eco_Any_AssignCharacter(Eco_Any* any, Eco_Codepoint character)
+{
+    *any = Eco_Any_FromCharacter(character);
+}
+
+static inline void Eco_Any_AssignPointer(Eco_Any* any, void* ptr)
+{
+    *any = Eco_Any_FromPointer(ptr);
 }
 
 #endif

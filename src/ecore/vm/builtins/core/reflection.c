@@ -24,15 +24,15 @@ bool Eco_VM_Builtin_GetTypeSlotNames(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
     Eco_Fiber_Pop(fiber, &any);
-    type = (struct Eco_Type*) Eco_Any_AsPointer(&any);
+    type = (struct Eco_Type*) Eco_Any_AsPointer(any);
     array = Eco_Array_New(type->slot_count);
     // TODO, FIXME, XXX: Handle array == NULL!
     for (index = 0; index < type->slot_count; index++)
     {
-        Eco_Any_AssignPointer(&any, (struct Eco_Object*) type->slots[index].key);
+        Eco_Any_AssignPointer(&any, type->slots[index].key);
         Eco_Array_Put(array, index, &any);
     }
-    Eco_Any_AssignPointer(&any, (struct Eco_Object*) array);
+    Eco_Any_AssignPointer(&any, array);
     Eco_Fiber_Push(fiber, &any);
     return true;
 }
@@ -48,13 +48,13 @@ bool Eco_VM_Builtin_GetTypeSlotInfo(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     
     Eco_Fiber_Pop(fiber, &any);
-    subindex = Eco_Any_AsInteger(&any);
+    subindex = Eco_Any_AsInteger(any);
 
     Eco_Fiber_Pop(fiber, &any);
-    index = Eco_Any_AsInteger(&any);
+    index = Eco_Any_AsInteger(any);
     
     Eco_Fiber_Pop(fiber, &any);
-    type = Eco_Any_AsPointer(&any);
+    type = Eco_Any_AsPointer(any);
 
     if (subindex == -1)
         Eco_Any_AssignInteger(&any, type->slot_count);
@@ -62,7 +62,7 @@ bool Eco_VM_Builtin_GetTypeSlotInfo(struct Eco_Fiber* fiber, unsigned int args)
         Eco_Any_AssignPointer(&any, type->slots[index].key);
     else if (subindex == -3) {
         if (type->slots[index].interface == NULL)
-            Eco_Any_AssignPointer(&any, (struct Eco_Object*) Eco_Interface_GetDefaultInterface());
+            Eco_Any_AssignPointer(&any, Eco_Interface_GetDefaultInterface());
         else
             Eco_Any_AssignPointer(&any, type->slots[index].interface);
     }
@@ -92,35 +92,35 @@ bool Eco_VM_Builtin_InterfaceGetEntryInfo(struct Eco_Fiber* fiber, unsigned int 
         return false;
     
     Eco_Fiber_Pop(fiber, &any);
-    subindex = Eco_Any_AsInteger(&any);
+    subindex = Eco_Any_AsInteger(any);
 
     Eco_Fiber_Pop(fiber, &any);
-    index = Eco_Any_AsInteger(&any);
+    index = Eco_Any_AsInteger(any);
     
     Eco_Fiber_Pop(fiber, &any);
-    interface = (struct Eco_Interface*) Eco_Any_AsPointer(&any);
+    interface = (struct Eco_Interface*) Eco_Any_AsPointer(any);
 
     if (subindex == -1)
         Eco_Any_AssignInteger(&any, interface->entry_count);
     else if (subindex == -2)
-        Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface->entries[index].key);
+        Eco_Any_AssignPointer(&any, interface->entries[index].key);
     else if (subindex == -3) {
         if (interface->entries[index].return_type == NULL)
-            Eco_Any_AssignPointer(&any, (struct Eco_Object*) Eco_Interface_GetDefaultInterface());
+            Eco_Any_AssignPointer(&any, Eco_Interface_GetDefaultInterface());
         else
-            Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface->entries[index].return_type);
+            Eco_Any_AssignPointer(&any, interface->entries[index].return_type);
     }
     else if (subindex == -4)
         Eco_Any_AssignInteger(&any, interface->entries[index].arg_count);
     else if (subindex == -5)
         Eco_Any_AssignInteger(&any, interface->entries[index].has_varargs);
     else if (subindex < 0 || ((unsigned int) subindex) >= interface->entries[index].arg_count)
-        Eco_Any_AssignPointer(&any, (struct Eco_Object*) Eco_Interface_GetDefaultInterface());
+        Eco_Any_AssignPointer(&any, Eco_Interface_GetDefaultInterface());
     else {
         if (interface->entries[index].arg_types[subindex] == NULL)
-            Eco_Any_AssignPointer(&any, (struct Eco_Object*) Eco_Interface_GetDefaultInterface());
+            Eco_Any_AssignPointer(&any, Eco_Interface_GetDefaultInterface());
         else
-            Eco_Any_AssignPointer(&any, (struct Eco_Object*) interface->entries[index].arg_types[subindex]);
+            Eco_Any_AssignPointer(&any, interface->entries[index].arg_types[subindex]);
     }
     Eco_Fiber_Push(fiber, &any);
     return true;
@@ -138,26 +138,26 @@ bool Eco_VM_Builtin_InterfaceAddEntry(struct Eco_Fiber* fiber, unsigned int args
         return false;
     
     Eco_Fiber_Pop(fiber, &any);
-    entry.has_varargs = Eco_Any_AsInteger(&any) != 0;
+    entry.has_varargs = Eco_Any_AsInteger(any) != 0;
 
     Eco_Fiber_Pop(fiber, &any);
-    types = (struct Eco_Array*) Eco_Any_AsPointer(&any);
+    types = (struct Eco_Array*) Eco_Any_AsPointer(any);
 
     entry.arg_count = Eco_Array_Size(types);
     
     for (index = 0; index < entry.arg_count; index++)
     {
-        entry.arg_types[index] = (struct Eco_Interface*) Eco_Any_AsPointer(Eco_Array_At(types, index));
+        entry.arg_types[index] = (struct Eco_Interface*) Eco_Any_AsPointer(*Eco_Array_At(types, index));
     }
 
     Eco_Fiber_Pop(fiber, &any);
-    entry.key = (struct Eco_Key*) Eco_Any_AsPointer(&any);
+    entry.key = (struct Eco_Key*) Eco_Any_AsPointer(any);
 
     Eco_Fiber_Pop(fiber, &any);
-    entry.return_type = (struct Eco_Interface*) Eco_Any_AsPointer(&any);
+    entry.return_type = (struct Eco_Interface*) Eco_Any_AsPointer(any);
 
     Eco_Fiber_Pop(fiber, &any);
-    interface = (struct Eco_Interface*) Eco_Any_AsPointer(&any);
+    interface = (struct Eco_Interface*) Eco_Any_AsPointer(any);
 
     interface = Eco_Interface_AddEntry(interface, &entry);
 

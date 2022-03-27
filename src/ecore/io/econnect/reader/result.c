@@ -66,7 +66,7 @@ bool Eco_EConnect_Result_ExpectObject(struct Eco_EConnect_Result* result,
                                       struct Eco_Object** obj_loc)
 {
     if (result->type == Eco_EConnect_Result_Type_ANY) {
-        *obj_loc = Eco_Any_AsPointer(&(result->body.any));
+        *obj_loc = Eco_Any_AsPointer(result->body.any);
         return true;
     } else {
         *obj_loc = NULL;

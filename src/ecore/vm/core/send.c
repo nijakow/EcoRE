@@ -56,10 +56,10 @@ bool Eco_Send(struct Eco_Message*  message,
     struct Eco_Object*  object;
 
     message->private_send = private_send;
-    if (Eco_Any_IsPointer(target)) {
-        object = Eco_Any_AsPointer(target);
+    if (Eco_Any_IsPointer(*target)) {
+        object = Eco_Any_AsPointer(*target);
     } else {
-        object = (*Eco_Send_JUMPS[Eco_Any_GetValueType(target)])->proxy;
+        object = (*Eco_Send_JUMPS[Eco_Any_GetValueType(*target)])->proxy;
     }
     return Eco_Send_ToObject(message, link, object, self);
 }

@@ -24,13 +24,13 @@ bool Eco_VM_Builtin_Code_New(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Pop(fiber, &code_instances);
     Eco_Fiber_Pop(fiber, &constants);
     Eco_Fiber_Pop(fiber, &bytecodes);
-    code = Eco_Code_ConstructFromEco((struct Eco_Blob*)  Eco_Any_AsPointer(&bytecodes),
-                                     (struct Eco_Array*) Eco_Any_AsPointer(&constants),
-                                     (struct Eco_Array*) Eco_Any_AsPointer(&code_instances),
-                                     Eco_Any_AsInteger(&registers),
-                                     Eco_Any_AsInteger(&fixed_args),
-                                     Eco_Any_AsInteger(&flags) != 0);
-    Eco_Any_AssignPointer(&result, (struct Eco_Object*) code);
+    code = Eco_Code_ConstructFromEco((struct Eco_Blob*)  Eco_Any_AsPointer(bytecodes),
+                                     (struct Eco_Array*) Eco_Any_AsPointer(constants),
+                                     (struct Eco_Array*) Eco_Any_AsPointer(code_instances),
+                                     Eco_Any_AsInteger(registers),
+                                     Eco_Any_AsInteger(fixed_args),
+                                     Eco_Any_AsInteger(flags) != 0);
+    result = Eco_Any_FromPointer(code);
     Eco_Fiber_Push(fiber, &result);
     return true;
 }
@@ -47,7 +47,7 @@ bool Eco_VM_Builtin_Code_Value(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, ECO_VM_BUILTIN_INFINITE_ARGS))
         return false;
 
-    code = (struct Eco_Code*) Eco_Any_AsPointer(&Eco_Fiber_Top(fiber)->registers[0]);  // TODO: Checks
+    code = (struct Eco_Code*) Eco_Any_AsPointer(Eco_Fiber_Top(fiber)->registers[0]);  // TODO: Checks
 
     return Eco_Fiber_Enter(fiber, NULL, code, args);
 }

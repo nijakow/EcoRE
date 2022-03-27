@@ -19,16 +19,14 @@ bool Eco_VM_Builtin_Print(struct Eco_Fiber* fiber, unsigned int args)
     while (args --> 0)
     {
         Eco_Fiber_Pop(fiber, &any);
-
-
-        if (Eco_Any_IsInteger(&any)) {
-            Eco_Log_Info("Integer: %d\n", Eco_Any_AsInteger(&any));
-        } else if (Eco_Any_IsFloating(&any)) {
-            Eco_Log_Info("Floating: %f\n", Eco_Any_AsFloating(&any));
-        } else if (Eco_Any_IsPointer(&any)) {
-            Eco_Log_Info("Pointer: %p\n", Eco_Any_AsPointer(&any));
-        } else if (Eco_Any_IsCharacter(&any)) {
-            Eco_Log_Info("Character: %-10d #\\%c\n", Eco_Any_AsCharacter(&any), Eco_Any_AsCharacter(&any));
+        if (Eco_Any_IsInteger(any)) {
+            Eco_Log_Info("Integer: %d\n", Eco_Any_AsInteger(any));
+        } else if (Eco_Any_IsFloating(any)) {
+            Eco_Log_Info("Floating: %f\n", Eco_Any_AsFloating(any));
+        } else if (Eco_Any_IsPointer(any)) {
+            Eco_Log_Info("Pointer: %p\n", Eco_Any_AsPointer(any));
+        } else if (Eco_Any_IsCharacter(any)) {
+            Eco_Log_Info("Character: %-10d #\\%c\n", Eco_Any_AsCharacter(any), Eco_Any_AsCharacter(any));
         } else {
             Eco_Log_Info("???\n");
         }
@@ -50,9 +48,9 @@ bool Eco_VM_Builtin_OpenFile(struct Eco_Fiber* fiber, unsigned int args)
      if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
          return false;
      Eco_Fiber_Pop(fiber, &any);
-     bits = Eco_Any_AsInteger(&any);
+     bits = Eco_Any_AsInteger(any);
      Eco_Fiber_Pop(fiber, &any);
-     path = Eco_Any_AsPointer(&any);
+     path = Eco_Any_AsPointer(any);
 
      char buffer[Eco_String_ByteCount(path) + 1];
      if (Eco_String_PutIntoByteArray(path, buffer, sizeof(buffer))) {

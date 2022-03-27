@@ -185,7 +185,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
         }
         TARGET(BUILTIN) {
             u8               args = NEXT_U8();
-            struct Eco_Key*  key  = (struct Eco_Key*) Eco_Any_AsPointer(NEXT_CONSTANT());   // TODO: Safety check!
+            struct Eco_Key*  key  = Eco_Any_AsPointer(*NEXT_CONSTANT());   // TODO: Safety check!
             top->instruction      = instruction;
             fiber->stack_pointer  = sp;
             Eco_Key_CallBuiltin(key, fiber, args);
@@ -199,7 +199,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             }
 
             u8               args = NEXT_U8() + i;
-            struct Eco_Key*  key  = (struct Eco_Key*) Eco_Any_AsPointer(NEXT_CONSTANT());   // TODO: Safety check!
+            struct Eco_Key*  key  = Eco_Any_AsPointer(*NEXT_CONSTANT());   // TODO: Safety check!
             top->instruction      = instruction;
             fiber->stack_pointer  = sp;
             Eco_Key_CallBuiltin(key, fiber, args);
@@ -209,7 +209,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             struct Eco_Message  message;
 
             message.body.send.arg_count = NEXT_U8();
-            message.key                 = (struct Eco_Key*) Eco_Any_AsPointer(NEXT_CONSTANT());
+            message.key                 = Eco_Any_AsPointer(*NEXT_CONSTANT());
             message.fiber               = fiber;
             message.type                = Eco_Message_Type_SEND;
 
@@ -220,8 +220,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                            NULL,
                            Eco_Fiber_Nth(fiber, message.body.send.arg_count),
                            Eco_Fiber_Nth(fiber, message.body.send.arg_count),
-                           Eco_Any_Equals(&Eco_Fiber_Top(fiber)->registers[0],
-                                           Eco_Fiber_Nth(fiber, message.body.send.arg_count)))) {
+                           Eco_Any_Equals(Eco_Fiber_Top(fiber)->registers[0],
+                                         *Eco_Fiber_Nth(fiber, message.body.send.arg_count)))) {
                 Eco_Log_Warning("Message send failed: %s\n", ((struct Eco_Key*) message.key)->name);
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
                 goto error;
@@ -237,7 +237,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             }
 
             message.body.send.arg_count = NEXT_U8() + i;
-            message.key                 = (struct Eco_Key*) Eco_Any_AsPointer(NEXT_CONSTANT());
+            message.key                 = Eco_Any_AsPointer(*NEXT_CONSTANT());
             message.fiber               = fiber;
             message.type                = Eco_Message_Type_SEND;
 
@@ -248,8 +248,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                            NULL,
                            Eco_Fiber_Nth(fiber, message.body.send.arg_count),
                            Eco_Fiber_Nth(fiber, message.body.send.arg_count),
-                           Eco_Any_Equals(&Eco_Fiber_Top(fiber)->registers[0],
-                                           Eco_Fiber_Nth(fiber, message.body.send.arg_count)))) {
+                           Eco_Any_Equals(Eco_Fiber_Top(fiber)->registers[0],
+                                         *Eco_Fiber_Nth(fiber, message.body.send.arg_count)))) {
                 Eco_Log_Warning("Message send with varargs failed: %s\n", ((struct Eco_Key*) message.key)->name);
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
                 goto error;
@@ -259,7 +259,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
         TARGET(ASSIGN) {
             struct Eco_Message  message;
 
-            message.key               = (struct Eco_Key*) Eco_Any_AsPointer(NEXT_CONSTANT());
+            message.key               = Eco_Any_AsPointer(*NEXT_CONSTANT());
             message.fiber             = fiber;
             message.type              = Eco_Message_Type_ASSIGN;
 
@@ -272,8 +272,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                            NULL,
                            Eco_Fiber_Nth(fiber, 1),
                            Eco_Fiber_Nth(fiber, 1),
-                           Eco_Any_Equals(&Eco_Fiber_Top(fiber)->registers[0],
-                                           Eco_Fiber_Nth(fiber, 1)))) {
+                           Eco_Any_Equals(Eco_Fiber_Top(fiber)->registers[0],
+                                          *Eco_Fiber_Nth(fiber, 1)))) {
                 Eco_Log_Warning("Assign failed: %s\n", ((struct Eco_Key*) message.key)->name);
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ASSIGNFAILED);
                 goto error;
@@ -284,7 +284,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
         TARGET(AS) {
             struct Eco_Message  message;
 
-            message.key               = (struct Eco_Key*) Eco_Any_AsPointer(NEXT_CONSTANT());
+            message.key               = Eco_Any_AsPointer(*NEXT_CONSTANT());
             message.fiber             = fiber;
             message.type              = Eco_Message_Type_AS;
 
@@ -297,8 +297,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                            NULL,
                            Eco_Fiber_Nth(fiber, 1),
                            Eco_Fiber_Nth(fiber, 1),
-                           Eco_Any_Equals(&Eco_Fiber_Top(fiber)->registers[0],
-                                           Eco_Fiber_Nth(fiber, 1)))) {
+                           Eco_Any_Equals(Eco_Fiber_Top(fiber)->registers[0],
+                                          *Eco_Fiber_Nth(fiber, 1)))) {
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ASFAILED);
                 goto error;
             }

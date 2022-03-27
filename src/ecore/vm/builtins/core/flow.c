@@ -17,7 +17,7 @@ bool Eco_VM_Builtin_Value(struct Eco_Fiber* fiber, unsigned int args)
 
     the_any = Eco_Fiber_Nth(fiber, args);
 
-    the_closure = (struct Eco_Closure*) Eco_Any_AsPointer(the_any);  // TODO: Checks
+    the_closure = (struct Eco_Closure*) Eco_Any_AsPointer(*the_any);  // TODO: Checks
 
     Eco_Any_AssignAny(the_any, &the_closure->lexical->registers[0]);    // TODO: Store SELF in the closure!
 
@@ -38,7 +38,7 @@ bool Eco_VM_Builtin_SetExceptionHandler(struct Eco_Fiber* fiber, unsigned int ar
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    closure = Eco_Any_AsPointer(Eco_Fiber_Peek(fiber));    // TODO: Checks!
+    closure = Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber));    // TODO: Checks!
     Eco_Fiber_Top(fiber)->handler = closure;
     return true;
 }

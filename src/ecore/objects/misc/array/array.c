@@ -50,7 +50,7 @@ struct Eco_Array* Eco_Array_New(unsigned int element_count)
     if (array != NULL)
     {
         array->size = element_count;
-        Eco_Any_AssignPointer(&default_value, (struct Eco_Object*) array);
+        default_value = Eco_Any_FromPointer(array);
         for (i = 0; i < element_count; i++)
         {
             Eco_Array_Put(array, i, &default_value);
@@ -123,8 +123,8 @@ struct Eco_String* Eco_Array_ToString(struct Eco_Array* array)
          array_index < Eco_Array_Size(array);
          array_index++)
     {
-        if (Eco_Any_IsCharacter(Eco_Array_At(array, array_index))) {
-            buffer_index += Eco_Utf8_Encode(Eco_Any_AsCharacter(Eco_Array_At(array, array_index)), &buffer[buffer_index]);
+        if (Eco_Any_IsCharacter(*Eco_Array_At(array, array_index))) {
+            buffer_index += Eco_Utf8_Encode(Eco_Any_AsCharacter(*Eco_Array_At(array, array_index)), &buffer[buffer_index]);
         }
     }
 

@@ -32,16 +32,16 @@ bool Eco_VM_Builtin_AddValueSlot(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Pop(fiber, &object);
 
     // TODO: More flags
-    info.is_delegate  = (Eco_Any_AsInteger(&flags) & 0x01) != 0;
-    info.is_inherited = (Eco_Any_AsInteger(&flags) & 0x02) != 0;
-    info.is_part      = (Eco_Any_AsInteger(&flags) & 0x04) != 0;
-    info.is_private   = (Eco_Any_AsInteger(&flags) & 0x08) != 0;
-    info.key          = (struct Eco_Key*) Eco_Any_AsPointer(&key);
+    info.is_delegate  = (Eco_Any_AsInteger(flags) & 0x01) != 0;
+    info.is_inherited = (Eco_Any_AsInteger(flags) & 0x02) != 0;
+    info.is_part      = (Eco_Any_AsInteger(flags) & 0x04) != 0;
+    info.is_private   = (Eco_Any_AsInteger(flags) & 0x08) != 0;
+    info.key          = (struct Eco_Key*) Eco_Any_AsPointer(key);
 
-    Eco_Molecule_AddSlot((struct Eco_Molecule*) Eco_Any_AsPointer(&object),
-                         Eco_Any_AsInteger(&index),
+    Eco_Molecule_AddSlot((struct Eco_Molecule*) Eco_Any_AsPointer(object),
+                         Eco_Any_AsInteger(index),
                          info,
-                         (struct Eco_Interface*) Eco_Any_AsPointer(&type),
+                         (struct Eco_Interface*) Eco_Any_AsPointer(type),
                         &value);
 
     Eco_Fiber_Push(fiber, &object);
@@ -76,17 +76,17 @@ bool Eco_VM_Builtin_AddCodeSlot(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Pop(fiber, &object);
 
     // TODO: More flags
-    info.is_delegate  = (Eco_Any_AsInteger(&flags) & 0x01) != 0;
-    info.is_inherited = (Eco_Any_AsInteger(&flags) & 0x02) != 0;
-    info.is_part      = (Eco_Any_AsInteger(&flags) & 0x04) != 0;
-    info.is_private   = (Eco_Any_AsInteger(&flags) & 0x08) != 0;
-    info.key          = (struct Eco_Key*) Eco_Any_AsPointer(&key);
+    info.is_delegate  = (Eco_Any_AsInteger(flags) & 0x01) != 0;
+    info.is_inherited = (Eco_Any_AsInteger(flags) & 0x02) != 0;
+    info.is_part      = (Eco_Any_AsInteger(flags) & 0x04) != 0;
+    info.is_private   = (Eco_Any_AsInteger(flags) & 0x08) != 0;
+    info.key          = (struct Eco_Key*) Eco_Any_AsPointer(key);
 
-    Eco_Molecule_AddCodeSlot((struct Eco_Molecule*) Eco_Any_AsPointer(&object),
-                             Eco_Any_AsInteger(&index),
+    Eco_Molecule_AddCodeSlot((struct Eco_Molecule*) Eco_Any_AsPointer(object),
+                             Eco_Any_AsInteger(index),
                              info,
-                             (struct Eco_Interface*) Eco_Any_AsPointer(&type),
-                             (struct Eco_Code*) Eco_Any_AsPointer(&code));
+                             (struct Eco_Interface*) Eco_Any_AsPointer(type),
+                             (struct Eco_Code*) Eco_Any_AsPointer(code));
 
     Eco_Fiber_Push(fiber, &object);
 
@@ -104,8 +104,8 @@ bool Eco_VM_Builtin_RemoveSlot(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Pop(fiber, &index);
     Eco_Fiber_Pop(fiber, &object);
 
-    Eco_Molecule_RemoveSlot((struct Eco_Molecule*) Eco_Any_AsPointer(&object),
-                            Eco_Any_AsInteger(&index));
+    Eco_Molecule_RemoveSlot((struct Eco_Molecule*) Eco_Any_AsPointer(object),
+                            Eco_Any_AsInteger(index));
 
     Eco_Fiber_Push(fiber, &object);
 

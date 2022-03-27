@@ -84,8 +84,8 @@ void Eco_CloneState_CloneAny(struct Eco_CloneState* state,
                              Eco_Any* src,
                              bool forced)
 {
-    if (Eco_Any_IsPointer(src)) {
-        Eco_Any_AssignPointer(dst, Eco_CloneState_CloneObject(state, Eco_Any_AsPointer(src), forced));
+    if (Eco_Any_IsPointer(*src)) {
+        Eco_Any_AssignPointer(dst, Eco_CloneState_CloneObject(state, Eco_Any_AsPointer(*src), forced));
     } else {
         Eco_Any_AssignAny(dst, src);
     }
