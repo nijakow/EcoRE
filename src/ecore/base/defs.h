@@ -23,9 +23,14 @@ typedef int32_t   i32;
 
 typedef float     f32;
 
+typedef char      eco_byte;
+
 typedef i32       eco_int;
+typedef u32       eco_uint;
 typedef f32       eco_float;
 typedef i32       eco_unichar;
+
+typedef size_t    eco_size_t;
 
 struct eco_object;
 struct eco_type;

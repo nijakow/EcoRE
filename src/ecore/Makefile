@@ -10,6 +10,10 @@ endif
 EXECUTABLE = ./ecore.app
 
 SOURCES = \
+memory/memory.c \
+objects/base/object.c \
+objects/symbol/symbol.c \
+utils/string.c \
 main.c
 
 OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
