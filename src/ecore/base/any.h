@@ -32,92 +32,7 @@ typedef enum Eco_Value_Type
  *
  */
 
-#if 0
-
-typedef struct Eco_Any
-{
-    Eco_Value       value;
-    Eco_Value_Type  type;
-} Eco_Any;
-
-
-static inline enum Eco_Value_Type Eco_Any_GetValueType(Eco_Any* any)
-{
-    return any->type;
-}
-
-static inline bool Eco_Any_IsPointer(Eco_Any* any)
-{
-    return any->type == Eco_Value_Type_POINTER;
-}
-
-static inline bool Eco_Any_IsCharacter(Eco_Any* any)
-{
-    return any->type == Eco_Value_Type_CHARACTER;
-}
-
-static inline bool Eco_Any_IsInteger(Eco_Any* any)
-{
-    return any->type == Eco_Value_Type_INTEGER;
-}
-
-static inline bool Eco_Any_IsFloating(Eco_Any* any)
-{
-    return any->type == Eco_Value_Type_FLOATING;
-}
-
-
-static inline void Eco_Any_AssignPointer(Eco_Any* any, void* pointer)
-{
-    any->value.pointer = pointer;
-    any->type          = Eco_Value_Type_POINTER;
-}
-
-static inline void Eco_Any_AssignInteger(Eco_Any* any, Eco_Integer integer)
-{
-    any->value.integer = integer;
-    any->type          = Eco_Value_Type_INTEGER;
-}
-
-static inline void Eco_Any_AssignCharacter(Eco_Any* any, Eco_Codepoint character)
-{
-    any->value.character = character;
-    any->type            = Eco_Value_Type_CHARACTER;
-}
-
-static inline void Eco_Any_AssignFloating(Eco_Any* any, Eco_Floating floating)
-{
-    any->value.floating = floating;
-    any->type           = Eco_Value_Type_FLOATING;
-}
-
-static inline void Eco_Any_AssignAny(Eco_Any* dest, Eco_Any* src)
-{
-    *dest = *src;
-}
-
-
-static inline void* Eco_Any_AsPointer(Eco_Any* any)
-{
-    return any->value.pointer;
-}
-
-static inline Eco_Integer Eco_Any_AsInteger(Eco_Any* any)
-{
-    return any->value.integer;
-}
-
-static inline Eco_Codepoint Eco_Any_AsCharacter(Eco_Any* any)
-{
-    return any->value.character;
-}
-
-static inline Eco_Floating Eco_Any_AsFloating(Eco_Any* any)
-{
-    return any->value.floating;
-}
-
-#else
+#ifdef ECO_CONFIG_USE_ANY_UINTPTR
 
 typedef uintptr_t Eco_Any;
 
@@ -214,6 +129,126 @@ static inline Eco_Integer Eco_Any_AsInteger(Eco_Any any)
 static inline Eco_Floating Eco_Any_AsFloating(Eco_Any any)
 {
     return 0.0f;    // TODO, FIXME, XXX!
+}
+
+#else
+
+typedef struct Eco_Any
+{
+    Eco_Value       value;
+    Eco_Value_Type  type;
+} Eco_Any;
+
+
+static inline enum Eco_Value_Type Eco_Any_GetValueType(Eco_Any any)
+{
+    return any.type;
+}
+
+static inline bool Eco_Any_Is(Eco_Any any, Eco_Value_Type type)
+{
+    return any.type == type;
+}
+
+static inline bool Eco_Any_IsPointer(Eco_Any any)
+{
+    return Eco_Any_Is(any, Eco_Value_Type_POINTER);
+}
+
+static inline bool Eco_Any_IsCharacter(Eco_Any any)
+{
+    return Eco_Any_Is(any, Eco_Value_Type_CHARACTER);
+}
+
+static inline bool Eco_Any_IsInteger(Eco_Any any)
+{
+    return Eco_Any_Is(any, Eco_Value_Type_INTEGER);
+}
+
+static inline bool Eco_Any_IsFloating(Eco_Any any)
+{
+    return Eco_Any_Is(any, Eco_Value_Type_FLOATING);
+}
+
+
+static inline Eco_Any Eco_Any_FromPointer(void* pointer)
+{
+    Eco_Any  any;
+
+    any.value.pointer = pointer;
+    any.type          = Eco_Value_Type_POINTER;
+
+    return any;
+}
+
+static inline Eco_Any Eco_Any_FromInteger(Eco_Integer integer)
+{
+    Eco_Any  any;
+
+    any.value.integer = integer;
+    any.type          = Eco_Value_Type_INTEGER;
+
+    return any;
+}
+
+static inline Eco_Any Eco_Any_FromCharacter(Eco_Codepoint character)
+{
+    Eco_Any  any;
+
+    any.value.character = character;
+    any.type            = Eco_Value_Type_CHARACTER;
+
+    return any;
+}
+
+static inline Eco_Any Eco_Any_FromFloating(Eco_Floating floating)
+{
+    Eco_Any  any;
+
+    any.value.floating = floating;
+    any.type           = Eco_Value_Type_FLOATING;
+
+    return any;
+}
+
+static inline void Eco_Any_AssignAny(Eco_Any* dest, Eco_Any* src)
+{
+    *dest = *src;
+}
+
+
+static inline void* Eco_Any_AsPointer(Eco_Any any)
+{
+    return any.value.pointer;
+}
+
+static inline Eco_Integer Eco_Any_AsInteger(Eco_Any any)
+{
+    return any.value.integer;
+}
+
+static inline Eco_Codepoint Eco_Any_AsCharacter(Eco_Any any)
+{
+    return any.value.character;
+}
+
+static inline Eco_Floating Eco_Any_AsFloating(Eco_Any any)
+{
+    return any.value.floating;
+}
+
+static inline bool Eco_Any_Equals(Eco_Any a, Eco_Any b)
+{
+    if (a.type != b.type)
+        return false;
+    switch (a.type)
+    {
+        case Eco_Value_Type_POINTER: return a.value.pointer == b.value.pointer;
+        case Eco_Value_Type_CHARACTER:
+        case Eco_Value_Type_INTEGER: return a.value.integer == b.value.integer;
+        case Eco_Value_Type_FLOATING: return a.value.floating == b.value.floating;
+        default: return false;
+    }
 }
 
 #endif
