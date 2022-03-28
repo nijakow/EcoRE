@@ -15,7 +15,7 @@
         at: i => start + i;
 
         do: block => start to: end do: block;
-        forEach: block => 0 to: range do: [ :i | block value(i, at: i) ];
+        forEach: block => 0 for: range do: [ :i | block value(i, at: i) ];
 
         writeOn: w => w << start << ' to: ' << end;
 
