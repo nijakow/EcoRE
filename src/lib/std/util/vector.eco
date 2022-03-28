@@ -32,7 +32,7 @@
         );
 
         resizeToAtLeast: cap => (
-            (cap > capacity) if: [ resize: cap ].
+            (cap > capacity) if: [ resize: ((capacity * 2) max: cap) ].
             ^ self
         );
 
