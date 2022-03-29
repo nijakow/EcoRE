@@ -28,7 +28,7 @@ bool Eco_VM_Builtin_GetTypeSlotNames(struct Eco_Fiber* fiber, unsigned int args)
     // TODO, FIXME, XXX: Handle array == NULL!
     for (index = 0; index < type->slot_count; index++)
     {
-        any = Eco_Any_FromPointer(type->slots[index].key);
+        any = Eco_Any_FromPointer(type->slots[index].info.key);
         Eco_Array_Put(array, index, &any);
     }
     any = Eco_Any_FromPointer(array);
@@ -58,7 +58,7 @@ bool Eco_VM_Builtin_GetTypeSlotInfo(struct Eco_Fiber* fiber, unsigned int args)
     if (subindex == -1)
         any = Eco_Any_FromInteger(type->slot_count);
     else if (subindex == -2)
-        any = Eco_Any_FromPointer(type->slots[index].key);
+        any = Eco_Any_FromPointer(type->slots[index].info.key);
     else if (subindex == -3) {
         if (type->slots[index].interface == NULL)
             any = Eco_Any_FromPointer(Eco_Interface_GetDefaultInterface());

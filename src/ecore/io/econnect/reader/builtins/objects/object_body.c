@@ -1,8 +1,8 @@
 #include "object_body.h"
 
 #include <ecore/io/econnect/reader/parser.h>
+#include <ecore/objects/base/slot_info.h>
 #include <ecore/objects/molecule/object_slots.h>
-#include <ecore/objects/molecule/slot_info.h>
 #include <ecore/objects/misc/key/key.h>
 #include <ecore/objects/vm/interface/interface.h>
 
@@ -11,13 +11,15 @@ bool Eco_EConnect_Reader_ReadMoleculeBody(struct Eco_EConnect_Reader* reader,
                                           struct Eco_EConnect_Result* result,
                                           struct Eco_Molecule* object)
 {
-    unsigned int                ups;
-    unsigned int                slot_def_current;
-    unsigned int                slot_def_max;
-    unsigned char               flags;
-    struct Eco_Object_SlotInfo  slot_info;
-    Eco_Any                     any;
-    struct Eco_Code*            code;
+    unsigned int              ups;
+    unsigned int              slot_def_current;
+    unsigned int              slot_def_max;
+    unsigned char             flags;
+    struct Eco_BasicSlotInfo  slot_info;
+    Eco_Any                   any;
+    struct Eco_Code*          code;
+
+    Eco_BasicSlotInfo_Create(&slot_info);
 
     ups = Eco_EConnect_ParseUInt(&reader->stream);
 
@@ -50,10 +52,10 @@ bool Eco_EConnect_Reader_ReadMoleculeBody(struct Eco_EConnect_Reader* reader,
         }
 
         if ((flags & 0x01) == 0) {
-            slot_info.is_inherited = (flags & 0x04) != 0;
-            slot_info.is_delegate  = (flags & 0x08) == 0;   // The flag 0x08 indicates "no delegate"
-            slot_info.is_part      = (flags & 0x10) != 0;
-            slot_info.is_private   = (flags & 0x20) != 0;
+            slot_info.flags.is_inherited = (flags & 0x04) != 0;
+            slot_info.flags.is_delegate  = (flags & 0x08) == 0;   // The flag 0x08 indicates "no delegate"
+            slot_info.flags.is_part      = (flags & 0x10) != 0;
+            slot_info.flags.is_private   = (flags & 0x20) != 0;
             if (flags & 0x02) {
                 if (!Eco_EConnect_Reader_ReadAny(reader, result, &any))
                     return false;
@@ -64,15 +66,15 @@ bool Eco_EConnect_Reader_ReadMoleculeBody(struct Eco_EConnect_Reader* reader,
                  */
                 any = Eco_Any_FromPointer(object);
             }
-            Eco_Molecule_AddSlot(object, -1, slot_info, Eco_Interface_GetDefaultInterface(), &any); // TODO, FIXME, XXX: Parse the interface!
+            Eco_Molecule_AddSlot(object, -1, &slot_info, Eco_Interface_GetDefaultInterface(), &any); // TODO, FIXME, XXX: Parse the interface!
         } else {
-            slot_info.is_inherited = false;
-            slot_info.is_delegate  = true;
-            slot_info.is_part      = false;
-            slot_info.is_private   = (flags & 0x20) != 0;
+            slot_info.flags.is_inherited = false;
+            slot_info.flags.is_delegate  = true;
+            slot_info.flags.is_part      = false;
+            slot_info.flags.is_private   = (flags & 0x20) != 0;
             if (!Eco_EConnect_Reader_ReadObject(reader, result, (struct Eco_Object**) &code))
                 return false;
-            Eco_Molecule_AddCodeSlot(object, -1, slot_info, Eco_Interface_GetDefaultInterface(), code); // TODO, FIXME, XXX: Parse the interface!
+            Eco_Molecule_AddCodeSlot(object, -1, &slot_info, Eco_Interface_GetDefaultInterface(), code); // TODO, FIXME, XXX: Parse the interface!
         }
     }
 

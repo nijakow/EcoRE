@@ -16,6 +16,7 @@ eco.c \
 objects/objects.c \
 objects/base/type.c \
 objects/base/typecore.c \
+objects/base/slot_info.c \
 objects/base/object/object.c \
 objects/base/object/gc.c \
 objects/base/object/send.c \

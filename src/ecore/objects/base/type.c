@@ -26,22 +26,11 @@ struct Eco_TypeCore Eco_Type_TYPECORE;
 struct Eco_Type*    Eco_Type_TYPE;
 
 
-void Eco_TypeSlot_Flags_Initialize(struct Eco_TypeSlotFlags* flags)
-{
-    flags->is_deprecated = false;
-    flags->is_private    = false;
-    flags->is_final      = false;
-    flags->is_inherited  = false;
-    flags->is_delegate   = false;
-    flags->is_part       = false;
-}
-
 void Eco_TypeSlot_Initialize(struct Eco_TypeSlot* slot)
 {
     // slot->type is currently left uninitialized
     slot->interface = Eco_Interface_GetDefaultInterface();
-    slot->key = NULL;
-    Eco_TypeSlot_Flags_Initialize(&slot->flags);
+    Eco_BasicSlotInfo_Create(&slot->info);
 }
 
 bool Eco_TypeSlot_GetValue(struct Eco_TypeSlot* slot, struct Eco_Object* object, Eco_Any* location)
@@ -178,7 +167,7 @@ static bool Eco_Type_CopyWithNewSlot(struct Eco_Type*      self,
 
 bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*           self,
                                      int                        pos,
-                                     struct Eco_Object_SlotInfo info,
+                                     struct Eco_BasicSlotInfo*  info,
                                      struct Eco_Interface*      interface,
                                      struct Eco_Type**          type_loc,
                                      struct Eco_TypeSlot**      slot_loc)
@@ -194,11 +183,7 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*           self,
         the_copy->instance_payload_size += slot_value_size;
 
         the_slot->type                    = Eco_TypeSlotType_INLINED;
-        the_slot->key                     = info.key;
-        the_slot->flags.is_inherited      = info.is_inherited;
-        the_slot->flags.is_delegate       = info.is_delegate;
-        the_slot->flags.is_part           = info.is_part;
-        the_slot->flags.is_private        = info.is_private;
+        the_slot->info                    = *info;
         the_slot->interface               = interface;
         the_slot->body.inlined.value_size = slot_value_size;
         the_slot->body.inlined.offset     = the_copy->instance_payload_size - slot_value_size;
@@ -212,12 +197,12 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*           self,
     }
 }
 
-bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type* self,
-                                  int pos,
-                                  struct Eco_Object_SlotInfo info,
-                                  struct Eco_Interface* interface,
-                                  struct Eco_Code* code,
-                                  struct Eco_Type** type_loc)
+bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type*          self,
+                                  int                       pos,
+                                  struct Eco_BasicSlotInfo* info,
+                                  struct Eco_Interface*     interface,
+                                  struct Eco_Code*          code,
+                                  struct Eco_Type**         type_loc)
 {
     struct Eco_Type*       the_copy;
     struct Eco_TypeSlot*  the_slot;
@@ -229,11 +214,9 @@ bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type* self,
         the_copy->instance_payload_size += slot_value_size;
 
         the_slot->type             = Eco_TypeSlotType_CODE;
+        the_slot->info             = *info;
         the_slot->interface        = interface;
-        the_slot->key              = info.key;
         the_slot->body.code.code   = code;
-        // TODO, FIXME, XXX: Also set the other flags
-        the_slot->flags.is_private = info.is_private;
 
         *type_loc                = the_copy;
 
@@ -279,7 +262,7 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
 
     for (i = 0; i < type->slot_count; i++)
     {
-        Eco_GC_State_MarkObject(state, type->slots[i].key);
+        Eco_GC_State_MarkObject(state, type->slots[i].info.key);
         Eco_GC_State_MarkObject(state, (struct Eco_Object*) type->slots[i].interface);
         switch (type->slots[i].type)
         {
@@ -334,7 +317,7 @@ void Eco_Type_Subclone(struct Eco_CloneState* state,
                 Eco_CloneState_CloneAny(state,
                                         Eco_Molecule_At(clone, type->slots[i].body.inlined.offset),
                                         Eco_Molecule_At(original, type->slots[i].body.inlined.offset),
-                                        type->slots[i].flags.is_part);
+                                        type->slots[i].info.flags.is_part);
                 break;
             default:
                 break;

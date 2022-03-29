@@ -22,11 +22,11 @@ static void Eco_Molecule_SwitchType(struct Eco_Molecule* object, struct Eco_Type
     Eco_Molecule_ResizePayload(object, new_type->instance_payload_size);
 }
 
-bool Eco_Molecule_AddSlot(struct Eco_Molecule*       self,
-                          int                        pos,
-                          struct Eco_Object_SlotInfo info,
-                          struct Eco_Interface*      interface,
-                          Eco_Any*                   value)
+bool Eco_Molecule_AddSlot(struct Eco_Molecule*      self,
+                          int                       pos,
+                          struct Eco_BasicSlotInfo* info,
+                          struct Eco_Interface*     interface,
+                          Eco_Any*                  value)
 {
     struct Eco_Type*      new_type;
     struct Eco_TypeSlot*  slot;
@@ -40,11 +40,11 @@ bool Eco_Molecule_AddSlot(struct Eco_Molecule*       self,
     }
 }
 
-bool Eco_Molecule_AddCodeSlot(struct Eco_Molecule*       self,
-                              int                        pos,
-                              struct Eco_Object_SlotInfo info,
-                              struct Eco_Interface*      interface,
-                              struct Eco_Code*           code)
+bool Eco_Molecule_AddCodeSlot(struct Eco_Molecule*      self,
+                              int                       pos,
+                              struct Eco_BasicSlotInfo* info,
+                              struct Eco_Interface*     interface,
+                              struct Eco_Code*          code)
 {
     struct Eco_Type*  new_type;
 

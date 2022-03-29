@@ -5,15 +5,13 @@
 
 #include "object.h"
 #include "typecore.h"
-
-#include <ecore/objects/molecule/slot_info.h>
+#include "slot_info.h"
 
 
 struct Eco_Code;
 struct Eco_Message;
 struct Eco_GC_State;
 struct Eco_Molecule;
-
 
 
 enum Eco_TypeSlotType
@@ -24,25 +22,11 @@ enum Eco_TypeSlotType
 };
 
 
-struct Eco_TypeSlotFlags
-{
-    int is_deprecated : 1;
-    int is_private    : 1;
-    int is_final      : 1;
-    int is_inherited  : 1;
-    int is_delegate   : 1;
-    int is_part       : 1;
-};
-
-void Eco_TypeSlot_Flags_Initialize(struct Eco_TypeSlotFlags*);
-
-
 struct Eco_TypeSlot
 {
     enum   Eco_TypeSlotType   type;
-    struct Eco_TypeSlotFlags  flags;
+    struct Eco_BasicSlotInfo  info;
     struct Eco_Interface*     interface;
-    struct Eco_Key*           key;
 
     union {
         struct {
@@ -80,8 +64,8 @@ struct Eco_Type
 
 struct Eco_Type* Eco_Type_NewPrefab(struct Eco_TypeCore*);
 
-bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*, int, struct Eco_Object_SlotInfo, struct Eco_Interface*, struct Eco_Type**, struct Eco_TypeSlot**);
-bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type*, int, struct Eco_Object_SlotInfo, struct Eco_Interface*, struct Eco_Code*, struct Eco_Type**);
+bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*, int, struct Eco_BasicSlotInfo*, struct Eco_Interface*, struct Eco_Type**, struct Eco_TypeSlot**);
+bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type*, int, struct Eco_BasicSlotInfo*, struct Eco_Interface*, struct Eco_Code*, struct Eco_Type**);
 bool Eco_Type_CopyWithRemovedSlot(struct Eco_Type*, unsigned int, struct Eco_Type**);
 
 void Eco_Type_MarkMolecule(struct Eco_GC_State*, struct Eco_Type*, struct Eco_Molecule*);

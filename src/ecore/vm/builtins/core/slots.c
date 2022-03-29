@@ -13,13 +13,13 @@
  */
 bool Eco_VM_Builtin_AddValueSlot(struct Eco_Fiber* fiber, unsigned int args)
 {
-    Eco_Any                     object;
-    Eco_Any                     index;
-    Eco_Any                     flags;
-    Eco_Any                     type;
-    Eco_Any                     key;
-    Eco_Any                     value;
-    struct Eco_Object_SlotInfo  info;
+    Eco_Any                   object;
+    Eco_Any                   index;
+    Eco_Any                   flags;
+    Eco_Any                   type;
+    Eco_Any                   key;
+    Eco_Any                   value;
+    struct Eco_BasicSlotInfo  info;
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 6, 6))
         return false;
@@ -32,15 +32,15 @@ bool Eco_VM_Builtin_AddValueSlot(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Pop(fiber, &object);
 
     // TODO: More flags
-    info.is_delegate  = (Eco_Any_AsInteger(flags) & 0x01) != 0;
-    info.is_inherited = (Eco_Any_AsInteger(flags) & 0x02) != 0;
-    info.is_part      = (Eco_Any_AsInteger(flags) & 0x04) != 0;
-    info.is_private   = (Eco_Any_AsInteger(flags) & 0x08) != 0;
-    info.key          = (struct Eco_Key*) Eco_Any_AsPointer(key);
+    info.key                = (struct Eco_Key*) Eco_Any_AsPointer(key);
+    info.flags.is_delegate  = (Eco_Any_AsInteger(flags) & 0x01) != 0;
+    info.flags.is_inherited = (Eco_Any_AsInteger(flags) & 0x02) != 0;
+    info.flags.is_part      = (Eco_Any_AsInteger(flags) & 0x04) != 0;
+    info.flags.is_private   = (Eco_Any_AsInteger(flags) & 0x08) != 0;
 
     Eco_Molecule_AddSlot((struct Eco_Molecule*) Eco_Any_AsPointer(object),
                          Eco_Any_AsInteger(index),
-                         info,
+                         &info,
                          (struct Eco_Interface*) Eco_Any_AsPointer(type),
                         &value);
 
@@ -57,13 +57,13 @@ bool Eco_VM_Builtin_AddValueSlot(struct Eco_Fiber* fiber, unsigned int args)
  */
 bool Eco_VM_Builtin_AddCodeSlot(struct Eco_Fiber* fiber, unsigned int args)
 {
-    Eco_Any                     object;
-    Eco_Any                     index;
-    Eco_Any                     flags;
-    Eco_Any                     type;
-    Eco_Any                     key;
-    Eco_Any                     code;
-    struct Eco_Object_SlotInfo  info;
+    Eco_Any                   object;
+    Eco_Any                   index;
+    Eco_Any                   flags;
+    Eco_Any                   type;
+    Eco_Any                   key;
+    Eco_Any                   code;
+    struct Eco_BasicSlotInfo  info;
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 6, 6))
         return false;
@@ -76,15 +76,15 @@ bool Eco_VM_Builtin_AddCodeSlot(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Pop(fiber, &object);
 
     // TODO: More flags
-    info.is_delegate  = (Eco_Any_AsInteger(flags) & 0x01) != 0;
-    info.is_inherited = (Eco_Any_AsInteger(flags) & 0x02) != 0;
-    info.is_part      = (Eco_Any_AsInteger(flags) & 0x04) != 0;
-    info.is_private   = (Eco_Any_AsInteger(flags) & 0x08) != 0;
-    info.key          = (struct Eco_Key*) Eco_Any_AsPointer(key);
+    info.key                = (struct Eco_Key*) Eco_Any_AsPointer(key);
+    info.flags.is_delegate  = (Eco_Any_AsInteger(flags) & 0x01) != 0;
+    info.flags.is_inherited = (Eco_Any_AsInteger(flags) & 0x02) != 0;
+    info.flags.is_part      = (Eco_Any_AsInteger(flags) & 0x04) != 0;
+    info.flags.is_private   = (Eco_Any_AsInteger(flags) & 0x08) != 0;
 
     Eco_Molecule_AddCodeSlot((struct Eco_Molecule*) Eco_Any_AsPointer(object),
                              Eco_Any_AsInteger(index),
-                             info,
+                             &info,
                              (struct Eco_Interface*) Eco_Any_AsPointer(type),
                              (struct Eco_Code*) Eco_Any_AsPointer(code));
 
