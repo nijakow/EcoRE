@@ -1,6 +1,7 @@
 #include "init.h"
 
 #include <ecore/objects/base/type.h>
+#include <ecore/objects/misc/string/string.h>
 #include <ecore/objects/vm/interface/interface.h>
 #include <ecore/vm/vm.h>
 #include <ecore/vm/fiber/stackops.h>
@@ -19,6 +20,17 @@ extern struct Eco_Type*  Eco_String_TYPE;
 extern struct Eco_Type*  Eco_Interface_TYPE;
 extern struct Eco_Type*  Eco_FFIType_TYPE;
 extern struct Eco_Type*  Eco_FFIFunc_TYPE;
+
+bool Eco_VM_Builtin_GetVersionString(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
+        return false;
+    any = Eco_Any_FromPointer(Eco_String_New(ECO_VERSION_STRING));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
 
 bool Eco_VM_Builtin_SetLobby(struct Eco_Fiber* fiber, unsigned int args)
 {

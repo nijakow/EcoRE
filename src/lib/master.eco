@@ -56,7 +56,7 @@
 
         Quote.
 
-        io out << 'EcoRE image online and ready.'.
+        io out << 'EcoRE v' << (#'ecosphere.ecore.init.version_string'()) << ' online and ready.'.
         io out newline.
         io out commit.
 

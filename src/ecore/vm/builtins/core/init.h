@@ -3,6 +3,8 @@
 
 #include <ecore/vm/builtins/builtin.h>
 
+bool Eco_VM_Builtin_GetVersionString(struct Eco_Fiber*, unsigned int);
+
 bool Eco_VM_Builtin_SetLobby(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_SetTrue(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_SetFalse(struct Eco_Fiber*, unsigned int);
