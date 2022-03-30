@@ -18,6 +18,8 @@
 
         readIntoBlob: blob => read: (blob size) BytesIntoBlob: blob AtOffset: 0;
         writeFromBlob: blob => write: (blob size) BytesFromBlob: blob AtOffset: 0;
+
+        close => "TODO";
     };
 
     with inherited parent = #<:std/Clonable>;

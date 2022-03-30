@@ -33,7 +33,7 @@
         ]
     );
 
-    close => "TODO";
+    close => fd close;
 
     with inherited parent = #<:std/Clonable>;
 }
