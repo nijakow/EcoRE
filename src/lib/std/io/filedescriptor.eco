@@ -1,0 +1,24 @@
+
+#=std/io/FileDescriptor: {
+    fd;
+
+    with inherited trait = {
+        init: _fd => (
+            fd <- _fd.
+          ^ self
+        );
+
+        read: count BytesIntoBlob: blob AtOffset: offset => (
+            #'ecosphere.ecore.object.blob.read_from'(blob, fd, offset, count);
+        );
+
+        write: count BytesFromBlob: blob AtOffset: offset => (
+            #'ecosphere.ecore.object.blob.write_to'(blob, fd, offset, count);
+        );
+
+        readIntoBlob: blob => read: (blob size) BytesIntoBlob: blob AtOffset: 0;
+        writeFromBlob: blob => write: (blob size) BytesFromBlob: blob AtOffset: 0;
+    };
+
+    with inherited parent = #<:std/Clonable>;
+}

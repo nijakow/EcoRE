@@ -17,7 +17,7 @@
 
     private refresh => (
         readHead  <- 0.
-        writeHead <- (buffer readFromFileDescriptor: fd)
+        writeHead <- (fd readIntoBlob: buffer)
     );
     private optionalRefresh => bufferEmpty if: [ refresh ];
 

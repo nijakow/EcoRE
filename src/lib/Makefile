@@ -15,6 +15,7 @@ std/module.eco \
 std/io/_.eco \
 std/io/fdbytereader.eco \
 std/io/fdbytewriter.eco \
+std/io/filedescriptor.eco \
 std/io/portinput.eco \
 std/io/portio.eco \
 std/io/portoutput.eco \

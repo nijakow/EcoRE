@@ -19,7 +19,7 @@
     );
 
     commit => (
-      buffer write: writeHead BytesToFileDescriptor: fd.
+      fd write: writeHead BytesFromBlob: buffer AtOffset: 0.
       writeHead <- 0.
     );
 
