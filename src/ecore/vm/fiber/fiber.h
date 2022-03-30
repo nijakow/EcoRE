@@ -3,14 +3,8 @@
 
 #include "states.h"
 
-
 struct Eco_Frame;
-struct Eco_Message;
-struct Eco_Code;
-struct Eco_Environment;
 struct Eco_VM;
-struct Eco_GC_State;
-
 
 struct Eco_Fiber
 {
@@ -33,6 +27,5 @@ struct Eco_Fiber
 
 struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM*, unsigned int);
 void Eco_Fiber_Delete(struct Eco_Fiber*);
-void Eco_Fiber_Mark(struct Eco_GC_State*, struct Eco_Fiber*);
 
 #endif
