@@ -2,11 +2,20 @@
 
 ## Things to implement
 
-### Byte-related stuff
+### Byte- and Vector-related stuff
+ - Iterators!
  - std util ByteVector (based on std util Vector -> shared trait?)
  - std io ByteBufferWriter (implements IByteWriter, returns a blob)
  - std lang eco code CodeWriter (implements %[addByte: b, addConst: c, addCode: c, finish])
  - std lang eco code BasicCodeWriter (extends CodeWriter, but implements all basic bytecodes)
+
+### Interfaces
+ - Let interfaces inherit from each other
+ - Check if an interface contains a selector
+ - Check if an interface extends another interface
+ - Get a list of interfaces inheriting an object (explicitly and implicitly)
+ - Get the interface an object implements
+ - Allow to specify the SELF type in an interface
 
 ### FFI
  - Implement a proper FFI system
