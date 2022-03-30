@@ -2,12 +2,15 @@
 
 ## Things to implement
 
+### I/O
+ - `io SlurpFile:` should be replaced with a wrapper around a "read file as bytes/blob" mechanism
+
 ### Byte- and Vector-related stuff
  - Iterators!
- - std util ByteVector (based on std util Vector -> shared trait?)
- - std io ByteBufferWriter (implements IByteWriter, returns a blob)
- - std lang eco code CodeWriter (implements %[addByte: b, addConst: c, addCode: c, finish])
- - std lang eco code BasicCodeWriter (extends CodeWriter, but implements all basic bytecodes)
+ - `std util ByteVector` (based on `std util Vector` -> shared trait?)
+ - `std io ByteBufferWriter` (implements `IByteWriter`, returns a blob)
+ - `std lang eco code CodeWriter` (implements `%[addByte: b, addConst: c, addCode: c, finish]`)
+ - `std lang eco code BasicCodeWriter` (extends `CodeWriter`, but implements all basic bytecodes)
 
 ### Interfaces
  - Let interfaces inherit from each other
