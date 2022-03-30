@@ -15,7 +15,6 @@ void Eco_Banner()
     Eco_Log_Info("\n");
 }
 
-
 void Eco_Main(int argc, char *argv[])
 {
     Eco_Init();
@@ -30,10 +29,8 @@ void Eco_Main(int argc, char *argv[])
     Eco_Terminate();
 }
 
-
 int main(int argc, char *argv[])
 {
     Eco_Main(argc, argv);
     return 0;
 }
-

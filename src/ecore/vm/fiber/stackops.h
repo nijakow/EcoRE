@@ -1,6 +1,9 @@
 #ifndef ECO_VM_FIBER_STACKOPS_H
 #define ECO_VM_FIBER_STACKOPS_H
 
+#include <ecore/base/defs.h>
+#include <ecore/base/any.h>
+
 #include "fiber.h"
 
 

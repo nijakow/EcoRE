@@ -14,7 +14,6 @@ struct Eco_GC_Page
 };
 
 
-
 void Eco_GC_State_Create(struct Eco_GC_State* state, struct Eco_VM* vm)
 {
     state->pages = NULL;

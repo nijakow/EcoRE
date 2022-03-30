@@ -59,6 +59,7 @@ vm/core/clone.c \
 vm/core/interpreter.c \
 vm/fiber/fiber.c \
 vm/fiber/sched.c \
+vm/fiber/stackops.c \
 vm/scheduler.c \
 vm/vm.c \
 io/logging/log.c \

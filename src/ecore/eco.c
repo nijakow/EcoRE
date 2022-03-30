@@ -6,7 +6,6 @@
 
 #include <ecore/vm/vm.h>
 #include <ecore/vm/builtins/builtins.h>
-#include <ecore/vm/memory/gc/gc.h>
 
 #include <ecore/io/econnect/econnect.h>
 
