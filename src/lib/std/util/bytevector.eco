@@ -1,10 +1,13 @@
 
-#=std/util/Vector: {
+#=std/util/ByteVector: {
     size = 0,
-    own elements = #();
+    own elements;
 
     with inherited trait = {
-        init => ( ^ self );
+        init => (
+            elements <- std util newBlob: 0.
+          ^ self
+        );
 
         capacity => elements size;
         isEmpty => size isZero;
@@ -55,7 +58,11 @@
         removeFirst => remove: 0;
         removeLast  => remove: (size - 1);
 
-        writeOn: writer => (std util) WriteIterable: self On: writer;
+        writeOn: writer => (
+            writer << '#['.
+            forEach: [ :i, :e | (i > 0) if: [ writer << ', ' ]. writer << e ].
+            writer << ']'.
+        );
     };
 
     with inherited parent = #<:std/Clonable>;

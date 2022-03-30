@@ -90,6 +90,7 @@
 
     newArray: size => #'ecosphere.ecore.object.array.new'(size);
     newBlob:  size => #'ecosphere.ecore.object.blob.new'(size);
+    newByteVector  => (#<:std/util> ByteVector) new;
     newVector      => (#<:std/util> Vector) new;
     newStack       => (#<:std/util> Stack) new;
     newQueue       => (#<:std/util> Queue) new;
@@ -121,6 +122,8 @@
     };
 
     Vector = #<:std/util/Vector>;
+
+    ByteVector = #<:std/util/ByteVector>;
 
     Link = #<:std/util/Link>;
     List = #<:std/util/List>;

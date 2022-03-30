@@ -35,6 +35,7 @@ std/reflect/proxies/string.eco \
 std/reflect/proxies/ffi/ffifunc.eco \
 std/reflect/proxies/ffi/ffitype.eco \
 std/util/_.eco \
+std/util/bytevector.eco \
 std/util/collector.eco \
 std/util/link.eco \
 std/util/list.eco \
