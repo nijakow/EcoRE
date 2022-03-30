@@ -100,7 +100,7 @@ CFLAGS = -I.. -I/opt/homebrew/Cellar/libffi/3.4.2/include/ -Wall -Wextra -Werror
 	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $(EXECUTABLE)
+	$(CC) $(OBJECTS) $(LDFLAGS) -o $(EXECUTABLE)
 
 all: $(EXECUTABLE)
 
