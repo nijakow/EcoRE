@@ -1,0 +1,27 @@
+
+#=testing/Test: {
+
+    with inherited trait = {
+        fail => (
+            "TODO"
+            io out << 'Test case failed!'.
+            io out newline.
+        );
+
+        assert: expression => (
+            expression -> [ ^ true ].
+            fail.
+          ^ false
+        );
+
+        runTestCases => ( "To be overridden" true );
+        run => (
+            "TODO: Protect this"
+            runTestCases
+        );
+
+        writeOn: w => w << 'a test';
+    };
+
+    with inherited parent = #<:std/Clonable>;
+}

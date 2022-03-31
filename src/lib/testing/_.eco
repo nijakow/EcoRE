@@ -1,0 +1,4 @@
+
+#=testing: {
+    own Test = #<:testing/Test>;
+}
