@@ -65,7 +65,12 @@ void Eco_VM_HandleEvents(struct Eco_VM* vm)
 
 void Eco_VM_Run(struct Eco_VM* vm)
 {
-    while (1)
+    /*
+     * This is a pretty ugly while condition, but it enables us to terminate
+     * after the last fiber has exited. Of course: TODO!
+     *                                                    - nijakow
+     */
+    while (vm->scheduler.fiber_queues.running.fibers != NULL || vm->scheduler.fiber_queues.paused.fibers != NULL)
     {
         Eco_Scheduler_Run(&vm->scheduler);
         Eco_VM_HandleEvents(vm);

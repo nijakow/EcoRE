@@ -4,12 +4,14 @@
     private buffer;
     private readHead;
     private writeHead;
+    private closed;
 
     initWithFileDescriptor: _fd => (
         fd        <- _fd.
         buffer    <- std util newBlob: 1024.
         readHead  <- 0.
         writeHead <- 0.
+        closed    <- false.
       ^ self
     );
 
@@ -17,11 +19,16 @@
 
     private refresh => (
         readHead  <- 0.
-        writeHead <- (fd readIntoBlob: buffer)
+        writeHead <- (fd readIntoBlob: buffer).
     );
     private optionalRefresh => bufferEmpty if: [ refresh ];
 
-    hasNext => ( optionalRefresh. bufferEmpty not );
+    hasNext => (
+        closed if: [ ^ false ].
+        optionalRefresh.
+        bufferEmpty if: [ closed <- true. ^ false ].
+      ^ true
+    );
     readByte => (
         optionalRefresh.
         bufferEmpty if: [
