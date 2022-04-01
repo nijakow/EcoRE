@@ -1,6 +1,7 @@
 
 #=std/reflect/proxies/Interface: {
     size => #'ecosphere.ecore.object.interface.get_entry_info'(self, 0, -1);
+    parents => #'ecosphere.ecore.object.interface.get_parents'(self);
     nameForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -2);
     returnTypeForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -3);
     argCountForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -4);
@@ -10,6 +11,7 @@
     writeOn: writer => (
         (self is: any) if: [ writer << 'any'. ^ self ].
         writer << '%[ '.
+        parents do: [ :p | writer << 'with ' << p << '. ' ].
         0 for: size do: [ :i |
             writer << '[' << (returnTypeForSlotIndex: i) << '] '
                    << (nameForSlotIndex: i) << '('.

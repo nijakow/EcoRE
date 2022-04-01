@@ -65,7 +65,7 @@ bool Eco_VM_Builtin_ArrayAtPut(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Pop(fiber, &index);
     Eco_Array_Put((Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber))),
                    Eco_Any_AsInteger(index),
-                   &value);
+                   value);
     return true;
 }
 

@@ -170,10 +170,33 @@ struct Eco_Interface* Eco_Interface_NewAndInit(unsigned int size,
     return interface;
 }
 
-void Eco_Interface_AddParent(struct Eco_Interface* interface,
-                             struct Eco_Interface* parent)
+struct Eco_Interface* Eco_Interface_AddParent(struct Eco_Interface* old_interface,
+                                              struct Eco_Interface* parent)
 {
-    // TODO
+    struct Eco_Interface*  new_interface;
+    unsigned int           i;
+
+    for (i = 0; i < old_interface->parent_count; i++)
+        if (old_interface->parents[i] == parent)
+            return old_interface;
+
+    new_interface = Eco_Interface_New(old_interface->parent_count + 1, old_interface->entry_count);
+
+    if (new_interface != NULL)
+    {
+        for (i = 0; i < old_interface->parent_count; i++)
+            new_interface->parents[i] = old_interface->parents[i];
+        new_interface->parents[i] = parent;
+        for (i = 0; i < old_interface->entry_count; i++)
+            new_interface->entries[i] = old_interface->entries[i];
+        Eco_Interface_EstablishSuperSubRelation(old_interface, new_interface);
+        /*
+         * TODO: Look for other interfaces that are supers to new_interface
+         *       and establish the same relation.
+         */
+    }
+
+    return new_interface;
 }
 
 struct Eco_Interface* Eco_Interface_AddEntry(struct Eco_Interface* old_interface,

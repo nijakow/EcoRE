@@ -33,6 +33,16 @@ struct Eco_Interface
     char                       payload[0];
 };
 
+static inline unsigned int Eco_Interface_GetParentCount(struct Eco_Interface* interface)
+{
+    return interface->parent_count;
+}
+
+static inline unsigned int Eco_Interface_GetEntryCount(struct Eco_Interface* interface)
+{
+    return interface->entry_count;
+}
+
 struct Eco_Interface* Eco_Interface_GetDefaultInterface();
 
 struct Eco_Interface* Eco_Interface_New(unsigned int, unsigned int);
@@ -42,7 +52,7 @@ void Eco_Interface_Del(struct Eco_Interface*);
 bool Eco_Interface_ImplementsMessage(struct Eco_Interface*, struct Eco_Key*);
 
 struct Eco_Interface* Eco_Interface_NewAndInit(unsigned int, struct Eco_InterfaceEntry*);
-void Eco_Interface_AddParent(struct Eco_Interface*, struct Eco_Interface*);
+struct Eco_Interface* Eco_Interface_AddParent(struct Eco_Interface*, struct Eco_Interface*);
 struct Eco_Interface* Eco_Interface_AddEntry(struct Eco_Interface*, struct Eco_InterfaceEntry*);
 
 void Eco_Interface_Init();

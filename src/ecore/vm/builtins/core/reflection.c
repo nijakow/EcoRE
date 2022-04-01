@@ -29,7 +29,7 @@ bool Eco_VM_Builtin_GetTypeSlotNames(struct Eco_Fiber* fiber, unsigned int args)
     for (index = 0; index < type->slot_count; index++)
     {
         any = Eco_Any_FromPointer(type->slots[index].info.key);
-        Eco_Array_Put(array, index, &any);
+        Eco_Array_Put(array, index, any);
     }
     any = Eco_Any_FromPointer(array);
     Eco_Fiber_Push(fiber, &any);
@@ -80,6 +80,28 @@ bool Eco_VM_Builtin_GetTypeSlotInfo(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_InterfaceGetParents(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Interface*  interface;
+    struct Eco_Array*      parents;
+    unsigned int           index;
+    Eco_Any                any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    
+    Eco_Fiber_Pop(fiber, &any);
+    interface = Eco_Any_AsPointer(any);
+
+    parents = Eco_Array_New(Eco_Interface_GetParentCount(interface));
+    for (index = 0; index < Eco_Interface_GetParentCount(interface); index++)
+        Eco_Array_Put(parents, index, Eco_Any_FromPointer(interface->parents[index]));
+    
+    any = Eco_Any_FromPointer(parents);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 bool Eco_VM_Builtin_InterfaceGetEntryInfo(struct Eco_Fiber* fiber, unsigned int args)
 {
     struct Eco_Interface*  interface;
@@ -121,6 +143,31 @@ bool Eco_VM_Builtin_InterfaceGetEntryInfo(struct Eco_Fiber* fiber, unsigned int 
         else
             any = Eco_Any_FromPointer(interface->entries[index].arg_types[subindex]);
     }
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_InterfaceAddParent(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Interface*  old_interface;
+    struct Eco_Interface*  new_interface;
+    struct Eco_Interface*  parent;
+    Eco_Any                any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+
+    Eco_Fiber_Pop(fiber, &any);
+    parent = Eco_Any_AsPointer(any);
+    
+    Eco_Fiber_Pop(fiber, &any);
+    old_interface = Eco_Any_AsPointer(any);
+
+    new_interface = Eco_Interface_AddParent(old_interface, parent);
+
+    // TODO, FIXME, XXX: Check if new_interface == NULL!
+
+    any = Eco_Any_FromPointer(new_interface);
     Eco_Fiber_Push(fiber, &any);
     return true;
 }

@@ -29,9 +29,9 @@ static inline Eco_Any* Eco_Array_At(struct Eco_Array* array, unsigned int index)
     return &array->values[index];
 }
 
-static inline void Eco_Array_Put(struct Eco_Array* array, unsigned int index, Eco_Any* value)
+static inline void Eco_Array_Put(struct Eco_Array* array, unsigned int index, Eco_Any value)
 {
-    Eco_Any_AssignAny(&array->values[index], value);
+    array->values[index] = value;
 }
 
 struct Eco_String* Eco_Array_ToString(struct Eco_Array*);

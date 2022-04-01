@@ -53,7 +53,7 @@ struct Eco_Array* Eco_Array_New(unsigned int element_count)
         default_value = Eco_Any_FromPointer(array);
         for (i = 0; i < element_count; i++)
         {
-            Eco_Array_Put(array, i, &default_value);
+            Eco_Array_Put(array, i, default_value);
         }
     }
 

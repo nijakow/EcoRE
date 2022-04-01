@@ -24,7 +24,7 @@ bool Eco_EConnect_Builtin_GetArray(struct Eco_EConnect_Reader* reader,
         {
             if (!Eco_EConnect_Reader_ReadAny(reader, result, &value))
                 return false;
-            Eco_Array_Put(array, index, &value);
+            Eco_Array_Put(array, index, value);
         }
         Eco_EConnect_Result_Create_Object(result, (struct Eco_Object*) array);
     } else {
