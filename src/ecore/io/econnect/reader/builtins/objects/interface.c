@@ -20,7 +20,7 @@ bool Eco_EConnect_Builtin_GetInterface(struct Eco_EConnect_Reader* reader,
     id            = Eco_EConnect_ParseUInt(&reader->stream);
     parent_count  = Eco_EConnect_ParseUInt(&reader->stream);
     entry_count   = Eco_EConnect_ParseUInt(&reader->stream);
-    the_interface = Eco_Interface_New(0, entry_count);  // TODO: Parents
+    the_interface = Eco_Interface_New(parent_count, entry_count);
 
     Eco_EConnect_Instance_OptionallyBindObject(reader->instance, (struct Eco_Object*) the_interface, id);
 
@@ -28,7 +28,7 @@ bool Eco_EConnect_Builtin_GetInterface(struct Eco_EConnect_Reader* reader,
     {
         if (!Eco_EConnect_Reader_ReadObject(reader, result, &obj))
             return false;
-        Eco_Interface_AddParent(the_interface, (struct Eco_Interface*) obj);
+        the_interface->parents[index] = (struct Eco_Interface*) obj;
     }
 
     for (index = 0; index < entry_count; index++)
