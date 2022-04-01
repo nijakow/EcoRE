@@ -122,7 +122,7 @@
     visitInterface: ast => (
         | i <- %[] |
         "TODO, FIXME, XXX: Move this builtin to a different place!"
-        ast parents do: [ :p | i <- #'ecosphere.ecore.object.interface.add_parent'(i, p evaluateInEnv: environment) ].
+        ast parents do: [ :p | i <- i addParent: (p evaluateInEnv: environment) ].
         ast entries do: [ :e | i <- e addToInterface: i WithEnv: environment ].
         compiler loadConstant: i
     );
