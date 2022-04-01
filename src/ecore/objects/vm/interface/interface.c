@@ -39,17 +39,22 @@ static struct Eco_Interface* Eco_INTERFACES        = NULL;
 static struct Eco_Interface* Eco_Interface_DEFAULT = NULL;
 
 
-struct Eco_Interface* Eco_Interface_New(unsigned int entry_count)
+struct Eco_Interface* Eco_Interface_New(unsigned int parent_count, unsigned int entry_count)
 {
     struct Eco_Interface*  interface;
     unsigned int           i;
 
-    interface = Eco_Object_New(Eco_Interface_TYPE, sizeof(struct Eco_Interface) + sizeof(struct Eco_InterfaceEntry) * entry_count);
+    interface = Eco_Object_New(Eco_Interface_TYPE, sizeof(struct Eco_Interface) + sizeof(struct Eco_InterfaceEntry) * entry_count + sizeof(struct Eco_Interface*) * parent_count);
 
     if (interface != NULL)
     {
-        interface->allow_all   = false;
-        interface->entry_count = entry_count;
+        interface->allow_all    = false;
+        interface->parent_count = parent_count;
+        interface->parents      = (void*) &interface->payload[0];
+        interface->entry_count  = entry_count;
+        interface->entries      = (void*) &interface->payload[sizeof(struct Eco_Interface*) * parent_count];
+        for (i = 0; i < parent_count; i++)
+            interface->parents[i] = NULL;   // TODO: Use a sentinel for this to speed up marking
         for (i = 0; i < entry_count; i++)
             interface->entries[i].key = NULL;   // TODO: Use a sentinel for this to speed up marking
         /*
@@ -72,6 +77,12 @@ void Eco_Interface_Mark(struct Eco_GC_State* state, struct Eco_Interface* interf
     struct Eco_InterfaceEntry*  entry;
     unsigned int                i;
     unsigned int                j;
+
+    for (i = 0; i < interface->parent_count; i++)
+    {
+        if (interface->parents[i] != NULL)
+            Eco_GC_State_MarkObject(state, (struct Eco_Object*) interface->parents[i]);
+    }
 
     for (i = 0; i < interface->entry_count; i++)
     {
@@ -101,7 +112,7 @@ void Eco_Interface_Del(struct Eco_Interface* interface)
 struct Eco_Interface* Eco_Interface_GetDefaultInterface()
 {
     if (Eco_Interface_DEFAULT == NULL) {
-        Eco_Interface_DEFAULT = Eco_Interface_New(0);
+        Eco_Interface_DEFAULT = Eco_Interface_New(0, 0);
         Eco_Interface_DEFAULT->allow_all = true;
     }
     return Eco_Interface_DEFAULT;
@@ -148,7 +159,7 @@ struct Eco_Interface* Eco_Interface_NewAndInit(unsigned int size,
     unsigned int           index;
     struct Eco_Interface*  interface;
 
-    interface = Eco_Interface_New(size);
+    interface = Eco_Interface_New(0, size);
 
     if (interface != NULL)
     {
@@ -171,10 +182,12 @@ struct Eco_Interface* Eco_Interface_AddEntry(struct Eco_Interface* old_interface
     struct Eco_Interface*  new_interface;
     unsigned int           i;
 
-    new_interface = Eco_Interface_New(old_interface->entry_count + 1);
+    new_interface = Eco_Interface_New(old_interface->parent_count, old_interface->entry_count + 1);
 
     if (new_interface != NULL)
     {
+        for (i = 0; i < old_interface->parent_count; i++)
+            new_interface->parents[i] = old_interface->parents[i];
         for (i = 0; i < old_interface->entry_count; i++)
             new_interface->entries[i] = old_interface->entries[i];
         new_interface->entries[i] = *entry;
