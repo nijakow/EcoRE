@@ -12,4 +12,7 @@ bool Eco_VM_Builtin_InterfaceGetEntryInfo(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_InterfaceAddParent(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_InterfaceAddEntry(struct Eco_Fiber*, unsigned int);
 
+bool Eco_VM_Builtin_InterfaceImplementsMessage(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_InterfaceImplementsInterface(struct Eco_Fiber*, unsigned int);
+
 #endif

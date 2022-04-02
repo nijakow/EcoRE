@@ -136,8 +136,44 @@ bool Eco_Interface_ImplementsMessage(struct Eco_Interface* interface, struct Eco
             return true;
     }
 
-    // TODO: Check parents
+    for (index = 0; index < interface->parent_count; index++)
+    {
+        if (Eco_Interface_ImplementsMessage(interface->parents[index], message))
+            return true;
+    }
+
     return false;
+}
+
+bool Eco_Interface_ImplementsInterface(struct Eco_Interface* interface,
+                                       struct Eco_Interface* subinterface)
+{
+    unsigned int  index;
+
+    if (interface->allow_all)
+        return true;
+    else if (subinterface->allow_all)
+        return true;
+    
+    for (index = 0; index < subinterface->entry_count; index++)
+    {
+        /*
+         * TODO: Check for the full slot (including args, varargs and types)
+         */
+        if (!Eco_Interface_ImplementsMessage(interface, subinterface->entries[index].key))
+            return false;
+    }
+
+    for (index = 0; index < subinterface->parent_count; index++)
+    {
+        /*
+         * TODO: Check for the full slot (including args, varargs and types)
+         */
+        if (!Eco_Interface_ImplementsInterface(interface, subinterface->parents[index]))
+            return false;
+    }
+
+    return true;
 }
 
 

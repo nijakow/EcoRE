@@ -101,6 +101,8 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.get_entry_info", Eco_VM_Builtin_InterfaceGetEntryInfo);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.add_parent", Eco_VM_Builtin_InterfaceAddParent);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.add_entry", Eco_VM_Builtin_InterfaceAddEntry);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.implements_message", Eco_VM_Builtin_InterfaceImplementsMessage);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.implements_interface", Eco_VM_Builtin_InterfaceImplementsInterface);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type", Eco_VM_Builtin_GetType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type_slot_names", Eco_VM_Builtin_GetTypeSlotNames);

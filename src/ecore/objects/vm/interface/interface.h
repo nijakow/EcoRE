@@ -50,6 +50,7 @@ void Eco_Interface_Mark(struct Eco_GC_State*, struct Eco_Interface*);
 void Eco_Interface_Del(struct Eco_Interface*);
 
 bool Eco_Interface_ImplementsMessage(struct Eco_Interface*, struct Eco_Key*);
+bool Eco_Interface_ImplementsInterface(struct Eco_Interface*, struct Eco_Interface*);
 
 struct Eco_Interface* Eco_Interface_NewAndInit(unsigned int, struct Eco_InterfaceEntry*);
 struct Eco_Interface* Eco_Interface_AddParent(struct Eco_Interface*, struct Eco_Interface*);

@@ -213,3 +213,54 @@ bool Eco_VM_Builtin_InterfaceAddEntry(struct Eco_Fiber* fiber, unsigned int args
     Eco_Fiber_Push(fiber, &any);
     return true;
 }
+
+
+bool Eco_VM_Builtin_InterfaceImplementsMessage(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Interface*  interface;
+    struct Eco_Key*        message;
+    Eco_Any                any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    
+    Eco_Fiber_Pop(fiber, &any);
+    message = Eco_Any_AsPointer(any);
+
+    Eco_Fiber_Pop(fiber, &any);
+    interface = Eco_Any_AsPointer(any);
+
+    if (Eco_Interface_ImplementsMessage(interface, message)) {
+        any = fiber->vm->constants.ctrue;
+    } else {
+        any = fiber->vm->constants.cfalse;
+    }
+
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_InterfaceImplementsInterface(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Interface*  interface;
+    struct Eco_Interface*  subinterface;
+    Eco_Any                any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    
+    Eco_Fiber_Pop(fiber, &any);
+    subinterface = Eco_Any_AsPointer(any);
+
+    Eco_Fiber_Pop(fiber, &any);
+    interface = Eco_Any_AsPointer(any);
+
+    if (Eco_Interface_ImplementsInterface(interface, subinterface)) {
+        any = fiber->vm->constants.ctrue;
+    } else {
+        any = fiber->vm->constants.cfalse;
+    }
+
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
