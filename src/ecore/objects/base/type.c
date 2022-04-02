@@ -281,6 +281,8 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
     }
     if (type->proxy != NULL)
         Eco_GC_State_MarkObject(state, type->proxy);
+    if (type->interface != NULL)
+        Eco_GC_State_MarkObject(state, type->interface);
     Eco_Object_Mark(state, &type->_);
 }
 
@@ -350,7 +352,7 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type* type, struct Eco_Ob
     
     inherited_slot_count = 0;
     for (index = 0; index < type->slot_count; index++)
-        if (type->slots[index].info.flags.is_delegate)
+        if (type->slots[index].info.flags.is_inherited)
             inherited_slot_count++;
 
     interface       = Eco_Interface_New(inherited_slot_count, type->slot_count);
@@ -359,7 +361,7 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type* type, struct Eco_Ob
     parent_index = 0;
     for (index = 0; index < type->slot_count; index++)
     {
-        if (type->slots[index].info.flags.is_delegate) {
+        if (type->slots[index].info.flags.is_inherited) {
             if (Eco_TypeSlot_GetValue(&type->slots[index], object, &value))
                 interface->parents[parent_index++] = Eco_Any_GetInterface(value);
             else
