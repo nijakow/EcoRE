@@ -4,4 +4,5 @@
 
     Mirror = #<:std/reflect/Mirror>;
     Mirror: object => #<:std/reflect/Mirror> clone init: object;
+    InterfaceFor: object => #'ecosphere.ecore.reflect.get_interface'(object);
 }
