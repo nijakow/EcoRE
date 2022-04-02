@@ -367,6 +367,7 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type* type, struct Eco_Ob
             else
                 interface->parents[parent_index++] = NULL;  // TODO: Error
         }
+        interface->entries[index].return_type = type->slots[index].interface;
         interface->entries[index].key         = type->slots[index].info.key;
         interface->entries[index].arg_count   = 0;      // TODO: If it's a method, check for args
         interface->entries[index].has_varargs = false;  // TODO: If it's a method, check for varargs
