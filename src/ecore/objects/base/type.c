@@ -1,5 +1,7 @@
 #include "type.h"
 
+#include <ecore/base/extra.h>
+
 #include <ecore/objects/base/typecore.h>
 #include <ecore/vm/builtins/builtins.h>
 #include <ecore/vm/memory/arena.h>
@@ -105,6 +107,7 @@ static struct Eco_Type* Eco_Type_New(unsigned int slot_count)
 
     type->typecore              = NULL;
     type->proxy                 = NULL;
+    type->interface             = NULL;
     type->slot_count            = slot_count;
     type->instance_payload_size = 0;
 
@@ -323,6 +326,51 @@ void Eco_Type_Subclone(struct Eco_CloneState* state,
                 break;
         }
     }
+}
+
+
+struct Eco_Interface* Eco_Any_GetInterface(Eco_Any value)
+{
+    struct Eco_Type* type;
+
+    type = Eco_Any_GetType(value);
+    return Eco_Type_GetInterface(type, Eco_Any_IsPointer(value) ? Eco_Any_AsPointer(value) : NULL);
+}
+
+struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type* type, struct Eco_Object* object)
+{
+    struct Eco_Interface*  interface;
+    unsigned int           index;
+    unsigned int           parent_index;
+    unsigned int           inherited_slot_count;
+    Eco_Any                value;
+
+    if (type->interface != NULL)
+        return type->interface;
+    
+    inherited_slot_count = 0;
+    for (index = 0; index < type->slot_count; index++)
+        if (type->slots[index].info.flags.is_delegate)
+            inherited_slot_count++;
+
+    interface       = Eco_Interface_New(inherited_slot_count, type->slot_count);
+    type->interface = interface;
+
+    parent_index = 0;
+    for (index = 0; index < type->slot_count; index++)
+    {
+        if (type->slots[index].info.flags.is_delegate) {
+            if (Eco_TypeSlot_GetValue(&type->slots[index], object, &value))
+                interface->parents[parent_index++] = Eco_Any_GetInterface(value);
+            else
+                interface->parents[parent_index++] = NULL;  // TODO: Error
+        }
+        interface->entries[index].key         = type->slots[index].info.key;
+        interface->entries[index].arg_count   = 0;      // TODO: If it's a method, check for args
+        interface->entries[index].has_varargs = false;  // TODO: If it's a method, check for varargs
+    }
+
+    return interface;
 }
 
 

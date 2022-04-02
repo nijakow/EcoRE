@@ -12,6 +12,7 @@ struct Eco_Code;
 struct Eco_Message;
 struct Eco_GC_State;
 struct Eco_Molecule;
+struct Eco_Interface;
 
 
 enum Eco_TypeSlotType
@@ -54,12 +55,12 @@ struct Eco_Type
     struct Eco_Object     _;
 
     struct Eco_TypeCore*  typecore;
-
     struct Eco_Object*    proxy;
+    struct Eco_Interface* interface;
 
-    unsigned int         slot_count;
-    unsigned int         instance_payload_size;
-    struct Eco_TypeSlot  slots[];
+    unsigned int          slot_count;
+    unsigned int          instance_payload_size;
+    struct Eco_TypeSlot   slots[];
 };
 
 struct Eco_Type* Eco_Type_NewPrefab(struct Eco_TypeCore*);
@@ -70,6 +71,9 @@ bool Eco_Type_CopyWithRemovedSlot(struct Eco_Type*, unsigned int, struct Eco_Typ
 
 void Eco_Type_MarkMolecule(struct Eco_GC_State*, struct Eco_Type*, struct Eco_Molecule*);
 void Eco_Type_Subclone(struct Eco_CloneState*, struct Eco_Type*, struct Eco_Molecule*, struct Eco_Molecule*);
+
+struct Eco_Interface* Eco_Any_GetInterface(Eco_Any);
+struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*, struct Eco_Object*);
 
 void Eco_Types_Init();
 void Eco_Types_Terminate();

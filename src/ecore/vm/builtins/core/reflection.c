@@ -9,7 +9,7 @@ bool Eco_VM_Builtin_GetType(struct Eco_Fiber* fiber, unsigned int args)
 {
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    *Eco_Fiber_Peek(fiber) = Eco_Any_FromPointer(Eco_Any_GetType(Eco_Fiber_Peek(fiber)));
+    *Eco_Fiber_Peek(fiber) = Eco_Any_FromPointer(Eco_Any_GetType(*Eco_Fiber_Peek(fiber)));
     return true;
 }
 
