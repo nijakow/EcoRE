@@ -41,7 +41,6 @@ class FileLoader:
         return self._shared_info.load(parent.joinpath(path).resolve())
 
     def _parse_expressions(self):
-        print('Loading', self._path.resolve().as_posix(), '...')
         text = self._path.read_text()
         s = ecosphere.parser.stream.StringStream(text)
         t = ecosphere.parser.tokenizer.Tokenizer(s)
@@ -119,7 +118,11 @@ def main(binfile, srcfiles, compressed=False):
     banner(compressed)
     shared = SharedBootstrappingInfo()
     result = None
+    rotates = '|/-\\'
+    i = 0
     for srcfile in srcfiles:
+        print('\033[1A\033[2K', rotates[i % len(rotates)], ' Loading ', srcfile, '...', sep='')
+        i += 1
         loader = shared.load(pathlib.Path(srcfile))
         result = loader.compile()
     serializer = ecosphere.econnect.Serializer()
@@ -129,7 +132,7 @@ def main(binfile, srcfiles, compressed=False):
             serialized = serializer.finish_compressed()
         else:
             serialized = serializer.finish()
-        print('Writing', len(serialized), 'bytes to', binfile, '...')
+        print('  Writing', len(serialized), 'bytes to', binfile, '...')
         out.write(serialized)
 
 if __name__ == '__main__':
