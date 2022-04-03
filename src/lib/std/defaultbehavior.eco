@@ -19,7 +19,6 @@
     if: t else: f => asBool if: t else: f;
     & value       => (((std util Collector) clone) init: self) & value;
     cons: value   => ((std util MutablePair) clone) initWithFirst: self Second: value;
-    % other       => (#'ecosphere.ecore.clone'(std Lens)) initWithFirst: self Second: other;
     writeOn: writer => writer << 'object';
     
     private with lobby = #<:lobby>;
