@@ -3,7 +3,7 @@
     itself        => self;
     value         => self;
     mirror        => (std reflect Mirror) clone init: self;
-    interface     => std reflect InterfaceFor: self;
+    interface     => std reflect InterfaceOf: self;
     asBool        => true;
     not           => asBool not;
     is: other     => #'ecosphere.ecore.is'(self, other);
