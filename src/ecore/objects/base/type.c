@@ -355,6 +355,8 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
     Eco_Any                value;
 
     /*
+     * If the type has a proxy, use the proxy's interface instead.
+     *
      * TODO, FIXME, XXX:
      * This is a very ugly fix. It ignores the slots already located
      * within the type, but it gives us an opportunity to get the
@@ -365,6 +367,10 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
         return Eco_Type_GetInterface(type->proxy->type, type->proxy, private_also);
     }
 
+    /*
+     * Check if we already have the interface pointer set.
+     * If so, return its stored value.
+     */
     if (private_also) {
         if (type->interface != NULL)
             return type->interface;
@@ -373,6 +379,14 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
             return type->public_interface;
     }
     
+    /*
+     * The interface has not been computed yet, so we prepare ourselves
+     * for creating a new interface instance. For that, we need to know
+     * how many slots and parents it will have.
+     * 
+     * We therefore run a basic loop, incrementing the corresponding
+     * counters.
+     */
     inherited_slot_count = 0;
     slot_count           = 0;
     for (index = 0; index < type->slot_count; index++)
@@ -384,13 +398,29 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
         }
     }
 
+    /*
+     * Everything's ready, we can now allocate.
+     * 
+     * TODO, FIXME, XXX: There is no check if the interface is NULL!
+     */
     interface = Eco_Interface_New(inherited_slot_count, slot_count);
 
-    if (private_also)
+    /*
+     * Update the interface pointers to point to our newly
+     * created interface. We do this before setting up the
+     * contents of our interface so that we can avoid
+     * infinite recursion pitfalls.
+     */
+    if (private_also) {
         type->interface = interface;
-    else
+    } else {
         type->public_interface = interface;
+    }
 
+    /*
+     * Now we do the actual copying of the slot names and types
+     * and all the other important stuff into the interface.
+     */
     parent_index = 0;
     slot_index   = 0;
     for (index = 0; index < type->slot_count; index++)
@@ -411,6 +441,9 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
         slot_index++;
     }
 
+    /*
+     * Done, return the interface.
+     */
     return interface;
 }
 
