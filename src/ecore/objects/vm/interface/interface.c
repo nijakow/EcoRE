@@ -123,7 +123,8 @@ struct Eco_Interface* Eco_Interface_GetDefaultInterface()
  *    C h e c k s
  */
 
-bool Eco_Interface_ImplementsMessage(struct Eco_Interface* interface, struct Eco_Key* message)
+bool Eco_Interface_ImplementsMessage(struct Eco_Interface* interface,
+                                     struct Eco_Key*       message)
 {
     unsigned int  index;
 

@@ -108,6 +108,7 @@ static struct Eco_Type* Eco_Type_New(unsigned int slot_count)
     type->typecore              = NULL;
     type->proxy                 = NULL;
     type->interface             = NULL;
+    type->public_interface      = NULL;
     type->slot_count            = slot_count;
     type->instance_payload_size = 0;
 
@@ -283,6 +284,8 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
         Eco_GC_State_MarkObject(state, type->proxy);
     if (type->interface != NULL)
         Eco_GC_State_MarkObject(state, type->interface);
+    if (type->public_interface != NULL)
+        Eco_GC_State_MarkObject(state, type->public_interface);
     Eco_Object_Mark(state, &type->_);
 }
 
@@ -331,20 +334,24 @@ void Eco_Type_Subclone(struct Eco_CloneState* state,
 }
 
 
-struct Eco_Interface* Eco_Any_GetInterface(Eco_Any value)
+struct Eco_Interface* Eco_Any_GetInterface(Eco_Any value, bool private_also)
 {
     struct Eco_Type* type;
 
     type = Eco_Any_GetType(value);
-    return Eco_Type_GetInterface(type, Eco_Any_IsPointer(value) ? Eco_Any_AsPointer(value) : NULL);
+    return Eco_Type_GetInterface(type, Eco_Any_IsPointer(value) ? Eco_Any_AsPointer(value) : NULL, private_also);
 }
 
-struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type* type, struct Eco_Object* object)
+struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
+                                            struct Eco_Object* object,
+                                            bool               private_also)
 {
     struct Eco_Interface*  interface;
     unsigned int           index;
     unsigned int           parent_index;
+    unsigned int           slot_index;
     unsigned int           inherited_slot_count;
+    unsigned int           slot_count;
     Eco_Any                value;
 
     /*
@@ -355,33 +362,53 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type* type, struct Eco_Ob
      *                                                - nijakow
      */
     if (type->proxy != NULL) {
-        return Eco_Type_GetInterface(type->proxy->type, type->proxy);
+        return Eco_Type_GetInterface(type->proxy->type, type->proxy, private_also);
     }
 
-    if (type->interface != NULL)
-        return type->interface;
+    if (private_also) {
+        if (type->interface != NULL)
+            return type->interface;
+    } else {
+        if (type->public_interface != NULL)
+            return type->public_interface;
+    }
     
     inherited_slot_count = 0;
-    for (index = 0; index < type->slot_count; index++)
-        if (type->slots[index].info.flags.is_inherited)
-            inherited_slot_count++;
-
-    interface       = Eco_Interface_New(inherited_slot_count, type->slot_count);
-    type->interface = interface;
-
-    parent_index = 0;
+    slot_count           = 0;
     for (index = 0; index < type->slot_count; index++)
     {
+        if (private_also || !type->slots[index].info.flags.is_private) {
+            if (type->slots[index].info.flags.is_inherited)
+                inherited_slot_count++;
+            slot_count++;
+        }
+    }
+
+    interface = Eco_Interface_New(inherited_slot_count, slot_count);
+
+    if (private_also)
+        type->interface = interface;
+    else
+        type->public_interface = interface;
+
+    parent_index = 0;
+    slot_index   = 0;
+    for (index = 0; index < type->slot_count; index++)
+    {
+        if (!private_also && type->slots[index].info.flags.is_private)
+            continue;
         if (type->slots[index].info.flags.is_inherited) {
             if (Eco_TypeSlot_GetValue(&type->slots[index], object, &value))
-                interface->parents[parent_index++] = Eco_Any_GetInterface(value);
+                interface->parents[parent_index] = Eco_Any_GetInterface(value, private_also);
             else
-                interface->parents[parent_index++] = NULL;  // TODO: Error
+                interface->parents[parent_index] = NULL;  // TODO: Error
+            parent_index++;
         }
-        interface->entries[index].return_type = type->slots[index].interface;
-        interface->entries[index].key         = type->slots[index].info.key;
-        interface->entries[index].arg_count   = 0;      // TODO: If it's a method, check for args
-        interface->entries[index].has_varargs = false;  // TODO: If it's a method, check for varargs
+        interface->entries[slot_index].return_type = type->slots[index].interface;
+        interface->entries[slot_index].key         = type->slots[index].info.key;
+        interface->entries[slot_index].arg_count   = 0;      // TODO: If it's a method, check for args
+        interface->entries[slot_index].has_varargs = false;  // TODO: If it's a method, check for varargs
+        slot_index++;
     }
 
     return interface;
