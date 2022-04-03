@@ -10,7 +10,12 @@
 
         commit     => _port commit;
         byte<< b   => _port byte<< b;
-        << object  => ( object writeOn: self. ^ self );
+        << object  => (
+            ((std reflect InterfaceOf: object) implementsMessage: #'writeOn:')
+                  if: [ object writeOn: self ]
+                else: [ << 'an object' ].
+          ^ self
+        );
         newline    => ( self << (char newline). ^ self );
         close      => _port close;
 

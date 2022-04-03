@@ -347,6 +347,17 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type* type, struct Eco_Ob
     unsigned int           inherited_slot_count;
     Eco_Any                value;
 
+    /*
+     * TODO, FIXME, XXX:
+     * This is a very ugly fix. It ignores the slots already located
+     * within the type, but it gives us an opportunity to get the
+     * interface of e.g. strings and integers without too much hassle.
+     *                                                - nijakow
+     */
+    if (type->proxy != NULL) {
+        return Eco_Type_GetInterface(type->proxy->type, type->proxy);
+    }
+
     if (type->interface != NULL)
         return type->interface;
     
