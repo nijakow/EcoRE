@@ -10,6 +10,10 @@
 
         typeInstance => #'ecosphere.ecore.reflect.get_type'(reflectee);
 
+        interface => publicInterface;
+        publicInterface => std reflect PublicInterfaceFor: reflectee;
+        privateInterface => std reflect PrivateInterfaceFor: reflectee;
+
         slotCount => (
             #'ecosphere.ecore.reflect.get_type_slot_info'(typeInstance, -1, -1)
         );
@@ -28,7 +32,7 @@
           ^ (#<:std/reflect/Slot> clone) initWithReflectee: reflectee Name: name Mirror: self;
         );
 
-        writeOn: w => w << 'a mirror';
+        writeOn: w => w << 'the mirror for ' << reflectee;
     };
 
     with inherited parent = #<:std/Clonable>;

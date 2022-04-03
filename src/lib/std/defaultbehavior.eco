@@ -3,9 +3,6 @@
     itself        => self;
     value         => self;
     mirror        => (std reflect Mirror) clone init: self;
-    interface     => publicInterface;
-    publicInterface => std reflect PublicInterfaceFor: self;
-    privateInterface => std reflect PrivateInterfaceFor: self;
     asBool        => true;
     not           => asBool not;
     is: other     => #'ecosphere.ecore.is'(self, other);
@@ -20,7 +17,7 @@
     if: t else: f => asBool if: t else: f;
     & value       => (((std util Collector) clone) init: self) & value;
     cons: value   => ((std util MutablePair) clone) initWithFirst: self Second: value;
-    writeOn: writer => writer << 'object';
+    writeOn: writer => writer << 'an object';
     
     private with lobby = #<:lobby>;
 }

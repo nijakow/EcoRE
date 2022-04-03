@@ -4,7 +4,7 @@
     init          => ^ self;
     clone         => #'ecosphere.ecore.clone'(self);
     new           => clone init;
-    writeOn: writer => writer << 'clonable';
+    writeOn: writer => writer << 'a clonable';
     isBlock       => false;
     isInt         => false;
     isChar        => false;
