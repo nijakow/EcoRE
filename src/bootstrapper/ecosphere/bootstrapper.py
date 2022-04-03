@@ -1,6 +1,5 @@
-from bz2 import compress
 import sys
-import os.path
+import time
 import pathlib
 
 import ecosphere.parser.stream
@@ -118,11 +117,10 @@ def main(binfile, srcfiles, compressed=False):
     banner(compressed)
     shared = SharedBootstrappingInfo()
     result = None
-    rotates = '|/-\\'
-    i = 0
+    rotates = " ⠁⠉⠙⠚⠖⠦⠤⠠"
+    i = int(time.time() * 10)
     for srcfile in srcfiles:
-        print('\033[1A\033[2K', rotates[i % len(rotates)], ' Loading ', srcfile, '...', sep='')
-        i += 1
+        print('\033[1A\033[2K', rotates[(int(time.time() * 10) - i) % len(rotates)], ' Loading ', srcfile, '...', sep='')
         loader = shared.load(pathlib.Path(srcfile))
         result = loader.compile()
     serializer = ecosphere.econnect.Serializer()
