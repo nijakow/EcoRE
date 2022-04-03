@@ -10,7 +10,6 @@
     equals: e     => is: e;
     == other      => is: other;
     != other      => (== other) not;
-    lens: other   => (other clone) init: self;
     let: block    => block value(self);
     when: block   => asBool if: [ block value(self) ];
     if: block     => asBool if: block;

@@ -62,9 +62,9 @@
         io out commit.
 
         |
-            reader <- (io in) lens: (lang eco tokenizer PortReader),
-            tok    <- reader lens: (lang eco tokenizer Tokenizer),
-            parser <- tok lens: (lang eco parser Parser)
+            reader <- ((lang eco tokenizer PortReader) clone) init: (io in),
+            tok    <- ((lang eco tokenizer Tokenizer) clone) init: reader,
+            parser <- ((lang eco parser Parser) clone) init: tok
         |
 
         parser exprDo: [ :expr |

@@ -4,8 +4,8 @@
 
     with inherited trait = {
         init: port => (
-            in  <- port lens: (std io PortInput);
-            out <- port lens: (std io PortOutput);
+            in  <- ((std io PortInput) clone) init: port;
+            out <- ((std io PortOutput) clone) init: port;
             ^ self
         );
 

@@ -72,9 +72,9 @@
     );
     parse => (
         |
-            reader <- self lens: (lang eco tokenizer StringReader),
-            tok    <- reader lens: (lang eco tokenizer Tokenizer),
-            parser <- tok lens: (lang eco parser Parser)
+            reader <- ((lang eco tokenizer StringReader) clone) init: self,
+            tok    <- ((lang eco tokenizer Tokenizer) clone) init: reader,
+            parser <- ((lang eco parser Parser) clone) init: tok
         |
       ^ parser parseExpression
     );
