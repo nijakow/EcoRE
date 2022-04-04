@@ -17,4 +17,6 @@ bool Eco_VM_Builtin_InterfaceAddEntry(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_InterfaceImplementsMessage(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_InterfaceImplementsInterface(struct Eco_Fiber*, unsigned int);
 
+bool Eco_VM_Builtin_InterfaceGetAllInterfaces(struct Eco_Fiber*, unsigned int);
+
 #endif

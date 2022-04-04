@@ -1,6 +1,7 @@
 #include "interface.h"
 
 #include <ecore/objects/base/type.h>
+#include <ecore/objects/misc/array/array.h>
 
 #include <ecore/vm/memory/memory.h>
 #include <ecore/vm/memory/gc/gc.h>
@@ -259,4 +260,31 @@ struct Eco_Interface* Eco_Interface_AddEntry(struct Eco_Interface* old_interface
     }
 
     return new_interface;
+}
+
+struct Eco_Array* Eco_Interface_GetAllInterfacesAsArray()
+{
+    struct Eco_Interface*  interface;
+    struct Eco_Array*      array;
+    unsigned int           interface_count;
+
+    interface_count = 0;
+    for (interface = Eco_INTERFACES;
+         interface != NULL;
+         interface = interface->next)
+    {
+        interface_count++;
+    }
+
+    array = Eco_Array_New(interface_count);
+
+    interface_count = 0;
+    for (interface = Eco_INTERFACES;
+         interface != NULL;
+         interface = interface->next)
+    {
+        Eco_Array_Put(array, interface_count++, Eco_Any_FromPointer(interface));
+    }
+
+    return array;
 }

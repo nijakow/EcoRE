@@ -286,3 +286,14 @@ bool Eco_VM_Builtin_InterfaceImplementsInterface(struct Eco_Fiber* fiber, unsign
     Eco_Fiber_Push(fiber, &any);
     return true;
 }
+
+bool Eco_VM_Builtin_InterfaceGetAllInterfaces(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
+        return false;
+    any = Eco_Any_FromPointer(Eco_Interface_GetAllInterfacesAsArray());
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}

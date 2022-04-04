@@ -10,6 +10,7 @@
 #define Eco_InterfaceEntry_MAXARGS 8
 
 struct Eco_Interface;
+struct Eco_Array;
 
 struct Eco_InterfaceEntry
 {
@@ -55,6 +56,8 @@ bool Eco_Interface_ImplementsInterface(struct Eco_Interface*, struct Eco_Interfa
 struct Eco_Interface* Eco_Interface_NewAndInit(unsigned int, struct Eco_InterfaceEntry*);
 struct Eco_Interface* Eco_Interface_AddParent(struct Eco_Interface*, struct Eco_Interface*);
 struct Eco_Interface* Eco_Interface_AddEntry(struct Eco_Interface*, struct Eco_InterfaceEntry*);
+
+struct Eco_Array* Eco_Interface_GetAllInterfacesAsArray();
 
 void Eco_Interface_Init();
 void Eco_Interface_Terminate();
