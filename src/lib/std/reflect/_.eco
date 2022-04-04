@@ -6,4 +6,5 @@
     Mirror: object => #<:std/reflect/Mirror> clone init: object;
     PrivateInterfaceFor: object => #'ecosphere.ecore.reflect.get_interface'(object);
     PublicInterfaceFor: object => #'ecosphere.ecore.reflect.get_public_interface'(object);
+    AllInterfaces => #'ecosphere.ecore.object.interface.get_all_interfaces'();
 }
