@@ -66,7 +66,7 @@ bool Eco_EConnect_Reader_ReadMoleculeBody(struct Eco_EConnect_Reader* reader,
                  */
                 any = Eco_Any_FromPointer(object);
             }
-            Eco_Molecule_AddSlot(object, -1, &slot_info, Eco_Interface_GetDefaultInterface(), &any); // TODO, FIXME, XXX: Parse the interface!
+            Eco_Molecule_AddSlot(object, -1, &slot_info, Eco_Interface_GetDefaultInterface(), any); // TODO, FIXME, XXX: Parse the interface!
         } else {
             slot_info.flags.is_inherited = false;
             slot_info.flags.is_delegate  = true;

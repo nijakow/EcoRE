@@ -9,7 +9,7 @@
 struct Eco_Interface;
 struct Eco_Code;
 
-bool Eco_Molecule_AddSlot(struct Eco_Molecule*, int, struct Eco_BasicSlotInfo*, struct Eco_Interface*, Eco_Any*);
+bool Eco_Molecule_AddSlot(struct Eco_Molecule*, int, struct Eco_BasicSlotInfo*, struct Eco_Interface*, Eco_Any);
 bool Eco_Molecule_AddCodeSlot(struct Eco_Molecule*, int, struct Eco_BasicSlotInfo*, struct Eco_Interface*, struct Eco_Code*);
 bool Eco_Molecule_RemoveSlot(struct Eco_Molecule*, unsigned int);
 

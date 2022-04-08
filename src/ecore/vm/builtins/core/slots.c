@@ -42,7 +42,7 @@ bool Eco_VM_Builtin_AddValueSlot(struct Eco_Fiber* fiber, unsigned int args)
                          Eco_Any_AsInteger(index),
                          &info,
                          (struct Eco_Interface*) Eco_Any_AsPointer(type),
-                        &value);
+                         value);
 
     Eco_Fiber_Push(fiber, &object);
 
