@@ -47,16 +47,6 @@ bool Eco_Type_SendMessageToMolecule(struct Eco_Message*  message,
                     }
                 }
                 break;
-            case Eco_TypeSlotType_SHARED:
-                if (slot->info.flags.is_inherited && Eco_Interface_ImplementsMessage(slot->interface, message->key)) {
-                    //if (slot->body.shared.is_delegate) {  // TODO
-                        result = Eco_Send(message, link, slot->body.shared.value, slot->body.shared.value, message->private_send);
-                    /*} else {
-                        result = Eco_Send(message, link, &slot->body.shared.value, self);
-                    }*/
-                    if (result) return true;
-                }
-                break;
             default:
                 break;
         }

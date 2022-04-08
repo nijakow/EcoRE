@@ -11,7 +11,6 @@ struct Eco_Molecule;
 enum Eco_TypeSlotType
 {
     Eco_TypeSlotType_INLINED,
-    Eco_TypeSlotType_SHARED,
     Eco_TypeSlotType_CODE
 };
 
@@ -26,9 +25,6 @@ struct Eco_TypeSlot
             unsigned int offset;
             unsigned int value_size;
         } inlined;
-        struct {
-            Eco_Any value;
-        } shared;
         struct {
             struct Eco_Code* code;
         } code;

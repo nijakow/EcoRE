@@ -67,10 +67,6 @@ bool Eco_TypeSlot_Invoke(struct Eco_Message*   message,
                     Eco_Fiber_Drop(message->fiber);  /* Drop self */
                     Eco_Fiber_Push(message->fiber, Eco_Molecule_At(molecule, slot->body.inlined.offset));
                     return true;
-                case Eco_TypeSlotType_SHARED:
-                    Eco_Fiber_Drop(message->fiber);
-                    Eco_Fiber_Push(message->fiber, &slot->body.shared.value);
-                    return true;
                 case Eco_TypeSlotType_CODE:
                     *Eco_Fiber_Nth(message->fiber, message->body.send.arg_count) = self;   // Assign the new self
                     return Eco_Fiber_Enter(message->fiber, NULL, slot->body.code.code, message->body.send.arg_count);

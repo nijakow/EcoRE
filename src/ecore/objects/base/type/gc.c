@@ -16,9 +16,6 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
         {
             case Eco_TypeSlotType_INLINED:
                 break;
-            case Eco_TypeSlotType_SHARED:
-                Eco_GC_State_MarkAny(state, &type->slots[i].body.shared.value);
-                break;
             case Eco_TypeSlotType_CODE:
                 Eco_GC_State_MarkObject(state, type->slots[i].body.code.code);
                 break;
