@@ -218,8 +218,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
 
             if (!Eco_Send(&message,
                            NULL,
-                           Eco_Fiber_Nth(fiber, message.body.send.arg_count),
-                           Eco_Fiber_Nth(fiber, message.body.send.arg_count),
+                           *Eco_Fiber_Nth(fiber, message.body.send.arg_count),
+                           *Eco_Fiber_Nth(fiber, message.body.send.arg_count),
                            Eco_Any_Equals(Eco_Fiber_Top(fiber)->registers[0],
                                          *Eco_Fiber_Nth(fiber, message.body.send.arg_count)))) {
                 Eco_Log_Warning("Message send failed: %s\n", ((struct Eco_Key*) message.key)->name);
@@ -246,8 +246,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
 
             if (!Eco_Send(&message,
                            NULL,
-                           Eco_Fiber_Nth(fiber, message.body.send.arg_count),
-                           Eco_Fiber_Nth(fiber, message.body.send.arg_count),
+                           *Eco_Fiber_Nth(fiber, message.body.send.arg_count),
+                           *Eco_Fiber_Nth(fiber, message.body.send.arg_count),
                            Eco_Any_Equals(Eco_Fiber_Top(fiber)->registers[0],
                                          *Eco_Fiber_Nth(fiber, message.body.send.arg_count)))) {
                 Eco_Log_Warning("Message send with varargs failed: %s\n", ((struct Eco_Key*) message.key)->name);
@@ -270,8 +270,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
 
             if (!Eco_Send(&message,
                            NULL,
-                           Eco_Fiber_Nth(fiber, 1),
-                           Eco_Fiber_Nth(fiber, 1),
+                           *Eco_Fiber_Nth(fiber, 1),
+                           *Eco_Fiber_Nth(fiber, 1),
                            Eco_Any_Equals(Eco_Fiber_Top(fiber)->registers[0],
                                           *Eco_Fiber_Nth(fiber, 1)))) {
                 Eco_Log_Warning("Assign failed: %s\n", ((struct Eco_Key*) message.key)->name);
@@ -295,8 +295,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
 
             if (!Eco_Send(&message,
                            NULL,
-                           Eco_Fiber_Nth(fiber, 1),
-                           Eco_Fiber_Nth(fiber, 1),
+                           *Eco_Fiber_Nth(fiber, 1),
+                           *Eco_Fiber_Nth(fiber, 1),
                            Eco_Any_Equals(Eco_Fiber_Top(fiber)->registers[0],
                                           *Eco_Fiber_Nth(fiber, 1)))) {
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ASFAILED);

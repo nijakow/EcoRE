@@ -26,14 +26,14 @@ bool Eco_Molecule_AddSlot(struct Eco_Molecule*      self,
                           int                       pos,
                           struct Eco_BasicSlotInfo* info,
                           struct Eco_Interface*     interface,
-                          Eco_Any*                  value)
+                          Eco_Any*                  value)  // TODO: Change this to Eco_Any (no pointer)
 {
     struct Eco_Type*      new_type;
     struct Eco_TypeSlot*  slot;
 
     if (Eco_Type_CopyWithNewInlinedSlot(self->_.type, pos, info, interface, &new_type, &slot)) {
         Eco_Molecule_SwitchType(self, new_type);
-        Eco_TypeSlot_SetValue(slot, (struct Eco_Object*) self, value);
+        Eco_TypeSlot_SetValue(slot, self, *value);
         return true;
     } else {
         return false;

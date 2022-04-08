@@ -29,24 +29,24 @@ void Eco_TypeSlot_Initialize(struct Eco_TypeSlot* slot)
     Eco_BasicSlotInfo_Create(&slot->info);
 }
 
-bool Eco_TypeSlot_GetValue(struct Eco_TypeSlot* slot, struct Eco_Object* object, Eco_Any* location)
+bool Eco_TypeSlot_GetValue(struct Eco_TypeSlot* slot, struct Eco_Molecule* molecule, Eco_Any* location)
 {
     switch (slot->type)
     {
         case Eco_TypeSlotType_INLINED:
-            *location = *((Eco_Any*) Eco_Molecule_At((struct Eco_Molecule*) object, slot->body.inlined.offset));
+            *location = *((Eco_Any*) Eco_Molecule_At(molecule, slot->body.inlined.offset));
             return true;
         default:
             return false;
     }
 }
 
-bool Eco_TypeSlot_SetValue(struct Eco_TypeSlot* slot, struct Eco_Object* object, Eco_Any* value)
+bool Eco_TypeSlot_SetValue(struct Eco_TypeSlot* slot, struct Eco_Molecule* molecule, Eco_Any value)
 {
     switch (slot->type)
     {
         case Eco_TypeSlotType_INLINED:
-            *((Eco_Any*) Eco_Molecule_At((struct Eco_Molecule*) object, slot->body.inlined.offset)) = *value;
+            *((Eco_Any*) Eco_Molecule_At(molecule, slot->body.inlined.offset)) = value;
             return true;
         default:
             return false;
@@ -54,9 +54,9 @@ bool Eco_TypeSlot_SetValue(struct Eco_TypeSlot* slot, struct Eco_Object* object,
 }
 
 bool Eco_TypeSlot_Invoke(struct Eco_Message*   message,
-                         struct Eco_Object*    object,
+                         struct Eco_Molecule*  molecule,
                          struct Eco_TypeSlot*  slot,
-                         Eco_Any*              self)
+                         Eco_Any               self)
 {
     switch (message->type)
     {
@@ -65,14 +65,14 @@ bool Eco_TypeSlot_Invoke(struct Eco_Message*   message,
             {
                 case Eco_TypeSlotType_INLINED:
                     Eco_Fiber_Drop(message->fiber);  /* Drop self */
-                    Eco_Fiber_Push(message->fiber, ((Eco_Any*) Eco_Molecule_At((struct Eco_Molecule*) object, slot->body.inlined.offset)));
+                    Eco_Fiber_Push(message->fiber, Eco_Molecule_At(molecule, slot->body.inlined.offset));
                     return true;
                 case Eco_TypeSlotType_SHARED:
                     Eco_Fiber_Drop(message->fiber);
                     Eco_Fiber_Push(message->fiber, &slot->body.shared.value);
                     return true;
                 case Eco_TypeSlotType_CODE:
-                    Eco_Any_AssignAny(Eco_Fiber_Nth(message->fiber, message->body.send.arg_count), self);   // Assign the new self
+                    *Eco_Fiber_Nth(message->fiber, message->body.send.arg_count) = self;   // Assign the new self
                     return Eco_Fiber_Enter(message->fiber, NULL, slot->body.code.code, message->body.send.arg_count);
             }
             return false;
@@ -80,7 +80,7 @@ bool Eco_TypeSlot_Invoke(struct Eco_Message*   message,
             switch (slot->type)
             {
                 case Eco_TypeSlotType_INLINED:
-                    Eco_Any_AssignAny((Eco_Any*) Eco_Molecule_At((struct Eco_Molecule*) object, slot->body.inlined.offset), &message->body.assign.value);
+                    *((Eco_Any*) Eco_Molecule_At(molecule, slot->body.inlined.offset)) = message->body.assign.value;
                     return true;
                 default:
                     return false;

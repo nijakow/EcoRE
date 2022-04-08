@@ -232,7 +232,7 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
         if (!private_also && type->slots[index].info.flags.is_private)
             continue;
         if (type->slots[index].info.flags.is_inherited) {
-            if (Eco_TypeSlot_GetValue(&type->slots[index], object, &value))
+            if (Eco_TypeSlot_GetValue(&type->slots[index], (struct Eco_Molecule*) object, &value))
                 interface->parents[parent_index] = Eco_Any_GetInterface(value, private_also);
             else
                 interface->parents[parent_index] = NULL;  // TODO: Error

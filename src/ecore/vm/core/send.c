@@ -9,7 +9,7 @@
 bool Eco_Send_ToObject(struct Eco_Message*  message,
                        struct Eco_SendLink* link,
                        struct Eco_Object*   object,
-                       Eco_Any*             self)
+                       Eco_Any              self)
 {
     struct Eco_SendLink  next_link;
 
@@ -49,17 +49,17 @@ static struct Eco_Type** Eco_Send_JUMPS[] = {
 
 bool Eco_Send(struct Eco_Message*  message,
               struct Eco_SendLink* link,
-              Eco_Any*             target,
-              Eco_Any*             self,
+              Eco_Any              target,
+              Eco_Any              self,
               bool                 private_send)
 {
     struct Eco_Object*  object;
 
     message->private_send = private_send;
-    if (Eco_Any_IsPointer(*target)) {
-        object = Eco_Any_AsPointer(*target);
+    if (Eco_Any_IsPointer(target)) {
+        object = Eco_Any_AsPointer(target);
     } else {
-        object = (*Eco_Send_JUMPS[Eco_Any_GetValueType(*target)])->proxy;
+        object = (*Eco_Send_JUMPS[Eco_Any_GetValueType(target)])->proxy;
     }
     return Eco_Send_ToObject(message, link, object, self);
 }

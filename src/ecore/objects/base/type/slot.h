@@ -6,6 +6,8 @@
 #include "../object/object.h"
 #include "slot_info.h"
 
+struct Eco_Molecule;
+
 enum Eco_TypeSlotType
 {
     Eco_TypeSlotType_INLINED,
@@ -35,8 +37,8 @@ struct Eco_TypeSlot
 
 void Eco_TypeSlot_Initialize(struct Eco_TypeSlot*);
 
-bool Eco_TypeSlot_GetValue(struct Eco_TypeSlot*, struct Eco_Object*, Eco_Any*);
-bool Eco_TypeSlot_SetValue(struct Eco_TypeSlot*, struct Eco_Object*, Eco_Any*);
-bool Eco_TypeSlot_Invoke(struct Eco_Message*, struct Eco_Object*, struct Eco_TypeSlot*, Eco_Any*);
+bool Eco_TypeSlot_GetValue(struct Eco_TypeSlot*, struct Eco_Molecule*, Eco_Any*);
+bool Eco_TypeSlot_SetValue(struct Eco_TypeSlot*, struct Eco_Molecule*, Eco_Any);
+bool Eco_TypeSlot_Invoke(struct Eco_Message*, struct Eco_Molecule*, struct Eco_TypeSlot*, Eco_Any);
 
 #endif
