@@ -2,7 +2,7 @@
 #define ECO_OBJECTS_MOLECULE_OBJECT_SLOTS_H
 
 #include <ecore/eco.h>
-#include <ecore/objects/base/slot_info.h>
+#include <ecore/objects/base/type/slot_info.h>
 
 #include "molecule.h"
 

@@ -1,7 +1,7 @@
 #include "object_body.h"
 
 #include <ecore/io/econnect/reader/parser.h>
-#include <ecore/objects/base/slot_info.h>
+#include <ecore/objects/base/type/slot_info.h>
 #include <ecore/objects/molecule/object_slots.h>
 #include <ecore/objects/misc/key/key.h>
 #include <ecore/objects/vm/interface/interface.h>

@@ -14,9 +14,9 @@ BOOTSTRAP_MASTER      = $(BOOTSTRAP_ENVIRONMENT)/master.ebf
 SOURCES = \
 eco.c \
 objects/objects.c \
-objects/base/type.c \
-objects/base/typecore.c \
-objects/base/slot_info.c \
+objects/base/type/type.c \
+objects/base/type/typecore.c \
+objects/base/type/slot_info.c \
 objects/base/object/object.c \
 objects/base/object/gc.c \
 objects/base/object/send.c \

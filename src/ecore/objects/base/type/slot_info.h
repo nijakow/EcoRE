@@ -1,5 +1,5 @@
-#ifndef ECO_OBJECTS_BASE_SLOT_INFO_H
-#define ECO_OBJECTS_BASE_SLOT_INFO_H
+#ifndef ECO_OBJECTS_BASE_TYPE_SLOT_INFO_H
+#define ECO_OBJECTS_BASE_TYPE_SLOT_INFO_H
 
 #include <ecore/objects/misc/key/key.h>
 
