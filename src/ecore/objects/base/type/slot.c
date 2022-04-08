@@ -73,14 +73,7 @@ bool Eco_TypeSlot_Invoke(struct Eco_Message*   message,
             }
             return false;
         case Eco_Message_Type_ASSIGN:
-            switch (slot->type)
-            {
-                case Eco_TypeSlotType_INLINED:
-                    *((Eco_Any*) Eco_Molecule_At(molecule, slot->body.inlined.offset)) = message->body.assign.value;
-                    return true;
-                default:
-                    return false;
-            }
+            return Eco_TypeSlot_SetValue(slot, molecule, message->body.assign.value);
         default:
             return false;
     }
