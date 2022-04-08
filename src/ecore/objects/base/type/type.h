@@ -32,9 +32,6 @@ struct Eco_Type* Eco_Type_NewPrefab(struct Eco_TypeCore*);
 void Eco_Type_MarkMolecule(struct Eco_GC_State*, struct Eco_Type*, struct Eco_Molecule*);
 void Eco_Type_Subclone(struct Eco_CloneState*, struct Eco_Type*, struct Eco_Molecule*, struct Eco_Molecule*);
 
-struct Eco_Interface* Eco_Any_GetInterface(Eco_Any, bool);
-struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*, struct Eco_Object*, bool);
-
 void Eco_Types_Init();
 void Eco_Types_Terminate();
 
