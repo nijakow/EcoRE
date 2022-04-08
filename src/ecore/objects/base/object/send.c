@@ -13,8 +13,6 @@ bool Eco_Object_Send(struct Eco_Message*  message,
 {
     struct Eco_Type*  type;
     
-    if (target == NULL) return false;   // TODO: Do we even need this?
-
     type = target->type;
 
     if (target->type->proxy != NULL) {
