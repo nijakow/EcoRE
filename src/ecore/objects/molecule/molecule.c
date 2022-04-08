@@ -3,6 +3,7 @@
 
 #include <ecore/objects/base/object.h>
 #include <ecore/objects/base/type.h>
+#include <ecore/objects/base/type/gc.h>
 #include <ecore/vm/core/clone.h>
 #include <ecore/vm/core/send.h>
 
