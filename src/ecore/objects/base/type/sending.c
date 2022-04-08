@@ -36,12 +36,12 @@ bool Eco_Type_SendMessageToMolecule(struct Eco_Message*  message,
         switch (slot->type)
         {
             case Eco_TypeSlotType_INLINED:
-                if (slot->info.flags.is_inherited && Eco_Interface_ImplementsMessage(slot->interface, message->key)) {
+                if (slot->info.flags.is_with && Eco_Interface_ImplementsMessage(slot->interface, message->key)) {
                     if (Eco_TypeSlot_GetValue(slot, molecule, &value)) {
-                        if (slot->info.flags.is_delegate) {
-                            result = Eco_Send(message, link, value, value, message->private_send);
-                        } else {
+                        if (slot->info.flags.is_inherited) {
                             result = Eco_Send(message, link, value, self, message->private_send);
+                        } else {
+                            result = Eco_Send(message, link, value, value, message->private_send);
                         }
                         if (result) return true;
                     }

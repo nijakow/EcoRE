@@ -80,7 +80,7 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
     for (index = 0; index < type->slot_count; index++)
     {
         if (private_also || !type->slots[index].info.flags.is_private) {
-            if (type->slots[index].info.flags.is_inherited)
+            if (type->slots[index].info.flags.is_with)
                 inherited_slot_count++;
             slot_count++;
         }
@@ -115,7 +115,7 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
     {
         if (!private_also && type->slots[index].info.flags.is_private)
             continue;
-        if (type->slots[index].info.flags.is_inherited) {
+        if (type->slots[index].info.flags.is_with) {
             if (Eco_TypeSlot_GetValue(&type->slots[index], (struct Eco_Molecule*) object, &value))
                 interface->parents[parent_index] = Eco_Any_GetInterface(value, private_also);
             else

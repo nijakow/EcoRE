@@ -9,7 +9,7 @@ void Eco_SlotFlags_Create(struct Eco_SlotFlags* flags)
     flags->is_private    = false;
     flags->is_final      = false;
     flags->is_inherited  = false;
-    flags->is_delegate   = false;
+    flags->is_with       = false;
     flags->is_part       = false;
 }
 
