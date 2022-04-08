@@ -19,8 +19,6 @@ bool Eco_EConnect_Reader_ReadMoleculeBody(struct Eco_EConnect_Reader* reader,
     Eco_Any                   any;
     struct Eco_Code*          code;
 
-    Eco_BasicSlotInfo_Create(&slot_info);
-
     ups = Eco_EConnect_ParseUInt(&reader->stream);
 
     while (ups --> 0)
@@ -40,6 +38,8 @@ bool Eco_EConnect_Reader_ReadMoleculeBody(struct Eco_EConnect_Reader* reader,
          slot_def_current < slot_def_max;
          slot_def_current++)
     {
+        Eco_BasicSlotInfo_Create(&slot_info);
+        
         flags = Eco_EConnect_ParseByte(&reader->stream);
 
         if (!Eco_EConnect_Reader_Read(reader, result))
