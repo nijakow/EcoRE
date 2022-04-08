@@ -107,7 +107,7 @@ compile_commands.json:
 	bear -- make all
 
 .phony: run
-run: $(EXECUTABLE)
+run: all
 	$(MAKE) -C $(BOOTSTRAP_ENVIRONMENT)
 	$(EXECUTABLE) $(BOOTSTRAP_MASTER)
 
@@ -121,6 +121,7 @@ leakcheck: $(EXECUTABLE)
 
 .phony: clean
 clean:
+	- $(MAKE) -C ../lib/ clean
 	- $(RM) $(EXECUTABLE) $(OBJECTS) $(DEPENDS)
 
 .phony: re
