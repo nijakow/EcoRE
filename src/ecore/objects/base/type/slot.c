@@ -47,6 +47,9 @@ bool Eco_TypeSlot_SetValue(struct Eco_TypeSlot* slot, struct Eco_Molecule* molec
     {
         case Eco_TypeSlotType_INLINED:
             *((Eco_Any*) Eco_Molecule_At(molecule, slot->body.inlined.offset)) = value;
+            if (slot->info.flags.is_with) {
+                // TODO: Initiate a type transfer!
+            }
             return true;
         default:
             return false;
