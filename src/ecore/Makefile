@@ -25,9 +25,9 @@ objects/base/type/typecore.c \
 objects/base/object/object.c \
 objects/base/object/gc.c \
 objects/base/object/send.c \
-objects/molecule/molecule.c \
-objects/molecule/object_payload.c \
-objects/molecule/object_slots.c \
+objects/base/molecule/molecule.c \
+objects/base/molecule/object_payload.c \
+objects/base/molecule/object_slots.c \
 objects/misc/array/array.c \
 objects/misc/blob/blob.c \
 objects/misc/key/key.c \

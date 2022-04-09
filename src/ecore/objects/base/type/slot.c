@@ -7,7 +7,7 @@
 #include <ecore/vm/memory/arena.h>
 
 #include <ecore/objects/base/object.h>
-#include <ecore/objects/molecule/molecule.h>
+#include <ecore/objects/base/molecule/molecule.h>
 #include <ecore/objects/misc/key/key.h>
 #include <ecore/objects/vm/code/code.h>
 #include <ecore/objects/vm/code/closure.h>

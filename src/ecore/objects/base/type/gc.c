@@ -1,6 +1,6 @@
 #include "gc.h"
 
-#include <ecore/objects/molecule/molecule.h>
+#include <ecore/objects/base/molecule/molecule.h>
 #include <ecore/vm/memory/gc/gc.h>
 
 

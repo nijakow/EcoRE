@@ -2,7 +2,7 @@
 #define ECO_OBJECTS_MOLECULE_MOLECULE_H
 
 #include <ecore/objects/base/object.h>
-#include <ecore/objects/molecule/object_payload.h>
+#include <ecore/objects/base/molecule/object_payload.h>
 
 
 struct Eco_Molecule

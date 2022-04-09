@@ -1,7 +1,7 @@
 #include "objects.h"
 
 #include "base/object.h"
-#include "molecule/molecule.h"
+#include "base/molecule/molecule.h"
 #include "misc/array/array.h"
 #include "misc/blob/blob.h"
 #include "misc/key/key.h"

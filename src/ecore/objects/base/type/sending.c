@@ -1,4 +1,4 @@
-#include <ecore/objects/molecule/molecule.h>
+#include <ecore/objects/base/molecule/molecule.h>
 #include <ecore/objects/vm/interface/interface.h>
 
 #include "sending.h"
