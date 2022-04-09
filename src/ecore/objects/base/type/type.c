@@ -38,12 +38,13 @@ struct Eco_Type* Eco_Type_New(unsigned int slot_count)
                                  sizeof(struct Eco_Type) + sizeof(struct Eco_TypeSlot) * slot_count,
                                  &Eco_TYPES);
 
-    type->typecore              = NULL;
-    type->proxy                 = NULL;
-    type->interface             = NULL;
-    type->public_interface      = NULL;
-    type->slot_count            = slot_count;
-    type->instance_payload_size = 0;
+    type->typecore               = NULL;
+    type->proxy                  = NULL;
+    type->interface              = NULL;
+    type->public_interface       = NULL;
+    type->implementing_molecules = NULL;
+    type->slot_count             = slot_count;
+    type->instance_payload_size  = 0;
 
     return type;
 }

@@ -8,6 +8,7 @@
 struct Eco_Molecule
 {
     struct Eco_Object           _;
+    struct Eco_Molecule*        next_of_same_type;
     struct Eco_Object_Payload*  payload;
 };
 
@@ -19,6 +20,9 @@ static inline void* Eco_Molecule_At(struct Eco_Molecule* object, unsigned int of
 
 
 struct Eco_Molecule* Eco_Molecule_NewPlain();
+
+void Eco_Molecule_UnlinkFromTypeList(struct Eco_Molecule*);
+void Eco_Molecule_LinkIntoTypeList(struct Eco_Molecule*, struct Eco_Type*);
 
 void Eco_Molecule_Init();
 void Eco_Molecule_Terminate();

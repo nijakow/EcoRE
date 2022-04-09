@@ -13,11 +13,14 @@ static void Eco_Molecule_ResizePayload(struct Eco_Molecule* object, unsigned int
     object->payload = Eco_Object_Payload_Resize(object->payload, new_size);
 }
 
+
 static void Eco_Molecule_SwitchType(struct Eco_Molecule* object, struct Eco_Type* new_type)
 {
     if (object->_.type == new_type) return;
 
+    Eco_Molecule_UnlinkFromTypeList(object);
     object->_.type = new_type;
+    Eco_Molecule_LinkIntoTypeList(object, new_type);
 
     Eco_Molecule_ResizePayload(object, new_type->instance_payload_size);
 }

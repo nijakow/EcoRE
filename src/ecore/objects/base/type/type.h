@@ -21,6 +21,8 @@ struct Eco_Type
     struct Eco_Interface* interface;
     struct Eco_Interface* public_interface;
 
+    struct Eco_Molecule*  implementing_molecules;
+
     unsigned int          slot_count;
     unsigned int          instance_payload_size;
     struct Eco_TypeSlot   slots[];

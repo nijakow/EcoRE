@@ -12,6 +12,30 @@ static struct Eco_TypeCore Eco_Molecule_TYPECORE;
 static struct Eco_Type*    Eco_Molecule_TYPE;
 
 
+void Eco_Molecule_UnlinkFromTypeList(struct Eco_Molecule* molecule)
+{
+    struct Eco_Type*       type;
+    struct Eco_Molecule**  ptr;
+
+    type =  molecule->_.type;
+    ptr  = &type->implementing_molecules;
+
+    while (*ptr != NULL)
+    {
+        if (*ptr == molecule) {
+            *ptr = molecule->next_of_same_type;
+            break;
+        }
+        ptr = &((*ptr)->next_of_same_type);
+    }
+}
+
+void Eco_Molecule_LinkIntoTypeList(struct Eco_Molecule* molecule, struct Eco_Type* type)
+{
+    molecule->next_of_same_type  = type->implementing_molecules;
+    type->implementing_molecules = molecule;
+}
+
 
 struct Eco_Molecule* Eco_Molecule_New(struct Eco_Type* type)
 {
@@ -19,7 +43,11 @@ struct Eco_Molecule* Eco_Molecule_New(struct Eco_Type* type)
 
     molecule          = Eco_Object_New(type, sizeof(struct Eco_Molecule));
 
-    molecule->payload = Eco_Object_Payload_New(type->instance_payload_size);
+    if (molecule != NULL)
+    {
+        molecule->payload = Eco_Object_Payload_New(type->instance_payload_size);
+        Eco_Molecule_LinkIntoTypeList(molecule, type);
+    }
 
     return molecule;
 }
@@ -31,6 +59,7 @@ struct Eco_Molecule* Eco_Molecule_NewPlain()
 
 void Eco_Molecule_Del(struct Eco_Molecule* molecule)
 {
+    Eco_Molecule_UnlinkFromTypeList(molecule);
     if (molecule->payload != NULL)
         Eco_Object_Payload_Delete(molecule->payload);
     Eco_Object_Del(&molecule->_);
