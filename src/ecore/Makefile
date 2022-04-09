@@ -28,6 +28,7 @@ objects/base/object/send.c \
 objects/base/molecule/molecule.c \
 objects/base/molecule/object_payload.c \
 objects/base/molecule/object_slots.c \
+objects/base/type_transfer.c \
 objects/misc/array/array.c \
 objects/misc/blob/blob.c \
 objects/misc/key/key.c \
