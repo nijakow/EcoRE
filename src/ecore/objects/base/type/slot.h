@@ -22,8 +22,9 @@ struct Eco_TypeSlot
 
     union {
         struct {
-            unsigned int offset;
-            unsigned int value_size;
+            unsigned int      offset;
+            unsigned int      value_size;
+            struct Eco_Type*  cached_type;
         } inlined;
         struct {
             struct Eco_Code* code;
