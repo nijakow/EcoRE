@@ -36,7 +36,7 @@ bool Eco_Molecule_AddSlot(struct Eco_Molecule*      self,
 
     if (Eco_Type_CopyWithNewInlinedSlot(self->_.type, pos, info, interface, &new_type, &slot)) {
         Eco_Molecule_SwitchType(self, new_type);
-        Eco_TypeSlot_SetValue(slot, self, value);
+        Eco_TypeSlot_SetValue(new_type, slot, self, value);
         return true;
     } else {
         return false;

@@ -1,5 +1,7 @@
 #include "slot.h"
 
+#include "inheriting.h"
+
 #include <ecore/base/extra.h>
 
 #include <ecore/objects/base/typecore.h>
@@ -41,14 +43,14 @@ bool Eco_TypeSlot_GetValue(struct Eco_TypeSlot* slot, struct Eco_Molecule* molec
     }
 }
 
-bool Eco_TypeSlot_SetValue(struct Eco_TypeSlot* slot, struct Eco_Molecule* molecule, Eco_Any value)
+bool Eco_TypeSlot_SetValue(struct Eco_Type* type, struct Eco_TypeSlot* slot, struct Eco_Molecule* molecule, Eco_Any value)
 {
     switch (slot->type)
     {
         case Eco_TypeSlotType_INLINED:
             *((Eco_Any*) Eco_Molecule_At(molecule, slot->body.inlined.offset)) = value;
             if (slot->info.flags.is_with) {
-                // TODO: Initiate a type transfer!
+                Eco_Type_EstablishTypeLink(type, slot, molecule->_.type);
             }
             return true;
         default:
@@ -58,6 +60,7 @@ bool Eco_TypeSlot_SetValue(struct Eco_TypeSlot* slot, struct Eco_Molecule* molec
 
 bool Eco_TypeSlot_Invoke(struct Eco_Message*   message,
                          struct Eco_Molecule*  molecule,
+                         struct Eco_Type*      type,
                          struct Eco_TypeSlot*  slot,
                          Eco_Any               self)
 {
@@ -76,7 +79,7 @@ bool Eco_TypeSlot_Invoke(struct Eco_Message*   message,
             }
             return false;
         case Eco_Message_Type_ASSIGN:
-            return Eco_TypeSlot_SetValue(slot, molecule, message->body.assign.value);
+            return Eco_TypeSlot_SetValue(type, slot, molecule, message->body.assign.value);
         default:
             return false;
     }

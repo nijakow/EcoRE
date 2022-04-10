@@ -2,21 +2,29 @@
 
 #include "inheriting.h"
 
-void Eco_Type_EstablishTypeLink(struct Eco_Type* super,
-                                unsigned int     slot_index,
-                                struct Eco_Type* sub)
+void Eco_Type_EstablishTypeLink(struct Eco_Type*     super,
+                                struct Eco_TypeSlot* slot,
+                                struct Eco_Type*     sub)
 {
     struct Eco_TypeLink*  link;
+
+    for (link = slot->body.inlined.referenced_types;
+         link != NULL;
+         link = link->right)
+    {
+        if (link->sub == sub)
+            return;
+    }
 
     link = Eco_Memory_Alloc(sizeof(struct Eco_TypeLink));
 
     if (link != NULL)
     {
         link->super            = super;
-        link->slot_index       = slot_index;
+        link->slot             = slot;
         link->sub              = sub;
-        link->right            = super->slots[slot_index].body.inlined.referenced_types;
-        super->slots[slot_index].body.inlined.referenced_types = link;
+        link->right            = slot->body.inlined.referenced_types;
+        slot->body.inlined.referenced_types = link;
         link->down             = sub->referencing_types;
         sub->referencing_types = link;
     }
@@ -26,7 +34,7 @@ static void Eco_TypeLink_Unlink(struct Eco_TypeLink* link)
 {
     struct Eco_TypeLink**  ptr;
 
-    ptr = &(link->super->slots[link->slot_index].body.inlined.referenced_types);
+    ptr = &(link->slot->body.inlined.referenced_types);
 
     while (*ptr != NULL)
     {

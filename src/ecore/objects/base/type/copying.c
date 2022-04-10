@@ -48,12 +48,18 @@ static bool Eco_Type_CopyWithNewSlot(struct Eco_Type*      self,
     the_copy->instance_payload_size = self->instance_payload_size;
 
     for (i = 0; i < new_slot_count; i++) {
-        if (i < adjusted_pos) the_copy->slots[i] = self->slots[i];
-        else if (i == adjusted_pos) {
+        if (i < adjusted_pos) {
+            the_copy->slots[i] = self->slots[i];
+            if (the_copy->slots[i].type == Eco_TypeSlotType_INLINED)
+                the_copy->slots[i].body.inlined.referenced_types = NULL;
+        } else if (i == adjusted_pos) {
             Eco_TypeSlot_Initialize(&the_copy->slots[i]);
             *slot_loc = &the_copy->slots[i];
+        } else {
+            the_copy->slots[i] = self->slots[i - 1];
+            if (the_copy->slots[i].type == Eco_TypeSlotType_INLINED)
+                the_copy->slots[i].body.inlined.referenced_types = NULL;
         }
-        else the_copy->slots[i] = self->slots[i - 1];
     }
 
     *type_loc = the_copy;
