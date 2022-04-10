@@ -15,8 +15,6 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
         switch (type->slots[i].type)
         {
             case Eco_TypeSlotType_INLINED:
-                if (type->slots[i].body.inlined.cached_type != NULL)
-                    Eco_GC_State_MarkObject(state, type->slots[i].body.inlined.cached_type);
                 break;
             case Eco_TypeSlotType_CODE:
                 Eco_GC_State_MarkObject(state, type->slots[i].body.code.code);

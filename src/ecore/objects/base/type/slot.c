@@ -24,7 +24,7 @@
 
 void Eco_TypeSlot_Initialize(struct Eco_TypeSlot* slot)
 {
-    // slot->type is currently left uninitialized
+    // slot->referenced_types will be initialized by other code
     slot->interface = Eco_Interface_GetDefaultInterface();
     Eco_BasicSlotInfo_Create(&slot->info);
 }

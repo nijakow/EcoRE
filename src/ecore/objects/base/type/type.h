@@ -11,6 +11,7 @@ struct Eco_Code;
 struct Eco_Message;
 struct Eco_Molecule;
 struct Eco_Interface;
+struct Eco_TypeLink;
 
 struct Eco_Type
 {
@@ -22,6 +23,7 @@ struct Eco_Type
     struct Eco_Interface* public_interface;
 
     struct Eco_Molecule*  implementing_molecules;
+    struct Eco_TypeLink*  referencing_types;
 
     unsigned int          slot_count;
     unsigned int          instance_payload_size;

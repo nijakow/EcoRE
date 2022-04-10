@@ -43,6 +43,7 @@ struct Eco_Type* Eco_Type_New(unsigned int slot_count)
     type->interface              = NULL;
     type->public_interface       = NULL;
     type->implementing_molecules = NULL;
+    type->referencing_types      = NULL;
     type->slot_count             = slot_count;
     type->instance_payload_size  = 0;
 

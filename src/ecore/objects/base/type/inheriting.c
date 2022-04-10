@@ -1,0 +1,3 @@
+#include "inheriting.h"
+
+
