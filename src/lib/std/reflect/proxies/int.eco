@@ -42,6 +42,7 @@
 
     with inherited misc = {
         negate => (0 - self);
+        abs    => (self < 0) if: [ negate ] else: [ self ].
     };
 
     with inherited conversions = {
