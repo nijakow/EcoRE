@@ -33,13 +33,7 @@ struct Eco_Message
     bool                   private_send;
 };
 
-struct Eco_SendLink
-{
-    struct Eco_SendLink*  previous;
-    struct Eco_Object*    object;
-};
-
-bool Eco_Send_ToObject(struct Eco_Message*, struct Eco_SendLink*, struct Eco_Object*, Eco_Any);
-bool Eco_Send(struct Eco_Message*, struct Eco_SendLink*, Eco_Any, Eco_Any, bool);
+bool Eco_Send_ToObject(struct Eco_Message*, struct Eco_Object*, Eco_Any);
+bool Eco_Send(struct Eco_Message*, Eco_Any, Eco_Any, bool);
 
 #endif

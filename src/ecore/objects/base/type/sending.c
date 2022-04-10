@@ -5,7 +5,6 @@
 
 
 bool Eco_Type_SendMessageToMolecule(struct Eco_Message*  message,
-                                    struct Eco_SendLink* link,
                                     Eco_Any              self,
                                     struct Eco_Type*     type,
                                     struct Eco_Molecule* molecule)
@@ -39,9 +38,9 @@ bool Eco_Type_SendMessageToMolecule(struct Eco_Message*  message,
                 if (slot->info.flags.is_with && Eco_Interface_ImplementsMessage(slot->interface, message->key)) {
                     if (Eco_TypeSlot_GetValue(slot, molecule, &value)) {
                         if (slot->info.flags.is_inherited) {
-                            result = Eco_Send(message, link, value, self, message->private_send);
+                            result = Eco_Send(message, value, self, message->private_send);
                         } else {
-                            result = Eco_Send(message, link, value, value, message->private_send);
+                            result = Eco_Send(message, value, value, message->private_send);
                         }
                         if (result) return true;
                     }

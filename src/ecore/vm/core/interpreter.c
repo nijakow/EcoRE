@@ -217,7 +217,6 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             fiber->stack_pointer        = sp;
 
             if (!Eco_Send(&message,
-                           NULL,
                            *Eco_Fiber_Nth(fiber, message.body.send.arg_count),
                            *Eco_Fiber_Nth(fiber, message.body.send.arg_count),
                            Eco_Any_Equals(Eco_Fiber_Top(fiber)->registers[0],
@@ -245,7 +244,6 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             fiber->stack_pointer        = sp;
 
             if (!Eco_Send(&message,
-                           NULL,
                            *Eco_Fiber_Nth(fiber, message.body.send.arg_count),
                            *Eco_Fiber_Nth(fiber, message.body.send.arg_count),
                            Eco_Any_Equals(Eco_Fiber_Top(fiber)->registers[0],
@@ -269,7 +267,6 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             fiber->stack_pointer      = sp;
 
             if (!Eco_Send(&message,
-                           NULL,
                            *Eco_Fiber_Nth(fiber, 1),
                            *Eco_Fiber_Nth(fiber, 1),
                            Eco_Any_Equals(Eco_Fiber_Top(fiber)->registers[0],
@@ -294,7 +291,6 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             fiber->stack_pointer      = sp;
 
             if (!Eco_Send(&message,
-                           NULL,
                            *Eco_Fiber_Nth(fiber, 1),
                            *Eco_Fiber_Nth(fiber, 1),
                            Eco_Any_Equals(Eco_Fiber_Top(fiber)->registers[0],

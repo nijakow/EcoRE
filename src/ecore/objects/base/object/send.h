@@ -3,6 +3,6 @@
 
 #include "object.h"
 
-bool Eco_Object_Send(struct Eco_Message*, struct Eco_SendLink*, struct Eco_Object*, Eco_Any);
+bool Eco_Object_Send(struct Eco_Message*, struct Eco_Object*, Eco_Any);
 
 #endif
