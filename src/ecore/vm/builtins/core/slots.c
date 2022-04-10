@@ -33,7 +33,7 @@ bool Eco_VM_Builtin_AddValueSlot(struct Eco_Fiber* fiber, unsigned int args)
 
     // TODO: More flags
     info.key                =  (struct Eco_Key*) Eco_Any_AsPointer(key);
-    info.flags.is_inherited = !(Eco_Any_AsInteger(flags) & 0x01) != 0;
+    info.flags.is_inherited =  (Eco_Any_AsInteger(flags) & 0x01) == 0;
     info.flags.is_with      =  (Eco_Any_AsInteger(flags) & 0x02) != 0;
     info.flags.is_part      =  (Eco_Any_AsInteger(flags) & 0x04) != 0;
     info.flags.is_private   =  (Eco_Any_AsInteger(flags) & 0x08) != 0;
@@ -77,7 +77,7 @@ bool Eco_VM_Builtin_AddCodeSlot(struct Eco_Fiber* fiber, unsigned int args)
 
     // TODO: More flags
     info.key                =  (struct Eco_Key*) Eco_Any_AsPointer(key);
-    info.flags.is_inherited = !(Eco_Any_AsInteger(flags) & 0x01) != 0;
+    info.flags.is_inherited =  (Eco_Any_AsInteger(flags) & 0x01) == 0;
     info.flags.is_with      =  (Eco_Any_AsInteger(flags) & 0x02) != 0;
     info.flags.is_part      =  (Eco_Any_AsInteger(flags) & 0x04) != 0;
     info.flags.is_private   =  (Eco_Any_AsInteger(flags) & 0x08) != 0;
