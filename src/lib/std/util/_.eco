@@ -46,7 +46,7 @@
 
 #=std/util/StandardStackImpl: {
     push: e => append: e;
-    peek    => last;
+    top     => last;
     pop     => removeLast;
 };
 

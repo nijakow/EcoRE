@@ -60,7 +60,7 @@
         #'isEmpty',
         #'push:'(element),
         #'pop',
-        #'peek'
+        #'top'
     ];
 
     IQueue = #=IQueue: %[
