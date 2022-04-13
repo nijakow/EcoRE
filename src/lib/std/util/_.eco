@@ -21,17 +21,16 @@
       ^ v
     );
 
-    asVector => (
-        | v <- std util newVector |
-        do: [ :value | v append: value ].
-      ^ v
-    );
-
     asBlob => (
         | b <- std util newBlob: size |
         forEach: [ :i, :v | b at: i put: v ].
       ^ b
     );
+
+    into: other => other from: self;
+    from: other => other do: [ :e | add: e ];
+
+    asVector => into: std util newVector;
 },
 
 #=std/util/StandardListAccess: {
