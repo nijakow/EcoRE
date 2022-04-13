@@ -13,7 +13,6 @@
         with std = #<:std>;
         with interfaces = #<:interfaces>;
         lang = #<:lang>;
-        testing = #<:testing>;
     };
 
     writeOn: writer => writer << 'lobby';

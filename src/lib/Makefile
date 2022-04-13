@@ -10,7 +10,6 @@ std/clonable.eco \
 std/defaultbehavior.eco \
 std/globals.eco \
 std/maybe.eco \
-std/module.eco \
 std/io/_.eco \
 std/io/fdbytereader.eco \
 std/io/fdbytewriter.eco \
@@ -70,8 +69,6 @@ lang/eco/parser/_.eco \
 lang/eco/parser/reader.eco \
 lang/eco/parser/shared.eco \
 lang/eco/parser/tokenizer.eco \
-testing/_.eco \
-testing/test.eco \
 interfaces.eco \
 master.eco
 

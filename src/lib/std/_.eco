@@ -7,7 +7,6 @@
 
     DefaultBehavior = #<:std/DefaultBehavior>;
     Clonable = #<:std/Clonable>;
-    Module = #<:std/Module>;
 
     with bool = #<:std/bool>;
     with maybe = #<:std/maybe>;
