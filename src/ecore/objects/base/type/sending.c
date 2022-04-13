@@ -20,7 +20,7 @@ bool Eco_Type_SendMessageToMolecule(struct Eco_Message*  message,
         if (slot->info.key == message->key) {
             if (slot->info.flags.is_private && !message->private_send)
                 continue;
-            Eco_TypeSlot_Invoke(message, molecule, type, slot, self);
+            Eco_TypeSlot_Invoke(message, molecule, type, i, self);
             return true;
         }
     }

@@ -3,9 +3,11 @@
 #include <ecore/base/extra.h>
 
 #include <ecore/objects/base/typecore.h>
+#include <ecore/objects/base/type/copying.h>
 #include <ecore/vm/builtins/builtins.h>
 #include <ecore/vm/memory/arena.h>
 
+#include <ecore/objects/base/type_transfer.h>
 #include <ecore/objects/base/object.h>
 #include <ecore/objects/base/molecule/molecule.h>
 #include <ecore/objects/misc/key/key.h>
@@ -41,14 +43,24 @@ bool Eco_TypeSlot_GetValue(struct Eco_TypeSlot* slot, struct Eco_Molecule* molec
     }
 }
 
-bool Eco_TypeSlot_SetValue(struct Eco_Type* type, struct Eco_TypeSlot* slot, struct Eco_Molecule* molecule, Eco_Any value)
+bool Eco_TypeSlot_SetValue(struct Eco_Type* type, unsigned int index, struct Eco_Molecule* molecule, Eco_Any value)
 {
+    struct Eco_TypeSlot*  slot;
+    //struct Eco_Type*      new_type;
+    //struct Eco_Type*      referenced_type;
+
+    slot = &(type->slots[index]);
     switch (slot->type)
     {
         case Eco_TypeSlotType_INLINED:
             *((Eco_Any*) Eco_Molecule_At(molecule, slot->body.inlined.offset)) = value;
             if (slot->info.flags.is_with) {
-                // TODO: Initiate type transfer
+                /*
+                referenced_type = Eco_Any_GetType(value);
+                if (Eco_Type_CopyWithChangedSlotTypeReference(molecule->_.type, index, referenced_type, &new_type))
+                    Eco_TypeTransfer(molecule, new_type);
+                */
+                // TODO, FIXME, XXX: Else?
             }
             return true;
         default:
@@ -59,9 +71,12 @@ bool Eco_TypeSlot_SetValue(struct Eco_Type* type, struct Eco_TypeSlot* slot, str
 bool Eco_TypeSlot_Invoke(struct Eco_Message*   message,
                          struct Eco_Molecule*  molecule,
                          struct Eco_Type*      type,
-                         struct Eco_TypeSlot*  slot,
+                         unsigned int          index,
                          Eco_Any               self)
 {
+    struct Eco_TypeSlot*  slot;
+
+    slot = &type->slots[index];
     switch (message->type)
     {
         case Eco_Message_Type_SEND:
@@ -77,7 +92,7 @@ bool Eco_TypeSlot_Invoke(struct Eco_Message*   message,
             }
             return false;
         case Eco_Message_Type_ASSIGN:
-            return Eco_TypeSlot_SetValue(type, slot, molecule, message->body.assign.value);
+            return Eco_TypeSlot_SetValue(type, index, molecule, message->body.assign.value);
         default:
             return false;
     }

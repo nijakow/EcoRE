@@ -32,6 +32,11 @@ struct Eco_Type* Eco_Type_NewPrefab(struct Eco_TypeCore*);
 
 void Eco_Type_Subclone(struct Eco_CloneState*, struct Eco_Type*, struct Eco_Molecule*, struct Eco_Molecule*);
 
+static inline unsigned int Eco_Type_SlotIndexOf(struct Eco_Type* type, struct Eco_TypeSlot* slot)
+{
+    return slot - type->slots;
+}
+
 void Eco_Types_Init();
 void Eco_Types_Terminate();
 

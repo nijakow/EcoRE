@@ -35,7 +35,7 @@ struct Eco_TypeSlot
 void Eco_TypeSlot_Initialize(struct Eco_TypeSlot*);
 
 bool Eco_TypeSlot_GetValue(struct Eco_TypeSlot*, struct Eco_Molecule*, Eco_Any*);
-bool Eco_TypeSlot_SetValue(struct Eco_Type*, struct Eco_TypeSlot*, struct Eco_Molecule*, Eco_Any);
-bool Eco_TypeSlot_Invoke(struct Eco_Message*, struct Eco_Molecule*, struct Eco_Type*, struct Eco_TypeSlot*, Eco_Any);
+bool Eco_TypeSlot_SetValue(struct Eco_Type*, unsigned int, struct Eco_Molecule*, Eco_Any);
+bool Eco_TypeSlot_Invoke(struct Eco_Message*, struct Eco_Molecule*, struct Eco_Type*, unsigned int, Eco_Any);
 
 #endif
