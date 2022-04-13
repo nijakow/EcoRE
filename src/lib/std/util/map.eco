@@ -13,11 +13,7 @@
         from: collection => ( collection forEach: [ :k, :v | at: k put: v ]. ^ self );
         into: collection => collection from: self;
 
-        at: index do: found else: notfound => ( forEach: [ :k, :v | (k == index) if: [ ^ found value(v) ] ]. ^ notfound value );
-        at: index do: found => at: index do: found else: [];
-        at: index else: notfound => at: index do: [ :v | ^ v ] else: notfound;
-        at: index default: def => at: index else: [ ^ def ];
-        at: index => at: index do: [ :v | ^ Yes: v ] else: [ ^ No ];
+        at: index => ( forEach: [ :k, :v | (k == index) if: [ ^ Yes: v ] ]. No );
 
         at: index put: value => (
             values do: [ :p | (p first == index) if: [ p second: value. ^ self ] ].

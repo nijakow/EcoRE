@@ -3,7 +3,7 @@
     scopes;
 
     init => (
-        scopes     <- newScope.
+        scopes <- newScope.
         addParameter: #'self'.
       ^ self
     );
