@@ -1,7 +1,5 @@
 #include "slot.h"
 
-#include "inheriting.h"
-
 #include <ecore/base/extra.h>
 
 #include <ecore/objects/base/typecore.h>
@@ -50,7 +48,7 @@ bool Eco_TypeSlot_SetValue(struct Eco_Type* type, struct Eco_TypeSlot* slot, str
         case Eco_TypeSlotType_INLINED:
             *((Eco_Any*) Eco_Molecule_At(molecule, slot->body.inlined.offset)) = value;
             if (slot->info.flags.is_with) {
-                Eco_Type_EstablishTypeLink(type, slot, molecule->_.type);
+                // TODO: Initiate type transfer
             }
             return true;
         default:

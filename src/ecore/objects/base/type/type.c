@@ -1,7 +1,6 @@
 #include "type.h"
 
 #include "gc.h"
-#include "inheriting.h"
 
 #include <ecore/base/extra.h>
 
@@ -53,7 +52,6 @@ struct Eco_Type* Eco_Type_New(unsigned int slot_count)
 
 void Eco_Type_Del(struct Eco_Type* type)
 {
-    Eco_Type_RemoveAllTypeLinks(type);
     Eco_Object_Del(&type->_);
 }
 

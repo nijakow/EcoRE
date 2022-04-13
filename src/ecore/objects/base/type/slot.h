@@ -7,7 +7,6 @@
 #include "slot_info.h"
 
 struct Eco_Molecule;
-struct Eco_TypeLink;
 
 enum Eco_TypeSlotType
 {
@@ -25,7 +24,7 @@ struct Eco_TypeSlot
         struct {
             unsigned int          offset;
             unsigned int          value_size;
-            struct Eco_TypeLink*  referenced_types;
+            struct Eco_Type*      referenced_type;
         } inlined;
         struct {
             struct Eco_Code* code;

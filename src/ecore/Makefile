@@ -16,7 +16,6 @@ eco.c \
 objects/objects.c \
 objects/base/type/copying.c \
 objects/base/type/gc.c \
-objects/base/type/inheriting.c \
 objects/base/type/interface.c \
 objects/base/type/sending.c \
 objects/base/type/slot_info.c \
