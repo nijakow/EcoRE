@@ -194,7 +194,6 @@ class Tokenizer:
         elif self._s.peeks(','): return Token(self, TokenType.SEPARATOR)
         elif self._s.peeks(';'): return Token(self, TokenType.SEPARATOR)
         elif self._s.peeks(':'): return Token(self, TokenType.COLON)
-        elif self._s.peeks('~'): return Token(self, TokenType.TILDE)
         elif self._s.peeks('|'): return Token(self, TokenType.BAR)
         elif self._s.peeks('^'): return Token(self, TokenType.CARET)
         elif self._s.peeks('\''): return StringToken(self, self.parse_string('\''))
@@ -232,6 +231,7 @@ class Tokenizer:
         elif c == 'final': return Token(self, TokenType.FINAL)
         elif c == 'own': return Token(self, TokenType.OWN)
         elif c == '=': return Token(self, TokenType.ASSIGNMENT)
+        elif c == '~': return Token(self, TokenType.TILDE)
         else: return IdentifierToken(self, c)
     
     def unread(self, token: Token):

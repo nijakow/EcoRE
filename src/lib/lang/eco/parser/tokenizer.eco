@@ -95,7 +95,6 @@
             (peeks: ',')   if: [ ^ newTokenWithType: TokenType SEPARATOR  ].
             (peeks: ';')   if: [ ^ newTokenWithType: TokenType SEPARATOR  ].
             (peeks: ':')   if: [ ^ newTokenWithType: TokenType COLON      ].
-            (peeks: '~')   if: [ ^ newTokenWithType: TokenType TILDE      ].
             (peeks: '|')   if: [ ^ newTokenWithType: TokenType BAR        ].
             (peeks: '^')   if: [ ^ newTokenWithType: TokenType CARET      ].
             (peeks: '\'')  if: [ ^ newTokenWithType: TokenType STRING Payload: (parseString: #\') ].
@@ -125,6 +124,7 @@
             (sb equals: 'final')       if: [ ^ newTokenWithType: TokenType FINAL      ].
             (sb equals: '@deprecated') if: [ ^ newTokenWithType: TokenType DEPRECATED ].
             (sb equals: '=')           if: [ ^ newTokenWithType: TokenType ASSIGNMENT ].
+            (sb equals: '~')           if: [ ^ newTokenWithType: TokenType TILDE      ].
           ^ newTokenWithType: (TokenType IDENTIFIER) Payload: (sb asKey)
         );
 
