@@ -2,6 +2,7 @@
 #=std/reflect/proxies/Block: {
     isBlock    => true;
     value(...) => #'ecosphere.ecore.flow.value'(self, ...);
+    value: v   => value(v);
     repeat     => ( self value. #'ecosphere.ecore.flow.reset'() );
 
     withBreak  => self value([ ^ self ]);
