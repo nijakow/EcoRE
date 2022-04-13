@@ -11,6 +11,8 @@
     at: index putInt16: value => #'ecosphere.ecore.object.blob.at_put_int16'(self, index, value);
     at: index putInt32: value => #'ecosphere.ecore.object.blob.at_put_int32'(self, index, value);
 
+    from: collection => ( collection forEach: [ :i, :v | at: i put: v ]. ^ self );
+
     with inherited iterations = #<:std/util/StandardListIterations>;
     with inherited conversions = #<:std/util/StandardListConversions>;
     with inherited access = #<:std/util/StandardListAccess>;

@@ -15,22 +15,12 @@
 },
 
 #=std/util/StandardListConversions: {
-    asArray => (
-        | v <- std util newArray: size |
-        forEach: [ :index, :value | v at: index put: value ].
-      ^ v
-    );
-
-    asBlob => (
-        | b <- std util newBlob: size |
-        forEach: [ :i, :v | b at: i put: v ].
-      ^ b
-    );
-
     into: other => other from: self;
-    from: other => other do: [ :e | add: e ];
+    from: other => ( other do: [ :e | add: e ]. ^ self);
 
-    asVector => into: std util newVector;
+    asArray  => into: (std util newArray: size);
+    asBlob   => into: (std util newBlob: size);
+    asVector => into: (std util newVector);
 },
 
 #=std/util/StandardListAccess: {
