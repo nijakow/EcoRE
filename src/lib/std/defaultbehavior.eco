@@ -16,7 +16,7 @@
     -> block      => asBool if: block;
     if: t else: f => asBool if: t else: f;
     & value       => (((std util Collector) clone) init: self) & value;
-    cons: value   => ((std util MutablePair) clone) initWithFirst: self Second: value;
+    ~> value      => ((std util MutablePair) clone) initWithFirst: self Second: value;
     writeOn: writer => writer << 'an object';
     
     private with lobby = #<:lobby>;

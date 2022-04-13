@@ -18,7 +18,7 @@
 
         at: index put: value => (
             values do: [ :p | (p first == index) if: [ p second: value. ^ self ] ].
-            values append: (index cons: value).
+            values append: (index ~> value).
             ^ self
         );
 
