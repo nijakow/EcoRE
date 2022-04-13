@@ -1,6 +1,5 @@
 
 #=std/DefaultBehavior: {
-    itself        => self;
     value         => self;
     mirror        => (std reflect Mirror) clone init: self;
     asBool        => true;
@@ -9,12 +8,16 @@
     equals: e     => is: e;
     == other      => is: other;
     != other      => (== other) not;
+
     let: block    => block value(self);
-    when: block   => asBool if: [ block value(self) ];
-    if: block     => asBool if: block;
-    unless: block => asBool unless: block;
-    -> block      => asBool if: block;
-    if: t else: f => asBool if: t else: f;
+
+    if: t else: f => t value;
+    if: block     => if: block else: [];
+    unless: block => if: [] else: block;
+    -> block      => if: block;
+    when: block   => if: [ block value(self) ];
+    not           => if: [ false ] else: [ true ];
+
     & value       => (((std util Collector) clone) init: self) & value;
     ~> value      => ((std util MutablePair) clone) initWithFirst: self Second: value;
     writeOn: writer => writer << 'an object';
