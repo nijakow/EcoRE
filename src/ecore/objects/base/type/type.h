@@ -15,6 +15,9 @@ struct Eco_Interface;
 struct Eco_Type
 {
     struct Eco_Object     _;
+    
+    struct Eco_Type**     prev;
+    struct Eco_Type*      next;
 
     struct Eco_TypeCore*  typecore;
     struct Eco_Object*    proxy;

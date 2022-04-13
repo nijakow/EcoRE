@@ -29,6 +29,8 @@ struct Eco_Arena  Eco_TYPES;
 struct Eco_TypeCore Eco_Type_TYPECORE;
 struct Eco_Type*    Eco_Type_TYPE;
 
+struct Eco_Type*    Eco_ALL_TYPES = NULL;
+
 
 struct Eco_Type* Eco_Type_New(unsigned int slot_count)
 {
@@ -46,11 +48,20 @@ struct Eco_Type* Eco_Type_New(unsigned int slot_count)
     type->slot_count             = slot_count;
     type->instance_payload_size  = 0;
 
+    type->prev = &Eco_ALL_TYPES;
+    type->next =  Eco_ALL_TYPES;
+    if (Eco_ALL_TYPES != NULL)
+        Eco_ALL_TYPES->prev = &type->next;
+    Eco_ALL_TYPES = type;
+
     return type;
 }
 
 void Eco_Type_Del(struct Eco_Type* type)
 {
+    *(type->prev) = type->next;
+    if (type->next != NULL)
+        type->next->prev = type->prev;
     Eco_Object_Del(&type->_);
 }
 
