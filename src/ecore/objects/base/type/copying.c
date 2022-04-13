@@ -34,6 +34,8 @@ static struct Eco_Type* Eco_Type_Copy(struct Eco_Type* type)
 
     if (the_copy != NULL)
     {
+        the_copy->typecore              = type->typecore;
+        the_copy->instance_payload_size = type->instance_payload_size;
         for (i = 0; i < type->slot_count; i++)
         {
             the_copy->slots[i] = type->slots[i];
