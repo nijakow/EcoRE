@@ -25,6 +25,8 @@
         ] repeat.
     );
 
+    returns: v => ( value. ^ v );
+
     while: b   => ( (self value) unless: [ ^ #<:std/bool/false> ]. b value. #'ecosphere.ecore.flow.reset'() );
     until: b   => ( (self value) if: [ ^ #<:std/bool/true> ]. b value. #'ecosphere.ecore.flow.reset'() );
     catch: b   => ( [ #'ecosphere.ecore.flow.set_exception_handler'(b). self value ] value );
