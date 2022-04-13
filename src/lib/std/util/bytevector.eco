@@ -47,6 +47,7 @@
             size <- size + 1.
             ^ self
         );
+        add: element => append: element;
 
         remove: index => (
             | elem <- at: index |

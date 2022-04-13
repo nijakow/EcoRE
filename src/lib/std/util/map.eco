@@ -10,6 +10,9 @@
         forEach: block => values do: [ :v | block value(v first, v second) ];
         do: block => forEach: [ :k, :v | block value(k) ];
 
+        from: collection => ( collection forEach: [ :k, :v | at: k put: v ]. ^ self );
+        into: collection => collection from: self;
+
         at: index do: found else: notfound => ( forEach: [ :k, :v | (k == index) if: [ ^ found value(v) ] ]. ^ notfound value );
         at: index do: found => at: index do: found else: [];
         at: index else: notfound => at: index do: [ :v | ^ v ] else: notfound;
