@@ -36,8 +36,6 @@ std/reflect/proxies/ffi/ffitype.eco \
 std/util/_.eco \
 std/util/bytevector.eco \
 std/util/collector.eco \
-std/util/link.eco \
-std/util/list.eco \
 std/util/map.eco \
 std/util/mutablepair.eco \
 std/util/range.eco \

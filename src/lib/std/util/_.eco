@@ -27,12 +27,6 @@
       ^ v
     );
 
-    asList => (
-        | v <- std util newList |
-        do: [ :value | v append: value ].
-      ^ v
-    );
-
     asBlob => (
         | b <- std util newBlob: size |
         forEach: [ :i, :v | b at: i put: v ].
@@ -95,7 +89,6 @@
     newStack       => (#<:std/util> Stack) new;
     newQueue       => (#<:std/util> Queue) new;
     newSet         => (#<:std/util> Set) new;
-    newList        => (#<:std/util> List) new;
     newMap         => (#<:std/util> Map) new;
     newStringBuilder => (#<:std/util> StringBuilder) new;
     newRangeFrom: start To: end => ((#<:std/util> Range) clone) initWithStart: start End: end;
