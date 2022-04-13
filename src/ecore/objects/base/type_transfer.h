@@ -4,6 +4,6 @@
 #include <ecore/objects/base/type/type.h>
 #include <ecore/objects/base/molecule/molecule.h>
 
-void Eco_TypeTransfer(struct Eco_Molecule*, struct Eco_Type*);
+void Eco_TypeTransfer(struct Eco_Molecule*, unsigned int, struct Eco_Type*);
 
 #endif

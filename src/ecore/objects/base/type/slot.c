@@ -3,7 +3,6 @@
 #include <ecore/base/extra.h>
 
 #include <ecore/objects/base/typecore.h>
-#include <ecore/objects/base/type/copying.h>
 #include <ecore/vm/builtins/builtins.h>
 #include <ecore/vm/memory/arena.h>
 
@@ -46,8 +45,6 @@ bool Eco_TypeSlot_GetValue(struct Eco_TypeSlot* slot, struct Eco_Molecule* molec
 bool Eco_TypeSlot_SetValue(struct Eco_Type* type, unsigned int index, struct Eco_Molecule* molecule, Eco_Any value)
 {
     struct Eco_TypeSlot*  slot;
-    struct Eco_Type*      new_type;
-    struct Eco_Type*      referenced_type;
 
     slot = &(type->slots[index]);
     switch (slot->type)
@@ -55,10 +52,7 @@ bool Eco_TypeSlot_SetValue(struct Eco_Type* type, unsigned int index, struct Eco
         case Eco_TypeSlotType_INLINED:
             *((Eco_Any*) Eco_Molecule_At(molecule, slot->body.inlined.offset)) = value;
             if (slot->info.flags.is_with) {
-                referenced_type = Eco_Any_GetType(value);
-                if (Eco_Type_CopyWithChangedSlotTypeReference(molecule->_.type, index, referenced_type, &new_type))
-                    Eco_TypeTransfer(molecule, new_type);
-                // TODO, FIXME, XXX: Else?
+                Eco_TypeTransfer(molecule, index, Eco_Any_GetType(value));
             }
             return true;
         default:
