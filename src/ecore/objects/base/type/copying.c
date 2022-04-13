@@ -25,6 +25,24 @@
 struct Eco_Type* Eco_Type_New(unsigned int slot_count);
 
 
+static struct Eco_Type* Eco_Type_Copy(struct Eco_Type* type)
+{
+    struct Eco_Type*  the_copy;
+    unsigned int      i;
+
+    the_copy = Eco_Type_New(type->slot_count);
+
+    if (the_copy != NULL)
+    {
+        for (i = 0; i < type->slot_count; i++)
+        {
+            the_copy->slots[i] = type->slots[i];
+        }
+    }
+
+    return the_copy;
+}
+
 static bool Eco_Type_CopyWithNewSlot(struct Eco_Type*      self,
                                      int                   pos,
                                      struct Eco_Type**     type_loc,
@@ -152,4 +170,22 @@ bool Eco_Type_CopyWithRemovedSlot(struct Eco_Type* self,
     *type_loc = the_copy;
 
     return true;
+}
+
+bool Eco_Type_CopyWithChangedSlotTypeReference(struct Eco_Type*  type,
+                                               unsigned int      slot_index,
+                                               struct Eco_Type*  new_reference_type,
+                                               struct Eco_Type** type_loc)
+{
+    struct Eco_Type*  the_copy;
+
+    the_copy = Eco_Type_Copy(type);
+
+    if (the_copy != NULL)
+    {
+        the_copy->slots[slot_index].body.inlined.referenced_type = new_reference_type;
+        *type_loc = the_copy;
+    }
+
+    return (the_copy != NULL);
 }
