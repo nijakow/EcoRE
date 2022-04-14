@@ -120,6 +120,9 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.type.by_index", Eco_VM_Builtin_FFIType_GetForIndex);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.type.sizeof", Eco_VM_Builtin_FFIType_GetSizeInBytes);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.function.new", Eco_VM_Builtin_FFIFunction_New);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.function.arg_count", Eco_VM_Builtin_FFIFunction_ArgCount);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.function.return_type", Eco_VM_Builtin_FFIFunction_ReturnType);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.function.arg_type", Eco_VM_Builtin_FFIFunction_ArgType);
 #endif
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.io.fd.open_file", Eco_VM_Builtin_OpenFile);

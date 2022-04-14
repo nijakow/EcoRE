@@ -64,4 +64,45 @@ bool Eco_VM_Builtin_FFIFunction_New(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_FFIFunction_ArgCount(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any function;
+    Eco_Any count;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &function);
+    count = Eco_Any_FromInteger(Eco_FFIFunc_GetArgumentCount(Eco_Any_AsPointer(function)));
+    Eco_Fiber_Push(fiber, &count);
+    return true;
+}
+
+bool Eco_VM_Builtin_FFIFunction_ReturnType(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any function;
+    Eco_Any result;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &function);
+    result = Eco_Any_FromPointer(Eco_FFIFunc_GetReturnType(Eco_Any_AsPointer(function)));
+    Eco_Fiber_Push(fiber, &result);
+    return true;
+}
+
+bool Eco_VM_Builtin_FFIFunction_ArgType(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any function;
+    Eco_Any index;
+    Eco_Any result;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    Eco_Fiber_Pop(fiber, &index);
+    Eco_Fiber_Pop(fiber, &function);
+    result = Eco_Any_FromPointer(Eco_FFIFunc_GetArgumentType(Eco_Any_AsPointer(function), Eco_Any_AsInteger(index)));
+    Eco_Fiber_Push(fiber, &result);
+    return true;
+}
+
 #endif

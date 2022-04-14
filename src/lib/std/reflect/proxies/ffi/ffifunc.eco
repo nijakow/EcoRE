@@ -1,5 +1,9 @@
 
 #=std/reflect/proxies/ffi/FFIFunc: {
+    argumentCount => #'ecosphere.ecore.ffi.function.arg_count'(self);
+    argumentType: index => #'ecosphere.ecore.ffi.function.arg_type'(self);
+    returnType => #'ecosphere.ecore.ffi.function.return_type'(self);
+
     writeOn: writer => writer << '<ffi_func>';
     with inherited parent = #<:std/Clonable>;
 }
