@@ -1,0 +1,28 @@
+
+#=std/reflect/ffi: {
+    types = {
+        private GetTypeByIndex: index => #'ecosphere.ecore.ffi.type.by_index'(index);
+
+        void => GetTypeByIndex: 0;
+        uint8 => GetTypeByIndex: 1;
+        sint8 => GetTypeByIndex: 2;
+        uint16 => GetTypeByIndex: 3;
+        sint16 => GetTypeByIndex: 4;
+        uint32 => GetTypeByIndex: 5;
+        sint32 => GetTypeByIndex: 6;
+        uint64 => GetTypeByIndex: 7;
+        sint64 => GetTypeByIndex: 8;
+        float => GetTypeByIndex: 9;
+        double => GetTypeByIndex: 10;
+        uchar => GetTypeByIndex: 11;
+        schar => GetTypeByIndex: 12;
+        ushort => GetTypeByIndex: 13;
+        sshort => GetTypeByIndex: 14;
+        uint => GetTypeByIndex: 15;
+        sint => GetTypeByIndex: 16;
+        ulong => GetTypeByIndex: 17;
+        slong => GetTypeByIndex: 18;
+        longdouble => GetTypeByIndex: 19;
+        pointer => GetTypeByIndex: 20;
+    };
+}
