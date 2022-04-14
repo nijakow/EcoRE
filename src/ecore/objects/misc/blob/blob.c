@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <unistd.h>
-#include <dlfcn.h>
+
+#include <ecore/base/config.h>
+
+#ifdef ECO_CONFIG_USE_DLOPEN
+# include <dlfcn.h>
+#endif
 
 #include "blob.h"
 
@@ -184,16 +189,28 @@ struct Eco_Blob* Eco_Blob_NewFromFile(char* path)
 
 struct Eco_Blob* Eco_Blob_DLOpen(char* path)
 {
+#ifdef ECO_CONFIG_USE_DLOPEN
     void* ptr;
 
     ptr = dlopen(path, RTLD_NOW);
+    if (ptr == NULL)
+        return NULL;
     return Eco_Blob_NewFromData(&ptr, sizeof(ptr));
+#else
+    return NULL;
+#endif
 }
 
 struct Eco_Blob* Eco_Blob_DLSym(void* base, char* symbol)
 {
+#ifdef ECO_CONFIG_USE_DLOPEN
     void* symptr;
 
     symptr = dlsym(base, symbol);
+    if (symptr == NULL)
+        return NULL;
     return Eco_Blob_NewFromData(&symptr, sizeof(symptr));
+#else
+    return NULL;
+#endif
 }

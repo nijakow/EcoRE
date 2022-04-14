@@ -1,5 +1,7 @@
 
 #=std/reflect/ffi: {
+    with std = #<:std>;
+    
     types = {
         private GetTypeByIndex: index => #'ecosphere.ecore.ffi.type.by_index'(index);
 
@@ -44,4 +46,33 @@
         
         pointer => GetTypeByIndex: 20;
     };
+
+    SharedLibrary = {
+        private library;
+
+        with inherited trait = {
+            init: lib => (
+                library <- lib.
+              ^ self
+            );
+
+            getSymbol: name => (
+                #'ecosphere.ecore.object.blob.dlsym'(library, name) when: [ :sym |
+                  ^ Yes: sym
+                ].
+              ^ No
+            );
+
+            writeOn: w => w << 'a shared library';
+        };
+
+        with inherited parent = #<:std/Clonable>;
+    };
+
+    DLOpen: path => (
+        #'ecosphere.ecore.object.blob.dlopen'(path) when: [ :lib |
+          ^ Yes: ((SharedLibrary clone) init: lib)
+        ].
+      ^ No
+    );
 }

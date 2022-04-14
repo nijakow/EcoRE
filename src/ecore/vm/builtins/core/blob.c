@@ -2,6 +2,7 @@
 
 #include <ecore/objects/misc/blob/blob.h>
 #include <ecore/objects/misc/string/string.h>
+#include <ecore/vm/vm.h>
 
 
 bool Eco_VM_Builtin_BlobNew(struct Eco_Fiber* fiber, unsigned int args)
@@ -255,16 +256,22 @@ bool Eco_VM_Builtin_BlobOpenFile(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+#ifdef ECO_CONFIG_USE_DLOPEN
 bool Eco_VM_Builtin_BlobDLOpen(struct Eco_Fiber* fiber, unsigned int args)
 {
     struct Eco_String*  string;
+    struct Eco_Blob*    blob;
     Eco_Any             any;
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
     Eco_Fiber_Pop(fiber, &any);
     string = Eco_Any_AsPointer(any);
-    any = Eco_Any_FromPointer(Eco_Blob_DLOpen(string->bytes));
+    blob = Eco_Blob_DLOpen(string->bytes);
+    if (blob != NULL)
+        any = Eco_Any_FromPointer(blob);
+    else
+        any = fiber->vm->constants.cfalse;
     Eco_Fiber_Push(fiber, &any);
     return true;
 }
@@ -275,13 +282,18 @@ bool Eco_VM_Builtin_BlobDLSym(struct Eco_Fiber* fiber, unsigned int args)
     struct Eco_Blob*    blob;
     Eco_Any             any;
 
-    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
     Eco_Fiber_Pop(fiber, &any);
     string = Eco_Any_AsPointer(any);
     Eco_Fiber_Pop(fiber, &any);
     blob = Eco_Any_AsPointer(any);
-    any = Eco_Any_FromPointer(Eco_Blob_DLSym(*((void**) blob->bytes), string->bytes));
+    blob = Eco_Blob_DLSym(*((void**) blob->bytes), string->bytes);
+    if (blob != NULL)
+        any = Eco_Any_FromPointer(blob);
+    else
+        any = fiber->vm->constants.cfalse;
     Eco_Fiber_Push(fiber, &any);
     return true;
 }
+#endif
