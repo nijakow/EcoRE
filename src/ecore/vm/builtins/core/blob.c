@@ -254,3 +254,34 @@ bool Eco_VM_Builtin_BlobOpenFile(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Push(fiber, &any);
     return true;
 }
+
+bool Eco_VM_Builtin_BlobDLOpen(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_String*  string;
+    Eco_Any             any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    string = Eco_Any_AsPointer(any);
+    any = Eco_Any_FromPointer(Eco_Blob_DLOpen(string->bytes));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_BlobDLSym(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_String*  string;
+    struct Eco_Blob*    blob;
+    Eco_Any             any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    string = Eco_Any_AsPointer(any);
+    Eco_Fiber_Pop(fiber, &any);
+    blob = Eco_Any_AsPointer(any);
+    any = Eco_Any_FromPointer(Eco_Blob_DLSym(*((void**) blob->bytes), string->bytes));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}

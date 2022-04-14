@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+#include <dlfcn.h>
 
 #include "blob.h"
 
@@ -115,6 +116,19 @@ bool Eco_Blob_AtPut(struct Eco_Blob* blob, unsigned int index, void* data, unsig
     return true;
 }
 
+struct Eco_Blob* Eco_Blob_NewFromData(void* data, unsigned long size)
+{
+    struct Eco_Blob*  blob;
+
+    blob = Eco_Blob_New(size);
+
+    if (blob != NULL)
+    {
+        Eco_Memcpy(blob->bytes, data, size);
+    }
+
+    return blob;
+}
 
 /*
  *    F i l e   D e s c r i p t o r   I / O
@@ -166,4 +180,20 @@ struct Eco_Blob* Eco_Blob_NewFromFile(char* path)
     }
 
     return blob;
+}
+
+struct Eco_Blob* Eco_Blob_DLOpen(char* path)
+{
+    void* ptr;
+
+    ptr = dlopen(path, RTLD_NOW);
+    return Eco_Blob_NewFromData(&ptr, sizeof(ptr));
+}
+
+struct Eco_Blob* Eco_Blob_DLSym(void* base, char* symbol)
+{
+    void* symptr;
+
+    symptr = dlsym(base, symbol);
+    return Eco_Blob_NewFromData(&symptr, sizeof(symptr));
 }
