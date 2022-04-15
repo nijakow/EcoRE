@@ -20,7 +20,15 @@
     with inherited access = #<:std/util/StandardListAccess>;
     with inherited search = #<:std/util/StandardListSearch>;
 
-    writeOn: writer => writer << '<blob: ' << size << '>';
+    writeOn: writer => (
+        (size < 128) if: [
+            writer << '#['.
+            forEach: [ :i, :e | (i > 0) if: [ writer << ', ' ]. writer << e ].
+            writer << ']'.
+        ] else: [
+            writer << '<blob: ' << size << '>'
+        ]
+    );
 
     with inherited parent = #<:std/Clonable>;
 }
