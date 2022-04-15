@@ -4,7 +4,7 @@
     argumentType: index => #'ecosphere.ecore.ffi.function.arg_type'(self);
     returnType => #'ecosphere.ecore.ffi.function.return_type'(self);
 
-    callOn: func WithArgs: args => #'ecosphere.ecore.ffi.function.call'(self, func, args);
+    callOn: func Args: args => #'ecosphere.ecore.ffi.function.call'(self, func, args);
 
     writeOn: writer => writer << '<ffi_func>';
     with inherited parent = #<:std/Clonable>;
