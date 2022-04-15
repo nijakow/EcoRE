@@ -13,7 +13,7 @@
     at: index putInt8: value => #'ecosphere.ecore.object.blob.at_put_int8'(self, index, value);
     at: index putInt16: value => #'ecosphere.ecore.object.blob.at_put_int16'(self, index, value);
     at: index putInt32: value => #'ecosphere.ecore.object.blob.at_put_int32'(self, index, value);
-    at: index putPtr: value Offset: offset => #'ecosphere.ecore.object.blob.at_put_any'(self, index, value, offset);
+    at: index putPtr: value Offset: offset => #'ecosphere.ecore.object.blob.at_put_ptr'(self, index, value, offset);
     at: index putPtr: value => at: index putPtr: value Offset: 0;
     at: index putAny: value => #'ecosphere.ecore.object.blob.at_put_any'(self, index, value);
 
