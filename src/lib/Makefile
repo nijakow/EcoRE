@@ -17,7 +17,7 @@ std/io/filedescriptor.eco \
 std/io/portinput.eco \
 std/io/portio.eco \
 std/io/portoutput.eco \
-std/reflect/ffi/_.eco \
+std/ffi/_.eco \
 std/reflect/_.eco \
 std/reflect/mirror.eco \
 std/reflect/slot.eco \

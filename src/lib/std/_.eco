@@ -11,6 +11,7 @@
     with bool = #<:std/bool>;
     with maybe = #<:std/maybe>;
 
+    ffi = #<:std/ffi>;
     io = #<:std/io>;
     util = #<:std/util>;
     reflect = #<:std/reflect>;

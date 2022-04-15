@@ -1,7 +1,6 @@
 
 #=std/reflect: {
     proxies = #<:std/reflect/proxies>;
-    ffi = #<:std/reflect/ffi>;
 
     Mirror = #<:std/reflect/Mirror>;
     Mirror: object => #<:std/reflect/Mirror> clone init: object;

@@ -1,5 +1,5 @@
 
-#=std/reflect/ffi: {
+#=std/ffi: {
     with std = #<:std>;
     
     types = {
