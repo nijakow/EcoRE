@@ -13,6 +13,8 @@ bool Eco_VM_Builtin_FFIFunction_ArgCount(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIFunction_ReturnType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIFunction_ArgType(struct Eco_Fiber*, unsigned int);
 
+bool Eco_VM_Builtin_FFIFunction_Call(struct Eco_Fiber*, unsigned int);
+
 #endif
 
 #endif

@@ -3,8 +3,10 @@
 #ifdef ECO_CONFIG_USE_FFI
 
 #include <ecore/objects/misc/array/array.h>
+#include <ecore/objects/misc/blob/blob.h>
 #include <ecore/objects/vm/ffi/ffitype.h>
 #include <ecore/objects/vm/ffi/ffifunc.h>
+#include <ecore/vm/vm.h>
 
 
 bool Eco_VM_Builtin_FFIType_GetForIndex(struct Eco_Fiber* fiber, unsigned int args)
@@ -102,6 +104,29 @@ bool Eco_VM_Builtin_FFIFunction_ArgType(struct Eco_Fiber* fiber, unsigned int ar
     Eco_Fiber_Pop(fiber, &function);
     result = Eco_Any_FromPointer(Eco_FFIFunc_GetArgumentType(Eco_Any_AsPointer(function), Eco_Any_AsInteger(index)));
     Eco_Fiber_Push(fiber, &result);
+    return true;
+}
+
+bool Eco_VM_Builtin_FFIFunction_Call(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_FFIFunc*  ffifunc;
+    struct Eco_Blob*     func;
+    struct Eco_Blob*     fargs;
+    Eco_Any              any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    fargs = Eco_Any_AsPointer(any);
+    Eco_Fiber_Pop(fiber, &any);
+    func = Eco_Any_AsPointer(any);
+    Eco_Fiber_Pop(fiber, &any);
+    ffifunc = Eco_Any_AsPointer(any);
+    if (Eco_FFIFunc_Call(ffifunc, *((void**) func->bytes), (void*) fargs->bytes))
+        any = fiber->vm->constants.ctrue;
+    else
+        any = fiber->vm->constants.cfalse;
+    Eco_Fiber_Push(fiber, &any);
     return true;
 }
 

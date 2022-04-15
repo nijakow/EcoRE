@@ -127,6 +127,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.function.arg_count", Eco_VM_Builtin_FFIFunction_ArgCount);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.function.return_type", Eco_VM_Builtin_FFIFunction_ReturnType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.function.arg_type", Eco_VM_Builtin_FFIFunction_ArgType);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.function.call", Eco_VM_Builtin_FFIFunction_Call);
 #endif
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.io.fd.open_file", Eco_VM_Builtin_OpenFile);
