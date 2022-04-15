@@ -24,15 +24,23 @@ void Eco_FFIFunc_Terminate()
 }
 
 
+#include <stdlib.h>
+
 struct Eco_FFIFunc* Eco_FFIFunc_New(unsigned int args, struct Eco_FFIType* rtype, struct Eco_FFIType** arg_types)
 {
     struct Eco_FFIFunc*  func;
 #ifdef ECO_CONFIG_USE_FFI
     unsigned int         index;
-    ffi_type*            actual_args[args];
+    ffi_type**           actual_args;
 #endif
 
-    func = Eco_Object_New(Eco_FFIFunc_TYPE, sizeof(struct Eco_FFIFunc));
+    func        = Eco_Object_New(Eco_FFIFunc_TYPE, sizeof(struct Eco_FFIFunc) + sizeof(struct Eco_FFIType*) * args + sizeof(ffi_type*) * args);
+
+    /*
+     * LibFFI requires us to store the argument list somewhere, so we append it to the
+     * end of the object. The pointers are pointing into the body of Eco_FFIType objects.
+     */
+    actual_args = (ffi_type**) (((char*) func) + sizeof(struct Eco_FFIFunc) + sizeof(struct Eco_FFIType*) * args);
 
     if (func != NULL)
     {
