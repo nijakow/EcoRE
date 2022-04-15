@@ -94,6 +94,33 @@ bool Eco_VM_Builtin_BlobAtInt32(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_BlobAtPtr(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Blob*  blob;
+    struct Eco_Blob*  value;
+    char*             ptr;
+    Eco_Any           any;
+    unsigned int      index;
+    unsigned int      offset;
+    unsigned int      size;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 4, 4))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    size = Eco_Any_AsInteger(any);
+    Eco_Fiber_Pop(fiber, &any);
+    offset = Eco_Any_AsInteger(any);
+    Eco_Fiber_Pop(fiber, &any);
+    index = Eco_Any_AsInteger(any);
+    Eco_Fiber_Pop(fiber, &any);
+    blob = Eco_Any_AsPointer(any);
+    Eco_Blob_AtN(blob, index, &ptr, sizeof(ptr));
+    value = Eco_Blob_NewFromData(ptr + offset, size);
+    any = Eco_Any_FromPointer(value);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 bool Eco_VM_Builtin_BlobAtAny(struct Eco_Fiber* fiber, unsigned int args)
 {
     /*
@@ -172,6 +199,29 @@ bool Eco_VM_Builtin_BlobAtPutInt32(struct Eco_Fiber* fiber, unsigned int args)
                    Eco_Any_AsInteger(index),
                    &actual_value,
                    sizeof(actual_value));
+    return true;
+}
+
+bool Eco_VM_Builtin_BlobAtPutPtr(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Blob*  blob;
+    struct Eco_Blob*  value;
+    char*             ptr;
+    Eco_Any           any;
+    unsigned int      index;
+    unsigned int      offset;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 4, 4))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    offset = Eco_Any_AsInteger(any);
+    Eco_Fiber_Pop(fiber, &any);
+    value = Eco_Any_AsPointer(any);
+    Eco_Fiber_Pop(fiber, &any);
+    index = Eco_Any_AsInteger(any);
+    blob = Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber));
+    ptr = Eco_Blob_Size(value) == 0 ? NULL : (value->bytes + offset);
+    Eco_Blob_AtPut(blob, index, &ptr, sizeof(ptr));
     return true;
 }
 

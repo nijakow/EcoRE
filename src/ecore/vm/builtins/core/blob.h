@@ -9,10 +9,12 @@ bool Eco_VM_Builtin_BlobSize(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_BlobAtInt8(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_BlobAtInt16(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_BlobAtInt32(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_BlobAtPtr(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_BlobAtAny(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_BlobAtPutInt8(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_BlobAtPutInt16(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_BlobAtPutInt32(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_BlobAtPutPtr(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_BlobAtPutAny(struct Eco_Fiber*, unsigned int);
 
 bool Eco_VM_Builtin_BlobReadFrom(struct Eco_Fiber*, unsigned int);
