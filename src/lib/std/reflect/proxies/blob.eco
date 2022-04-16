@@ -4,7 +4,7 @@
     private index;
 
     with inherited trait = {
-        with inherited init: _blob => (
+        init: _blob => (
             blob  <- _blob.
             index <- 0.
           ^ self
