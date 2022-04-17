@@ -63,4 +63,46 @@
 
         "TODO..."
     };
+
+    private own SDLWindow = {
+        private winptr,
+        renderer;
+
+        with inherited trait = {
+            init: _winptr => (
+                winptr   <- _winptr.
+                renderer <- (SDLRenderer clone) init: (CreateRenderer(_winptr, -1, 0));
+              ^ self
+            );
+
+            destroy => DestroyWindow(winptr);
+        };
+
+        with inherited parent = std Clonable;
+    };
+
+    private own SDLRenderer = {
+        private renptr;
+
+        with inherited trait = {
+            init: _renptr => (
+                renptr <- _renptr.
+              ^ self
+            );
+
+            destroy => DestroyRenderer(renderer);
+
+            flush => RenderFlush(renptr);
+            present => RenderPresent(renptr);
+
+            setR: r G: g B: b A: a => SetRenderDrawColor(renptr, r, g, b, a);
+            setR: r G: g B: b => setR: r G: g B: b A: 255;
+
+            clear => RenderClear(renptr);
+            drawPointX: x Y: y => RenderDrawPoint(renptr, x, y);
+            drawLineX: x1 Y: y1 X: x2 Y: y2 => RenderDrawLine(renptr, x1, y1, x2, y2);
+        };
+
+        with inherited parent = std Clonable;
+    };
 }
