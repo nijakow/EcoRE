@@ -6,13 +6,11 @@
     repeat     => ( self value. #'ecosphere.ecore.flow.reset'() );
 
     withBreak  => self value([ ^ self ]);
+    exitValue  => self value([ :v | ^ v ]);
 
-    withRestart => (
-        [
-            [ :inner |
-                ^ value(inner).
-            ] withBreak.
-        ] repeat.
+    repeatWithExitValue => (
+        | breaker <- [ :v | ^ v ] |
+        [ self value(breaker) ] repeat.
     );
 
     repeatWithBreak => (
@@ -23,6 +21,14 @@
     repeatWithContinue => (
         [
             self repeatWithBreak
+        ] repeat.
+    );
+
+    withRestart => (
+        [
+            [ :inner |
+                ^ value(inner).
+            ] withBreak.
         ] repeat.
     );
 
