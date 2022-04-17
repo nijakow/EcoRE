@@ -1,0 +1,51 @@
+
+{
+    private with parent = std;
+
+    private lib;
+
+    private SDL_Init,
+    private SDL_Quit,
+    private SDL_PollEvent,
+    private SDL_CreateWindow,
+    private SDL_GetWindowSurface,
+    private SDL_DestroyWindow,
+    private SDL_CreateRenderer,
+    private SDL_DestroyRenderer,
+    private SDL_SetRenderDrawColor,
+    private SDL_RenderDrawPoint;
+
+    INIT_EVERYTHING;
+
+    with inherited trait = {
+        init => (
+            lib <- (ffi DLOpen: 'libSDL2.so') value.
+            INIT_EVERYTHING <- 62001.
+            SDL_Init <- (lib getFunction: #'SDL_Init' Type: ((ffi types int) function(ffi types uint32))) value.
+            SDL_Quit <- (lib getFunction: #'SDL_Quit' Type: ((ffi types void) function)) value.
+            SDL_PollEvent <- (lib getFunction: #'SDL_PollEvent' Type: ((ffi types int) function(ffi types pointer))) value.
+            SDL_CreateWindow <- (lib getFunction: #'SDL_CreateWindow' Type: ((ffi types int) function(ffi types pointer, ffi types int, ffi types int, ffi types int, ffi types int, ffi types uint32))) value.
+            SDL_DestroyWindow <- (lib getFunction: #'f_SDL_DestroyWindow' Type: ((ffi types void) function(ffi types pointer))) value.
+            SDL_GetWindowSurface <- (lib getFunction: #'SDL_GetWindowSurface' Type: ((ffi types pointer) function(ffi types pointer))) value.
+            SDL_CreateRenderer <- (lib getFunction: #'SDL_CreateRenderer' Type: ((ffi types pointer) function(ffi types pointer, ffi types int, ffi types uint32))) value.
+            SDL_DestroyRenderer <- (lib getFunction: #'SDL_DestroyRenderer' Type: ((ffi types void) function(ffi types pointer))) value.
+            SDL_SetRenderDrawColor <- (lib getFunction: #'SDL_SetRenderDrawColor' Type: ((ffi types int) function(ffi types pointer, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8))) value.
+            SDL_RenderDrawPoint <- (lib getFunction: #'SDL_RenderDrawPoint' Type: ((ffi types void) function(ffi types pointer, ffi types int, ffi types int))) value.
+          ^ self
+        );
+
+        InitEverything => Init(INIT_EVERYTHING);
+        Init(flags) => SDL_Init value(flags);
+        Quit => SDL_Quit value();
+        PollEvent(event_ptr) => SDL_PollEvent value(event_ptr);
+        CreateWindow(name, x, y, w, h, flags) => SDL_CreateWindow value(x, y, w, h, flags);
+        DestroyWindow(window) => SDL_DestroyWindow value(window);
+        GetWindowSurface(window)  => SDL_GetWindowSurface value(window);
+        CreateRenderer(window, index, flags) => SDL_CreateRenderer value(window, index, flags);
+        DestroyRenderer(renderer) => SDL_DestroyRenderer value(renderer);
+        SetRenderDrawColor(renderer, r, g, b, a) => SDL_SetRenderDrawColor value(renderer, r, g, b, a);
+        RenderDrawPoint(renderer, x, y) => SDL_RenderDrawPoint value(renderer, x, y);
+
+        "TODO..."
+    };
+}
