@@ -32,9 +32,5 @@
     ParseFile: file => (SlurpFile: file) parse;
     EvaluateFile: file InEnv: env => (ParseFile: file) evaluateInEnv: env;
 
-    Import: file => (
-        | obj <- EvaluateFile: file InEnv: #<:lobby> |
-        obj init.
-      ^ obj
-    );
+    Import: file => EvaluateFile: file InEnv: #<:lobby>;
 }
