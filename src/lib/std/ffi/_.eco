@@ -53,12 +53,35 @@
       ^ b
     );
 
+    ForeignFunction = {
+        private name,
+        private ptr,
+        type;
+
+        with inherited trait = {
+            initWithName: _name Ptr: _ptr Type: _type => (
+                name <- _name.
+                ptr  <- _ptr.
+                type <- _type.
+              ^ self
+            );
+
+            value(...) => type invoke(ptr, ...);
+
+            writeOn: w => w << 'the foreign function ' << name;
+        };
+
+        with inherited parent = #<:std/Clonable>;
+    };
+
     SharedLibrary = {
+        private name,
         private library;
 
         with inherited trait = {
-            init: lib => (
-                library <- lib.
+            initWithName: _name Library: _library => (
+                name    <- _name.
+                library <- _library.
               ^ self
             );
 
@@ -69,7 +92,13 @@
               ^ No
             );
 
-            writeOn: w => w << 'a shared library';
+            getFunction: name Type: t => (
+                (getSymbol: name)
+                    yes: [ :sym | Yes: (((std ffi ForeignFunction) clone) initWithName: name Ptr: sym Type: t) ]
+                     no: [ No ]
+            );
+
+            writeOn: w => w << 'the shared library ' << name;
         };
 
         with inherited parent = #<:std/Clonable>;
@@ -77,7 +106,7 @@
 
     DLOpen: path => (
         #'ecosphere.ecore.object.blob.dlopen'(path) when: [ :lib |
-          ^ Yes: ((SharedLibrary clone) init: lib)
+          ^ Yes: ((SharedLibrary clone) initWithName: path Library: lib)
         ].
       ^ No
     );
