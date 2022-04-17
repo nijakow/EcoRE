@@ -3,6 +3,28 @@
 #include <ecore/objects/misc/array/array.h>
 
 
+bool Eco_VM_Builtin_Array(struct Eco_Fiber* fiber, unsigned int args)
+{
+    /*
+     * TODO: Type checks
+     */
+    struct Eco_Array*  array;
+    Eco_Any            any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, ECO_VM_BUILTIN_INFINITE_ARGS))
+        return false;
+    array = Eco_Array_New(args);
+    while (args > 0)
+    {
+        args--;
+        Eco_Fiber_Pop(fiber, &any);
+        Eco_Array_Put(array, args, any);
+    }
+    any = Eco_Any_FromPointer(array);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 bool Eco_VM_Builtin_ArrayNew(struct Eco_Fiber* fiber, unsigned int args)
 {
     /*
