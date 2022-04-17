@@ -14,7 +14,10 @@
     private SDL_CreateRenderer,
     private SDL_DestroyRenderer,
     private SDL_SetRenderDrawColor,
+    private SDL_RenderClear,
     private SDL_RenderDrawPoint,
+    private SDL_RenderDrawLine,
+    private SDL_RenderFlush,
     private SDL_RenderPresent;
 
     INIT_EVERYTHING;
@@ -33,7 +36,10 @@
             SDL_CreateRenderer <- (lib getFunction: #'SDL_CreateRenderer' Type: ((ffi types pointer) function(ffi types pointer, ffi types int, ffi types uint32))) value.
             SDL_DestroyRenderer <- (lib getFunction: #'SDL_DestroyRenderer' Type: ((ffi types void) function(ffi types pointer))) value.
             SDL_SetRenderDrawColor <- (lib getFunction: #'SDL_SetRenderDrawColor' Type: ((ffi types int) function(ffi types pointer, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8))) value.
-            SDL_RenderDrawPoint <- (lib getFunction: #'SDL_RenderDrawPoint' Type: ((ffi types void) function(ffi types pointer, ffi types int, ffi types int))) value.
+            SDL_RenderClear <- (lib getFunction: #'SDL_RenderClear' Type: ((ffi types int) function(ffi types pointer))) value.
+            SDL_RenderDrawPoint <- (lib getFunction: #'SDL_RenderDrawPoint' Type: ((ffi types int) function(ffi types pointer, ffi types int, ffi types int))) value.
+            SDL_RenderDrawLine <- (lib getFunction: #'SDL_RenderDrawLine' Type: ((ffi types int) function(ffi types pointer, ffi types int, ffi types int, ffi types int, ffi types int))) value.
+            SDL_RenderFlush <- (lib getFunction: #'SDL_RenderFlush' Type: ((ffi types int) function(ffi types pointer))) value.
             SDL_RenderPresent <- (lib getFunction: #'SDL_RenderPresent' Type: ((ffi types void) function(ffi types pointer))) value.
           ^ self
         );
@@ -49,7 +55,10 @@
         CreateRenderer(window, index, flags) => SDL_CreateRenderer value(window, index, flags);
         DestroyRenderer(renderer) => SDL_DestroyRenderer value(renderer);
         SetRenderDrawColor(renderer, r, g, b, a) => SDL_SetRenderDrawColor value(renderer, r, g, b, a);
+        RenderClear(renderer) => SDL_RenderClear value(renderer);
         RenderDrawPoint(renderer, x, y) => SDL_RenderDrawPoint value(renderer, x, y);
+        RenderDrawLine(renderer, x1, y1, x2, y2) => SDL_RenderDrawLine value(renderer, x1, y1, x2, y2);
+        RenderFlush(renderer) => SDL_RenderFlush value(renderer);
         RenderPresent(renderer) => SDL_RenderPresent value(renderer);
 
         "TODO..."
