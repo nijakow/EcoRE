@@ -105,7 +105,7 @@
         addToMolecule: molecule WithEnv: env Host: host => (
             "TODO: Use Mirrors for this!"
 
-            | realType  <- type evaluateInEnv: env,
+            | realType  <- type evaluateInEnv: env Host: host,
               flagBits  <- 0 |
             
             flags isWith          if: [ flagBits <- flagBits bitOr: 0b0010 ].
