@@ -69,8 +69,7 @@
 };
 
 #=std/util: {
-    Array(size) => #'ecosphere.ecore.object.array.new'(size);
-
+    newArray(...) => #'ecosphere.ecore.object.array.array'(...);
     newArray: size => #'ecosphere.ecore.object.array.new'(size);
     newBlob:  size => #'ecosphere.ecore.object.blob.new'(size);
     newByteVector  => (#<:std/util> ByteVector) new;
