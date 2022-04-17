@@ -37,13 +37,13 @@
     ptrAt: index Offset: offset Size: size => #'ecosphere.ecore.object.blob.at_ptr'(self, index, offset, size);
     ptrAt: index Size: size => ptrAt: index Offset: 0 Size: size;
     anyAt: index => #'ecosphere.ecore.object.blob.at_any'(self, index);
-    at: index put: value => at: index putInt8: value;
-    at: index putInt8: value => #'ecosphere.ecore.object.blob.at_put_int8'(self, index, value);
-    at: index putInt16: value => #'ecosphere.ecore.object.blob.at_put_int16'(self, index, value);
-    at: index putInt32: value => #'ecosphere.ecore.object.blob.at_put_int32'(self, index, value);
-    at: index putPtr: value Offset: offset => #'ecosphere.ecore.object.blob.at_put_ptr'(self, index, value, offset);
-    at: index putPtr: value => at: index putPtr: value Offset: 0;
-    at: index putAny: value => #'ecosphere.ecore.object.blob.at_put_any'(self, index, value);
+    at: index put: value => at: index PutInt8: value;
+    at: index PutInt8: value => #'ecosphere.ecore.object.blob.at_put_int8'(self, index, value);
+    at: index PutInt16: value => #'ecosphere.ecore.object.blob.at_put_int16'(self, index, value);
+    at: index PutInt32: value => #'ecosphere.ecore.object.blob.at_put_int32'(self, index, value);
+    at: index PutPtr: value Offset: offset => #'ecosphere.ecore.object.blob.at_put_ptr'(self, index, value, offset);
+    at: index PutPtr: value => at: index PutPtr: value Offset: 0;
+    at: index PutAny: value => #'ecosphere.ecore.object.blob.at_put_any'(self, index, value);
 
     from: collection => ( collection forEach: [ :i, :v | at: i put: v ]. ^ self );
 
