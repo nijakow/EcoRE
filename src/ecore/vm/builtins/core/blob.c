@@ -1,6 +1,7 @@
 #include "blob.h"
 
 #include <ecore/objects/misc/blob/blob.h>
+#include <ecore/objects/misc/key/key.h>
 #include <ecore/objects/misc/string/string.h>
 #include <ecore/vm/vm.h>
 
@@ -328,17 +329,21 @@ bool Eco_VM_Builtin_BlobDLOpen(struct Eco_Fiber* fiber, unsigned int args)
 
 bool Eco_VM_Builtin_BlobDLSym(struct Eco_Fiber* fiber, unsigned int args)
 {
-    struct Eco_String*  string;
-    struct Eco_Blob*    blob;
-    Eco_Any             any;
+    struct Eco_Key*   key;
+    struct Eco_Blob*  blob;
+    Eco_Any           any;
 
-    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 2))
         return false;
     Eco_Fiber_Pop(fiber, &any);
-    string = Eco_Any_AsPointer(any);
-    Eco_Fiber_Pop(fiber, &any);
-    blob = Eco_Any_AsPointer(any);
-    blob = Eco_Blob_DLSym(*((void**) blob->bytes), string->bytes);
+    key = Eco_Any_AsPointer(any);
+    if (args == 1) {
+        blob = Eco_Blob_DLSym(NULL, key->name);
+    } else {
+        Eco_Fiber_Pop(fiber, &any);
+        blob = Eco_Any_AsPointer(any);
+        blob = Eco_Blob_DLSym(*((void**) blob->bytes), key->name);
+    }
     if (blob != NULL)
         any = Eco_Any_FromPointer(blob);
     else

@@ -86,7 +86,7 @@
             );
 
             getSymbol: name => (
-                #'ecosphere.ecore.object.blob.dlsym'(library, name asString) when: [ :sym |
+                #'ecosphere.ecore.object.blob.dlsym'(library, name) when: [ :sym |
                   ^ Yes: sym
                 ].
               ^ No
@@ -109,5 +109,18 @@
           ^ Yes: ((SharedLibrary clone) initWithName: path Library: lib)
         ].
       ^ No
+    );
+
+    DLSymbol: name => (
+        #'ecosphere.ecore.object.blob.dlsym'(name) when: [ :sym |
+          ^ Yes: sym
+        ].
+      ^ No
+    );
+
+    DLFunction: name Type: t => (
+        (DLSymbol: name)
+            yes: [ :sym | Yes: (((std ffi ForeignFunction) clone) initWithName: name Ptr: sym Type: t) ]
+             no: [ No ]
     );
 }
