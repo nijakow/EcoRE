@@ -37,14 +37,16 @@
 
 
 #=lang/eco/compiler/Visitor: {
-    compiler, environment, host;
+    compiler, environment, host, nexthost;
 
     initWithCompiler: _compiler Environment: _env => initWithCompiler: _compiler Environment: _env Host: lobby;
+    initWithCompiler: _compiler Environment: _env Host: host => initWithCompiler: _compiler Environment: _env Host: host NextHost: host;
 
-    initWithCompiler: _compiler Environment: _env Host: _host => (
+    initWithCompiler: _compiler Environment: _env Host: _host NextHost: _nexthost => (
        compiler    <- _compiler.
        environment <- _env.
        host        <- _host.
+       nexthost    <- _nexthost.
       ^ self
     );
 
@@ -135,7 +137,7 @@
     visitMolecule: ast => (
         | m <- #'ecosphere.ecore.clone'({}) |  "TODO: Use a different mechanism, maybe Clone: obj"
         "TODO: Parent entries"
-        ast slots do: [ :e | e addToMolecule: m WithEnv: environment ].
+        ast slots do: [ :e | e addToMolecule: m WithEnv: environment Host: nexthost ].
         compiler loadConstant: m
     );
 

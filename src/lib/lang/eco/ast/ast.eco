@@ -7,17 +7,19 @@
     AST_SharedBehavior = #=lang/eco/ast/AST_SharedBehavior: {
         acceptVisitor: visitor => visitor visitUnknown: self;
         writeOn: writer => writer << 'AST';
-        compileInEnv: env Host: host => compileInEnv: env;
-        compileInEnv: env => (
+        compileInEnv: env => compileInEnv: env Host: lobby;
+        compileInEnv: env Host: host => compileInEnv: env Host: host NextHost: host;
+        compileInEnv: env Host: host NextHost: nexthost => (
             |
                 compiler <- (lang eco compiler ScopedCompiler) new,
-                visitor  <- ((lang eco compiler Visitor) clone) initWithCompiler: compiler Environment: env
+                visitor  <- ((lang eco compiler Visitor) clone) initWithCompiler: compiler Environment: env Host: host NextHost: nexthost
             |
             acceptVisitor: visitor.
           ^ compiler finish
         );
         evaluateInEnv: env => (compileInEnv: env) execute(env);
-        evaluateInEnv: env Host: host => (compileInEnv: env Host: host) execute(env);
+        evaluateInEnv: env Host: host => evaluateInEnv: env Host: host NextHost: host;
+        evaluateInEnv: env Host: host NextHost: nexthost => (compileInEnv: env Host: host NextHost: nexthost) execute(env);
         isSelfAST => false;
     };
 
@@ -100,7 +102,7 @@
             args forEach: [ :i, :v | realArgs at: i put: (v type evaluateInEnv: env) ].
           ^ #'ecosphere.ecore.object.interface.add_entry'(interface, realType, name, realArgs, varargs if: 1 else: 0)
         );
-        addToMolecule: molecule WithEnv: env => (
+        addToMolecule: molecule WithEnv: env Host: host => (
             "TODO: Use Mirrors for this!"
 
             | realType  <- type evaluateInEnv: env,
@@ -122,7 +124,7 @@
                 body acceptVisitor: visitor.
                 #'ecosphere.ecore.reflect.add_code_slot'(molecule, -1, flagBits, realType, name, compiler finish).
             ] else: [
-                | realValue <- body evaluateInEnv: env |
+                | realValue <- body evaluateInEnv: env Host: host NextHost: molecule |
                 #'ecosphere.ecore.reflect.add_value_slot'(molecule, -1, flagBits, realType, name, realValue).
             ].
           ^ molecule
