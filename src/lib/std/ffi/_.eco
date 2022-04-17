@@ -1,6 +1,6 @@
 
 #=std/ffi: {
-    with std = #<:std>;
+    private with std = #<:std>;
     
     types = {
         private GetTypeByIndex: index => #'ecosphere.ecore.ffi.type.by_index'(index);
