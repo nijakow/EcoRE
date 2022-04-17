@@ -61,6 +61,11 @@ void Eco_String_Del(struct Eco_String* string)
     Eco_Object_Del(&string->_);
 }
 
+bool Eco_String_IsString(struct Eco_Object* object)
+{
+    return (object->type->typecore == &Eco_String_TYPECORE);
+}
+
 
 /*
  *    C - S t r i n g s

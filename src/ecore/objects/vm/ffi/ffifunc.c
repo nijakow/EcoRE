@@ -2,6 +2,7 @@
 
 #include <ecore/objects/base/type.h>
 #include <ecore/objects/misc/blob/blob.h>
+#include <ecore/objects/misc/string/string.h>
 #include <ecore/vm/memory/gc/gc.h>
 #include <ecore/util/memory.h>
 
@@ -128,7 +129,7 @@ bool Eco_FFIFunc_Call(struct Eco_FFIFunc* func, void* function, void* buffer)
         args[index] = buffer_ptr;
         buffer_ptr += Eco_FFIType_SizeofCType(func->arg_types[index]);
     }
-    ffi_call(&func->cif, function, buffer_ptr, args);   // TODO: Check return value
+    ffi_call(&func->cif, function, buffer_ptr, args);
     return true;
 #else
     return false;
@@ -139,7 +140,12 @@ static bool Eco_FFIFunc_EcoCall_ArgumentCopy(void* loc, Eco_Any any, unsigned in
 {
     // TODO, FIXME, XXX: Size checks!
     if (Eco_Any_IsPointer(any)) {
-        Eco_Memcpy(loc, ((struct Eco_Blob*) Eco_Any_AsPointer(any))->bytes, size);
+        if (Eco_Blob_IsBlob(Eco_Any_AsPointer(any)))
+            Eco_Memcpy(loc, ((struct Eco_Blob*) Eco_Any_AsPointer(any))->bytes, size);
+        else if (Eco_String_IsString(Eco_Any_AsPointer(any)) && size == sizeof(char*))
+            *((char**) loc) = ((struct Eco_String*) Eco_Any_AsPointer(any))->bytes;
+        else
+            return false;
     } else if (Eco_Any_IsInteger(any)) {
         if (size == sizeof(char)) *((char*) loc) = (char) Eco_Any_AsInteger(any);
         else if (size == sizeof(short)) *((short*) loc) = (short) Eco_Any_AsInteger(any);
@@ -172,6 +178,9 @@ bool Eco_FFIFunc_EcoCall(struct Eco_FFIFunc* func,
           struct Eco_Blob*  blob;
           char*             ptr;
           char              argbuffer[argbuffer_size + sizeof(void*) * arg_count];
+    
+    if (arg_count != Eco_FFIFunc_GetArgumentCount(func))
+        return false;
 
     blob        = Eco_Blob_New(Eco_FFIType_SizeofCType(func->return_type));
     *result_loc = Eco_Any_FromPointer(blob);
@@ -181,11 +190,12 @@ bool Eco_FFIFunc_EcoCall(struct Eco_FFIFunc* func,
     {
         size = Eco_FFIType_SizeofCType(func->arg_types[index]);
         *((void**) &argbuffer[argbuffer_size + index * sizeof(void*)]) = ptr;
-        Eco_FFIFunc_EcoCall_ArgumentCopy(ptr, args[index], size);   // TODO: Check return value
+        if (!Eco_FFIFunc_EcoCall_ArgumentCopy(ptr, args[index], size))
+            return false;
         ptr += size;
     }
 
-    ffi_call(&func->cif, function, blob->bytes, (void**) &argbuffer[argbuffer_size]);   // TODO: Check return value
+    ffi_call(&func->cif, function, blob->bytes, (void**) &argbuffer[argbuffer_size]);
     return true;
 #else
     return false;

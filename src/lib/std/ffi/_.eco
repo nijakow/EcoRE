@@ -47,6 +47,12 @@
         pointer => GetTypeByIndex: 20;
     };
 
+    null => (
+        | b <- std util newBlob: (types pointer sizeof) |
+        0 to: (b size) do: [ :i | b at: i put: 0 ].
+      ^ b
+    );
+
     MakeFunctionWithReturnType: type Args: args => #'ecosphere.ecore.ffi.function.new'(type, args);
 
     SharedLibrary = {
@@ -59,7 +65,7 @@
             );
 
             getSymbol: name => (
-                #'ecosphere.ecore.object.blob.dlsym'(library, name) when: [ :sym |
+                #'ecosphere.ecore.object.blob.dlsym'(library, name asString) when: [ :sym |
                   ^ Yes: sym
                 ].
               ^ No

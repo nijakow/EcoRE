@@ -100,6 +100,10 @@ void Eco_Blob_Del(struct Eco_Blob* blob)
     Eco_Object_Del(&blob->_);
 }
 
+bool Eco_Blob_IsBlob(struct Eco_Object* object)
+{
+    return (object->type->typecore == &Eco_Blob_TYPECORE);
+}
 
 /*
  *    E l e m e n t   A c c e s s

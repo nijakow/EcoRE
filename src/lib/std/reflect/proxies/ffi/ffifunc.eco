@@ -5,6 +5,7 @@
     returnType => #'ecosphere.ecore.ffi.function.return_type'(self);
 
     callOn: func Args: args => #'ecosphere.ecore.ffi.function.call'(self, func, args);
+    invoke(func, ...) => #'ecosphere.ecore.ffi.function.eco_call'(self, func, ...);
 
     writeOn: writer => writer << '<ffi_func>';
     with inherited parent = #<:std/Clonable>;
