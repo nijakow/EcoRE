@@ -35,5 +35,6 @@ struct Eco_FFIType* Eco_FFIFunc_GetReturnType(struct Eco_FFIFunc*);
 struct Eco_FFIType* Eco_FFIFunc_GetArgumentType(struct Eco_FFIFunc*, unsigned int);
 
 bool Eco_FFIFunc_Call(struct Eco_FFIFunc*, void*, void*);
+bool Eco_FFIFunc_EcoCall(struct Eco_FFIFunc*, void*, Eco_Any*, unsigned int, Eco_Any*);
 
 #endif
