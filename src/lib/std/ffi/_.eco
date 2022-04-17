@@ -53,8 +53,6 @@
       ^ b
     );
 
-    MakeFunctionWithReturnType: type Args: args => #'ecosphere.ecore.ffi.function.new'(type, args);
-
     SharedLibrary = {
         private library;
 
