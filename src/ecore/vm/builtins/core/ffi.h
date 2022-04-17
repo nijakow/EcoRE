@@ -14,6 +14,7 @@ bool Eco_VM_Builtin_FFIFunction_ReturnType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIFunction_ArgType(struct Eco_Fiber*, unsigned int);
 
 bool Eco_VM_Builtin_FFIFunction_Call(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_FFIFunction_EcoCall(struct Eco_Fiber*, unsigned int);
 
 #endif
 

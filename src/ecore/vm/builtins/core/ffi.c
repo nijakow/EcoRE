@@ -130,4 +130,24 @@ bool Eco_VM_Builtin_FFIFunction_Call(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_FFIFunction_EcoCall(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_FFIFunc*  ffifunc;
+    struct Eco_Blob*     func;
+    Eco_Any              any;
+    Eco_Any              result;
+    unsigned int         index;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, ECO_VM_BUILTIN_INFINITE_ARGS))
+        return false;
+    ffifunc = Eco_Any_AsPointer(*Eco_Fiber_Nth(fiber, args));
+    func    = Eco_Any_AsPointer(*Eco_Fiber_Nth(fiber, args - 1));
+    if (!Eco_FFIFunc_EcoCall(ffifunc, *((void**) func->bytes), Eco_Fiber_Nth(fiber, args - 2), args - 2, &result))
+        return false;
+    for (index = 0; index < args; index++)
+        Eco_Fiber_Pop(fiber, &any);
+    Eco_Fiber_Push(fiber, &result);
+    return true;
+}
+
 #endif

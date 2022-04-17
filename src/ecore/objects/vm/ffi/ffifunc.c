@@ -128,7 +128,7 @@ bool Eco_FFIFunc_Call(struct Eco_FFIFunc* func, void* function, void* buffer)
         args[index] = buffer_ptr;
         buffer_ptr += Eco_FFIType_SizeofCType(func->arg_types[index]);
     }
-    ffi_call(&func->cif, function, buffer_ptr, args);
+    ffi_call(&func->cif, function, buffer_ptr, args);   // TODO: Check return value
     return true;
 #else
     return false;
@@ -173,18 +173,19 @@ bool Eco_FFIFunc_EcoCall(struct Eco_FFIFunc* func,
           char*             ptr;
           char              argbuffer[argbuffer_size + sizeof(void*) * arg_count];
 
-    blob = Eco_Blob_New(Eco_FFIType_SizeofCType(func->return_type));
+    blob        = Eco_Blob_New(Eco_FFIType_SizeofCType(func->return_type));
+    *result_loc = Eco_Any_FromPointer(blob);
 
     ptr = argbuffer;
     for (index = 0; index < arg_count; index++)
     {
         size = Eco_FFIType_SizeofCType(func->arg_types[index]);
         *((void**) &argbuffer[argbuffer_size + index * sizeof(void*)]) = ptr;
-        Eco_FFIFunc_EcoCall_ArgumentCopy(ptr, args[index], size);
+        Eco_FFIFunc_EcoCall_ArgumentCopy(ptr, args[index], size);   // TODO: Check return value
         ptr += size;
     }
 
-    ffi_call(&func->cif, function, blob->bytes, (void**) &argbuffer[argbuffer_size]);
+    ffi_call(&func->cif, function, blob->bytes, (void**) &argbuffer[argbuffer_size]);   // TODO: Check return value
     return true;
 #else
     return false;
