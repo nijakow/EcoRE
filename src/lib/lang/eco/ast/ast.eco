@@ -96,10 +96,10 @@
             writer << (varargs if: ', ...) ' else: ') ').
             writer << body.
         );
-        addToInterface: interface WithEnv: env => (
-            | realType <- type evaluateInEnv: env,
+        addToInterface: interface WithEnv: env Host: host => (
+            | realType <- type evaluateInEnv: env Host: host,
               realArgs <- std util newArray: args size |
-            args forEach: [ :i, :v | realArgs at: i put: (v type evaluateInEnv: env) ].
+            args forEach: [ :i, :v | realArgs at: i put: (v type evaluateInEnv: env Host: host) ].
           ^ #'ecosphere.ecore.object.interface.add_entry'(interface, realType, name, realArgs, varargs if: 1 else: 0)
         );
         addToMolecule: molecule WithEnv: env Host: host => (

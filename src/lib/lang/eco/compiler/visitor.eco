@@ -122,15 +122,15 @@
 
     visitArray: ast => (
         | array <- std util newArray: ast exprs size |
-        ast exprs forEach: [ :i, :v | array at: i put: (v evaluateInEnv: environment) ].
+        ast exprs forEach: [ :i, :v | array at: i put: (v evaluateInEnv: environment Host: nexthost) ].
         compiler loadConstant: array
     );
 
     visitInterface: ast => (
         | i <- %[] |
         "TODO, FIXME, XXX: Move this builtin to a different place!"
-        ast parents do: [ :p | i <- i addParent: (p evaluateInEnv: environment) ].
-        ast entries do: [ :e | i <- e addToInterface: i WithEnv: environment ].
+        ast parents do: [ :p | i <- i addParent: (p evaluateInEnv: environment Host: nexthost) ].
+        ast entries do: [ :e | i <- e addToInterface: i WithEnv: environment Host: nexthost ].
         compiler loadConstant: i
     );
 
