@@ -7,6 +7,7 @@
     AST_SharedBehavior = #=lang/eco/ast/AST_SharedBehavior: {
         acceptVisitor: visitor => visitor visitUnknown: self;
         writeOn: writer => writer << 'AST';
+        compileInEnv: env Host: host => compileInEnv: env;
         compileInEnv: env => (
             |
                 compiler <- (lang eco compiler ScopedCompiler) new,
@@ -16,6 +17,7 @@
           ^ compiler finish
         );
         evaluateInEnv: env => (compileInEnv: env) execute(env);
+        evaluateInEnv: env Host: host => (compileInEnv: env Host: host) execute(env);
         isSelfAST => false;
     };
 
@@ -133,6 +135,14 @@
         isSelfAST => true;
         acceptVisitor: visitor => visitor visitSelf: self;
         writeOn: writer => writer << 'self';
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+        with inherited parent = #<:std/Clonable>;
+    };
+
+    ASTHostRef = {
+        new => self;
+        acceptVisitor: visitor => visitor visitHostRef: self;
+        writeOn: writer => writer << '$';
         with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
         with inherited parent = #<:std/Clonable>;
     };

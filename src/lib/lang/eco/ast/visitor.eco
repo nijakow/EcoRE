@@ -3,6 +3,7 @@
 
     #'visitUnknown:'(ast),
     #'visitSelf:'(ast),
+    #'visitHostRef:'(ast),
     #'visitConstant:'(ast),
 
     #'visitArray:'(ast),

@@ -37,17 +37,22 @@
 
 
 #=lang/eco/compiler/Visitor: {
-    compiler, environment;
+    compiler, environment, host;
 
-    initWithCompiler: _compiler Environment: _env => (
+    initWithCompiler: _compiler Environment: _env => initWithCompiler: _compiler Environment: _env Host: lobby;
+
+    initWithCompiler: _compiler Environment: _env Host: _host => (
        compiler    <- _compiler.
        environment <- _env.
+       host        <- _host.
       ^ self
     );
 
     visitUnknown: ast => ( io out << 'Visiting unknown AST'. io out newline. io out commit );
     
     visitSelf: ast => compiler loadSelf;
+
+    visitHostRef: ast => compiler loadConstant: host;
     
     visitConstant: ast => compiler loadConstant: ast constantValue;
 

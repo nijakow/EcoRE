@@ -15,6 +15,7 @@
         (check: TokenType LCURLY)     if: [ ^ parseMolecule  ].
         (check: TokenType HASHLPAREN) if: [ ^ parseArray     ].
         (check: TokenType PERCLBRACK) if: [ ^ parseInterface ].
+        (check: TokenType DOLLAR)     if: [ ^ newASTHostRef  ].
 
         (check: TokenType KEY) when: [ :kw |
             (check: TokenType LPAREN) if: [

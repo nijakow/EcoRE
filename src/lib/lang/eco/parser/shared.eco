@@ -15,6 +15,7 @@
         RCURLY = #'rcurly',
         HASHLPAREN = #'hashlparen',
         PERCLBRACK = #'perclbrack',
+        DOLLAR = #'dollar',
         SEPARATOR = #'separator',
         COLON = #'colon',
         TILDE = #'tilde',

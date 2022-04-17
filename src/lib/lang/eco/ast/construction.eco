@@ -55,6 +55,8 @@
 
   newASTSelf => (ast ASTSelf new);
 
+  newASTHostRef => (ast ASTHostRef new);
+
   newASTConstantWithValue: value => (ast ASTConstant new) initWithValue: value;
 
   newASTArrayWithExpressions: exprs => (ast ASTArray new) initWithExprs: exprs;
