@@ -47,6 +47,9 @@ static inline unsigned int Eco_FFIType_SizeofCType(struct Eco_FFIType* type) {
     return type->type->size;
 }
 
+unsigned int Eco_FFIType_OffsetOf_ByIndex(struct Eco_FFIType*, unsigned int);
+unsigned int Eco_FFIType_OffsetOf_ByName(struct Eco_FFIType*, struct Eco_Key*);
+
 #endif
 
 void Eco_FFIType_Init();

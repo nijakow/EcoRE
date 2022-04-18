@@ -143,4 +143,23 @@ struct Eco_FFIType* Eco_FFIType_GetForIndex(unsigned int index)
     return Eco_FFIType_New(Eco_FFIType_BASIC_TYPE_POINTERS[index]);
 }
 
+unsigned int Eco_FFIType_OffsetOf_ByIndex(struct Eco_FFIType* type, unsigned int index)
+{
+    if (index >= type->member_count)
+        return 0;
+    return type->members[index].offset;
+}
+
+unsigned int Eco_FFIType_OffsetOf_ByName(struct Eco_FFIType* type, struct Eco_Key* name)
+{
+    unsigned int  index;
+
+    for (index = 0; index < type->member_count; index++)
+    {
+        if (type->members[index].name == name)
+            return type->members[index].offset;
+    }
+    return 0;
+}
+
 #endif

@@ -71,6 +71,29 @@ bool Eco_VM_Builtin_FFIType_GetSizeInBytes(struct Eco_Fiber* fiber, unsigned int
     return true;
 }
 
+bool Eco_VM_Builtin_FFIType_GetOffsetOf(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_FFIType*  type;
+    Eco_Any              index;
+    Eco_Any              any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    Eco_Fiber_Pop(fiber, &index);
+    Eco_Fiber_Pop(fiber, &any);
+    type = Eco_Any_AsPointer(any);
+    if (Eco_Any_IsInteger(index)) {
+        any = Eco_Any_FromInteger(Eco_FFIType_OffsetOf_ByIndex(type, Eco_Any_AsInteger(index)));
+    } else if (Eco_Any_IsPointer(index)) {
+        any = Eco_Any_FromInteger(Eco_FFIType_OffsetOf_ByName(type, Eco_Any_AsPointer(index)));
+    } else {
+        // TODO: How do the stack pops affect the failing builtin?
+        return false;
+    }
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 bool Eco_VM_Builtin_FFIFunction_New(struct Eco_Fiber* fiber, unsigned int args)
 {
     unsigned int         index;
