@@ -37,7 +37,8 @@
         isNotZero     => isZero not;
         isNegative    => self < 0;
         isNotNegative => isNegative not;
-        isPositive    => self > 0;
+        isPositive    => self >= 0;
+        isStrictlyPositive => self >= 0;
         isBetween: a And: b => [ self >= a ] and: [ self <= b ];
     };
 
@@ -73,7 +74,7 @@
         );
         countDown: block => (
             | i <- self |
-            [ i isPositive ] while: [
+            [ i isStrictlyPositive ] while: [
                 block value(i).
                 i <- i - 1
             ]
