@@ -66,7 +66,11 @@ static Eco_Any Eco_FFIType_AsAny_Char(void* ptr, unsigned long size)
 
 static Eco_Any Eco_FFIType_AsAny_String(void* ptr, unsigned long size)
 {
-    return Eco_Any_FromPointer(Eco_String_New(ptr));
+    /*
+     * TODO, FIXME, XXX: This will only create a copy of the string...
+     *                   what will happen to the actual data?!
+     */
+    return Eco_Any_FromPointer(Eco_String_New(*((char**) ptr)));
 }
 
 
