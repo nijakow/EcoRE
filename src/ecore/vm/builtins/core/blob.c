@@ -338,11 +338,7 @@ bool Eco_VM_Builtin_BlobDLSym(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Pop(fiber, &any);
     key = Eco_Any_AsPointer(any);
     if (args == 1) {
-#ifdef RTLD_DEFAULT
-        blob = Eco_Blob_DLSym(RTLD_DEFAULT, key->name);
-#else
         blob = Eco_Blob_DLSym(NULL, key->name);
-#endif
     } else {
         Eco_Fiber_Pop(fiber, &any);
         blob = Eco_Any_AsPointer(any);

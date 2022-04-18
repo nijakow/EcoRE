@@ -210,6 +210,11 @@ struct Eco_Blob* Eco_Blob_DLSym(void* base, char* symbol)
 #ifdef ECO_CONFIG_USE_DLOPEN
     void* symptr;
 
+#ifdef RTLD_DEFAULT
+    if (base == NULL)
+        base = RTLD_DEFAULT;
+#endif
+
     symptr = dlsym(base, symbol);
     if (symptr == NULL)
         return NULL;
