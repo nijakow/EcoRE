@@ -50,6 +50,8 @@
         pointer => GetTypeByIndex: 20;
     };
 
+    struct(...) => #'ecosphere.ecore.ffi.type.new_struct'(std util newArray(...));
+
     null => (
         | b <- allocType: (types pointer) |
         0 to: (b size) do: [ :i | b at: i put: 0 ].

@@ -10,16 +10,22 @@
 #include <ecore/objects/base/object.h>
 
 
+struct Eco_FFIType_Entry
+{
+    struct Eco_FFIType*  type;
+    unsigned int         offset;
+};
+
 struct Eco_FFIType
 {
-    struct Eco_Object     _;
+    struct Eco_Object         _;
 
 #ifdef ECO_CONFIG_USE_FFI
-    ffi_type*             type;
-    ffi_type              payload;
+    ffi_type*                 type;
+    ffi_type                  payload;
 #endif
-    unsigned int          member_count;
-    struct Eco_FFIType*   members[0];
+    unsigned int              member_count;
+    struct Eco_FFIType_Entry  members[0];
 };
 
 #ifdef ECO_CONFIG_USE_FFI

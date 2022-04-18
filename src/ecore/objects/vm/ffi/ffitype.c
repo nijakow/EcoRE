@@ -64,8 +64,7 @@ struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType** members,
     {
         payload = ((char*) type) + sizeof(struct Eco_FFIType) + sizeof(struct Eco_FFIType*) * member_count;
         type->member_count = member_count;
-        for (index = 0; index < member_count; index++)
-            type->members[index] = members[index];
+        size_t offsets[member_count];
 #ifdef ECO_CONFIG_USE_FFI
         for (index = 0; index < member_count; index++)
             ((ffi_type**) payload)[index] = members[index]->type;
@@ -75,7 +74,13 @@ struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType** members,
         type->payload.type      = FFI_TYPE_STRUCT;
         type->payload.elements  = (ffi_type**) payload;
         type->type = &type->payload;
+        ffi_get_struct_offsets(FFI_DEFAULT_ABI, &type->payload, offsets);
 #endif
+        for (index = 0; index < member_count; index++)
+        {
+            type->members[index].type   = members[index];
+            type->members[index].offset = offsets[index];
+        }
     }
 
     return type;
@@ -86,7 +91,7 @@ void Eco_FFIType_Mark(struct Eco_GC_State* state, struct Eco_FFIType* type)
     unsigned int  index;
 
     for (index = 0; index < type->member_count; index++)
-        Eco_GC_State_MarkObject(state, type->members[index]);
+        Eco_GC_State_MarkObject(state, type->members[index].type);
     Eco_Object_Mark(state, &type->_);
 }
 
