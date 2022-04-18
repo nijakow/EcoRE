@@ -1,6 +1,7 @@
 
 #=std/reflect/proxies/ffi/FFIType: {
     sizeof => #'ecosphere.ecore.ffi.type.sizeof'(self);
+    alloc => std util newBlob: sizeof;
 
     function: args => #'ecosphere.ecore.ffi.function.new'(self, args);
     function(...) => function: (std util newArray(...));

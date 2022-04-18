@@ -53,14 +53,13 @@
     struct(...) => #'ecosphere.ecore.ffi.type.new_struct'(std util newArray(...));
 
     null => (
-        | b <- allocType: (types pointer) |
+        | b <- (types pointer) alloc |
         0 to: (b size) do: [ :i | b at: i put: 0 ].
       ^ b
     );
 
     allocBytes: bytes => std util newBlob: bytes;
-    allocType: type => allocBytes: (type sizeof);
-    address: object => ( | b <- allocType (types pointer) | b at: 0 PutPtr: object. b );
+    address: object => ( | b <- (types pointer) alloc | b at: 0 PutPtr: object. b );
     dereference: object type: type => object ptrAt: 0 Size: (type sizeof);
 
     ForeignFunction = {
