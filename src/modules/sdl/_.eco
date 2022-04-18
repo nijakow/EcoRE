@@ -98,7 +98,7 @@
               ^ self
             );
 
-            destroy => sdl DestroyRenderer(renderer);
+            destroy => sdl DestroyRenderer(renptr);
 
             flush => sdl RenderFlush(renptr);
             present => sdl RenderPresent(renptr);
@@ -110,7 +110,7 @@
             drawPointX: x Y: y => sdl RenderDrawPoint(renptr, x, y);
             drawLineX: x1 Y: y1 X: x2 Y: y2 => sdl RenderDrawLine(renptr, x1, y1, x2, y2);
 
-            writeOn: w => 'an sdl renderer';
+            writeOn: w => w << 'an sdl renderer';
         };
 
         with inherited parent = std Clonable;
