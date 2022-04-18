@@ -2,6 +2,7 @@
 
 #include <ecore/objects/base/type.h>
 #include <ecore/objects/misc/blob/blob.h>
+#include <ecore/objects/misc/string/string.h>
 #include <ecore/vm/memory/gc/gc.h>
 
 static ffi_type* Eco_FFIType_BASIC_TYPE_POINTERS[] = {
@@ -25,6 +26,7 @@ static ffi_type* Eco_FFIType_BASIC_TYPE_POINTERS[] = {
     &ffi_type_ulong,
     &ffi_type_slong,
     &ffi_type_longdouble,
+    &ffi_type_pointer,
     &ffi_type_pointer
 };
 
@@ -33,9 +35,44 @@ static Eco_Any Eco_FFIType_AsAny_Default(void* ptr, unsigned long size)
     return Eco_Any_FromPointer(Eco_Blob_NewFromData(ptr, size));
 }
 
+static Eco_Any Eco_FFIType_AsAny_Void(void* ptr, unsigned long size)
+{
+    return Eco_Any_FromInteger(0);
+}
+
+static Eco_Any Eco_FFIType_AsAny_Integer(void* ptr, unsigned long size)
+{
+    Eco_Integer  i;
+
+    if (size == sizeof(char)) i = *((char*) ptr);
+    else if (size == sizeof(short)) i = *((short*) ptr);
+    else if (size == sizeof(int)) i = *((int*) ptr);
+    else if (size == sizeof(Eco_Integer)) i = *((Eco_Integer*) ptr);
+    else return Eco_FFIType_AsAny_Default(ptr, size);
+    return Eco_Any_FromInteger(i);
+}
+
+static Eco_Any Eco_FFIType_AsAny_Char(void* ptr, unsigned long size)
+{
+    Eco_Codepoint  c;
+
+    if (size == sizeof(char)) c = *((char*) ptr);
+    else if (size == sizeof(short)) c = *((short*) ptr);
+    else if (size == sizeof(int)) c = *((int*) ptr);
+    else if (size == sizeof(Eco_Integer)) c = *((Eco_Integer*) ptr);
+    else return Eco_FFIType_AsAny_Default(ptr, size);
+    return Eco_Any_FromCharacter(c);
+}
+
+static Eco_Any Eco_FFIType_AsAny_String(void* ptr, unsigned long size)
+{
+    return Eco_Any_FromPointer(Eco_String_New(ptr));
+}
+
+
 static struct Eco_TypeCore Eco_FFIType_TYPECORE;
        struct Eco_Type*    Eco_FFIType_TYPE;
-static struct Eco_FFIType* Eco_FFIType_BASIC_INSTANCE_POINTERS[21];
+static struct Eco_FFIType* Eco_FFIType_BASIC_INSTANCE_POINTERS[22];
 
 void Eco_FFIType_Init()
 {
@@ -54,6 +91,15 @@ void Eco_FFIType_Init()
         Eco_FFIType_BASIC_INSTANCE_POINTERS[index] = Eco_FFIType_New(Eco_FFIType_BASIC_TYPE_POINTERS[index]);
         Eco_Object_MakeSticky(&Eco_FFIType_BASIC_INSTANCE_POINTERS[index]->_);
     }
+
+    Eco_FFIType_BASIC_INSTANCE_POINTERS[0]->as_any = Eco_FFIType_AsAny_Void;
+    for (index = 1; index <= 6; index++)
+        Eco_FFIType_BASIC_INSTANCE_POINTERS[index]->as_any = Eco_FFIType_AsAny_Integer;
+    Eco_FFIType_BASIC_INSTANCE_POINTERS[11]->as_any = Eco_FFIType_AsAny_Char;
+    Eco_FFIType_BASIC_INSTANCE_POINTERS[12]->as_any = Eco_FFIType_AsAny_Char;
+    for (index = 13; index <= 16; index++)
+        Eco_FFIType_BASIC_INSTANCE_POINTERS[index]->as_any = Eco_FFIType_AsAny_Integer;
+    Eco_FFIType_BASIC_INSTANCE_POINTERS[21]->as_any = Eco_FFIType_AsAny_String;
 }
 
 void Eco_FFIType_Terminate()

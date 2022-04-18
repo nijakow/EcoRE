@@ -31,7 +31,7 @@
             SDL_Init <- (lib getFunction: #'SDL_Init' Type: ((ffi types int) function(ffi types uint32))) value.
             SDL_Quit <- (lib getFunction: #'SDL_Quit' Type: ((ffi types void) function)) value.
             SDL_PollEvent <- (lib getFunction: #'SDL_PollEvent' Type: ((ffi types int) function(ffi types pointer))) value.
-            SDL_CreateWindow <- (lib getFunction: #'SDL_CreateWindow' Type: ((ffi types pointer) function(ffi types pointer, ffi types int, ffi types int, ffi types int, ffi types int, ffi types uint32))) value.
+            SDL_CreateWindow <- (lib getFunction: #'SDL_CreateWindow' Type: ((ffi types pointer) function(ffi types string, ffi types int, ffi types int, ffi types int, ffi types int, ffi types uint32))) value.
             SDL_DestroyWindow <- (lib getFunction: #'SDL_DestroyWindow' Type: ((ffi types void) function(ffi types pointer))) value.
             SDL_GetWindowSurface <- (lib getFunction: #'SDL_GetWindowSurface' Type: ((ffi types pointer) function(ffi types pointer))) value.
             SDL_GetRenderer <- (lib getFunction: #'SDL_GetRenderer' Type: ((ffi types pointer) function(ffi types pointer))) value.
@@ -66,7 +66,7 @@
         "TODO..."
     };
 
-    NewWindowWithTitle: title X: x Y: y Width: w Height: h => (Window clone) init: CreateWindow(title, x, y, w, h, 0);
+    NewWindowWithTitle: title X: x Y: y W: w H: h => (Window clone) init: CreateWindow(title, x, y, w, h, 0);
 
     own Window = {
         private sdl = $,
@@ -82,7 +82,7 @@
 
             destroy => sdl DestroyWindow(winptr);
 
-            writeOn: w => 'an sdl window';
+            writeOn: w => w << 'an sdl window';
         };
 
         with inherited parent = std Clonable;

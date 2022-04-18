@@ -48,6 +48,7 @@
         longdouble => GetTypeByIndex: 19;
         
         pointer => GetTypeByIndex: 20;
+        string => GetTypeByIndex: 21;
     };
 
     struct(...) => #'ecosphere.ecore.ffi.type.new_struct'(std util newArray(...));
