@@ -1,6 +1,7 @@
 #include "ffitype.h"
 
 #include <ecore/objects/base/type.h>
+#include <ecore/objects/misc/blob/blob.h>
 #include <ecore/vm/memory/gc/gc.h>
 
 static ffi_type* Eco_FFIType_BASIC_TYPE_POINTERS[] = {
@@ -27,6 +28,10 @@ static ffi_type* Eco_FFIType_BASIC_TYPE_POINTERS[] = {
     &ffi_type_pointer
 };
 
+static Eco_Any Eco_FFIType_AsAny_Default(void* ptr, unsigned long size)
+{
+    return Eco_Any_FromPointer(Eco_Blob_NewFromData(ptr, size));
+}
 
 static struct Eco_TypeCore Eco_FFIType_TYPECORE;
        struct Eco_Type*    Eco_FFIType_TYPE;
@@ -69,6 +74,7 @@ struct Eco_FFIType* Eco_FFIType_New(void* ffi_type_ptr)
     if (type != NULL)
     {
         type->member_count = 0;
+        type->as_any       = Eco_FFIType_AsAny_Default;
 #ifdef ECO_CONFIG_USE_FFI
         if (ffi_type_ptr == NULL)
             type->type = &type->payload;    // TODO: Initialize payload
@@ -98,6 +104,7 @@ struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType** members,
     {
         payload = ((char*) type) + sizeof(struct Eco_FFIType) + sizeof(struct Eco_FFIType*) * member_count;
         type->member_count = member_count;
+        type->as_any       = Eco_FFIType_AsAny_Default;
         size_t offsets[member_count];
 #ifdef ECO_CONFIG_USE_FFI
         for (index = 0; index < member_count; index++)

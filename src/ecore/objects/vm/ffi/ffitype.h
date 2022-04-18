@@ -26,6 +26,7 @@ struct Eco_FFIType
     ffi_type*                 type;
     ffi_type                  payload;
 #endif
+    Eco_Any                 (*as_any)(void*, unsigned long);
     unsigned int              member_count;
     struct Eco_FFIType_Entry  members[0];
 };

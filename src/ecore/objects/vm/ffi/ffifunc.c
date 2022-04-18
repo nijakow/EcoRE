@@ -175,15 +175,11 @@ bool Eco_FFIFunc_EcoCall(struct Eco_FFIFunc* func,
     const unsigned int      argbuffer_size = Eco_FFIFunc_GetArgBufferSize(func);
           unsigned int      index;
           unsigned int      size;
-          struct Eco_Blob*  blob;
           char*             ptr;
-          char              argbuffer[argbuffer_size + sizeof(void*) * arg_count];
+          char              argbuffer[argbuffer_size + sizeof(void*) * arg_count + Eco_FFIType_SizeofCType(func->return_type)];
     
     if (arg_count != Eco_FFIFunc_GetArgumentCount(func))
         return false;
-
-    blob        = Eco_Blob_New(Eco_FFIType_SizeofCType(func->return_type));
-    *result_loc = Eco_Any_FromPointer(blob);
 
     ptr = argbuffer;
     for (index = 0; index < arg_count; index++)
@@ -195,7 +191,12 @@ bool Eco_FFIFunc_EcoCall(struct Eco_FFIFunc* func,
         ptr += size;
     }
 
-    ffi_call(&func->cif, function, blob->bytes, (void**) &argbuffer[argbuffer_size]);
+    ffi_call(&func->cif, function, &argbuffer[argbuffer_size + sizeof(void*) * arg_count], (void**) &argbuffer[argbuffer_size]);
+    if (result_loc != NULL) {
+        *result_loc = func->return_type->as_any(&argbuffer[argbuffer_size + sizeof(void*) * arg_count], Eco_FFIType_SizeofCType(func->return_type));
+    } else {
+        Eco_Any_Initialize(result_loc);
+    }
     return true;
 #else
     return false;
