@@ -18,6 +18,8 @@ struct Eco_FFIType
     ffi_type*             type;
     ffi_type              payload;
 #endif
+    unsigned int          member_count;
+    struct Eco_FFIType*   members[0];
 };
 
 #ifdef ECO_CONFIG_USE_FFI
@@ -25,6 +27,7 @@ struct Eco_FFIType* Eco_FFIType_New(ffi_type*);
 #else
 struct Eco_FFIType* Eco_FFIType_New(void*);
 #endif
+struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType**, unsigned int);
 void Eco_FFIType_Mark(struct Eco_GC_State*, struct Eco_FFIType*);
 void Eco_FFIType_Del(struct Eco_FFIType*);
 

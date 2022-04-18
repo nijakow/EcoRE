@@ -1,6 +1,7 @@
 #include "ffitype.h"
 
 #include <ecore/objects/base/type.h>
+#include <ecore/vm/memory/gc/gc.h>
 
 
 static struct Eco_TypeCore Eco_FFIType_TYPECORE;
@@ -34,6 +35,7 @@ struct Eco_FFIType* Eco_FFIType_New(void* ffi_type_ptr)
 
     if (type != NULL)
     {
+        type->member_count = 0;
 #ifdef ECO_CONFIG_USE_FFI
         if (ffi_type_ptr == NULL)
             type->type = &type->payload;    // TODO: Initialize payload
@@ -45,8 +47,46 @@ struct Eco_FFIType* Eco_FFIType_New(void* ffi_type_ptr)
     return type;
 }
 
+struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType** members,
+                                          unsigned int         member_count)
+{
+    struct Eco_FFIType*  type;
+    char*                payload;
+    unsigned int         index;
+
+#ifdef ECO_CONFIG_USE_FFI
+    type = Eco_Object_New(Eco_FFIType_TYPE, sizeof(struct Eco_FFIType) + sizeof(struct Eco_FFIType*) * member_count + sizeof(ffi_type*) * (member_count + 1));
+#else
+    type = Eco_Object_New(Eco_FFIType_TYPE, sizeof(struct Eco_FFIType) + sizeof(struct Eco_FFIType*) * member_count);
+#endif
+
+    if (type != NULL)
+    {
+        payload = ((char*) type) + sizeof(struct Eco_FFIType) + sizeof(struct Eco_FFIType*) * member_count;
+        type->member_count = member_count;
+        for (index = 0; index < member_count; index++)
+            type->members[index] = members[index];
+#ifdef ECO_CONFIG_USE_FFI
+        for (index = 0; index < member_count; index++)
+            ((ffi_type**) payload)[index] = members[index]->type;
+        ((ffi_type**) payload)[index] = NULL;
+        type->payload.size      = 0; /* LibFFI initializes this */
+        type->payload.alignment = 0; /* LibFFI initializes this */
+        type->payload.type      = FFI_TYPE_STRUCT;
+        type->payload.elements  = (ffi_type**) payload;
+        type->type = &type->payload;
+#endif
+    }
+
+    return type;
+}
+
 void Eco_FFIType_Mark(struct Eco_GC_State* state, struct Eco_FFIType* type)
 {
+    unsigned int  index;
+
+    for (index = 0; index < type->member_count; index++)
+        Eco_GC_State_MarkObject(state, type->members[index]);
     Eco_Object_Mark(state, &type->_);
 }
 
