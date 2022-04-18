@@ -26,23 +26,23 @@
         init => init: 'libSDL2.so';
         
         init: libpath => (
-            lib <- (ffi DLOpen: libpath) value.
+            lib <- (ffi DLOpen: libpath) yes.
             INIT_EVERYTHING <- 62001.
-            SDL_Init <- (lib getFunction: #'SDL_Init' Type: ((ffi types int) function(ffi types uint32))) value.
-            SDL_Quit <- (lib getFunction: #'SDL_Quit' Type: ((ffi types void) function)) value.
-            SDL_PollEvent <- (lib getFunction: #'SDL_PollEvent' Type: ((ffi types int) function(ffi types pointer))) value.
-            SDL_CreateWindow <- (lib getFunction: #'SDL_CreateWindow' Type: ((ffi types pointer) function(ffi types string, ffi types int, ffi types int, ffi types int, ffi types int, ffi types uint32))) value.
-            SDL_DestroyWindow <- (lib getFunction: #'SDL_DestroyWindow' Type: ((ffi types void) function(ffi types pointer))) value.
-            SDL_GetWindowSurface <- (lib getFunction: #'SDL_GetWindowSurface' Type: ((ffi types pointer) function(ffi types pointer))) value.
-            SDL_GetRenderer <- (lib getFunction: #'SDL_GetRenderer' Type: ((ffi types pointer) function(ffi types pointer))) value.
-            SDL_CreateRenderer <- (lib getFunction: #'SDL_CreateRenderer' Type: ((ffi types pointer) function(ffi types pointer, ffi types int, ffi types uint32))) value.
-            SDL_DestroyRenderer <- (lib getFunction: #'SDL_DestroyRenderer' Type: ((ffi types void) function(ffi types pointer))) value.
-            SDL_SetRenderDrawColor <- (lib getFunction: #'SDL_SetRenderDrawColor' Type: ((ffi types int) function(ffi types pointer, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8))) value.
-            SDL_RenderClear <- (lib getFunction: #'SDL_RenderClear' Type: ((ffi types int) function(ffi types pointer))) value.
-            SDL_RenderDrawPoint <- (lib getFunction: #'SDL_RenderDrawPoint' Type: ((ffi types int) function(ffi types pointer, ffi types int, ffi types int))) value.
-            SDL_RenderDrawLine <- (lib getFunction: #'SDL_RenderDrawLine' Type: ((ffi types int) function(ffi types pointer, ffi types int, ffi types int, ffi types int, ffi types int))) value.
-            SDL_RenderFlush <- (lib getFunction: #'SDL_RenderFlush' Type: ((ffi types int) function(ffi types pointer))) value.
-            SDL_RenderPresent <- (lib getFunction: #'SDL_RenderPresent' Type: ((ffi types void) function(ffi types pointer))) value.
+            SDL_Init <- (lib getFunction: #'SDL_Init' Type: ((ffi types int) function(ffi types uint32))) yes.
+            SDL_Quit <- (lib getFunction: #'SDL_Quit' Type: ((ffi types void) function)) yes.
+            SDL_PollEvent <- (lib getFunction: #'SDL_PollEvent' Type: ((ffi types int) function(ffi types pointer))) yes.
+            SDL_CreateWindow <- (lib getFunction: #'SDL_CreateWindow' Type: ((ffi types pointer) function(ffi types string, ffi types int, ffi types int, ffi types int, ffi types int, ffi types uint32))) yes.
+            SDL_DestroyWindow <- (lib getFunction: #'SDL_DestroyWindow' Type: ((ffi types void) function(ffi types pointer))) yes.
+            SDL_GetWindowSurface <- (lib getFunction: #'SDL_GetWindowSurface' Type: ((ffi types pointer) function(ffi types pointer))) yes.
+            SDL_GetRenderer <- (lib getFunction: #'SDL_GetRenderer' Type: ((ffi types pointer) function(ffi types pointer))) yes.
+            SDL_CreateRenderer <- (lib getFunction: #'SDL_CreateRenderer' Type: ((ffi types pointer) function(ffi types pointer, ffi types int, ffi types uint32))) yes.
+            SDL_DestroyRenderer <- (lib getFunction: #'SDL_DestroyRenderer' Type: ((ffi types void) function(ffi types pointer))) yes.
+            SDL_SetRenderDrawColor <- (lib getFunction: #'SDL_SetRenderDrawColor' Type: ((ffi types int) function(ffi types pointer, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8))) yes.
+            SDL_RenderClear <- (lib getFunction: #'SDL_RenderClear' Type: ((ffi types int) function(ffi types pointer))) yes.
+            SDL_RenderDrawPoint <- (lib getFunction: #'SDL_RenderDrawPoint' Type: ((ffi types int) function(ffi types pointer, ffi types int, ffi types int))) yes.
+            SDL_RenderDrawLine <- (lib getFunction: #'SDL_RenderDrawLine' Type: ((ffi types int) function(ffi types pointer, ffi types int, ffi types int, ffi types int, ffi types int))) yes.
+            SDL_RenderFlush <- (lib getFunction: #'SDL_RenderFlush' Type: ((ffi types int) function(ffi types pointer))) yes.
+            SDL_RenderPresent <- (lib getFunction: #'SDL_RenderPresent' Type: ((ffi types void) function(ffi types pointer))) yes.
           ^ self
         );
 

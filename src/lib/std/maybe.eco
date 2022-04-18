@@ -1,14 +1,14 @@
 
 #=std/maybe: {
     Yes = #=std/maybe/Yes: {
-        value;
+        yes;
 
         with inherited trait = {
-            init: v => value <- v;
-            yes: block => block value(value);
+            init: v => yes <- v;
+            yes: block => block value(yes);
             no: block => self;
-            yes: yblock no: nblock => yblock value(value);
-            writeOn: writer => writer << 'Yes: ' << value;
+            yes: yblock no: nblock => yblock value(yes);
+            writeOn: writer => writer << 'Yes: ' << yes;
         };
         with inherited parent = #<:std/Clonable>;
     };
@@ -17,10 +17,10 @@
 
     No = #=std/maybe/No: {
         with inherited trait = {
-            value => false;
             yes: block => self;
             no: block => block value;
             yes: yblock no: nblock => nblock value;
+            yes => self;  "TODO: Throw an error"
             writeOn: writer => writer << 'No';
         };
         with inherited parent = #<:std/Clonable>;
