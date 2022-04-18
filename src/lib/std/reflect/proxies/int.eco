@@ -38,6 +38,7 @@
         isNegative    => self < 0;
         isNotNegative => isNegative not;
         isPositive    => self > 0;
+        isBetween: a And: b => [ self >= a ] and: [ self <= b ];
     };
 
     with inherited misc = {

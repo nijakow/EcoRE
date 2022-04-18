@@ -1,0 +1,49 @@
+
+
+"This is for the stream/iterator"
+do: block => (
+    [ has ] while: [
+        block value(current).
+        advance.
+    ].
+);
+
+
+{
+    private own Base10Transformer = {
+        value(c) => (
+            ((c asInt) isBetween: (#\0 asInt) And: (#\9 asInt)) -> [
+              ^ Yes: ((c asInt) - (#\0 asInt))
+            ].
+          ^ No
+        );
+        with inherited parent = #<:std/Clonable>;
+    };
+
+    ParseUIntFromStream: stream Transformer: transformer => (
+        | v <- 0 |
+        stream do: [ :c |
+            (transformer value(c))
+                yes: [ :digit | v <- (v * 10) + digit ]
+                 no: [ ^ v ]
+        ].
+        v
+    );
+
+    ParseIntFromStream: stream Transformer: transformer => (
+        ([ stream has ] and: [ stream current == #\- ])
+            -> [ stream advance. (ParseUIntFromStream: stream Transformer: transformer) negate ].
+        ([ stream has ] and: [ stream current == #\+ ]) -> [ stream forward ].
+      ^ ParseUIntFromStream: stream Transformer: transformer
+    );
+
+    ParseUIntFromStream: stream => (
+        ParseUIntFromStream: stream
+                Transformer: Base10Transformer
+    );
+
+    ParseIntFromStream: stream => (
+        ParseIntFromStream: stream
+               Transformer: Base10Transformer
+    );
+}
