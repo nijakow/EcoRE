@@ -11,20 +11,34 @@
 
 bool Eco_VM_Builtin_FFIType_NewStruct(struct Eco_Fiber* fiber, unsigned int args)
 {
-    struct Eco_Array*  array;
+    struct Eco_Array*  type_array;
+    struct Eco_Array*  name_array;
     Eco_Any            any;
     unsigned int       count;
     unsigned int       index;
 
-    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 2))
         return false;
+    if (args == 2) {
+        Eco_Fiber_Pop(fiber, &any);
+        name_array = Eco_Any_AsPointer(any);
+    } else {
+        name_array = NULL;
+    }
     Eco_Fiber_Pop(fiber, &any);
-    array = Eco_Any_AsPointer(any);
-    count = Eco_Array_Size(array);
+    type_array = Eco_Any_AsPointer(any);
+    count = Eco_Array_Size(type_array);
     struct Eco_FFIType* types[count];
+    struct Eco_Key*     names[count];
     for (index = 0; index < count; index++)
-        types[index] = Eco_Any_AsPointer(*Eco_Array_At(array, index));
-    any = Eco_Any_FromPointer(Eco_FFIType_NewStruct(types, count));
+    {
+        types[index] = Eco_Any_AsPointer(*Eco_Array_At(type_array, index));
+        if (name_array != NULL && index < Eco_Array_Size(name_array))
+            names[index] = Eco_Any_AsPointer(*Eco_Array_At(name_array, index));
+        else
+            names[index] = NULL;
+    }
+    any = Eco_Any_FromPointer(Eco_FFIType_NewStruct(types, names, count));
     Eco_Fiber_Push(fiber, &any);
     return true;
 }

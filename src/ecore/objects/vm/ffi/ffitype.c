@@ -48,6 +48,7 @@ struct Eco_FFIType* Eco_FFIType_New(void* ffi_type_ptr)
 }
 
 struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType** members,
+                                          struct Eco_Key**     names,
                                           unsigned int         member_count)
 {
     struct Eco_FFIType*  type;
@@ -78,6 +79,7 @@ struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType** members,
 #endif
         for (index = 0; index < member_count; index++)
         {
+            type->members[index].name   = (names == NULL) ? NULL : names[index];
             type->members[index].type   = members[index];
             type->members[index].offset = offsets[index];
         }
@@ -91,7 +93,11 @@ void Eco_FFIType_Mark(struct Eco_GC_State* state, struct Eco_FFIType* type)
     unsigned int  index;
 
     for (index = 0; index < type->member_count; index++)
+    {
+        if (type->members[index].name != NULL)
+            Eco_GC_State_MarkObject(state, type->members[index].name);
         Eco_GC_State_MarkObject(state, type->members[index].type);
+    }
     Eco_Object_Mark(state, &type->_);
 }
 
