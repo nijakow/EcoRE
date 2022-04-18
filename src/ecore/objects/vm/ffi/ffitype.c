@@ -3,12 +3,39 @@
 #include <ecore/objects/base/type.h>
 #include <ecore/vm/memory/gc/gc.h>
 
+static ffi_type* Eco_FFIType_BASIC_TYPE_POINTERS[] = {
+    &ffi_type_void,
+    &ffi_type_uint8,
+    &ffi_type_sint8,
+    &ffi_type_uint16,
+    &ffi_type_sint16,
+    &ffi_type_uint32,
+    &ffi_type_sint32,
+    &ffi_type_uint64,
+    &ffi_type_sint64,
+    &ffi_type_float,
+    &ffi_type_double,
+    &ffi_type_uchar,
+    &ffi_type_schar,
+    &ffi_type_ushort,
+    &ffi_type_sshort,
+    &ffi_type_uint,
+    &ffi_type_sint,
+    &ffi_type_ulong,
+    &ffi_type_slong,
+    &ffi_type_longdouble,
+    &ffi_type_pointer
+};
+
 
 static struct Eco_TypeCore Eco_FFIType_TYPECORE;
        struct Eco_Type*    Eco_FFIType_TYPE;
+static struct Eco_FFIType* Eco_FFIType_BASIC_INSTANCE_POINTERS[21];
 
 void Eco_FFIType_Init()
 {
+    unsigned int  index;
+
     Eco_TypeCore_Create(&Eco_FFIType_TYPECORE, "Eco_FFIType");
 
     Eco_FFIType_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
@@ -16,6 +43,12 @@ void Eco_FFIType_Init()
     Eco_FFIType_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_FFIType_Del;
 
     Eco_FFIType_TYPE          = Eco_Type_NewPrefab(&Eco_FFIType_TYPECORE);
+
+    for (index = 0; index < sizeof(Eco_FFIType_BASIC_TYPE_POINTERS) / sizeof(Eco_FFIType_BASIC_TYPE_POINTERS[0]); index++)
+    {
+        Eco_FFIType_BASIC_INSTANCE_POINTERS[index] = Eco_FFIType_New(Eco_FFIType_BASIC_TYPE_POINTERS[index]);
+        Eco_Object_MakeSticky(&Eco_FFIType_BASIC_INSTANCE_POINTERS[index]->_);
+    }
 }
 
 void Eco_FFIType_Terminate()
@@ -113,34 +146,9 @@ void Eco_FFIType_Del(struct Eco_FFIType* type)
  *    G e t F o r I n d e x
  */
 
-static ffi_type* Eco_FFIType_BASIC_TYPE_POINTERS[] = {
-    &ffi_type_void,
-    &ffi_type_uint8,
-    &ffi_type_sint8,
-    &ffi_type_uint16,
-    &ffi_type_sint16,
-    &ffi_type_uint32,
-    &ffi_type_sint32,
-    &ffi_type_uint64,
-    &ffi_type_sint64,
-    &ffi_type_float,
-    &ffi_type_double,
-    &ffi_type_uchar,
-    &ffi_type_schar,
-    &ffi_type_ushort,
-    &ffi_type_sshort,
-    &ffi_type_uint,
-    &ffi_type_sint,
-    &ffi_type_ulong,
-    &ffi_type_slong,
-    &ffi_type_longdouble,
-    &ffi_type_pointer
-};
-
 struct Eco_FFIType* Eco_FFIType_GetForIndex(unsigned int index)
 {
-    // TODO: Cache these instances
-    return Eco_FFIType_New(Eco_FFIType_BASIC_TYPE_POINTERS[index]);
+    return Eco_FFIType_BASIC_INSTANCE_POINTERS[index];
 }
 
 unsigned int Eco_FFIType_OffsetOf_ByIndex(struct Eco_FFIType* type, unsigned int index)
