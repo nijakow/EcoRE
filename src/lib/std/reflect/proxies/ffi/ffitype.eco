@@ -1,6 +1,8 @@
 
 #=std/reflect/proxies/ffi/FFIType: {
     pointer => #'ecosphere.ecore.ffi.type.pointer_to'(self);
+    pointee => #'ecosphere.ecore.ffi.type.pointee_or_self'(self);
+    isPointer => (pointee is: self) not;
 
     alloc => #'ecosphere.ecore.ffi.object.alloc'(self);
     
@@ -10,6 +12,43 @@
     function: args => #'ecosphere.ecore.ffi.function.new'(self, args);
     function(...) => function: (std util newArray(...));
 
-    writeOn: writer => writer << '<ffi_type:' << sizeof << '>';
+    writeOn: writer => (
+        (self is: (ffi types void))  -> [ writer << 'void'. ^ ].
+        (self is: (ffi types bool))  -> [ writer << 'bool'. ^ ].
+        (self is: (ffi types uint8)) -> [ writer << 'uint8'. ^ ].
+        (self is: (ffi types sint8)) -> [ writer << 'sint8'. ^ ].
+        (self is: (ffi types int8)) -> [ writer << 'int8'. ^ ].
+        (self is: (ffi types byte)) -> [ writer << 'byte'. ^ ].
+        (self is: (ffi types uint16)) -> [ writer << 'uint16'. ^ ].
+        (self is: (ffi types sint16)) -> [ writer << 'sint16'. ^ ].
+        (self is: (ffi types int16)) -> [ writer << 'int16'. ^ ].
+        (self is: (ffi types uint32)) -> [ writer << 'uint32'. ^ ].
+        (self is: (ffi types sint32)) -> [ writer << 'sint32'. ^ ].
+        (self is: (ffi types int32)) -> [ writer << 'int32'. ^ ].
+        (self is: (ffi types uint64)) -> [ writer << 'uint64'. ^ ].
+        (self is: (ffi types sint64)) -> [ writer << 'sint64'. ^ ].
+        (self is: (ffi types int64)) -> [ writer << 'int64'. ^ ].
+        (self is: (ffi types float)) -> [ writer << 'float'. ^ ].
+        (self is: (ffi types double)) -> [ writer << 'double'. ^ ].
+        (self is: (ffi types uchar)) -> [ writer << 'unsigned char'. ^ ].
+        (self is: (ffi types schar)) -> [ writer << 'signed char'. ^ ].
+        (self is: (ffi types char)) -> [ writer << 'char'. ^ ].
+        (self is: (ffi types ushort)) -> [ writer << 'unsigned short'. ^ ].
+        (self is: (ffi types sshort)) -> [ writer << 'signed short'. ^ ].
+        (self is: (ffi types short)) -> [ writer << 'short'. ^ ].
+        (self is: (ffi types uint)) -> [ writer << 'unsigned int'. ^ ].
+        (self is: (ffi types sint)) -> [ writer << 'signed int'. ^ ].
+        (self is: (ffi types int)) -> [ writer << 'int'. ^ ].
+        (self is: (ffi types ulong)) -> [ writer << 'unsigned long'. ^ ].
+        (self is: (ffi types slong)) -> [ writer << 'signed long'. ^ ].
+        (self is: (ffi types long)) -> [ writer << 'long'. ^ ].
+        (self is: (ffi types longdouble)) -> [ writer << 'long double'. ^ ].
+        (self is: (ffi types string)) -> [ writer << 'string'. ^ ].
+        
+        isPointer -> [ writer << 'pointer to ' << pointee. ^ ].
+        
+        writer << '<ffi_type:' << sizeof << '>'
+    );
+
     with inherited parent = #<:std/Clonable>;
 }

@@ -49,6 +49,11 @@ void Eco_FFIType_Del(struct Eco_FFIType*);
 struct Eco_FFIType* Eco_FFIType_GetForIndex(unsigned int);
 struct Eco_FFIType* Eco_FFIType_GetVoidPointer();
 
+static inline struct Eco_FFIType* Eco_FFIType_PointeeOrSelf(struct Eco_FFIType* type)
+{
+    return (type->pointee == NULL) ? type : type->pointee;
+}
+
 static inline unsigned int Eco_FFIType_SizeofCType(struct Eco_FFIType* type) {
     return type->type->size;
 }
