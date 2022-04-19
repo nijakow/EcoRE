@@ -267,7 +267,7 @@ struct Eco_FFIType* Eco_FFIType_GetForIndex(unsigned int index)
 
 struct Eco_FFIType* Eco_FFIType_GetVoidPointer()
 {
-    return Eco_FFIType_PointerTo(Eco_FFIType_GetForIndex(20));
+    return Eco_FFIType_PointerTo(Eco_FFIType_GetForIndex(0));
 }
 
 unsigned int Eco_FFIType_OffsetOf_ByIndex(struct Eco_FFIType* type, unsigned int index)
