@@ -48,7 +48,7 @@ void Eco_Blob_Terminate()
  *    B a s i c s
  */
 
-struct Eco_Blob* Eco_Blob_New(unsigned int element_count)
+struct Eco_Blob* Eco_Blob_New(unsigned int element_size)
 {
     /*
      * In this case, the blob size is fixed (no swapout, no realloc),
@@ -56,7 +56,7 @@ struct Eco_Blob* Eco_Blob_New(unsigned int element_count)
      */
     struct Eco_Blob*  blob;
 
-    blob = Eco_Object_New(Eco_Blob_TYPE, sizeof(struct Eco_Blob) + sizeof(char) * element_count);
+    blob = Eco_Object_New(Eco_Blob_TYPE, sizeof(struct Eco_Blob) + sizeof(char) * element_size);
 
     if (blob != NULL)
     {
@@ -64,8 +64,27 @@ struct Eco_Blob* Eco_Blob_New(unsigned int element_count)
          * The blob is not initialized by default. This could leak information,
          * but we don't worry about that now (TODO, XXX).
          */
-        blob->size = element_count;
+        blob->size = element_size;
         blob->bytes = blob->payload;
+    }
+
+    return blob;
+}
+
+struct Eco_Blob* Eco_Blob_NewExt(void* ptr, unsigned int element_size)
+{
+    /*
+     * In this case, the blob size is fixed (no swapout, no realloc),
+     * but the data belongs to somebody else.
+     */
+    struct Eco_Blob*  blob;
+
+    blob = Eco_Object_New(Eco_Blob_TYPE, sizeof(struct Eco_Blob));
+
+    if (blob != NULL)
+    {
+        blob->size = element_size;
+        blob->bytes = ptr;
     }
 
     return blob;

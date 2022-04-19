@@ -14,6 +14,7 @@ struct Eco_Blob
 };
 
 struct Eco_Blob* Eco_Blob_New(unsigned int);
+struct Eco_Blob* Eco_Blob_NewExt(void*, unsigned int);
 void Eco_Blob_Mark(struct Eco_GC_State*, struct Eco_Blob*);
 struct Eco_Blob* Eco_Blob_Clone(struct Eco_CloneState*, struct Eco_Blob*, bool);
 void Eco_Blob_Del(struct Eco_Blob*);
