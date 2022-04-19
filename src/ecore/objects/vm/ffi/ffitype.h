@@ -26,7 +26,9 @@ struct Eco_FFIType
     ffi_type*                 type;
     ffi_type                  payload;
 #endif
-    Eco_Any                 (*as_any)(void*, unsigned long);
+    struct Eco_FFIType*       pointer;
+    struct Eco_FFIType*       pointee;
+    Eco_Any                 (*as_any)(struct Eco_FFIType*, void*, unsigned long);
     unsigned int              member_count;
     struct Eco_FFIType_Entry  members[0];
 };
@@ -37,6 +39,7 @@ struct Eco_FFIType* Eco_FFIType_New(ffi_type*);
 struct Eco_FFIType* Eco_FFIType_New(void*);
 #endif
 struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType**, struct Eco_Key**, unsigned int);
+struct Eco_FFIType* Eco_FFIType_PointerTo(struct Eco_FFIType*);
 void Eco_FFIType_Mark(struct Eco_GC_State*, struct Eco_FFIType*);
 void Eco_FFIType_Del(struct Eco_FFIType*);
 

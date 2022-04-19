@@ -193,7 +193,7 @@ bool Eco_FFIFunc_EcoCall(struct Eco_FFIFunc* func,
 
     ffi_call(&func->cif, function, &argbuffer[argbuffer_size + sizeof(void*) * arg_count], (void**) &argbuffer[argbuffer_size]);
     if (result_loc != NULL) {
-        *result_loc = func->return_type->as_any(&argbuffer[argbuffer_size + sizeof(void*) * arg_count], Eco_FFIType_SizeofCType(func->return_type));
+        *result_loc = func->return_type->as_any(func->return_type, &argbuffer[argbuffer_size + sizeof(void*) * arg_count], Eco_FFIType_SizeofCType(func->return_type));
     } else {
         Eco_Any_Initialize(result_loc);
     }
