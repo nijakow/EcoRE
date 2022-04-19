@@ -35,8 +35,8 @@
             SDL_PollEvent <- (lib getFunction: #'SDL_PollEvent' Type: ((ffi types int) function(ffi types pointer))) yes.
             SDL_CreateWindow <- (lib getFunction: #'SDL_CreateWindow' Type: ((ffi types pointer) function(ffi types string, ffi types int, ffi types int, ffi types int, ffi types int, ffi types uint32))) yes.
             SDL_DestroyWindow <- (lib getFunction: #'SDL_DestroyWindow' Type: ((ffi types void) function(ffi types pointer))) yes.
-            SDL_ShowWindow <- (lib getFunction: #'SDL_ShowWindow' Type: ((ffi types void) function(ffi types pointer)) yes.
-            SDL_HideWindow <- (lib getFunction: #'SDL_HideWindow' Type: ((ffi types void) function(ffi types pointer)) yes.
+            SDL_ShowWindow <- (lib getFunction: #'SDL_ShowWindow' Type: ((ffi types void) function(ffi types pointer))) yes.
+            SDL_HideWindow <- (lib getFunction: #'SDL_HideWindow' Type: ((ffi types void) function(ffi types pointer))) yes.
             SDL_GetWindowSurface <- (lib getFunction: #'SDL_GetWindowSurface' Type: ((ffi types pointer) function(ffi types pointer))) yes.
             SDL_GetRenderer <- (lib getFunction: #'SDL_GetRenderer' Type: ((ffi types pointer) function(ffi types pointer))) yes.
             SDL_CreateRenderer <- (lib getFunction: #'SDL_CreateRenderer' Type: ((ffi types pointer) function(ffi types pointer, ffi types int, ffi types uint32))) yes.
