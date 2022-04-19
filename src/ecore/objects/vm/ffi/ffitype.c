@@ -80,7 +80,7 @@ static Eco_Any Eco_FFIType_AsAny_String(struct Eco_FFIType* type, void* ptr, uns
 static bool Eco_FFIType_FromAny_Default(struct Eco_FFIType* type, void* ptr, unsigned long size, Eco_Any any)
 {
     if (Eco_Any_IsPointer(any)) {
-        if (Eco_FFIObject_IsFFIObject(Eco_Any_AsPointer(any)) && type == Eco_FFIObject_GetFFIType(Eco_Any_AsPointer(any)))
+        if (Eco_FFIObject_IsFFIObject(Eco_Any_AsPointer(any)) && Eco_FFIType_SizeofCType(type) == Eco_FFIType_SizeofCType(Eco_FFIObject_GetFFIType(Eco_Any_AsPointer(any))))
             Eco_Memcpy(ptr, Eco_FFIObject_GetBytes(Eco_Any_AsPointer(any)), size);
         else if (Eco_String_IsString(Eco_Any_AsPointer(any)) && size == sizeof(char*))
             *((char**) ptr) = ((struct Eco_String*) Eco_Any_AsPointer(any))->bytes;
