@@ -43,6 +43,20 @@ bool Eco_VM_Builtin_FFIType_NewStruct(struct Eco_Fiber* fiber, unsigned int args
     return true;
 }
 
+bool Eco_VM_Builtin_FFIType_PointerTo(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_FFIType*  type;
+    Eco_Any              any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    type = Eco_Any_AsPointer(any);
+    any = Eco_Any_FromPointer(Eco_FFIType_PointerTo(type));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 bool Eco_VM_Builtin_FFIType_GetForIndex(struct Eco_Fiber* fiber, unsigned int args)
 {
     struct Eco_FFIType*  type;

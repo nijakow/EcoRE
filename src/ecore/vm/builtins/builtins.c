@@ -125,6 +125,7 @@ void Eco_VM_Builtins_Init()
 
 #ifdef ECO_CONFIG_USE_FFI
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.type.new_struct", Eco_VM_Builtin_FFIType_NewStruct);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.type.pointer_to", Eco_VM_Builtin_FFIType_PointerTo);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.type.by_index", Eco_VM_Builtin_FFIType_GetForIndex);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.type.sizeof", Eco_VM_Builtin_FFIType_GetSizeInBytes);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.type.offsetof", Eco_VM_Builtin_FFIType_GetOffsetOf);
