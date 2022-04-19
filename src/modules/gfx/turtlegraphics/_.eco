@@ -1,0 +1,54 @@
+
+{
+    own SDLTurtle = {
+        private with std = $ std;
+        private turtlegfx = $;
+
+        private renderer,
+        private x, y, angle,
+        private penDown;
+
+        with inherited trait = {
+            initWithRenderer: _renderer X: _x Y: _y => (
+                moveToX: _x Y: _y.
+                angle <- 0.0.
+                penDown <- true.
+              ^ self
+            );
+
+            initWithRenderer: renderer => initWithRenderer: renderer X: 0.0 Y: 0.0;
+
+            moveToX: _x Y: _y => (
+                x <- _x.
+                y <- _y.
+              ^ self
+            );
+
+            left: alpha => (
+                angle <- angle + alpha.
+              ^ self
+            );
+
+            right: alpha => (
+                angle <- angle - alpha.
+              ^ self
+            );
+            
+            forward: amount => (
+                |
+                    tx <- x + (angle cos),
+                    ty <- y - (angle sin)
+                |
+                penDown -> [ renderer drawLineX: x Y: y X: tx Y: ty ].
+                moveToX: tx Y: ty.
+              ^ self
+            );
+
+            backward: amount => forward: amount negate;
+
+            writeOn: w => w << 'a turtle(' << x << ', ' << y ')';
+        };
+
+        with inherited parent = std Clonable;
+    }
+}
