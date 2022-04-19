@@ -22,9 +22,4 @@ bool Eco_VM_Builtin_BlobWriteTo(struct Eco_Fiber*, unsigned int);
 
 bool Eco_VM_Builtin_BlobOpenFile(struct Eco_Fiber*, unsigned int);
 
-#ifdef ECO_CONFIG_USE_DLOPEN
-bool Eco_VM_Builtin_BlobDLOpen(struct Eco_Fiber*, unsigned int);
-bool Eco_VM_Builtin_BlobDLSym(struct Eco_Fiber*, unsigned int);
-#endif
-
 #endif

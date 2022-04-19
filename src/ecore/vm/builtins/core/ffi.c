@@ -3,8 +3,9 @@
 #ifdef ECO_CONFIG_USE_FFI
 
 #include <ecore/objects/misc/array/array.h>
-#include <ecore/objects/misc/blob/blob.h>
+#include <ecore/objects/misc/string/string.h>
 #include <ecore/objects/vm/ffi/ffitype.h>
+#include <ecore/objects/vm/ffi/ffiobject.h>
 #include <ecore/objects/vm/ffi/ffifunc.h>
 #include <ecore/vm/vm.h>
 
@@ -180,10 +181,10 @@ bool Eco_VM_Builtin_FFIFunction_ArgType(struct Eco_Fiber* fiber, unsigned int ar
 
 bool Eco_VM_Builtin_FFIFunction_Call(struct Eco_Fiber* fiber, unsigned int args)
 {
-    struct Eco_FFIFunc*  ffifunc;
-    struct Eco_Blob*     func;
-    struct Eco_Blob*     fargs;
-    Eco_Any              any;
+    struct Eco_FFIFunc*    ffifunc;
+    struct Eco_FFIObject*  func;
+    struct Eco_FFIObject*  fargs;
+    Eco_Any                any;
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
         return false;
@@ -193,7 +194,7 @@ bool Eco_VM_Builtin_FFIFunction_Call(struct Eco_Fiber* fiber, unsigned int args)
     func = Eco_Any_AsPointer(any);
     Eco_Fiber_Pop(fiber, &any);
     ffifunc = Eco_Any_AsPointer(any);
-    if (Eco_FFIFunc_Call(ffifunc, *((void**) func->bytes), (void*) fargs->bytes))
+    if (Eco_FFIFunc_Call(ffifunc, *((void**) Eco_FFIObject_GetBytes(func)), Eco_FFIObject_GetBytes(fargs)))
         any = fiber->vm->constants.ctrue;
     else
         any = fiber->vm->constants.cfalse;
@@ -203,22 +204,69 @@ bool Eco_VM_Builtin_FFIFunction_Call(struct Eco_Fiber* fiber, unsigned int args)
 
 bool Eco_VM_Builtin_FFIFunction_EcoCall(struct Eco_Fiber* fiber, unsigned int args)
 {
-    struct Eco_FFIFunc*  ffifunc;
-    struct Eco_Blob*     func;
-    Eco_Any              any;
-    Eco_Any              result;
-    unsigned int         index;
+    struct Eco_FFIFunc*    ffifunc;
+    struct Eco_FFIObject*  func;
+    Eco_Any                any;
+    Eco_Any                result;
+    unsigned int           index;
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, ECO_VM_BUILTIN_INFINITE_ARGS))
         return false;
     ffifunc = Eco_Any_AsPointer(*Eco_Fiber_Nth(fiber, args));
     func    = Eco_Any_AsPointer(*Eco_Fiber_Nth(fiber, args - 1));
-    if (!Eco_FFIFunc_EcoCall(ffifunc, *((void**) func->bytes), Eco_Fiber_Nth(fiber, args - 2), args - 2, &result))
+    if (!Eco_FFIFunc_EcoCall(ffifunc, *((void**) Eco_FFIObject_GetBytes(func)), Eco_Fiber_Nth(fiber, args - 2), args - 2, &result))
         return false;
     for (index = 0; index < args; index++)
         Eco_Fiber_Pop(fiber, &any);
     Eco_Fiber_Push(fiber, &result);
     return true;
 }
+
+#ifdef ECO_CONFIG_USE_DLOPEN
+bool Eco_VM_Builtin_FFIObjectDLOpen(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_String*    string;
+    struct Eco_FFIObject* object;
+    Eco_Any               any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    string = Eco_Any_AsPointer(any);
+    object = Eco_FFIObject_DLOpen(string->bytes);
+    if (object != NULL)
+        any = Eco_Any_FromPointer(object);
+    else
+        any = fiber->vm->constants.cfalse;
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_FFIObjectDLSym(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Key*        key;
+    struct Eco_FFIObject*  object;
+    Eco_Any                any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 2))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    key = Eco_Any_AsPointer(any);
+    if (args == 1) {
+        object = Eco_FFIObject_DLSym(NULL, key->name);
+    } else {
+        Eco_Fiber_Pop(fiber, &any);
+        object = Eco_Any_AsPointer(any);
+        object = Eco_FFIObject_DLSym(*((void**) Eco_FFIObject_GetBytes(object)), key->name);
+    }
+    if (object != NULL)
+        any = Eco_Any_FromPointer(object);
+    else
+        any = fiber->vm->constants.cfalse;
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+#endif
+
 
 #endif

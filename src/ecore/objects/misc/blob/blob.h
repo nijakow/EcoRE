@@ -51,8 +51,6 @@ int Eco_Blob_ReadFromFD(struct Eco_Blob*, int, unsigned long, unsigned long);
 int Eco_Blob_WriteToFD(struct Eco_Blob*, int, unsigned long, unsigned long);
 
 struct Eco_Blob* Eco_Blob_NewFromFile(char*);
-struct Eco_Blob* Eco_Blob_DLOpen(char*);
-struct Eco_Blob* Eco_Blob_DLSym(void*, char*);
 
 void Eco_Blob_Init();
 void Eco_Blob_Terminate();

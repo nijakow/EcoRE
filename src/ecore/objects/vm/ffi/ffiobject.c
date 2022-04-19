@@ -1,3 +1,9 @@
+#include <ecore/base/config.h>
+
+#ifdef ECO_CONFIG_USE_DLOPEN
+# include <dlfcn.h>
+#endif
+
 #include <ecore/objects/base/type/type.h>
 #include <ecore/vm/memory/gc/gc.h>
 #include <ecore/util/memory.h>
@@ -42,6 +48,40 @@ struct Eco_FFIObject* Eco_FFIObject_New(struct Eco_FFIType* type, void* ptr, uns
     return object;
 }
 
+
+struct Eco_FFIObject* Eco_FFIObject_DLOpen(char* path)
+{
+#ifdef ECO_CONFIG_USE_DLOPEN
+    void* ptr;
+
+    ptr = dlopen(path, RTLD_NOW);
+    if (ptr == NULL)
+        return NULL;
+    return Eco_FFIObject_New(Eco_FFIType_GetVoidPointer(), &ptr, sizeof(ptr));
+#else
+    return NULL;
+#endif
+}
+
+struct Eco_FFIObject* Eco_FFIObject_DLSym(void* base, char* symbol)
+{
+#ifdef ECO_CONFIG_USE_DLOPEN
+    void* symptr;
+
+#ifdef RTLD_DEFAULT
+    if (base == NULL)
+        base = RTLD_DEFAULT;
+#endif
+
+    symptr = dlsym(base, symbol);
+    if (symptr == NULL)
+        return NULL;
+    return Eco_FFIObject_New(Eco_FFIType_GetVoidPointer(), &symptr, sizeof(symptr));
+#else
+    return NULL;
+#endif
+}
+
 void Eco_FFIObject_Mark(struct Eco_GC_State* state, struct Eco_FFIObject* object)
 {
     Eco_GC_State_MarkObject(state, object->type);
@@ -51,4 +91,9 @@ void Eco_FFIObject_Mark(struct Eco_GC_State* state, struct Eco_FFIObject* object
 void Eco_FFIObject_Del(struct Eco_FFIObject* object)
 {
     Eco_Object_Del(&object->_);
+}
+
+bool Eco_FFIObject_IsFFIObject(struct Eco_Object* object)
+{
+    return object->type->typecore == &Eco_FFIObject_TYPECORE;
 }

@@ -3,6 +3,7 @@
 #include <ecore/objects/base/type.h>
 #include <ecore/objects/misc/blob/blob.h>
 #include <ecore/objects/misc/string/string.h>
+#include <ecore/objects/vm/ffi/ffiobject.h>
 #include <ecore/vm/memory/gc/gc.h>
 #include <ecore/util/memory.h>
 
@@ -35,7 +36,7 @@ static ffi_type* Eco_FFIType_BASIC_TYPE_POINTERS[] = {
 static Eco_Any Eco_FFIType_AsAny_Default(struct Eco_FFIType* type, void* ptr, unsigned long size)
 {
     // TODO: assert(size == sizeof(Eco_FFIType_SizeofCType(type)));
-    return Eco_Any_FromPointer(Eco_Blob_NewFromData(ptr, size));
+    return Eco_Any_FromPointer(Eco_FFIObject_New(type, ptr, size));
 }
 
 static Eco_Any Eco_FFIType_AsAny_Void(struct Eco_FFIType* type, void* ptr, unsigned long size)
@@ -67,12 +68,6 @@ static Eco_Any Eco_FFIType_AsAny_Char(struct Eco_FFIType* type, void* ptr, unsig
     return Eco_Any_FromCharacter(c);
 }
 
-static Eco_Any Eco_FFIType_AsAny_Pointer(struct Eco_FFIType* type, void* ptr, unsigned long size)
-{
-    // TODO: assert(size == sizeof(void*));
-    return Eco_Any_FromPointer(Eco_Blob_NewExt(((void**) ptr), Eco_FFIType_SizeofCType(type->pointee)));
-}
-
 static Eco_Any Eco_FFIType_AsAny_String(struct Eco_FFIType* type, void* ptr, unsigned long size)
 {
     /*
@@ -85,8 +80,8 @@ static Eco_Any Eco_FFIType_AsAny_String(struct Eco_FFIType* type, void* ptr, uns
 static bool Eco_FFIType_FromAny_Default(struct Eco_FFIType* type, void* ptr, unsigned long size, Eco_Any any)
 {
     if (Eco_Any_IsPointer(any)) {
-        if (Eco_Blob_IsBlob(Eco_Any_AsPointer(any)) && size == Eco_FFIType_SizeofCType(type))
-            Eco_Memcpy(ptr, ((struct Eco_Blob*) Eco_Any_AsPointer(any))->bytes, size);
+        if (Eco_FFIObject_IsFFIObject(Eco_Any_AsPointer(any)) && type == Eco_FFIObject_GetFFIType(Eco_Any_AsPointer(any)))
+            Eco_Memcpy(ptr, Eco_FFIObject_GetBytes(Eco_Any_AsPointer(any)), size);
         else
             return false;
     } else if (Eco_Any_IsInteger(any)) {
@@ -102,21 +97,6 @@ static bool Eco_FFIType_FromAny_Default(struct Eco_FFIType* type, void* ptr, uns
         else return false;
     } else if (Eco_Any_IsCharacter(any)) {
         return Eco_FFIType_FromAny_Default(type, ptr, size, Eco_Any_FromInteger(Eco_Any_AsCharacter(any)));
-    } else {
-        return false;
-    }
-    return true;
-}
-
-static bool Eco_FFIType_FromAny_Pointer(struct Eco_FFIType* type, void* ptr, unsigned long size, Eco_Any any)
-{
-    if (Eco_Any_IsPointer(any) && size == sizeof(void*)) {
-        if (Eco_Blob_IsBlob(Eco_Any_AsPointer(any)))
-            *((void**) ptr) = ((struct Eco_Blob*) Eco_Any_AsPointer(any))->bytes;
-        else if (Eco_String_IsString(Eco_Any_AsPointer(any)))
-            *((char**) ptr) = ((struct Eco_String*) Eco_Any_AsPointer(any))->bytes;
-        else
-            return false;
     } else {
         return false;
     }
@@ -155,7 +135,6 @@ void Eco_FFIType_Init()
         Eco_FFIType_BASIC_INSTANCE_POINTERS[index]->as_any = Eco_FFIType_AsAny_Integer;
     Eco_FFIType_BASIC_INSTANCE_POINTERS[21]->pointee  = Eco_FFIType_BASIC_INSTANCE_POINTERS[12];    // Pointer to schar
     Eco_FFIType_BASIC_INSTANCE_POINTERS[21]->as_any   = Eco_FFIType_AsAny_String;
-    Eco_FFIType_BASIC_INSTANCE_POINTERS[21]->from_any = Eco_FFIType_FromAny_Pointer;
 }
 
 void Eco_FFIType_Terminate()
@@ -247,9 +226,6 @@ struct Eco_FFIType* Eco_FFIType_PointerTo(struct Eco_FFIType* pointee)
 
     if (type != NULL)
     {
-        // TODO: Update the any conversion
-        type->as_any     = Eco_FFIType_AsAny_Pointer;
-        type->from_any   = Eco_FFIType_FromAny_Pointer;
         pointee->pointer = type;
         type->pointee    = pointee;
     }
@@ -285,6 +261,11 @@ void Eco_FFIType_Del(struct Eco_FFIType* type)
 struct Eco_FFIType* Eco_FFIType_GetForIndex(unsigned int index)
 {
     return Eco_FFIType_BASIC_INSTANCE_POINTERS[index];
+}
+
+struct Eco_FFIType* Eco_FFIType_GetVoidPointer()
+{
+    return Eco_FFIType_PointerTo(Eco_FFIType_GetForIndex(20));
 }
 
 unsigned int Eco_FFIType_OffsetOf_ByIndex(struct Eco_FFIType* type, unsigned int index)

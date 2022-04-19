@@ -101,10 +101,6 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.read_from", Eco_VM_Builtin_BlobReadFrom);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.write_to", Eco_VM_Builtin_BlobWriteTo);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.open_file", Eco_VM_Builtin_BlobOpenFile);
-#ifdef ECO_CONFIG_USE_DLOPEN
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.dlopen", Eco_VM_Builtin_BlobDLOpen);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.dlsym", Eco_VM_Builtin_BlobDLSym);
-#endif
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.get_parents", Eco_VM_Builtin_InterfaceGetParents);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.get_entry_info", Eco_VM_Builtin_InterfaceGetEntryInfo);
@@ -135,6 +131,10 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.function.arg_type", Eco_VM_Builtin_FFIFunction_ArgType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.function.call", Eco_VM_Builtin_FFIFunction_Call);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.function.eco_call", Eco_VM_Builtin_FFIFunction_EcoCall);
+  #ifdef ECO_CONFIG_USE_DLOPEN
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.object.dlopen", Eco_VM_Builtin_FFIObjectDLOpen);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.object.dlsym", Eco_VM_Builtin_FFIObjectDLSym);
+  #endif
 #endif
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.io.fd.open_file", Eco_VM_Builtin_OpenFile);
