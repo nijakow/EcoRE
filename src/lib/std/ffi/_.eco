@@ -55,10 +55,6 @@
 
     null => ((types pointer) alloc) assignNull;
 
-    allocBytes: bytes => std util newBlob: bytes;
-    address: object => ( | b <- (types pointer) alloc | b at: 0 PutPtr: object. b );
-    dereference: object type: type => object ptrAt: 0 Size: (type sizeof);
-
     ForeignFunction = {
         private name,
         private ptr,

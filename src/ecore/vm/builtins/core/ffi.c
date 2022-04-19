@@ -272,6 +272,24 @@ bool Eco_VM_Builtin_FFIObject_AssignNull(struct Eco_Fiber* fiber, unsigned int a
     return true;
 }
 
+bool Eco_VM_Builtin_FFIObject_Address(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_FFIObject*  object;
+    struct Eco_FFIObject*  pointer;
+    void*                  ptr;
+    Eco_Any                any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    object  = Eco_Any_AsPointer(any);
+    ptr     = Eco_FFIObject_GetBytes(object);
+    pointer = Eco_FFIObject_New(Eco_FFIType_PointerTo(Eco_FFIObject_GetFFIType(object)), ptr, sizeof(ptr));
+    any     = Eco_Any_FromPointer(pointer);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 #ifdef ECO_CONFIG_USE_DLOPEN
 bool Eco_VM_Builtin_FFIObjectDLOpen(struct Eco_Fiber* fiber, unsigned int args)
 {
