@@ -222,6 +222,49 @@ bool Eco_VM_Builtin_FFIFunction_EcoCall(struct Eco_Fiber* fiber, unsigned int ar
     return true;
 }
 
+bool Eco_VM_Builtin_FFIObject_Alloc(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_FFIType*    type;
+    Eco_Any                any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    type = Eco_Any_AsPointer(any);
+    any = Eco_Any_FromPointer(Eco_FFIObject_New(type, NULL, Eco_FFIType_SizeofCType(type)));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_FFIObject_GetType(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_FFIObject*  object;
+    Eco_Any                any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    object = Eco_Any_AsPointer(any);
+    any = Eco_Any_FromPointer(Eco_FFIObject_GetFFIType(object));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_FFIObject_GetSize(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_FFIObject*  object;
+    Eco_Any                any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    object = Eco_Any_AsPointer(any);
+    any = Eco_Any_FromInteger(Eco_FFIObject_GetSize(object));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+
 #ifdef ECO_CONFIG_USE_DLOPEN
 bool Eco_VM_Builtin_FFIObjectDLOpen(struct Eco_Fiber* fiber, unsigned int args)
 {

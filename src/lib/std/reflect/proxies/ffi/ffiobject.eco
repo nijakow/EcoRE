@@ -1,5 +1,8 @@
 
 #=std/reflect/proxies/ffi/FFIObject: {
-    writeOn: writer => writer << '<ffi_object>';
+    type => #'ecosphere.ecore.ffi.object.get_type'(self);
+    size => #'ecosphere.ecore.ffi.object.get_size'(self);
+
+    writeOn: writer => writer << '<ffi_object:' << type << ':' << size << '>';
     with inherited parent = #<:std/Clonable>;
 }

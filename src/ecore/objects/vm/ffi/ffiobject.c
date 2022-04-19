@@ -42,7 +42,8 @@ struct Eco_FFIObject* Eco_FFIObject_New(struct Eco_FFIType* type, void* ptr, uns
         object->type  = type;
         object->size  = size;
         object->bytes = object->payload;
-        Eco_Memcpy(object->bytes, ptr, size);
+        if (ptr != NULL)
+            Eco_Memcpy(object->bytes, ptr, size);
     }
 
     return object;
