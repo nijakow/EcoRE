@@ -82,6 +82,8 @@ static bool Eco_FFIType_FromAny_Default(struct Eco_FFIType* type, void* ptr, uns
     if (Eco_Any_IsPointer(any)) {
         if (Eco_FFIObject_IsFFIObject(Eco_Any_AsPointer(any)) && type == Eco_FFIObject_GetFFIType(Eco_Any_AsPointer(any)))
             Eco_Memcpy(ptr, Eco_FFIObject_GetBytes(Eco_Any_AsPointer(any)), size);
+        else if (Eco_String_IsString(Eco_Any_AsPointer(any)) && size == sizeof(char*))
+            *((char**) ptr) = ((struct Eco_String*) Eco_Any_AsPointer(any))->bytes;
         else
             return false;
     } else if (Eco_Any_IsInteger(any)) {

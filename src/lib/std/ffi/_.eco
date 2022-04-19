@@ -96,7 +96,7 @@
             );
 
             getSymbol: name => (
-                #'ecosphere.ecore.object.blob.dlsym'(library, name) when: [ :sym |
+                #'ecosphere.ecore.ffi.object.dlsym'(library, name) when: [ :sym |
                   ^ Yes: sym
                 ].
               ^ No
@@ -115,14 +115,14 @@
     };
 
     DLOpen: path => (
-        #'ecosphere.ecore.object.blob.dlopen'(path) when: [ :lib |
+        #'ecosphere.ecore.ffi.object.dlopen'(path) when: [ :lib |
           ^ Yes: ((SharedLibrary clone) initWithName: path Library: lib)
         ].
       ^ No
     );
 
     DLSymbol: name => (
-        #'ecosphere.ecore.object.blob.dlsym'(name) when: [ :sym |
+        #'ecosphere.ecore.ffi.object.dlsym'(name) when: [ :sym |
           ^ Yes: sym
         ].
       ^ No
