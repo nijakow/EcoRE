@@ -145,7 +145,7 @@ struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType** members,
     unsigned int         index;
 
 #ifdef ECO_CONFIG_USE_FFI
-    type = Eco_Object_New(Eco_FFIType_TYPE, sizeof(struct Eco_FFIType) + sizeof(struct Eco_FFIType*) * member_count + sizeof(ffi_type*) * (member_count + 1));
+    type = Eco_Object_New(Eco_FFIType_TYPE, sizeof(struct Eco_FFIType) + sizeof(struct Eco_FFIType*) * member_count + sizeof(struct Eco_FFIType_Entry) * (member_count + 1));
 #else
     type = Eco_Object_New(Eco_FFIType_TYPE, sizeof(struct Eco_FFIType) + sizeof(struct Eco_FFIType*) * member_count);
 #endif
