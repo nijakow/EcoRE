@@ -53,11 +53,7 @@
 
     struct(...) => #'ecosphere.ecore.ffi.type.new_struct'(std util newArray(...));
 
-    null => (
-        | b <- (types pointer) alloc |
-        0 to: (b size) do: [ :i | b at: i put: 0 ].
-      ^ b
-    );
+    null => ((types pointer) alloc) assignNull;
 
     allocBytes: bytes => std util newBlob: bytes;
     address: object => ( | b <- (types pointer) alloc | b at: 0 PutPtr: object. b );

@@ -22,6 +22,7 @@ bool Eco_VM_Builtin_FFIFunction_EcoCall(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIObject_Alloc(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIObject_GetType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIObject_GetSize(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_FFIObject_AssignNull(struct Eco_Fiber*, unsigned int);
 
 #ifdef ECO_CONFIG_USE_DLOPEN
 bool Eco_VM_Builtin_FFIObjectDLOpen(struct Eco_Fiber*, unsigned int);

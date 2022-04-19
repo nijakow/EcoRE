@@ -3,6 +3,8 @@
     type => #'ecosphere.ecore.ffi.object.get_type'(self);
     size => #'ecosphere.ecore.ffi.object.get_size'(self);
 
+    assignNull => #'ecosphere.ecore.ffi.object.assign_null'(self);
+
     writeOn: writer => writer << '<ffi_object:' << type << ':' << size << '>';
     with inherited parent = #<:std/Clonable>;
 }

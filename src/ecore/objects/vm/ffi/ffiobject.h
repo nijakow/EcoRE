@@ -25,6 +25,7 @@ void Eco_FFIObject_Mark(struct Eco_GC_State*, struct Eco_FFIObject*);
 void Eco_FFIObject_Del(struct Eco_FFIObject*);
 
 bool Eco_FFIObject_IsFFIObject(struct Eco_Object*);
+void Eco_FFIObject_AssignNull(struct Eco_FFIObject*);
 
 static inline struct Eco_FFIType* Eco_FFIObject_GetFFIType(struct Eco_FFIObject* object)
 {

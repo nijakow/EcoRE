@@ -34,6 +34,7 @@ void Eco_FFIObject_Terminate()
 struct Eco_FFIObject* Eco_FFIObject_New(struct Eco_FFIType* type, void* ptr, unsigned long size)
 {
     struct Eco_FFIObject*  object;
+    unsigned long          index;
 
     object = Eco_Object_New(Eco_FFIObject_TYPE, sizeof(struct Eco_FFIObject) + size);
 
@@ -42,13 +43,16 @@ struct Eco_FFIObject* Eco_FFIObject_New(struct Eco_FFIType* type, void* ptr, uns
         object->type  = type;
         object->size  = size;
         object->bytes = object->payload;
-        if (ptr != NULL)
+        if (ptr == NULL) {
+            for (index = 0; index < size; index++)
+                ((char*) object->bytes)[index] = 0;
+        } else {
             Eco_Memcpy(object->bytes, ptr, size);
+        }
     }
 
     return object;
 }
-
 
 struct Eco_FFIObject* Eco_FFIObject_DLOpen(char* path)
 {
@@ -97,4 +101,11 @@ void Eco_FFIObject_Del(struct Eco_FFIObject* object)
 bool Eco_FFIObject_IsFFIObject(struct Eco_Object* object)
 {
     return object->type->typecore == &Eco_FFIObject_TYPECORE;
+}
+
+void Eco_FFIObject_AssignNull(struct Eco_FFIObject* object)
+{
+    // TODO: Insert a type check if the type of object is 'pointer'!
+    if (object->bytes != NULL)
+        *((void**) (object->bytes)) = NULL;
 }

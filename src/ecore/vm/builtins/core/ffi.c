@@ -264,6 +264,13 @@ bool Eco_VM_Builtin_FFIObject_GetSize(struct Eco_Fiber* fiber, unsigned int args
     return true;
 }
 
+bool Eco_VM_Builtin_FFIObject_AssignNull(struct Eco_Fiber* fiber, unsigned int args)
+{
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_FFIObject_AssignNull(Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber)));
+    return true;
+}
 
 #ifdef ECO_CONFIG_USE_DLOPEN
 bool Eco_VM_Builtin_FFIObjectDLOpen(struct Eco_Fiber* fiber, unsigned int args)
