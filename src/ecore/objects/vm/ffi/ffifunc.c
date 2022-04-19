@@ -136,35 +136,6 @@ bool Eco_FFIFunc_Call(struct Eco_FFIFunc* func, void* function, void* buffer)
 #endif
 }
 
-static bool Eco_FFIFunc_EcoCall_ArgumentCopy(void* loc, Eco_Any any, unsigned int size)
-{
-    // TODO, FIXME, XXX: Size checks!
-    if (Eco_Any_IsPointer(any)) {
-        if (Eco_Blob_IsBlob(Eco_Any_AsPointer(any)))
-            Eco_Memcpy(loc, ((struct Eco_Blob*) Eco_Any_AsPointer(any))->bytes, size);
-        else if (Eco_String_IsString(Eco_Any_AsPointer(any)) && size == sizeof(char*))
-            *((char**) loc) = ((struct Eco_String*) Eco_Any_AsPointer(any))->bytes;
-        else
-            return false;
-    } else if (Eco_Any_IsInteger(any)) {
-        if (size == sizeof(char)) *((char*) loc) = (char) Eco_Any_AsInteger(any);
-        else if (size == sizeof(short)) *((short*) loc) = (short) Eco_Any_AsInteger(any);
-        else if (size == sizeof(int)) *((int*) loc) = (int) Eco_Any_AsInteger(any);
-        else if (size == sizeof(long)) *((long*) loc) = (long) Eco_Any_AsInteger(any);
-        else if (size == sizeof(long long)) *((long long*) loc) = (long long) Eco_Any_AsInteger(any);
-        else return false;
-    } else if (Eco_Any_IsFloating(any)) {
-        if (size == sizeof(float)) *((float*) loc) = (float) Eco_Any_AsFloating(any);
-        else if (size == sizeof(double)) *((double*) loc) = (double) Eco_Any_AsFloating(any);
-        else return false;
-    } else if (Eco_Any_IsCharacter(any)) {
-        return Eco_FFIFunc_EcoCall_ArgumentCopy(loc, Eco_Any_FromInteger(Eco_Any_AsCharacter(any)), size);
-    } else {
-        return false;
-    }
-    return true;
-}
-
 bool Eco_FFIFunc_EcoCall(struct Eco_FFIFunc* func,
                          void*               function,
                          Eco_Any*            args,
@@ -186,7 +157,7 @@ bool Eco_FFIFunc_EcoCall(struct Eco_FFIFunc* func,
     {
         size = Eco_FFIType_SizeofCType(func->arg_types[index]);
         *((void**) &argbuffer[argbuffer_size + index * sizeof(void*)]) = ptr;
-        if (!Eco_FFIFunc_EcoCall_ArgumentCopy(ptr, args[index], size))
+        if (!func->arg_types[index]->from_any(func->arg_types[index], ptr, size, args[index]))
             return false;
         ptr += size;
     }

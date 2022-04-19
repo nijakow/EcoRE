@@ -4,6 +4,8 @@
 #include <ecore/objects/misc/blob/blob.h>
 #include <ecore/objects/misc/string/string.h>
 #include <ecore/vm/memory/gc/gc.h>
+#include <ecore/util/memory.h>
+
 
 static ffi_type* Eco_FFIType_BASIC_TYPE_POINTERS[] = {
     &ffi_type_void,
@@ -80,6 +82,47 @@ static Eco_Any Eco_FFIType_AsAny_String(struct Eco_FFIType* type, void* ptr, uns
     return Eco_Any_FromPointer(Eco_String_New(*((char**) ptr)));
 }
 
+static bool Eco_FFIType_FromAny_Default(struct Eco_FFIType* type, void* ptr, unsigned long size, Eco_Any any)
+{
+    if (Eco_Any_IsPointer(any)) {
+        if (Eco_Blob_IsBlob(Eco_Any_AsPointer(any)) && size == Eco_FFIType_SizeofCType(type))
+            Eco_Memcpy(ptr, ((struct Eco_Blob*) Eco_Any_AsPointer(any))->bytes, size);
+        else
+            return false;
+    } else if (Eco_Any_IsInteger(any)) {
+        if (size == sizeof(char)) *((char*) ptr) = (char) Eco_Any_AsInteger(any);
+        else if (size == sizeof(short)) *((short*) ptr) = (short) Eco_Any_AsInteger(any);
+        else if (size == sizeof(int)) *((int*) ptr) = (int) Eco_Any_AsInteger(any);
+        else if (size == sizeof(long)) *((long*) ptr) = (long) Eco_Any_AsInteger(any);
+        else if (size == sizeof(long long)) *((long long*) ptr) = (long long) Eco_Any_AsInteger(any);
+        else return false;
+    } else if (Eco_Any_IsFloating(any)) {
+        if (size == sizeof(float)) *((float*) ptr) = (float) Eco_Any_AsFloating(any);
+        else if (size == sizeof(double)) *((double*) ptr) = (double) Eco_Any_AsFloating(any);
+        else return false;
+    } else if (Eco_Any_IsCharacter(any)) {
+        return Eco_FFIType_FromAny_Default(type, ptr, size, Eco_Any_FromInteger(Eco_Any_AsCharacter(any)));
+    } else {
+        return false;
+    }
+    return true;
+}
+
+static bool Eco_FFIType_FromAny_Pointer(struct Eco_FFIType* type, void* ptr, unsigned long size, Eco_Any any)
+{
+    if (Eco_Any_IsPointer(any) && size == sizeof(void*)) {
+        if (Eco_Blob_IsBlob(Eco_Any_AsPointer(any)))
+            *((void**) ptr) = ((struct Eco_Blob*) Eco_Any_AsPointer(any))->bytes;
+        else if (Eco_String_IsString(Eco_Any_AsPointer(any)))
+            *((char**) ptr) = ((struct Eco_String*) Eco_Any_AsPointer(any))->bytes;
+        else
+            return false;
+    } else {
+        return false;
+    }
+    return true;
+}
+
 
 static struct Eco_TypeCore Eco_FFIType_TYPECORE;
        struct Eco_Type*    Eco_FFIType_TYPE;
@@ -110,7 +153,9 @@ void Eco_FFIType_Init()
     Eco_FFIType_BASIC_INSTANCE_POINTERS[12]->as_any = Eco_FFIType_AsAny_Char;
     for (index = 13; index <= 16; index++)
         Eco_FFIType_BASIC_INSTANCE_POINTERS[index]->as_any = Eco_FFIType_AsAny_Integer;
-    Eco_FFIType_BASIC_INSTANCE_POINTERS[21]->as_any = Eco_FFIType_AsAny_String;
+    Eco_FFIType_BASIC_INSTANCE_POINTERS[21]->pointee  = Eco_FFIType_BASIC_INSTANCE_POINTERS[12];    // Pointer to schar
+    Eco_FFIType_BASIC_INSTANCE_POINTERS[21]->as_any   = Eco_FFIType_AsAny_String;
+    Eco_FFIType_BASIC_INSTANCE_POINTERS[21]->from_any = Eco_FFIType_FromAny_Pointer;
 }
 
 void Eco_FFIType_Terminate()
@@ -132,6 +177,7 @@ struct Eco_FFIType* Eco_FFIType_New(void* ffi_type_ptr)
     {
         type->member_count = 0;
         type->as_any       = Eco_FFIType_AsAny_Default;
+        type->from_any     = Eco_FFIType_FromAny_Default;
         type->pointer      = NULL;
         type->pointee      = NULL;
 #ifdef ECO_CONFIG_USE_FFI
@@ -164,6 +210,7 @@ struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType** members,
         payload = ((char*) type) + sizeof(struct Eco_FFIType) + sizeof(struct Eco_FFIType*) * member_count;
         type->member_count = member_count;
         type->as_any       = Eco_FFIType_AsAny_Default;
+        type->from_any     = Eco_FFIType_FromAny_Default;
         type->pointer      = NULL;
         type->pointee      = NULL;
         size_t offsets[member_count];
@@ -202,6 +249,7 @@ struct Eco_FFIType* Eco_FFIType_PointerTo(struct Eco_FFIType* pointee)
     {
         // TODO: Update the any conversion
         type->as_any     = Eco_FFIType_AsAny_Pointer;
+        type->from_any   = Eco_FFIType_FromAny_Pointer;
         pointee->pointer = type;
         type->pointee    = pointee;
     }

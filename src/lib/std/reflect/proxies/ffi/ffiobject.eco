@@ -1,0 +1,5 @@
+
+#=std/reflect/proxies/ffi/FFIObject: {
+    writeOn: writer => writer << '<ffi_object>';
+    with inherited parent = #<:std/Clonable>;
+}

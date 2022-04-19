@@ -39,6 +39,7 @@ objects/vm/code/code.c \
 objects/vm/code/closure.c \
 objects/vm/interface/interface.c \
 objects/vm/ffi/ffitype.c \
+objects/vm/ffi/ffiobject.c \
 objects/vm/ffi/ffifunc.c \
 vm/builtins/builtins.c \
 vm/builtins/core/array.c \

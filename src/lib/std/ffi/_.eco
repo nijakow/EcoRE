@@ -47,7 +47,7 @@
 
         longdouble => GetTypeByIndex: 19;
         
-        pointer => GetTypeByIndex: 20;
+        pointer => void pointer;
         string => GetTypeByIndex: 21;
     };
 

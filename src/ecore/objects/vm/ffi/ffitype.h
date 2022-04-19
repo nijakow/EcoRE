@@ -29,6 +29,7 @@ struct Eco_FFIType
     struct Eco_FFIType*       pointer;
     struct Eco_FFIType*       pointee;
     Eco_Any                 (*as_any)(struct Eco_FFIType*, void*, unsigned long);
+    bool                    (*from_any)(struct Eco_FFIType*, void*, unsigned long, Eco_Any);
     unsigned int              member_count;
     struct Eco_FFIType_Entry  members[0];
 };
