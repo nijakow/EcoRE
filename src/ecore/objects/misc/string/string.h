@@ -12,7 +12,8 @@ struct Eco_String
     struct Eco_Object  _;
     unsigned int       byte_count;
     unsigned int       character_count;
-    char               bytes[];
+    char*              bytes;
+    char               payload[];
 };
 
 struct Eco_String* Eco_String_New(const char*);

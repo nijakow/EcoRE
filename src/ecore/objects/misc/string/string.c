@@ -41,15 +41,21 @@ struct Eco_String* Eco_String_New(const char* text)
     unsigned int        byte_count;
     struct Eco_String*  string;
 
-    byte_count              = strlen(text);
-    string                  = Eco_Object_New(Eco_String_TYPE, sizeof(struct Eco_String) + (byte_count + 1) * sizeof(char));
-    string->byte_count      = byte_count;
-    string->character_count = Eco_Utf8_StringLength(text);
+    byte_count = strlen(text);
+    string     = Eco_Object_New(Eco_String_TYPE, sizeof(struct Eco_String) + (byte_count + 1) * sizeof(char));
 
-    memcpy(&string->bytes, text, byte_count + 1);
+    if (string != NULL)
+    {
+        string->bytes           = string->payload;
+        string->byte_count      = byte_count;
+        string->character_count = Eco_Utf8_StringLength(text);
+
+        memcpy(string->bytes, text, byte_count + 1);
+    }
 
     return string;
 }
+
 
 void Eco_String_Mark(struct Eco_GC_State* state, struct Eco_String* string)
 {
