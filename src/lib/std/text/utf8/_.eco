@@ -48,9 +48,9 @@
             );
             next => [ forward ] returns: current;
 
-            with inherited iteratorTrait = #<:std/util/IteratorTrait>;
-
             writeOn: w => w << 'a utf8 forward iterator';
+
+            with inherited iteratorTrait = #<:std/util/iterators/IteratorTrait>;
         };
 
         with inherited parent = #<:std/Clonable>;

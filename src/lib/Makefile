@@ -39,6 +39,7 @@ std/text/parsing/_.eco \
 std/text/parsing/integer.eco \
 std/text/utf8/_.eco \
 std/util/_.eco \
+std/util/iterators/_.eco \
 std/util/bytevector.eco \
 std/util/collector.eco \
 std/util/map.eco \

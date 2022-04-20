@@ -1,33 +1,4 @@
 
-#=std/reflect/proxies/Blob/ByteIterator: {
-    private blob,
-    private index;
-
-    with inherited trait = {
-        init: _blob => (
-            blob  <- _blob.
-            index <- 0.
-          ^ self
-        );
-
-        forward => ( index <- index + 1. self );
-        backward => ( index <- index - 1. self );
-
-        has => index < blob size;
-        hasNext => has;
-        hasPrevious => index > 0;
-
-        current => blob at: index;
-        next => [ forward ] returns: current;
-        previous => ( backward. current );
-
-        writeOn: w => w << 'a byte iterator';
-
-        with inherited iteratorTrait = #<:std/util/IteratorTrait>;
-    };
-
-    with inherited parent = #<:std/Clonable>;
-},
 
 #=std/reflect/proxies/Blob: {
     size => #'ecosphere.ecore.object.blob.size'(self);
@@ -54,7 +25,7 @@
     with inherited access = #<:std/util/StandardListAccess>;
     with inherited search = #<:std/util/StandardListSearch>;
 
-    iterator => (#<:std/reflect/proxies/Blob/ByteIterator> clone) init: self;
+    iterator => ((std util iterators IndexIterator) clone) init: self;
 
     writeOn: writer => (
         (size < 128) if: [

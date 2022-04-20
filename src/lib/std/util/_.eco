@@ -69,6 +69,8 @@
 };
 
 #=std/util: {
+    iterators = #<:std/util/iterators>;
+
     newArray(...) => #'ecosphere.ecore.object.array.array'(...);
     newArray: size => #'ecosphere.ecore.object.array.new'(size);
     newBlob:  size => #'ecosphere.ecore.object.blob.new'(size);
@@ -118,8 +120,4 @@
     StringBuilder = #<:std/util/StringBuilder>;
 
     Range = #<:std/util/Range>;
-
-    IteratorTrait = #=std/util/IteratorTrait: {
-        do: block => [ hasNext ] while: [ block value(next) ];
-    };
 }

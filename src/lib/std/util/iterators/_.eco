@@ -1,0 +1,36 @@
+
+#=std/util/iterators: {
+
+    IteratorTrait = #=std/util/iterators/IteratorTrait: {
+        do: block => [ hasNext ] while: [ block value(next) ];
+        writeOn: w => w << 'an iterator';
+    };
+
+    IndexIterator = {
+        private blob,
+        private index;
+
+        with inherited trait = {
+            init: _blob => (
+                blob  <- _blob.
+                index <- 0.
+              ^ self
+            );
+
+            forward => ( index <- index + 1. self );
+            backward => ( index <- index - 1. self );
+
+            has => index < blob size;
+            hasNext => has;
+            hasPrevious => index > 0;
+
+            current => blob at: index;
+            next => [ forward ] returns: current;
+            previous => ( backward. current );
+
+            with inherited iteratorTrait = #<:std/util/iterators/IteratorTrait>;
+        };
+
+        with inherited parent = #<:std/Clonable>;
+    }
+}
