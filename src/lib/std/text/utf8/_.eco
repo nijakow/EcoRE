@@ -29,25 +29,24 @@
               ^ v asChar
             );
 
-            private forward => (
-                (it hasNext) -> [
+            forward => (
+                (it hasNext) if: [
                   lastChar <- readNext.
                   hasLastChar <- true.
+                ] else: [
+                  hasLastChar <- false.
                 ].
               ^ self
             );
 
             has => [ hasLastChar ] or: [ it hasNext ];
-            hasNext => it hasNext;
+            hasNext => has;
 
             current => (
                 (hasLastChar not) -> [ forward ].
               ^ lastChar
             );
-            next => (
-                hasLastChar <- false.
-              ^ current
-            );
+            next => [ forward ] returns: current;
 
             with inherited iteratorTrait = #<:std/util/IteratorTrait>;
 

@@ -22,7 +22,7 @@
 
     ParseIntFromIterator: it Transformer: transformer => (
         ([ it has ] and: [ it current == #\- ])
-            -> [ it forward. (ParseUIntFromIterator: it Transformer: transformer) negate ].
+            -> [ it forward. ^ (ParseUIntFromIterator: it Transformer: transformer) negate ].
         ([ it has ] and: [ it current == #\+ ]) -> [ it forward ].
       ^ ParseUIntFromIterator: it Transformer: transformer
     );
