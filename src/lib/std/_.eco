@@ -13,6 +13,7 @@
 
     ffi = #<:std/ffi>;
     io = #<:std/io>;
-    util = #<:std/util>;
     reflect = #<:std/reflect>;
+    text = #<:std/text>;
+    util = #<:std/util>;
 }

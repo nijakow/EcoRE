@@ -14,7 +14,7 @@
         backward => ( index <- index - 1. self );
 
         has => index < blob size;
-        hasNext => index < (blob size - 1);
+        hasNext => has;
         hasPrevious => index > 0;
 
         current => blob at: index;
@@ -22,6 +22,8 @@
         previous => ( backward. current );
 
         writeOn: w => w << 'a byte iterator';
+
+        with inherited iteratorTrait = #<:std/util/IteratorTrait>;
     };
 
     with inherited parent = #<:std/Clonable>;

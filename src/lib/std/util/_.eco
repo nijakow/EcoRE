@@ -118,4 +118,8 @@
     StringBuilder = #<:std/util/StringBuilder>;
 
     Range = #<:std/util/Range>;
+
+    IteratorTrait = #=std/util/IteratorTrait: {
+        do: block => [ hasNext ] while: [ block value(next) ];
+    };
 }

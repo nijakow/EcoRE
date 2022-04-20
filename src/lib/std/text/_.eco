@@ -1,0 +1,4 @@
+
+#=std/text: {
+    utf8 = #<:std/text/utf8>;
+}

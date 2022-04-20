@@ -1,0 +1,59 @@
+
+#=std/text/utf8: {
+    UTF8ForwardIterator = #=std/text/utf8/UTF8ForwardIterator: {
+        private it,
+        private lastChar,
+        private hasLastChar;
+
+        with inherited trait = {
+            initOnByteIterator: _it => (
+                it          <- _it.
+                lastChar    <- 0 asChar.
+                hasLastChar <- false.
+              ^ self
+            );
+
+            private readNext => (
+                | b <- it next, bytes, v |
+                begin
+                    if: [ (b bitAnd: 0b10000000) isZero        ] then: [ ^ b asChar                             ] ~
+                    if: [ (b bitAnd: 0b11100000) == 0b11000000 ] then: [ v <- b bitAnd: 0b00011111. bytes <- 1. ] ~
+                    if: [ (b bitAnd: 0b11110000) == 0b11100000 ] then: [ v <- b bitAnd: 0b00001111. bytes <- 2. ] ~
+                    if: [ (b bitAnd: 0b11111000) == 0b11110000 ] then: [ v <- b bitAnd: 0b00000111. bytes <- 3. ] ~
+                    default: [ ^ 0xfffd asChar ].
+                1 to: bytes do: [ :i |
+                    b <- it next.
+                    ((b bitAnd: 0b11000000) != (0b10000000)) if: [ ^ 0xfffd asChar ].
+                    v <- ((v shift: 6) bitOr: (b bitAnd: 0b00111111)).
+                ].
+              ^ v asChar
+            );
+
+            private forward => (
+                (it hasNext) -> [
+                  lastChar <- readNext.
+                  hasLastChar <- true.
+                ].
+              ^ self
+            );
+
+            has => [ hasLastChar ] or: [ it hasNext ];
+            hasNext => it hasNext;
+
+            current => (
+                (hasLastChar not) -> [ forward ].
+              ^ lastChar
+            );
+            next => (
+                hasLastChar <- false.
+              ^ current
+            );
+
+            with inherited iteratorTrait = #<:std/util/IteratorTrait>;
+
+            writeOn: w => w << 'a utf8 forward iterator';
+        };
+
+        with inherited parent = #<:std/Clonable>;
+    };
+}
