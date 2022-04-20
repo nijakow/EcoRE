@@ -1,0 +1,4 @@
+
+#=std/text/parsing: {
+    integer = #<:std/text/parsing/integer>;
+}

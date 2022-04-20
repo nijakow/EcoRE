@@ -1,0 +1,39 @@
+
+#=std/text/parsing/integer: {
+    private own Base10Transformer = {
+        value(c) => (
+            ((c asInt) isBetween: (#\0 asInt) And: (#\9 asInt)) -> [
+              ^ Yes: ((c asInt) - (#\0 asInt))
+            ].
+          ^ No
+        );
+        with inherited parent = #<:std/Clonable>;
+    };
+
+    ParseUIntFromIterator: it Transformer: transformer => (
+        | v <- 0 |
+        it do: [ :c |
+            (transformer value(c))
+                yes: [ :digit | v <- (v * 10) + digit ]
+                 no: [ ^ v ]
+        ].
+        v
+    );
+
+    ParseIntFromIterator: it Transformer: transformer => (
+        ([ it has ] and: [ it current == #\- ])
+            -> [ it forward. (ParseUIntFromIterator: it Transformer: transformer) negate ].
+        ([ it has ] and: [ it current == #\+ ]) -> [ it forward ].
+      ^ ParseUIntFromIterator: it Transformer: transformer
+    );
+
+    ParseUIntFromIterator: it => (
+        ParseUIntFromIterator: it
+                  Transformer: Base10Transformer
+    );
+
+    ParseIntFromIterator: it => (
+        ParseIntFromIterator: it
+                 Transformer: Base10Transformer
+    );
+}
