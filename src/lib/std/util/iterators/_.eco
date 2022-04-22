@@ -28,6 +28,11 @@
             next => [ forward ] returns: current;
             previous => ( backward. current );
 
+            withReset: block => (
+                | resetIndex <- index |
+              ^ block value([ index <- resetIndex ])
+            );
+
             with inherited iteratorTrait = #<:std/util/iterators/IteratorTrait>;
         };
 

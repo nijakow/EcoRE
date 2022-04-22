@@ -1,0 +1,42 @@
+
+#=std/text/parsing/ParseStream: {
+    private it;
+    
+    with inherited trait = {
+        initWithIterator: _it => (
+            it <- _it.
+          ^ self
+        );
+
+        has         => it has;
+        hasNext     => it hasNext;
+        hasPrevious => it hasPrevious;
+
+        current  => it current;
+        next     => it next;
+        previous => it previous;
+
+        forward  => it forward;
+        backward => it backward;
+
+        withReset: block => it withReset: block;
+
+        check: char => (
+            ([ has ] and: [ current == char ]) -> [ forward. ^ true ].
+          ^ false
+        );
+
+        checkN: sequence => (
+            withReset: [ :reset |
+                sequence do: [ :c |
+                    (check: char) unless: [ reset value. ^ false ]
+                ]
+            ].
+          ^ true
+        );
+
+        writeOn: w => w << 'a parse stream';
+    };
+
+    with inherited parent = #<:std/Clonable>;
+}

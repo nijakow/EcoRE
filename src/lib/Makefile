@@ -37,7 +37,9 @@ std/reflect/proxies/ffi/ffitype.eco \
 std/text/_.eco \
 std/text/parsing/_.eco \
 std/text/parsing/integer.eco \
+std/text/parsing/parsestream.eco \
 std/text/utf8/_.eco \
+std/text/utf8/utf8forwarditerator.eco \
 std/util/_.eco \
 std/util/iterators/_.eco \
 std/util/bytevector.eco \
