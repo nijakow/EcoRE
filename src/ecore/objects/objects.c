@@ -7,6 +7,7 @@
 #include "misc/key/key.h"
 #include "misc/string/string.h"
 #include "pseudo/character.h"
+#include "pseudo/float.h"
 #include "pseudo/integer.h"
 #include "vm/code/code.h"
 #include "vm/code/closure.h"
@@ -24,6 +25,7 @@ void Eco_Objects_Init()
     Eco_Interface_Init();
     Eco_Code_Init();
     Eco_Integer_Init();
+    Eco_Float_Init();
     Eco_Character_Init();
     Eco_Blob_Init();
     Eco_String_Init();
@@ -44,6 +46,7 @@ void Eco_Objects_Terminate()
     Eco_String_Terminate();
     Eco_Blob_Init();
     Eco_Character_Terminate();
+    Eco_Float_Terminate();
     Eco_Integer_Terminate();
     Eco_Code_Terminate();
     Eco_Interface_Terminate();

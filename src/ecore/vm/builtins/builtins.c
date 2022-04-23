@@ -68,6 +68,8 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.less", Eco_VM_Builtin_Less2);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.int.as_char", Eco_VM_Builtin_IntAsChar);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.int.as_float", Eco_VM_Builtin_IntAsFloat);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.float.as_int", Eco_VM_Builtin_FloatAsInt);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.char.as_int", Eco_VM_Builtin_CharAsInt);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.key.as_string", Eco_VM_Builtin_KeyAsString);
@@ -155,6 +157,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.blob_type", Eco_VM_Builtin_GetBlobType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.code_type", Eco_VM_Builtin_GetCodeType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.integer_type", Eco_VM_Builtin_GetIntegerType);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.float_type", Eco_VM_Builtin_GetFloatType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.character_type", Eco_VM_Builtin_GetCharacterType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.block_type", Eco_VM_Builtin_GetBlockType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.key_type", Eco_VM_Builtin_GetKeyType);

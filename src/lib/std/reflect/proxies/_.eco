@@ -5,6 +5,7 @@
     Block     = #<:std/reflect/proxies/Block>;
     Char      = #<:std/reflect/proxies/Char>;
     Code      = #<:std/reflect/proxies/Code>;
+    Float     = #<:std/reflect/proxies/Float>;
     Int       = #<:std/reflect/proxies/Int>;
     Interface = #<:std/reflect/proxies/Interface>;
     Key       = #<:std/reflect/proxies/Key>;

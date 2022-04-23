@@ -3,6 +3,9 @@
 
 #include <ecore/vm/builtins/builtin.h>
 
+bool Eco_VM_Builtin_IntAsFloat(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_FloatAsInt(struct Eco_Fiber*, unsigned int);
+
 bool Eco_VM_Builtin_AddIntegers(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_Add(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_Subtract2(struct Eco_Fiber*, unsigned int);

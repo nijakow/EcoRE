@@ -49,6 +49,7 @@
 
     with inherited conversions = {
         isInt  => true;
+        asFloat => #'ecosphere.ecore.int.as_float'(self);
         asChar => #'ecosphere.ecore.int.as_char'(self);
     };
 

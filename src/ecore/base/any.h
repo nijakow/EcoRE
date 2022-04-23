@@ -101,8 +101,17 @@ static inline Eco_Any Eco_Any_FromInteger(Eco_Integer integer)
 
 static inline Eco_Any Eco_Any_FromFloating(Eco_Floating floating)
 {
-    // TODO, FIXME, XXX!
-    return 0;
+    union data
+    {
+        u32           i;
+        Eco_Floating  f;
+    } d;
+    uintptr_t  value;
+
+    d.f = floating;
+    value = 0 | d.i;
+    value |= Eco_Any_Mask_FLOATING;
+    return (Eco_Any) value;
 }
 
 static inline void Eco_Any_AssignAny(Eco_Any* dest, Eco_Any* src)
@@ -123,12 +132,19 @@ static inline Eco_Codepoint Eco_Any_AsCharacter(Eco_Any any)
 
 static inline Eco_Integer Eco_Any_AsInteger(Eco_Any any)
 {
-    return (Eco_Integer) any & 0xffffffff;
+    return (Eco_Integer) (any & 0xffffffff);
 }
 
 static inline Eco_Floating Eco_Any_AsFloating(Eco_Any any)
 {
-    return 0.0f;    // TODO, FIXME, XXX!
+    union data
+    {
+        u32           i;
+        Eco_Floating  f;
+    } d;
+    
+    d.i = (any & 0xffffffff);
+    return d.f;
 }
 
 #else

@@ -14,6 +14,7 @@ bool Eco_VM_Builtin_GetArrayType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetBlobType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetCodeType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetIntegerType(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_GetFloatType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetCharacterType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetBlockType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetKeyType(struct Eco_Fiber*, unsigned int);

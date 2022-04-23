@@ -34,6 +34,7 @@ objects/misc/blob/blob.c \
 objects/misc/key/key.c \
 objects/misc/string/string.c \
 objects/pseudo/character.c \
+objects/pseudo/float.c \
 objects/pseudo/integer.c \
 objects/vm/code/code.c \
 objects/vm/code/closure.c \
@@ -100,7 +101,7 @@ OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
 DEPENDS = $(patsubst %.c,%.d,$(SOURCES))
 
 LDFLAGS = -lz -lffi -ldl
-CFLAGS = -I.. -I/opt/homebrew/Cellar/libffi/3.4.2/include/ -Wall -Wextra -Werror -Wno-unused-result -Wno-unused-parameter -Wno-unused-label -g -Ofast -DECO_LATEST_GIT_COMMIT="\"$(shell git rev-parse --short=12 HEAD)\""
+CFLAGS = -I.. -I/opt/homebrew/Cellar/libffi/3.4.2/include/ -Wall -Wextra -Werror -Wno-strict-aliasing -Wno-unused-result -Wno-unused-parameter -Wno-unused-label -g -Ofast -DECO_LATEST_GIT_COMMIT="\"$(shell git rev-parse --short=12 HEAD)\""
 
 %.o: %.c
 	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@

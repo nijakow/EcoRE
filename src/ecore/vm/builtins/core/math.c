@@ -3,6 +3,30 @@
 #include <ecore/vm/vm.h>
 
 
+bool Eco_VM_Builtin_IntAsFloat(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    any = Eco_Any_FromFloating((Eco_Floating) Eco_Any_AsInteger(any));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_FloatAsInt(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    any = Eco_Any_FromInteger((Eco_Integer) Eco_Any_AsFloating(any));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 bool Eco_VM_Builtin_AddIntegers(struct Eco_Fiber* fiber, unsigned int args)
 {
     Eco_Integer  value;

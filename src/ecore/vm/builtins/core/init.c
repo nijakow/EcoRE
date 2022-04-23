@@ -13,6 +13,7 @@ extern struct Eco_Type*  Eco_Array_TYPE;
 extern struct Eco_Type*  Eco_Blob_TYPE;
 extern struct Eco_Type*  Eco_Code_TYPE;
 extern struct Eco_Type*  Eco_Integer_TYPE;
+extern struct Eco_Type*  Eco_Float_TYPE;
 extern struct Eco_Type*  Eco_Character_TYPE;
 extern struct Eco_Type*  Eco_Closure_TYPE;
 extern struct Eco_Type*  Eco_Key_TYPE;
@@ -108,6 +109,17 @@ bool Eco_VM_Builtin_GetIntegerType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_Integer_TYPE);
+    Eco_Fiber_Push(fiber, &value);
+    return true;
+}
+
+bool Eco_VM_Builtin_GetFloatType(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  value;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
+        return false;
+    value = Eco_Any_FromPointer(Eco_Float_TYPE);
     Eco_Fiber_Push(fiber, &value);
     return true;
 }
