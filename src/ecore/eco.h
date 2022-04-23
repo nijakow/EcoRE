@@ -15,6 +15,7 @@
 void Eco_Init();
 void Eco_Terminate();
 void Eco_LoadImageFromFile(const char*);
+void Eco_LoadImage(char*, unsigned long);
 void Eco_Run();
 
 #endif

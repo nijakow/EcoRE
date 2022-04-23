@@ -97,6 +97,25 @@ struct Eco_Fiber* Eco_VM_SpawnThunk(struct Eco_VM* vm, struct Eco_Code* code)
     return fiber;
 }
 
+bool Eco_VM_LoadImage(struct Eco_VM* vm, char* image, unsigned long image_size)
+{
+    struct Eco_EConnect_Result  result;
+    struct Eco_Code*            code;
+
+    if (Eco_EConnect_LoadImage(&result, image, image_size)) {
+        if (Eco_EConnect_Result_ExpectObject(&result, (struct Eco_Object**) &code)) {
+            Eco_VM_SpawnThunk(vm, code);
+        } else {
+            Eco_Log_Error("Expected code, got something different (while loading image)!\n");
+        }
+        Eco_EConnect_Result_Destroy(&result);
+        return true;
+    } else {
+        Eco_Log_Error("Can't load image!\n");
+        return false;
+    }   
+}
+
 bool Eco_VM_LoadImageFromFile(struct Eco_VM* vm, const char* file)
 {
     struct Eco_EConnect_Result  result;

@@ -7,13 +7,30 @@
 #include <ecore/vm/memory/memory.h>
 
 
+bool Eco_EConnect_LoadImageWithFreeFunc(struct Eco_EConnect_Result* result, char* image, unsigned long image_size, void* free_func)
+{
+    struct Eco_EConnect_Instance  instance;
+    struct Eco_EConnect_Reader    reader;
+    bool                          retval;
+
+    Eco_EConnect_Instance_Create(&instance);
+    Eco_EConnect_Reader_Create(&reader, &instance, image, image_size, free_func);
+    retval = Eco_EConnect_Reader_Read(&reader, result);
+    Eco_EConnect_Reader_Destroy(&reader);
+    Eco_EConnect_Instance_Destroy(&instance);
+    return retval;
+}
+
+bool Eco_EConnect_LoadImage(struct Eco_EConnect_Result* result, char* image, unsigned long image_size)
+{
+    return Eco_EConnect_LoadImageWithFreeFunc(result, image, image_size, NULL);
+}
+
 bool Eco_EConnect_ReadFile(const char* filename, struct Eco_EConnect_Result* result)
 {
     FILE*                         file;
-    unsigned int                  file_size;
+    unsigned long                 file_size;
     char*                         buffer;
-    struct Eco_EConnect_Instance  instance;
-    struct Eco_EConnect_Reader    reader;
     bool                          retval;
 
     file = fopen(filename, "rb");
@@ -29,11 +46,7 @@ bool Eco_EConnect_ReadFile(const char* filename, struct Eco_EConnect_Result* res
 
     buffer = Eco_Memory_Alloc(file_size * sizeof(char));
     if (fread(buffer, file_size, sizeof(char), file) != 0) {
-        Eco_EConnect_Instance_Create(&instance);
-        Eco_EConnect_Reader_Create(&reader, &instance, buffer, file_size, (void (*)(char*)) Eco_Memory_Free);
-        retval = Eco_EConnect_Reader_Read(&reader, result);
-        Eco_EConnect_Reader_Destroy(&reader);
-        Eco_EConnect_Instance_Destroy(&instance);
+        retval = Eco_EConnect_LoadImageWithFreeFunc(result, buffer, file_size, Eco_Memory_Free);
     } else {
         retval = false;
     }

@@ -18,6 +18,11 @@ void Eco_LoadImageFromFile(const char* file)
     Eco_VM_LoadImageFromFile(&Eco_THE_VM, file);
 }
 
+void Eco_LoadImage(char* image, unsigned long image_size)
+{
+    Eco_VM_LoadImage(&Eco_THE_VM, image, image_size);
+}
+
 void Eco_Run()
 {
     Eco_VM_Run(&Eco_THE_VM);

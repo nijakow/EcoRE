@@ -2,7 +2,9 @@
 import sys
 
 def convert(infile):
-    print('char *Eco_DEFAULT_IMAGE = ')
+    print('#define ECO_CONFIG_COMPILE_WITH_INTEGRATED_BINARY')
+    print()
+    print('char Eco_DEFAULT_IMAGE[] = ')
     print('{')
     print('    ', end='')
     i = 0
@@ -12,10 +14,10 @@ def convert(infile):
             break        
         for b in bts:
             print('0x{:02x}, '.format(b), end='')
+            i += 1
             if i % 8 == 0:
                 print()
                 print('    ', end='')
-            i += 1
     if i % 8 != 0:
         print()
     print('};')
