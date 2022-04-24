@@ -1,0 +1,24 @@
+
+#=std/text/writing/NumberWriter: {
+    private own Base10Transformer = {
+        base => 10;
+        transform: n => ((#\0 asInt) + n) asChar;
+    };
+
+    private WriteUIntLoop(writer, i, transformer) => (
+        (i isZero) unless: [
+            WriteUIntLoop(writer, i / (transformer base), transformer).
+            writer << (transformer transform: (i mod: (transformer base))).
+        ].
+    );
+
+    private WriteUInt: i To: writer => (
+        (i isZero)   if: [ writer << #\0 ]
+                   else: [ WriteUIntLoop(writer, i, Base10Transformer) ]
+    );
+
+    WriteInt: i To: writer => (
+        (i isNegative) -> [ writer << '-'. i <- i negate ].
+        WriteUInt: i To: writer.
+    );   
+}

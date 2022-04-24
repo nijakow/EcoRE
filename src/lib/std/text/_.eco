@@ -2,4 +2,5 @@
 #=std/text: {
     parsing = #<:std/text/parsing>;
     utf8 = #<:std/text/utf8>;
+    writing = #<:std/text/writing>;
 }

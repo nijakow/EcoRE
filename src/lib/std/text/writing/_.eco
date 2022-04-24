@@ -1,0 +1,4 @@
+
+#=std/text/writing: {
+    NumberWriter = #<:std/text/writing/NumberWriter>;
+}
