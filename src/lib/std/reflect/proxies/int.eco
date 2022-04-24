@@ -46,6 +46,9 @@
         negate => (0 - self);
         abs    => (self < 0) if: [ negate ] else: [ self ].
         sqrt   => #'ecosphere.ecore.math.sqrt'(self);
+        sin    => #'ecosphere.ecore.math.sin'(self asFloat);
+        cos    => #'ecosphere.ecore.math.cos'(self asFloat);
+        tan    => #'ecosphere.ecore.math.tan'(self asFloat);
     };
 
     with inherited conversions = {

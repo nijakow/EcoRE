@@ -32,6 +32,7 @@
     );
 
     WriteFloat: f To: writer => (
+        (f < 0) -> [ writer << #\-. f <- f negate ].
         WriteInt: (f integerPart) To: writer.
         writer << '.'.
         WriteFractional: f fractionalPart
