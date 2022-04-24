@@ -19,4 +19,9 @@ bool Eco_VM_Builtin_LShift2(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_RShift2(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_Less2(struct Eco_Fiber*, unsigned int);
 
+bool Eco_VM_Builtin_Sqrt(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_Sin(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_Cos(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_Tan(struct Eco_Fiber*, unsigned int);
+
 #endif

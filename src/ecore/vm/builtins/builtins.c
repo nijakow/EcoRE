@@ -66,6 +66,10 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.bitshift_left", Eco_VM_Builtin_LShift2);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.bitshift_right", Eco_VM_Builtin_RShift2);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.less", Eco_VM_Builtin_Less2);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.sqrt", Eco_VM_Builtin_Sqrt);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.sin", Eco_VM_Builtin_Sin);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.cos", Eco_VM_Builtin_Cos);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.tan", Eco_VM_Builtin_Tan);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.int.as_char", Eco_VM_Builtin_IntAsChar);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.int.as_float", Eco_VM_Builtin_IntAsFloat);

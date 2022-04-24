@@ -436,3 +436,71 @@ bool Eco_VM_Builtin_Less2(struct Eco_Fiber* fiber, unsigned int args)
     // TODO: Set error type
     return false;
 }
+
+bool Eco_VM_Builtin_Sqrt(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    if (Eco_Any_IsInteger(any))
+        any = Eco_Any_FromInteger(sqrt(Eco_Any_AsInteger(any)));
+    else if (Eco_Any_IsFloating(any))
+        any = Eco_Any_FromFloating(sqrtf(Eco_Any_AsFloating(any)));
+    else
+        return false;
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_Sin(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    if (Eco_Any_IsInteger(any))
+        any = Eco_Any_FromFloating(sin(Eco_Any_AsInteger(any)));
+    else if (Eco_Any_IsFloating(any))
+        any = Eco_Any_FromFloating(sin(Eco_Any_AsFloating(any)));
+    else
+        return false;
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_Cos(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    if (Eco_Any_IsInteger(any))
+        any = Eco_Any_FromFloating(cos(Eco_Any_AsInteger(any)));
+    else if (Eco_Any_IsFloating(any))
+        any = Eco_Any_FromFloating(cos(Eco_Any_AsFloating(any)));
+    else
+        return false;
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_Tan(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    if (Eco_Any_IsInteger(any))
+        any = Eco_Any_FromFloating(tan(Eco_Any_AsInteger(any)));
+    else if (Eco_Any_IsFloating(any))
+        any = Eco_Any_FromFloating(tan(Eco_Any_AsFloating(any)));
+    else
+        return false;
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
