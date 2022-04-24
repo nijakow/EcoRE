@@ -2,7 +2,7 @@
 #=std/text/writing/NumberWriter: {
     private own Base10Transformer = {
         base => 10;
-        transform: n => ((#\0 asInt) + n) asChar;
+        transform: n => ((#\0 asInt) + (n asInt)) asChar;
     };
 
     private WriteUIntLoop(writer, i, transformer) => (
@@ -20,5 +20,10 @@
     WriteInt: i To: writer => (
         (i isNegative) -> [ writer << '-'. i <- i negate ].
         WriteUInt: i To: writer.
-    );   
+    );
+
+    WriteFloat: f To: writer => (
+        WriteInt: (f integerPart) To: writer.
+        writer << '.?f'.
+    );
 }

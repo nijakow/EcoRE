@@ -1,7 +1,8 @@
+#include <math.h>
+
 #include "math.h"
 
 #include <ecore/vm/vm.h>
-
 
 bool Eco_VM_Builtin_IntAsFloat(struct Eco_Fiber* fiber, unsigned int args)
 {
@@ -237,6 +238,18 @@ bool Eco_VM_Builtin_Modulo2(struct Eco_Fiber* fiber, unsigned int args)
 
     if (Eco_Any_IsInteger(arg1) && Eco_Any_IsInteger(arg2)) {
         result = Eco_Any_FromInteger(Eco_Any_AsInteger(arg1) % Eco_Any_AsInteger(arg2));
+        Eco_Fiber_Push(fiber, &result);
+        return true;
+    } else if (Eco_Any_IsFloating(arg1) && Eco_Any_IsFloating(arg2)) {
+        result = Eco_Any_FromFloating(fmod(Eco_Any_AsFloating(arg1), Eco_Any_AsFloating(arg2)));
+        Eco_Fiber_Push(fiber, &result);
+        return true;
+    } else if (Eco_Any_IsFloating(arg1) && Eco_Any_IsInteger(arg2)) {
+        result = Eco_Any_FromFloating(fmod(Eco_Any_AsFloating(arg1), Eco_Any_AsInteger(arg2)));
+        Eco_Fiber_Push(fiber, &result);
+        return true;
+    } else if (Eco_Any_IsInteger(arg1) && Eco_Any_IsFloating(arg2)) {
+        result = Eco_Any_FromFloating(fmod(Eco_Any_AsInteger(arg1), Eco_Any_AsFloating(arg2)));
         Eco_Fiber_Push(fiber, &result);
         return true;
     } else {
