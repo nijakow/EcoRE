@@ -6,7 +6,6 @@
         -    other => #'ecosphere.ecore.math.sub'(self, other);
         *    other => #'ecosphere.ecore.math.mul'(self, other);
         /    other => #'ecosphere.ecore.math.div'(self, other);
-        mod: other => #'ecosphere.ecore.math.mod'(self, other);
     };
 
     with inherited comparisons = {
