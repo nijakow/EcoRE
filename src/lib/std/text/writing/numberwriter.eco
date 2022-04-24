@@ -22,8 +22,20 @@
         WriteUInt: i To: writer.
     );
 
+    private WriteFractional: f To: writer Transformer: transformer => (
+        1 to: 6 do: [ :iteration |
+            f <- f * (transformer base).
+            writer << (transformer transform: (f integerPart)).
+            f <- f fractionalPart.
+            (f isZero) -> [ ^ ].
+        ].
+    );
+
     WriteFloat: f To: writer => (
         WriteInt: (f integerPart) To: writer.
-        writer << '.?f'.
+        writer << '.'.
+        WriteFractional: f fractionalPart
+                     To: writer
+            Transformer: Base10Transformer.
     );
 }
