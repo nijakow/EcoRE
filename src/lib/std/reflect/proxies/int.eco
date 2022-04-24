@@ -82,25 +82,7 @@
         );
     };
 
-    writeOn: writer => (
-        |
-            lib <- {
-                Digit(n) => ((#\0 asInt) + n) asChar;
-                WriteNumLoop(writer, num, base, digit_func) => (
-                    (num isZero) unless: [
-                        WriteNumLoop(writer, num / base, base, digit_func).
-                        writer << digit_func(num mod: base).
-                    ].
-                );
-                WriteNum(writer, num) => (
-                    (num isNegative) if:   [ writer << #\-. num <- num negate ].
-                    (num isZero)     if:   [ writer << #\0 ]
-                                     else: [ WriteNumLoop(writer, num, 10, [ :i, Digit(i) ]) ]
-                );
-            }
-        |
-        lib WriteNum(writer, self);
-    );
+    writeOn: writer => (std text writing NumberWriter) WriteInt: self To: writer;
     
     with inherited parent = #<:std/Clonable>;
 }
