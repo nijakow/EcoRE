@@ -40,6 +40,8 @@
     with inherited conversions = {
         isFloat => true;
         asInt => #'ecosphere.ecore.float.as_int'(self);
+        integerPart => asInt;
+        fractionalPart => self - integerPart;
     };
 
     writeOn: writer => writer << 'a float';
