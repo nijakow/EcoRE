@@ -1,7 +1,8 @@
 
 #=std/text/parsing/integer: {
     private own Base10Transformer = {
-        value(c) => (
+        base => 10;
+        transformFromChar: c => (
             ((c asInt) isBetween: (#\0 asInt) And: (#\9 asInt)) -> [
               ^ Yes: ((c asInt) - (#\0 asInt))
             ].
@@ -10,30 +11,34 @@
         with inherited parent = #<:std/Clonable>;
     };
 
-    ParseUIntFromIterator: it Transformer: transformer => (
-        | v <- 0 |
+    ParseUIntFromStream: it Transformer: transformer => (
+        |
+            v <- 0,
+            n <- 0
+        |
         it do: [ :c |
-            (transformer value(c))
-                yes: [ :digit | v <- (v * 10) + digit ]
-                 no: [ ^ v ]
+            (transformer transformFromChar: c)
+                yes: [ :digit | v <- (v * (transformer base)) + digit ]
+                 no: [ (n > 0) -> [ ^ Yes: v ]. ^ No ].
+            n <- n + 1.
         ].
-        v
+      ^ No
     );
 
-    ParseIntFromIterator: it Transformer: transformer => (
+    ParseIntFromStream: it Transformer: transformer => (
         ([ it has ] and: [ it current == #\- ])
-            -> [ it forward. ^ (ParseUIntFromIterator: it Transformer: transformer) negate ].
+            -> [ it forward. ^ (ParseUIntFromStream: it Transformer: transformer) negate ].
         ([ it has ] and: [ it current == #\+ ]) -> [ it forward ].
-      ^ ParseUIntFromIterator: it Transformer: transformer
+      ^ ParseUIntFromStream: it Transformer: transformer
     );
 
-    ParseUIntFromIterator: it => (
-        ParseUIntFromIterator: it
-                  Transformer: Base10Transformer
+    ParseUIntFromStream: it => (
+        ParseUIntFromStream: it
+                Transformer: Base10Transformer
     );
 
-    ParseIntFromIterator: it => (
-        ParseIntFromIterator: it
-                 Transformer: Base10Transformer
+    ParseIntFromStream: it => (
+        ParseIntFromStream: it
+               Transformer: Base10Transformer
     );
 }
