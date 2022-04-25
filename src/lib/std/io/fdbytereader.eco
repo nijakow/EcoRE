@@ -23,7 +23,7 @@
     );
     private optionalRefresh => bufferEmpty if: [ refresh ];
 
-    hasNext => (
+    hasNextByte => (
         closed if: [ ^ false ].
         optionalRefresh.
         bufferEmpty if: [ closed <- true. ^ false ].
@@ -39,8 +39,26 @@
           ^ b
         ]
     );
-
+    peekByte => (
+        optionalRefresh.
+        bufferEmpty if: [
+          ^ 0
+        ] else: [
+          ^ buffer at: readHead
+        ]
+    );
     close => fd close;
 
+    forward => ( readByte. self );
+
+    has => hasNext;
+    hasNext => hasNextByte;
+
+    current => peekByte;
+    next => [ forward ] returns: current;
+
+    writeOn: w => w << 'an fd byte reader';
+
+    with inherited trait = #<:std/util/iterators/IteratorTrait>;
     with inherited parent = #<:std/Clonable>;
 }
