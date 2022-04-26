@@ -1,0 +1,54 @@
+
+"BlockReaderCache"
+{
+    private reader,
+    private cachedValue;
+
+    with inherited trait = {
+        initWithBlockReader: _reader => (
+            reader      <- _reader.
+            cachedValue <- No.
+          ^ self
+        );
+
+        private refresh => (
+            |
+                block <- reader nextBlock,
+                cache <- (BlockReaderCache clone) initWithBlockReader: reader,
+                node  <- StreamNode clone initWithVector: block Next: cache
+            |
+            cachedValue <- Yes: v.
+          ^ v
+        );
+
+        value => cachedValue
+                    yes: [ :v | v ]
+                     no: [ refresh ];
+    };
+
+    with inherited parent = #<:std/Clonable>;
+}
+
+"StreamNode"
+{
+    private vector,
+    private bytes,
+    private nextPtr,
+    private loader;
+
+    with inherited trait = {
+        initWithVector: _vector Next: _next => (
+            vector   <- _vector.
+            fill     <- _fill.
+            nextPtr  <- No.
+          ^ self
+        );
+
+        at: index => vector at: index;
+        size => vector size;
+
+        next => next value;
+    };
+
+    with inherited parent = #<std/Clonable>;
+}
