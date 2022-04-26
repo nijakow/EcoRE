@@ -15,7 +15,7 @@
           ^ self
         );
 
-        close => "TODO";
+        close => ( in close. out close. );
 
         writeOn: w => w << 'PortIO';
     };

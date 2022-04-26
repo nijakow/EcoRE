@@ -41,7 +41,7 @@
             ].
             ^ v asString
         );
-        close => "TODO";
+        close => _br close;
         writeOn: w => w << 'PortInput';
     };
 
