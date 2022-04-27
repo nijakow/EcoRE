@@ -41,5 +41,7 @@
         };
 
         with inherited parent = #<:std/Clonable>;
-    }
+    };
+
+    segmented = #<:std/util/iterators/segmented>;
 }

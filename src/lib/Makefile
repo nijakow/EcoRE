@@ -45,6 +45,7 @@ std/text/utf8/utf8forwarditerator.eco \
 std/text/writing/_.eco \
 std/text/writing/numberwriter.eco \
 std/util/_.eco \
+std/util/iterators/segmented/_.eco \
 std/util/iterators/_.eco \
 std/util/bytevector.eco \
 std/util/collector.eco \
