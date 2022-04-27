@@ -8,7 +8,7 @@
         );
 
         nextSegment: size => fd read: size;
-        nextSegment => nextBlock: 4096;
+        nextSegment => nextSegment: 4096;
     };
 
     with inherited parent = #<:std/Clonable>;
