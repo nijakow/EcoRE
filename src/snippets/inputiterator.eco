@@ -69,3 +69,65 @@
 
     with inherited parent = #<std/Clonable>;
 }
+
+"StreamNodeIteratorPosition"
+{
+    private node,
+    private index;
+
+    with inherited trait = {
+        initWithNode: _node Index: _index => (
+            node  <- _node.
+            index <- _index.
+          ^ self
+        );
+        initWithNode: node => initWithNode: node Index: 0;
+
+        copy => clone;
+
+        private ensureValidIndex => (
+            (index < node size) -> [ node <- node next. index <- 0 ].
+        );
+
+        has => (
+            ensureValidIndex.
+          ^ index < node size
+        );
+
+        get => (
+            ensureValidIndex.
+          ^ node at: index
+        );
+
+        forward => (
+            (index < node size)
+                  if: [ index <- index + 1 ]
+                else: [ node <- node next. index <- 0 ].
+          ^ self
+        );
+    };
+
+    with inherited parent = #<:std/Clonable>;
+}
+
+"StreamNodeIterator"
+{
+    private pos;
+
+    with inherited trait = {
+
+        forward => pos forward;
+
+        has => pos has;
+
+        current => pos get;
+
+        withReset: block => (
+            | old_pos <- pos copy |
+          ^ block value([ pos <- old_pos ])
+        );
+    };
+
+    with inherited iteratorTrait = #<:std/util/iterators/IteratorTrait>;
+    with inherited parent = #<:std/Clonable>;
+}
