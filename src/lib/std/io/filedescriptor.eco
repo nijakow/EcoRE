@@ -8,6 +8,19 @@
           ^ self
         );
 
+        read: size => (
+            |
+                buffer     <- std util newBlob: size,
+                bytes_read <- readIntoBlob: buffer
+            |
+            (bytes_read == buffer size) -> [ ^ buffer ].
+            (bytes_read < 0) -> [ bytes_read <- 0 ].
+            | b <- std util newBlob: bytes_read |
+            0 to: (b size) do: [ :i | b at: i put: (buffer at: i) ].
+          ^ b
+        );
+        read => read: 4096;
+
         read: count BytesIntoBlob: blob AtOffset: offset => (
             #'ecosphere.ecore.object.blob.read_from'(blob, fd, offset, count);
         );

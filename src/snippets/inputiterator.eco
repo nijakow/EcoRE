@@ -1,4 +1,21 @@
 
+"FDBlockReader"
+{
+    private fd;
+
+    with inherited trait = {
+        initWithFileDescriptor: _fd => (
+            fd <- _fd.
+          ^ self
+        );
+
+        nextBlock: size => fd read: size;
+        nextBlock => nextBlock: 4096;
+    };
+
+    with inherited parent = #<:std/Clonable>;
+}
+
 "BlockReaderCache"
 {
     private reader,
@@ -17,8 +34,8 @@
                 cache <- (BlockReaderCache clone) initWithBlockReader: reader,
                 node  <- StreamNode clone initWithVector: block Next: cache
             |
-            cachedValue <- Yes: v.
-          ^ v
+            cachedValue <- Yes: node.
+          ^ node
         );
 
         value => cachedValue
