@@ -13,6 +13,7 @@ std/maybe.eco \
 std/io/_.eco \
 std/io/fdbytereader.eco \
 std/io/fdbytewriter.eco \
+std/io/fdsegmentreader.eco \
 std/io/filedescriptor.eco \
 std/io/portinput.eco \
 std/io/portio.eco \

@@ -1,0 +1,15 @@
+#=std/io/FDSegmentReader: {
+    private fd;
+
+    with inherited trait = {
+        initWithFileDescriptor: _fd => (
+            fd <- _fd.
+          ^ self
+        );
+
+        nextBlock: size => fd read: size;
+        nextBlock => nextBlock: 4096;
+    };
+
+    with inherited parent = #<:std/Clonable>;
+}
