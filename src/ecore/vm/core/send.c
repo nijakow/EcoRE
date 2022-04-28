@@ -9,12 +9,13 @@
 
 bool Eco_Send_ToObject(struct Eco_Message*  message,
                        struct Eco_Object*   object,
-                       Eco_Any              self)
+                       Eco_Any              self,
+                       bool                 delegated_send)
 {
     /*
      * Dispatch to the local send handler.
      */
-    return object->type->typecore->send(message, object, self);
+    return object->type->typecore->send(message, object, self, delegated_send);
 }
 
 
@@ -28,7 +29,8 @@ static struct Eco_Type** Eco_Send_JUMPS[] = {
 bool Eco_Send(struct Eco_Message*  message,
               Eco_Any              target,
               Eco_Any              self,
-              bool                 private_send)
+              bool                 private_send,
+              bool                 delegated_send)
 {
     struct Eco_Object*  object;
 
@@ -38,5 +40,5 @@ bool Eco_Send(struct Eco_Message*  message,
     } else {
         object = (*Eco_Send_JUMPS[Eco_Any_GetValueType(target)])->proxy;
     }
-    return Eco_Send_ToObject(message, object, self);
+    return Eco_Send_ToObject(message, object, self, delegated_send);
 }

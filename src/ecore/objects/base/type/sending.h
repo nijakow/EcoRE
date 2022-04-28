@@ -5,6 +5,6 @@
 
 #include <ecore/vm/core/send.h>
 
-bool Eco_Type_SendMessageToMolecule(struct Eco_Message*, Eco_Any, struct Eco_Type*, struct Eco_Molecule*);
+bool Eco_Type_SendMessageToMolecule(struct Eco_Message*, Eco_Any, struct Eco_Type*, struct Eco_Molecule*, bool);
 
 #endif
