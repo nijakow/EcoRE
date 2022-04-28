@@ -18,7 +18,7 @@ bool Eco_Type_SendMessageToMolecule(struct Eco_Message*  message,
     {
         slot = &type->slots[i];
         if (slot->info.key == message->key) {
-            if (slot->info.flags.is_private && !message->private_send)
+            if (slot->info.flags.is_protected && !message->private_send)
                 continue;
             Eco_TypeSlot_Invoke(message, molecule, type, i, self);
             return true;
@@ -29,7 +29,7 @@ bool Eco_Type_SendMessageToMolecule(struct Eco_Message*  message,
     {
         slot = &(type->slots[i]);
 
-        if (slot->info.flags.is_private && !message->private_send)
+        if (slot->info.flags.is_protected && !message->private_send)
             continue;
 
         switch (slot->type)

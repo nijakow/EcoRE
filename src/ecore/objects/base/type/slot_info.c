@@ -6,7 +6,7 @@
 void Eco_SlotFlags_Create(struct Eco_SlotFlags* flags)
 {
     flags->is_deprecated = false;
-    flags->is_private    = false;
+    flags->is_protected  = false;
     flags->is_static     = false;
     flags->is_final      = false;
     flags->is_inherited  = false;

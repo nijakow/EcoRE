@@ -36,7 +36,8 @@ bool Eco_VM_Builtin_AddValueSlot(struct Eco_Fiber* fiber, unsigned int args)
     info.flags.is_inherited =  (Eco_Any_AsInteger(flags) & 0x01) == 0;
     info.flags.is_with      =  (Eco_Any_AsInteger(flags) & 0x02) != 0;
     info.flags.is_part      =  (Eco_Any_AsInteger(flags) & 0x04) != 0;
-    info.flags.is_private   =  (Eco_Any_AsInteger(flags) & 0x08) != 0;
+    info.flags.is_protected =  (Eco_Any_AsInteger(flags) & 0x08) != 0;
+    info.flags.is_static    =  (Eco_Any_AsInteger(flags) & 0x10) != 0;
 
     Eco_Molecule_AddSlot((struct Eco_Molecule*) Eco_Any_AsPointer(object),
                          Eco_Any_AsInteger(index),
@@ -80,7 +81,8 @@ bool Eco_VM_Builtin_AddCodeSlot(struct Eco_Fiber* fiber, unsigned int args)
     info.flags.is_inherited =  (Eco_Any_AsInteger(flags) & 0x01) == 0;
     info.flags.is_with      =  (Eco_Any_AsInteger(flags) & 0x02) != 0;
     info.flags.is_part      =  (Eco_Any_AsInteger(flags) & 0x04) != 0;
-    info.flags.is_private   =  (Eco_Any_AsInteger(flags) & 0x08) != 0;
+    info.flags.is_protected =  (Eco_Any_AsInteger(flags) & 0x08) != 0;
+    info.flags.is_static    =  (Eco_Any_AsInteger(flags) & 0x10) != 0;
 
     Eco_Molecule_AddCodeSlot((struct Eco_Molecule*) Eco_Any_AsPointer(object),
                              Eco_Any_AsInteger(index),

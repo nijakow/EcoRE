@@ -6,7 +6,7 @@
 struct Eco_SlotFlags
 {
     int is_deprecated : 1;
-    int is_private    : 1;
+    int is_protected  : 1;
     int is_static     : 1;
     int is_final      : 1;
     int is_with       : 1;

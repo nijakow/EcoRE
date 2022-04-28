@@ -55,7 +55,7 @@ bool Eco_EConnect_Reader_ReadMoleculeBody(struct Eco_EConnect_Reader* reader,
             slot_info.flags.is_with      =  (flags & 0x04) != 0;
             slot_info.flags.is_inherited =  (flags & 0x08) != 0;   // The flag 0x08 indicates "no delegate"
             slot_info.flags.is_part      =  (flags & 0x10) != 0;
-            slot_info.flags.is_private   =  (flags & 0x20) != 0;
+            slot_info.flags.is_protected =  (flags & 0x20) != 0;
             slot_info.flags.is_static    =  (flags & 0x40) != 0;
             if (flags & 0x02) {
                 if (!Eco_EConnect_Reader_ReadAny(reader, result, &any))
@@ -69,8 +69,8 @@ bool Eco_EConnect_Reader_ReadMoleculeBody(struct Eco_EConnect_Reader* reader,
             }
             Eco_Molecule_AddSlot(object, -1, &slot_info, Eco_Interface_GetDefaultInterface(), any); // TODO, FIXME, XXX: Parse the interface!
         } else {
-            slot_info.flags.is_private = (flags & 0x20) != 0;
-            slot_info.flags.is_static  = (flags & 0x40) != 0;
+            slot_info.flags.is_protected = (flags & 0x20) != 0;
+            slot_info.flags.is_static    = (flags & 0x40) != 0;
             if (!Eco_EConnect_Reader_ReadObject(reader, result, (struct Eco_Object**) &code))
                 return false;
             Eco_Molecule_AddCodeSlot(object, -1, &slot_info, Eco_Interface_GetDefaultInterface(), code); // TODO, FIXME, XXX: Parse the interface!

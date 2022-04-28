@@ -79,7 +79,7 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
     slot_count           = 0;
     for (index = 0; index < type->slot_count; index++)
     {
-        if (private_also || !type->slots[index].info.flags.is_private) {
+        if (private_also || !type->slots[index].info.flags.is_protected) {
             if (type->slots[index].info.flags.is_with)
                 inherited_slot_count++;
             slot_count++;
@@ -113,7 +113,7 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
     slot_index   = 0;
     for (index = 0; index < type->slot_count; index++)
     {
-        if (!private_also && type->slots[index].info.flags.is_private)
+        if (!private_also && type->slots[index].info.flags.is_protected)
             continue;
         if (type->slots[index].info.flags.is_with) {
             if (Eco_TypeSlot_GetValue(&type->slots[index], (struct Eco_Molecule*) object, &value))
