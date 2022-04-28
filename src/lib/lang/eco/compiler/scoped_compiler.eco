@@ -8,12 +8,12 @@
       ^ self
     );
 
-    private newBlockContextWithParent: p => (#<:lang/eco/compiler/ScopeSharedInfo> clone) initWithLexicalParent: p;
-    private newBlockContext => #<:lang/eco/compiler/ScopeSharedInfo> new;
-    private newScopeFromBlockContext: bc => (Scope clone) initWithShared: bc;
-    private newScope => newScopeFromBlockContext: newBlockContext;
+    protected newBlockContextWithParent: p => (#<:lang/eco/compiler/ScopeSharedInfo> clone) initWithLexicalParent: p;
+    protected newBlockContext => #<:lang/eco/compiler/ScopeSharedInfo> new;
+    protected newScopeFromBlockContext: bc => (Scope clone) initWithShared: bc;
+    protected newScope => newScopeFromBlockContext: newBlockContext;
 
-    private localCompiler => scopes compiler;
+    protected localCompiler => scopes compiler;
 
     pushNormalScope => scopes <- scopes createSubscope;
     pushBlockScope => (

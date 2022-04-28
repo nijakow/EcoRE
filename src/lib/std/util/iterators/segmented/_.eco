@@ -2,9 +2,9 @@
 #=std/util/iterators/segmented: {
 
     SegmentListLink = {
-        private segmented = #<:std/util/iterators/segmented>,
-        private reader,
-        private cachedValue;
+        protected segmented = #<:std/util/iterators/segmented>,
+        protected reader,
+        protected cachedValue;
 
         with inherited trait = {
             initWithSegmentReader: _reader => (
@@ -13,7 +13,7 @@
               ^ self
             );
 
-            private refresh => (
+            protected refresh => (
                 | segment <- reader nextSegment |
                 segment yes: [ :seg |
                     |
@@ -37,10 +37,10 @@
     };
 
     SegmentListNode = {
-        private vector,
-        private bytes,
-        private nextPtr,
-        private loader;
+        protected vector,
+        protected bytes,
+        protected nextPtr,
+        protected loader;
 
         with inherited trait = {
             initWithVector: _vector Next: _next => (
@@ -59,9 +59,9 @@
     };
 
     IteratorState = {
-        private atEOF,
-        private node,
-        private index;
+        protected atEOF,
+        protected node,
+        protected index;
 
         with inherited trait = {
             initWithNode: _node Index: _index => (
@@ -78,7 +78,7 @@
 
             copy => clone;
 
-            private ensureValidIndex => (
+            protected ensureValidIndex => (
                 atEOF -> [ ^ ].
                 (index < node size) unless: [
                     (node next)
@@ -116,8 +116,8 @@
     };
 
     Iterator = {
-        private segmented = #<:std/util/iterators/segmented>,
-        private state;
+        protected segmented = #<:std/util/iterators/segmented>,
+        protected state;
 
         with inherited trait = {
             initOnSegmentReader: reader => (

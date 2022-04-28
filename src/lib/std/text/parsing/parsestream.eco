@@ -1,6 +1,6 @@
 
 #=std/text/parsing/ParseStream: {
-    private it;
+    protected it;
     
     with inherited trait = {
         initWithIterator: _it => (

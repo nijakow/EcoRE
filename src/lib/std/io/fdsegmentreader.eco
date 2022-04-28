@@ -1,5 +1,5 @@
 #=std/io/FDSegmentReader: {
-    private fd;
+    protected fd;
 
     with inherited trait = {
         initWithFileDescriptor: _fd => (

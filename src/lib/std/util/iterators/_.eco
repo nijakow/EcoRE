@@ -14,8 +14,8 @@
     };
 
     IndexIterator = {
-        private blob,
-        private index;
+        protected blob,
+        protected index;
 
         with inherited trait = {
             init: _blob => (

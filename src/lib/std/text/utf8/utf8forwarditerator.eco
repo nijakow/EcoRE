@@ -1,8 +1,8 @@
 
 #=std/text/utf8/UTF8ForwardIterator: {
-    private it,
-    private lastChar,
-    private hasLastChar;
+    protected it,
+    protected lastChar,
+    protected hasLastChar;
 
     with inherited trait = {
         initOnByteIterator: _it => (
@@ -12,7 +12,7 @@
           ^ self
         );
 
-        private readNext => (
+        protected readNext => (
             | b <- it next, bytes, v |
             begin
                 if: [ (b bitAnd: 0b10000000) isZero        ] then: [ ^ b asChar                             ] ~

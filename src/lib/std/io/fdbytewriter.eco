@@ -1,8 +1,8 @@
 
 #=std/io/FDByteWriter: {
-    private fd;
-    private buffer;
-    private writeHead;
+    protected fd;
+    protected buffer;
+    protected writeHead;
 
     initWithFileDescriptor: _fd => (
         fd        <- _fd.

@@ -1,5 +1,5 @@
 #=std/util/Map: {
-    private pairs;
+    protected pairs;
 
     with inherited trait = {
         init => (

@@ -1,18 +1,18 @@
 
 #=std/text/writing/NumberWriter: {
-    private own Base10Transformer = {
+    protected own Base10Transformer = {
         base => 10;
         transform: n => ((#\0 asInt) + (n asInt)) asChar;
     };
 
-    private WriteUIntLoop(writer, i, transformer) => (
+    protected WriteUIntLoop(writer, i, transformer) => (
         (i isZero) unless: [
             WriteUIntLoop(writer, i / (transformer base), transformer).
             writer << (transformer transform: (i mod: (transformer base))).
         ].
     );
 
-    private WriteUInt: i To: writer => (
+    protected WriteUInt: i To: writer => (
         (i isZero)   if: [ writer << #\0 ]
                    else: [ WriteUIntLoop(writer, i, Base10Transformer) ]
     );
@@ -22,7 +22,7 @@
         WriteUInt: i To: writer.
     );
 
-    private WriteFractional: f To: writer Transformer: transformer => (
+    protected WriteFractional: f To: writer Transformer: transformer => (
         1 to: 6 do: [ :iteration |
             f <- f * (transformer base).
             writer << (transformer transform: (f integerPart)).

@@ -2,7 +2,7 @@
 #=std/reflect/Slot: {
     reflectee, name;
 
-    private owningMirror;
+    protected owningMirror;
 
     with inherited trait = {
         initWithReflectee: _reflectee Name: _name Mirror: _mirror => (

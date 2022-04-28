@@ -22,5 +22,5 @@
     ~> value      => ((std util MutablePair) clone) initWithFirst: self Second: value;
     writeOn: writer => writer << 'an object';
     
-    private with lobby = #<:lobby>;
+    protected with lobby = #<:lobby>;
 }

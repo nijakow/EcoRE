@@ -1,9 +1,9 @@
 
 #=std/ffi: {
-    private with std = #<:std>;
+    protected with std = #<:std>;
     
     types = {
-        private GetTypeByIndex: index => #'ecosphere.ecore.ffi.type.by_index'(index);
+        protected GetTypeByIndex: index => #'ecosphere.ecore.ffi.type.by_index'(index);
 
         void => GetTypeByIndex: 0;
 
@@ -56,8 +56,8 @@
     null => ((types pointer) alloc) assignNull;
 
     ForeignFunction = {
-        private name,
-        private ptr,
+        protected name,
+        protected ptr,
         type;
 
         with inherited trait = {
@@ -77,8 +77,8 @@
     };
 
     SharedLibrary = {
-        private name,
-        private library;
+        protected name,
+        protected library;
 
         with inherited trait = {
             initWithName: _name Library: _library => (
