@@ -82,8 +82,13 @@ class Parser:
             elif self.check(TokenType.INHERITED):
                 flags.add('inherited')
                 flags.add('nodelegate')
+            elif self.check(TokenType.STATIC):
+                flags.add('static')
+            elif self.check(TokenType.PROTECTED):
+                flags.add('private')
             elif self.check(TokenType.PRIVATE):
                 flags.add('private')
+                flags.add('static')
             elif self.check(TokenType.FINAL):
                 flags.add('final')
             else:
