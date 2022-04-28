@@ -7,8 +7,14 @@
           ^ self
         );
 
-        nextSegment: size => fd read: size;
+        nextSegment: size => (
+            | result <- fd read: size |
+            (result size > 0) -> [ ^ Yes: result ].
+          ^ No
+        );
         nextSegment => nextSegment: 4096;
+
+        iterator => ((std util iterators segmented Iterator) clone) initOnSegmentReader: self;
     };
 
     with inherited parent = #<:std/Clonable>;

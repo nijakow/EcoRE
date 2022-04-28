@@ -14,13 +14,18 @@
             );
 
             private refresh => (
-                |
-                    segment <- reader nextSegment,
-                    cache   <- ((segmented SegmentListLink) clone) initWithSegmentReader: reader,
-                    node    <- ((segmented SegmentListNode) clone) initWithVector: segment Next: cache
-                |
-                cachedValue <- Yes: node.
-              ^ node
+                | segment <- reader nextSegment |
+                segment yes: [ :seg |
+                    |
+                        cache <- ((segmented SegmentListLink) clone) initWithSegmentReader: reader,
+                        node  <- ((segmented SegmentListNode) clone) initWithVector: seg Next: cache
+                    |
+                    cachedValue <- Yes: (Yes: node).
+                  ^ Yes: node
+                ] no: [
+                    cachedValue <- Yes: No.
+                  ^ No
+                ]
             );
 
             value => cachedValue
@@ -40,28 +45,33 @@
         with inherited trait = {
             initWithVector: _vector Next: _next => (
                 vector   <- _vector.
-                fill     <- _fill.
-                nextPtr  <- No.
+                nextPtr  <- _next.
               ^ self
             );
 
             at: index => vector at: index;
             size => vector size;
 
-            next => next value;
+            next => nextPtr value;
         };
 
         with inherited parent = #<std/Clonable>;
     };
 
     IteratorState = {
+        private atEOF,
         private node,
         private index;
 
         with inherited trait = {
             initWithNode: _node Index: _index => (
-                node  <- _node.
-                index <- _index.
+                _node yes: [ :n |
+                    atEOF <- false.
+                    node  <- n.
+                    index <- _index.
+                ] no: [
+                    atEOF <- true.
+                ].
               ^ self
             );
             initWithNode: node => initWithNode: node Index: 0;
@@ -69,23 +79,35 @@
             copy => clone;
 
             private ensureValidIndex => (
-                (index < node size) -> [ node <- node next. index <- 0 ].
+                atEOF -> [ ^ ].
+                (index < node size) unless: [
+                    (node next)
+                        yes: [ :n | node <- n. index <- 0 ]
+                         no: [      atEOF <- true         ]
+                ].
             );
 
             has => (
                 ensureValidIndex.
+                atEOF -> [ ^ false ].
               ^ index < node size
             );
 
             get => (
                 ensureValidIndex.
+                atEOF -> [ ^ 0 ].
               ^ node at: index
             );
 
             forward => (
+                atEOF -> [ ^ self ].
                 (index < node size)
                       if: [ index <- index + 1 ]
-                    else: [ node <- node next. index <- 0 ].
+                    else: [
+                        (node next)
+                            yes: [ :n | node <- n. index <- 0 ]
+                             no: [      atEOF <- true         ]
+                    ].
               ^ self
             );
         };
