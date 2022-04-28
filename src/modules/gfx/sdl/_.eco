@@ -1,26 +1,26 @@
 
 {
-    private with parent = std;
+    protected with parent = std;
 
-    private lib;
+    protected lib;
 
-    private SDL_Init,
-    private SDL_Quit,
-    private SDL_PollEvent,
-    private SDL_CreateWindow,
-    private SDL_DestroyWindow,
-    private SDL_ShowWindow,
-    private SDL_HideWindow,
-    private SDL_GetWindowSurface,
-    private SDL_GetRenderer,
-    private SDL_CreateRenderer,
-    private SDL_DestroyRenderer,
-    private SDL_SetRenderDrawColor,
-    private SDL_RenderClear,
-    private SDL_RenderDrawPoint,
-    private SDL_RenderDrawLine,
-    private SDL_RenderFlush,
-    private SDL_RenderPresent;
+    protected SDL_Init,
+    protected SDL_Quit,
+    protected SDL_PollEvent,
+    protected SDL_CreateWindow,
+    protected SDL_DestroyWindow,
+    protected SDL_ShowWindow,
+    protected SDL_HideWindow,
+    protected SDL_GetWindowSurface,
+    protected SDL_GetRenderer,
+    protected SDL_CreateRenderer,
+    protected SDL_DestroyRenderer,
+    protected SDL_SetRenderDrawColor,
+    protected SDL_RenderClear,
+    protected SDL_RenderDrawPoint,
+    protected SDL_RenderDrawLine,
+    protected SDL_RenderFlush,
+    protected SDL_RenderPresent;
 
     INIT_EVERYTHING;
 
@@ -75,8 +75,8 @@
     NewWindowWithTitle: title X: x Y: y W: w H: h => (Window clone) init: CreateWindow(title, x, y, w, h, 0);
 
     own Window = {
-        private sdl = $,
-        private winptr,
+        protected sdl = $,
+        protected winptr,
         renderer;
 
         with inherited trait = {
@@ -98,8 +98,8 @@
     };
 
     own Renderer = {
-        private sdl = $,
-        private renptr;
+        protected sdl = $,
+        protected renptr;
 
         with inherited trait = {
             init: _renptr => (

@@ -1,12 +1,12 @@
 
 {
     own SDLTurtle = {
-        private with std = $ std;
-        private turtlegfx = $;
+        protected with std = $ std;
+        protected turtlegfx = $;
 
-        private renderer,
-        private x, y, angle,
-        private penDown;
+        protected renderer,
+        protected x, y, angle,
+        protected penDown;
 
         with inherited trait = {
             initWithRenderer: _renderer X: _x Y: _y => (
