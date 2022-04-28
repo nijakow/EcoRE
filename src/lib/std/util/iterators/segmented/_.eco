@@ -136,7 +136,7 @@
 
             withReset: block => (
                 | old_state <- state copy |
-              ^ block value([ state <- state_pos ])
+              ^ block value([ state <- old_state ])
             );
         };
 
