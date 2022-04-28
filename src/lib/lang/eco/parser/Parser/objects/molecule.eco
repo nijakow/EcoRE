@@ -4,6 +4,8 @@
         [
             begin
               if: [ check: TokenType DEPRECATED ] then: [ flags setDeprecated ] ~
+              if: [ check: TokenType PROTECTED  ] then: [ flags setProtected  ] ~
+              if: [ check: TokenType STATIC     ] then: [ flags setStatic     ] ~
               if: [ check: TokenType PRIVATE    ] then: [ flags setPrivate    ] ~
               if: [ check: TokenType FINAL      ] then: [ flags setFinal      ] ~
               if: [ check: TokenType WITH       ] then: [ flags setWith       ] ~

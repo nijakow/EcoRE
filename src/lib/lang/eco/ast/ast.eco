@@ -24,11 +24,12 @@
     };
 
     ASTFlags = {
-        isDeprecated, isPrivate, isFinal, isWith, isInherited, isOwn, isMethod;
+        isDeprecated, isProtected, isStatic, isFinal, isWith, isInherited, isOwn, isMethod;
 
         init => (
             isDeprecated <- false.
-            isPrivate    <- false.
+            isProtected  <- false.
+            isStatic     <- false.
             isFinal      <- false.
             isWith       <- false.
             isInherited  <- false.
@@ -37,8 +38,12 @@
           ^ self
         );
 
+        isPrivate => [ isProtected ] and: [ isPrivate ];
+
         setDeprecated => ( isDeprecated <- true. self );
-        setPrivate    => ( isPrivate <- true. self );
+        setProtected  => ( isPrivate <- true. self );
+        setStatic     => ( isStatic  <- true. self );
+        setPrivate    => ( setProtected. setStatic. self );
         setFinal      => ( isFinal <- true. self );
         setWith       => ( isWith <- true. self );
         setInherited  => ( isInherited <- true. self );
@@ -47,7 +52,8 @@
 
         writeOn: writer => (
             isDeprecated if: [ writer << '@deprecated ' ].
-            isPrivate    if: [ writer << 'private '     ].
+            isProtected  if: [ writer << 'protected '   ].
+            isStatic     if: [ writer << 'static '      ].
             isFinal      if: [ writer << 'final '       ].
             isWith       if: [ writer << 'with '        ].
             isInherited  if: [ writer << 'inherited '   ].
@@ -108,10 +114,11 @@
             | realType  <- type evaluateInEnv: env Host: host,
               flagBits  <- 0 |
             
-            flags isWith          if: [ flagBits <- flagBits bitOr: 0b0010 ].
-            flags isInherited unless: [ flagBits <- flagBits bitOr: 0b0001 ].
-            flags isOwn           if: [ flagBits <- flagBits bitOr: 0b0100 ].
-            flags isPrivate       if: [ flagBits <- flagBits bitOr: 0b1000 ].
+            flags isWith          if: [ flagBits <- flagBits bitOr: 0b00010 ].
+            flags isInherited unless: [ flagBits <- flagBits bitOr: 0b00001 ].
+            flags isOwn           if: [ flagBits <- flagBits bitOr: 0b00100 ].
+            flags isProtected     if: [ flagBits <- flagBits bitOr: 0b01000 ].
+            flags isStatic        if: [ flagBits <- flagBits bitOr: 0b10000 ].
 
             flags isMethod if: [
                 "TODO, FIXME, XXX: This approach is totally horrendous"

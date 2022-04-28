@@ -31,6 +31,8 @@
         INHERITED = #'inherited',
         OWN = #'own',
         PRIVATE = #'private',
+        PROTECTED = #'protected',
+        STATIC = #'static',
         FINAL = #'final',
         DEPRECATED = #'deprecated'
     }
