@@ -121,6 +121,8 @@
             (sb equals: 'with')        if: [ ^ newTokenWithType: TokenType WITH       ].
             (sb equals: 'inherited')   if: [ ^ newTokenWithType: TokenType INHERITED  ].
             (sb equals: 'own')         if: [ ^ newTokenWithType: TokenType OWN        ].
+            (sb equals: 'static')      if: [ ^ newTokenWithType: TokenType STATIC     ].
+            (sb equals: 'protected')   if: [ ^ newTokenWithType: TokenType PROTECTED  ].
             (sb equals: 'private')     if: [ ^ newTokenWithType: TokenType PRIVATE    ].
             (sb equals: 'final')       if: [ ^ newTokenWithType: TokenType FINAL      ].
             (sb equals: '@deprecated') if: [ ^ newTokenWithType: TokenType DEPRECATED ].
