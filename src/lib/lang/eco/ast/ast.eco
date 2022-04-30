@@ -41,7 +41,7 @@
         isPrivate => [ isProtected ] and: [ isPrivate ];
 
         setDeprecated => ( isDeprecated <- true. self );
-        setProtected  => ( isPrivate <- true. self );
+        setProtected  => ( isProtected <- true. self );
         setStatic     => ( isStatic  <- true. self );
         setPrivate    => ( setProtected. setStatic. self );
         setFinal      => ( isFinal <- true. self );
