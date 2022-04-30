@@ -16,11 +16,14 @@
             v <- 0,
             n <- 0
         |
-        it do: [ :c |
-            (transformer transformFromChar: c)
-                yes: [ :digit | v <- (v * (transformer base)) + digit ]
-                 no: [ (n > 0) -> [ ^ Yes: v ]. ^ No ].
-            n <- n + 1.
+        [ it hasNext ] while: [
+            it withReset: [ :reset |
+                | c <- it next |
+                (transformer transformFromChar: c)
+                    yes: [ :digit | v <- (v * (transformer base)) + digit ]
+                     no: [ reset value. (n > 0) -> [ ^ Yes: v ]. ^ No ].
+                n <- n + 1.
+            ]
         ].
       ^ No
     );
