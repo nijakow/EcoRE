@@ -1,4 +1,4 @@
 
 #=std/text/utf8: {
-    UTF8ForwardIterator = #<:std/text/utf8/UTF8ForwardIterator>;
+    UTF8Iterator = #<:std/text/utf8/UTF8Iterator>;
 }

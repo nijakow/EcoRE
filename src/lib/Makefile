@@ -41,7 +41,7 @@ std/text/parsing/_.eco \
 std/text/parsing/integer.eco \
 std/text/parsing/parsestream.eco \
 std/text/utf8/_.eco \
-std/text/utf8/utf8forwarditerator.eco \
+std/text/utf8/utf8iterator.eco \
 std/text/writing/_.eco \
 std/text/writing/numberwriter.eco \
 std/util/_.eco \
