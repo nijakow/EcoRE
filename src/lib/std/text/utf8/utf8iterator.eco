@@ -1,5 +1,5 @@
 
-#=std/text/utf8/UTF8ForwardIterator: {
+#=std/text/utf8/UTF8Iterator: {
     protected iterator;
 
     with inherited trait = {
