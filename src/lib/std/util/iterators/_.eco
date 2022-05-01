@@ -4,6 +4,10 @@
     IteratorTrait = #=std/util/iterators/IteratorTrait: {
         hasNext => has;
         next => [ forward ] returns: current;
+        forEach: block => (
+            | i <- 0 |
+            [ hasNext ] while: [ block value(i, next). i <- i + 1 ]
+        );
         do: block => [ hasNext ] while: [ block value(next) ];
         writeOn: w => w << 'an iterator';
     };
