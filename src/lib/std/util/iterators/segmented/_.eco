@@ -122,9 +122,10 @@
         with inherited trait = {
             initOnSegmentReader: reader => (
                 |
-                    node <- (((segmented SegmentListLink) clone) initWithSegmentReader: reader) value
+                    link <- ((segmented SegmentListLink) clone) initWithSegmentReader: reader,
+                    node <- ((segmented SegmentListNode) clone) initWithVector: (std util newBlob: 0) Next: link
                 |
-                state <- ((segmented IteratorState) clone) initWithNode: node.
+                state <- ((segmented IteratorState) clone) initWithNode: (Yes: node).
               ^ self
             );
 
