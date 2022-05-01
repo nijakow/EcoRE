@@ -34,8 +34,8 @@
 
     returns: v => ( value. ^ v );
 
-    while: b   => ( (self value) unless: [ ^ #<:std/bool/false> ]. b value. #'ecosphere.ecore.flow.reset'() );
-    until: b   => ( (self value) if: [ ^ #<:std/bool/true> ]. b value. #'ecosphere.ecore.flow.reset'() );
+    while: b   => ( (self value) unless: [ ^ self ]. b value. #'ecosphere.ecore.flow.reset'() );
+    until: b   => ( (self value) if: [ ^ self ]. b value. #'ecosphere.ecore.flow.reset'() );
     catch: b   => ( [ #'ecosphere.ecore.flow.set_exception_handler'(b). self value ] value );
     and:   b   => (
         | v <- self value |
@@ -45,6 +45,6 @@
         | v <- self value |
         v if: [ ^ v ] else: [ ^ b value ]
     );
-    writeOn: writer => writer << '<block>';
+    writeOn: writer => writer << 'a block closure';
     with inherited parent = #<:std/Clonable>;
 }
