@@ -3,6 +3,8 @@
 
 #include <ecore/vm/builtins/builtin.h>
 
+bool Eco_VM_Builtin_GetSlotValue(struct Eco_Fiber*, unsigned int);
+
 bool Eco_VM_Builtin_GetInterface(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetPublicInterface(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetType(struct Eco_Fiber*, unsigned int);

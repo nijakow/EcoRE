@@ -53,6 +53,9 @@ void Eco_VM_Builtins_Init()
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.code.new", Eco_VM_Builtin_Code_New);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.code.value", Eco_VM_Builtin_Code_Value);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.code.bytecodes", Eco_VM_Builtin_Code_Bytecodes);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.code.constants", Eco_VM_Builtin_Code_Constants);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.code.closures", Eco_VM_Builtin_Code_Closures);
     
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add_integers", Eco_VM_Builtin_AddIntegers);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add", Eco_VM_Builtin_Add);
@@ -116,6 +119,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.implements_interface", Eco_VM_Builtin_InterfaceImplementsInterface);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.get_all_interfaces", Eco_VM_Builtin_InterfaceGetAllInterfaces);
 
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.slot_value", Eco_VM_Builtin_GetSlotValue);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_interface", Eco_VM_Builtin_GetInterface);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_public_interface", Eco_VM_Builtin_GetPublicInterface);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type", Eco_VM_Builtin_GetType);

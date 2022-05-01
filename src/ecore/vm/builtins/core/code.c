@@ -1,5 +1,7 @@
 #include "code.h"
 
+#include <ecore/objects/misc/array/array.h>
+#include <ecore/objects/misc/blob/blob.h>
 #include <ecore/objects/vm/code/code.h>
 #include <ecore/vm/core/frame.h>
 #include <ecore/vm/core/interpreter.h>
@@ -47,7 +49,67 @@ bool Eco_VM_Builtin_Code_Value(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, ECO_VM_BUILTIN_INFINITE_ARGS))
         return false;
 
-    code = (struct Eco_Code*) Eco_Any_AsPointer(Eco_Fiber_Top(fiber)->registers[0]);  // TODO: Checks
+    code = Eco_Any_AsPointer(Eco_Fiber_Top(fiber)->registers[0]);  // TODO: Checks
 
     return Eco_Fiber_Enter(fiber, NULL, code, args);
+}
+
+bool Eco_VM_Builtin_Code_Bytecodes(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Code*  code;
+    struct Eco_Blob*  bytes;
+    Eco_Any           any;
+    unsigned int      i;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+
+    Eco_Fiber_Pop(fiber, &any);
+    code = Eco_Any_AsPointer(any);
+    bytes = Eco_Blob_New(code->bytecode_count);
+    for (i = 0; i < code->bytecode_count; i++)
+        Eco_Blob_AtPutInt8(bytes, i, code->bytecodes[i]);
+    any = Eco_Any_FromPointer(bytes);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_Code_Constants(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Code*   code;
+    struct Eco_Array*  constants;
+    Eco_Any            any;
+    unsigned int       i;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+
+    Eco_Fiber_Pop(fiber, &any);
+    code = Eco_Any_AsPointer(any);
+    constants = Eco_Array_New(code->constant_count);
+    for (i = 0; i < code->constant_count; i++)
+        Eco_Array_Put(constants, i, code->constants[i]);
+    any = Eco_Any_FromPointer(constants);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_Code_Closures(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Code*   code;
+    struct Eco_Array*  closures;
+    Eco_Any            any;
+    unsigned int       i;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+
+    Eco_Fiber_Pop(fiber, &any);
+    code = Eco_Any_AsPointer(any);
+    closures = Eco_Array_New(code->code_instance_count);
+    for (i = 0; i < code->code_instance_count; i++)
+        Eco_Array_Put(closures, i, Eco_Any_FromPointer(code->code_instances[i]));
+    any = Eco_Any_FromPointer(closures);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
 }

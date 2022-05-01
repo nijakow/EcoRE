@@ -1,9 +1,44 @@
 #include "reflection.h"
 
 #include <ecore/base/extra.h>
+#include <ecore/objects/base/type/type.h>
+#include <ecore/objects/base/type/slot.h>
 #include <ecore/objects/misc/array/array.h>
 #include <ecore/objects/vm/interface/interface.h>
 #include <ecore/vm/vm.h>
+
+bool Eco_VM_Builtin_GetSlotValue(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Key*       name;
+    struct Eco_Molecule*  molecule;
+    struct Eco_Type*      type;
+    Eco_Any               any;
+    unsigned int          index;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    name = Eco_Any_AsPointer(any);
+    Eco_Fiber_Pop(fiber, &any);
+    type = Eco_Any_GetType(any);
+    if (type->proxy != NULL)
+        molecule = (struct Eco_Molecule*) type->proxy;
+    else
+        molecule = Eco_Any_AsPointer(any);
+    for (index = 0; index < type->slot_count; index++)
+    {
+        if (type->slots[index].info.key == name)
+        {
+            if (type->slots[index].type == Eco_TypeSlotType_CODE)
+                any = Eco_Any_FromPointer(type->slots[index].body.code.code);
+            else
+                Eco_TypeSlot_GetValue(&type->slots[index], molecule, &any);
+            break;
+        }
+    }
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
 
 bool Eco_VM_Builtin_GetInterface(struct Eco_Fiber* fiber, unsigned int args)
 {

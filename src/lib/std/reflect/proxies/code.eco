@@ -1,6 +1,12 @@
 
 #=std/reflect/proxies/Code: {
+    bytecodes => #'ecosphere.ecore.object.code.bytecodes'(self);
+    constants => #'ecosphere.ecore.object.code.constants'(self);
+    closures => #'ecosphere.ecore.object.code.closures'(self);
+
     execute(...) => #'ecosphere.ecore.object.code.value'(...);  "TODO: This can lead to lens-breaks"
-    writeOn: writer => writer << '<code>';
+
+    writeOn: writer => writer << 'a code object';
+
     static with inherited parent = #<:std/Clonable>;
 }

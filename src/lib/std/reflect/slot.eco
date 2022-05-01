@@ -12,6 +12,8 @@
             ^ self
         );
 
+        slotValue => #'ecosphere.ecore.reflect.slot_value'(reflectee, name);
+
         writeOn: w => w << 'slot named ' << name;
     };
 
