@@ -1,6 +1,107 @@
 project('EcoRE', 'c')
 
+eco_src = [
+    './src/lib/lang/eco/parser/tokenizer.eco',
+    './src/lib/lang/eco/parser/Parser/expressions.eco',
+    './src/lib/lang/eco/parser/Parser/send.eco',
+    './src/lib/lang/eco/parser/Parser/objects/molecule.eco',
+    './src/lib/lang/eco/parser/Parser/objects/interface.eco',
+    './src/lib/lang/eco/parser/Parser/objects/simple.eco',
+    './src/lib/lang/eco/parser/Parser/checks.eco',
+    './src/lib/lang/eco/parser/Parser/charchecks.eco',
+    './src/lib/lang/eco/parser/Parser/bars.eco',
+    './src/lib/lang/eco/parser/Parser/args.eco',
+    './src/lib/lang/eco/parser/Parser/compounds.eco',
+    './src/lib/lang/eco/parser/Parser/optionals.eco',
+    './src/lib/lang/eco/parser/shared.eco',
+    './src/lib/lang/eco/parser/reader.eco',
+    './src/lib/lang/eco/parser/_.eco',
+    './src/lib/lang/eco/compiler/scope.eco',
+    './src/lib/lang/eco/compiler/regalloc.eco',
+    './src/lib/lang/eco/compiler/value_type.eco',
+    './src/lib/lang/eco/compiler/visitor.eco',
+    './src/lib/lang/eco/compiler/codewriter.eco',
+    './src/lib/lang/eco/compiler/compiler.eco',
+    './src/lib/lang/eco/compiler/scoped_compiler.eco',
+    './src/lib/lang/eco/compiler/_.eco',
+    './src/lib/lang/eco/compiler/bytecodes.eco',
+    './src/lib/lang/eco/ast/construction.eco',
+    './src/lib/lang/eco/ast/ast.eco',
+    './src/lib/lang/eco/ast/visitor.eco',
+    './src/lib/lang/eco/_.eco',
+    './src/lib/lang/_.eco',
+    './src/lib/std/ffi/_.eco',
+    './src/lib/std/util/map.eco',
+    './src/lib/std/util/stringbuilder.eco',
+    './src/lib/std/util/mutablepair.eco',
+    './src/lib/std/util/collector.eco',
+    './src/lib/std/util/vector.eco',
+    './src/lib/std/util/range.eco',
+    './src/lib/std/util/iterators/segmented/_.eco',
+    './src/lib/std/util/iterators/_.eco',
+    './src/lib/std/util/bytevector.eco',
+    './src/lib/std/util/_.eco',
+    './src/lib/std/maybe.eco',
+    './src/lib/std/bool.eco',
+    './src/lib/std/clonable.eco',
+    './src/lib/std/io/portoutput.eco',
+    './src/lib/std/io/portinput.eco',
+    './src/lib/std/io/portio.eco',
+    './src/lib/std/io/fdbytewriter.eco',
+    './src/lib/std/io/fdbytereader.eco',
+    './src/lib/std/io/filedescriptor.eco',
+    './src/lib/std/io/_.eco',
+    './src/lib/std/io/fdsegmentreader.eco',
+    './src/lib/std/text/utf8/utf8iterator.eco',
+    './src/lib/std/text/utf8/_.eco',
+    './src/lib/std/text/writing/numberwriter.eco',
+    './src/lib/std/text/writing/_.eco',
+    './src/lib/std/text/parsing/integer.eco',
+    './src/lib/std/text/parsing/parsestream.eco',
+    './src/lib/std/text/parsing/_.eco',
+    './src/lib/std/text/_.eco',
+    './src/lib/std/reflect/mirror.eco',
+    './src/lib/std/reflect/proxies/key.eco',
+    './src/lib/std/reflect/proxies/string.eco',
+    './src/lib/std/reflect/proxies/int.eco',
+    './src/lib/std/reflect/proxies/ffi/ffitype.eco',
+    './src/lib/std/reflect/proxies/ffi/ffifunc.eco',
+    './src/lib/std/reflect/proxies/ffi/ffiobject.eco',
+    './src/lib/std/reflect/proxies/array.eco',
+    './src/lib/std/reflect/proxies/char.eco',
+    './src/lib/std/reflect/proxies/code.eco',
+    './src/lib/std/reflect/proxies/blob.eco',
+    './src/lib/std/reflect/proxies/block.eco',
+    './src/lib/std/reflect/proxies/float.eco',
+    './src/lib/std/reflect/proxies/interface.eco',
+    './src/lib/std/reflect/proxies/_.eco',
+    './src/lib/std/reflect/slot.eco',
+    './src/lib/std/reflect/_.eco',
+    './src/lib/std/module.eco',
+    './src/lib/std/defaultbehavior.eco',
+    './src/lib/std/globals.eco',
+    './src/lib/std/_.eco',
+    './src/lib/interfaces.eco',
+    './src/lib/master.eco'
+]
+
+eco_src_with_path = []
+
+foreach file : eco_src
+    eco_src_with_path += files(join_paths(meson.current_source_dir(), file))
+endforeach
+
+prog_python = import('python').find_installation('python3')
+
+eco_target = custom_target('image.c',
+                           output: 'image.c',
+                           input: ['./src/bootstrapper/ecosphere/bootstrapper.py'],
+                           command: [prog_python, '@INPUT@', '@OUTPUT@', eco_src_with_path],
+                           env: ['PYTHONPATH=' + meson.current_source_dir() + '/src/bootstrapper/']
+             )
+
 src = [
+    eco_target,
     './src/ecore/util/memory.c',
     './src/ecore/util/utf8.c',
     './src/ecore/util/gz.c',
@@ -97,5 +198,7 @@ zlib = dependency('zlib')
 libffi = dependency('libffi')
 
 executable('ecore.app', sources: src,
-                        include_directories : includes,
-                        dependencies : [math, dl, zlib, libffi])
+                        include_directories: includes,
+                        dependencies: [math, dl, zlib, libffi],
+                        c_args : ['-DECO_CONFIG_COMPILE_WITH_INTEGRATED_BINARY'],
+                        install: true)

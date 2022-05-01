@@ -15,6 +15,11 @@ void Eco_Banner()
     Eco_Log_Info("\n");
 }
 
+#ifdef ECO_CONFIG_COMPILE_WITH_INTEGRATED_BINARY
+extern char Eco_DEFAULT_IMAGE[];
+extern unsigned int Eco_DEFAULT_IMAGE_LENGTH;
+#endif
+
 void Eco_Main(int argc, char *argv[])
 {
     Eco_Init();
