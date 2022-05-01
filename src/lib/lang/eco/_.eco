@@ -1,5 +1,7 @@
 
 #=lang/eco: {
+    bytecodes = #<:lang/eco/compiler/Bytecodes>;
+
     tokenizer = #<:lang/eco/tokenizer>;
     parser = #<:lang/eco/parser>;
     ast = #<:lang/eco/ast>;
