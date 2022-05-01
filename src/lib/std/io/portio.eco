@@ -20,5 +20,5 @@
         writeOn: w => w << 'PortIO';
     };
 
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 }

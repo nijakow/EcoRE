@@ -25,5 +25,5 @@
             default: [ writer byte<< 0xef. writer byte<< 0xbf. writer byte<< 0xbd. ].
       ^ self
     );
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 }

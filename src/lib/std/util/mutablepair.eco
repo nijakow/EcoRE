@@ -17,5 +17,5 @@
         writeOn: w => w << '(' << first << ' ~> ' << second << ')';
     };
 
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 }

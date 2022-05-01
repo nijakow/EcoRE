@@ -25,5 +25,5 @@
 
     close => fd close;
 
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 }

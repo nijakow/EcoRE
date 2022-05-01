@@ -38,5 +38,5 @@
         writeOn: w => w << 'a parse stream';
     };
 
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 }

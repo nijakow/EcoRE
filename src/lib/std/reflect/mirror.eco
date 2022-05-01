@@ -35,5 +35,5 @@
         writeOn: w => w << 'the mirror for ' << reflectee;
     };
 
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 }

@@ -7,5 +7,5 @@
     assignNull => #'ecosphere.ecore.ffi.object.assign_null'(self);
 
     writeOn: writer => writer << '<ffi_object:' << type << ':' << size << '>';
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 }

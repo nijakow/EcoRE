@@ -8,5 +8,5 @@
     invoke(func, ...) => #'ecosphere.ecore.ffi.function.eco_call'(self, func, ...);
 
     writeOn: writer => writer << '<ffi_func>';
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 }

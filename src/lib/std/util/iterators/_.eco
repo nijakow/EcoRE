@@ -44,7 +44,7 @@
             with inherited iteratorTrait = #<:std/util/iterators/BiIteratorTrait>;
         };
 
-        with inherited parent = #<:std/Clonable>;
+        static with inherited parent = #<:std/Clonable>;
     };
 
     segmented = #<:std/util/iterators/segmented>;

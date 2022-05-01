@@ -46,5 +46,5 @@
         v if: [ ^ v ] else: [ ^ b value ]
     );
     writeOn: writer => writer << 'a block closure';
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 }

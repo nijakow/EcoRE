@@ -25,7 +25,7 @@
 
         with inherited iteratorTrait = #<:std/util/iterators/BiIteratorTrait>;
     };
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 },
 
 #=std/reflect/proxies/String: {
@@ -109,5 +109,5 @@
     );
     iterator => ((std text utf8 UTF8Iterator) clone) init: ((#<:std/reflect/proxies/String/Iterator> clone) init: self);
     writeOn: writer => do: [ :c | writer << c ];
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 }

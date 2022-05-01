@@ -50,5 +50,5 @@
         writer << '<ffi_type:' << sizeof << '>'
     );
 
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 }

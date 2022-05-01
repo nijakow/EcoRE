@@ -12,7 +12,7 @@
             default: b       => ( b value. ^ self );
             writeOn: writer  => writer << 'true';
         };
-        with inherited parent = #<:std/Clonable>;
+        static with inherited parent = #<:std/Clonable>;
     },
 
     false = #=std/bool/false: {
@@ -27,6 +27,6 @@
             default: b       => self;
             writeOn: writer  => writer << 'false';
         };
-        with inherited parent = #<:std/Clonable>;
+        static with inherited parent = #<:std/Clonable>;
     }
 }

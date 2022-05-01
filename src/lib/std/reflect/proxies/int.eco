@@ -89,5 +89,5 @@
 
     writeOn: writer => (std text writing NumberWriter) WriteInt: self To: writer;
     
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 }

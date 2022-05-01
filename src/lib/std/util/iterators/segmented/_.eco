@@ -33,7 +33,7 @@
                          no: [ refresh ];
         };
 
-        with inherited parent = #<:std/Clonable>;
+        static with inherited parent = #<:std/Clonable>;
     };
 
     SegmentListNode = {
@@ -55,7 +55,7 @@
             next => nextPtr value;
         };
 
-        with inherited parent = #<std/Clonable>;
+        static with inherited parent = #<std/Clonable>;
     };
 
     IteratorState = {
@@ -112,7 +112,7 @@
             );
         };
 
-        with inherited parent = #<:std/Clonable>;
+        static with inherited parent = #<:std/Clonable>;
     };
 
     Iterator = {
@@ -142,6 +142,6 @@
         };
 
         with inherited iteratorTrait = #<:std/util/iterators/IteratorTrait>;
-        with inherited parent = #<:std/Clonable>;
+        static with inherited parent = #<:std/Clonable>;
     }
 }

@@ -15,5 +15,5 @@
         writeOn: w => w << 'slot named ' << name;
     };
 
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 }

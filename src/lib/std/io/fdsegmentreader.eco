@@ -17,5 +17,5 @@
         iterator => ((std util iterators segmented Iterator) clone) initOnSegmentReader: self;
     };
 
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 }

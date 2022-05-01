@@ -44,5 +44,5 @@
         with inherited access = #<:std/util/StandardListAccess>;
     };
 
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 }

@@ -73,7 +73,7 @@
             writeOn: w => w << 'the foreign function ' << name;
         };
 
-        with inherited parent = #<:std/Clonable>;
+        static with inherited parent = #<:std/Clonable>;
     };
 
     SharedLibrary = {
@@ -103,7 +103,7 @@
             writeOn: w => w << 'the shared library ' << name;
         };
 
-        with inherited parent = #<:std/Clonable>;
+        static with inherited parent = #<:std/Clonable>;
     };
 
     DLOpen: path => (

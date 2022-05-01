@@ -60,5 +60,5 @@
     writeOn: w => w << 'an fd byte reader';
 
     with inherited trait = #<:std/util/iterators/IteratorTrait>;
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 }

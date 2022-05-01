@@ -10,7 +10,7 @@
             yes: yblock no: nblock => yblock value(yes);
             writeOn: writer => writer << 'Yes: ' << yes;
         };
-        with inherited parent = #<:std/Clonable>;
+        static with inherited parent = #<:std/Clonable>;
     };
 
     Yes: value => (#<:std/maybe/Yes> clone) init: value;
@@ -23,6 +23,6 @@
             yes => self;  "TODO: Throw an error"
             writeOn: writer => writer << 'No';
         };
-        with inherited parent = #<:std/Clonable>;
+        static with inherited parent = #<:std/Clonable>;
     };
 },
