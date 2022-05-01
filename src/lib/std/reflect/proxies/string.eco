@@ -1,4 +1,33 @@
 
+#=std/reflect/proxies/String/Iterator: {
+    private string,
+    private index;
+
+    with inherited trait = {
+        init: _string => (
+            string <- _string.
+            index  <- 0.
+          ^ self
+        );
+
+        forward => ( index <- index + 1. self );
+        backward => ( index <- index - 1. self );
+
+        has => index < string byteSize;
+        hasPrevious => index > 0;
+
+        current => string byteAt: index;
+
+        withReset: block => (
+            | resetIndex <- index |
+          ^ block value([ index <- resetIndex ])
+        );
+
+        with inherited iteratorTrait = #<:std/util/iterators/BiIteratorTrait>;
+    };
+    with inherited parent = #<:std/Clonable>;
+},
+
 #=std/reflect/proxies/String: {
     size => #'ecosphere.ecore.object.string.char_length'(self);
     byteSize => #'ecosphere.ecore.object.string.byte_length'(self);
@@ -78,6 +107,7 @@
         |
       ^ parser parseExpression
     );
+    iterator => ((std text utf8 UTF8Iterator) clone) init: ((#<:std/reflect/proxies/String/Iterator> clone) init: self);
     writeOn: writer => do: [ :c | writer << c ];
     with inherited parent = #<:std/Clonable>;
 }
