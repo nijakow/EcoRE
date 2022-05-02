@@ -54,7 +54,6 @@ std/util/collector.eco \
 std/util/map.eco \
 std/util/mutablepair.eco \
 std/util/range.eco \
-std/util/stringbuilder.eco \
 std/util/vectors.eco \
 lang/_.eco \
 lang/eco/_.eco \

@@ -32,7 +32,6 @@ eco_src = [
     './src/lib/lang/_.eco',
     './src/lib/std/ffi/_.eco',
     './src/lib/std/util/map.eco',
-    './src/lib/std/util/stringbuilder.eco',
     './src/lib/std/util/mutablepair.eco',
     './src/lib/std/util/collector.eco',
     './src/lib/std/util/vectors.eco',
