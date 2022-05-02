@@ -1,4 +1,63 @@
 
+#=std/util/vectors/VectorTrait: {
+    capacity => elements size;
+    isEmpty => size isZero;
+
+    at: index => elements at: index;
+    at: index put: value => elements at: index put: value;  "TODO: Index >= capacity"
+
+    with inherited iterations = #<:std/util/StandardListIterations>;
+    with inherited conversions = #<:std/util/StandardListConversions>;
+    with inherited access = #<:std/util/StandardListAccess>;
+    with inherited search = #<:std/util/StandardListSearch>;
+    with inherited stack = #<:std/util/StandardStackImpl>;
+    with inherited queue = #<:std/util/StandardQueueImpl>;
+    with inherited set = #<:std/util/StandardSetImpl>;
+
+    asString => asArray asString;
+
+    resize: cap => (
+        | new_elements = allocate: cap |
+        (cap < capacity) if: [
+            0 for: cap do: [ :i | new_elements at: i put: (at: i) ]
+        ] else: [
+            forEach: [ :index, :value | new_elements at: index put: value ]
+        ].
+        elements <- new_elements.
+        ^ self
+    );
+
+    resizeToAtLeast: cap => (
+        (cap > capacity) if: [ resize: ((capacity * 2) max: cap) ].
+        ^ self
+    );
+
+    append: element => (
+        resizeToAtLeast: (size + 1).
+        elements at: size put: element.
+        size <- size + 1.
+        ^ self
+    );
+    add: element => append: element;
+
+    remove: index => (
+        | elem <- at: index |
+        index to: (size - 2) do: [ :i | at: i put: (at: i + 1) ].
+        size <- size - 1.
+        ^ elem
+    );
+
+    removeFirst => remove: 0;
+    removeLast  => remove: (size - 1);
+
+    clear => ( size <- 0. ^ self );
+
+    writeOn: writer => (
+        writer << '#['.
+        forEach: [ :i, :e | (i > 0) if: [ writer << ', ' ]. writer << e ].
+        writer << ']'.
+    );
+},
 
 #=std/util/ByteVector: {
     size = 0,
@@ -10,63 +69,11 @@
           ^ self
         );
 
-        capacity => elements size;
-        isEmpty => size isZero;
-
-        at: index => elements at: index;
-        at: index put: value => elements at: index put: value;  "TODO: Index >= capacity"
-
-        with inherited iterations = #<:std/util/StandardListIterations>;
-        with inherited conversions = #<:std/util/StandardListConversions>;
-        with inherited access = #<:std/util/StandardListAccess>;
-        with inherited search = #<:std/util/StandardListSearch>;
-        with inherited stack = #<:std/util/StandardStackImpl>;
-        with inherited queue = #<:std/util/StandardQueueImpl>;
-        with inherited set = #<:std/util/StandardSetImpl>;
-
         asString => asArray asString;
 
-        resize: cap => (
-            | new_elements = std util newArray: cap |
-            (cap < capacity) if: [
-                0 for: cap do: [ :i | new_elements at: i put: (at: i) ]
-            ] else: [
-                forEach: [ :index, :value | new_elements at: index put: value ]
-            ].
-            elements <- new_elements.
-            ^ self
-        );
+        protected allocate: n => std util newBlob: n;
 
-        resizeToAtLeast: cap => (
-            (cap > capacity) if: [ resize: ((capacity * 2) max: cap) ].
-            ^ self
-        );
-
-        append: element => (
-            resizeToAtLeast: (size + 1).
-            elements at: size put: element.
-            size <- size + 1.
-            ^ self
-        );
-        add: element => append: element;
-
-        remove: index => (
-            | elem <- at: index |
-            index to: (size - 2) do: [ :i | at: i put: (at: i + 1) ].
-            size <- size - 1.
-            ^ elem
-        );
-
-        removeFirst => remove: 0;
-        removeLast  => remove: (size - 1);
-
-        clear => ( size <- 0. ^ self );
-
-        writeOn: writer => (
-            writer << '#['.
-            forEach: [ :i, :e | (i > 0) if: [ writer << ', ' ]. writer << e ].
-            writer << ']'.
-        );
+        with inherited vectorTrait = #<:std/util/vectors/VectorTrait>;
     };
 
     static with inherited parent = #<:std/Clonable>;
@@ -79,59 +86,11 @@
     with inherited trait = {
         init => ( ^ self );
 
-        capacity => elements size;
-        isEmpty => size isZero;
-
-        at: index => elements at: index;
-        at: index put: value => elements at: index put: value;  "TODO: Index >= capacity"
-
-        with inherited iterations = #<:std/util/StandardListIterations>;
-        with inherited conversions = #<:std/util/StandardListConversions>;
-        with inherited access = #<:std/util/StandardListAccess>;
-        with inherited search = #<:std/util/StandardListSearch>;
-        with inherited stack = #<:std/util/StandardStackImpl>;
-        with inherited queue = #<:std/util/StandardQueueImpl>;
-        with inherited set = #<:std/util/StandardSetImpl>;
-
-        asString => asArray asString;
-
-        resize: cap => (
-            | new_elements = std util newArray: cap |
-            (cap < capacity) if: [
-                0 for: cap do: [ :i | new_elements at: i put: (at: i) ]
-            ] else: [
-                forEach: [ :index, :value | new_elements at: index put: value ]
-            ].
-            elements <- new_elements.
-            ^ self
-        );
-
-        resizeToAtLeast: cap => (
-            (cap > capacity) if: [ resize: ((capacity * 2) max: cap) ].
-            ^ self
-        );
-
-        append: element => (
-            resizeToAtLeast: (size + 1).
-            elements at: size put: element.
-            size <- size + 1.
-            ^ self
-        );
-        add: element => append: element;
-
-        remove: index => (
-            | elem <- at: index |
-            index to: (size - 2) do: [ :i | at: i put: (at: i + 1) ].
-            size <- size - 1.
-            ^ elem
-        );
-
-        removeFirst => remove: 0;
-        removeLast  => remove: (size - 1);
-
-        clear => ( size <- 0. ^ self );
+        protected allocate: n => std util newArray: n;
 
         writeOn: writer => (std util) WriteIterable: self On: writer;
+
+        with inherited vectorTrait = #<:std/util/vectors/VectorTrait>;
     };
 
     static with inherited parent = #<:std/Clonable>;
