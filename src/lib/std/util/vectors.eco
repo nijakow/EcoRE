@@ -1,5 +1,7 @@
 
 #=std/util/vectors/VectorTrait: {
+    init => ( elements <- allocate: 0. ^ self );
+
     capacity => elements size;
     isEmpty => size isZero;
 
@@ -13,8 +15,6 @@
     with inherited stack = #<:std/util/StandardStackImpl>;
     with inherited queue = #<:std/util/StandardQueueImpl>;
     with inherited set = #<:std/util/StandardSetImpl>;
-
-    asString => asArray asString;
 
     resize: cap => (
         | new_elements = allocate: cap |
@@ -66,11 +66,6 @@
     own elements;
 
     with inherited trait = {
-        init => (
-            elements <- std util newBlob: 0.
-          ^ self
-        );
-
         asString => asArray asString;
 
         protected allocate: n => std util newBlob: n;
@@ -83,14 +78,12 @@
 
 #=std/util/Vector: {
     size = 0,
-    own elements = #();
+    own elements;
 
     with inherited trait = {
-        init => ( ^ self );
+        asString => elements asString;
 
         protected allocate: n => std util newArray: n;
-
-        writeOn: writer => (std util) WriteIterable: self On: writer;
 
         with inherited vectorTrait = #<:std/util/vectors/VectorTrait>;
     };
