@@ -66,8 +66,6 @@
     own elements;
 
     with inherited trait = {
-        asString => asArray asString;
-
         protected allocate: n => std util newBlob: n;
 
         with inherited vectorTrait = #<:std/util/vectors/VectorTrait>;
