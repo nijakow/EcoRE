@@ -52,6 +52,8 @@
 
     clear => ( size <- 0. ^ self );
 
+    iterator => (std util iterators IndexIterator) clone init: self;
+
     writeOn: writer => (
         writer << '#['.
         forEach: [ :i, :e | (i > 0) if: [ writer << ', ' ]. writer << e ].
