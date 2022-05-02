@@ -7,7 +7,11 @@
     alloc => #'ecosphere.ecore.ffi.object.alloc'(self);
     
     sizeof => #'ecosphere.ecore.ffi.type.sizeof'(self);
+    typeOf: slot => #'ecosphere.ecore.ffi.type.typeof'(self, slot);
+    nameOf: slot => #'ecosphere.ecore.ffi.type.nameof'(self, slot);
     offsetOf: slot => #'ecosphere.ecore.ffi.type.offsetof'(self, slot);
+    slotCount => #'ecosphere.ecore.ffi.type.member_count'(self);
+    isStruct => slotCount > 0;
 
     function: args => #'ecosphere.ecore.ffi.function.new'(self, args);
     function(...) => function: (std util newArray(...));
@@ -46,6 +50,15 @@
         (self is: (ffi types string)) -> [ writer << 'string'. ^ ].
         
         isPointer -> [ writer << 'pointer to ' << pointee. ^ ].
+        isStruct -> [
+            writer << 'a ffi struct('.
+            0 for: slotCount do: [ :i |
+                writer << (typeOf: i).
+                (i < (slotCount - 1)) -> [ writer << ', ' ].
+            ].
+            writer << ')'.
+          ^
+        ].
         
         writer << '<ffi_type:' << sizeof << '>'
     );

@@ -61,6 +61,26 @@ static inline unsigned int Eco_FFIType_SizeofCType(struct Eco_FFIType* type) {
 unsigned int Eco_FFIType_OffsetOf_ByIndex(struct Eco_FFIType*, unsigned int);
 unsigned int Eco_FFIType_OffsetOf_ByName(struct Eco_FFIType*, struct Eco_Key*);
 
+static inline struct Eco_FFIType* Eco_FFIType_TypeOf_ByIndex(struct Eco_FFIType* type, unsigned int index)
+{
+    if (index >= type->member_count)
+        return NULL;
+    return type->members[index].type;
+}
+
+static inline struct Eco_Key* Eco_FFIType_NameOf_ByIndex(struct Eco_FFIType* type, unsigned int index)
+{
+    if (index >= type->member_count)
+        return NULL;
+    return type->members[index].name;
+}
+
+
+static inline unsigned int Eco_FFIType_GetStructMemberCount(struct Eco_FFIType* type)
+{
+    return type->member_count;
+}
+
 #endif
 
 void Eco_FFIType_Init();

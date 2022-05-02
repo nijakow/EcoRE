@@ -100,6 +100,38 @@ bool Eco_VM_Builtin_FFIType_GetSizeInBytes(struct Eco_Fiber* fiber, unsigned int
     return true;
 }
 
+bool Eco_VM_Builtin_FFIType_GetNameOf(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_FFIType*  type;
+    Eco_Any              index;
+    Eco_Any              any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    Eco_Fiber_Pop(fiber, &index);
+    Eco_Fiber_Pop(fiber, &any);
+    type = Eco_Any_AsPointer(any);
+    any = Eco_Any_FromPointer(Eco_FFIType_NameOf_ByIndex(type, Eco_Any_AsInteger(index)));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_FFIType_GetTypeOf(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_FFIType*  type;
+    Eco_Any              index;
+    Eco_Any              any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    Eco_Fiber_Pop(fiber, &index);
+    Eco_Fiber_Pop(fiber, &any);
+    type = Eco_Any_AsPointer(any);
+    any = Eco_Any_FromPointer(Eco_FFIType_TypeOf_ByIndex(type, Eco_Any_AsInteger(index)));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 bool Eco_VM_Builtin_FFIType_GetOffsetOf(struct Eco_Fiber* fiber, unsigned int args)
 {
     struct Eco_FFIType*  type;
@@ -111,14 +143,23 @@ bool Eco_VM_Builtin_FFIType_GetOffsetOf(struct Eco_Fiber* fiber, unsigned int ar
     Eco_Fiber_Pop(fiber, &index);
     Eco_Fiber_Pop(fiber, &any);
     type = Eco_Any_AsPointer(any);
-    if (Eco_Any_IsInteger(index)) {
-        any = Eco_Any_FromInteger(Eco_FFIType_OffsetOf_ByIndex(type, Eco_Any_AsInteger(index)));
-    } else if (Eco_Any_IsPointer(index)) {
-        any = Eco_Any_FromInteger(Eco_FFIType_OffsetOf_ByName(type, Eco_Any_AsPointer(index)));
-    } else {
-        // TODO: How do the stack pops affect the failing builtin?
+    any = Eco_Any_FromInteger(Eco_FFIType_OffsetOf_ByIndex(type, Eco_Any_AsInteger(index)));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_FFIType_GetMemberCount(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_FFIType*  type;
+    Eco_Any              any;
+    unsigned int         count;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    }
+    Eco_Fiber_Pop(fiber, &any);
+    type = Eco_Any_AsPointer(any);
+    count = Eco_FFIType_GetStructMemberCount(type);
+    any = Eco_Any_FromInteger(count);
     Eco_Fiber_Push(fiber, &any);
     return true;
 }
