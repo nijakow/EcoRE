@@ -15,6 +15,7 @@
     PortOutput = #<:std/io/PortOutput>;
     PortIO = #<:std/io/PortIO>;
 
+    Writer = #<:std/io/Writer>;
     StringWriter = #<:std/io/StringWriter>;
 
     WrapFileDescriptor: fd   => PortIO clone initWithInput: ((FDByteReader clone) initWithFileDescriptor: fd) Output: ((FDByteWriter clone) initWithFileDescriptor: fd);

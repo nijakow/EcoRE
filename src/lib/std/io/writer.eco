@@ -1,0 +1,11 @@
+
+#=std/io/Writer: {
+    << object => (
+        ((std reflect PublicInterfaceFor: object) implementsMessage: #'writeOn:')
+              if: [ object writeOn: self ]
+            else: [ << 'an object'       ].
+      ^ self
+    );
+
+    newline => ( self << (char newline). ^ self );
+}
