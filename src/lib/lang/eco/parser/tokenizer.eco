@@ -54,24 +54,24 @@
         newTokenWithType: type => newTokenWithType: type Payload: false;
 
         parseString: terminator => (
-            | sb <- (std util StringBuilder) new |
+            | sb <- (std io StringWriter) new |
 
             [ in peekChar == terminator ] until: [
                 | c <- in readChar |
                 (c == #\\) if: [
                     | n <- in readChar |
                     begin
-                      if: [ n == #\\        ] then: [ sb append: n          ] ~
-                      if: [ n == terminator ] then: [ sb append: terminator ] ~
-                    default: [ sb append: c. sb append: n ]
+                      if: [ n == #\\        ] then: [ sb char<< n          ] ~
+                      if: [ n == terminator ] then: [ sb char<< terminator ] ~
+                    default: [ sb char<< c. sb char<< n ]
                 ] else: [
-                    sb append: c
+                    sb char<< c
                 ].
             ].
 
             in readChar.
 
-          ^ sb asString
+          ^ sb commit
         );
 
         nextToken => (
@@ -105,13 +105,13 @@
             (peeks: '#\\') if: [ ^ newTokenWithType: TokenType CHARACTER  Payload: (in readChar) ].
             (peeks: '"')   if: [ parseString: #\". ^ nextToken ].
             
-            | sb <- (std util StringBuilder) new |
+            | sb <- (std io StringWriter) new |
 
             [ [ in hasNext ] and: [ IsSpecial(in peekChar) not ] ] while: [
-                sb append: (in readChar).
+                sb char<< (in readChar).
             ].
 
-            sb <- sb asString.
+            sb <- sb commit.
 
             sb parseInt yes: [ :v | ^ newTokenWithType: TokenType NUMBER Payload: v ].
 
