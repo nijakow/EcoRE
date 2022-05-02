@@ -66,6 +66,19 @@
         other do: [ :c | vec append: c ].
       ^ vec asString
     );
+    splitOnChar: char => (
+        "TODO: Generate an iterator"
+        |
+            tokens <- std util newVector,
+            token  <- std util newVector
+        |
+        do: [ :c |
+            (c == char) if: [ (token isEmpty) unless: [ tokens append: (token asString). token clear ] ]
+                      else: [ token append: c ]
+        ].
+        (token isEmpty) unless: [ tokens append: (token asString). token clear ].
+      ^ tokens asArray
+    );
     * count => (
         | vec <- std util newVector |
         count times: [

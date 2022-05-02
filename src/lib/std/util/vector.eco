@@ -56,6 +56,8 @@
         removeFirst => remove: 0;
         removeLast  => remove: (size - 1);
 
+        clear => ( size <- 0. ^ self );
+
         writeOn: writer => (std util) WriteIterable: self On: writer;
     };
 

@@ -59,6 +59,8 @@
         removeFirst => remove: 0;
         removeLast  => remove: (size - 1);
 
+        clear => ( size <- 0. ^ self );
+
         writeOn: writer => (
             writer << '#['.
             forEach: [ :i, :e | (i > 0) if: [ writer << ', ' ]. writer << e ].
