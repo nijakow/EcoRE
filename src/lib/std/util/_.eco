@@ -107,9 +107,6 @@
 
     ByteVector = #<:std/util/ByteVector>;
 
-    Link = #<:std/util/Link>;
-    List = #<:std/util/List>;
-
     Collector = #<:std/util/Collector>;
 
     MutablePair = #<:std/util/MutablePair>;
