@@ -104,6 +104,7 @@ src = [
     eco_target,
     './src/ecore/util/memory.c',
     './src/ecore/util/utf8.c',
+    './src/ecore/util/libc.c',
     './src/ecore/util/gz.c',
     './src/ecore/objects/misc/key/key.c',
     './src/ecore/objects/misc/blob/blob.c',

@@ -5,6 +5,7 @@
 #include <ecore/objects/vm/interface/interface.h>
 #include <ecore/vm/vm.h>
 #include <ecore/vm/fiber/stackops.h>
+#include <ecore/util/libc.h>
 
 /*
  * TODO: Include headers for this!
@@ -30,6 +31,26 @@ bool Eco_VM_Builtin_GetVersionString(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     any = Eco_Any_FromPointer(Eco_String_New(ECO_VERSION_STRING));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_GetEnv(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_String*  var;
+    struct Eco_String*  val;
+    char*               val_cstr;
+    Eco_Any             any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    var = Eco_Any_AsPointer(any);
+    val_cstr = Eco_LibC_GetEnv(var->bytes);
+    if (val_cstr == NULL)
+        val_cstr = "";
+    val = Eco_String_New(val_cstr);
+    any = Eco_Any_FromPointer(val);
     Eco_Fiber_Push(fiber, &any);
     return true;
 }

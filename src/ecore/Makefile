@@ -93,6 +93,7 @@ io/econnect/reader/builtins/id/id.c \
 io/econnect/reader/builtins/flow/flow.c \
 io/econnect/file/file.c \
 util/gz.c \
+util/libc.c \
 util/memory.c \
 util/utf8.c \
 main.c
