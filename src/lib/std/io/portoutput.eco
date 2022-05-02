@@ -8,8 +8,27 @@
             ^ self
         );
 
+        private writeChar: c => (
+            | v <- c asInt |
+            begin
+                if: [ v <= 0        ] then: [ byte<< 0xef. byte<< 0xbf. byte<< 0xbd. ] ~
+                if: [ v <= 0x7f     ] then: [ byte<< v ] ~
+                if: [ v <= 0x7ff    ] then: [ byte<< (((v rshift: 6) bitAnd: 0x1f) bitOr: 0xc0).
+                                              byte<< (((v)           bitAnd: 0x3f) bitOr: 0x80). ] ~
+                if: [ v <= 0xffff   ] then: [ byte<< (((v rshift: 12) bitAnd: 0x0f) bitOr: 0xe0).
+                                              byte<< (((v rshift:  6) bitAnd: 0x3f) bitOr: 0x80).
+                                              byte<< (((v)            bitAnd: 0x3f) bitOr: 0x80). ] ~
+                if: [ v <= 0x10ffff ] then: [ byte<< (((v rshift: 18) bitAnd: 0x07) bitOr: 0xf0).
+                                              byte<< (((v rshift: 12) bitAnd: 0x3f) bitOr: 0x80).
+                                              byte<< (((v rshift:  6) bitAnd: 0x3f) bitOr: 0x80).
+                                              byte<< (((v rshift:  0) bitAnd: 0x3f) bitOr: 0x80). ] ~
+            default: [ byte<< 0xef. byte<< 0xbf. byte<< 0xbd. ].
+          ^ self
+        );
+
         commit     => _port commit;
         byte<< b   => _port byte<< b;
+        char<< c   => writeChar: c;
         << object  => (
             ((std reflect PublicInterfaceFor: object) implementsMessage: #'writeOn:')
                   if: [ object writeOn: self ]

@@ -44,6 +44,7 @@ eco_src = [
     './src/lib/std/maybe.eco',
     './src/lib/std/bool.eco',
     './src/lib/std/clonable.eco',
+    './src/lib/std/io/stringwriter.eco',
     './src/lib/std/io/portoutput.eco',
     './src/lib/std/io/portinput.eco',
     './src/lib/std/io/portio.eco',

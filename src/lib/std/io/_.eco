@@ -15,6 +15,8 @@
     PortOutput = #<:std/io/PortOutput>;
     PortIO = #<:std/io/PortIO>;
 
+    StringWriter = #<:std/io/StringWriter>;
+
     WrapFileDescriptor: fd   => PortIO clone initWithInput: ((FDByteReader clone) initWithFileDescriptor: fd) Output: ((FDByteWriter clone) initWithFileDescriptor: fd);
     OpenFileForReading: path => PortInput clone init: ((FDByteReader clone) initWithFileDescriptor: (((FileDescriptor clone) init: #'ecosphere.ecore.io.fd.open_file'(path, 1))));
     OpenFileForWriting: path => PortOutput clone init: ((FDByteWriter clone) initWithFileDescriptor: (((FileDescriptor clone) init: #'ecosphere.ecore.io.fd.open_file'(path, 6))));

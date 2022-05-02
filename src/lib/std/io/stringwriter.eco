@@ -1,0 +1,27 @@
+
+#=std/io/StringWriter: {
+    private builder;
+
+    with inherited trait = {
+        init => (
+            builder <- std util newVector.
+          ^ self
+        );
+
+        char<< c => builder append: c.
+        << object => (
+            ((std reflect PublicInterfaceFor: object) implementsMessage: #'writeOn:')
+                  if: [ object writeOn: self ]
+                else: [ << 'an object' ].
+          ^ self
+        );
+        newline => ( self << (char newline). ^ self );
+
+        commit => builder asString;
+        close => self;
+
+        writeOn: w => w << 'a string writer';
+    };
+
+    static with inherited parent = #<:std/Clonable>;
+}
