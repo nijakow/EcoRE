@@ -22,10 +22,11 @@
 },
 
 #=lang/eco/compiler/VariableInfo: {
-    index;
+    index, type;
 
-    initWithIndex: i => (
-        index <- i.
+    initWithIndex: _index Type: _type => (
+        index <- _index.
+        type  <- _type.
       ^ self
     );
 
@@ -68,7 +69,7 @@
     bindVariable: varname Type: type => (
       |
           r    <- compiler regAlloc allocate,
-          info <- (#<:lang/eco/compiler/VariableInfo> clone) initWithIndex: r "TODO: Type"
+          info <- (#<:lang/eco/compiler/VariableInfo> clone) initWithIndex: r Type: type
       |
       bindings at: varname put: info
     );
