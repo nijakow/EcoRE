@@ -1,72 +1,33 @@
 
-#=lang/eco/tokenizer/StringReader: {
-    charVector, index;
-
-    with inherited trait = {
-        init: str => (
-            charVector <- str asVector.
-            index <- 0.
-            ^ self
-        );
-
-        hasNext  => index < (charVector size);
-        advance  => index <- index + 1;
-        peekChar => charVector at: index;
-        readChar => ( | c <- peekChar | advance. ^ c );
-        peeks: s => (
-            | i <- index |
-            s do: [ :c |
-                hasNext unless: [ index <- i. ^ false ].
-                (c != readChar) if: [ index <- i. ^ false ]
-            ].
-            ^ true
-        );
-    };
-
-    with inherited parent = #<:std/Clonable>;
-},
-
 #=lang/eco/tokenizer/PortReader: {
-    inputPort, currentChar, flushed, pushbacks;
+    private iterator;
 
     with inherited trait = {
-        init: _inputPort => (
-            inputPort <- _inputPort.
-            flushed   <- false.
-            pushbacks <- std util newStack.
-            ^ self
+        init: _iterator => (
+            iterator <- _iterator.
+          ^ self
         );
 
-        hasNext  => (
-            flushed if: [ ^ true ].
-          ^ [ pushbacks isEmpty not ] or: [ inputPort hasNext ]
-        );
-        advance  => (
-            (pushbacks isEmpty)
-                  if: [ currentChar <- inputPort readChar ]
-                else: [ currentChar <- pushbacks pop      ].
-            flushed <- true.
-        );
-        peekChar => (
-            flushed unless: [ advance ].
-          ^ currentChar
-        );
-        readChar => ( | c <- peekChar | flushed <- false. ^ c );
+        "TODO: Solve this by using inheritance"
+        has => iterator has;
+        hasNext => iterator hasNext;
+
+        current => iterator current;
+        next => iterator next;
+
+        advance => iterator advance;
+
+        withReset: block => iterator withReset: block;
+
         peeks: s => (
-            |
-                p     <- std util newStack,
-                fail  <- [ [ p isEmpty ] until: [ pushbacks push: (p pop) ]. ^ false ]
-            |
-            s do: [ :c |
-                hasNext unless: [ fail value ].
-                | c2 <- readChar |
-                p push: c2.
-                (c != c2) if: [ fail value ]
+            withReset: [ :reset |
+                s do: [ :c |
+                    ([hasNext not] or: [next != c]) -> [ reset value. ^ false ].
+                ].
             ].
-            ^ true
+          ^ true
         );
     };
 
-    with inherited parent = #<:std/Clonable>;
+    static with inherited parent = #<:std/Clonable>;
 },
-

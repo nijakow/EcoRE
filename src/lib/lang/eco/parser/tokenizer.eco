@@ -1,6 +1,5 @@
 #=lang/eco/tokenizer: {
 
-    StringReader = #<:lang/eco/tokenizer/StringReader>,
     PortReader = #<:lang/eco/tokenizer/PortReader>,
 
     Token = {
@@ -45,7 +44,7 @@
         IsSpecial(c) => [ '()[]{}.,;|^' contains: c ] or: [ IsSpace(c) ];
 
         skipWhitespace => (
-            [ [ in hasNext ] and: [ IsSpace(in peekChar) ] ] while: [ in advance ]
+            [ [ in has ] and: [ IsSpace(in current) ] ] while: [ in advance ]
         );
 
         peeks: str => in peeks: str;
@@ -56,10 +55,10 @@
         parseString: terminator => (
             | sb <- (std io StringWriter) new |
 
-            [ in peekChar == terminator ] until: [
-                | c <- in readChar |
+            [ in current == terminator ] until: [
+                | c <- in next |
                 (c == #\\) if: [
-                    | n <- in readChar |
+                    | n <- in next |
                     begin
                       if: [ n == #\\        ] then: [ sb char<< n          ] ~
                       if: [ n == terminator ] then: [ sb char<< terminator ] ~
@@ -69,7 +68,7 @@
                 ].
             ].
 
-            in readChar.
+            in advance.
 
           ^ sb commit
         );
@@ -107,8 +106,8 @@
             
             | sb <- (std io StringWriter) new |
 
-            [ [ in hasNext ] and: [ IsSpecial(in peekChar) not ] ] while: [
-                sb char<< (in readChar).
+            [ [ in has ] and: [ IsSpecial(in current) not ] ] while: [
+                sb char<< (in next).
             ].
 
             sb <- sb commit.

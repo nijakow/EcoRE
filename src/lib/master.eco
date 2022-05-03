@@ -41,8 +41,8 @@
     );
 
     InitIO => (
-        std io in  <- ((std io PortInput) clone) init: ((std io FDByteReader) clone initWithFileDescriptor: (((std io FileDescriptor) clone) init: 0));
-        std io out <- ((std io PortOutput) clone) init: ((std io FDByteWriter) clone initWithFileDescriptor: (((std io FileDescriptor) clone) init: 1));
+        std io in  <- (std text utf8 UTF8Iterator) clone init: (((std io FDSegmentReader) clone initWithFileDescriptor: ((std io FileDescriptor) clone init: 0)) iterator).
+        std io out <- ((std io PortOutput) clone) init: ((std io FDByteWriter) clone initWithFileDescriptor: (((std io FileDescriptor) clone) init: 1)).
     );
 
     Quote => (

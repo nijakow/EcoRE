@@ -10,7 +10,7 @@
 
         withReset: block => iterator withReset: block;
 
-        hasNext => iterator hasNext;
+        has => iterator has;
 
         next => (
             "TODO: Check if we actually have a next byte"
@@ -28,6 +28,8 @@
             ].
           ^ v asChar
         );
+
+        advance => next;
 
         current => withReset: [ :reset | reset returns: next ];
         
