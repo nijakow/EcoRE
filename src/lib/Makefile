@@ -41,8 +41,7 @@ std/reflect/proxies/ffi/ffiobject.eco \
 std/reflect/proxies/ffi/ffitype.eco \
 std/text/_.eco \
 std/text/parsing/_.eco \
-std/text/parsing/integer.eco \
-std/text/parsing/parsestream.eco \
+std/text/parsing/number.eco \
 std/text/utf8/_.eco \
 std/text/utf8/utf8iterator.eco \
 std/text/writing/_.eco \

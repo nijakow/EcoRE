@@ -1,5 +1,5 @@
 
-#=std/text/parsing/integer: {
+#=std/text/parsing/number: {
     protected own Base10Transformer = {
         base => 10;
         transformFromChar: c => (

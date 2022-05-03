@@ -1,6 +1,4 @@
 
 #=std/text/parsing: {
-    ParseStream = #<:std/text/parsing/ParseStream>;
-    
-    integer = #<:std/text/parsing/integer>;
+    number = #<:std/text/parsing/number>;
 }
