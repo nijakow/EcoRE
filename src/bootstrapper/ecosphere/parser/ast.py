@@ -69,7 +69,8 @@ class ASTSlot:
             code = ecosphere.compiler.compile_ast(self._value, the_environment, self._type, self._args, 'varargs' in self._flags)
             slot = ecosphere.objects.plain.EcoCodeSlot(self._name, 'private' in self._flags, 'static' in self._flags, code)
         else:
-            slot = ecosphere.objects.plain.EcoValueSlot(self._name, 'private' in self._flags, 'static' in self._flags, 'inherited' in self._flags, 'nodelegate' in self._flags, 'part' in self._flags)
+            # We set the value to plain_object by default so that every slot is properly initialized
+            slot = ecosphere.objects.plain.EcoValueSlot(self._name, 'private' in self._flags, 'static' in self._flags, 'inherited' in self._flags, 'nodelegate' in self._flags, 'part' in self._flags, plain_object)
             if self._type is not None:
                 self._type.evaluate(plain_object, the_environment, lambda value: slot.set_type(value))
             if self._value is not None:

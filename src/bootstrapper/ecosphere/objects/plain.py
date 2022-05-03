@@ -53,12 +53,12 @@ class EcoValueSlot(EcoSlot):
         else:
             self._callbacks.append(cb)
 
-    def __init__(self, name, is_private, is_static, is_inherited, is_no_delegate, is_part):
+    def __init__(self, name, is_private, is_static, is_inherited, is_no_delegate, is_part, value):
         super().__init__(name, is_private, is_static)
         self._is_inherited = is_inherited
         self._is_part = is_part
         self._is_no_delegate = is_no_delegate
-        self._value = None
+        self._value = value
         self._callbacks = list()
 
 
