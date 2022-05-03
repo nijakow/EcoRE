@@ -8,6 +8,7 @@
             yes: block => block value(yes);
             no: block => self;
             yes: yblock no: nblock => yblock value(yes);
+            no: nblock yes: yblock => yblock value(yes);
             writeOn: writer => writer << 'Yes: ' << yes;
         };
         static with inherited parent = #<:std/Clonable>;
@@ -20,6 +21,7 @@
             yes: block => self;
             no: block => block value;
             yes: yblock no: nblock => nblock value;
+            no: nblock yes: yblock => nblock value;
             yes => self;  "TODO: Throw an error"
             writeOn: writer => writer << 'No';
         };

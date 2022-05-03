@@ -47,5 +47,30 @@
                Transformer: Base10Transformer
     );
 
-    ParseNumberFromStream: it => ParseIntFromStream: it;
+    protected ParseFractionalPartFromStream: it Transformer: transformer => (
+        ((it has) not) -> [ ^ 0 asFloat ].
+        it withReset: [ :reset |
+            (transformer transformFromChar: it next)
+                yes: [ :v | ^ ((ParseFractionalPartFromStream: it Transformer: transformer) + v) / 10 ]
+                 no: [ reset value. ^ 0 asFloat ]
+        ]
+    );
+
+    protected ParseOptionalFractionalPartFromStream: it Transformer: transformer => (
+        it withReset: [ :reset |
+            (([ it hasNext ] and: [ it next == #\. ]) not) -> [ reset value. ^ No ].
+            (transformer transformFromChar: it current) no: [ reset value. ^ No ].
+        ].
+      ^ Yes: (ParseFractionalPartFromStream: it Transformer: transformer)
+    );
+
+    ParseNumberFromStream: it => (
+        (ParseIntFromStream: it)
+             no: [ ^ No ]
+            yes: [ :i |
+                (ParseOptionalFractionalPartFromStream: it Transformer: Base10Transformer)
+                    yes: [ :f | ^ Yes: ((i asFloat) + f) ]
+                     no: [      ^ Yes: i                 ]
+            ]
+    );
 }
