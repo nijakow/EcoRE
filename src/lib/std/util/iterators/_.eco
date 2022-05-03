@@ -9,6 +9,15 @@
             [ hasNext ] while: [ block value(i, next). i <- i + 1 ]
         );
         do: block => [ hasNext ] while: [ block value(next) ];
+        peek: sequence => (
+            withReset: [ :reset |
+                sequence do: [ :element |
+                    ([ has not ] or: [ (current == element) not ]) -> [ reset value. ^ false ].
+                    advance.
+                ]
+            ].
+          ^ true
+        );
         writeOn: w => w << 'an iterator';
     };
 

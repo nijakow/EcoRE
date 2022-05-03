@@ -1,7 +1,5 @@
 #=lang/eco/tokenizer: {
 
-    PortReader = #<:lang/eco/tokenizer/PortReader>,
-
     Token = {
         tokenizer, type, payload;
 
@@ -47,7 +45,7 @@
             [ [ in has ] and: [ IsSpace(in current) ] ] while: [ in advance ]
         );
 
-        peeks: str => in peeks: str;
+        peeks: str => in peek: str;
 
         newTokenWithType: type Payload: pl => (#<:lang/eco/tokenizer> Token) new tokenizer: self type: type payload: pl;
         newTokenWithType: type => newTokenWithType: type Payload: false;

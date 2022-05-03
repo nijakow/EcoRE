@@ -63,8 +63,7 @@
         io out commit.
 
         |
-            reader <- ((lang eco tokenizer PortReader) clone) init: (io in),
-            tok    <- ((lang eco tokenizer Tokenizer) clone) init: reader,
+            tok    <- ((lang eco tokenizer Tokenizer) clone) init: (io in),
             parser <- ((lang eco parser Parser) clone) init: tok
         |
 

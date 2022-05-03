@@ -14,7 +14,6 @@ eco_src = [
     './src/lib/lang/eco/parser/Parser/compounds.eco',
     './src/lib/lang/eco/parser/Parser/optionals.eco',
     './src/lib/lang/eco/parser/shared.eco',
-    './src/lib/lang/eco/parser/reader.eco',
     './src/lib/lang/eco/parser/_.eco',
     './src/lib/lang/eco/compiler/scope.eco',
     './src/lib/lang/eco/compiler/regalloc.eco',
