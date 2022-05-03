@@ -65,13 +65,15 @@
     );
     enableVarargs => shared enableVarargs;
 
-    bindVariable: varname => (
+    bindVariable: varname Type: type => (
       |
           r    <- compiler regAlloc allocate,
-          info <- (#<:lang/eco/compiler/VariableInfo> clone) initWithIndex: r
+          info <- (#<:lang/eco/compiler/VariableInfo> clone) initWithIndex: r "TODO: Type"
       |
       bindings at: varname put: info
     );
+
+    bindVariable: name => bindVariable: name Type: any;
 
     findVariable: varname IfFound: found IfNotFound: notfound Depth: depth => (
         (bindings at: varname) yes: [ :info | ^ found value(info, depth) ].

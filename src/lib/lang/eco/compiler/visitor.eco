@@ -104,9 +104,9 @@
     );
 
     visitVariableDeclaration: ast => (
-        compiler bindVariable: ast getName.
+        compiler bindVariable: ast name Type: ast type.
         ast getValue acceptVisitor: self.
-        compiler storeVariable: ast getName.
+        compiler storeVariable: ast name.
         ast getFollowup acceptVisitor: self
     );
 

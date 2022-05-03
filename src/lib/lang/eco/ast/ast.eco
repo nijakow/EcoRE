@@ -291,6 +291,7 @@
             followup <- _followup.
           ^ self
         );
+        "These get-style functions are deprecated"
         getType => type;
         getName => name;
         getValue => value;

@@ -50,6 +50,7 @@
     addParameter: name => scopes addParameter: name;
     enableVarargs => scopes enableVarargs;
 
+    bindVariable: name Type: type => scopes bindVariable: name Type: type;
     bindVariable: name => scopes bindVariable: name;
     loadVariable: name IfPresent: present IfNotPresent: notpresent => (
         scopes findVariable: name
