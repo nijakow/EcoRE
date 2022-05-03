@@ -92,13 +92,6 @@
         0 for: byteSize do: [ :i | blob at: i put: (byteAt: i) ].
       ^ blob
     );
-    asVector => (
-        | v <- std util newVector |
-        do: [ :c | v append: c ].
-      ^ v
-    );
-    asArray => asVector asArray;
-    asList => asVector asList;
     asKey => #'ecosphere.ecore.object.string.as_key'(self);
     parseInt => (
         | v <- 0, sign <- 1 |
@@ -114,13 +107,13 @@
     );
     parse => (
         |
-            reader <- ((lang eco tokenizer StringReader) clone) init: self,
-            tok    <- ((lang eco tokenizer Tokenizer) clone) init: reader,
+            tok    <- ((lang eco tokenizer Tokenizer) clone) init: iterator,
             parser <- ((lang eco parser Parser) clone) init: tok
         |
       ^ parser parseExpression
     );
     iterator => ((std text utf8 UTF8Iterator) clone) init: ((#<:std/reflect/proxies/String/Iterator> clone) init: self);
     writeOn: writer => do: [ :c | writer << c ];
+    with inherited standard_list_conversions = #<:std/util/StandardListConversions>;
     static with inherited parent = #<:std/Clonable>;
 }
