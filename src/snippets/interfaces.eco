@@ -1,0 +1,9 @@
+
+IIndexable = %[
+    at: index,
+    size
+],
+
+IMutableIndexable = %[
+    at: index put: value
+]
