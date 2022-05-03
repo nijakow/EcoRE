@@ -14,13 +14,17 @@
     implementsMessage: message => #'ecosphere.ecore.object.interface.implements_message'(self, message);
     implementsInterface: interface => #'ecosphere.ecore.object.interface.implements_interface'(self, interface);
 
+    private writeTypeBlock: type On: writer => (
+        (any != type) -> [ writer << '[' << type << ']' ]
+    );
+
     writeOn: writer => (
         (self is: any) if: [ writer << 'any'. ^ self ].
         writer << '%[ '.
         parents do: [ :p | writer << 'with ' << p << '. ' ].
         0 for: size do: [ :i |
-            writer << '[' << (returnTypeForSlotIndex: i) << '] '
-                   << (nameForSlotIndex: i) << '('.
+            writeTypeBlock: (returnTypeForSlotIndex: i) On: writer.
+            writer << (nameForSlotIndex: i) << '('.
             | count <- (argCountForSlotIndex: i) |
             0 for: count do: [ :j |
                 (j > 0) if: [ writer << ', ' ].

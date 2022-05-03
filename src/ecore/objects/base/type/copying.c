@@ -105,7 +105,11 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*           self,
         the_slot->interface                     = interface;
         the_slot->body.inlined.value_size       = slot_value_size;
         the_slot->body.inlined.offset           = the_copy->instance_payload_size - slot_value_size;
-        the_slot->body.inlined.referenced_type  = NULL;
+        /*
+         * If the slot is inherited, the object will point to itself by default.
+         * Therefore, set the corresponding type pointer directly.
+         */
+        the_slot->body.inlined.referenced_type  = (the_slot->info.flags.is_with) ? the_copy : NULL;
 
         *type_loc                               = the_copy;
         *slot_loc                               = the_slot;

@@ -57,6 +57,9 @@ void Eco_TypeTransfer(struct Eco_Molecule* molecule,
                       unsigned int         slot_index,
                       struct Eco_Type*     referenced_type)
 {
-    Eco_TypeTransfer1(molecule, slot_index, referenced_type);
-    Eco_TypeTransfer_Patch();
+    if (molecule->_.type->slots[slot_index].body.inlined.referenced_type != referenced_type)
+    {
+        Eco_TypeTransfer1(molecule, slot_index, referenced_type);
+        Eco_TypeTransfer_Patch();
+    }
 }
