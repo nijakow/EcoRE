@@ -14,8 +14,8 @@
     visitSend: ast => (
         (ast subject isSelfAST) if: [
             (compiler isLocal: ast message) if: [
-                rhs acceptVisitor: visitor.
                 compiler storeVariable: ast message
+                             Interlude: [ rhs acceptVisitor: visitor ]
                              IfPresent: [ ^ ]
                           IfNotPresent: [
                               io out << 'Local bound and not bound at the same time!'.
@@ -104,9 +104,8 @@
     );
 
     visitVariableDeclaration: ast => (
-        compiler bindVariable: ast name Type: ast type.
-        ast getValue acceptVisitor: self.
-        compiler storeVariable: ast name.
+        compiler bindVariable: ast name Type: ((ast type) evaluateInEnv: environment Host: nexthost).
+        compiler storeVariable: ast name Interlude: [ ast getValue acceptVisitor: self ].
         ast getFollowup acceptVisitor: self
     );
 

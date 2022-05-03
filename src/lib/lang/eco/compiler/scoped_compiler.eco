@@ -60,15 +60,25 @@
                              ]
                  IfNotFound: notpresent
     );
-    storeVariable: name IfPresent: present IfNotPresent: notpresent => (
+    storeVariable: name Interlude: interlude IfPresent: present IfNotPresent: notpresent => (
         scopes findVariable: name
                     IfFound: [ :info, :depth |
+                                | type <- info type |
+                                (any != info type) if: [
+                                    localCompiler loadConstant: info type.
+                                    localCompiler push.
+                                    interlude value.
+                                    localCompiler push.
+                                    localCompiler sendWithMessage: #'cast:' ArgCount: 2. 
+                                ] else: [
+                                    interlude value.
+                                ].
                                 localCompiler moveLastValueToReg: (info index) Depth: depth.
                                 present value
                              ]
                  IfNotFound: notpresent
     );
-    storeVariable: name => storeVariable: name IfPresent: [] IfNotPresent: [];
+    storeVariable: name Interlude: interlude => storeVariable: name Interlude: interlude IfPresent: [] IfNotPresent: [];
     isLocal: name => scopes findVariable: name IfFound: [ :info, :depth | ^ true ] IfNotFound: [ ^ false ];
 
     with inherited parent = #<:std/Clonable>;
