@@ -31,10 +31,12 @@
     );
 
     ParseIntFromStream: it Transformer: transformer => (
-        ([ it has ] and: [ it current == #\- ])
-            -> [ it forward. (ParseUIntFromStream: it Transformer: transformer) yes: [ :v | ^ Yes: (v negate) ] no: [ ^ No ] ].
-        ([ it has ] and: [ it current == #\+ ]) -> [ it forward ].
-      ^ ParseUIntFromStream: it Transformer: transformer
+        it withReset: [ :reset |
+            ([ it has ] and: [ it current == #\- ])
+                -> [ it forward. ^ (ParseUIntFromStream: it Transformer: transformer) yes: [ :v | ^ Yes: (v negate) ] no: [ reset value. ^ No ] ].
+            ([ it has ] and: [ it current == #\+ ]) -> [ it forward ].
+          ^ (ParseUIntFromStream: it Transformer: transformer) yes: [ :v | Yes: v ] no: [ reset value. No ]
+        ]
     );
 
     ParseUIntFromStream: it => (
@@ -69,8 +71,8 @@
              no: [ ^ No ]
             yes: [ :i |
                 (ParseOptionalFractionalPartFromStream: it Transformer: Base10Transformer)
-                    yes: [ :f | ^ Yes: ((i asFloat) + f) ]
-                     no: [      ^ Yes: i                 ]
+                    yes: [ :f | ^ Yes: ((i < 0) if: [ ((i asFloat) - f) ] else: [ ((i asFloat) + f) ]) ]
+                     no: [      ^ Yes: i                                                               ]
             ]
     );
 }
