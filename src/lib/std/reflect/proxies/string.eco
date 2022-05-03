@@ -93,18 +93,6 @@
       ^ blob
     );
     asKey => #'ecosphere.ecore.object.string.as_key'(self);
-    parseInt => (
-        | v <- 0, sign <- 1 |
-        (size isZero) if: [ ^ No ].
-        forEach: [ :i, :c |
-            (c == #\-) if: [ ( [ i isZero ] and: [ size > 1 ] ) if: [ sign <- -1 ] else: [ ^ No ] ]
-                     else: [
-                ([ (c asInt) >= (#\0 asInt) ] and: [ (c asInt) <= (#\9 asInt) ]) unless: [ ^ No ].
-                v <- (v * 10) + ((c asInt) - (#\0 asInt))
-            ]
-        ].
-        Yes: (v * sign)
-    );
     parse => (
         |
             tok    <- ((lang eco tokenizer Tokenizer) clone) init: iterator,
