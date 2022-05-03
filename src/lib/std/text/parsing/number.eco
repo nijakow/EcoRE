@@ -13,6 +13,12 @@
         with inherited parent = #<:std/Clonable>;
     };
 
+    protected ParseSignFromStream: it => (
+        (it check: #\-) -> [ ^ -1 ].
+        (it check: #\+).
+      ^ 1
+    );
+
     ParseUIntFromStream: it Transformer: transformer => (
         |
             v <- 0,
@@ -67,12 +73,19 @@
     );
 
     ParseNumberFromStream: it => (
-        (ParseIntFromStream: it)
-             no: [ ^ No ]
-            yes: [ :i |
-                (ParseOptionalFractionalPartFromStream: it Transformer: Base10Transformer)
-                    yes: [ :f | ^ Yes: ((i < 0) if: [ ((i asFloat) - f) ] else: [ ((i asFloat) + f) ]) ]
-                     no: [      ^ Yes: i                                                               ]
-            ]
+        it withReset: [ :reset |
+            |
+                sign        <- ParseSignFromStream: it,
+                transformer <- Base10Transformer
+            |
+            (ParseUIntFromStream: it Transformer: transformer)
+                 no: [ reset value. ^ No ]
+                yes: [ :i |
+                    i <- i * sign.
+                    (ParseOptionalFractionalPartFromStream: it Transformer: transformer)
+                        yes: [ :f | ^ Yes: ((sign < 0) if: [ ((i asFloat) - f) ] else: [ ((i asFloat) + f) ]) ]
+                        no:  [      ^ Yes: i                                                                  ]
+                ]
+        ]
     );
 }
