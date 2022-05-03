@@ -29,7 +29,7 @@
           ^ v asChar
         );
 
-        advance => next;
+        forward => next;
 
         current => withReset: [ :reset | reset returns: next ];
         

@@ -42,7 +42,7 @@
         IsSpecial(c) => [ '()[]{}.,;|^' contains: c ] or: [ IsSpace(c) ];
 
         skipWhitespace => (
-            [ [ in has ] and: [ IsSpace(in current) ] ] while: [ in advance ]
+            [ [ in has ] and: [ IsSpace(in current) ] ] while: [ in forward ]
         );
 
         peeks: str => in peek: str;
@@ -66,7 +66,7 @@
                 ].
             ].
 
-            in advance.
+            in forward.
 
           ^ sb commit
         );
@@ -101,6 +101,9 @@
             (peeks: '#<')  if: [ ^ newTokenWithType: TokenType PROXY  Payload: (parseString: #\>) ].
             (peeks: '#\\') if: [ ^ newTokenWithType: TokenType CHARACTER  Payload: (in next) ].
             (peeks: '"')   if: [ parseString: #\". ^ nextToken ].
+
+            (std text parsing number ParseNumberFromStream: in)
+                yes: [ :n | ^ newTokenWithType: TokenType NUMBER Payload: n ].
             
             | sb <- (std io StringWriter) new |
 
@@ -109,8 +112,6 @@
             ].
 
             sb <- sb commit.
-
-            sb parseInt yes: [ :v | ^ newTokenWithType: TokenType NUMBER Payload: v ].
 
             (sb equals: '')            if: [ ^ newTokenWithType: TokenType EOF        ].
             (sb equals: 'self')        if: [ ^ newTokenWithType: TokenType SELF       ].

@@ -13,7 +13,7 @@
             withReset: [ :reset |
                 sequence do: [ :element |
                     ([ has not ] or: [ (current == element) not ]) -> [ reset value. ^ false ].
-                    advance.
+                    forward.
                 ]
             ].
           ^ true

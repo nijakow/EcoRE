@@ -1,5 +1,7 @@
 
 #=std/text/parsing/number: {
+    static with inherited parent = #<:std/Module>;
+
     protected own Base10Transformer = {
         base => 10;
         transformFromChar: c => (
@@ -30,7 +32,7 @@
 
     ParseIntFromStream: it Transformer: transformer => (
         ([ it has ] and: [ it current == #\- ])
-            -> [ it forward. ^ (ParseUIntFromStream: it Transformer: transformer) negate ].
+            -> [ it forward. (ParseUIntFromStream: it Transformer: transformer) yes: [ :v | ^ Yes: (v negate) ] no: [ ^ No ] ].
         ([ it has ] and: [ it current == #\+ ]) -> [ it forward ].
       ^ ParseUIntFromStream: it Transformer: transformer
     );
@@ -44,4 +46,6 @@
         ParseIntFromStream: it
                Transformer: Base10Transformer
     );
+
+    ParseNumberFromStream: it => ParseIntFromStream: it;
 }
