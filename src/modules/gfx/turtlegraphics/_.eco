@@ -1,7 +1,8 @@
 
 {
+    static with inherited _ = std Module;
+
     own SDLTurtle = {
-        protected with std = $ std;
         protected turtlegfx = $;
 
         protected renderer,
@@ -46,7 +47,7 @@
 
             backward: amount => forward: amount negate;
 
-            writeOn: w => w << 'a turtle(' << x << ', ' << y ')';
+            writeOn: w => w << 'a turtle(' << x << ', ' << y << ')';
         };
 
         with inherited parent = std Clonable;
