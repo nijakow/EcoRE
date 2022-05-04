@@ -5,5 +5,32 @@ IIndexable = %[
 ],
 
 IMutableIndexable = %[
+    with IIndexable,
     at: index put: value
+],
+
+ISequence = %[
+    forEach: block,
+    do: block
+],
+
+ISequenceAcceptor = %[
+    from: [ISequence] sequence
+],
+
+IConvertibleSequence = %[
+    into: [ISequenceAcceptor] other
+],
+
+IIterator = %[
+    has,
+    hasNext,
+
+    current,
+    forward,
+    next,
+
+    withReset: block,
+    check: element,
+    peek: [ISequence] sequence
 ]
