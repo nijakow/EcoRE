@@ -188,7 +188,10 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             struct Eco_Key*  key  = Eco_Any_AsPointer(*NEXT_CONSTANT());   // TODO: Safety check!
             top->instruction      = instruction;
             fiber->stack_pointer  = sp;
-            Eco_Key_CallBuiltin(key, fiber, args);
+            if (!Eco_Key_CallBuiltin(key, fiber, args)) {
+                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_BUILTIN_TRAP);
+                goto error;
+            }
             SLOW_DISPATCH();
         }
         TARGET(BUILTINV) {
@@ -202,7 +205,10 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             struct Eco_Key*  key  = Eco_Any_AsPointer(*NEXT_CONSTANT());   // TODO: Safety check!
             top->instruction      = instruction;
             fiber->stack_pointer  = sp;
-            Eco_Key_CallBuiltin(key, fiber, args);
+            if (!Eco_Key_CallBuiltin(key, fiber, args)) {
+                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_BUILTIN_TRAP);
+                goto error;
+            }
             SLOW_DISPATCH();
         }
         TARGET(SEND) {
