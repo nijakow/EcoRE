@@ -25,7 +25,7 @@
 
         init: reader => (
             in <- reader.
-            pushbacks <- std util newVector.
+            pushbacks <- std util newStack.
           ^ self
         );
 

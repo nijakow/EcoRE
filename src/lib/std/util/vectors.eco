@@ -12,9 +12,6 @@
     with inherited conversions = #<:std/util/StandardListConversions>;
     with inherited access = #<:std/util/StandardListAccess>;
     with inherited search = #<:std/util/StandardListSearch>;
-    with inherited stack = #<:std/util/StandardStackImpl>;
-    with inherited queue = #<:std/util/StandardQueueImpl>;
-    with inherited set = #<:std/util/StandardSetImpl>;
 
     resize: cap => (
         | new_elements = allocate: cap |
