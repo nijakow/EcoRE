@@ -1,5 +1,20 @@
 
 #=std/util/Queue: {
-    new => std util newVector;
+    private elements;
+
+    with inherited trait = {
+        init => (
+            elements <- std util newVector.
+          ^ self
+        );
+
+        isEmpty => elements isEmpty;
+        enqueue: e => elements append: e;
+        dequeue => elements removeFirst;
+        front => elements first;
+
+        writeOn: w => w << 'a queue';
+    };
+
     with inherited parent = #<:std/Clonable>;
 }
