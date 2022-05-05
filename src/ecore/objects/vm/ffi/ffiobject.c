@@ -72,6 +72,24 @@ struct Eco_FFIObject* Eco_FFIObject_Cast(struct Eco_FFIObject* original, struct 
     return object;
 }
 
+struct Eco_FFIObject* Eco_FFIObject_Address(struct Eco_FFIObject* original)
+{
+    struct Eco_FFIObject*  object;
+
+    object = Eco_Object_New(Eco_FFIObject_TYPE, sizeof(struct Eco_FFIObject) + sizeof(void*));
+
+    if (object != NULL)
+    {
+        object->type                = Eco_FFIType_PointerTo(Eco_FFIObject_GetFFIType(original));
+        object->size                = sizeof(void*);
+        object->bytes               = object->payload;
+        object->ref                 = original;
+        *((void**) object->payload) = Eco_FFIObject_GetBytes(original);
+    }
+
+    return object;
+}
+
 struct Eco_FFIObject* Eco_FFIObject_DLOpen(char* path)
 {
 #ifdef ECO_CONFIG_USE_DLOPEN
