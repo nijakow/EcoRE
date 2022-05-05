@@ -22,6 +22,12 @@
     protected SDL_RenderFlush,
     protected SDL_RenderPresent;
 
+    protected SDL_Scancode,
+    protected SDL_Keycode,
+    protected SDL_Keysym,
+    protected SDL_KeyboardEvent,
+    protected SDL_Event;
+
     INIT_EVERYTHING;
 
     with inherited trait = {
@@ -30,6 +36,13 @@
         init: libpath => (
             lib <- (ffi DLOpen: libpath) yes.
             INIT_EVERYTHING <- 62001.
+
+            SDL_Scancode <- ffi types enum.
+            SDL_Keycode <- ffi types enum.
+            SDL_Keysym <- ffi struct(SDL_Scancode, SDL_Keycode, ffi types uint16, ffi types uint32).
+            SDL_KeyboardEvent <- ffi struct(ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8, SDL_Keysym).
+            SDL_Event <- ffi union(ffi types uint8, SDL_KeyboardEvent).
+
             SDL_Init <- (lib function: #'SDL_Init' type: ((ffi types int) function(ffi types uint32))) yes.
             SDL_Quit <- (lib function: #'SDL_Quit' type: ((ffi types void) function)) yes.
             SDL_PollEvent <- (lib function: #'SDL_PollEvent' type: ((ffi types int) function(ffi types pointer))) yes.

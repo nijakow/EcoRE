@@ -49,6 +49,7 @@
         
         pointer => void pointer;
         string => GetTypeByIndex: 21;
+        enum => int;
     };
 
     struct(...) => #'ecosphere.ecore.ffi.type.new_struct'(std util newArray(...));
