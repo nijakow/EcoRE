@@ -1,5 +1,30 @@
 
 #=std/util/Set: {
-    new => std util newVector;
+    private elements;
+
+    with inherited trait = {
+        init => (
+            elements <- std util newVector.
+          ^ self
+        );
+
+        forEach: block => elements forEach: block;
+        do: block => elements do: block;
+
+        isEmpty => elements isEmpty;
+
+        contains: e => (elements find: e) yes: [ :i | ^ true ] no: [ ^ false ];
+        addElement: e => (contains: e) unless: [ elements append: e ];
+        removeElement: e => (elements find: e) yes: [ :i | elements remove: i ];
+        take => (
+            elements isEmpty if: [ invalidIndexError ].
+            | v <- elements at: 0 |
+            elements remove: 0.
+          ^ v
+        );
+        
+        writeOn: w => w << 'a set';
+    };
+
     with inherited parent = #<:std/Clonable>;
 }

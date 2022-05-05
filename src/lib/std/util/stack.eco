@@ -1,5 +1,21 @@
 
 #=std/util/Stack: {
-    new => std util newVector;
+    private elements;
+
+    with inherited trait = {
+        init => (
+            elements <- std util newVector.
+          ^ self
+        );
+
+        isEmpty => elements isEmpty;
+
+        push: e => ( elements append: e. ^ self );
+        pop => elements removeLast;
+        top => elements last;
+        
+        writeOn: w => w << 'a stack';
+    };
+
     with inherited parent = #<:std/Clonable>;
 }
