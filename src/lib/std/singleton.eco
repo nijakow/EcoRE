@@ -1,0 +1,5 @@
+
+#=std/Singleton: {
+    with inherited parent = #<:std/DefaultBehavior>;
+    writeOn: writer => writer << 'a singleton';
+}

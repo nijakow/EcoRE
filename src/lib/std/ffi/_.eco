@@ -106,6 +106,13 @@
         static with inherited parent = #<:std/Clonable>;
     };
 
+    LocalBinary = {
+        getSymbol: name => ffi DLSymbol: name;
+        getFunction: name Type: t => ffi DLFunction: name Type: t;
+        writeOn: w => w << 'the local binary';
+        static with inherited parent = #<:std/Singleton>;
+    };
+
     DLOpen: path => (
         #'ecosphere.ecore.ffi.object.dlopen'(path) when: [ :lib |
           ^ Yes: ((SharedLibrary clone) initWithName: path Library: lib)
