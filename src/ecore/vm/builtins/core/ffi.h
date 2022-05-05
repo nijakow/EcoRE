@@ -6,6 +6,7 @@
 #ifdef ECO_CONFIG_USE_FFI
 
 bool Eco_VM_Builtin_FFIType_NewStruct(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_FFIType_NewUnion(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIType_PointerTo(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIType_PointeeOrSelf(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIType_GetForIndex(struct Eco_Fiber*, unsigned int);

@@ -10,7 +10,7 @@
 #include <ecore/vm/vm.h>
 
 
-bool Eco_VM_Builtin_FFIType_NewStruct(struct Eco_Fiber* fiber, unsigned int args)
+static bool Eco_VM_Builtin_FFIType_NewStructOrUnion(struct Eco_Fiber* fiber, unsigned int args, bool is_union)
 {
     struct Eco_Array*  type_array;
     struct Eco_Array*  name_array;
@@ -39,9 +39,19 @@ bool Eco_VM_Builtin_FFIType_NewStruct(struct Eco_Fiber* fiber, unsigned int args
         else
             names[index] = NULL;
     }
-    any = Eco_Any_FromPointer(Eco_FFIType_NewStruct(types, names, count));
+    any = Eco_Any_FromPointer(Eco_FFIType_NewStruct(types, names, count, is_union));
     Eco_Fiber_Push(fiber, &any);
     return true;
+}
+
+bool Eco_VM_Builtin_FFIType_NewStruct(struct Eco_Fiber* fiber, unsigned int args)
+{
+    return Eco_VM_Builtin_FFIType_NewStructOrUnion(fiber, args, false);
+}
+
+bool Eco_VM_Builtin_FFIType_NewUnion(struct Eco_Fiber* fiber, unsigned int args)
+{
+    return Eco_VM_Builtin_FFIType_NewStructOrUnion(fiber, args, true);
 }
 
 bool Eco_VM_Builtin_FFIType_PointerTo(struct Eco_Fiber* fiber, unsigned int args)

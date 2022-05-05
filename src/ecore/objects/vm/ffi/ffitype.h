@@ -39,7 +39,7 @@ struct Eco_FFIType* Eco_FFIType_New(ffi_type*);
 #else
 struct Eco_FFIType* Eco_FFIType_New(void*);
 #endif
-struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType**, struct Eco_Key**, unsigned int);
+struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType**, struct Eco_Key**, unsigned int, bool);
 struct Eco_FFIType* Eco_FFIType_PointerTo(struct Eco_FFIType*);
 void Eco_FFIType_Mark(struct Eco_GC_State*, struct Eco_FFIType*);
 void Eco_FFIType_Del(struct Eco_FFIType*);

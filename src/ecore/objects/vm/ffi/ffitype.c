@@ -174,7 +174,8 @@ struct Eco_FFIType* Eco_FFIType_New(void* ffi_type_ptr)
 
 struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType** members,
                                           struct Eco_Key**     names,
-                                          unsigned int         member_count)
+                                          unsigned int         member_count,
+                                          bool                 is_union)
 {
     struct Eco_FFIType*  type;
     char*                payload;
@@ -204,7 +205,18 @@ struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType** members,
         type->payload.type      = FFI_TYPE_STRUCT;
         type->payload.elements  = (ffi_type**) payload;
         type->type = &type->payload;
-        ffi_get_struct_offsets(FFI_DEFAULT_ABI, &type->payload, offsets);
+        if (is_union) {
+            type->type->size = 0;
+            for (index = 0; index < member_count; index++)
+            {
+                const unsigned int s = Eco_FFIType_SizeofCType(members[index]);
+                offsets[index] = 0;
+                if (type->type->size < s)
+                    type->type->size = s;
+            }
+        } else {
+            ffi_get_struct_offsets(FFI_DEFAULT_ABI, &type->payload, offsets);
+        }
 #endif
         for (index = 0; index < member_count; index++)
         {
