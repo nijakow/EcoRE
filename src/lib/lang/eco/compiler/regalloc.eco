@@ -13,7 +13,7 @@
                         else: [ freeSet take ]
     );
     allocateN: n => ( | c <- counter | counter <- counter + n. ^ c );
-    deallocate: r => freeSet addElement: r;
+    deallocate: r => freeSet add: r;
     withAllocatedRegister: block => (
         "TODO: Unwind-Protect!"
         |

@@ -11,6 +11,7 @@
         from: sequence => ( sequence do: [ :e | push: e ]. ^ self).
 
         isEmpty => elements isEmpty;
+        size => elements size;
 
         push: e => ( elements append: e. ^ self );
         pop => elements removeLast;

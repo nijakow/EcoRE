@@ -8,9 +8,11 @@
           ^ self
         );
 
-        from: sequence => ( sequence do: [ :e | enqueue: e ]. ^ self).
+        from: sequence => ( sequence do: [ :e | enqueue: e ]. ^ self);
 
         isEmpty => elements isEmpty;
+        size => elements size;
+        
         enqueue: e => elements append: e;
         dequeue => elements removeFirst;
         front => elements first;

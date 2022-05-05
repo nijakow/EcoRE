@@ -74,8 +74,8 @@
         with #<:IIterable>;
         #'isEmpty',
         #'contains:'(element),
-        #'addElement:'(element),
-        #'removeElement:'(element),
+        #'add:'(element),
+        #'remove:'(element),
         #'take'()
     ];
 

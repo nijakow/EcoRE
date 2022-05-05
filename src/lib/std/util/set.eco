@@ -8,18 +8,17 @@
           ^ self
         );
 
-        from: sequence => ( sequence do: [ :e | addElement: e ]. ^ self).
+        from: sequence => ( sequence do: [ :e | add: e ]. ^ self).
 
         forEach: block => elements forEach: block;
         do: block => elements do: block;
 
         isEmpty => elements isEmpty;
+        size => elements size;
 
         contains: e => (elements find: e) yes: [ :i | ^ true ] no: [ ^ false ];
-        addElement: e => (contains: e) unless: [ elements append: e ];
-        removeElement: e => (elements find: e) yes: [ :i | elements remove: i ];
-        add: e => addElement: e;
-        remove: e => removeElement: e;
+        add: e => (contains: e) unless: [ elements append: e ];
+        remove: e => (elements find: e) yes: [ :i | elements remove: i ];
         take => (
             elements isEmpty if: [ invalidIndexError ].
             | v <- elements at: 0 |
@@ -28,6 +27,8 @@
         );
         
         writeOn: w => w << 'a set';
+
+        with inherited parent = #<:std/util/StandardListConversions>;
     };
 
     with inherited parent = #<:std/Clonable>;
