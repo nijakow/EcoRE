@@ -44,30 +44,6 @@
     );
 },
 
-#=std/util/StandardStackImpl: {
-    push: e => append: e;
-    top     => last;
-    pop     => removeLast;
-};
-
-#=std/util/StandardQueueImpl: {
-    enqueue: e => append: e;
-    front      => first;
-    dequeue    => removeFirst;
-};
-
-#=std/util/StandardSetImpl: {
-    contains: value => (find: value) yes: [ :i | ^ true ] no: [ ^ false ];
-    addElement: e => (contains: e) unless: [ append: e ];
-    removeElement: e => (find: e) yes: [ :i | remove: i ];
-    take => (
-        isEmpty if: [ invalidIndexError ].
-        | v <- first |
-        removeElement: v.
-      ^ v
-    );
-};
-
 #=std/util: {
     iterators = #<:std/util/iterators>;
 
