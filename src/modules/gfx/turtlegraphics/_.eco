@@ -12,8 +12,9 @@
         with inherited trait = {
             initWithRenderer: _renderer X: _x Y: _y => (
                 moveToX: _x Y: _y.
-                angle <- 0.0.
-                penDown <- true.
+                renderer <- _renderer.
+                angle    <- 0.0.
+                penDown  <- true.
               ^ self
             );
 
@@ -26,21 +27,18 @@
             );
 
             left: alpha => (
-                angle <- angle + alpha.
+                angle <- angle + ((alpha / 360.0) * (3.141592 * 2)).
               ^ self
             );
 
-            right: alpha => (
-                angle <- angle - alpha.
-              ^ self
-            );
+            right: alpha => left: alpha negate;
             
             forward: amount => (
                 |
-                    tx <- x + (angle cos),
-                    ty <- y - (angle sin)
+                    tx <- x + ((angle cos) * amount),
+                    ty <- y - ((angle sin) * amount)
                 |
-                penDown -> [ renderer drawLineX: x Y: y X: tx Y: ty ].
+                penDown -> [ renderer drawLineX: (x asInt) Y: (y asInt) X: (tx asInt) Y: (ty asInt) ].
                 moveToX: tx Y: ty.
               ^ self
             );
