@@ -8,6 +8,8 @@
           ^ self
         );
 
+        from: sequence => ( sequence do: [ :e | addElement: e ]. ^ self).
+
         forEach: block => elements forEach: block;
         do: block => elements do: block;
 
@@ -16,6 +18,8 @@
         contains: e => (elements find: e) yes: [ :i | ^ true ] no: [ ^ false ];
         addElement: e => (contains: e) unless: [ elements append: e ];
         removeElement: e => (elements find: e) yes: [ :i | elements remove: i ];
+        add: e => addElement: e;
+        remove: e => removeElement: e;
         take => (
             elements isEmpty if: [ invalidIndexError ].
             | v <- elements at: 0 |

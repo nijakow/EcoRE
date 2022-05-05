@@ -8,6 +8,8 @@
           ^ self
         );
 
+        from: sequence => ( sequence do: [ :e | push: e ]. ^ self).
+
         isEmpty => elements isEmpty;
 
         push: e => ( elements append: e. ^ self );

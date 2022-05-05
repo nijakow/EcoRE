@@ -8,6 +8,8 @@
           ^ self
         );
 
+        from: sequence => ( sequence do: [ :e | enqueue: e ]. ^ self).
+
         isEmpty => elements isEmpty;
         enqueue: e => elements append: e;
         dequeue => elements removeFirst;
