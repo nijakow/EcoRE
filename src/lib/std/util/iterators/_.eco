@@ -9,6 +9,7 @@
             [ hasNext ] while: [ block value(i, next). i <- i + 1 ]
         );
         do: block => [ hasNext ] while: [ block value(next) ];
+        into: acceptor => acceptor from: self;
         check: elem => ([ has ] and: [ current == elem ]) -> [ forward. true ];
         peek: sequence => (
             withReset: [ :reset |
