@@ -1,6 +1,8 @@
 #ifndef ECO_VM_FIBER_FIBER_H
 #define ECO_VM_FIBER_FIBER_H
 
+#include <ecore/base/any.h>
+
 #include "states.h"
 
 struct Eco_Frame;
@@ -8,7 +10,8 @@ struct Eco_VM;
 
 struct Eco_Fiber
 {
-    enum Eco_Fiber_State  state;
+    enum Eco_Fiber_State    state;
+    Eco_Any                 thrown;
 
     struct Eco_VM*          vm;
     struct Eco_Fiber**      prev;

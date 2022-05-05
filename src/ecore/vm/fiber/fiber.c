@@ -29,6 +29,7 @@ struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
     fiber->stack_max        = &fiber->stack[stack_size];
 
     Eco_Fiber_SetPaused(fiber);
+    fiber->thrown           = Eco_Any_FromInteger(0);
 
     return fiber;
 }

@@ -32,6 +32,17 @@ bool Eco_VM_Builtin_Reset(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_Throw(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  value;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    value = *Eco_Fiber_Peek(fiber);
+    Eco_Fiber_Throw(fiber, value);
+    return true;
+}
+
 bool Eco_VM_Builtin_SetExceptionHandler(struct Eco_Fiber* fiber, unsigned int args)
 {
     struct Eco_Closure*  closure;

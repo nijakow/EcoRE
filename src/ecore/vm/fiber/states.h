@@ -9,6 +9,7 @@ enum Eco_Fiber_State
     Eco_Fiber_State_PAUSED,         // Doing nothing
     Eco_Fiber_State_WAITING,        // Waiting for a notification by some event
     Eco_Fiber_State_TERMINATED,
+    Eco_Fiber_State_THROW,
     Eco_Fiber_State_ERROR,
     Eco_Fiber_State_ERROR_BUILTIN_TRAP,
     Eco_Fiber_State_ERROR_NOOPCODE,

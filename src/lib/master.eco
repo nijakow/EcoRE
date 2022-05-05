@@ -82,9 +82,9 @@
                 result <- (code execute(env)).
                 io out << '        ' << result.
                 io out newline
-            ] catch: [
-                io out << '--== Error Caught ==--'.
-                io out newline.
+            ] catch: [ :e |
+                (io out << '--== Error Caught ==--') newline commit.
+                (io out << '>>> ' << e) newline commit.
             ].
             io out commit.
         ]

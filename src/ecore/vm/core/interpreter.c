@@ -85,7 +85,8 @@ bool Eco_Fiber_Unwind(struct Eco_Fiber* fiber)
         Eco_Fiber_SetRunning(fiber);
         value = Eco_Any_FromInteger(0);
         Eco_Fiber_Push(fiber, &value);
-        Eco_Fiber_EnterClosure(fiber, handler, 1);
+        Eco_Fiber_Push(fiber, &fiber->thrown);
+        Eco_Fiber_EnterClosure(fiber, handler, 2);
         Eco_Fiber_Top(fiber)->return_to = handler->lexical;
         return true;
     }

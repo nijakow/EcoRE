@@ -85,3 +85,9 @@ void Eco_Fiber_SetState(struct Eco_Fiber* fiber, enum Eco_Fiber_State state)
 {
     fiber->state = state;
 }
+
+void Eco_Fiber_Throw(struct Eco_Fiber* fiber, Eco_Any value)
+{
+    fiber->thrown = value;
+    fiber->state  = Eco_Fiber_State_THROW;
+}

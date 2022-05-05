@@ -20,6 +20,9 @@
 
     & value       => (((std util Collector) clone) init: self) & value;
     ~> value      => ((std util MutablePair) clone) initWithFirst: self Second: value;
+
+    throw         => #'ecosphere.ecore.flow.throw'(self);
+
     writeOn: writer => writer << 'an object';
     
     protected with lobby = #<:lobby>;
