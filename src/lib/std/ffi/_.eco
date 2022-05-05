@@ -87,15 +87,15 @@
               ^ self
             );
 
-            getSymbol: name => (
+            symbol: name => (
                 #'ecosphere.ecore.ffi.object.dlsym'(library, name) when: [ :sym |
                   ^ Yes: sym
                 ].
               ^ No
             );
 
-            getFunction: name Type: t => (
-                (getSymbol: name)
+            function: name type: t => (
+                (symbol: name)
                     yes: [ :sym | Yes: (((std ffi ForeignFunction) clone) initWithName: name Ptr: sym Type: t) ]
                      no: [ No ]
             );
@@ -107,8 +107,19 @@
     };
 
     LocalBinary = {
-        getSymbol: name => ffi DLSymbol: name;
-        getFunction: name Type: t => ffi DLFunction: name Type: t;
+        symbol: name => (
+            #'ecosphere.ecore.ffi.object.dlsym'(name) when: [ :sym |
+              ^ Yes: sym
+            ].
+          ^ No
+        );
+
+        function: name type: t => (
+            (symbol: name)
+                yes: [ :sym | Yes: (((std ffi ForeignFunction) clone) initWithName: name Ptr: sym Type: t) ]
+                 no: [ No ]
+        );
+
         writeOn: w => w << 'the local binary';
         static with inherited parent = #<:std/Singleton>;
     };
@@ -118,18 +129,5 @@
           ^ Yes: ((SharedLibrary clone) initWithName: path Library: lib)
         ].
       ^ No
-    );
-
-    DLSymbol: name => (
-        #'ecosphere.ecore.ffi.object.dlsym'(name) when: [ :sym |
-          ^ Yes: sym
-        ].
-      ^ No
-    );
-
-    DLFunction: name Type: t => (
-        (DLSymbol: name)
-            yes: [ :sym | Yes: (((std ffi ForeignFunction) clone) initWithName: name Ptr: sym Type: t) ]
-             no: [ No ]
     );
 }
