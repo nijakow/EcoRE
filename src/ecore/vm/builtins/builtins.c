@@ -147,6 +147,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.function.call", Eco_VM_Builtin_FFIFunction_Call);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.function.eco_call", Eco_VM_Builtin_FFIFunction_EcoCall);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.object.alloc", Eco_VM_Builtin_FFIObject_Alloc);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.object.cast_to", Eco_VM_Builtin_FFIObject_Cast);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.object.get_type", Eco_VM_Builtin_FFIObject_GetType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.object.get_size", Eco_VM_Builtin_FFIObject_GetSize);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.object.assign_null", Eco_VM_Builtin_FFIObject_AssignNull);

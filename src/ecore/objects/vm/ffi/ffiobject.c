@@ -43,12 +43,30 @@ struct Eco_FFIObject* Eco_FFIObject_New(struct Eco_FFIType* type, void* ptr, uns
         object->type  = type;
         object->size  = size;
         object->bytes = object->payload;
+        object->ref   = NULL;
         if (ptr == NULL) {
             for (index = 0; index < size; index++)
                 ((char*) object->bytes)[index] = 0;
         } else {
             Eco_Memcpy(object->bytes, ptr, size);
         }
+    }
+
+    return object;
+}
+
+struct Eco_FFIObject* Eco_FFIObject_Cast(struct Eco_FFIObject* original, struct Eco_FFIType* type)
+{
+    struct Eco_FFIObject*  object;
+
+    object = Eco_Object_New(Eco_FFIObject_TYPE, sizeof(struct Eco_FFIObject));
+
+    if (object != NULL)
+    {
+        object->type  = type;
+        object->size  = original->size;
+        object->bytes = original->bytes;
+        object->ref   = original;
     }
 
     return object;
@@ -89,6 +107,8 @@ struct Eco_FFIObject* Eco_FFIObject_DLSym(void* base, char* symbol)
 
 void Eco_FFIObject_Mark(struct Eco_GC_State* state, struct Eco_FFIObject* object)
 {
+    if (object->ref != NULL)
+        Eco_GC_State_MarkObject(state, object->ref);
     Eco_GC_State_MarkObject(state, object->type);
     Eco_Object_Mark(state, &object->_);
 }

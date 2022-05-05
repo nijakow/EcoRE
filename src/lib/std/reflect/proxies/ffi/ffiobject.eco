@@ -5,6 +5,7 @@
     address => #'ecosphere.ecore.ffi.object.address'(self);
 
     assignNull => #'ecosphere.ecore.ffi.object.assign_null'(self);
+    castTo: type => #'ecosphere.ecore.ffi.object.cast_to'(self, type);
 
     writeOn: writer => writer << '<ffi_object:' << type << ':' << size << '>';
     static with inherited parent = #<:std/Clonable>;

@@ -355,6 +355,25 @@ bool Eco_VM_Builtin_FFIObject_Address(struct Eco_Fiber* fiber, unsigned int args
     return true;
 }
 
+bool Eco_VM_Builtin_FFIObject_Cast(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_FFIObject*  object;
+    struct Eco_FFIObject*  cast;
+    struct Eco_FFIType*    type;
+    Eco_Any                any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    type = Eco_Any_AsPointer(any);
+    Eco_Fiber_Pop(fiber, &any);
+    object = Eco_Any_AsPointer(any);
+    cast = Eco_FFIObject_Cast(object, type);
+    any = Eco_Any_FromPointer(cast);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 #ifdef ECO_CONFIG_USE_DLOPEN
 bool Eco_VM_Builtin_FFIObjectDLOpen(struct Eco_Fiber* fiber, unsigned int args)
 {
