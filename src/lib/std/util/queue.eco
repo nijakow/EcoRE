@@ -1,0 +1,5 @@
+
+#=std/util/Queue: {
+    new => std util newVector;
+    with inherited parent = #<:std/Clonable>;
+}

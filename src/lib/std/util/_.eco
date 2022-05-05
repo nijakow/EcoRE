@@ -88,20 +88,11 @@
         writer << ')'
     );
 
-    Stack = {
-      new => std util newVector;
-      with inherited parent = #<:std/Clonable>;
-    };
+    Stack = #<:std/util/Stack>;
 
-    Queue = {
-      new => std util newVector;
-      with inherited parent = #<:std/Clonable>;
-    };
+    Queue = #<:std/util/Queue>;
 
-    Set = {
-      new => std util newVector;
-      with inherited parent = #<:std/Clonable>;
-    };
+    Set = #<:std/util/Set>;
 
     Vector = #<:std/util/Vector>;
 

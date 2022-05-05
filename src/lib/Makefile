@@ -52,7 +52,10 @@ std/util/iterators/_.eco \
 std/util/collector.eco \
 std/util/map.eco \
 std/util/mutablepair.eco \
+std/util/queue.eco \
 std/util/range.eco \
+std/util/set.eco \
+std/util/stack.eco \
 std/util/vectors.eco \
 lang/_.eco \
 lang/eco/_.eco \
