@@ -46,7 +46,7 @@ static void Eco_TypeTransfer1(struct Eco_Molecule* molecule,
 {
     struct Eco_Type*  new_type;
 
-    if (Eco_Type_CopyWithChangedSlotTypeReference(molecule->_.type, slot_index, referenced_type, &new_type))
+    if (Eco_Type_CopyWithChangedSlotTypeReference(molecule->_.type, molecule, slot_index, referenced_type, &new_type))
     {
         Eco_Molecule_SwitchType(molecule, new_type);
     }

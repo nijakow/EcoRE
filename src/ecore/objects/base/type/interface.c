@@ -116,12 +116,23 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
         if (!private_also && type->slots[index].info.flags.is_protected)
             continue;
         if (type->slots[index].info.flags.is_with) {
-            if (Eco_TypeSlot_GetValue(&type->slots[index], (struct Eco_Molecule*) object, &value))
-                interface->parents[parent_index] = Eco_Any_GetInterface(value, private_also);
-            else
-                interface->parents[parent_index] = NULL;  // TODO: Error
-            parent_index++;
+            if (Eco_TypeSlot_GetValue(&type->slots[index], (struct Eco_Molecule*) object, &value)) {
+                /*
+                 * Check for circular inheritance (only valid if the slot points to SELF)
+                 */
+                if (Eco_Any_IsPointer(value) && Eco_Any_AsPointer(value) == object) {
+                    /*
+                     * Circular inheritance confirmed. Since an interface always includes itself,
+                     * there is no need for us to add a parent entry.
+                     */
+                } else {
+                    interface->parents[parent_index++] = Eco_Any_GetInterface(value, private_also);
+                }
+            } else {
+                // TODO: Error
+            }
         }
+        interface->parent_count = parent_index;
         interface->entries[slot_index].return_type = type->slots[index].interface;
         interface->entries[slot_index].key         = type->slots[index].info.key;
         interface->entries[slot_index].arg_count   = 0;      // TODO: If it's a method, check for args

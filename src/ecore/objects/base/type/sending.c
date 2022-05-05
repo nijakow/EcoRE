@@ -38,6 +38,11 @@ bool Eco_Type_SendMessageToMolecule(struct Eco_Message*  message,
             case Eco_TypeSlotType_INLINED:
                 if (slot->info.flags.is_with && Eco_Interface_ImplementsMessage(slot->interface, message->key)) {
                     if (Eco_TypeSlot_GetValue(slot, molecule, &value)) {
+                        /*
+                         * Check for circular inheritance (only valid if the slot points to SELF)
+                         */
+                        if (Eco_Any_IsPointer(value) && Eco_Any_AsPointer(value) == molecule)
+                            continue;
                         if (slot->info.flags.is_inherited) {
                             result = Eco_Send(message, value, self, message->private_send, true);
                         } else {

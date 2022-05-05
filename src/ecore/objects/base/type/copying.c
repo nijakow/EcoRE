@@ -178,18 +178,30 @@ bool Eco_Type_CopyWithRemovedSlot(struct Eco_Type* self,
     return true;
 }
 
-bool Eco_Type_CopyWithChangedSlotTypeReference(struct Eco_Type*  type,
-                                               unsigned int      slot_index,
-                                               struct Eco_Type*  new_reference_type,
-                                               struct Eco_Type** type_loc)
+bool Eco_Type_CopyWithChangedSlotTypeReference(struct Eco_Type*     type,
+                                               struct Eco_Molecule* molecule,
+                                               unsigned int         slot_index,
+                                               struct Eco_Type*     new_reference_type,
+                                               struct Eco_Type**    type_loc)
 {
     struct Eco_Type*  the_copy;
+    unsigned int      index;
+    Eco_Any           any;
 
     the_copy = Eco_Type_Copy(type);
 
     if (the_copy != NULL)
     {
         the_copy->slots[slot_index].body.inlined.referenced_type = new_reference_type;
+        for (index = 0; index < type->slot_count; index++)
+        {
+            if (type->slots[index].type == Eco_TypeSlotType_INLINED) {
+                Eco_TypeSlot_GetValue(&type->slots[index], molecule, &any);
+                if (Eco_Any_IsPointer(any) && Eco_Any_AsPointer(any) == molecule) {
+                    the_copy->slots[index].body.inlined.referenced_type = the_copy;
+                }
+            }
+        }
         *type_loc = the_copy;
     }
 
