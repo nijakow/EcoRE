@@ -1,22 +1,10 @@
 
-
 #=std/reflect/proxies/Blob: {
     size => #'ecosphere.ecore.object.blob.size'(self);
     isEmpty => size isZero;
-    at: index => int8at: index;
-    int8at: index => #'ecosphere.ecore.object.blob.at_int8'(self, index);
-    int16at: index => #'ecosphere.ecore.object.blob.at_int16'(self, index);
-    int32at: index => #'ecosphere.ecore.object.blob.at_int32'(self, index);
-    ptrAt: index Offset: offset Size: size => #'ecosphere.ecore.object.blob.at_ptr'(self, index, offset, size);
-    ptrAt: index Size: size => ptrAt: index Offset: 0 Size: size;
-    anyAt: index => #'ecosphere.ecore.object.blob.at_any'(self, index);
-    at: index put: value => at: index PutInt8: value;
-    at: index PutInt8: value => #'ecosphere.ecore.object.blob.at_put_int8'(self, index, value);
-    at: index PutInt16: value => #'ecosphere.ecore.object.blob.at_put_int16'(self, index, value);
-    at: index PutInt32: value => #'ecosphere.ecore.object.blob.at_put_int32'(self, index, value);
-    at: index PutPtr: value Offset: offset => #'ecosphere.ecore.object.blob.at_put_ptr'(self, index, value, offset);
-    at: index PutPtr: value => at: index PutPtr: value Offset: 0;
-    at: index PutAny: value => #'ecosphere.ecore.object.blob.at_put_any'(self, index, value);
+
+    at: index => #'ecosphere.ecore.object.blob.at_int8'(self, index);
+    at: index put: value => #'ecosphere.ecore.object.blob.at_put_int8'(self, index, value);
 
     from: collection => ( collection forEach: [ :i, :v | at: i put: v ]. ^ self );
 
