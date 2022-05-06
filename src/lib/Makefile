@@ -86,7 +86,6 @@ lang/eco/parser/Parser/send.eco \
 lang/eco/parser/_.eco \
 lang/eco/parser/shared.eco \
 lang/eco/parser/tokenizer.eco \
-ecosphere/_.eco \
 interfaces.eco \
 master.eco
 
