@@ -46,16 +46,21 @@
         std io out <- ((std io PortOutput) clone) init: ((std io FDByteWriter) clone initWithFileDescriptor: (((std io FileDescriptor) clone) init: 1)).
     );
 
+    InitModules => (
+        modules init.
+    );
+
     Quote => (
         io out newline.
-        io out << '      Grant me wings that I might fly'. io out newline.
-        io out << '              - VNV Nation, "Beloved"'. io out newline.
+        (io out << '      Grant me wings that I might fly') newline.
+        (io out << '              - VNV Nation, "Beloved"') newline.
         io out newline.
     );
 
     Init => (
         InitTypes.
         InitIO.
+        InitModules.
 
         Quote.
 

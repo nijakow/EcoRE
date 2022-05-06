@@ -1,7 +1,5 @@
 
 {
-    protected with parent = std;
-
     protected lib;
 
     protected SDL_Init,
@@ -84,6 +82,8 @@
 
         "TODO..."
     };
+
+    static with inherited _ = std Module;
 
     NewWindowWithTitle: title X: x Y: y W: w H: h => (Window clone) init: CreateWindow(title, x, y, w, h, 0);
 

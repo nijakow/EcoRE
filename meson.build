@@ -80,6 +80,7 @@ eco_src = [
     './src/lib/std/reflect/_.eco',
     './src/lib/std/singleton.eco',
     './src/lib/std/module.eco',
+    './src/lib/std/modules.eco',
     './src/lib/std/defaultbehavior.eco',
     './src/lib/std/globals.eco',
     './src/lib/std/_.eco',

@@ -9,6 +9,7 @@
     Clonable = #<:std/Clonable>;
     Singleton = #<:std/Singleton>;
     Module = #<:std/Module>;
+    modules = #<:std/modules>;
 
     with bool = #<:std/bool>;
     with maybe = #<:std/maybe>;

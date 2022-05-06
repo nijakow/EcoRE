@@ -1,5 +1,7 @@
 
 #=std/Module: {
+    init => self;
+    main => self;
     
     writeOn: w => w << 'a module';
 
