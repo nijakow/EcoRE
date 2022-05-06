@@ -1,8 +1,12 @@
 
 #=std/io/StringWriter: {
+    static with inherited parent = #<:std/Clonable>;
+
     private builder;
 
     with inherited trait = {
+        with inherited parent = #<:std/io/Writer>;
+        
         init => (
             builder <- std util newVector.
           ^ self
@@ -14,9 +18,5 @@
         close => self;
 
         writeOn: w => w << 'a string writer';
-
-        with inherited parent = #<:std/io/Writer>;
     };
-
-    static with inherited parent = #<:std/Clonable>;
 }

@@ -1,5 +1,7 @@
 
 #=std/io/PortIO: {
+    static with inherited parent = #<:std/Clonable>;
+    
     in, out;
 
     with inherited trait = {
@@ -19,6 +21,4 @@
 
         writeOn: w => w << 'PortIO';
     };
-
-    static with inherited parent = #<:std/Clonable>;
 }

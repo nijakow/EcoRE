@@ -1,8 +1,14 @@
 
 #=std/util/Range: {
+    static with inherited parent = #<:std/Clonable>;
+
     start, end;
 
     with inherited trait = {
+        with inherited parent = #<:std/util/StandardListConversions>;
+        with inherited parent = #<:std/util/StandardListAccess>;
+        with inherited parent = #<:std/util/StandardListSearch>;
+        
         initWithStart: _start End: _end => (
             start <- _start min: _end.
             end   <- _start max: _end.
@@ -18,11 +24,5 @@
         forEach: block => 0 for: range do: [ :i | block value(i, at: i) ];
 
         writeOn: w => w << start << ' to: ' << end;
-
-        with inherited parent = #<:std/util/StandardListConversions>;
-        with inherited parent = #<:std/util/StandardListAccess>;
-        with inherited parent = #<:std/util/StandardListSearch>;
     };
-
-    static with inherited parent = #<:std/Clonable>;
 }

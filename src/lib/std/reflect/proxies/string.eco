@@ -1,9 +1,13 @@
 
 #=std/reflect/proxies/String/Iterator: {
+    static with inherited parent = #<:std/Clonable>;
+
     private string,
     private index;
 
     with inherited trait = {
+        with inherited iteratorTrait = #<:std/util/iterators/BiIteratorTrait>;
+        
         init: _string => (
             string <- _string.
             index  <- 0.
@@ -22,13 +26,13 @@
             | resetIndex <- index |
           ^ block value([ index <- resetIndex ])
         );
-
-        with inherited iteratorTrait = #<:std/util/iterators/BiIteratorTrait>;
     };
-    static with inherited parent = #<:std/Clonable>;
 },
 
 #=std/reflect/proxies/String: {
+    static with inherited parent = #<:std/Clonable>;
+    with inherited standard_list_conversions = #<:std/util/StandardListConversions>;
+
     size => #'ecosphere.ecore.object.string.char_length'(self);
     byteSize => #'ecosphere.ecore.object.string.byte_length'(self);
     byteAt: index => #'ecosphere.ecore.object.string.byte_at'(self, index);
@@ -102,6 +106,4 @@
     );
     iterator => ((std text utf8 UTF8Iterator) clone) init: ((#<:std/reflect/proxies/String/Iterator> clone) init: self);
     writeOn: writer => do: [ :c | writer << c ];
-    with inherited standard_list_conversions = #<:std/util/StandardListConversions>;
-    static with inherited parent = #<:std/Clonable>;
 }

@@ -1,5 +1,7 @@
 
 #=std/reflect/proxies/Block: {
+    static with inherited parent = #<:std/Clonable>;
+    
     isBlock    => true;
     value(...) => #'ecosphere.ecore.flow.value'(self, ...);
     value: v   => value(v);
@@ -46,5 +48,4 @@
         v if: [ ^ v ] else: [ ^ b value ]
     );
     writeOn: writer => writer << 'a block closure';
-    static with inherited parent = #<:std/Clonable>;
 }

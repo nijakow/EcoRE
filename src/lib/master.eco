@@ -20,6 +20,7 @@
 },
 
 #=bootstrapper: {
+    with lobby = #<:lobby>;
 
     InitTypes => (
         #'ecosphere.ecore.init.set_lobby'(#<:lobby>).
@@ -95,8 +96,6 @@
             io out commit.
         ]
     );
-
-    with lobby = #<:lobby>;
 },
 
 #<:bootstrapper> Init.

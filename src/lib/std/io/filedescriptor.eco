@@ -1,5 +1,7 @@
 
 #=std/io/FileDescriptor: {
+    static with inherited parent = #<:std/Clonable>;
+    
     fd;
 
     with inherited trait = {
@@ -34,6 +36,4 @@
 
         close => "TODO";
     };
-
-    static with inherited parent = #<:std/Clonable>;
 }

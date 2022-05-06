@@ -1,5 +1,7 @@
 
 #=std/reflect/proxies/Array: {
+    static with inherited parent = #<:std/Clonable>;
+    
     size => #'ecosphere.ecore.object.array.size'(self);
     isEmpty => size isZero;
     at: index => #'ecosphere.ecore.object.array.at'(self, index);
@@ -16,6 +18,4 @@
     with inherited conversions = #<:std/util/StandardListConversions>;
     with inherited access = #<:std/util/StandardListAccess>;
     with inherited search = #<:std/util/StandardListSearch>;
-    
-    static with inherited parent = #<:std/Clonable>;
 }

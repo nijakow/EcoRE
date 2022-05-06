@@ -1,5 +1,7 @@
 
 #=std/util/Queue: {
+    with inherited parent = #<:std/Clonable>;
+    
     private elements;
 
     with inherited trait = {
@@ -19,6 +21,4 @@
 
         writeOn: w => w << 'a queue';
     };
-
-    with inherited parent = #<:std/Clonable>;
 }

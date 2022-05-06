@@ -1,5 +1,7 @@
 
 {
+    with inherited parent = std Clonable;
+    
     x, y;
 
     with inherited trait = {
@@ -18,6 +20,4 @@
         translateByX: dx Y: dy => x: x + dx y: y + dy;
         translateBy: vec => x: x + vec x y: y + vec y;
     };
-
-    with inherited parent = std Clonable;
 }

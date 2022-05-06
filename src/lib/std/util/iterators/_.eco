@@ -24,15 +24,19 @@
     };
 
     BiIteratorTrait = #=std/util/iterators/BiIteratorTrait: {
-        previous => ( backward. current );
         with inherited parent = #<:std/util/iterators/IteratorTrait>;
+        previous => ( backward. current );
     };
 
     IndexIterator = {
+        static with inherited parent = #<:std/Clonable>;
+
         protected blob,
         protected index;
 
         with inherited trait = {
+            with inherited iteratorTrait = #<:std/util/iterators/BiIteratorTrait>;
+            
             init: _blob => (
                 blob  <- _blob.
                 index <- 0.
@@ -51,11 +55,7 @@
                 | resetIndex <- index |
               ^ block value([ index <- resetIndex ])
             );
-
-            with inherited iteratorTrait = #<:std/util/iterators/BiIteratorTrait>;
         };
-
-        static with inherited parent = #<:std/Clonable>;
     };
 
     segmented = #<:std/util/iterators/segmented>;

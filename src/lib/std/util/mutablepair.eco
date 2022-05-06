@@ -1,4 +1,6 @@
 #=std/util/MutablePair: {
+    static with inherited parent = #<:std/Clonable>;
+    
     first, second;
 
     with inherited trait = {
@@ -16,6 +18,4 @@
 
         writeOn: w => w << '(' << first << ' ~> ' << second << ')';
     };
-
-    static with inherited parent = #<:std/Clonable>;
 }

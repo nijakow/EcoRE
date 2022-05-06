@@ -1,5 +1,7 @@
 
 #=std/DefaultBehavior: {
+    protected with lobby = #<:lobby>;
+    
     value         => self;
     mirror        => (std reflect Mirror) clone init: self;
     asBool        => true;
@@ -24,6 +26,4 @@
     throw         => #'ecosphere.ecore.flow.throw'(self);
 
     writeOn: writer => writer << 'an object';
-    
-    protected with lobby = #<:lobby>;
 }

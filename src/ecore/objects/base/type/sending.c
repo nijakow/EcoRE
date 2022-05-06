@@ -15,7 +15,7 @@ bool Eco_Type_SendMessageToMolecule(struct Eco_Message*  message,
     unsigned int         i;
     bool                 result;
 
-    for (i = 0; i < type->slot_count; i++)
+    for (i = type->slot_count; i-- > 0;)
     {
         slot = &type->slots[i];
         if (slot->info.key == message->key) {
@@ -26,7 +26,7 @@ bool Eco_Type_SendMessageToMolecule(struct Eco_Message*  message,
         }
     }
 
-    for (i = 0; i < type->slot_count; i++)
+    for (i = type->slot_count; i-- > 0;)
     {
         slot = &(type->slots[i]);
 

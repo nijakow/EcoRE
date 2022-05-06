@@ -1,8 +1,12 @@
 
 #=std/text/utf8/UTF8Iterator: {
+    static with inherited parent = #<:std/Clonable>;
+
     protected iterator;
 
     with inherited trait = {
+        with inherited iteratorTrait = #<:std/util/iterators/IteratorTrait>;
+        
         init: _iterator => (
             iterator <- _iterator.
           ^ self
@@ -34,9 +38,5 @@
         current => withReset: [ :reset | reset returns: next ];
         
         writeOn: w => w << 'a utf8 forward iterator';
-
-        with inherited iteratorTrait = #<:std/util/iterators/IteratorTrait>;
     };
-
-    static with inherited parent = #<:std/Clonable>;
 };

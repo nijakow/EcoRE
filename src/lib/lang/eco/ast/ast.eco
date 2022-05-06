@@ -24,6 +24,8 @@
     };
 
     ASTFlags = {
+        static with inherited parent = #<:std/Clonable>;
+
         isDeprecated, isProtected, isStatic, isFinal, isWith, isInherited, isOwn, isMethod;
 
         init => (
@@ -60,11 +62,11 @@
             isOwn        if: [ writer << 'own '         ].
             isMethod     if: [ writer << '<method> '    ]. "isMethod is usually not printed"
         );
-
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTTypeAndName = {
+        static with inherited parent = #<:std/Clonable>;
+
         type, name;
 
         initWithType: t Name: n => (
@@ -77,11 +79,11 @@
         getName => name;
 
         writeOn: writer => writer << '[' << type << '] ' << name;
-
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTSlotDef = {
+        static with inherited parent = #<:std/Clonable>;
+
         flags, type, name, args, varargs, body;
 
         initWithFlags: f Type: t Name: n Args: a Varargs: v Body: b => (
@@ -136,27 +138,31 @@
             ].
           ^ molecule
         );
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTSelf = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
         new => self;
         isSelfAST => true;
         acceptVisitor: visitor => visitor visitSelf: self;
         writeOn: writer => writer << 'self';
-        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTHostRef = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
         new => self;
         acceptVisitor: visitor => visitor visitHostRef: self;
         writeOn: writer => writer << '$';
-        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTConstant = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
         constantValue;
 
         initWithValue: v => (
@@ -165,11 +171,12 @@
         );
         acceptVisitor: visitor => visitor visitConstant: self;
         writeOn: writer => writer << 'ASTConstant(' << constantValue << ')';
-        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTArray = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
         exprs;
 
         initWithExprs: _exprs => (
@@ -178,11 +185,12 @@
         );
         acceptVisitor: visitor => visitor visitArray: self;
         writeOn: writer => writer << 'ASTArray(' << exprs << ')';
-        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTInterface = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
         parents, entries;
 
         initWithParents: _parents Entries: _entries => (
@@ -193,11 +201,12 @@
 
         acceptVisitor: visitor => visitor visitInterface: self;
         writeOn: writer => writer << 'ASTInterface(' << parents << ', ' << entries << ')';
-        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTMolecule = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
         slots;
 
         initWithSlots: _slots => (
@@ -207,11 +216,12 @@
 
         acceptVisitor: visitor => visitor visitMolecule: self;
         writeOn: writer => writer << 'ASTMolecule(' << slots << ')';
-        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTBuiltin = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
         name, args, varargs;
 
         initWithName: _name Args: _args Varargs: _varargs => (
@@ -225,11 +235,12 @@
         getVarargs => varargs;
         acceptVisitor: visitor => visitor visitBuiltin: self;
         writeOn: writer => writer << 'ASTBuiltin(' << name << ', ' << args << ', ' << varargs << ')';
-        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTCall = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
         subject, args, varargs;
 
         initWithSubject: _subject Args: _args Varargs: _varargs => (
@@ -243,11 +254,12 @@
         getVarargs => varargs;
         acceptVisitor: visitor => visitor visitCall: self;
         writeOn: writer => writer << 'ASTCall(' << subject << ', ' << args << ', ' << varargs << ')';
-        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTSend = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
         subject, message, args, varargs;
 
         initWithSubject: _subject Message: _message Args: _args Varargs: _varargs => (
@@ -263,11 +275,12 @@
         getVarargs => varargs;
         acceptVisitor: visitor => visitor visitSend: self;
         writeOn: writer => writer << 'ASTSend(' << subject << ', ' << message << ', ' << args << ', ' << varargs << ')';
-        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTAssignment = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
         lhs, rhs;
 
         initWithLHS: _lhs RHS: _rhs => (
@@ -277,11 +290,12 @@
         );
         acceptVisitor: visitor => visitor visitAssignment: self;
         writeOn: writer => writer << 'ASTAssignment(' << lhs << ', ' << rhs << ')';
-        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTVariableDeclaration = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
         type, name, value, followup;
 
         initWithType: _type Name: _name Value: _value Followup: _followup => (
@@ -298,11 +312,12 @@
         getFollowup => followup;
         acceptVisitor: visitor => visitor visitVariableDeclaration: self;
         writeOn: writer => writer << 'ASTVariableDeclaration(' << type << ', ' << name << ', ' << value << ', ' << followup << ')';
-        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTCompound = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
         exprs;
 
         initWithExprs: _exprs => (
@@ -312,11 +327,12 @@
         getExprs => exprs asArray;
         acceptVisitor: visitor => visitor visitCompound: self;
         writeOn: writer => writer << 'ASTCompound(' << exprs << ')';
-        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTBlock = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
         args, varargs, body;
 
         initWithArgs: _args Varargs: _varargs Body: _body => (
@@ -330,11 +346,12 @@
         getBody => body;
         acceptVisitor: visitor => visitor visitBlock: self;
         writeOn: writer => writer << 'ASTBlock(' << args << ', ' << varargs << ', ' << body << ')';
-        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTReturn = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
         returnValue;
 
         initWithValue: _value => (
@@ -343,11 +360,12 @@
         );
         acceptVisitor: visitor => visitor visitReturn: self;
         writeOn: writer => writer << 'ASTReturn(' << returnValue << ')';
-        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     };
 
     ASTAs = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+        
         lhs, rhs;
 
         initWithLHS: _lhs RHS: _rhs => (
@@ -357,7 +375,5 @@
         );
         acceptVisitor: visitor => visitor visitAs: self;
         writeOn: writer => writer << 'ASTAs(' << lhs << ', ' << rhs << ')';
-        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     };
 }

@@ -1,5 +1,8 @@
 
 #=std/io/FDByteReader: {
+    static with inherited parent = #<:std/Clonable>;
+    with inherited trait = #<:std/util/iterators/IteratorTrait>;
+
     protected fd;
     protected buffer;
     protected readHead;
@@ -58,7 +61,4 @@
     next => [ forward ] returns: current;
 
     writeOn: w => w << 'an fd byte reader';
-
-    with inherited trait = #<:std/util/iterators/IteratorTrait>;
-    static with inherited parent = #<:std/Clonable>;
 }

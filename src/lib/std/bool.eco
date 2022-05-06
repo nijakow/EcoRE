@@ -1,6 +1,7 @@
 
 #=std/bool: {
     true = #=std/bool/true: {
+        static with inherited parent = #<:std/Clonable>;
         with inherited trait = {
             asBool           => self;
             not              => false;
@@ -12,10 +13,10 @@
             default: b       => ( b value. ^ self );
             writeOn: writer  => writer << 'true';
         };
-        static with inherited parent = #<:std/Clonable>;
     },
 
     false = #=std/bool/false: {
+        static with inherited parent = #<:std/Clonable>;
         with inherited trait = {
             asBool           => self;
             not              => true;
@@ -27,6 +28,5 @@
             default: b       => self;
             writeOn: writer  => writer << 'false';
         };
-        static with inherited parent = #<:std/Clonable>;
     }
 }

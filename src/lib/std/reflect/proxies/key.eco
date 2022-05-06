@@ -1,5 +1,6 @@
 
 #=std/reflect/proxies/Key: {
+    static with inherited parent = #<:std/Clonable>;
     isKey    => true;
     asString => #'ecosphere.ecore.object.key.as_string'(self);
     writeOn: writer => (
@@ -8,5 +9,4 @@
         writer << asString.
         writer << #\'.
     );
-    static with inherited parent = #<:std/Clonable>;
 }

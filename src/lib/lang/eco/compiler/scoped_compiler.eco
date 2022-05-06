@@ -1,5 +1,8 @@
 
 #=lang/eco/compiler/ScopedCompiler: {
+    static with inherited parent = #<:std/Clonable>;
+    with inherited module = #<:lang/eco/compiler>;
+
     scopes;
 
     init => (
@@ -80,7 +83,4 @@
     );
     storeVariable: name Interlude: interlude => storeVariable: name Interlude: interlude IfPresent: [] IfNotPresent: [];
     isLocal: name => scopes findVariable: name IfFound: [ :info, :depth | ^ true ] IfNotFound: [ ^ false ];
-
-    with inherited parent = #<:std/Clonable>;
-    with inherited module = #<:lang/eco/compiler>;
 }

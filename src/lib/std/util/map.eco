@@ -1,4 +1,6 @@
 #=std/util/Map: {
+    static with inherited parent = #<:std/Clonable>;
+    
     protected pairs;
 
     with inherited trait = {
@@ -29,6 +31,4 @@
 
         writeOn: w => w << pairs;
     };
-
-    static with inherited parent = #<:std/Clonable>;
 }

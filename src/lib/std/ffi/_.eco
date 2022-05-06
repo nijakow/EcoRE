@@ -58,6 +58,8 @@
     null => ((types pointer) alloc) assignNull;
 
     ForeignFunction = {
+        static with inherited parent = #<:std/Clonable>;
+
         protected name,
         protected ptr,
         type;
@@ -74,11 +76,11 @@
 
             writeOn: w => w << 'the foreign function ' << name;
         };
-
-        static with inherited parent = #<:std/Clonable>;
     };
 
     SharedLibrary = {
+        static with inherited parent = #<:std/Clonable>;
+
         protected name,
         protected library;
 
@@ -104,11 +106,11 @@
 
             writeOn: w => w << 'the shared library ' << name;
         };
-
-        static with inherited parent = #<:std/Clonable>;
     };
 
     LocalBinary = {
+        static with inherited parent = #<:std/Singleton>;
+        
         symbol: name => (
             #'ecosphere.ecore.ffi.object.dlsym'(name) when: [ :sym |
               ^ Yes: sym
@@ -123,7 +125,6 @@
         );
 
         writeOn: w => w << 'the local binary';
-        static with inherited parent = #<:std/Singleton>;
     };
 
     DLOpen: path => (

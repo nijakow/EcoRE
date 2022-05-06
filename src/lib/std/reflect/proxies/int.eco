@@ -1,5 +1,6 @@
 
 #=std/reflect/proxies/Int: {
+    static with inherited parent = #<:std/Clonable>;
 
     with inherited basic_math = {
         +    other => #'ecosphere.ecore.math.add'(self, other);
@@ -88,6 +89,4 @@
     };
 
     writeOn: writer => (std text writing NumberWriter) WriteInt: self To: writer;
-    
-    static with inherited parent = #<:std/Clonable>;
 }

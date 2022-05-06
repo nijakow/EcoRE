@@ -1,5 +1,7 @@
 
 #=std/io/FDByteWriter: {
+    static with inherited parent = #<:std/Clonable>;
+
     protected fd;
     protected buffer;
     protected writeHead;
@@ -24,6 +26,4 @@
     );
 
     close => fd close;
-
-    static with inherited parent = #<:std/Clonable>;
 }

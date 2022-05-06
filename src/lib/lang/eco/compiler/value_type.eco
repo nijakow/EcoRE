@@ -2,6 +2,9 @@
 
 #=lang/eco/compiler/ValueType: {
     Register = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited module = #<:lang/eco/compiler>;
+
         number, depth;
 
         initWithNumber: n Depth: d => (
@@ -17,20 +20,21 @@
         isStack => false;
         isClosure => false;
         ifRegister: r ifConstant: c ifClosure: cl ifStack: s => r value;
-
-        with inherited parent = #<:std/Clonable>;
-        with inherited module = #<:lang/eco/compiler>;
     },
     Stack = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited module = #<:lang/eco/compiler>;
+
         isRegister => false;
         isConstant => false;
         isStack => true;
         isClosure => false;
         ifRegister: r ifConstant: c ifClosure: cl ifStack: s => s value;
-        with inherited parent = #<:std/Clonable>;
-        with inherited module = #<:lang/eco/compiler>;
     },
     Constant = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited module = #<:lang/eco/compiler>;
+
         constantValue;
 
         initWithValue: v => (
@@ -43,10 +47,11 @@
         isStack => false;
         isClosure => false;
         ifRegister: r ifConstant: c ifClosure: cl ifStack: s => c value;
-        with inherited parent = #<:std/Clonable>;
-        with inherited module = #<:lang/eco/compiler>;
     },
     Closure = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited module = #<:lang/eco/compiler>;
+
         closureValue;
 
         initWithValue: v => (
@@ -59,7 +64,5 @@
         isStack => false;
         isClosure => true;
         ifRegister: r ifConstant: c ifClosure: cl ifStack: s => cl value;
-        with inherited parent = #<:std/Clonable>;
-        with inherited module = #<:lang/eco/compiler>;
     }
 }

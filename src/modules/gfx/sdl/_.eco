@@ -1,5 +1,7 @@
 
 {
+    static with inherited _ = std Module;
+
     protected lib;
 
     protected SDL_Init,
@@ -83,11 +85,11 @@
         "TODO..."
     };
 
-    static with inherited _ = std Module;
-
     NewWindowWithTitle: title X: x Y: y W: w H: h => (Window clone) init: CreateWindow(title, x, y, w, h, 0);
 
     own Window = {
+        with inherited parent = std Clonable;
+
         protected sdl = $,
         protected winptr,
         renderer;
@@ -106,11 +108,11 @@
 
             writeOn: w => w << 'an sdl window';
         };
-
-        with inherited parent = std Clonable;
     };
 
     own Renderer = {
+        with inherited parent = std Clonable;
+
         protected sdl = $,
         protected renptr;
 
@@ -134,7 +136,5 @@
 
             writeOn: w => w << 'an sdl renderer';
         };
-
-        with inherited parent = std Clonable;
     };
 }

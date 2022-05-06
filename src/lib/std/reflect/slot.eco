@@ -1,5 +1,7 @@
 
 #=std/reflect/Slot: {
+    static with inherited parent = #<:std/Clonable>;
+    
     reflectee, name;
 
     protected owningMirror;
@@ -16,6 +18,4 @@
 
         writeOn: w => w << 'slot named ' << name;
     };
-
-    static with inherited parent = #<:std/Clonable>;
 }

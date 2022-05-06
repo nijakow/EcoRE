@@ -1,6 +1,8 @@
 #=lang/eco/tokenizer: {
 
     Token = {
+        static with inherited parent = #<:std/Clonable>;
+
         tokenizer, type, payload;
 
         with inherited trait = {
@@ -16,11 +18,12 @@
             hasType: t => type is: t;
             fail => tokenizer unread: self;
         },
-
-        with inherited parent = #<:std/Clonable>;
     },
     
     Tokenizer = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited shared = #<:lang/eco/parser/SharedBehavior>;
+
         in, pushbacks;
 
         init: reader => (
@@ -128,8 +131,5 @@
             (sb equals: '~')           if: [ ^ newTokenWithType: TokenType TILDE      ].
           ^ newTokenWithType: (TokenType IDENTIFIER) Payload: (sb asKey)
         );
-
-        with inherited shared = #<:lang/eco/parser/SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     }
 }

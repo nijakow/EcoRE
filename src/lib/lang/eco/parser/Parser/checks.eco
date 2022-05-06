@@ -1,6 +1,6 @@
 
 #=lang/eco/parser/Parser/Checks: {
-    error: msg => "TODO";
+    error: msg => "TODO" ('Compile error: ' + msg) throw;
 
     check: type => check: type withProperty: [ :token | true ];
     check: type withProperty: block => (

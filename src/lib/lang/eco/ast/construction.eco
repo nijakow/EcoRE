@@ -1,8 +1,12 @@
 
 #=lang/eco/ast/ASTConstruction/ASTInterfaceBuilder: {
+    static with inherited parent = #<:std/Clonable>;
+
     parents, entries;
 
     with inherited trait = {
+        ast = #<:lang/eco/ast>;
+
         init => (
             parents <- std util newVector.
             entries <- std util newVector.
@@ -15,16 +19,17 @@
         );
 
         commit => ((ast ASTInterface) new) initWithParents: parents Entries: entries;
-
-        ast = #<:lang/eco/ast>;
-        with inherited parent = #<:std/Clonable>;
     };
 },
 
 #=lang/eco/ast/ASTConstruction/ASTMoleculeBuilder: {
+    static with inherited parent = #<:std/Clonable>;
+
     slots;
 
     with inherited trait = {
+        ast = #<:lang/eco/ast>;
+        
         init => (
             slots <- std util newVector.
           ^ self
@@ -42,9 +47,6 @@
         );
 
         commit => ((ast ASTMolecule) new) initWithSlots: slots;
-
-        ast = #<:lang/eco/ast>;
-        with inherited parent = #<:std/Clonable>;
     };
 },
 

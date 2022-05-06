@@ -1,5 +1,8 @@
 
 #=lang/eco/compiler/Compiler: {
+    static with inherited parent = #<:std/Clonable>;
+    with inherited module = #<:lang/eco/compiler>;
+
     writer, depth, regAlloc, lastValue;
 
     initWithWriter: w Depth: d => (
@@ -117,7 +120,4 @@
       pushLastValue.
       writer writeReturn: depth
     );
-
-    with inherited parent = #<:std/Clonable>;
-    with inherited module = #<:lang/eco/compiler>;
 }

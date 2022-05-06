@@ -1,5 +1,7 @@
 
 {
+    static with inherited _ = std Clonable;
+    
     with inherited trait = {
         with in,
         with out;
@@ -31,6 +33,4 @@
 
         writeOn: w => w << 'a terminal';
     };
-
-    static with inherited _ = std Clonable;
 }

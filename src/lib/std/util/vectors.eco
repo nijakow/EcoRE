@@ -1,5 +1,10 @@
 
 #=std/util/vectors/VectorTrait: {
+    with inherited iterations = #<:std/util/StandardListIterations>;
+    with inherited conversions = #<:std/util/StandardListConversions>;
+    with inherited access = #<:std/util/StandardListAccess>;
+    with inherited search = #<:std/util/StandardListSearch>;
+
     init => ( elements <- allocate: 0. ^ self );
 
     capacity => elements size;
@@ -7,11 +12,6 @@
 
     at: index => elements at: index;
     at: index put: value => elements at: index put: value;  "TODO: Index >= capacity"
-
-    with inherited iterations = #<:std/util/StandardListIterations>;
-    with inherited conversions = #<:std/util/StandardListConversions>;
-    with inherited access = #<:std/util/StandardListAccess>;
-    with inherited search = #<:std/util/StandardListSearch>;
 
     resize: cap => (
         | new_elements = allocate: cap |
@@ -59,29 +59,29 @@
 },
 
 #=std/util/ByteVector: {
+    static with inherited parent = #<:std/Clonable>;
+
     size = 0,
     own elements;
 
     with inherited trait = {
-        protected allocate: n => std util newBlob: n;
-
         with inherited vectorTrait = #<:std/util/vectors/VectorTrait>;
-    };
 
-    static with inherited parent = #<:std/Clonable>;
+        protected allocate: n => std util newBlob: n;
+    };
 },
 
 #=std/util/Vector: {
+    static with inherited parent = #<:std/Clonable>;
+
     size = 0,
     own elements;
 
     with inherited trait = {
+        with inherited vectorTrait = #<:std/util/vectors/VectorTrait>;
+        
         asString => elements asString;
 
         protected allocate: n => std util newArray: n;
-
-        with inherited vectorTrait = #<:std/util/vectors/VectorTrait>;
     };
-
-    static with inherited parent = #<:std/Clonable>;
 }

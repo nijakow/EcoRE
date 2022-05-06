@@ -1,5 +1,6 @@
 
 #=std/reflect/proxies/Float: {
+    static with inherited parent = #<:std/Singleton>;
 
     with inherited basic_math = {
         +    other => #'ecosphere.ecore.math.add'(self, other);
@@ -51,6 +52,4 @@
     };
 
     writeOn: writer => (std text writing NumberWriter) WriteFloat: self To: writer;
-    
-    static with inherited parent = #<:std/Clonable>;
 }

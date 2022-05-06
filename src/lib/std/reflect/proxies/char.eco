@@ -1,5 +1,7 @@
 
 #=std/reflect/proxies/Char: {
+    static with inherited parent = #<:std/Singleton>;
+    
     isChar          => true;
     asInt           => #'ecosphere.ecore.char.as_int'(self);
     == other        => #'ecosphere.ecore.is'(self, other);
@@ -9,5 +11,4 @@
     > other         => (self asInt) > (other asInt);
     >= other        => (self asInt) >= (other asInt);
     writeOn: writer => writer char<< self;
-    static with inherited parent = #<:std/Clonable>;
 }

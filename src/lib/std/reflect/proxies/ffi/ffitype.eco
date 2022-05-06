@@ -1,5 +1,7 @@
 
 #=std/reflect/proxies/ffi/FFIType: {
+    static with inherited parent = #<:std/Clonable>;
+    
     pointer => #'ecosphere.ecore.ffi.type.pointer_to'(self);
     pointee => #'ecosphere.ecore.ffi.type.pointee_or_self'(self);
     isPointer => (pointee is: self) not;
@@ -62,6 +64,4 @@
         
         writer << '<ffi_type:' << sizeof << '>'
     );
-
-    static with inherited parent = #<:std/Clonable>;
 }

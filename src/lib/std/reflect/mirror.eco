@@ -1,5 +1,7 @@
 
 #=std/reflect/Mirror: {
+    static with inherited parent = #<:std/Clonable>;
+    
     reflectee;
 
     with inherited trait = {
@@ -34,6 +36,4 @@
 
         writeOn: w => w << 'the mirror for ' << reflectee;
     };
-
-    static with inherited parent = #<:std/Clonable>;
 }

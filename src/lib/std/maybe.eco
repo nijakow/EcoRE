@@ -1,6 +1,8 @@
 
 #=std/maybe: {
     Yes = #=std/maybe/Yes: {
+        static with inherited parent = #<:std/Clonable>;
+
         yes;
 
         with inherited trait = {
@@ -11,12 +13,12 @@
             no: nblock yes: yblock => yblock value(yes);
             writeOn: writer => writer << 'Yes: ' << yes;
         };
-        static with inherited parent = #<:std/Clonable>;
     };
 
     Yes: value => (#<:std/maybe/Yes> clone) init: value;
 
     No = #=std/maybe/No: {
+        static with inherited parent = #<:std/Singleton>;
         with inherited trait = {
             yes: block => self;
             no: block => block value;
@@ -25,6 +27,5 @@
             yes => self;  "TODO: Throw an error"
             writeOn: writer => writer << 'No';
         };
-        static with inherited parent = #<:std/Clonable>;
     };
 },

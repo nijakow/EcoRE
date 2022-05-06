@@ -1,5 +1,7 @@
 
 #=lang/eco/compiler/AssignmentVisitor: {
+    with inherited parent = #<:std/Clonable>;
+
     compiler, rhs, visitor;
 
     initWithCompiler: _compiler RHS: _rhs Visitor: v => (
@@ -31,12 +33,14 @@
         compiler push.
         compiler assignWithKey: ast message
     );
-
-    with inherited parent = #<:std/Clonable>;
 },
 
 
 #=lang/eco/compiler/Visitor: {
+    "TODO: Implements interface lang/eco/ast/IVisitor"
+    static with inherited parent = #<:std/Clonable>;
+    with inherited module = #<:lang/eco/compiler>;
+
     compiler, environment, host, nexthost;
 
     initWithCompiler: _compiler Environment: _env => initWithCompiler: _compiler Environment: _env Host: lobby;
@@ -139,8 +143,4 @@
         ast slots do: [ :e | e addToMolecule: m WithEnv: environment Host: nexthost ].
         compiler loadConstant: m
     );
-
-    "TODO: Implements interface lang/eco/ast/IVisitor"
-    with inherited parent = #<:std/Clonable>;
-    with inherited module = #<:lang/eco/compiler>;
 } 

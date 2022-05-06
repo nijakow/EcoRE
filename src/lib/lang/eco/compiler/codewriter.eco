@@ -1,5 +1,8 @@
 
 #=lang/eco/compiler/CodeWriter: {
+    static with inherited parent = #<:std/Clonable>;
+    with inherited module = #<:lang/eco/compiler>;
+
     bytes, constants, closures, maxRegister;
 
     init => (
@@ -139,7 +142,4 @@
         writeU8: Bytecodes RETURN.
         writeU8: depth
     );
-
-    with inherited parent = #<:std/Clonable>;
-    with inherited module = #<:lang/eco/compiler>;
 }

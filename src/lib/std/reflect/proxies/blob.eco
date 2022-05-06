@@ -1,5 +1,7 @@
 
 #=std/reflect/proxies/Blob: {
+    static with inherited parent = #<:std/Clonable>;
+    
     size => #'ecosphere.ecore.object.blob.size'(self);
     isEmpty => size isZero;
 
@@ -24,6 +26,4 @@
             writer << '<blob: ' << size << '>'
         ]
     );
-
-    static with inherited parent = #<:std/Clonable>;
 }

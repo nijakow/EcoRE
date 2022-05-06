@@ -1,5 +1,8 @@
 
 #=lang/eco/compiler/ScopeSharedInfo: {
+    static with inherited parent = #<:std/Clonable>;
+    with inherited module = #<:lang/eco/compiler>;
+
     lexicalParent, compiler, argCount, hasVarargs;
 
     initWithMaybeLexicalParent: ml => (
@@ -16,12 +19,12 @@
 
     addParameter => argCount <- argCount + 1;
     enableVarargs => hasVarargs <- true;
-
-    with inherited parent = #<:std/Clonable>;
-    with inherited module = #<:lang/eco/compiler>;
 },
 
 #=lang/eco/compiler/VariableInfo: {
+    static with inherited parent = #<:std/Clonable>;
+    with inherited module = #<:lang/eco/compiler>;
+
     index, type;
 
     initWithIndex: _index Type: _type => (
@@ -29,12 +32,12 @@
         type  <- _type.
       ^ self
     );
-
-    with inherited parent = #<:std/Clonable>;
-    with inherited module = #<:lang/eco/compiler>;
 },
 
 #=lang/eco/compiler/Scope: {
+    static with inherited parent = #<:std/Clonable>;
+    with inherited module = #<:lang/eco/compiler>;
+
     shared, parent_scope, bindings;
 
     initWithShared: s => (
@@ -92,7 +95,4 @@
     findVariable: varname IfFound: found IfNotFound: notfound => (
         findVariable: varname IfFound: found IfNotFound: notfound Depth: 0
     );
-
-    with inherited parent = #<:std/Clonable>;
-    with inherited module = #<:lang/eco/compiler>;
 }

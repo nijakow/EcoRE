@@ -1,8 +1,12 @@
 
 #=std/util/Set: {
+    with inherited parent = #<:std/Clonable>;
+
     private elements;
 
     with inherited trait = {
+        with inherited parent = #<:std/util/StandardListConversions>;
+
         init => (
             elements <- std util newVector.
           ^ self
@@ -27,9 +31,5 @@
         );
         
         writeOn: w => w << 'a set';
-
-        with inherited parent = #<:std/util/StandardListConversions>;
     };
-
-    with inherited parent = #<:std/Clonable>;
 }

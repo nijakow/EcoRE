@@ -1,4 +1,6 @@
 #=std/io/FDSegmentReader: {
+    static with inherited parent = #<:std/Clonable>;
+    
     protected fd;
 
     with inherited trait = {
@@ -16,6 +18,4 @@
 
         iterator => ((std util iterators segmented Iterator) clone) initOnSegmentReader: self;
     };
-
-    static with inherited parent = #<:std/Clonable>;
 }

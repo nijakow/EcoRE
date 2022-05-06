@@ -1,5 +1,8 @@
 
 #=lang/eco/compiler/RegisterAllocator: {
+    static with inherited parent = #<:std/Clonable>;
+    with inherited module = #<:lang/eco/compiler>;
+
     freeSet, counter;
 
     init => (
@@ -23,7 +26,4 @@
         deallocate: v.
       ^ r
     );
-
-    with inherited parent = #<:std/Clonable>;
-    with inherited module = #<:lang/eco/compiler>;
 }

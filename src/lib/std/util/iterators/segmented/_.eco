@@ -2,6 +2,8 @@
 #=std/util/iterators/segmented: {
 
     SegmentListLink = {
+        static with inherited parent = #<:std/Clonable>;
+
         protected segmented = #<:std/util/iterators/segmented>,
         protected reader,
         protected cachedValue;
@@ -32,11 +34,11 @@
                         yes: [ :v | v ]
                          no: [ refresh ];
         };
-
-        static with inherited parent = #<:std/Clonable>;
     };
 
     SegmentListNode = {
+        static with inherited parent = #<std/Clonable>;
+
         protected vector,
         protected bytes,
         protected nextPtr,
@@ -54,11 +56,11 @@
 
             next => nextPtr value;
         };
-
-        static with inherited parent = #<std/Clonable>;
     };
 
     IteratorState = {
+        static with inherited parent = #<:std/Clonable>;
+        
         protected atEOF,
         protected node,
         protected index;
@@ -111,11 +113,12 @@
               ^ self
             );
         };
-
-        static with inherited parent = #<:std/Clonable>;
     };
 
     Iterator = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited iteratorTrait = #<:std/util/iterators/IteratorTrait>;
+
         protected segmented = #<:std/util/iterators/segmented>,
         protected state;
 
@@ -140,8 +143,5 @@
               ^ block value([ state <- old_state ])
             );
         };
-
-        with inherited iteratorTrait = #<:std/util/iterators/IteratorTrait>;
-        static with inherited parent = #<:std/Clonable>;
     }
 }
