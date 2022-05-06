@@ -83,6 +83,7 @@ eco_src = [
     './src/lib/std/defaultbehavior.eco',
     './src/lib/std/globals.eco',
     './src/lib/std/_.eco',
+    './src/lib/ecosphere/_.eco',
     './src/lib/interfaces.eco',
     './src/lib/master.eco'
 ]

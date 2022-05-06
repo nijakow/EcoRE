@@ -1,0 +1,4 @@
+
+#=ecosphere: {
+    static with inherited parent = #<:std/Module>;
+}
