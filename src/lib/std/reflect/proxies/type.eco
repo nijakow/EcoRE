@@ -2,5 +2,10 @@
 #=std/reflect/proxies/Type: {
     static with inherited _ = #<:std/Singleton>;
 
-    writeOn: writer => writer << 'a type';
+    slotNames => #'ecosphere.ecore.reflect.get_type_slot_names'(self);
+
+    supers => #'ecosphere.ecore.reflect.get_type_supers'(self);
+    subs => #'ecosphere.ecore.reflect.get_type_subs'(self);
+
+    writeOn: writer => writer << 'a type(' << slotNames << ')';
 }

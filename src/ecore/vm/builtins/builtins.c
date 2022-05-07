@@ -126,6 +126,8 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type", Eco_VM_Builtin_GetType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type_slot_names", Eco_VM_Builtin_GetTypeSlotNames);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type_slot_info", Eco_VM_Builtin_GetTypeSlotInfo);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type_supers", Eco_VM_Builtin_GetTypeSupers);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type_subs", Eco_VM_Builtin_GetTypeSubs);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.add_value_slot", Eco_VM_Builtin_AddValueSlot);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.add_code_slot", Eco_VM_Builtin_AddCodeSlot);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.remove_slot", Eco_VM_Builtin_RemoveSlot);
