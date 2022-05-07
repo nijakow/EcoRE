@@ -148,10 +148,10 @@ bool Eco_VM_Builtin_GetTypeSupers(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     Eco_Fiber_Pop(fiber, &any);
     type = Eco_Any_AsPointer(any);
-    elements = Eco_Array_New(type->inheriting_types.fill);
-    for (index = 0; index < type->inheriting_types.fill; index++)
+    elements = Eco_Array_New(type->inherited_types.fill);
+    for (index = 0; index < type->inherited_types.fill; index++)
     {
-        any = Eco_Any_FromPointer(type->inheriting_types.types[index]);
+        any = Eco_Any_FromPointer(type->inherited_types.types[index]);
         Eco_Array_Put(elements, index, any);
     }
     any = Eco_Any_FromPointer(elements);
@@ -170,10 +170,10 @@ bool Eco_VM_Builtin_GetTypeSubs(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     Eco_Fiber_Pop(fiber, &any);
     type = Eco_Any_AsPointer(any);
-    elements = Eco_Array_New(type->inherited_types.fill);
-    for (index = 0; index < type->inherited_types.fill; index++)
+    elements = Eco_Array_New(type->inheriting_types.fill);
+    for (index = 0; index < type->inheriting_types.fill; index++)
     {
-        any = Eco_Any_FromPointer(type->inherited_types.types[index]);
+        any = Eco_Any_FromPointer(type->inheriting_types.types[index]);
         Eco_Array_Put(elements, index, any);
     }
     any = Eco_Any_FromPointer(elements);
