@@ -17,7 +17,7 @@
     Load: path As: name => (
         | mod <- io Import: path |
         modules at: name put: mod.
-        mod init.
+        mod Init.
       ^ mod
     );
 }

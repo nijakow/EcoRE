@@ -31,9 +31,9 @@
     INIT_EVERYTHING;
 
     with inherited trait = {
-        init => init: 'libSDL2.so';
+        Init => Setup: 'libSDL2.so';
         
-        init: libpath => (
+        Setup: libpath => (
             lib <- (ffi DLOpen: libpath) yes.
             INIT_EVERYTHING <- 62001.
 
@@ -63,8 +63,8 @@
           ^ self
         );
 
-        InitEverything => Init(INIT_EVERYTHING);
-        Init(flags) => SDL_Init value(flags);
+        InitEverything => Init: INIT_EVERYTHING;
+        Init: flags => SDL_Init value(flags);
         Quit => SDL_Quit value();
         PollEvent(event_ptr) => SDL_PollEvent value(event_ptr);
         CreateWindow(name, x, y, w, h, flags) => SDL_CreateWindow value(name, x, y, w, h, flags);

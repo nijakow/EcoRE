@@ -48,9 +48,11 @@ bool Eco_VM_Builtin_GetEnv(struct Eco_Fiber* fiber, unsigned int args)
     var = Eco_Any_AsPointer(any);
     val_cstr = Eco_LibC_GetEnv(var->bytes);
     if (val_cstr == NULL)
-        val_cstr = "";
-    val = Eco_String_New(val_cstr);
-    any = Eco_Any_FromPointer(val);
+        any = fiber->vm->constants.cfalse;
+    else {
+        val = Eco_String_New(val_cstr);
+        any = Eco_Any_FromPointer(val);
+    }
     Eco_Fiber_Push(fiber, &any);
     return true;
 }

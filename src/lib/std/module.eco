@@ -2,8 +2,8 @@
 #=std/Module: {
     with inherited parent = #<:std/Clonable>;
     
-    init => self;
-    main => self;
+    Init => self;
+    Main => self;
     
     writeOn: w => w << 'a module';
 }
