@@ -24,14 +24,10 @@
 
 struct Eco_Interface* Eco_Any_GetInterface(Eco_Any value, bool private_also)
 {
-    struct Eco_Type* type;
-
-    type = Eco_Any_GetType(value);
-    return Eco_Type_GetInterface(type, Eco_Any_IsPointer(value) ? Eco_Any_AsPointer(value) : NULL, private_also);
+    return Eco_Type_GetInterface(Eco_Any_GetType(value), private_also);
 }
 
 struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
-                                            struct Eco_Object* object,
                                             bool               private_also)
 {
     struct Eco_Interface*  interface;
@@ -40,7 +36,6 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
     unsigned int           slot_index;
     unsigned int           inherited_slot_count;
     unsigned int           slot_count;
-    Eco_Any                value;
 
     /*
      * If the type has a proxy, use the proxy's interface instead.
@@ -52,7 +47,7 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
      *                                                - nijakow
      */
     if (type->proxy != NULL) {
-        return Eco_Type_GetInterface(type->proxy->type, type->proxy, private_also);
+        return Eco_Type_GetInterface(type->proxy->type, private_also);
     }
 
     /*
@@ -80,7 +75,8 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
     for (index = 0; index < type->slot_count; index++)
     {
         if (private_also || !type->slots[index].info.flags.is_protected) {
-            if (type->slots[index].info.flags.is_with)
+            if (type->slots[index].type == Eco_TypeSlotType_INLINED && type->slots[index].info.flags.is_with
+            && type->slots[index].body.inlined.referenced_type != NULL && type->slots[index].body.inlined.referenced_type != type)
                 inherited_slot_count++;
             slot_count++;
         }
@@ -115,21 +111,17 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
     {
         if (!private_also && type->slots[index].info.flags.is_protected)
             continue;
-        if (type->slots[index].info.flags.is_with) {
-            if (Eco_TypeSlot_GetValue(&type->slots[index], (struct Eco_Molecule*) object, &value)) {
+        if (type->slots[index].type == Eco_TypeSlotType_INLINED && type->slots[index].info.flags.is_with) {
+            /*
+             * Check for circular inheritance (only valid if the slot points to SELF)
+             */
+            if (type->slots[index].body.inlined.referenced_type == NULL || type->slots[index].body.inlined.referenced_type == type) {
                 /*
-                 * Check for circular inheritance (only valid if the slot points to SELF)
+                 * Circular inheritance confirmed. Since an interface always includes itself,
+                 * there is no need for us to add a parent entry.
                  */
-                if (Eco_Any_IsPointer(value) && Eco_Any_AsPointer(value) == object) {
-                    /*
-                     * Circular inheritance confirmed. Since an interface always includes itself,
-                     * there is no need for us to add a parent entry.
-                     */
-                } else {
-                    interface->parents[parent_index++] = Eco_Any_GetInterface(value, private_also);
-                }
             } else {
-                // TODO: Error
+                interface->parents[parent_index++] = Eco_Type_GetInterface(type->slots[index].body.inlined.referenced_type, private_also);
             }
         }
         interface->parent_count = parent_index;
