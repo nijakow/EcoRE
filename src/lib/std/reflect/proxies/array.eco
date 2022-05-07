@@ -8,6 +8,8 @@
     at: index put: value => #'ecosphere.ecore.object.array.at_put'(self, index, value);
 
     from: collection => ( collection forEach: [ :i, :v | at: i put: v ]. ^ self);
+
+    iterator => (std util iterators IndexIterator) new: self;
     
     isArray => true;
     asString => #'ecosphere.ecore.object.array.to_string'(self);
