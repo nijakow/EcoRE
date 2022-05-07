@@ -12,6 +12,7 @@ bool Eco_VM_Builtin_GetTypeSlotNames(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetTypeSlotInfo(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetTypeSupers(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetTypeSubs(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_GetTypeProxy(struct Eco_Fiber*, unsigned int);
 
 bool Eco_VM_Builtin_InterfaceGetParents(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_InterfaceGetEntryInfo(struct Eco_Fiber*, unsigned int);

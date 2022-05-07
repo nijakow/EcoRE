@@ -181,6 +181,21 @@ bool Eco_VM_Builtin_GetTypeSubs(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_GetTypeProxy(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Type*  type;
+    Eco_Any           any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    type = Eco_Any_AsPointer(any);
+    if (type->proxy != NULL)    // If NULL, any will point to the type itself
+        any = Eco_Any_FromPointer(type->proxy);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 bool Eco_VM_Builtin_InterfaceGetParents(struct Eco_Fiber* fiber, unsigned int args)
 {
     struct Eco_Interface*  interface;

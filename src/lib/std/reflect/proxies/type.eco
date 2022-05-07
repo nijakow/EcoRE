@@ -7,5 +7,7 @@
     supers => #'ecosphere.ecore.reflect.get_type_supers'(self);
     subs => #'ecosphere.ecore.reflect.get_type_subs'(self);
 
+    proxy => ( | v <- #'ecosphere.ecore.reflect.get_type_proxy'(self) | (self == v) -> [ ^ No ]. Yes: v );
+
     writeOn: writer => writer << 'a type(' << slotNames << ')';
 }
