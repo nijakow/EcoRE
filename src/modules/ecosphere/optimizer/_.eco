@@ -1,0 +1,38 @@
+
+{
+    static with inherited _ = std Module;
+
+    own instructions = {
+        static with inherited _ = std Module;
+
+        own ByteCodeInstruction = {
+            static with inherited _ = std Clonable;
+
+            next;
+
+            with inherited trait = {
+                initWithNext: _next => (
+                    next <- _next.
+                ^ self
+                );
+
+                writeOn: w => w << 'a bytecode instruction';
+            };
+        };
+
+        own LoadSelf = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+            private instructions = $;
+
+            with inherited trait = {
+                initWithNext: _next => (
+                    super initWithNext: _next.
+                  ^ self
+                );
+
+                writeOn: w => w << 'a <<load self>> bytecode instruction';
+            }
+        };
+    }
+}
