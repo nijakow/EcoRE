@@ -80,7 +80,7 @@
     with inherited trait = {
         with inherited vectorTrait = #<:std/util/vectors/VectorTrait>;
         
-        asString => elements asString;
+        asString => asArray asString;
 
         protected allocate: n => std util newArray: n;
     };
