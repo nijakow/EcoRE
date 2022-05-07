@@ -13,6 +13,8 @@ char* Eco_LibC_Strdup(const char*);
 
 char* Eco_LibC_GetEnv(const char*);
 
+bool Eco_LibC_FileExists(const char*);
+bool Eco_LibC_FileIsDirectory(const char*);
 bool Eco_LibC_ListFiles(const char*, char**, unsigned int);
 
 #endif

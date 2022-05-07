@@ -5,6 +5,7 @@
 #include <ecore/objects/misc/array/array.h>
 #include <ecore/objects/misc/string/string.h>
 #include <ecore/vm/fiber/stackops.h>
+#include <ecore/vm/vm.h>
 #include <ecore/io/logging/log.h>
 #include <ecore/util/libc.h>
 
@@ -66,6 +67,40 @@ bool Eco_VM_Builtin_OpenFile(struct Eco_Fiber* fiber, unsigned int args)
         fd = -1;
     }
     any = Eco_Any_FromInteger(fd);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_FileExists(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_String*  path;
+    Eco_Any             any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    path = Eco_Any_AsPointer(any);
+    if (Eco_LibC_FileExists(path->bytes))
+        any = fiber->vm->constants.ctrue;
+    else
+        any = fiber->vm->constants.cfalse;
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_FileIsDirectory(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_String*  path;
+    Eco_Any             any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    path = Eco_Any_AsPointer(any);
+    if (Eco_LibC_FileIsDirectory(path->bytes))
+        any = fiber->vm->constants.ctrue;
+    else
+        any = fiber->vm->constants.cfalse;
     Eco_Fiber_Push(fiber, &any);
     return true;
 }

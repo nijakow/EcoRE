@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <dirent.h>
 
 #include "libc.h"
@@ -22,6 +24,24 @@ char* Eco_LibC_Strdup(const char* str)
 char* Eco_LibC_GetEnv(const char* varname)
 {
     return getenv(varname);
+}
+
+bool Eco_LibC_FileExists(const char* path)
+{
+    struct stat sb;
+
+    if (stat(path, &sb) < 0)
+        return false;
+    return true;
+}
+
+bool Eco_LibC_FileIsDirectory(const char* path)
+{
+    struct stat sb;
+
+    if (stat(path, &sb) < 0)
+        return false;
+    return (sb.st_mode & S_IFMT) == S_IFDIR;
 }
 
 bool Eco_LibC_ListFiles(const char* path, char** entries, unsigned int max)
