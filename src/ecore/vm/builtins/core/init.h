@@ -11,6 +11,7 @@ bool Eco_VM_Builtin_SetTrue(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_SetFalse(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_SetProxy(struct Eco_Fiber*, unsigned int);
 
+bool Eco_VM_Builtin_GetTypeType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetArrayType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetBlobType(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetCodeType(struct Eco_Fiber*, unsigned int);

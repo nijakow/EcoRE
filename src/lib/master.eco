@@ -27,6 +27,7 @@
         #'ecosphere.ecore.init.set_true'(#<:std/bool/true>).
         #'ecosphere.ecore.init.set_false'(#<:std/bool/false>).
         any <- #'ecosphere.ecore.constant.any'().
+        #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.type_type'(), #<:std/reflect/proxies/Type>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.array_type'(), #<:std/reflect/proxies/Array>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.blob_type'(), #<:std/reflect/proxies/Blob>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.block_type'(), #<:std/reflect/proxies/Block>).

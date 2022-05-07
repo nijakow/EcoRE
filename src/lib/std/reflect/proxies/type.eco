@@ -1,0 +1,6 @@
+
+#=std/reflect/proxies/Type: {
+    static with inherited _ = #<:std/Singleton>;
+
+    writeOn: writer => writer << 'a type';
+}

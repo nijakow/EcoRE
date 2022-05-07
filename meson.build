@@ -64,6 +64,7 @@ eco_src = [
     './src/lib/std/reflect/mirror.eco',
     './src/lib/std/reflect/proxies/key.eco',
     './src/lib/std/reflect/proxies/string.eco',
+    './src/lib/std/reflect/proxies/type.eco',
     './src/lib/std/reflect/proxies/int.eco',
     './src/lib/std/reflect/proxies/ffi/ffitype.eco',
     './src/lib/std/reflect/proxies/ffi/ffifunc.eco',
