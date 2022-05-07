@@ -160,6 +160,7 @@ void Eco_VM_Builtins_Init()
 #endif
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.io.fd.open_file", Eco_VM_Builtin_OpenFile);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.io.list_files", Eco_VM_Builtin_ListFiles);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.os.getenv", Eco_VM_Builtin_GetEnv);
 

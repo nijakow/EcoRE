@@ -2,9 +2,11 @@
 
 #include "io.h"
 
+#include <ecore/objects/misc/array/array.h>
 #include <ecore/objects/misc/string/string.h>
 #include <ecore/vm/fiber/stackops.h>
 #include <ecore/io/logging/log.h>
+#include <ecore/util/libc.h>
 
 
 bool Eco_VM_Builtin_Print(struct Eco_Fiber* fiber, unsigned int args)
@@ -38,32 +40,62 @@ bool Eco_VM_Builtin_Print(struct Eco_Fiber* fiber, unsigned int args)
 }
 
 bool Eco_VM_Builtin_OpenFile(struct Eco_Fiber* fiber, unsigned int args)
- {
-     int                 mask;
-     int                 fd;
-     Eco_Any             any;
-     Eco_Integer         bits;
-     struct Eco_String*  path;
+{
+    int                 mask;
+    int                 fd;
+    Eco_Any             any;
+    Eco_Integer         bits;
+    struct Eco_String*  path;
 
-     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
-         return false;
-     Eco_Fiber_Pop(fiber, &any);
-     bits = Eco_Any_AsInteger(any);
-     Eco_Fiber_Pop(fiber, &any);
-     path = Eco_Any_AsPointer(any);
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    bits = Eco_Any_AsInteger(any);
+    Eco_Fiber_Pop(fiber, &any);
+    path = Eco_Any_AsPointer(any);
 
-     char buffer[Eco_String_ByteCount(path) + 1];
-     if (Eco_String_PutIntoByteArray(path, buffer, sizeof(buffer))) {
-         mask = 0;
-         if (bits & 0x01) mask |= O_RDONLY;
-         if (bits & 0x02) mask |= O_WRONLY;
-         if (bits & 0x04) mask |= O_CREAT;
-         if (bits & 0x08) mask |= O_TRUNC;
-         fd = open(buffer, mask, 0744);
-     } else {
-         fd = -1;
-     }
-     any = Eco_Any_FromInteger(fd);
-     Eco_Fiber_Push(fiber, &any);
-     return true;
- }
+    char buffer[Eco_String_ByteCount(path) + 1];
+    if (Eco_String_PutIntoByteArray(path, buffer, sizeof(buffer))) {
+        mask = 0;
+        if (bits & 0x01) mask |= O_RDONLY;
+        if (bits & 0x02) mask |= O_WRONLY;
+        if (bits & 0x04) mask |= O_CREAT;
+        if (bits & 0x08) mask |= O_TRUNC;
+        fd = open(buffer, mask, 0744);
+    } else {
+        fd = -1;
+    }
+    any = Eco_Any_FromInteger(fd);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_ListFiles(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_String*  path;
+    struct Eco_String*  element;
+    struct Eco_Array*   elements;
+    unsigned int        index;
+    unsigned int        count;
+    Eco_Any             any;
+    char*               entries[256];
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    path = Eco_Any_AsPointer(any);
+    Eco_LibC_ListFiles(path->bytes, entries, 256);
+    count = 0;
+    while (entries[count] != NULL)
+        count++;
+    elements = Eco_Array_New(count);
+    for (index = 0; index < count; index++)
+    {
+        element = Eco_String_New(entries[index]);
+        Eco_Array_Put(elements, index, Eco_Any_FromPointer(element));
+        Eco_LibC_Free(entries[index]);
+    }
+    any = Eco_Any_FromPointer(elements);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
