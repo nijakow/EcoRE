@@ -11,6 +11,13 @@ void* Eco_LibC_Alloc(Eco_SizeT size)
     return malloc(size);
 }
 
+void* Eco_LibC_Realloc(void* ptr, Eco_SizeT size)
+{
+    if (ptr == NULL)
+        return Eco_LibC_Alloc(size);
+    return realloc(ptr, size);
+}
+
 void Eco_LibC_Free(void* ptr)
 {
     free(ptr);

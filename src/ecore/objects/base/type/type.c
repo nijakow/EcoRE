@@ -40,6 +40,9 @@ struct Eco_Type* Eco_Type_New(unsigned int slot_count)
                                  sizeof(struct Eco_Type) + sizeof(struct Eco_TypeSlot) * slot_count,
                                  &Eco_TYPES);
 
+    Eco_TypeList_Create(&type->inheriting_types);
+    Eco_TypeList_Create(&type->inherited_types);
+
     type->typecore               = NULL;
     type->proxy                  = NULL;
     type->interface              = NULL;
@@ -59,6 +62,13 @@ struct Eco_Type* Eco_Type_New(unsigned int slot_count)
 
 void Eco_Type_Del(struct Eco_Type* type)
 {
+    unsigned int  index;
+
+    for (index = 0; index < type->inheriting_types.fill; index++)
+        Eco_TypeList_Remove(&type->inheriting_types.types[index]->inherited_types, type);
+    for (index = 0; index < type->inherited_types.fill; index++)
+        Eco_TypeList_Remove(&type->inherited_types.types[index]->inheriting_types, type);
+
     *(type->prev) = type->next;
     if (type->next != NULL)
         type->next->prev = type->prev;
@@ -78,6 +88,25 @@ struct Eco_Type* Eco_Type_NewPrefab(struct Eco_TypeCore* typecore)
     return type;
 }
 
+void Eco_Type_Inherits(struct Eco_Type* super_type, struct Eco_Type* sub_type)
+{
+    if (super_type != NULL && sub_type != NULL)
+    {
+        Eco_TypeList_Insert(&super_type->inherited_types, sub_type);
+        Eco_TypeList_Insert(&sub_type->inheriting_types, super_type);
+    }
+}
+
+void Eco_Type_UpdateInheritanceLists(struct Eco_Type* type)
+{
+    unsigned int  i;
+
+    for (i = 0; i < type->slot_count; i++)
+    {
+        if (type->slots[i].type == Eco_TypeSlotType_INLINED)
+            Eco_Type_Inherits(type, type->slots[i].body.inlined.referenced_type);
+    }
+}
 
 void Eco_Type_Subclone(struct Eco_CloneState* state,
                        struct Eco_Type* type,

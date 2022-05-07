@@ -22,6 +22,7 @@ objects/base/type/slot_info.c \
 objects/base/type/slot.c \
 objects/base/type/type.c \
 objects/base/type/typecore.c \
+objects/base/type/typelist.c \
 objects/base/object/object.c \
 objects/base/object/gc.c \
 objects/base/object/send.c \

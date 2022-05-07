@@ -114,6 +114,8 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*           self,
         *type_loc                               = the_copy;
         *slot_loc                               = the_slot;
         
+        Eco_Type_UpdateInheritanceLists(the_copy);
+
         return true;
     } else {
         return false;
@@ -142,6 +144,8 @@ bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type*          self,
         the_slot->body.code.code   = code;
 
         *type_loc                  = the_copy;
+
+        Eco_Type_UpdateInheritanceLists(the_copy);
 
         return true;
     } else {
@@ -173,6 +177,8 @@ bool Eco_Type_CopyWithRemovedSlot(struct Eco_Type* self,
         else the_copy->slots[i - 1] = self->slots[i];
     }
 
+    Eco_Type_UpdateInheritanceLists(the_copy);
+    
     *type_loc = the_copy;
 
     return true;
@@ -202,6 +208,7 @@ bool Eco_Type_CopyWithChangedSlotTypeReference(struct Eco_Type*     type,
                 }
             }
         }
+        Eco_Type_UpdateInheritanceLists(the_copy);
         *type_loc = the_copy;
     }
 

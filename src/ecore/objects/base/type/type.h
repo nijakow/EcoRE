@@ -5,6 +5,7 @@
 
 #include "../object/object.h"
 #include "typecore.h"
+#include "typelist.h"
 #include "slot.h"
 
 struct Eco_Code;
@@ -18,6 +19,9 @@ struct Eco_Type
     
     struct Eco_Type**     prev;
     struct Eco_Type*      next;
+
+    struct Eco_TypeList   inheriting_types;
+    struct Eco_TypeList   inherited_types;
 
     struct Eco_TypeCore*  typecore;
     struct Eco_Object*    proxy;
@@ -39,6 +43,9 @@ static inline unsigned int Eco_Type_SlotIndexOf(struct Eco_Type* type, struct Ec
 {
     return slot - type->slots;
 }
+
+void Eco_Type_Inherits(struct Eco_Type* super_type, struct Eco_Type* sub_type);
+void Eco_Type_UpdateInheritanceLists(struct Eco_Type*);
 
 void Eco_Types_Init();
 void Eco_Types_Terminate();

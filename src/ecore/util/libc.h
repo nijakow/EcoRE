@@ -7,6 +7,7 @@
 typedef size_t Eco_SizeT;
 
 void* Eco_LibC_Alloc(Eco_SizeT);
+void* Eco_LibC_Realloc(void*, Eco_SizeT);
 void Eco_LibC_Free(void*);
 
 char* Eco_LibC_Strdup(const char*);

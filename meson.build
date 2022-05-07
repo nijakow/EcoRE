@@ -127,6 +127,7 @@ src = [
     './src/ecore/objects/base/object/send.c',
     './src/ecore/objects/base/object/object.c',
     './src/ecore/objects/base/type_transfer.c',
+    './src/ecore/objects/base/type/typelist.c',
     './src/ecore/objects/base/type/typecore.c',
     './src/ecore/objects/base/type/slot_info.c',
     './src/ecore/objects/base/type/type.c',
