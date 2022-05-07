@@ -201,7 +201,7 @@ bool Eco_Type_CopyWithChangedSlotTypeReference(struct Eco_Type*     type,
         the_copy->slots[slot_index].body.inlined.referenced_type = new_reference_type;
         for (index = 0; index < type->slot_count; index++)
         {
-            if (type->slots[index].type == Eco_TypeSlotType_INLINED) {
+            if (type->slots[index].type == Eco_TypeSlotType_INLINED && type->slots[index].info.flags.is_with) {
                 Eco_TypeSlot_GetValue(&type->slots[index], molecule, &any);
                 if (Eco_Any_IsPointer(any) && Eco_Any_AsPointer(any) == molecule) {
                     the_copy->slots[index].body.inlined.referenced_type = the_copy;
