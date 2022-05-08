@@ -4,6 +4,9 @@
 
     slotNames => #'ecosphere.ecore.reflect.get_type_slot_names'(self);
 
+    publicInterface => #'ecosphere.ecore.reflect.type_get_public_interface'(self);
+    privateInterface => #'ecosphere.ecore.reflect.type_get_private_interface'(self);
+
     supers => #'ecosphere.ecore.reflect.get_type_supers'(self);
     subs => #'ecosphere.ecore.reflect.get_type_subs'(self);
 

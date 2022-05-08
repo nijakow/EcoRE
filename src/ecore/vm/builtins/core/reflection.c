@@ -46,7 +46,7 @@ bool Eco_VM_Builtin_GetInterface(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    interface = Eco_Any_GetInterface(*Eco_Fiber_Peek(fiber), true);
+    interface = Eco_Type_GetInterface(Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber)), true);
     *Eco_Fiber_Peek(fiber) = Eco_Any_FromPointer(interface);
     return true;
 }
@@ -57,7 +57,7 @@ bool Eco_VM_Builtin_GetPublicInterface(struct Eco_Fiber* fiber, unsigned int arg
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    interface = Eco_Any_GetInterface(*Eco_Fiber_Peek(fiber), false);
+    interface = Eco_Type_GetInterface(Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber)), false);
     *Eco_Fiber_Peek(fiber) = Eco_Any_FromPointer(interface);
     return true;
 }
