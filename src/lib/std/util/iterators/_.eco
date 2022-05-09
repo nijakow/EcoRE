@@ -9,6 +9,7 @@
             [ hasNext ] while: [ block value(i, next). i <- i + 1 ]
         );
         do: block => [ hasNext ] while: [ block value(next) ];
+        map: func => (#<:std/util/iterators/MappingIterator> clone) initWithIterator: self Function: func;
         into: acceptor => acceptor from: self;
         check: elem => ([ has ] and: [ current == elem ]) -> [ forward. true ];
         peek: sequence => (
@@ -55,6 +56,35 @@
                 | resetIndex <- index |
               ^ block value([ index <- resetIndex ])
             );
+        };
+    };
+
+    MappingIterator = #=std/util/iterators/MappingIterator: {
+        static with inherited _ = #<:std/Clonable>;
+
+        protected it,
+        protected func;
+
+        with inherited trait = {
+            with inherited iteratorTrait = #<:std/util/iterators/BiIteratorTrait>;
+
+            initWithIterator: _it Function: _func => (
+                it   <- _it.
+                func <- _func.
+              ^ self
+            );
+
+            forward => it forward;
+            backward => it backward;
+
+            has => it has;
+            hasPrevious => it hasPrevious;
+
+            current => func value(it current);
+
+            withReset: block => it withReset: block;
+
+            writeOn: w => w << 'a mapping iterator';
         };
     };
 
