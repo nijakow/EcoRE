@@ -16,6 +16,7 @@
 
         forEach: block => elements forEach: block;
         do: block => elements do: block;
+        iterator => elements iterator;
 
         isEmpty => elements isEmpty;
         size => elements size;
