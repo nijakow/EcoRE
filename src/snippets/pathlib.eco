@@ -4,12 +4,31 @@
 
     ListFiles: path => #'ecosphere.ecore.io.list_files'(path);
 
-    own Path = {
-        static with inherited _ = std Clonable;
+    own SharedPathTrait = {
+        exists => #'ecosphere.ecore.io.file_exists'(path);
+        isDirectory => #'ecosphere.ecore.io.file_is_directory'(path);
+        children => (((module ListFiles: path) iterator map: [ :file | child: file ]) into: (std util newVector)) asArray;
+        writeOn: w => w << 'a path(' << path << ')';
+    };
+
+    own Root = {
+        static with inherited _ = std Singleton;
+        with inherited sharedTrait = $ SharedPathTrait;
         private module = $;
 
-        private parent,
-        private name,
+        parent => No;
+        name => '/';
+        path => '/';
+        child: name => (module Path) clone initWithName: name Path: '/' + name Parent: self;
+    };
+
+    own Path = {
+        static with inherited _ = std Clonable;
+        with inherited sharedTrait = $ SharedPathTrait;
+        private module = $;
+
+        parent,
+        name,
         path;
 
         with inherited trait = {
@@ -28,17 +47,7 @@
               ^ self
             );
 
-            up => parent;
-            exists => #'ecosphere.ecore.io.file_exists'(path);
-            isDirectory => #'ecosphere.ecore.io.file_is_directory'(path);
-
-            children => (
-                | v <- std util newVector |
-                ((module ListFiles: path) iterator map: [ :name | ((module Path) clone) initWithName: name Path: (parent yes: [ :p | path + '/' + name ] no: [ '/' + name ]) Parent: self ]) into: v.
-              ^ v asArray
-            );
-
-            writeOn: w => w << 'a path(' << path << ')';
+            child: name => (module Path) clone initWithName: name Path: path + '/' + name Parent: self;
         };
     },
 }
