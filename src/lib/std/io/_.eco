@@ -3,6 +3,8 @@
 "
 
 #=std/io: {
+    static with inherited _ = #<:std/Module>;
+
     in, out;
 
     FileDescriptor = #<:std/io/FileDescriptor>;
@@ -18,10 +20,10 @@
     Writer = #<:std/io/Writer>;
     StringWriter = #<:std/io/StringWriter>;
 
-    WrapFileDescriptor: fd   => PortIO clone initWithInput: ((FDByteReader clone) initWithFileDescriptor: fd) Output: ((FDByteWriter clone) initWithFileDescriptor: fd);
-    OpenFileForReading: path => PortInput clone init: ((FDByteReader clone) initWithFileDescriptor: (((FileDescriptor clone) init: #'ecosphere.ecore.io.fd.open_file'(path, 1))));
-    OpenFileForWriting: path => PortOutput clone init: ((FDByteWriter clone) initWithFileDescriptor: (((FileDescriptor clone) init: #'ecosphere.ecore.io.fd.open_file'(path, 6))));
-    OpenFile:           path => OpenFileDescriptor: ((FileDescriptor clone) init: #'ecosphere.ecore.io.fd.open_file'(path, 7));
+    OpenFileForReading: path  => (std text utf8 UTF8Iterator) clone init: (((std io FDSegmentReader) clone initWithFileDescriptor: ((std io FileDescriptor) clone init: #'ecosphere.ecore.io.fd.open_file'(path, 1))) iterator);
+    OpenFileForWriting: path  => PortOutput clone init: ((FDByteWriter clone) initWithFileDescriptor: (((FileDescriptor clone) init: #'ecosphere.ecore.io.fd.open_file'(path, 6))));
+    OpenFile:           path  => OpenFileDescriptor: ((FileDescriptor clone) init: #'ecosphere.ecore.io.fd.open_file'(path, 7));
+    OpenFile: path Mode: mode => OpenFile: path;  "TODO: Mode objects"
 
     WithOpenFileForReading: path Do: block => (
         |
@@ -32,7 +34,12 @@
       ^ val
     );
 
-    SlurpFile: file => WithOpenFileForReading: file Do: [ :port | port readAll ];
+    SlurpFile: file => WithOpenFileForReading: file Do: [ :in |
+        | sw <- StringWriter new |
+        in do: [ :c | sw << c ].
+      ^ sw commit
+    ];
+
     ParseFile: file => (SlurpFile: file) parse;
     EvaluateFile: file InEnv: env => (ParseFile: file) evaluateInEnv: env;
 

@@ -55,6 +55,8 @@
                                             Path: path + '/' + name
                                           Parent: self.
             );
+
+            openForReading => io OpenFileForReading: path;
         };
     },
 }
