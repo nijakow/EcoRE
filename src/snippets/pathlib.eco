@@ -8,7 +8,8 @@
         exists => #'ecosphere.ecore.io.file_exists'(path);
         isDirectory => #'ecosphere.ecore.io.file_is_directory'(path);
         children => (((module ListFiles: path) iterator map: [ :file | child: file ]) into: (std util newVector)) asArray;
-        / name => child: name;
+        openForReading => io OpenFileForReading: path;
+        import => io Import: path;
         writeOn: w => w << 'a path(' << path << ')';
     };
 
@@ -20,7 +21,7 @@
         parent => No;
         name => '/';
         path => '/';
-        child: name => (module Path) clone initWithName: name Path: '/' + name Parent: self;
+        / name => (module Path) clone initWithName: name Path: '/' + name Parent: self;
     };
 
     own Path = {
@@ -48,15 +49,13 @@
               ^ self
             );
 
-            child: name => (
+            / name => (
                 (name == '.') -> [ ^ self ].
                 (name == '..') -> [ ^ parent ].
               ^ (module Path) clone initWithName: name
                                             Path: path + '/' + name
                                           Parent: self.
             );
-
-            openForReading => io OpenFileForReading: path;
         };
     },
 }
