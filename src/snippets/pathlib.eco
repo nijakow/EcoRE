@@ -8,10 +8,11 @@
         exists => #'ecosphere.ecore.io.file_exists'(path);
         isDirectory => #'ecosphere.ecore.io.file_is_directory'(path);
         children => (((module ListFiles: path) iterator map: [ :file | child: file ]) into: (std util newVector)) asArray;
+        / name => child: name;
         writeOn: w => w << 'a path(' << path << ')';
     };
 
-    own Root = {
+    own root = {
         static with inherited _ = std Singleton;
         with inherited sharedTrait = $ SharedPathTrait;
         private module = $;
