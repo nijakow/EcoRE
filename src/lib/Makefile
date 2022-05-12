@@ -23,6 +23,8 @@ std/io/portio.eco \
 std/io/portoutput.eco \
 std/io/stringwriter.eco \
 std/io/writer.eco \
+std/os/_.eco \
+std/os/files/_.eco \
 std/ffi/_.eco \
 std/reflect/_.eco \
 std/reflect/mirror.eco \

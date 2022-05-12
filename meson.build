@@ -54,6 +54,8 @@ eco_src = [
     './src/lib/std/io/filedescriptor.eco',
     './src/lib/std/io/_.eco',
     './src/lib/std/io/fdsegmentreader.eco',
+    './src/lib/std/os/_.eco',
+    './src/lib/std/os/files/_.eco',
     './src/lib/std/text/utf8/utf8iterator.eco',
     './src/lib/std/text/utf8/_.eco',
     './src/lib/std/text/writing/numberwriter.eco',

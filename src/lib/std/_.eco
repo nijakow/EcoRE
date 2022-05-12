@@ -16,6 +16,7 @@
 
     ffi = #<:std/ffi>;
     io = #<:std/io>;
+    os = #<:std/os>;
     reflect = #<:std/reflect>;
     text = #<:std/text>;
     util = #<:std/util>;

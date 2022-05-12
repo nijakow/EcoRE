@@ -1,10 +1,10 @@
 
-{
-    static with inherited _ = std Module;
+#=std/os/files: {
+    static with inherited _ = #<:std/Module>;
 
     ListFiles: path => #'ecosphere.ecore.io.list_files'(path);
 
-    own SharedPathTrait = {
+    own SharedPathTrait = #=std/os/files/SharedPathTrait: {
         exists => #'ecosphere.ecore.io.file_exists'(path);
         isDirectory => #'ecosphere.ecore.io.file_is_directory'(path);
         / name => (
@@ -21,9 +21,9 @@
     };
 
     own root = {
-        static with inherited _ = std Singleton;
-        with inherited sharedTrait = $ SharedPathTrait;
-        private module = $;
+        static with inherited _ = #<:std/Singleton>;
+        with inherited sharedTrait = #<std/os/files/SharedPathTrait>;
+        private module = #<:std/os/files>;
 
         parent => No; "TODO"
         name => '/';
@@ -32,9 +32,9 @@
     };
 
     own here = {
-        static with inherited _ = std Singleton;
-        with inherited sharedTrait = $ SharedPathTrait;
-        private module = $;
+        static with inherited _ = #<:std/Singleton>;
+        with inherited sharedTrait = #<std/os/files/SharedPathTrait>;
+        private module = #<:std/os/files>;
 
         parent => No;
         name => '.';
@@ -42,9 +42,9 @@
     };
 
     own Path = {
-        static with inherited _ = std Clonable;
-        with inherited sharedTrait = $ SharedPathTrait;
-        private module = $;
+        static with inherited _ = #<:std/Clonable>;
+        with inherited sharedTrait = #<std/os/files/SharedPathTrait>;
+        private module = #<:std/os/files>;
 
         parent,
         name,
