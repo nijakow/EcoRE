@@ -7,10 +7,17 @@
     own SharedPathTrait = {
         exists => #'ecosphere.ecore.io.file_exists'(path);
         isDirectory => #'ecosphere.ecore.io.file_is_directory'(path);
+        / name => (
+            (name equals: '.') -> [ ^ self ].
+            (name equals: '..') -> [ ^ parent yes ].
+          ^ (module Path) clone initWithName: name
+                                        Path: path + '/' + name
+                                      Parent: self.
+        );
         children => (((module ListFiles: path) iterator map: [ :file | child: file ]) into: (std util newVector)) asArray;
         openForReading => io OpenFileForReading: path;
         import => io Import: path;
-        writeOn: w => w << 'a path(' << path << ')';
+        writeOn: w => w << 'a path(\'' << path << '\')';
     };
 
     own root = {
@@ -18,10 +25,20 @@
         with inherited sharedTrait = $ SharedPathTrait;
         private module = $;
 
-        parent => No;
+        parent => No; "TODO"
         name => '/';
         path => '/';
         / name => (module Path) clone initWithName: name Path: '/' + name Parent: self;
+    };
+
+    own here = {
+        static with inherited _ = std Singleton;
+        with inherited sharedTrait = $ SharedPathTrait;
+        private module = $;
+
+        parent => No;
+        name => '.';
+        path => '.';
     };
 
     own Path = {
@@ -47,14 +64,6 @@
                 name   <- '/'.
                 path   <- '/'.
               ^ self
-            );
-
-            / name => (
-                (name == '.') -> [ ^ self ].
-                (name == '..') -> [ ^ parent ].
-              ^ (module Path) clone initWithName: name
-                                            Path: path + '/' + name
-                                          Parent: self.
             );
         };
     },
