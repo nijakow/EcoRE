@@ -4,6 +4,16 @@
 
     ListFiles: path => #'ecosphere.ecore.io.list_files'(path);
 
+    here => (std os env Lookup: 'PWD')
+                yes: [ :p | Path: p ]
+                 no: [ ^ root ];
+
+    Path: fullpath => (
+        | path <- root |
+        (fullpath splitOnChar: #\/) do: [ :sub | path <- path / sub ].
+      ^ path
+    );
+
     own SharedPathTrait = #=std/os/files/SharedPathTrait: {
         exists => #'ecosphere.ecore.io.file_exists'(path);
         isDirectory => #'ecosphere.ecore.io.file_is_directory'(path);
@@ -26,21 +36,11 @@
         with inherited sharedTrait = #<std/os/files/SharedPathTrait>;
         private module = #<:std/os/files>;
 
-        parent => No; "TODO"
+        parent => self;
         name => '/';
         path => '/';
         / name => (module Path) clone initWithName: name Path: '/' + name Parent: self;
     };
-
-    here => (std os env Lookup: 'PWD')
-                yes: [ :p | Path: p ]
-                 no: [ ^ root ];
-
-    Path: fullpath => (
-        | path <- root |
-        (fullpath splitOnChar: #\/) do: [ :sub | path <- path / sub ].
-      ^ path
-    );
 
     own Path = {
         static with inherited _ = #<:std/Clonable>;
@@ -53,17 +53,9 @@
 
         with inherited trait = {
             initWithName: _name Path: _path Parent: _parent => (
-                parent <- Yes: _parent.
+                parent <- _parent.
                 name   <- _name.
                 path   <- _path.
-              ^ self
-            );
-
-            init => (
-                "Initializes a pointer to root"
-                parent <- No.
-                name   <- '/'.
-                path   <- '/'.
               ^ self
             );
         };
