@@ -13,6 +13,7 @@ std/maybe.eco \
 std/module.eco \
 std/modules.eco \
 std/singleton.eco \
+std/try.eco \
 std/io/_.eco \
 std/io/fdbytereader.eco \
 std/io/fdbytewriter.eco \

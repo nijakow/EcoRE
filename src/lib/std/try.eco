@@ -1,0 +1,37 @@
+
+#=std/try: {
+
+    Ok = #=std/try/Ok: {
+        static with inherited parent = #<:std/Clonable>;
+
+        ok;
+
+        with inherited trait = {
+            init: v => ok <- v;
+            ok: block => block value(ok);
+            error: block => self;
+            ok: yblock error: nblock => yblock value(ok);
+            error: nblock ok: yblock => yblock value(ok);
+            writeOn: writer => writer << 'Ok: ' << ok;
+        };
+    };
+
+    Ok: value => (#<:std/try/Ok> clone) init: value;
+
+    Error = #=std/try/Error: {
+        static with inherited parent = #<:std/Clonable>;
+
+        error;
+
+        with inherited trait = {
+            init: v => error <- v;
+            ok: block => self;
+            error: block => block value(error);
+            ok: yblock error: nblock => nblock value(error);
+            error: nblock ok: yblock => nblock value(error);
+            writeOn: writer => writer << 'Error: ' << error;
+        };
+    };
+
+    Error: value => (#<:std/try/Error> clone) init: value;
+}
