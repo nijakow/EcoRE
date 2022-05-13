@@ -1,0 +1,9 @@
+
+#=std/util/comparators: {
+    own DefaultComparator = #=std/util/comparators/DefaultComparator: {
+        static with inherited _ = std Singleton;
+
+        compare(a, b) => a == b;
+        writeOn: w => w << 'the default comparator';
+    }
+}

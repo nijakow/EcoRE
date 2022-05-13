@@ -40,6 +40,7 @@ eco_src = [
     './src/lib/std/util/queue.eco',
     './src/lib/std/util/iterators/segmented/_.eco',
     './src/lib/std/util/iterators/_.eco',
+    './src/lib/std/util/comparators/_.eco',
     './src/lib/std/util/_.eco',
     './src/lib/std/maybe.eco',
     './src/lib/std/bool.eco',

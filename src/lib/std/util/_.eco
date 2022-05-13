@@ -46,6 +46,7 @@
 
 #=std/util: {
     iterators = #<:std/util/iterators>;
+    comparators = #<:std/util/comparators>;
 
     newArray(...) => #'ecosphere.ecore.object.array.array'(...);
     newArray: size => #'ecosphere.ecore.object.array.new'(size);

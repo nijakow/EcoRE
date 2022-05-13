@@ -53,6 +53,7 @@ std/text/utf8/utf8iterator.eco \
 std/text/writing/_.eco \
 std/text/writing/numberwriter.eco \
 std/util/_.eco \
+std/util/comparators/_.eco \
 std/util/iterators/segmented/_.eco \
 std/util/iterators/_.eco \
 std/util/collector.eco \
