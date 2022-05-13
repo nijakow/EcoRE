@@ -1,4 +1,14 @@
 
 #=std/os: {
     files = #<:std/os/files>;
+
+    env = {
+        static with inherited _ = #<:std/Module>;
+
+        Lookup: var => (
+            | v <- #'ecosphere.ecore.os.getenv'(var) |
+            v -> [ ^ Yes: v ].
+          ^ No
+        );
+    };
 }

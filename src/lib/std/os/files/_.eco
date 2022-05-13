@@ -8,6 +8,7 @@
         exists => #'ecosphere.ecore.io.file_exists'(path);
         isDirectory => #'ecosphere.ecore.io.file_is_directory'(path);
         / name => (
+            (name equals: '') -> [ ^ self ].
             (name equals: '.') -> [ ^ self ].
             (name equals: '..') -> [ ^ parent yes ].
           ^ (module Path) clone initWithName: name
@@ -31,15 +32,15 @@
         / name => (module Path) clone initWithName: name Path: '/' + name Parent: self;
     };
 
-    own here = {
-        static with inherited _ = #<:std/Singleton>;
-        with inherited sharedTrait = #<std/os/files/SharedPathTrait>;
-        private module = #<:std/os/files>;
+    here => (std os env Lookup: 'PWD')
+                yes: [ :p | Path: p ]
+                 no: [ ^ root ];
 
-        parent => No;
-        name => '.';
-        path => '.';
-    };
+    Path: fullpath => (
+        | path <- root |
+        (fullpath splitOnChar: #\/) do: [ :sub | path <- path / sub ].
+      ^ path
+    );
 
     own Path = {
         static with inherited _ = #<:std/Clonable>;
