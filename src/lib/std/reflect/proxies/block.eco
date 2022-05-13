@@ -38,7 +38,13 @@
 
     while: b   => ( (self value) unless: [ ^ self ]. b value. #'ecosphere.ecore.flow.reset'() );
     until: b   => ( (self value) if: [ ^ self ]. b value. #'ecosphere.ecore.flow.reset'() );
+
     catch: b   => ( [ #'ecosphere.ecore.flow.set_exception_handler'(b). self value ] value );
+    ok: yblock => [ yblock value(self value) ] catch: [ :e | self ];
+    error: nblock => self catch: nblock;
+    ok: yblock error: nblock => [ yblock value(self value) ] catch: nblock;
+    error: nblock ok: yblock => [ yblock value(self value) ] catch: nblock;
+
     and:   b   => (
         | v <- self value |
         v if: [ ^ b value ] else: [ ^ v ]
