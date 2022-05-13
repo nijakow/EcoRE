@@ -1,0 +1,24 @@
+{
+    static with inherited _ = std Module;
+
+    own Pair = {
+        static with inherited _ = std Clonable;
+
+        car, cdr;
+
+        with inherited trait = {
+            initWithCar: _car Cdr: _cdr => (
+                car <- _car.
+                cdr <- _cdr.
+              ^ self
+            );
+
+            car: v => car <- v;
+            cdr: v => cdr <- v;
+
+            writeOn: w => w << '(' << car << ' . ' << cdr << ')';
+        };
+    },
+
+    cons(car, cdr) => (Pair clone) initWithCar: car Cdr: cdr;
+}
