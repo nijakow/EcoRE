@@ -278,13 +278,13 @@
             static with inherited _ = std Clonable;
             with inherited own super = $ ByteCodeInstruction;
 
-            to, code;
+            register, code;
 
             with inherited trait = {
-                initWithTo: _to Code: _code => (
+                initWithRegister: _register Code: _code => (
                     super init.
-                    to   <- _to.
-                    code <- _code.
+                    register <- _register.
+                    code     <- _code.
                   ^ self
                 );
 
