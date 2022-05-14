@@ -210,6 +210,8 @@
                   ^ self
                 );
                 initWithKey: key Args: args => initWithKey: key Args: args Varargs: false;
+                initWithArgs: args Key: key => initWithKey: key Args: args;
+                initWithArgs: args Key: key Varargs: varargs => initWithKey: key Args: args Varargs: varargs;
 
                 writeOn: w => w << 'a call-builtin bytecode instruction';
             };
@@ -230,26 +232,8 @@
                   ^ self
                 );
                 initWithKey: key Args: args => initWithKey: key Args: args Varargs: false;
-
-                writeOn: w => w << 'a send bytecode instruction';
-            };
-        },
-
-        own SendInstruction = {
-            static with inherited _ = std Clonable;
-            with inherited own super = $ ByteCodeInstruction;
-
-            key, args, varargs;
-
-            with inherited trait = {
-                initWithKey: _key Args: _args Varargs: _varargs => (
-                    super init.
-                    key     <- _key.
-                    args    <- _args.
-                    varargs <- _varargs.
-                  ^ self
-                );
-                initWithKey: key Args: args => initWithKey: key Args: args Varargs: false;
+                initWithArgs: args Key: key => initWithKey: key Args: args;
+                initWithArgs: args Key: key Varargs: varargs => initWithKey: key Args: args Varargs: varargs;
 
                 writeOn: w => w << 'a send bytecode instruction';
             };
@@ -351,5 +335,64 @@
         commit => first;
 
         writeOn: w => w << 'an instruction graph builder';
+    },
+
+    own Disassembler = {
+        static with inherited parent = std Clonable;
+        private optimizer = $;
+        private instructions = $ instructions;
+
+        private bytecodes,
+        private it,
+        private constants,
+        private closures;
+
+        with inherited trait = {
+            initWithBytecodes: _bytecodes Constants: _constants Closures: _closures => (
+                bytecodes <- _bytecodes.
+                constants <- _constants.
+                closures  <- _closures.
+                it        <- _bytecodes iterator.
+              ^ self
+            );
+            initWithCode: _code => initWithBytecodes: (_code bytecodes) Constants: (_code constants) Closures: (_code closures);
+
+            protected nextU8 => (it next) bitAnd: 255;
+            protected nextU16 => (
+                | v <- nextU8 |
+                v <- v bitOr: (nextU8 rshift: 8).
+              ^ v
+            );
+
+            protected nextConstant => constants at: nextU16;
+            protected nextCode => closures at: nextU16;
+
+            disassemble => (
+                | builder <- (optimizer InstructionGraphBuilder) new |
+                [ it hasNext ] while: [
+                    | opcode <- nextU8 |
+                    (opcode == lang eco bytecodes NOOP)  -> [ builder add: ((instructions NoopInstruction) clone init) ].
+                    (opcode == lang eco bytecodes CONST) -> [ builder add: ((instructions LoadConstantInstruction) clone initWithRegister: nextU8 Constant: nextConstant) ].
+                    (opcode == lang eco bytecodes PUSHC) -> [ builder add: ((instructions PushConstantInstruction) clone initWithConstant: nextConstant) ].
+                    (opcode == lang eco bytecodes PUSH)  -> [ builder add: ((instructions PushInstruction) clone initWithRegister: nextU8) ].
+                    (opcode == lang eco bytecodes POP)   -> [ builder add: ((instructions PopInstruction) clone initWithRegister: nextU8) ].
+                    (opcode == lang eco bytecodes DROP)  -> [ builder add: ((instructions DropInstruction) clone init) ].
+                    (opcode == lang eco bytecodes DUP)   -> [ builder add: ((instructions DupInstruction) clone init) ].
+                    (opcode == lang eco bytecodes R2R)   -> [ builder add: ((instructions R2RInstruction) clone initWithTo: nextU8 From: nextU8) ].
+                    (opcode == lang eco bytecodes R2L)   -> [ builder add: ((instructions R2LInstruction) clone initWithTo: nextU8 Depth: nextU8 From: nextU8) ].
+                    (opcode == lang eco bytecodes L2R)   -> [ builder add: ((instructions L2RInstruction) clone initWithTo: nextU8 From: nextU8 Depth: nextU8) ].
+                    (opcode == lang eco bytecodes BUILTIN) -> [ builder add: ((instructions BuiltinInstruction) clone initWithArgs: nextU8 Key: nextConstant) ].
+                    (opcode == lang eco bytecodes BUILTINV) -> [ builder add: ((instructions BuiltinInstruction) clone initWithArgs: nextU8 Key: nextConstant Varargs: true) ].
+                    (opcode == lang eco bytecodes SEND) -> [ builder add: ((instructions SendInstruction) clone initWithArgs: nextU8 Key: nextConstant) ].
+                    (opcode == lang eco bytecodes SENDV) -> [ builder add: ((instructions SendInstruction) clone initWithArgs: nextU8 Key: nextConstant Varargs: true) ].
+                    (opcode == lang eco bytecodes ASSIGN) -> [ builder add: ((instructions AssignInstruction) clone initWithKey: nextConstant) ].
+                    (opcode == lang eco bytecodes RETURN) -> [ builder add: ((instructions ReturnInstruction) clone initWithDepth: nextU8) ].
+                    (opcode == lang eco bytecodes CLOSURE) -> [ builder add: ((instructions ClosureInstruction) clone initWithRegister: nextU8 Code: nextCode) ].
+                ].
+              ^ builder commit
+            );
+
+            writeOn: w => w << 'a disassembler';
+        };
     }
 }
