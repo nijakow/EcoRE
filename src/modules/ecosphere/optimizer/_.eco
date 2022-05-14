@@ -5,34 +5,351 @@
     own instructions = {
         static with inherited _ = std Module;
 
+        own StopInstruction = {
+            static with inherited _ = std Singleton;
+
+            next => self;
+
+            writeOn: w => w << 'a stop bytecode pseudo-instruction';
+        },
+
         own ByteCodeInstruction = {
             static with inherited _ = std Clonable;
+            private instructions = $;
 
             next;
 
             with inherited trait = {
-                initWithNext: _next => (
-                    next <- _next.
-                ^ self
-                );
+                init => next: (instructions StopInstruction new);
+
+                next: v => next <- v;
 
                 writeOn: w => w << 'a bytecode instruction';
             };
-        };
+        },
 
-        own LoadSelf = {
+        own NoopInstruction = {
             static with inherited _ = std Clonable;
             with inherited own super = $ ByteCodeInstruction;
-            private instructions = $;
 
             with inherited trait = {
-                initWithNext: _next => (
-                    super initWithNext: _next.
+                init => (
+                    super init.
                   ^ self
                 );
 
-                writeOn: w => w << 'a <<load self>> bytecode instruction';
-            }
+                writeOn: w => w << 'a noop bytecode instruction';
+            };
+        },
+
+        own LoadConstantInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            register, constant;
+
+            with inherited trait = {
+                initWithRegister: _register Constant: _constant => (
+                    super init.
+                    register <- _register.
+                    constant <- _constant.
+                  ^ self
+                );
+
+                writeOn: w => w << 'a load constant bytecode instruction';
+            };
+        },
+
+        own PushConstantInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            constant;
+
+            with inherited trait = {
+                initWithConstant: _constant => (
+                    super init.
+                    constant <- _constant.
+                  ^ self
+                );
+
+                writeOn: w => w << 'a push constant bytecode instruction';
+            };
+        },
+
+        own PushInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            register;
+
+            with inherited trait = {
+                initWithRegister: _register => (
+                    super init.
+                    register <- _register.
+                  ^ self
+                );
+
+                writeOn: w => w << 'a push bytecode instruction';
+            };
+        },
+
+        own PopInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            register;
+
+            with inherited trait = {
+                initWithRegister: _register => (
+                    super init.
+                    register <- _register.
+                  ^ self
+                );
+
+                writeOn: w => w << 'a pop bytecode instruction';
+            };
+        },
+
+        own DropInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            with inherited trait = {
+                init => (
+                    super init.
+                  ^ self
+                );
+
+                writeOn: w => w << 'a drop bytecode instruction';
+            };
+        },
+
+        own DupInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            with inherited trait = {
+                init => (
+                    super init.
+                  ^ self
+                );
+
+                writeOn: w => w << 'a dup bytecode instruction';
+            };
+        },
+
+        own R2RInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            from, to;
+
+            with inherited trait = {
+                initWithFrom: _from To: _to => (
+                    super init.
+                    from <- _from.
+                    to   <- _to.
+                  ^ self
+                );
+
+                writeOn: w => w << 'a register-to-register bytecode instruction';
+            };
+        },
+
+        own R2LInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            from, to, depth;
+
+            with inherited trait = {
+                initWithFrom: _from To: _to Depth: _depth => (
+                    super init.
+                    from  <- _from.
+                    to    <- _to.
+                    depth <- _depth.
+                  ^ self
+                );
+
+                writeOn: w => w << 'a register-to-lexical bytecode instruction';
+            };
+        },
+
+        own L2RInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            from, depth, to;
+
+            with inherited trait = {
+                initWithFrom: _from Depth: _depth To: _to => (
+                    super init.
+                    from  <- _from.
+                    depth <- _depth.
+                    to    <- _to.
+                  ^ self
+                );
+
+                writeOn: w => w << 'a lexical-to-register bytecode instruction';
+            };
+        },
+
+        own BuiltinInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            key, args, varargs;
+
+            with inherited trait = {
+                initWithKey: _key Args: _args Varargs: _varargs => (
+                    super init.
+                    key     <- _key.
+                    args    <- _args.
+                    varargs <- _varargs.
+                  ^ self
+                );
+                initWithKey: key Args: args => initWithKey: key Args: args Varargs: false;
+
+                writeOn: w => w << 'a call-builtin bytecode instruction';
+            };
+        },
+
+        own SendInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            key, args, varargs;
+
+            with inherited trait = {
+                initWithKey: _key Args: _args Varargs: _varargs => (
+                    super init.
+                    key     <- _key.
+                    args    <- _args.
+                    varargs <- _varargs.
+                  ^ self
+                );
+                initWithKey: key Args: args => initWithKey: key Args: args Varargs: false;
+
+                writeOn: w => w << 'a send bytecode instruction';
+            };
+        },
+
+        own SendInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            key, args, varargs;
+
+            with inherited trait = {
+                initWithKey: _key Args: _args Varargs: _varargs => (
+                    super init.
+                    key     <- _key.
+                    args    <- _args.
+                    varargs <- _varargs.
+                  ^ self
+                );
+                initWithKey: key Args: args => initWithKey: key Args: args Varargs: false;
+
+                writeOn: w => w << 'a send bytecode instruction';
+            };
+        },
+
+        own AssignInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            key;
+
+            with inherited trait = {
+                initWithKey: _key => (
+                    super init.
+                    key <- _key.
+                  ^ self
+                );
+
+                writeOn: w => w << 'an assign bytecode instruction';
+            };
+        },
+
+        own ReturnInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            depth;
+
+            with inherited trait = {
+                initWithDepth: _depth => (
+                    super init.
+                    depth <- _depth.
+                  ^ self
+                );
+                init => initWithDepth: 0;
+
+                writeOn: w => w << 'a return bytecode instruction';
+            };
+        },
+
+        own ClosureInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            to, code;
+
+            with inherited trait = {
+                initWithTo: _to Code: _code => (
+                    super init.
+                    to   <- _to.
+                    code <- _code.
+                  ^ self
+                );
+
+                writeOn: w => w << 'a closure bytecode instruction';
+            };
+        },
+
+        own JumpInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            target;
+
+            with inherited trait = {
+                initWithTarget: _target => (
+                    super init.
+                    target <- _target.
+                  ^ self
+                );
+
+                writeOn: w => w << 'a jump bytecode instruction';
+            };
+        },
+    },
+
+    own InstructionGraphBuilder = {
+        static with inherited _ = std Clonable;
+        private optimizer = $;
+
+        private first,
+        private last;
+
+        with inherited trait = {
+            init => (
+                | node <- optimizer instructions NoopInstruction |
+                first <- node.
+                last  <- node.
+              ^ self
+            );
         };
+
+        add: instruction => (
+            last next: instruction.
+            last <- instruction.
+          ^ self
+        );
+
+        commit => first;
+
+        writeOn: w => w << 'an instruction graph builder';
     }
 }
