@@ -20,7 +20,7 @@
         / name => (
             (name equals: '') -> [ ^ self ].
             (name equals: '.') -> [ ^ self ].
-            (name equals: '..') -> [ ^ parent yes ].
+            (name equals: '..') -> [ ^ parent ].
           ^ (module Path) clone initWithName: name
                                         Path: path + '/' + name
                                       Parent: self.
