@@ -381,7 +381,12 @@
                     (opcode == lang eco bytecodes R2R)   -> [ builder add: ((instructions R2RInstruction) clone initWithTo: nextU8 From: nextU8) ].
                     (opcode == lang eco bytecodes R2L)   -> [ builder add: ((instructions R2LInstruction) clone initWithTo: nextU8 Depth: nextU8 From: nextU8) ].
                     (opcode == lang eco bytecodes L2R)   -> [ builder add: ((instructions L2RInstruction) clone initWithTo: nextU8 From: nextU8 Depth: nextU8) ].
-                    (opcode == lang eco bytecodes BUILTIN) -> [ builder add: ((instructions BuiltinInstruction) clone initWithArgs: nextU8 Key: nextConstant) ].
+                    (opcode == lang eco bytecodes BUILTIN) -> [
+                        | args <- nextU8, key <- nextConstant |
+                        (#'ecosphere.ecore.flow.reset' == key)
+                              if: [ builder add: ((instructions JumpInstruction) clone initWithTarget: builder commit) ]
+                            else: [ builder add: ((instructions BuiltinInstruction) clone initWithArgs: args Key: key) ]
+                    ].
                     (opcode == lang eco bytecodes BUILTINV) -> [ builder add: ((instructions BuiltinInstruction) clone initWithArgs: nextU8 Key: nextConstant Varargs: true) ].
                     (opcode == lang eco bytecodes SEND) -> [ builder add: ((instructions SendInstruction) clone initWithArgs: nextU8 Key: nextConstant) ].
                     (opcode == lang eco bytecodes SENDV) -> [ builder add: ((instructions SendInstruction) clone initWithArgs: nextU8 Key: nextConstant Varargs: true) ].
