@@ -27,7 +27,7 @@
         );
         children => (((module ListFiles: path) iterator map: [ :file | self / file ]) into: (std util newVector)) asArray;
         openForReading => io OpenFileForReading: path;
-        import => io Import: path;
+        import => io Import: path Path: parent;
         writeOn: w => w << 'a path(\'' << path << '\')';
     };
 

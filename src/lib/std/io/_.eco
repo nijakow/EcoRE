@@ -43,5 +43,17 @@
     ParseFile: file => (SlurpFile: file) parse;
     EvaluateFile: file InEnv: env => (ParseFile: file) evaluateInEnv: env;
 
-    Import: file => EvaluateFile: file InEnv: #<:lobby>;
+    Import: file Path: path => (
+      |
+        env <- {
+          static with inherited _ = #<:std/Clonable>;
+          with lobby = #<:lobby>;
+
+          here;
+          init: _here => here <- _here;
+        }
+      |
+      EvaluateFile: file InEnv: (env clone init: path)
+    );
+    Import: file => Import: file Path: (std os files here);
 }
