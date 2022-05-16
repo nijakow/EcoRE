@@ -17,7 +17,7 @@ OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
 DEPENDS = $(patsubst %.c,%.d,$(SOURCES))
 
 LDFLAGS = 
-CFLAGS = -Wall -Wextra -Werror -Wno-strict-aliasing -Wno-unused-result -Wno-unused-parameter -Wno-unused-label -g -Ofast -DECO_LATEST_GIT_COMMIT="\"$(shell git rev-parse --short=12 HEAD)\""
+CFLAGS = -Wall -Wextra -Werror -Wno-strict-aliasing -Wno-unused-result -Wno-unused-function -Wno-unused-parameter -Wno-unused-label -g -Ofast -DECO_LATEST_GIT_COMMIT="\"$(shell git rev-parse --short=12 HEAD)\""
 
 %.o: %.c
 	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
