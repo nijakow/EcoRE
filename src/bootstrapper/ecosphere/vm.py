@@ -82,12 +82,31 @@ class Type(AObject):
         super().__init__(None, count + 2)
 
 class Slot(AObject):
+    # Layout:
+    #  - <parent>
+    #  - name
+    #  - flags
+    #  - offset / method
+    #  - referenced type
 
     def set_name(self, name):
         self[2] = name
+    
+    def set_flags(self, flags):
+        self[3] = flags
+    
+    def set_offset(self, offset):
+        self[4] = offset
+    
+    def set_method(self, method):
+        self[4] = method
+    
+    def set_referenced_type(self, tp):
+        self[5] = tp
 
     def __init__(self):
-        super().__init__(None, 3)
+        super().__init__(None, 6)
+        self[3] = 0
 
 class Transformer:
 
