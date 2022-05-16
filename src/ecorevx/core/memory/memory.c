@@ -39,9 +39,14 @@ void* Eco_Page_Alloc(struct Eco_Page* self, Eco_Size_t size)
 {
     void*  ptr;
 
-    if ((size % Eco_ALLOCATION_ALIGNMENT) != 0)
-        size = (size - (size % Eco_ALLOCATION_ALIGNMENT)) + Eco_ALLOCATION_ALIGNMENT;
+    /*
+     * Align the allocation.
+     */
+    size        = Eco_Util_StandardAlign(size);
 
+    /*
+     * The classic pointer increment :)
+     */
     ptr         = Eco_Page_Here(self);
     self->alloc = self->alloc + size;
 
