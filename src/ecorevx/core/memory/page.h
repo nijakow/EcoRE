@@ -26,6 +26,8 @@
 
 struct Eco_PageInfo
 {
+    struct Eco_Page*  next;
+    struct Eco_Page** prev;
 };
 
 struct Eco_Page
@@ -112,10 +114,34 @@ static inline void* Eco_Page_Here(struct Eco_Page* self)
     return self->alloc;
 }
 
+/*
+ * Returns the pointer to the next page in this page list.
+ *
+ * The pointer has to point to the page base.
+ */
+static inline struct Eco_Page** Eco_Page_NextPage(struct Eco_Page* self)
+{
+    return &self->info->next;
+}
+
+/*
+ * Returns the pointer to the previous page in this page list.
+ *
+ * The pointer has to point to the page base.
+ */
+static inline struct Eco_Page*** Eco_Page_PrevPage(struct Eco_Page* self)
+{
+    return &self->info->prev;
+}
+
+
 struct Eco_Page* Eco_Page_New();
 void             Eco_Page_Delete(struct Eco_Page*);
 
 void*            Eco_Page_Alloc(struct Eco_Page*, Eco_Size_t);
 void             Eco_Page_Clear(struct Eco_Page*);
+
+void             Eco_Page_Unlink(struct Eco_Page*);
+void             Eco_Page_Link(struct Eco_Page*, struct Eco_Page**);
 
 #endif
