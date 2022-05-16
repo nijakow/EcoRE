@@ -5,7 +5,9 @@
 
 struct Eco_Pages
 {
-    struct Eco_Page*  page_list;
+    struct Eco_Page*   free_page_list;
+    struct Eco_Page*   edens[2];
+    struct Eco_Page**  current_eden;
 };
 
 void Eco_Pages_Create(struct Eco_Pages*);

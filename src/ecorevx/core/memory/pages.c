@@ -8,7 +8,7 @@ static struct Eco_Page* Eco_Pages_AllocateNewPage(struct Eco_Pages* self)
 
     if (page != NULL)
     {
-        Eco_Page_Link(page, &self->page_list);
+        Eco_Page_Link(page, &self->free_page_list);
     }
 
     return page;
@@ -16,7 +16,10 @@ static struct Eco_Page* Eco_Pages_AllocateNewPage(struct Eco_Pages* self)
 
 void Eco_Pages_Create(struct Eco_Pages* self)
 {
-    self->page_list = NULL;
+    self->free_page_list =  NULL;
+    self->edens[0]       =  NULL;
+    self->edens[1]       =  NULL;
+    self->current_eden   = &self->edens[0];
 }
 
 void Eco_Pages_Destroy(struct Eco_Pages* self)
