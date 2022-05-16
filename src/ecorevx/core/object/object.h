@@ -78,19 +78,24 @@ static inline void Eco_Object_Set(struct Eco_Object* self, unsigned int index, E
     ((Eco_Any*) Eco_Object_GetPayload(self))[index] = value;
 }
 
-static inline char* Eco_Object_GetBytePayload(struct Eco_Object* self)
+static inline char* Eco_ByteObject_GetBytePayload(struct Eco_Object* self)
 {
-    return (((char*) Eco_Object_GetPayload(self)) + sizeof(Eco_Any) * Eco_DEFAULT_OBJECT_SLOT_COUNT);
+    return (((char*) Eco_Object_GetBytePayload(self)) + sizeof(Eco_Any) * Eco_DEFAULT_OBJECT_SLOT_COUNT);
 }
 
-static inline char Eco_Object_GetByte(struct Eco_Object* self, unsigned int index)
+static inline char Eco_ByteObject_GetByte(struct Eco_Object* self, unsigned int index)
 {
-    return Eco_Object_GetBytePayload(self)[index];
+    return Eco_ByteObject_GetBytePayload(self)[index];
 }
 
-static inline void Eco_Object_SetByte(struct Eco_Object* self, unsigned int index, char value)
+static inline void Eco_ByteObject_SetByte(struct Eco_Object* self, unsigned int index, char value)
 {
-    Eco_Object_GetBytePayload(self)[index] = value;
+    Eco_ByteObject_GetBytePayload(self)[index] = value;
+}
+
+static inline Eco_Size_t Eco_ByteObject_GetByteCount(struct Eco_Object* self)
+{
+    return Eco_Object_GetUnalignedSize(self) - sizeof(struct Eco_Object) - sizeof(Eco_Any) * Eco_DEFAULT_OBJECT_SLOT_COUNT;
 }
 
 struct Eco_Object* Eco_Object_AllocByteObject(Eco_Allocator_t, Eco_Any, Eco_Size_t);
