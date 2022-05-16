@@ -32,4 +32,7 @@
 # endif
 #endif
 
+#define Eco_WORD_SIZE (sizeof(void*))
+#define Eco_ALLOCATION_ALIGNMENT Eco_WORD_SIZE
+
 #endif

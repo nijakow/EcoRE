@@ -10,6 +10,7 @@ static void Eco_PageInfo_Destroy(struct Eco_PageInfo* self)
 {
 }
 
+
 struct Eco_Page* Eco_Page_New()
 {
     struct Eco_Page*  self;
@@ -18,6 +19,7 @@ struct Eco_Page* Eco_Page_New()
 
     if (self != NULL)
     {
+        Eco_Page_Clear(self);
         self->info = Eco_PageInfo(self);
         Eco_PageInfo_Create(self->info);
     }
@@ -28,4 +30,28 @@ struct Eco_Page* Eco_Page_New()
 void Eco_Page_Delete(struct Eco_Page* self)
 {
     Eco_PageInfo_Destroy(self->info);
+}
+
+/*
+ * Allocates data on a page.
+ */
+void* Eco_Page_Alloc(struct Eco_Page* self, Eco_Size_t size)
+{
+    void*  ptr;
+
+    if ((size % Eco_ALLOCATION_ALIGNMENT) != 0)
+        size = (size - (size % Eco_ALLOCATION_ALIGNMENT)) + Eco_ALLOCATION_ALIGNMENT;
+
+    ptr         = Eco_Page_Here(self);
+    self->alloc = self->alloc + size;
+
+    return ptr;
+}
+
+/*
+ * Clears the page by resetting its allocation pointer.
+ */
+void Eco_Page_Clear(struct Eco_Page* self)
+{
+    self->alloc = Eco_Page_GetHeapStart(self);
 }
