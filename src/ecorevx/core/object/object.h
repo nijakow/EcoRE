@@ -4,7 +4,7 @@
 #include "../../util/memory.h"
 #include "../any.h"
 
-#define Eco_DEFAULT_OBJECT_SLOT_COUNT 0
+#define Eco_DEFAULT_OBJECT_SLOT_COUNT 1
 
 
 enum Eco_ObjectType
@@ -63,22 +63,36 @@ static inline unsigned int Eco_Object_GetSlotCount(struct Eco_Object* self)
         return Eco_DEFAULT_OBJECT_SLOT_COUNT;
 }
 
-static inline void* Eco_Object_PayloadOffset(struct Eco_Object* self)
+static inline void* Eco_Object_GetPayload(struct Eco_Object* self)
 {
     return ((char*) self) + sizeof(struct Eco_Object);
 }
 
 static inline Eco_Any Eco_Object_Get(struct Eco_Object* self, unsigned int index)
 {
-    return ((Eco_Any*) Eco_Object_PayloadOffset(self))[index];
+    return ((Eco_Any*) Eco_Object_GetPayload(self))[index];
 }
 
 static inline void Eco_Object_Set(struct Eco_Object* self, unsigned int index, Eco_Any value)
 {
-    ((Eco_Any*) Eco_Object_PayloadOffset(self))[index] = value;
+    ((Eco_Any*) Eco_Object_GetPayload(self))[index] = value;
 }
 
-void Eco_Object_Create(struct Eco_Object*, enum Eco_ObjectType, Eco_Size_t);
-void Eco_Object_Destroy(struct Eco_Object*);
+static inline char* Eco_Object_GetBytePayload(struct Eco_Object* self)
+{
+    return (((char*) Eco_Object_GetPayload(self)) + sizeof(Eco_Any) * Eco_DEFAULT_OBJECT_SLOT_COUNT);
+}
+
+static inline char Eco_Object_GetByte(struct Eco_Object* self, unsigned int index)
+{
+    return Eco_Object_GetBytePayload(self)[index];
+}
+
+static inline void Eco_Object_SetByte(struct Eco_Object* self, unsigned int index, char value)
+{
+    Eco_Object_GetBytePayload(self)[index] = value;
+}
+
+struct Eco_Object* Eco_Object_AllocByteObject(Eco_Allocator_t, Eco_Any, Eco_Size_t);
 
 #endif

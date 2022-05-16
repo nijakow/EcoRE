@@ -38,6 +38,7 @@ struct Eco_Page* Eco_Page_New()
 void Eco_Page_Delete(struct Eco_Page* self)
 {
     Eco_PageInfo_Destroy(self->info);
+    Eco_Util_AlignedFree(self);
 }
 
 /*
