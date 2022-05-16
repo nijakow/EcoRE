@@ -13,4 +13,6 @@ struct Eco_Pages
 void Eco_Pages_Create(struct Eco_Pages*);
 void Eco_Pages_Destroy(struct Eco_Pages*);
 
+void* Eco_Pages_AllocateInEden(struct Eco_Pages*, Eco_Size_t);
+
 #endif

@@ -48,9 +48,16 @@ void* Eco_Page_Alloc(struct Eco_Page* self, Eco_Size_t size)
     void*  ptr;
 
     /*
-     * Align the allocation.
+     * Align the allocation size.
      */
     size        = Eco_Util_StandardAlign(size);
+
+    /*
+     * Check if the page has space for this allocation.
+     * If the space is exhausted, we fail.
+     */
+    if (!Eco_Page_HasSpaceFor(self, size))
+        return NULL;
 
     /*
      * The classic pointer increment :)

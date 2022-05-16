@@ -134,6 +134,16 @@ static inline struct Eco_Page*** Eco_Page_PrevPage(struct Eco_Page* self)
     return &self->info->prev;
 }
 
+static inline Eco_Size_t Eco_Page_GetFreeSpace(struct Eco_Page* self)
+{
+    return (Eco_Page_End(self) - Eco_Page_Here(self));
+}
+
+static inline bool Eco_Page_HasSpaceFor(struct Eco_Page* self, Eco_Size_t size)
+{
+    return Eco_Page_GetFreeSpace(self) >= size;
+}
+
 
 struct Eco_Page* Eco_Page_New();
 void             Eco_Page_Delete(struct Eco_Page*);
