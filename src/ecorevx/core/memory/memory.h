@@ -3,9 +3,25 @@
 
 #include "../../base/defs.h"
 
-#define Eco_PAGE_SIZE (16 * 1024 * 1024)
-#define Eco_PAGE_MASK ((((Eco_Uintptr_t) 1) << Eco_PAGE_SIZE) - 1)
-#define Eco_PAGEADDR_MASK ~((((Eco_Uintptr_t) 1) << Eco_PAGE_SIZE) - 1)
+/*
+ * The amount of bits osed for the offset of a pointer inside of its page
+ */
+#define Eco_PAGE_SHIFT (24)
+
+/*
+ * The size of a page, in bytes
+ */
+#define Eco_PAGE_SIZE (((Eco_Size_t) 1) << Eco_PAGE_SHIFT)
+
+/*
+ * Apply this mask to get the offset of a pointer inside of its page
+ */
+#define Eco_PAGE_MASK ((((Eco_Uintptr_t) 1) << Eco_PAGE_SHIFT) - 1)
+
+/*
+ * Apply this mask to get the base address of a page
+ */
+#define Eco_PAGEBASE_MASK ~((((Eco_Uintptr_t) 1) << Eco_PAGE_SHIFT) - 1)
 
 struct Eco_PageInfo
 {
@@ -25,7 +41,7 @@ struct Eco_Page
  */
 static inline void* Eco_Page_Base(void* ptr)
 {
-    return (void*) (((Eco_Uintptr_t) ptr) & Eco_PAGEADDR_MASK);
+    return (void*) (((Eco_Uintptr_t) ptr) & Eco_PAGEBASE_MASK);
 }
 
 /*
