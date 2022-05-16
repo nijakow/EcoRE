@@ -8,6 +8,7 @@ import ecosphere.parser.tokenizer
 import ecosphere.parser.parser
 import ecosphere.compiler
 import ecosphere.econnect
+import ecosphere.vm
 
 
 class LabelStorage:
@@ -159,6 +160,10 @@ def main(binfile, srcfiles, as_c=False, compressed=False):
             convert(out, serialized)
         else:
             out.write(serialized)
+    #transformer = ecosphere.vm.Transformer()
+    #transformer.get(result)
+    #for o in ecosphere.vm.OBJECTS:
+    #    print(o)
 
 
 if __name__ == '__main__':
@@ -177,4 +182,3 @@ if __name__ == '__main__':
     ofile = sys.argv[index]
     ifiles = sys.argv[(index + 1):]
     main(ofile, ifiles, as_c, compressed)
-

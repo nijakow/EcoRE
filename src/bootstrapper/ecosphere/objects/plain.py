@@ -1,4 +1,5 @@
 import ecosphere.objects.base
+import ecosphere.vm
 
 
 class EcoSlot:
@@ -11,6 +12,12 @@ class EcoSlot:
     
     def add_value_callback(self, cb):
         raise Exception('Can\'t put a callback on this slot!')
+    
+    def transform(self, transformer):
+        s = ecosphere.vm.Slot()
+        transformer.put(self, s)
+        s.set_name(transformer.get(self._name))
+        return s
 
     def __init__(self, name, is_private, is_static):
         self._name = name
@@ -122,6 +129,15 @@ class EcoPlainObject(ecosphere.objects.base.EcoObject):
             serializer.write_vlq(len(self._slots))
             for slot in self._slots:
                 slot.serialize(serializer)
+    
+    def transform(self, transformer):
+        t = ecosphere.vm.Type(len(self._slots))
+        for i in range(0, len(self._slots)):
+            t.set_slot(i, transformer.get(self._slots[i]))
+        p = ecosphere.vm.AObject(t, len(self._slots))  # TODO: Only non-method slots!
+        transformer.put(self, p)
+        # TODO: Serialize slots, set type!
+        return p
 
     def __init__(self):
         super().__init__()

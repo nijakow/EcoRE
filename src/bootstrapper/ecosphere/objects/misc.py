@@ -1,7 +1,7 @@
 import ecosphere.objects.base
+import ecosphere.vm
 
 from ecosphere.compiler.codegen import Bytecodes
-
 
 class EcoKey(ecosphere.objects.base.EcoObject):
     KEYS = dict()
@@ -23,6 +23,11 @@ class EcoKey(ecosphere.objects.base.EcoObject):
             k = EcoKey(name)
             EcoKey.KEYS[name] = k
         return EcoKey.KEYS[name]
+    
+    def transform(self, transformer):
+        k = transformer.make_key(transformer.get(self._name))
+        transformer.put(self, k)
+        return k
 
     def __init__(self, name):
         self._name = name
@@ -34,6 +39,11 @@ class EcoString(ecosphere.objects.base.EcoObject):
             serializer.write_message('ecosphere.object.string')
             serializer.write_vlq(serializer.add_object(self))
             serializer.write_string(self._string)
+    
+    def transform(self, transformer):
+        s = transformer.get(self._name)
+        transformer.put(self, s)
+        return s
 
     def __init__(self, string):
         self._string = string
@@ -50,6 +60,15 @@ class EcoArray(ecosphere.objects.base.EcoObject):
             serializer.write_message('ecosphere.object.array')
             serializer.write_vlq(serializer.add_object(self))
             serializer.write_objects(self._elements)
+    
+    def transform(self, transformer):
+        e = len(self._elements)
+        a = ecosphere.vm.Array(e)
+        transformer.put(self, a)
+        i = 0
+        while i < e:
+            a.put(i, transformer.get(self._elements[i]))
+        return a
 
     def __init__(self, length):
         self._elements = [None] * length
@@ -151,6 +170,17 @@ class EcoCode(ecosphere.objects.base.EcoObject):
             serializer.write_objects(self._constants)
             serializer.write_objects(self._closures)
             serializer.write_bytes(self._instructions)
+    
+    def transform(self, transformer):
+        c = ecosphere.vm.Code()
+        transformer.put(self, c)
+        c.set_bytecodes(transformer.get(self._instructions))
+        c.set_constants(transformer.make_array(self._constants))
+        c.set_closures(transformer.make_array(self._closures))
+        c.set_register_count(self._register_count)
+        c.set_parameters(self._parameters)
+        c.set_has_varargs(self._has_varargs)
+        return c
 
     def __init__(self, instructions, constants, closures, register_count, parameter_count, has_varargs):
         super().__init__()
