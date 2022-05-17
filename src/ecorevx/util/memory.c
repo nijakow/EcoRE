@@ -32,6 +32,11 @@ void* Eco_Util_AlignedAlloc(Eco_Size_t alignment, Eco_Size_t size)
 #else
     void*  ptr;
 
+    /*
+     * Linux's posix_memalign is a bit special: If it fails, ptr remains untouched.
+     * To avoid errors, we initialize the value to NULL.
+     */
+    ptr = NULL;
     posix_memalign(&ptr, alignment, size);
     return ptr;
 #endif

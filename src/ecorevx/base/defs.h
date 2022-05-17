@@ -31,5 +31,6 @@ typedef size_t Eco_Size_t;
 typedef uintptr_t Eco_Uintptr_t;
 
 struct Eco_Object;
+struct Eco_Map;
 
 #endif

@@ -3,6 +3,7 @@
 
 #include "memory/memory.h"
 #include "object/object.h"
+#include "object/byteobject.h"
 #include "any.h"
 
 #endif
