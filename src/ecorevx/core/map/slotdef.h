@@ -3,6 +3,7 @@
 
 #include "../any.h"
 
+
 struct Eco_SlotFlags
 {
     unsigned int is_code      : 1;
@@ -11,10 +12,17 @@ struct Eco_SlotFlags
     unsigned int is_own       : 1;
 };
 
+void Eco_SlotFlags_Create(struct Eco_SlotFlags*);
+void Eco_SlotFlags_Destroy(struct Eco_SlotFlags*);
+
+
 struct Eco_SlotDef
 {
-    Eco_Any               name;
+    struct Eco_Object*    name;
     struct Eco_SlotFlags  flags;
 };
+
+void Eco_SlotDef_Create(struct Eco_SlotDef*, struct Eco_Object*);
+void Eco_SlotDef_Destroy(struct Eco_SlotDef*);
 
 #endif
