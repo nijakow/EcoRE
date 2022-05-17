@@ -3,9 +3,21 @@
 
 #include "slotdef.h"
 
+union Eco_MapSlotBody
+{
+    struct {
+        unsigned int     offset;
+        struct Eco_Map*  referenced_map;
+    } inlined;
+
+    struct {
+    } code;
+};
+
 struct Eco_MapSlot
 {
-    struct Eco_SlotDef  def;
+    struct Eco_SlotDef      def;
+    union  Eco_MapSlotBody  body;
 };
 
 #endif
