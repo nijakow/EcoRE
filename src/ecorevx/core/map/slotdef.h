@@ -7,6 +7,8 @@
 struct Eco_SlotFlags
 {
     unsigned int is_code      : 1;
+    unsigned int is_protected : 1;
+    unsigned int is_static    : 1;
     unsigned int is_with      : 1;
     unsigned int is_inherited : 1;
     unsigned int is_own       : 1;
