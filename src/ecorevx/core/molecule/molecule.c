@@ -28,7 +28,8 @@ bool Eco_Molecule_AddValueSlot(Eco_Allocator_t      allocator,
      * TODO: - Create a copy of the molecule, move slots, insert value
      *       - Update the object structure (all in one pass)
      *          ^ Update all pointers to the new object
-     *          ^ Update the global maps
+     *          ^ Update the global maps (part of the previous operation:
+     *            if the object changes, so does its type)
      */
     return false;
 }
