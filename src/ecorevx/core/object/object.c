@@ -19,7 +19,7 @@ struct Eco_Object* Eco_Object_AllocPlainObject(Eco_Allocator_t allocator, struct
     const  Eco_Size_t   act_size = sizeof(struct Eco_Object) + sizeof(Eco_Any) * slot_count;
     struct Eco_Object*  self;
 
-    self = Eco_Pages_AllocateInEden((struct Eco_Pages*) allocator, act_size);
+    self = Eco_Heap_AllocateInEden((struct Eco_Heap*) allocator, act_size);
 
     if (self != NULL)
     {

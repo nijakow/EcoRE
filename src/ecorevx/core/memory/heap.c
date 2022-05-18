@@ -1,6 +1,6 @@
-#include "pages.h"
+#include "heap.h"
 
-static struct Eco_Page* Eco_Pages_AllocateNewPageToEden(struct Eco_Pages* self)
+static struct Eco_Page* Eco_Heap_AllocateNewPageToEden(struct Eco_Heap* self)
 {
     struct Eco_Page*  page;
 
@@ -18,7 +18,7 @@ static struct Eco_Page* Eco_Pages_AllocateNewPageToEden(struct Eco_Pages* self)
     return page;
 }
 
-void* Eco_Pages_AllocateInEden(struct Eco_Pages* self, Eco_Size_t size)
+void* Eco_Heap_AllocateInEden(struct Eco_Heap* self, Eco_Size_t size)
 {
     struct Eco_Page*  page;
     void*             allocation;
@@ -44,13 +44,13 @@ void* Eco_Pages_AllocateInEden(struct Eco_Pages* self, Eco_Size_t size)
      * 
      * TODO: Note that this happened, adapt the GC accordingly.
      */
-    page = Eco_Pages_AllocateNewPageToEden(self);
+    page = Eco_Heap_AllocateNewPageToEden(self);
     if (page == NULL)
         return NULL;
     return Eco_Page_Alloc(page, size);
 }
 
-void Eco_Pages_Create(struct Eco_Pages* self)
+void Eco_Heap_Create(struct Eco_Heap* self)
 {
     self->free_page_list =  NULL;
     self->edens[0]       =  NULL;
@@ -58,7 +58,7 @@ void Eco_Pages_Create(struct Eco_Pages* self)
     self->current_eden   = &self->edens[0];
 }
 
-void Eco_Pages_Destroy(struct Eco_Pages* self)
+void Eco_Heap_Destroy(struct Eco_Heap* self)
 {
     /*
      * TODO: Free all pages

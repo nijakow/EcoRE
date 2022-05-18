@@ -2,8 +2,8 @@
 #define ECO_CORE_MEMORY_MEMORY_H
 
 #include "page.h"
-#include "pages.h"
+#include "heap.h"
 
-typedef struct Eco_Pages* Eco_Allocator_t;
+typedef struct Eco_Heap* Eco_Allocator_t;
 
 #endif

@@ -5,12 +5,12 @@
 
 struct Eco
 {
-    struct Eco_Pages  memory;
+    struct Eco_Heap  heap;
 };
 
 static inline Eco_Allocator_t Eco_GetAllocator(struct Eco* self)
 {
-    return &self->memory;
+    return &self->heap;
 }
 
 #endif
