@@ -28,8 +28,4 @@ static inline bool Eco_MapSlot_IsInlined(struct Eco_MapSlot* self)
     return !self->def.flags.is_code;
 }
 
-void Eco_MapSlot_CreateInlined(struct Eco_MapSlot*, struct Eco_SlotDef*, unsigned int);
-void Eco_MapSlot_CreateCode(struct Eco_MapSlot*, struct Eco_SlotDef*, struct Eco_Object*);
-void Eco_MapSlot_Destroy(struct Eco_MapSlot*);
-
 #endif
