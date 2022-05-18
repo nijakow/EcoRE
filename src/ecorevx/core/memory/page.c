@@ -1,12 +1,15 @@
 #include "../../util/memory.h"
+#include "heap.h"
 
 #include "page.h"
 
 
 static void Eco_PageInfo_Create(struct Eco_PageInfo* self)
 {
-    self->next = NULL;
-    self->prev = NULL;
+    self->next         = NULL;
+    self->prev         = NULL;
+    self->next_in_list = NULL;
+    self->prev_in_list = NULL;
 }
 
 static void Eco_PageInfo_Destroy(struct Eco_PageInfo* self)
@@ -19,7 +22,7 @@ static void Eco_PageInfo_Destroy(struct Eco_PageInfo* self)
 }
 
 
-struct Eco_Page* Eco_Page_New()
+struct Eco_Page* Eco_Page_New(struct Eco_Heap* heap)
 {
     struct Eco_Page*  self;
 
@@ -30,6 +33,9 @@ struct Eco_Page* Eco_Page_New()
         Eco_Page_Clear(self);
         self->info = Eco_PageInfo(self);
         Eco_PageInfo_Create(self->info);
+        *Eco_Page_PrevPage(self) = &heap->page_list;
+        *Eco_Page_NextPage(self) =  heap->page_list;
+        *Eco_Page_PrevPage(heap->page_list) = Eco_Page_NextPage(self);
     }
 
     return self;
@@ -37,7 +43,21 @@ struct Eco_Page* Eco_Page_New()
 
 void Eco_Page_Delete(struct Eco_Page* self)
 {
+    /*
+     * Unlink the page from the page list.
+     */
+    **Eco_Page_PrevPage(self) = *Eco_Page_NextPage(self);
+    if (*Eco_Page_NextPage(self) != NULL)
+        *Eco_Page_PrevPage(*Eco_Page_NextPage(self)) = *Eco_Page_PrevPage(self);
+    
+    /*
+     * Destroy the PageInfo.
+     */
     Eco_PageInfo_Destroy(self->info);
+
+    /*
+     * Free the page.
+     */
     Eco_Util_AlignedFree(self);
 }
 
@@ -51,7 +71,7 @@ void* Eco_Page_Alloc(struct Eco_Page* self, Eco_Size_t size)
     /*
      * Align the allocation size.
      */
-    size        = Eco_Util_StandardAlign(size);
+    size = Eco_Util_StandardAlign(size);
 
     /*
      * Check if the page has space for this allocation.
@@ -86,16 +106,16 @@ void Eco_Page_Unlink(struct Eco_Page* self)
     struct Eco_Page*   next;
     struct Eco_Page**  prev;
 
-    next = *Eco_Page_NextPage(self);
-    prev = *Eco_Page_PrevPage(self);
+    next = *Eco_Page_NextPageInList(self);
+    prev = *Eco_Page_PrevPageInList(self);
 
     if (next != NULL)
-        *Eco_Page_PrevPage(next) = prev;
+        *Eco_Page_PrevPageInList(next) = prev;
     if (prev != NULL)
         *prev = next;
     
-    *Eco_Page_NextPage(self) = NULL;
-    *Eco_Page_PrevPage(self) = NULL;
+    *Eco_Page_NextPageInList(self) = NULL;
+    *Eco_Page_PrevPageInList(self) = NULL;
 }
 
 /*
@@ -104,7 +124,7 @@ void Eco_Page_Unlink(struct Eco_Page* self)
 void Eco_Page_Link(struct Eco_Page* self, struct Eco_Page** list)
 {
      Eco_Page_Unlink(self);
-    *Eco_Page_PrevPage(self) =  list;
-    *Eco_Page_NextPage(self) = *list;
+    *Eco_Page_PrevPageInList(self) =  list;
+    *Eco_Page_NextPageInList(self) = *list;
     *list = self;
 }

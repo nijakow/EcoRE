@@ -28,6 +28,8 @@ struct Eco_PageInfo
 {
     struct Eco_Page*  next;
     struct Eco_Page** prev;
+    struct Eco_Page*  next_in_list;
+    struct Eco_Page** prev_in_list;
 };
 
 struct Eco_Page
@@ -115,7 +117,7 @@ static inline void* Eco_Page_Here(struct Eco_Page* self)
 }
 
 /*
- * Returns the pointer to the next page in this page list.
+ * Returns the pointer to the next page.
  *
  * The pointer has to point to the page base.
  */
@@ -125,7 +127,7 @@ static inline struct Eco_Page** Eco_Page_NextPage(struct Eco_Page* self)
 }
 
 /*
- * Returns the pointer to the previous page in this page list.
+ * Returns the pointer to the previous page.
  *
  * The pointer has to point to the page base.
  */
@@ -133,6 +135,27 @@ static inline struct Eco_Page*** Eco_Page_PrevPage(struct Eco_Page* self)
 {
     return &self->info->prev;
 }
+
+/*
+ * Returns the pointer to the next page in this page list.
+ *
+ * The pointer has to point to the page base.
+ */
+static inline struct Eco_Page** Eco_Page_NextPageInList(struct Eco_Page* self)
+{
+    return &self->info->next_in_list;
+}
+
+/*
+ * Returns the pointer to the previous page in this page list.
+ *
+ * The pointer has to point to the page base.
+ */
+static inline struct Eco_Page*** Eco_Page_PrevPageInList(struct Eco_Page* self)
+{
+    return &self->info->prev_in_list;
+}
+
 
 static inline Eco_Size_t Eco_Page_GetFreeSpace(struct Eco_Page* self)
 {
