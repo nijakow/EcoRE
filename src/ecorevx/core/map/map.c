@@ -129,8 +129,7 @@ static struct Eco_Map*  Eco_Map_CopyWithoutSlot(struct Eco_Map*      self,
 
 struct Eco_Map*  Eco_Map_AddValueSlot(struct Eco_Map*    self,
                                       unsigned int       index,
-                                      struct Eco_SlotDef slot_def,
-                                      unsigned int*      value_index_loc)
+                                      struct Eco_SlotDef slot_def)
 {
     struct Eco_Map*      new_map;
     struct Eco_MapSlot*  new_slot;

@@ -65,6 +65,11 @@ static inline unsigned int Eco_Object_GetSlotCount(struct Eco_Object* self)
         return Eco_DEFAULT_OBJECT_SLOT_COUNT;
 }
 
+static inline struct Eco_Map* Eco_Object_GetMap(struct Eco_Object* self)
+{
+    return self->map;
+}
+
 static inline void* Eco_Object_GetPayload(struct Eco_Object* self)
 {
     return ((char*) self) + sizeof(struct Eco_Object);
