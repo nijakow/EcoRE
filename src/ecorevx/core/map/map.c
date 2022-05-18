@@ -94,8 +94,7 @@ static struct Eco_Map*  Eco_Map_CopyWithSlot(struct Eco_Map*      self,
 }
 
 static struct Eco_Map*  Eco_Map_CopyWithoutSlot(struct Eco_Map*      self,
-                                                unsigned int         index,
-                                                struct Eco_SlotDef   slot_def)
+                                                unsigned int         index)
 {
     struct Eco_Map*    copy;
     unsigned int       i;
@@ -117,11 +116,6 @@ static struct Eco_Map*  Eco_Map_CopyWithoutSlot(struct Eco_Map*      self,
         {
             copy->slots[i] = self->slots[(i < index) ? i : (i + 1)];
         }
-
-        /*
-         * Copy the slot definition from the argument.
-         */
-        copy->slots[index].def = slot_def;
     }
 
     return copy;
@@ -161,7 +155,7 @@ struct Eco_Map*  Eco_Map_AddValueSlot(struct Eco_Map*    self,
 }
 
 struct Eco_Map*  Eco_Map_AddCodeSlot(struct Eco_Map*    self,
-                                     int                index,
+                                     unsigned int       index,
                                      struct Eco_SlotDef slot_def,
                                      struct Eco_Object* code)
 {
@@ -187,15 +181,20 @@ struct Eco_Map*  Eco_Map_AddCodeSlot(struct Eco_Map*    self,
     return new_map;
 }
 
-struct Eco_Map*  Eco_Map_RemoveSlot(struct Eco_Map* self, int index)
+struct Eco_Map*  Eco_Map_RemoveSlot(struct Eco_Map* self, unsigned int index)
 {
     struct Eco_Map*      new_map;
-    struct Eco_MapSlot*  new_slot;
 
-    new_map = Eco_Map_CopyWithoutSlot(self, index, slot_def);
+    new_map = Eco_Map_CopyWithoutSlot(self, index);
 
     if (new_map != NULL)
     {
+        /*
+         * Recompute the slot offsets. This is important as it helps us
+         * to save space in the allocated molecules.
+         */
+        Eco_Map_RecomputeInlineSlotOffsets(new_map);
+
         /*
          * Finalize the map. This has to be the last step.
          */

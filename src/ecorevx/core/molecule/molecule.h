@@ -1,6 +1,7 @@
 #ifndef ECO_CORE_MOLECULE_MOLECULE_H
 #define ECO_CORE_MOLECULE_MOLECULE_H
 
+#include "../eco/eco.h"
 #include "../memory/memory.h"
 #include "../object/object.h"
 #include "../map/slotdef.h"
@@ -21,17 +22,18 @@ static inline void Eco_Molecule_Set(struct Eco_Object* self, unsigned int index,
  * These functions should only be called during a safe phase!
  */
 
-bool Eco_Molecule_AddValueSlot(Eco_Allocator_t,
+bool Eco_Molecule_AddValueSlot(struct Eco*,
                                struct Eco_Object**,
                                int,
                                struct Eco_SlotDef,
                                Eco_Any);
 
-bool Eco_Molecule_AddCodeSlot(struct Eco_Object*,
+bool Eco_Molecule_AddCodeSlot(struct Eco*,
+                              struct Eco_Object*,
                               int,
                               struct Eco_SlotDef,
                               struct Eco_Object*);
 
-bool Eco_Molecule_RemoveSlot(struct Eco_Object*, int);
+bool Eco_Molecule_RemoveSlot(struct Eco*, struct Eco_Object**, int);
 
 #endif
