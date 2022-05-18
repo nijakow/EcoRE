@@ -176,5 +176,7 @@ void             Eco_Page_Clear(struct Eco_Page*);
 
 void             Eco_Page_Unlink(struct Eco_Page*);
 void             Eco_Page_Link(struct Eco_Page*, struct Eco_Page**);
+void             Eco_Page_ListUnlink(struct Eco_Page*);
+void             Eco_Page_ListLink(struct Eco_Page*, struct Eco_Page**);
 
 #endif

@@ -13,4 +13,7 @@ static inline Eco_Allocator_t Eco_GetAllocator(struct Eco* self)
     return &self->heap;
 }
 
+void Eco_Create(struct Eco*);
+void Eco_Destroy(struct Eco*);
+
 #endif

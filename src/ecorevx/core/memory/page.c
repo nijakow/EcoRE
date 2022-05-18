@@ -33,9 +33,7 @@ struct Eco_Page* Eco_Page_New(struct Eco_Heap* heap)
         Eco_Page_Clear(self);
         self->info = Eco_PageInfo(self);
         Eco_PageInfo_Create(self->info);
-        *Eco_Page_PrevPage(self) = &heap->page_list;
-        *Eco_Page_NextPage(self) =  heap->page_list;
-        *Eco_Page_PrevPage(heap->page_list) = Eco_Page_NextPage(self);
+        Eco_Page_Link(self, &heap->page_list);
     }
 
     return self;
@@ -44,12 +42,11 @@ struct Eco_Page* Eco_Page_New(struct Eco_Heap* heap)
 void Eco_Page_Delete(struct Eco_Page* self)
 {
     /*
-     * Unlink the page from the page list.
+     * Unlink the page from its lists.
      */
-    **Eco_Page_PrevPage(self) = *Eco_Page_NextPage(self);
-    if (*Eco_Page_NextPage(self) != NULL)
-        *Eco_Page_PrevPage(*Eco_Page_NextPage(self)) = *Eco_Page_PrevPage(self);
-    
+    Eco_Page_ListUnlink(self);
+    Eco_Page_Unlink(self);
+
     /*
      * Destroy the PageInfo.
      */
@@ -99,9 +96,41 @@ void Eco_Page_Clear(struct Eco_Page* self)
 
 
 /*
- * Unlinks the page from its current list.
+ * Unlinks the page from the global page list.
  */
 void Eco_Page_Unlink(struct Eco_Page* self)
+{
+    struct Eco_Page*   next;
+    struct Eco_Page**  prev;
+
+    next = *Eco_Page_NextPage(self);
+    prev = *Eco_Page_PrevPage(self);
+
+    if (next != NULL)
+        *Eco_Page_PrevPage(next) = prev;
+    if (prev != NULL)
+        *prev = next;
+    
+    *Eco_Page_NextPage(self) = NULL;
+    *Eco_Page_PrevPage(self) = NULL;
+}
+
+/*
+ * Links the page into the global page list.
+ */
+void Eco_Page_Link(struct Eco_Page* self, struct Eco_Page** list)
+{
+     Eco_Page_Unlink(self);
+    *Eco_Page_PrevPage(self) =  list;
+    *Eco_Page_NextPage(self) = *list;
+    *list = self;
+}
+
+
+/*
+ * Unlinks the page from its current list.
+ */
+void Eco_Page_ListUnlink(struct Eco_Page* self)
 {
     struct Eco_Page*   next;
     struct Eco_Page**  prev;
@@ -121,9 +150,9 @@ void Eco_Page_Unlink(struct Eco_Page* self)
 /*
  * Links the page into a list.
  */
-void Eco_Page_Link(struct Eco_Page* self, struct Eco_Page** list)
+void Eco_Page_ListLink(struct Eco_Page* self, struct Eco_Page** list)
 {
-     Eco_Page_Unlink(self);
+     Eco_Page_ListUnlink(self);
     *Eco_Page_PrevPageInList(self) =  list;
     *Eco_Page_NextPageInList(self) = *list;
     *list = self;

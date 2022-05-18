@@ -6,14 +6,14 @@ static struct Eco_Page* Eco_Heap_AllocateNewPageToEden(struct Eco_Heap* self)
 
     if (self->free_page_list != NULL) {
         page = self->free_page_list;
-        Eco_Page_Unlink(page);
+        Eco_Page_ListUnlink(page);
     } else {
         page = Eco_Page_New();
         if (page == NULL)
             return NULL;
     }
 
-    Eco_Page_Link(page, self->current_eden);
+    Eco_Page_ListLink(page, self->current_eden);
 
     return page;
 }
@@ -52,6 +52,7 @@ void* Eco_Heap_AllocateInEden(struct Eco_Heap* self, Eco_Size_t size)
 
 void Eco_Heap_Create(struct Eco_Heap* self)
 {
+    self->page_list      =  NULL;
     self->free_page_list =  NULL;
     self->edens[0]       =  NULL;
     self->edens[1]       =  NULL;
@@ -60,7 +61,8 @@ void Eco_Heap_Create(struct Eco_Heap* self)
 
 void Eco_Heap_Destroy(struct Eco_Heap* self)
 {
-    /*
-     * TODO: Free all pages
-     */
+    while (self->page_list != NULL)
+    {
+        Eco_Page_Delete(self->page_list);
+    }
 }
