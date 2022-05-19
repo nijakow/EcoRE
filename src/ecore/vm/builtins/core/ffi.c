@@ -407,6 +407,48 @@ bool Eco_VM_Builtin_FFIObject_Store(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_FFIObject_FetchWithOffset(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_FFIObject*  object;
+    struct Eco_FFIType*    type;
+    Eco_Any                any;
+    unsigned int           offset;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    offset = Eco_Any_AsInteger(any);
+    Eco_Fiber_Pop(fiber, &any);
+    type = Eco_Any_AsPointer(any);
+    Eco_Fiber_Pop(fiber, &any);
+    object  = Eco_Any_AsPointer(any);
+    any     = Eco_FFIObject_FetchWithOffset(object, type, offset);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
+bool Eco_VM_Builtin_FFIObject_StoreWithOffset(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_FFIObject*  object;
+    struct Eco_FFIType*    type;
+    Eco_Any                any;
+    Eco_Any                value;
+    unsigned int           offset;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 4, 4))
+        return false;
+    Eco_Fiber_Pop(fiber, &value);
+    Eco_Fiber_Pop(fiber, &any);
+    offset = Eco_Any_AsInteger(any);
+    Eco_Fiber_Pop(fiber, &any);
+    type = Eco_Any_AsPointer(any);
+    Eco_Fiber_Pop(fiber, &any);
+    object = Eco_Any_AsPointer(any);
+    Eco_FFIObject_StoreWithOffset(object, type, offset, value);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 bool Eco_VM_Builtin_FFIObject_Access(struct Eco_Fiber* fiber, unsigned int args)
 {
     struct Eco_FFIObject*  object;
