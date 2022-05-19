@@ -251,6 +251,10 @@ void Eco_FFIType_Mark(struct Eco_GC_State* state, struct Eco_FFIType* type)
 {
     unsigned int  index;
 
+    if (type->pointee != NULL)
+        Eco_GC_State_MarkObject(state, type->pointee);
+    if (type->pointer != NULL)
+        Eco_GC_State_MarkObject(state, type->pointer);
     for (index = 0; index < type->member_count; index++)
     {
         if (type->members[index].name != NULL)
