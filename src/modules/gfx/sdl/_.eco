@@ -159,11 +159,10 @@
             drawPointX: x Y: y => sdl RenderDrawPoint(renptr, x, y);
             drawLineX: x1 Y: y1 X: x2 Y: y2 => sdl RenderDrawLine(renptr, x1, y1, x2, y2);
             drawRectX: x Y: y W: w H: h => (
-                (rectangle access: 0) store: x.
-                (rectangle access: 1) store: y.
-                (rectangle access: 2) store: w.
-                (rectangle access: 3) store: h.
-                sdl RenderDrawRect(renptr, rectangle address).
+                drawLineX: x Y: y X: (x + w) Y: y.
+                drawLineX: x Y: y X: x Y: (y + h).
+                drawLineX: x Y: (y + h) X: (x + w) Y: (y + h).
+                drawLineX: (x + w) Y: y X: (x + w) Y: (y + h).
             );
             fillRectX: x Y: y W: w H: h => (
                 (rectangle access: 0) store: x.
