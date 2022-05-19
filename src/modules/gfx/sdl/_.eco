@@ -27,13 +27,16 @@
     protected SDL_Keysym,
     protected SDL_KeyboardEvent,
     protected SDL_MouseMotionEvent,
+    protected SDL_MouseButtonEvent,
     protected SDL_Event;
 
     INIT_EVERYTHING,
     SDL_EventTypes = {
         KEYDOWN = 768,
         KEYUP = 769,
-        MOUSEMOTION = 1024
+        MOUSEMOTION = 1024,
+        MOUSEBUTTONDOWN = 1025,
+        MOUSEBUTTONUP = 1026
     };
 
     with inherited trait = {
@@ -48,7 +51,8 @@
             SDL_Keysym <- ffi struct(SDL_Scancode, SDL_Keycode, ffi types uint16, ffi types uint32).
             SDL_KeyboardEvent <- ffi struct(ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8, SDL_Keysym).
             SDL_MouseMotionEvent <- ffi struct(ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint32, ffi types sint32, ffi types sint32, ffi types sint32, ffi types sint32).
-            SDL_Event <- ffi union(ffi types uint32, SDL_KeyboardEvent, SDL_MouseMotionEvent, (ffi types char) array: 56).
+            SDL_MouseButtonEvent <- ffi struct(ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8, ffi types sint32, ffi types sint32).
+            SDL_Event <- ffi union(ffi types uint32, SDL_KeyboardEvent, SDL_MouseMotionEvent, SDL_MouseButtonEvent, (ffi types char) array: 56).
             SDL_Init <- (lib function: #'SDL_Init' type: ((ffi types int) function(ffi types uint32))) yes.
             SDL_Quit <- (lib function: #'SDL_Quit' type: ((ffi types void) function)) yes.
             SDL_PollEvent <- (lib function: #'SDL_PollEvent' type: ((ffi types int) function(SDL_Event pointer))) yes.
@@ -167,6 +171,9 @@
             isMouseMotionEvent => (type == sdl SDL_EventTypes MOUSEMOTION);
             mouseMotionX => (((event access: 2) fetch) access: 5) fetch;
             mouseMotionY => (((event access: 2) fetch) access: 6) fetch;
+
+            isMouseButtonDown => (type == sdl SDL_EventTypes MOUSEBUTTONDOWN);
+            isMouseButtonUp => (type == sdl SDL_EventTypes MOUSEBUTTONUP);
 
             writeOn: w => w << 'an sdl event';
         };
