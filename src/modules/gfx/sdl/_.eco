@@ -86,10 +86,10 @@
     };
 
     NewWindowWithTitle: title X: x Y: y W: w H: h => (Window clone) init: CreateWindow(title, x, y, w, h, 0);
-    NewEvent => SDL_Event alloc;
+    NewEvent => (Event clone) init: SDL_Event alloc;
 
     own Window = {
-        with inherited parent = std Clonable;
+        static with inherited parent = std Clonable;
 
         protected sdl = $,
         protected winptr,
@@ -112,7 +112,7 @@
     };
 
     own Renderer = {
-        with inherited parent = std Clonable;
+        static with inherited parent = std Clonable;
 
         protected sdl = $,
         protected renptr;
@@ -136,6 +136,25 @@
             drawLineX: x1 Y: y1 X: x2 Y: y2 => sdl RenderDrawLine(renptr, x1, y1, x2, y2);
 
             writeOn: w => w << 'an sdl renderer';
+        };
+    };
+
+    own Event = {
+        static with inherited parent = std Clonable;
+
+        protected sdl = $;
+        protected event;
+
+        with inherited trait = {
+            init: _event => (
+                event <- _event.
+              ^ self
+            );
+
+            poll => sdl PollEvent(event address);
+            type => (event access: 0) fetch;
+
+            writeOn: w => w << 'an sdl event';
         };
     };
 }
