@@ -158,6 +158,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.object.assign_null", Eco_VM_Builtin_FFIObject_AssignNull);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.object.address", Eco_VM_Builtin_FFIObject_Address);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.object.fetch", Eco_VM_Builtin_FFIObject_Fetch);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.object.store", Eco_VM_Builtin_FFIObject_Store);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.object.access", Eco_VM_Builtin_FFIObject_Access);
   #ifdef ECO_CONFIG_USE_DLOPEN
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.object.dlopen", Eco_VM_Builtin_FFIObjectDLOpen);

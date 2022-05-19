@@ -31,6 +31,7 @@ bool Eco_VM_Builtin_FFIObject_GetSize(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIObject_AssignNull(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIObject_Address(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIObject_Fetch(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_FFIObject_Store(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIObject_Access(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIObject_Cast(struct Eco_Fiber*, unsigned int);
 

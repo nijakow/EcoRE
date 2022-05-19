@@ -6,6 +6,7 @@
     size => #'ecosphere.ecore.ffi.object.get_size'(self);
     address => #'ecosphere.ecore.ffi.object.address'(self);
     fetch => #'ecosphere.ecore.ffi.object.fetch'(self);
+    store: v => #'ecosphere.ecore.ffi.object.store'(self, v);
     access: index => #'ecosphere.ecore.ffi.object.access'(self, index);
 
     assignNull => #'ecosphere.ecore.ffi.object.assign_null'(self);

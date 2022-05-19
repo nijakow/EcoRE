@@ -92,10 +92,24 @@ struct Eco_FFIObject* Eco_FFIObject_Address(struct Eco_FFIObject* original)
 
 Eco_Any Eco_FFIObject_Fetch(struct Eco_FFIObject* object)
 {
-    struct Eco_FFIType*    deref_type;
+    struct Eco_FFIType*  deref_type;
 
+    /*
+     * TODO: Check if it's an actual pointer!
+     */
     deref_type = Eco_FFIType_PointeeOrSelf(Eco_FFIObject_GetFFIType(object));
     return deref_type->as_any(deref_type, *((void**) object->bytes), Eco_FFIType_SizeofCType(deref_type));
+}
+
+void Eco_FFIObject_Store(struct Eco_FFIObject* object, Eco_Any value)
+{
+    struct Eco_FFIType*  deref_type;
+
+    /*
+     * TODO: Check if it's an actual pointer!
+     */
+    deref_type = Eco_FFIType_PointeeOrSelf(Eco_FFIObject_GetFFIType(object));
+    deref_type->from_any(deref_type, *((void**) object->bytes), Eco_FFIType_SizeofCType(deref_type), value);
 }
 
 struct Eco_FFIObject* Eco_FFIObject_Access(struct Eco_FFIObject* original, unsigned int index)

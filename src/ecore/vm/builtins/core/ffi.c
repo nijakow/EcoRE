@@ -390,6 +390,23 @@ bool Eco_VM_Builtin_FFIObject_Fetch(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_FFIObject_Store(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_FFIObject*  object;
+    Eco_Any                any;
+    Eco_Any                value;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &value);
+    Eco_Fiber_Pop(fiber, &any);
+    object = Eco_Any_AsPointer(any);
+    Eco_FFIObject_Store(object, value);
+    any = Eco_Any_FromPointer(object);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 bool Eco_VM_Builtin_FFIObject_Access(struct Eco_Fiber* fiber, unsigned int args)
 {
     struct Eco_FFIObject*  object;
