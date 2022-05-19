@@ -41,11 +41,10 @@
             SDL_Keycode <- ffi types enum.
             SDL_Keysym <- ffi struct(SDL_Scancode, SDL_Keycode, ffi types uint16, ffi types uint32).
             SDL_KeyboardEvent <- ffi struct(ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8, SDL_Keysym).
-            SDL_Event <- ffi union(ffi types uint8, SDL_KeyboardEvent).
-
+            SDL_Event <- ffi union(ffi types uint8, SDL_KeyboardEvent, (ffi types char) array: 56).
             SDL_Init <- (lib function: #'SDL_Init' type: ((ffi types int) function(ffi types uint32))) yes.
             SDL_Quit <- (lib function: #'SDL_Quit' type: ((ffi types void) function)) yes.
-            SDL_PollEvent <- (lib function: #'SDL_PollEvent' type: ((ffi types int) function(ffi types pointer))) yes.
+            SDL_PollEvent <- (lib function: #'SDL_PollEvent' type: ((ffi types int) function(SDL_Event pointer))) yes.
             SDL_CreateWindow <- (lib function: #'SDL_CreateWindow' type: ((ffi types pointer) function(ffi types string, ffi types int, ffi types int, ffi types int, ffi types int, ffi types uint32))) yes.
             SDL_DestroyWindow <- (lib function: #'SDL_DestroyWindow' type: ((ffi types void) function(ffi types pointer))) yes.
             SDL_ShowWindow <- (lib function: #'SDL_ShowWindow' type: ((ffi types void) function(ffi types pointer))) yes.
@@ -60,6 +59,7 @@
             SDL_RenderDrawLine <- (lib function: #'SDL_RenderDrawLine' type: ((ffi types int) function(ffi types pointer, ffi types int, ffi types int, ffi types int, ffi types int))) yes.
             SDL_RenderFlush <- (lib function: #'SDL_RenderFlush' type: ((ffi types int) function(ffi types pointer))) yes.
             SDL_RenderPresent <- (lib function: #'SDL_RenderPresent' type: ((ffi types void) function(ffi types pointer))) yes.
+            InitEverything.
           ^ self
         );
 
@@ -86,6 +86,7 @@
     };
 
     NewWindowWithTitle: title X: x Y: y W: w H: h => (Window clone) init: CreateWindow(title, x, y, w, h, 0);
+    NewEvent => SDL_Event alloc;
 
     own Window = {
         with inherited parent = std Clonable;
