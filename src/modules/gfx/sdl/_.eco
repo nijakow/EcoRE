@@ -175,6 +175,9 @@
             isMouseButtonDown => (type == sdl SDL_EventTypes MOUSEBUTTONDOWN);
             isMouseButtonUp => (type == sdl SDL_EventTypes MOUSEBUTTONUP);
 
+            isKeyDown => (type == sdl SDL_EventTypes KEYDOWN);
+            isKeyUp => (type == sdl SDL_EventTypes KEYUP);
+
             writeOn: w => w << 'an sdl event';
         };
     };
