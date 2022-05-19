@@ -7,6 +7,16 @@
 #define Eco_BYTE_OBJECT_SLOT_COUNT (Eco_DEFAULT_OBJECT_SLOT_COUNT)
 
 
+static inline Eco_Any Eco_ByteObject_GetExtra(struct Eco_Object* self)
+{
+    return Eco_Object_Get(self, 0);
+}
+
+static inline void Eco_ByteObject_SetExtra(struct Eco_Object* self, Eco_Any value)
+{
+    return Eco_Object_Set(self, 0, value);
+}
+
 static inline char* Eco_ByteObject_GetBytePayload(struct Eco_Object* self)
 {
     return (((char*) Eco_Object_GetPayload(self)) + sizeof(Eco_Any) * Eco_BYTE_OBJECT_SLOT_COUNT);
