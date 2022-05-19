@@ -18,6 +18,8 @@
     function: args => #'ecosphere.ecore.ffi.function.new'(self, args);
     function(...) => function: (std util newArray(...));
 
+    array: size => #'ecosphere.ecore.ffi.type.new_array'(self, size);
+
     writeOn: writer => (
         (self is: (ffi types void))  -> [ writer << 'void'. ^ ].
         (self is: (ffi types bool))  -> [ writer << 'bool'. ^ ].

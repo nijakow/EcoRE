@@ -54,6 +54,29 @@ bool Eco_VM_Builtin_FFIType_NewUnion(struct Eco_Fiber* fiber, unsigned int args)
     return Eco_VM_Builtin_FFIType_NewStructOrUnion(fiber, args, true);
 }
 
+bool Eco_VM_Builtin_FFIType_NewArray(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_FFIType* type;
+    unsigned int        count;
+    Eco_Any             any;
+    unsigned int        index;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    count = Eco_Any_AsInteger(any);
+    Eco_Fiber_Pop(fiber, &any);
+    type = Eco_Any_AsPointer(any);
+    struct Eco_FFIType* types[count];
+    for (index = 0; index < count; index++)
+    {
+        types[index] = type;
+    }
+    any = Eco_Any_FromPointer(Eco_FFIType_NewStruct(types, NULL, count, false));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 bool Eco_VM_Builtin_FFIType_PointerTo(struct Eco_Fiber* fiber, unsigned int args)
 {
     struct Eco_FFIType*  type;
