@@ -90,25 +90,12 @@ struct Eco_FFIObject* Eco_FFIObject_Address(struct Eco_FFIObject* original)
     return object;
 }
 
-struct Eco_FFIObject* Eco_FFIObject_Fetch(struct Eco_FFIObject* original)
+Eco_Any Eco_FFIObject_Fetch(struct Eco_FFIObject* object)
 {
-    struct Eco_FFIObject*  object;
+    struct Eco_FFIType*    deref_type;
 
-    object = Eco_Object_New(Eco_FFIObject_TYPE, sizeof(struct Eco_FFIObject) + sizeof(void*));
-
-    if (object != NULL)
-    {
-        /*
-         * TODO: Check if pointee references the type itself -> No pointer, error!
-         */
-        object->type                = Eco_FFIType_PointeeOrSelf(Eco_FFIObject_GetFFIType(original));
-        object->size                = Eco_FFIType_SizeofCType(object->type);
-        object->bytes               = object->payload;
-        object->ref                 = NULL;
-        Eco_Memcpy(object->bytes, *((void**) original->bytes), object->size);
-    }
-
-    return object;
+    deref_type = Eco_FFIType_PointeeOrSelf(Eco_FFIObject_GetFFIType(object));
+    return deref_type->as_any(deref_type, *((void**) object->bytes), Eco_FFIType_SizeofCType(deref_type));
 }
 
 struct Eco_FFIObject* Eco_FFIObject_Access(struct Eco_FFIObject* original, unsigned int index)

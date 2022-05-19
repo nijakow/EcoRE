@@ -22,7 +22,7 @@ struct Eco_FFIObject
 struct Eco_FFIObject* Eco_FFIObject_New(struct Eco_FFIType*, void*, unsigned long);
 struct Eco_FFIObject* Eco_FFIObject_Cast(struct Eco_FFIObject*, struct Eco_FFIType*);
 struct Eco_FFIObject* Eco_FFIObject_Address(struct Eco_FFIObject*);
-struct Eco_FFIObject* Eco_FFIObject_Fetch(struct Eco_FFIObject*);
+Eco_Any               Eco_FFIObject_Fetch(struct Eco_FFIObject*);
 struct Eco_FFIObject* Eco_FFIObject_Access(struct Eco_FFIObject*, unsigned);
 struct Eco_FFIObject* Eco_FFIObject_DLOpen(char*);
 struct Eco_FFIObject* Eco_FFIObject_DLSym(void*, char*);

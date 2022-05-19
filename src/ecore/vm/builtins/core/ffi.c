@@ -379,15 +379,13 @@ bool Eco_VM_Builtin_FFIObject_Address(struct Eco_Fiber* fiber, unsigned int args
 bool Eco_VM_Builtin_FFIObject_Fetch(struct Eco_Fiber* fiber, unsigned int args)
 {
     struct Eco_FFIObject*  object;
-    struct Eco_FFIObject*  result;
     Eco_Any                any;
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
     Eco_Fiber_Pop(fiber, &any);
     object  = Eco_Any_AsPointer(any);
-    result  = Eco_FFIObject_Fetch(object);
-    any     = Eco_Any_FromPointer(result);
+    any     = Eco_FFIObject_Fetch(object);
     Eco_Fiber_Push(fiber, &any);
     return true;
 }
