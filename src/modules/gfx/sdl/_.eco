@@ -19,6 +19,8 @@
     protected SDL_RenderClear,
     protected SDL_RenderDrawPoint,
     protected SDL_RenderDrawLine,
+    protected SDL_RenderDrawRect,
+    protected SDL_RenderFillRect,
     protected SDL_RenderFlush,
     protected SDL_RenderPresent;
 
@@ -31,6 +33,7 @@
     protected SDL_Event;
 
     INIT_EVERYTHING,
+    SDL_Rect,
     SDL_EventTypes = {
         KEYDOWN = 768,
         KEYUP = 769,
@@ -46,6 +49,7 @@
             lib <- (ffi DLOpen: libpath) yes.
             INIT_EVERYTHING <- 62001.
 
+            SDL_Rect <- ffi struct(ffi types int, ffi types int, ffi types int, ffi types int).
             SDL_Scancode <- ffi types enum.
             SDL_Keycode <- ffi types enum.
             SDL_Keysym <- ffi struct(SDL_Scancode, SDL_Keycode, ffi types uint16, ffi types uint32).
@@ -68,6 +72,8 @@
             SDL_RenderClear <- (lib function: #'SDL_RenderClear' type: ((ffi types int) function(ffi types pointer))) yes.
             SDL_RenderDrawPoint <- (lib function: #'SDL_RenderDrawPoint' type: ((ffi types int) function(ffi types pointer, ffi types int, ffi types int))) yes.
             SDL_RenderDrawLine <- (lib function: #'SDL_RenderDrawLine' type: ((ffi types int) function(ffi types pointer, ffi types int, ffi types int, ffi types int, ffi types int))) yes.
+            SDL_RenderDrawRect <- (lib function: #'SDL_RenderDrawRect' type: ((ffi types int) function(ffi types pointer, SDL_Rect pointer))) yes.
+            SDL_RenderFillRect <- (lib function: #'SDL_RenderFillRect' type: ((ffi types int) function(ffi types pointer, SDL_Rect pointer))) yes.
             SDL_RenderFlush <- (lib function: #'SDL_RenderFlush' type: ((ffi types int) function(ffi types pointer))) yes.
             SDL_RenderPresent <- (lib function: #'SDL_RenderPresent' type: ((ffi types void) function(ffi types pointer))) yes.
             InitEverything.
@@ -90,6 +96,8 @@
         RenderClear(renderer) => SDL_RenderClear value(renderer);
         RenderDrawPoint(renderer, x, y) => SDL_RenderDrawPoint value(renderer, x, y);
         RenderDrawLine(renderer, x1, y1, x2, y2) => SDL_RenderDrawLine value(renderer, x1, y1, x2, y2);
+        RenderDrawRect(renderer, rect) => SDL_RenderDrawRect value(renderer, rect);
+        RenderFillRect(renderer, rect) => SDL_RenderFillRect value(renderer, rect);
         RenderFlush(renderer) => SDL_RenderFlush value(renderer);
         RenderPresent(renderer) => SDL_RenderPresent value(renderer);
 
@@ -129,11 +137,13 @@
         static with inherited parent = std Clonable;
 
         protected sdl = $,
-        protected renptr;
+        protected renptr,
+        protected rectangle;
 
         with inherited trait = {
             init: _renptr => (
-                renptr <- _renptr.
+                renptr    <- _renptr.
+                rectangle <- sdl SDL_Rect alloc.
               ^ self
             );
 
@@ -148,6 +158,20 @@
             clear => sdl RenderClear(renptr);
             drawPointX: x Y: y => sdl RenderDrawPoint(renptr, x, y);
             drawLineX: x1 Y: y1 X: x2 Y: y2 => sdl RenderDrawLine(renptr, x1, y1, x2, y2);
+            drawRectX: x Y: y W: w H: h => (
+                (rectangle access: 0) store: x.
+                (rectangle access: 1) store: y.
+                (rectangle access: 2) store: w.
+                (rectangle access: 3) store: h.
+                sdl RenderDrawRect(renptr, rectangle address).
+            );
+            fillRectX: x Y: y W: w H: h => (
+                (rectangle access: 0) store: x.
+                (rectangle access: 1) store: y.
+                (rectangle access: 2) store: w.
+                (rectangle access: 3) store: h.
+                sdl RenderFillRect(renptr, rectangle address).
+            );
 
             writeOn: w => w << 'an sdl renderer';
         };

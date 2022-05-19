@@ -396,7 +396,7 @@ bool Eco_VM_Builtin_FFIObject_Store(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Any                any;
     Eco_Any                value;
 
-    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
     Eco_Fiber_Pop(fiber, &value);
     Eco_Fiber_Pop(fiber, &any);
