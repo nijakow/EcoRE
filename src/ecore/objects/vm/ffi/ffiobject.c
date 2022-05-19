@@ -90,6 +90,47 @@ struct Eco_FFIObject* Eco_FFIObject_Address(struct Eco_FFIObject* original)
     return object;
 }
 
+struct Eco_FFIObject* Eco_FFIObject_Fetch(struct Eco_FFIObject* original)
+{
+    struct Eco_FFIObject*  object;
+
+    object = Eco_Object_New(Eco_FFIObject_TYPE, sizeof(struct Eco_FFIObject) + sizeof(void*));
+
+    if (object != NULL)
+    {
+        /*
+         * TODO: Check if pointee references the type itself -> No pointer, error!
+         */
+        object->type                = Eco_FFIType_PointeeOrSelf(Eco_FFIObject_GetFFIType(original));
+        object->size                = Eco_FFIType_SizeofCType(object->type);
+        object->bytes               = object->payload;
+        object->ref                 = NULL;
+        Eco_Memcpy(object->bytes, *((void**) original->bytes), object->size);
+    }
+
+    return object;
+}
+
+struct Eco_FFIObject* Eco_FFIObject_Access(struct Eco_FFIObject* original, unsigned int index)
+{
+    struct Eco_FFIObject*  object;
+
+    // TODO: Index check!
+
+    object = Eco_Object_New(Eco_FFIObject_TYPE, sizeof(struct Eco_FFIObject) + sizeof(void*));
+
+    if (object != NULL)
+    {
+        object->type                = Eco_FFIType_PointerTo(original->type->members[index].type);
+        object->size                = sizeof(void*);
+        object->bytes               = object->payload;
+        object->ref                 = original;
+        *((void**) object->payload) = Eco_FFIObject_GetBytes(original) + original->type->members[index].offset;
+    }
+
+    return object;
+}
+
 struct Eco_FFIObject* Eco_FFIObject_DLOpen(char* path)
 {
 #ifdef ECO_CONFIG_USE_DLOPEN
