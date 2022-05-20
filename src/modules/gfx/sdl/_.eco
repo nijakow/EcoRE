@@ -63,6 +63,7 @@
 
             setR: r G: g B: b A: a => sdl SetRenderDrawColor(renptr, r, g, b, a);
             setR: r G: g B: b => setR: r G: g B: b A: 255;
+            setColor: color => setR: color r G: g B: b;
 
             clear => sdl RenderClear(renptr);
             drawPointX: x Y: y => sdl RenderDrawPoint(renptr, x, y);
@@ -171,6 +172,23 @@
             stop => running <- false;
 
             writeOn: w => w << 'an sdl program';
+        };
+    };
+
+    own Color = {
+        static with inherited _ = std Clonable;
+
+        r, g, b;
+
+        with inherited trait = {
+            initWithR: _r G: _g B: _b => (
+                r <- _r.
+                g <- _g.
+                b <- _b.
+              ^ self
+            );
+
+            writeOn: w => w << 'a color';
         };
     };
 }
