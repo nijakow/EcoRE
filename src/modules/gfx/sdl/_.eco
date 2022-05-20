@@ -2,125 +2,32 @@
 {
     static with inherited _ = std Module;
 
-    protected lib;
+    sdl = (here / 'sdl.eco') import;
 
-    protected SDL_Init,
-    protected SDL_Quit,
-    protected SDL_PollEvent,
-    protected SDL_CreateWindow,
-    protected SDL_DestroyWindow,
-    protected SDL_ShowWindow,
-    protected SDL_HideWindow,
-    protected SDL_GetWindowSurface,
-    protected SDL_GetRenderer,
-    protected SDL_CreateRenderer,
-    protected SDL_DestroyRenderer,
-    protected SDL_SetRenderDrawColor,
-    protected SDL_RenderClear,
-    protected SDL_RenderDrawPoint,
-    protected SDL_RenderDrawLine,
-    protected SDL_RenderDrawRect,
-    protected SDL_RenderFillRect,
-    protected SDL_RenderFlush,
-    protected SDL_RenderPresent;
+    Init => (
+        sdl Init.
+      ^ self
+    );
 
-    protected SDL_Scancode,
-    protected SDL_Keycode,
-    protected SDL_Keysym,
-    protected SDL_KeyboardEvent,
-    protected SDL_MouseMotionEvent,
-    protected SDL_MouseButtonEvent,
-    protected SDL_Event;
-
-    INIT_EVERYTHING,
-    SDL_Rect,
-    SDL_EventTypes = {
-        KEYDOWN = 768,
-        KEYUP = 769,
-        MOUSEMOTION = 1024,
-        MOUSEBUTTONDOWN = 1025,
-        MOUSEBUTTONUP = 1026
-    };
-
-    with inherited trait = {
-        Init => Setup: 'libSDL2.so';
-        
-        Setup: libpath => (
-            lib <- (ffi DLOpen: libpath) yes.
-            INIT_EVERYTHING <- 62001.
-
-            SDL_Rect <- ffi struct(ffi types int, ffi types int, ffi types int, ffi types int).
-            SDL_Scancode <- ffi types enum.
-            SDL_Keycode <- ffi types enum.
-            SDL_Keysym <- ffi struct(SDL_Scancode, SDL_Keycode, ffi types uint16, ffi types uint32).
-            SDL_KeyboardEvent <- ffi struct(ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8, SDL_Keysym).
-            SDL_MouseMotionEvent <- ffi struct(ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint32, ffi types sint32, ffi types sint32, ffi types sint32, ffi types sint32).
-            SDL_MouseButtonEvent <- ffi struct(ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8, ffi types sint32, ffi types sint32).
-            SDL_Event <- ffi union(ffi types uint32, SDL_KeyboardEvent, SDL_MouseMotionEvent, SDL_MouseButtonEvent, (ffi types char) array: 56).
-            SDL_Init <- (lib function: #'SDL_Init' type: ((ffi types int) function(ffi types uint32))) yes.
-            SDL_Quit <- (lib function: #'SDL_Quit' type: ((ffi types void) function)) yes.
-            SDL_PollEvent <- (lib function: #'SDL_PollEvent' type: ((ffi types int) function(SDL_Event pointer))) yes.
-            SDL_CreateWindow <- (lib function: #'SDL_CreateWindow' type: ((ffi types pointer) function(ffi types string, ffi types int, ffi types int, ffi types int, ffi types int, ffi types uint32))) yes.
-            SDL_DestroyWindow <- (lib function: #'SDL_DestroyWindow' type: ((ffi types void) function(ffi types pointer))) yes.
-            SDL_ShowWindow <- (lib function: #'SDL_ShowWindow' type: ((ffi types void) function(ffi types pointer))) yes.
-            SDL_HideWindow <- (lib function: #'SDL_HideWindow' type: ((ffi types void) function(ffi types pointer))) yes.
-            SDL_GetWindowSurface <- (lib function: #'SDL_GetWindowSurface' type: ((ffi types pointer) function(ffi types pointer))) yes.
-            SDL_GetRenderer <- (lib function: #'SDL_GetRenderer' type: ((ffi types pointer) function(ffi types pointer))) yes.
-            SDL_CreateRenderer <- (lib function: #'SDL_CreateRenderer' type: ((ffi types pointer) function(ffi types pointer, ffi types int, ffi types uint32))) yes.
-            SDL_DestroyRenderer <- (lib function: #'SDL_DestroyRenderer' type: ((ffi types void) function(ffi types pointer))) yes.
-            SDL_SetRenderDrawColor <- (lib function: #'SDL_SetRenderDrawColor' type: ((ffi types int) function(ffi types pointer, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8))) yes.
-            SDL_RenderClear <- (lib function: #'SDL_RenderClear' type: ((ffi types int) function(ffi types pointer))) yes.
-            SDL_RenderDrawPoint <- (lib function: #'SDL_RenderDrawPoint' type: ((ffi types int) function(ffi types pointer, ffi types int, ffi types int))) yes.
-            SDL_RenderDrawLine <- (lib function: #'SDL_RenderDrawLine' type: ((ffi types int) function(ffi types pointer, ffi types int, ffi types int, ffi types int, ffi types int))) yes.
-            SDL_RenderDrawRect <- (lib function: #'SDL_RenderDrawRect' type: ((ffi types int) function(ffi types pointer, SDL_Rect pointer))) yes.
-            SDL_RenderFillRect <- (lib function: #'SDL_RenderFillRect' type: ((ffi types int) function(ffi types pointer, SDL_Rect pointer))) yes.
-            SDL_RenderFlush <- (lib function: #'SDL_RenderFlush' type: ((ffi types int) function(ffi types pointer))) yes.
-            SDL_RenderPresent <- (lib function: #'SDL_RenderPresent' type: ((ffi types void) function(ffi types pointer))) yes.
-            InitEverything.
-          ^ self
-        );
-
-        InitEverything => Init: INIT_EVERYTHING;
-        Init: flags => SDL_Init value(flags);
-        Quit => SDL_Quit value();
-        PollEvent(event_ptr) => SDL_PollEvent value(event_ptr);
-        CreateWindow(name, x, y, w, h, flags) => SDL_CreateWindow value(name, x, y, w, h, flags);
-        DestroyWindow(window) => SDL_DestroyWindow value(window);
-        ShowWindow(window) => SDL_ShowWindow value(window);
-        HideWindow(window) => SDL_HideWindow value(window);
-        GetWindowSurface(window) => SDL_GetWindowSurface value(window);
-        GetRenderer(window) => SDL_GetRenderer value(window);
-        CreateRenderer(window, index, flags) => SDL_CreateRenderer value(window, index, flags);
-        DestroyRenderer(renderer) => SDL_DestroyRenderer value(renderer);
-        SetRenderDrawColor(renderer, r, g, b, a) => SDL_SetRenderDrawColor value(renderer, r, g, b, a);
-        RenderClear(renderer) => SDL_RenderClear value(renderer);
-        RenderDrawPoint(renderer, x, y) => SDL_RenderDrawPoint value(renderer, x, y);
-        RenderDrawLine(renderer, x1, y1, x2, y2) => SDL_RenderDrawLine value(renderer, x1, y1, x2, y2);
-        RenderDrawRect(renderer, rect) => SDL_RenderDrawRect value(renderer, rect);
-        RenderFillRect(renderer, rect) => SDL_RenderFillRect value(renderer, rect);
-        RenderFlush(renderer) => SDL_RenderFlush value(renderer);
-        RenderPresent(renderer) => SDL_RenderPresent value(renderer);
-
-        "TODO..."
-    };
-
-    NewWindowWithTitle: title X: x Y: y W: w H: h => (Window clone) initWithHandle: CreateWindow(title, x, y, w, h, 0) Width: w Height: h;
-    NewEvent => (Event clone) init: SDL_Event alloc;
+    NewWindowWithTitle: title X: x Y: y W: w H: h => (Window clone) initWithHandle: (sdl CreateWindow(title, x, y, w, h, 0)) Width: w Height: h;
+    NewEvent => (Event clone) init: sdl SDL_Event alloc;
 
     own Window = {
         static with inherited parent = std Clonable;
 
-        protected sdl = $,
+        protected wrapper = $,
         protected winptr,
         width, height,
         renderer;
 
         with inherited trait = {
+            protected sdl => wrapper sdl;
+
             initWithHandle: _winptr Width: _width Height: _height => (
                 winptr   <- _winptr.
                 width    <- _width.
                 height   <- _height.
-                renderer <- (sdl Renderer clone) init: (sdl CreateRenderer(_winptr, -1, 0));
+                renderer <- (wrapper Renderer clone) init: (sdl CreateRenderer(_winptr, -1, 0));
               ^ self
             );
 
@@ -136,11 +43,13 @@
     own Renderer = {
         static with inherited parent = std Clonable;
 
-        protected sdl = $,
+        protected wrapper = $,
         protected renptr,
         protected rectangle;
 
         with inherited trait = {
+            protected sdl => wrapper sdl;
+
             init: _renptr => (
                 renptr    <- _renptr.
                 rectangle <- sdl SDL_Rect alloc.
@@ -179,10 +88,12 @@
     own Event = {
         static with inherited parent = std Clonable;
 
-        protected sdl = $;
+        protected wrapper = $;
         protected event;
 
         with inherited trait = {
+            protected sdl => wrapper sdl;
+
             init: _event => (
                 event <- _event.
               ^ self
