@@ -43,9 +43,9 @@
     own Renderer = {
         static with inherited _ = std Clonable;
 
-        protected wrapper = $,
-        protected renptr,
-        protected rectangle;
+        protected     wrapper = $,
+        protected     renptr,
+        protected own rectangle;
 
         with inherited trait = {
             protected sdl => wrapper sdl;
