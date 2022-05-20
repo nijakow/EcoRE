@@ -14,8 +14,8 @@
 
     own Window = {
         static with inherited _ = std Clonable;
+        protected wrapper = $;
 
-        protected wrapper = $,
         protected winptr,
         width, height,
         renderer;
@@ -42,8 +42,8 @@
 
     own Renderer = {
         static with inherited _ = std Clonable;
+        protected wrapper = $;
 
-        protected     wrapper = $,
         protected     renptr,
         protected own rectangle;
 
@@ -102,8 +102,8 @@
 
     own Event = {
         static with inherited _ = std Clonable;
-
         protected wrapper = $;
+
         protected event;
 
         with inherited trait = {
@@ -143,25 +143,29 @@
 
     own Program = {
         static with inherited _ = std Clonable;
+        protected wrapper = $;
 
         window,
         protected handler,
         private running;
 
         with inherited trait = {
+            sdl => wrapper sdl;
+
             initWithWindow: _window Handler: _handler => (
                 window  <- _window.
                 handler <- _handler.
                 running <- true.
+                handler setProgram: self.
               ^ self
             );
 
             run => (
-                | event <- sdl NewEvent |
+                | event <- wrapper NewEvent |
                 running <- true.
                 [
                     (running not) -> [ ^ self ].
-                    handler tick: self.
+                    handler tick.
                     (event poll != 0) -> [
                         handler handleEvent: event.
                     ].
