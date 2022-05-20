@@ -13,7 +13,7 @@
     NewEvent => (Event clone) init: sdl SDL_Event alloc;
 
     own Window = {
-        static with inherited parent = std Clonable;
+        static with inherited _ = std Clonable;
 
         protected wrapper = $,
         protected winptr,
@@ -41,7 +41,7 @@
     };
 
     own Renderer = {
-        static with inherited parent = std Clonable;
+        static with inherited _ = std Clonable;
 
         protected wrapper = $,
         protected renptr,
@@ -85,8 +85,22 @@
         };
     };
 
+    own EventVisitor = {
+        static with inherited _ = std Clonable;
+
+        visitUnknown: event => event;
+
+        visitMouseMotionEvent: event => visitUnknown: event;
+
+        visitMouseButtonEvent: event => visitUnknown: event;
+
+        visitKeyEvent: event => visitUnknown: event;
+
+        writeOn: w => w << 'an sdl event visitor';
+    };
+
     own Event = {
-        static with inherited parent = std Clonable;
+        static with inherited _ = std Clonable;
 
         protected wrapper = $;
         protected event;
@@ -112,7 +126,51 @@
             isKeyDown => (type == sdl SDL_EventTypes KEYDOWN);
             isKeyUp => (type == sdl SDL_EventTypes KEYUP);
 
+            acceptEventVisitor: visitor => (
+                begin
+                    if: [ isMouseMotionEvent ] then: [ visitor visitMouseMotionEvent: self ] ~
+                    if: [ isMouseButtonUp    ] then: [ visitor visitMouseButtonEvent: self ] ~
+                    if: [ isMouseButtonDown  ] then: [ visitor visitMouseButtonEvent: self ] ~
+                    if: [ isKeyUp            ] then: [ visitor visitKeyEvent: self         ] ~
+                    if: [ isKeyDown          ] then: [ visitor visitKeyEvent: self         ] ~
+                default: [ visitor visitUnknown: self ].
+            );
+
             writeOn: w => w << 'an sdl event';
+        };
+    };
+
+    own Program = {
+        static with inherited _ = std Clonable;
+
+        window,
+        protected handler,
+        private running;
+
+        with inherited trait = {
+            initWithWindow: _window Handler: _handler => (
+                window  <- _window.
+                handler <- _handler.
+                running <- true.
+              ^ self
+            );
+
+            run => (
+                | event <- sdl NewEvent |
+                running <- true.
+                [
+                    (running not) -> [ ^ self ].
+                    handler tick: self.
+                    (event poll != 0) -> [
+                        handler handleEvent: event.
+                    ].
+                    "TODO: Sleep for a while to avoid eating up CPU resources"
+                ] repeat.
+            );
+
+            stop => running <- false;
+
+            writeOn: w => w << 'an sdl program';
         };
     };
 }
