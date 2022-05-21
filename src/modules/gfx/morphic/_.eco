@@ -1,0 +1,97 @@
+{
+    static with inherited _ = std Module;
+
+    own Renderer = {
+        static with inherited _ = std Clonable;
+        private module = $;
+
+        protected xOff,
+        protected yOff,
+        protected sdlRenderer;
+
+        with inherited trait = {
+            initWithSDLRenderer: _sdl_renderer X: _x Y: _y => (
+                sdlRenderer <- _sdl_renderer.
+                xOff <- _x.
+                yOff <- _y.
+              ^ self
+            );
+
+            x: xv y: yv => (
+                xOff <- xv.
+                yOff <- yv.
+              ^ self
+            );
+
+            translateX: x Y: y => clone x: xOff + x y: yOff + y;
+            translatedByX: x Y: y Do: block => (
+                | xv <- xOff. yv <- yOff |
+                x: xOff + x y: yOff + y.
+                block value(self).
+                x: xv y: yv.
+            );
+
+            clear => sdlRenderer clear;
+            present => sdlRenderer present;
+
+            setR: r G: g B: b => sdlRenderer setR: r G: g B: b;
+            setColor: color => sdlRenderer setColor: color;
+
+            drawPointX: x Y: y => sdlRenderer drawPointX: xOff + x Y: yOff + y;
+            drawLineX: x1 Y: y1 X: x2 Y: y2 => sdlRenderer drawLineX: xOff + x1 Y: yOff + y1 X: xOff + x2 Y: yOff + y2;
+            drawRectX: x Y: y W: w H: h => sdlRenderer drawRectX: xOff + x Y: yOff + y W: w H: h;
+            fillRectX: x Y: y W: w H: h => sdlRenderer fillRectX: xOff + x Y: yOff + y W: w H: h;
+
+            writeOn: w => w << 'a morphic renderer';
+        };
+    };
+
+    own Rectangle = {
+        static with inherited _ = std Clonable;
+
+        x, y, w, h;
+
+        with inherited trait = {
+            init => (
+                x: 0 y: 0 w: 1 h: 1.
+              ^ self
+            );
+
+            x: xv => x <- xv;
+            y: yv => y <- yv;
+            w: wv => w <- wv;
+            h: hv => h <- hv;
+
+            x: xv y: yv w: wv h: hv => (
+                x: xv.
+                y: yv.
+                w: wv.
+                h: hv.
+              ^ self
+            );
+
+            writeOn: w => w << 'a rectangle';
+        };
+    };
+
+    own Morph = {
+        static with inherited _ = std Clonable;
+        private module = $;
+
+        bounds;
+
+        with inherited trait = {
+            init => (
+                bounds <- (module Rectangle) clone x: 0 y: 0 w: 50 h: 50.
+              ^ self
+            );
+
+            renderOn: renderer => (
+                renderer setR: 0 G: 255 B: 0.
+                renderer fillRectX: bounds x Y: bounds y W: bounds w H: bounds h.
+            );
+
+            writeOn: w => w << 'a morph renderer';
+        };
+    };
+}

@@ -1,0 +1,46 @@
+{
+    static with inherited _ = std Module;
+    sdl = (here / 'gfx' / 'sdl' / '_.eco') import.
+    morphic = (here / 'gfx' / 'morphic' / '_.eco') import.
+
+    own MorphicHandler = {
+        static with inherited _ = std Module;
+        private morphic = $ morphic;
+
+        protected program,
+        protected renderer,
+        protected morph;
+
+        with inherited trait = {
+            init => (
+                morph <- morphic Morph new.
+              ^ self
+            );
+
+            setProgram: p => (
+                program  <- p.
+                renderer <- morphic Renderer clone initWithSDLRenderer: program window renderer X: 0 Y: 0.
+            );
+
+            tick => (
+                renderer setR: 0 G: 0 B: 0.
+                renderer clear.
+                morph renderOn: renderer.
+                renderer present.
+            );
+
+            handleEvent: event => (
+                event isKeyDown -> [ ^ program stop ].
+            );
+        };
+    };
+
+    Main => (
+        sdl Init.
+        |
+            win     <- sdl NewWindowWithTitle: 'Morphic' X: 100 Y: 100 W: 800 H: 600,
+            program <- sdl Program clone initWithWindow: win Handler: (MorphicHandler new)
+        |
+        program run.
+    );
+}
