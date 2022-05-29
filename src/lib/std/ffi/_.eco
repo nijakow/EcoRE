@@ -108,7 +108,7 @@
         };
     };
 
-    LocalBinary = {
+    StaticLibrary = {
         static with inherited parent = #<:std/Singleton>;
         
         symbol: name => (
@@ -124,7 +124,7 @@
                  no: [ No ]
         );
 
-        writeOn: w => w << 'the local binary';
+        writeOn: w => w << 'the static library';
     };
 
     DLOpen: path => (
