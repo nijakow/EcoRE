@@ -97,12 +97,13 @@ util/gz.c \
 util/libc.c \
 util/memory.c \
 util/utf8.c \
+util/dwarf/dwarf.c \
 main.c
 
 OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
 DEPENDS = $(patsubst %.c,%.d,$(SOURCES))
 
-LDFLAGS = -lz -lffi -ldl -lm
+LDFLAGS = -lz -lffi -ldl -lm -ldwarf
 CFLAGS = -I.. -I/opt/homebrew/Cellar/libffi/3.4.2/include/ -Wall -Wextra -Werror -Wno-strict-aliasing -Wno-unused-result -Wno-unused-parameter -Wno-unused-label -g -Ofast -DECO_LATEST_GIT_COMMIT="\"$(shell git rev-parse --short=12 HEAD)\""
 
 %.o: %.c

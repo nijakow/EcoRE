@@ -27,6 +27,8 @@ typedef i32         Eco_Integer;
 typedef f32         Eco_Floating;
 typedef Eco_Integer Eco_Codepoint;
 
+typedef size_t      Eco_Size_t;
+
 struct Eco_Object;
 struct Eco_Type;
 
