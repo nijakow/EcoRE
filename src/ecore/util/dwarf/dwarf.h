@@ -11,9 +11,11 @@
 
 struct Eco_Dwarf
 {
+    int          fd;
+    Dwarf_Debug  debug;
 };
 
-void Eco_Dwarf_Create(struct Eco_Dwarf*, const char*);
+bool Eco_Dwarf_Create(struct Eco_Dwarf*, const char*);
 void Eco_Dwarf_Destroy(struct Eco_Dwarf*);
 
 struct Eco_DwarfDie
