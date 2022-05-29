@@ -20,9 +20,16 @@ void Eco_Dwarf_Destroy(struct Eco_Dwarf*);
 
 struct Eco_DwarfDie
 {
-    struct Eco_Dwarf*  session;
+    struct Eco_Dwarf*     session;
+    Dwarf_Die             die;
+    struct Eco_DwarfDie*  parent;
+    struct Eco_DwarfDie*  sibling;
+    struct Eco_DwarfDie*  child;
+    struct Eco_DwarfDie** prev;
 };
 
+struct Eco_DwarfDie* Eco_DwarfDie_Sibling(struct Eco_DwarfDie*);
+struct Eco_DwarfDie* Eco_DwarfDie_Child(struct Eco_DwarfDie*);
 void Eco_DwarfDie_Delete(struct Eco_DwarfDie*);
 
 bool Eco_DwarfDie_Is(struct Eco_DwarfDie*, const char*);
