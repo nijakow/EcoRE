@@ -23,6 +23,8 @@
         do: block => start to: end do: block;
         forEach: block => 0 for: range do: [ :i | block value(i, at: i) ];
 
+        iterator => (std util iterators IndexIterator) clone init: self;
+
         writeOn: w => w << start << ' to: ' << end;
     };
 }
