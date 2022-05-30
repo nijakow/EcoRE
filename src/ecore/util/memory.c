@@ -8,6 +8,11 @@ void Eco_Memcpy(void* dst, const void* src, unsigned long size)
     memcpy(dst, src, size);
 }
 
+void Eco_Strncpy(void* dst, const void* src, unsigned long size)
+{
+    strncpy(dst, src, size);
+}
+
 unsigned int Eco_Strlen(const char* str)
 {
     return strlen(str);

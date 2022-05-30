@@ -98,3 +98,13 @@ bool Eco_DwarfDie_Is(struct Eco_DwarfDie* die, const char* name)
     dwarf_get_TAG_name(tag, &tag_name);
     return Eco_StrEq(name, tag_name);
 }
+
+bool Eco_DwarfDie_AttrName(struct Eco_DwarfDie* die, char* dest, Eco_Size_t size)
+{
+    char*  die_name;
+
+    dwarf_diename(die->die, &die_name, NULL);
+    Eco_Strncpy(dest, die_name, size);
+    dwarf_dealloc(die->session->debug, die_name, DW_DLA_STRING);
+    return true; /* TODO: Check success */
+}

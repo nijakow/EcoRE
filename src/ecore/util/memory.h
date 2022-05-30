@@ -4,6 +4,7 @@
 #include <ecore/base/defs.h>
 
 void Eco_Memcpy(void* dst, const void* src, unsigned long size);
+void Eco_Strncpy(void* dst, const void* src, unsigned long size);
 
 unsigned int Eco_Strlen(const char* str);
 
