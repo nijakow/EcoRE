@@ -2,6 +2,7 @@
 #include <unistd.h>
 
 #include <ecore/util/libc.h>
+#include <ecore/util/memory.h>
 
 #include "dwarf.h"
 
@@ -86,4 +87,14 @@ void Eco_DwarfDie_Delete(struct Eco_DwarfDie* die)
     if (die->prev != NULL)   *(die->prev) = NULL;
     dwarf_dealloc(die->session->debug, die->die, 0);
     Eco_LibC_Free(die);
+}
+
+bool Eco_DwarfDie_Is(struct Eco_DwarfDie* die, const char* name)
+{
+    Dwarf_Half   tag;
+    const char*  tag_name;
+
+    dwarf_tag(die->die, &tag, NULL);
+    dwarf_get_TAG_name(tag, &tag_name);
+    return Eco_StrEq(name, tag_name);
 }

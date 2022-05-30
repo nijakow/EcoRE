@@ -3,17 +3,17 @@
 #include "memory.h"
 
 
-void Eco_Memcpy(void* dst, void* src, unsigned long size)
+void Eco_Memcpy(void* dst, const void* src, unsigned long size)
 {
     memcpy(dst, src, size);
 }
 
-unsigned int Eco_Strlen(char* str)
+unsigned int Eco_Strlen(const char* str)
 {
     return strlen(str);
 }
 
-bool Eco_StrEq(char* s1, char* s2)
+bool Eco_StrEq(const char* s1, const char* s2)
 {
     return strcmp(s1, s2) == 0;
 }
