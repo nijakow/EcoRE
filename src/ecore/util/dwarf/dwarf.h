@@ -9,14 +9,21 @@
 #include ECO_CONFIG_LIBDWARF_INCLUDE1
 #include ECO_CONFIG_LIBDWARF_INCLUDE2
 
+
+struct Eco_DwarfDie;
+
 struct Eco_Dwarf
 {
-    int          fd;
-    Dwarf_Debug  debug;
+    int                   fd;
+    Dwarf_Debug           debug;
+    struct Eco_DwarfDie*  dies;
 };
 
 bool Eco_Dwarf_Create(struct Eco_Dwarf*, const char*);
 void Eco_Dwarf_Destroy(struct Eco_Dwarf*);
+
+struct Eco_DwarfDie* Eco_Dwarf_GetFirstDie(struct Eco_Dwarf*);
+
 
 struct Eco_DwarfDie
 {
@@ -25,10 +32,10 @@ struct Eco_DwarfDie
     struct Eco_DwarfDie*  parent;
     struct Eco_DwarfDie*  sibling;
     struct Eco_DwarfDie*  child;
+    struct Eco_DwarfDie** holder;
     struct Eco_DwarfDie** prev;
+    struct Eco_DwarfDie*  next;
 };
-
-struct Eco_DwarfDie* Eco_Dwarf_GetFirstDie(struct Eco_Dwarf*);
 
 struct Eco_DwarfDie* Eco_DwarfDie_Sibling(struct Eco_DwarfDie*);
 struct Eco_DwarfDie* Eco_DwarfDie_Child(struct Eco_DwarfDie*);

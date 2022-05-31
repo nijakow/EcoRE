@@ -9,7 +9,8 @@
 
 bool Eco_Dwarf_Create(struct Eco_Dwarf* dwarf, const char* path)
 {
-    dwarf->fd = open(path, O_RDONLY);
+    dwarf->dies = NULL;
+    dwarf->fd   = open(path, O_RDONLY);
 
     if (dwarf->fd < 0) return false;
 
@@ -23,8 +24,48 @@ bool Eco_Dwarf_Create(struct Eco_Dwarf* dwarf, const char* path)
 
 void Eco_Dwarf_Destroy(struct Eco_Dwarf* dwarf)
 {
+    while (dwarf->dies != NULL)
+        Eco_DwarfDie_Delete(dwarf->dies);
     dwarf_finish(dwarf->debug, NULL);
     close(dwarf->fd);
+}
+
+
+struct Eco_DwarfDie* Eco_DwarfDie_New(struct Eco_Dwarf*    session,
+                                      Dwarf_Die            dwarf_die,
+                                      struct Eco_DwarfDie* parent)
+{
+    struct Eco_DwarfDie*  die;
+
+    die = Eco_LibC_Alloc(sizeof(struct Eco_DwarfDie));
+
+    if (die != NULL)
+    {
+        die->session    =  session;
+        die->die        =  dwarf_die;
+        die->parent     =  parent;
+        die->sibling    =  NULL;
+        die->child      =  NULL;
+        die->holder     =  NULL;
+        die->prev       = &session->dies;
+        die->next       =  session->dies;
+        if (session->dies != NULL)
+            session->dies->prev = &die->next;
+        session->dies   =  die;
+    }
+
+    return die;
+}
+
+void Eco_DwarfDie_Delete(struct Eco_DwarfDie* die)
+{
+    if (die->sibling != NULL) Eco_DwarfDie_Delete(die->sibling);
+    if (die->child != NULL)   Eco_DwarfDie_Delete(die->child);
+    if (die->holder != NULL)  *(die->holder) = die->sibling;
+    if (die->next != NULL)    die->next->prev = die->prev;
+    *(die->prev) = die->next;
+    dwarf_dealloc(die->session->debug, die->die, 0);
+    Eco_LibC_Free(die);
 }
 
 struct Eco_DwarfDie* Eco_Dwarf_GetFirstDie(struct Eco_Dwarf* dwarf)
@@ -37,16 +78,11 @@ struct Eco_DwarfDie* Eco_Dwarf_GetFirstDie(struct Eco_Dwarf* dwarf)
     if (dwarf_siblingof(dwarf->debug, NULL, &dwarf_die, NULL) != DW_DLV_OK)
         return NULL;
 
-    die = Eco_LibC_Alloc(sizeof(struct Eco_DwarfDie));
+    die = Eco_DwarfDie_New(dwarf, dwarf_die, NULL);
 
     if (die != NULL)
     {
-        die->session    =  dwarf;
-        die->die        =  dwarf_die;
-        die->parent     =  NULL;
-        die->sibling    =  NULL;
-        die->child      =  NULL;
-        die->prev       =  NULL;    // TODO: List of dwarf entries in session
+        /* Add initialization code here */
     }
 
     return die;
@@ -63,17 +99,12 @@ struct Eco_DwarfDie* Eco_DwarfDie_Sibling(struct Eco_DwarfDie* prev)
     if (dwarf_siblingof(prev->session->debug, prev->die, &dwarf_die, NULL) != DW_DLV_OK)
         return NULL;
 
-    die = Eco_LibC_Alloc(sizeof(struct Eco_DwarfDie));
+    die = Eco_DwarfDie_New(prev->session, dwarf_die, prev->parent);
 
     if (die != NULL)
     {
-        die->session    =  prev->session;
-        die->die        =  dwarf_die;
-        die->parent     =  prev->parent;
-        die->sibling    =  NULL;
-        die->child      =  NULL;
-        die->prev       = &prev->sibling;
-        prev->sibling   =  die;
+        die->holder   = &prev->sibling;
+        prev->sibling =  die;
     }
 
     return die;
@@ -90,29 +121,15 @@ struct Eco_DwarfDie* Eco_DwarfDie_Child(struct Eco_DwarfDie* parent)
     if (dwarf_child(parent->die, &dwarf_die, NULL) != DW_DLV_OK)
         return NULL;
 
-    die = Eco_LibC_Alloc(sizeof(struct Eco_DwarfDie));
+    die = Eco_DwarfDie_New(parent->session, dwarf_die, parent);
 
     if (die != NULL)
     {
-        die->session    =  parent->session;
-        die->die        =  dwarf_die;
-        die->parent     =  parent;
-        die->sibling    =  NULL;
-        die->child      =  NULL;
-        die->prev       = &parent->child;
-        parent->child   =  die;
+        die->holder   = &parent->child;
+        parent->child =  die;
     }
 
     return die;
-}
-
-void Eco_DwarfDie_Delete(struct Eco_DwarfDie* die)
-{
-    if (die->sibling != NULL) Eco_DwarfDie_Delete(die->sibling);
-    if (die->child != NULL)   Eco_DwarfDie_Delete(die->child);
-    if (die->prev != NULL)   *(die->prev) = NULL;
-    dwarf_dealloc(die->session->debug, die->die, 0);
-    Eco_LibC_Free(die);
 }
 
 bool Eco_DwarfDie_Is(struct Eco_DwarfDie* die, const char* name)
@@ -151,6 +168,17 @@ bool Eco_DwarfDie_AttrName(struct Eco_DwarfDie* die, char* dest, Eco_Size_t size
     return true; /* TODO: Check success */
 }
 
+bool Eco_DwarfDie_AttrType(struct Eco_DwarfDie* die, struct Eco_DwarfDie** loc)
+{
+    Dwarf_Attribute  attr;
+    Dwarf_Error      error;
+
+    if (dwarf_attr(die->die, DW_AT_type, &attr, &error) != DW_DLV_OK)
+        return false;
+    printf("Type: %p\n", attr);
+    return true;
+}
+
 static void Eco_DwarfDie_PrintRecursively(struct Eco_DwarfDie* die, int depth)
 {
     struct Eco_DwarfDie*  other;
@@ -165,6 +193,7 @@ static void Eco_DwarfDie_PrintRecursively(struct Eco_DwarfDie* die, int depth)
     if (Eco_DwarfDie_AttrName(die, buffer, sizeof(buffer)))
         printf(": %s", buffer);
     printf("\n");
+    Eco_DwarfDie_AttrType(die, NULL);
     if ((other = Eco_DwarfDie_Child(die)) != NULL)
         Eco_DwarfDie_PrintRecursively(other, depth + 1);
     if ((other = Eco_DwarfDie_Sibling(die)) != NULL)
