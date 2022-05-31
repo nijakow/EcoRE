@@ -16,6 +16,7 @@ struct Eco_Dwarf
 {
     int                   fd;
     Dwarf_Debug           debug;
+    struct Eco_DwarfDie*  head;
     struct Eco_DwarfDie*  dies;
 };
 

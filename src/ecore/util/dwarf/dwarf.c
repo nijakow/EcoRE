@@ -7,6 +7,33 @@
 
 #include "dwarf.h"
 
+static void Eco_DwarfDie_LoadRecursively(struct Eco_DwarfDie* die)
+{
+    while (die != NULL)
+    {
+        Eco_DwarfDie_LoadRecursively(Eco_DwarfDie_Child(die));
+        die = Eco_DwarfDie_Sibling(die);
+    }
+}
+
+static void Eco_Dwarf_Load(struct Eco_Dwarf* dwarf)
+{
+    struct Eco_DwarfDie*  die;
+    struct Eco_DwarfDie*  die_next;
+
+    die         = Eco_Dwarf_GetFirstDie(dwarf);
+    dwarf->head = die;
+    while (die != NULL)
+    {
+        Eco_DwarfDie_LoadRecursively(die);
+        die_next         =  Eco_Dwarf_GetFirstDie(dwarf);
+        die->sibling     =  die_next;
+        if (die_next != NULL)
+            die_next->holder = &die->sibling;
+        die              =  die_next;
+    }
+}
+
 bool Eco_Dwarf_Create(struct Eco_Dwarf* dwarf, const char* path)
 {
     dwarf->dies = NULL;
@@ -15,6 +42,7 @@ bool Eco_Dwarf_Create(struct Eco_Dwarf* dwarf, const char* path)
     if (dwarf->fd < 0) return false;
 
     if (dwarf_init(dwarf->fd, DW_DLC_READ, NULL, NULL, &dwarf->debug, NULL) == DW_DLV_OK) {
+        Eco_Dwarf_Load(dwarf);
         return true;
     } else {
         close(dwarf->fd);
@@ -28,6 +56,24 @@ void Eco_Dwarf_Destroy(struct Eco_Dwarf* dwarf)
         Eco_DwarfDie_Delete(dwarf->dies);
     dwarf_finish(dwarf->debug, NULL);
     close(dwarf->fd);
+}
+
+static struct Eco_DwarfDie* Eco_Dwarf_Resolve(struct Eco_Dwarf* dwarf, Dwarf_Off dwarf_die_off)
+{
+    struct Eco_DwarfDie*  die;
+    Dwarf_Off             off;
+
+    for (die = dwarf->dies;
+         die != NULL;
+         die = die->next)
+    {
+        if (dwarf_dieoffset(die->die, &off, NULL) == DW_DLV_OK)
+        {
+            if (off == dwarf_die_off)
+                return die;
+        }
+    }
+    return NULL;
 }
 
 
@@ -170,30 +216,42 @@ bool Eco_DwarfDie_AttrName(struct Eco_DwarfDie* die, char* dest, Eco_Size_t size
 
 bool Eco_DwarfDie_AttrType(struct Eco_DwarfDie* die, struct Eco_DwarfDie** loc)
 {
+    Dwarf_Bool       hasattr;
     Dwarf_Attribute  attr;
     Dwarf_Error      error;
+    Dwarf_Off        off;
+    //Dwarf_Die        dwarf_die;
 
+    if (dwarf_hasattr(die->die, DW_AT_type, &hasattr, &error) != DW_DLV_OK)
+        return false;
+    if (!hasattr)
+        return false;
     if (dwarf_attr(die->die, DW_AT_type, &attr, &error) != DW_DLV_OK)
         return false;
-    printf("Type: %p\n", attr);
+    if (dwarf_global_formref(attr, &off, &error) != DW_DLV_OK)
+        return false;
+    if (loc != NULL)
+        *loc = Eco_Dwarf_Resolve(die->session, off);
     return true;
 }
 
 static void Eco_DwarfDie_PrintRecursively(struct Eco_DwarfDie* die, int depth)
 {
     struct Eco_DwarfDie*  other;
+    struct Eco_DwarfDie*  type;
     char                  buffer[1024];
 
     for (int x = 0; x < depth; x++)
-        printf(" ");
+        printf("  ");
     if (Eco_DwarfDie_Name(die, buffer, sizeof(buffer)))
         printf("%s", buffer);
     else
         printf("???");
     if (Eco_DwarfDie_AttrName(die, buffer, sizeof(buffer)))
         printf(": %s", buffer);
+    if (Eco_DwarfDie_AttrType(die, &type))
+        printf(", type=%p", type);
     printf("\n");
-    Eco_DwarfDie_AttrType(die, NULL);
     if ((other = Eco_DwarfDie_Child(die)) != NULL)
         Eco_DwarfDie_PrintRecursively(other, depth + 1);
     if ((other = Eco_DwarfDie_Sibling(die)) != NULL)
@@ -208,11 +266,9 @@ static void Eco_DwarfDie_Print(struct Eco_DwarfDie* die)
 void Eco_Dwarf_Test(const char* path)
 {
     struct Eco_Dwarf      session;
-    struct Eco_DwarfDie*  die;
 
     Eco_Dwarf_Create(&session, path);
-    die = Eco_Dwarf_GetFirstDie(&session);
-    if (die != NULL)
-        Eco_DwarfDie_Print(die);
+    if (session.head != NULL)
+        Eco_DwarfDie_Print(session.head);
     Eco_Dwarf_Destroy(&session);
 }
