@@ -1,3 +1,7 @@
+#include <ecore/base/config.h>
+
+#ifdef ECO_CONFIG_USE_LIBDWARF
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -272,3 +276,5 @@ void Eco_Dwarf_Test(const char* path)
         Eco_DwarfDie_Print(session.head);
     Eco_Dwarf_Destroy(&session);
 }
+
+#endif
