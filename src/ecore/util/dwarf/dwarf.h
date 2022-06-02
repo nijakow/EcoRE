@@ -3,6 +3,9 @@
 
 #include <ecore/base/defs.h>
 #include <ecore/base/config.h>
+#include <ecore/base/any.h>
+
+#include <ecore/objects/vm/ffi/ffitype.h>
 
 #ifdef ECO_CONFIG_USE_LIBDWARF
 
@@ -36,6 +39,7 @@ struct Eco_DwarfDie
     struct Eco_DwarfDie** holder;
     struct Eco_DwarfDie** prev;
     struct Eco_DwarfDie*  next;
+    struct Eco_FFIType*   ffi_type;
 };
 
 struct Eco_DwarfDie* Eco_DwarfDie_Sibling(struct Eco_DwarfDie*);
