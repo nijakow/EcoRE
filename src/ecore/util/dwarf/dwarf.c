@@ -62,6 +62,11 @@ void Eco_Dwarf_Destroy(struct Eco_Dwarf* dwarf)
     close(dwarf->fd);
 }
 
+void Eco_Dwarf_ExportInfo(struct Eco_Dwarf* dwarf, struct Eco_FFILib* lib)
+{
+    /* TODO */
+}
+
 static struct Eco_DwarfDie* Eco_Dwarf_Resolve(struct Eco_Dwarf* dwarf, Dwarf_Off dwarf_die_off)
 {
     struct Eco_DwarfDie*  die;

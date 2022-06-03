@@ -48,3 +48,20 @@ void Eco_FFILib_Del(struct Eco_FFILib* object)
 {
     Eco_Object_Del(&object->_);
 }
+
+
+bool Eco_FFILib_At(struct Eco_FFILib* lib, struct Eco_Key* key, Eco_Any* loc)
+{
+    /* TODO */
+    return false;
+}
+
+void Eco_FFILib_Put(struct Eco_FFILib* lib, struct Eco_Key* key, Eco_Any value)
+{
+    /* TODO */
+}
+
+void Eco_FFILib_PutType(struct Eco_FFILib* lib, struct Eco_Key* key, struct Eco_FFIType* value)
+{
+    Eco_FFILib_Put(lib, key, Eco_Any_FromPointer(value));
+}

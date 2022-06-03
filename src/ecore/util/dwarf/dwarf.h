@@ -6,6 +6,7 @@
 #include <ecore/base/any.h>
 
 #include <ecore/objects/vm/ffi/ffitype.h>
+#include <ecore/objects/vm/ffi/ffilib.h>
 
 #ifdef ECO_CONFIG_USE_LIBDWARF
 
@@ -25,6 +26,7 @@ struct Eco_Dwarf
 
 bool Eco_Dwarf_Create(struct Eco_Dwarf*, const char*);
 void Eco_Dwarf_Destroy(struct Eco_Dwarf*);
+void Eco_Dwarf_ExportInfo(struct Eco_Dwarf*, struct Eco_FFILib*);
 
 struct Eco_DwarfDie* Eco_Dwarf_GetFirstDie(struct Eco_Dwarf*);
 
