@@ -35,17 +35,19 @@
         size <- size + 1.
         ^ self
     );
-    add: element => append: element;
 
-    remove: index => (
+    add: element => append: element;
+    remove: e => (find: e) yes: [ :i | erase: i ];
+
+    erase: index => (
         | elem <- at: index |
         index to: (size - 2) do: [ :i | at: i put: (at: i + 1) ].
         size <- size - 1.
         ^ elem
     );
 
-    removeFirst => remove: 0;
-    removeLast  => remove: (size - 1);
+    removeFirst => erase: 0;
+    removeLast  => erase: (size - 1);
 
     clear => ( size <- 0. ^ self );
 

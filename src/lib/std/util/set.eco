@@ -22,12 +22,12 @@
         size => elements size;
 
         contains: e => (elements find: e) yes: [ :i | ^ true ] no: [ ^ false ];
-        add: e => (contains: e) unless: [ elements append: e ];
-        remove: e => (elements find: e) yes: [ :i | elements remove: i ];
+        add: e => (contains: e) unless: [ elements add: e ];
+        remove: e => elements remove: e;
         take => (
             elements isEmpty if: [ invalidIndexError ].
             | v <- elements at: 0 |
-            elements remove: 0.
+            elements erase: 0.
           ^ v
         );
         
