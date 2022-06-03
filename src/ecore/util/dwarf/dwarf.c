@@ -317,7 +317,10 @@ bool Eco_DwarfDie_GetFFIType(struct Eco_DwarfDie* die, struct Eco_FFIType **loc)
         {
             if (Eco_DwarfDie_Is(die2, "DW_TAG_member"))
             {
-                names[element] = NULL;
+                if (Eco_DwarfDie_AttrName(die, name, sizeof(name) - 1))
+                    names[element] = Eco_Key_Find(name);
+                else
+                    names[element] = NULL;
                 if (Eco_DwarfDie_GetFFIType(die2, &type2))
                     types[element] = type2;
                 else
