@@ -15,6 +15,7 @@
 #include "vm/ffi/ffitype.h"
 #include "vm/ffi/ffiobject.h"
 #include "vm/ffi/ffifunc.h"
+#include "vm/ffi/ffilib.h"
 
 
 void Eco_Objects_Init()
@@ -34,10 +35,12 @@ void Eco_Objects_Init()
     Eco_FFIType_Init();
     Eco_FFIObject_Init();
     Eco_FFIFunc_Init();
+    Eco_FFILib_Init();
 }
 
 void Eco_Objects_Terminate()
 {
+    Eco_FFILib_Terminate();
     Eco_FFIFunc_Terminate();
     Eco_FFIObject_Terminate();
     Eco_FFIType_Terminate();

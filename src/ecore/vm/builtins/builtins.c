@@ -196,6 +196,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.ffitype_type", Eco_VM_Builtin_GetFFITypeType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.ffiobject_type", Eco_VM_Builtin_GetFFIObjectType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.ffifunc_type", Eco_VM_Builtin_GetFFIFuncType);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.ffilib_type", Eco_VM_Builtin_GetFFIFuncType);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.debug.shortlog", Eco_VM_Builtin_Print);
 }

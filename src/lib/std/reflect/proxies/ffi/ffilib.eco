@@ -1,0 +1,6 @@
+
+#=std/reflect/proxies/ffi/FFILib: {
+    static with inherited parent = #<:std/Clonable>;
+
+    writeOn: writer => writer << '<ffi_lib>';
+}

@@ -43,6 +43,7 @@ objects/vm/interface/interface.c \
 objects/vm/ffi/ffitype.c \
 objects/vm/ffi/ffiobject.c \
 objects/vm/ffi/ffifunc.c \
+objects/vm/ffi/ffilib.c \
 vm/builtins/builtins.c \
 vm/builtins/core/array.c \
 vm/builtins/core/blob.c \
