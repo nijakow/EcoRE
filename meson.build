@@ -208,9 +208,10 @@ math = cc.find_library('m')
 dl = cc.find_library('dl')
 zlib = dependency('zlib')
 libffi = dependency('libffi')
+libdwarf = dependency('libdwarf')
 
 executable('ecore.app', sources: src,
                         include_directories: includes,
-                        dependencies: [math, dl, zlib, libffi],
+                        dependencies: [math, dl, zlib, libffi, libdwarf],
                         c_args : ['-DECO_CONFIG_COMPILE_WITH_INTEGRATED_BINARY'],
                         install: true)
