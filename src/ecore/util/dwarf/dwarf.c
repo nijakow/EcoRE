@@ -246,6 +246,28 @@ bool Eco_DwarfDie_AttrType(struct Eco_DwarfDie* die, struct Eco_DwarfDie** loc)
     return true;
 }
 
+bool Eco_DwarfDie_AttrUpperBound(struct Eco_DwarfDie* die, long* loc)
+{
+    Dwarf_Bool       hasattr;
+    Dwarf_Attribute  attr;
+    Dwarf_Error      error;
+    Dwarf_Signed     bound;
+
+    if (dwarf_hasattr(die->die, DW_AT_upper_bound, &hasattr, &error) != DW_DLV_OK)
+        return false;
+    if (!hasattr)
+        return false;
+    if (dwarf_attr(die->die, DW_AT_upper_bound, &attr, &error) != DW_DLV_OK)
+        return false;
+    if (dwarf_formsdata(attr, &bound, &error) != DW_DLV_OK)
+    {
+        Eco_Log_Debug("Formsdata failed!\n");
+        return false;
+    }
+    *loc = (long) bound;
+    return true;
+}
+
 static unsigned int Eco_DwarfDie_SiblingCount(struct Eco_DwarfDie* die)
 {
     unsigned int  count;
@@ -274,6 +296,7 @@ bool Eco_DwarfDie_GetFFIType(struct Eco_DwarfDie* die, struct Eco_FFIType **loc)
     struct Eco_DwarfDie*  die3;
     unsigned int          elements;
     unsigned int          element;
+    long                  array_size;
     bool                  is_union;
     char                  name[128];
 
@@ -344,6 +367,15 @@ bool Eco_DwarfDie_GetFFIType(struct Eco_DwarfDie* die, struct Eco_FFIType **loc)
             is_union = Eco_DwarfDie_Is(die, "DW_TAG_union_type");
             type     = Eco_FFIType_NewStruct(types, names, element, is_union);
         }
+    } else if (Eco_DwarfDie_Is(die, "DW_TAG_array_type")) {
+        array_size = 0;
+        if ((die2 = Eco_DwarfDie_Child(die)) != NULL)
+            if (Eco_DwarfDie_Is(die2, "DW_TAG_subrange_type"))
+                if (Eco_DwarfDie_AttrUpperBound(die2, &array_size))
+                    array_size++; // From upper bound to size: +1
+        if (Eco_DwarfDie_AttrType(die, &die2))
+            if (Eco_DwarfDie_GetFFIType(die2, &type2))
+                type = Eco_FFIType_NewArray(type2, array_size);
     }
 
     die->ffi_type = type;

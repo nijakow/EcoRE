@@ -53,6 +53,7 @@ bool Eco_DwarfDie_Name(struct Eco_DwarfDie*, char*, Eco_Size_t);
 bool Eco_DwarfDie_AttrName(struct Eco_DwarfDie*, char*, Eco_Size_t);
 bool Eco_DwarfDie_AttrType(struct Eco_DwarfDie*, struct Eco_DwarfDie**);
 bool Eco_DwarfDie_AttrLocation(struct Eco_DwarfDie*, void**);
+bool Eco_DwarfDie_AttrUpperBound(struct Eco_DwarfDie*, long*);
 bool Eco_DwarfDie_AttrByteSize(struct Eco_DwarfDie*, Eco_Size_t*);
 bool Eco_DwarfDie_AttrExternal(struct Eco_DwarfDie*, bool*);
 

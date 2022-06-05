@@ -229,6 +229,17 @@ struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType** members,
     return type;
 }
 
+struct Eco_FFIType* Eco_FFIType_NewArray(struct Eco_FFIType* type, unsigned int size)
+{
+    unsigned int         index;
+    struct Eco_FFIType*  elements[size];
+
+    for (index = 0; index < size; index++)
+        elements[index] = type;
+    
+    return Eco_FFIType_NewStruct(elements, NULL, size, false);
+}
+
 struct Eco_FFIType* Eco_FFIType_PointerTo(struct Eco_FFIType* pointee)
 {
     struct Eco_FFIType*  type;
