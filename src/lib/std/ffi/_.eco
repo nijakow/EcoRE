@@ -133,4 +133,6 @@
         ].
       ^ No
     );
+
+    Open: path => #'ecosphere.ecore.ffi.lib.open'(path);
 }

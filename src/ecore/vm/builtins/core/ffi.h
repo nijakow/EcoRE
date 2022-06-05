@@ -42,6 +42,8 @@ bool Eco_VM_Builtin_FFIObjectDLOpen(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFIObjectDLSym(struct Eco_Fiber*, unsigned int);
 #endif
 
+bool Eco_VM_Builtin_FFILib_Open(struct Eco_Fiber*, unsigned int);
+
 #endif
 
 #endif

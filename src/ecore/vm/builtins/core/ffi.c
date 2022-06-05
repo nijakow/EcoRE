@@ -7,6 +7,7 @@
 #include <ecore/objects/vm/ffi/ffitype.h>
 #include <ecore/objects/vm/ffi/ffiobject.h>
 #include <ecore/objects/vm/ffi/ffifunc.h>
+#include <ecore/objects/vm/ffi/ffilib.h>
 #include <ecore/vm/vm.h>
 
 
@@ -533,5 +534,18 @@ bool Eco_VM_Builtin_FFIObjectDLSym(struct Eco_Fiber* fiber, unsigned int args)
 }
 #endif
 
+bool Eco_VM_Builtin_FFILib_Open(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any             any;
+    struct Eco_String*  path;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    path = Eco_Any_AsPointer(any);
+    any = Eco_Any_FromPointer(Eco_FFILib_New(path->bytes));
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
 
 #endif
