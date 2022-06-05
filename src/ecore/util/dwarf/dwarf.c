@@ -386,9 +386,46 @@ void Eco_Dwarf_Test(const char* path)
     Eco_Dwarf_Destroy(&session);
 }
 
+static bool Eco_DwarfDie_IsCollectable(struct Eco_DwarfDie* die)
+{
+    return Eco_DwarfDie_Is(die, "DW_TAG_typedef")
+        || Eco_DwarfDie_Is(die, "DW_TAG_enumerator")
+        || Eco_DwarfDie_Is(die, "DW_TAG_structure_type")
+        || Eco_DwarfDie_Is(die, "DW_TAG_union_type")
+        || Eco_DwarfDie_Is(die, "DW_TAG_variable")
+        || Eco_DwarfDie_Is(die, "DW_TAG_subprogram");
+}
+
+static void Eco_Dwarf_LoadDebugInfoLoop(struct Eco_DwarfDie* die, struct Eco_FFILib* lib)
+{
+    bool  has_name;
+    char  name[128];
+
+    if (die == NULL) return;
+
+    if (Eco_DwarfDie_Is(die, "DW_TAG_compile_unit"))
+        Eco_Dwarf_LoadDebugInfoLoop(Eco_DwarfDie_Child(die), lib);
+    else {
+        has_name = Eco_DwarfDie_AttrName(die, name, sizeof(name));
+        if (Eco_DwarfDie_IsCollectable(die))
+        {
+            /* TODO */
+        }
+    }
+
+    Eco_Dwarf_LoadDebugInfoLoop(Eco_DwarfDie_Sibling(die), lib);
+}
+
 bool Eco_Dwarf_LoadDebugInfo(const char* path, struct Eco_FFILib* lib)
 {
-    /* TODO */
+    struct Eco_Dwarf  session;
+
+    if (Eco_Dwarf_Create(&session, path))
+    {
+        Eco_Dwarf_LoadDebugInfoLoop(session.head, lib);
+        Eco_Dwarf_Destroy(&session);
+        return true;
+    }
     return false;
 }
 
