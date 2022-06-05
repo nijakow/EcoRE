@@ -386,6 +386,7 @@ void Eco_Dwarf_Test(const char* path)
     Eco_Dwarf_Destroy(&session);
 }
 
+/*
 static bool Eco_DwarfDie_IsCollectable(struct Eco_DwarfDie* die)
 {
     return Eco_DwarfDie_Is(die, "DW_TAG_typedef")
@@ -395,11 +396,13 @@ static bool Eco_DwarfDie_IsCollectable(struct Eco_DwarfDie* die)
         || Eco_DwarfDie_Is(die, "DW_TAG_variable")
         || Eco_DwarfDie_Is(die, "DW_TAG_subprogram");
 }
+*/
 
 static void Eco_Dwarf_LoadDebugInfoLoop(struct Eco_DwarfDie* die, struct Eco_FFILib* lib)
 {
-    bool  has_name;
-    char  name[128];
+    struct Eco_FFIType*  type;
+    bool                 has_name;
+    char                 name[128];
 
     if (die == NULL) return;
 
@@ -407,9 +410,8 @@ static void Eco_Dwarf_LoadDebugInfoLoop(struct Eco_DwarfDie* die, struct Eco_FFI
         Eco_Dwarf_LoadDebugInfoLoop(Eco_DwarfDie_Child(die), lib);
     else {
         has_name = Eco_DwarfDie_AttrName(die, name, sizeof(name));
-        if (Eco_DwarfDie_IsCollectable(die))
-        {
-            /* TODO */
+        if (has_name && Eco_DwarfDie_Is(die, "DW_TAG_structure_type") && Eco_DwarfDie_GetFFIType(die, &type)) {
+            Eco_FFILib_PutStruct(lib, name, type);
         }
     }
 

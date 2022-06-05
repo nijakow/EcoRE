@@ -5,7 +5,9 @@
 #endif
 
 #include <ecore/objects/base/type/type.h>
+#include <ecore/objects/misc/key/key.h>
 #include <ecore/vm/memory/gc/gc.h>
+#include <ecore/vm/memory/memory.h>
 #include <ecore/util/dwarf/dwarf.h>
 #include <ecore/util/memory.h>
 
@@ -39,6 +41,7 @@ struct Eco_FFILib* Eco_FFILib_New(const char* path)
 
     if (object != NULL)
     {
+        object->entries = NULL;
 #ifndef ECO_CONFIG_USE_DLOPEN
         object->dl_handle = dlopen(path, RTLD_NOW);
 #else
@@ -52,11 +55,28 @@ struct Eco_FFILib* Eco_FFILib_New(const char* path)
 
 void Eco_FFILib_Mark(struct Eco_GC_State* state, struct Eco_FFILib* object)
 {
+    struct Eco_FFILib_Entry*  entry;
+
+    for (entry = object->entries;
+         entry != NULL;
+         entry = entry->next)
+    {
+        Eco_GC_State_MarkObject(state, entry->name);
+        Eco_GC_State_MarkObject(state, entry->type);
+    }
     Eco_Object_Mark(state, &object->_);
 }
 
 void Eco_FFILib_Del(struct Eco_FFILib* object)
 {
+    struct Eco_FFILib_Entry*  entry;
+
+    while (object->entries != NULL)
+    {
+        entry           = object->entries;
+        object->entries = entry->next;
+        Eco_Memory_Free(entry);
+    }
     if (object->dl_handle != NULL)
     {
 #ifdef ECO_CONFIG_USE_DLOPEN
@@ -74,12 +94,28 @@ bool Eco_FFILib_At(struct Eco_FFILib* lib, struct Eco_Key* key, Eco_Any* loc)
     return false;
 }
 
-void Eco_FFILib_Put(struct Eco_FFILib* lib, struct Eco_Key* key, Eco_Any value)
+static bool Eco_FFILib_PutType(struct Eco_FFILib* lib, const char* name, struct Eco_FFIType* type)
 {
-    /* TODO */
+    struct Eco_Key*           key;
+    struct Eco_FFILib_Entry*  entry;
+
+    key   = Eco_Key_Find(name);
+    entry = Eco_Memory_Alloc(sizeof(struct Eco_FFILib_Entry));
+
+    if (key != NULL && entry != NULL)
+    {
+        entry->name  = key;
+        entry->type  = type;
+        entry->next  = lib->entries;
+        lib->entries = entry;
+        return true;
+    }
+
+    return false;
 }
 
-void Eco_FFILib_PutType(struct Eco_FFILib* lib, struct Eco_Key* key, struct Eco_FFIType* value)
+
+bool Eco_FFILib_PutStruct(struct Eco_FFILib* lib, const char* name, struct Eco_FFIType* type)
 {
-    Eco_FFILib_Put(lib, key, Eco_Any_FromPointer(value));
+    return Eco_FFILib_PutType(lib, name, type);
 }

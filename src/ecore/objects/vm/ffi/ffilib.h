@@ -9,11 +9,20 @@
 
 struct Eco_GC_State;
 
+struct Eco_FFILib_Entry
+{
+    struct Eco_FFILib_Entry*  next;
+    struct Eco_Key*           name;
+    struct Eco_FFIType*       type;
+};
+
 struct Eco_FFILib
 {
-    struct Eco_Object  _;
+    struct Eco_Object         _;
     
-    void*              dl_handle;
+    void*                     dl_handle;
+
+    struct Eco_FFILib_Entry*  entries;
 };
 
 struct Eco_FFILib* Eco_FFILib_New();
@@ -21,8 +30,8 @@ void Eco_FFILib_Mark(struct Eco_GC_State*, struct Eco_FFILib*);
 void Eco_FFILib_Del(struct Eco_FFILib*);
 
 bool Eco_FFILib_At(struct Eco_FFILib*, struct Eco_Key*, Eco_Any*);
-void Eco_FFILib_Put(struct Eco_FFILib*, struct Eco_Key*, Eco_Any);
-void Eco_FFILib_PutType(struct Eco_FFILib*, struct Eco_Key*, struct Eco_FFIType*);
+
+bool Eco_FFILib_PutStruct(struct Eco_FFILib*, const char*, struct Eco_FFIType*);
 
 void Eco_FFILib_Init();
 void Eco_FFILib_Terminate();
