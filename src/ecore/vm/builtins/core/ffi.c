@@ -548,4 +548,22 @@ bool Eco_VM_Builtin_FFILib_Open(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_FFILib_At(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any             any;
+    struct Eco_FFILib*  lib;
+    struct Eco_Key*     key;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    Eco_Fiber_Pop(fiber, &any);
+    key = Eco_Any_AsPointer(any);
+    Eco_Fiber_Pop(fiber, &any);
+    lib = Eco_Any_AsPointer(any);
+    if (!Eco_FFILib_At(lib, key, &any))
+        any = Eco_Any_FromPointer(lib);
+    Eco_Fiber_Push(fiber, &any);
+    return true;
+}
+
 #endif

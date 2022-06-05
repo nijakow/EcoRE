@@ -271,6 +271,7 @@ bool Eco_DwarfDie_GetFFIType(struct Eco_DwarfDie* die, struct Eco_FFIType **loc)
     struct Eco_FFIType*   type;
     struct Eco_FFIType*   type2;
     struct Eco_DwarfDie*  die2;
+    struct Eco_DwarfDie*  die3;
     unsigned int          elements;
     unsigned int          element;
     bool                  is_union;
@@ -311,32 +312,38 @@ bool Eco_DwarfDie_GetFFIType(struct Eco_DwarfDie* die, struct Eco_FFIType **loc)
             type = Eco_FFIType_GetForIndex(19);
     } else if (Eco_DwarfDie_Is(die, "DW_TAG_pointer_type")) {
         if (Eco_DwarfDie_AttrType(die, &die2))
+            type = Eco_FFIType_PointerTo(Eco_FFIType_GetForIndex(0)); /* TODO: Eco_FFIType_PointerTo(type2); */
+    } else if (Eco_DwarfDie_Is(die, "DW_TAG_typedef")) {
+        if (Eco_DwarfDie_AttrType(die, &die2))
             if (Eco_DwarfDie_GetFFIType(die2, &type2))
-                type = Eco_FFIType_GetForIndex(20); /* TODO: Eco_FFIType_PointerTo(type2); */
+                type = type2;
     } else if (Eco_DwarfDie_Is(die, "DW_TAG_structure_type") || Eco_DwarfDie_Is(die, "DW_TAG_union_type")) {
         elements = Eco_DwarfDie_ChildrenCount(die);
-        struct Eco_Key*     names[elements];
-        struct Eco_FFIType* types[elements];
-        element = 0;
-        for (die2 = Eco_DwarfDie_Child(die);
-             die2 != NULL;
-             die2 = Eco_DwarfDie_Sibling(die2))
+        if (elements > 0)
         {
-            if (Eco_DwarfDie_Is(die2, "DW_TAG_member"))
+            struct Eco_Key*     names[elements];
+            struct Eco_FFIType* types[elements];
+            element = 0;
+            for (die2 = Eco_DwarfDie_Child(die);
+                die2 != NULL;
+                die2 = Eco_DwarfDie_Sibling(die2))
             {
-                if (Eco_DwarfDie_AttrName(die, name, sizeof(name) - 1))
-                    names[element] = Eco_Key_Find(name);
-                else
-                    names[element] = NULL;
-                if (Eco_DwarfDie_GetFFIType(die2, &type2))
-                    types[element] = type2;
-                else
-                    return false;
-                element++;
+                if (Eco_DwarfDie_Is(die2, "DW_TAG_member"))
+                {
+                    if (Eco_DwarfDie_AttrName(die2, name, sizeof(name) - 1))
+                        names[element] = Eco_Key_Find(name);
+                    else
+                        names[element] = NULL;
+                    if (Eco_DwarfDie_AttrType(die2, &die3) && Eco_DwarfDie_GetFFIType(die3, &type2))
+                        types[element] = type2;
+                    else
+                        return false;
+                    element++;
+                }
             }
+            is_union = Eco_DwarfDie_Is(die, "DW_TAG_union_type");
+            type     = Eco_FFIType_NewStruct(types, names, element, is_union);
         }
-        is_union = Eco_DwarfDie_Is(die, "DW_TAG_union_type");
-        type     = Eco_FFIType_NewStruct(types, names, element, is_union);
     }
 
     die->ffi_type = type;
@@ -412,6 +419,10 @@ static void Eco_Dwarf_LoadDebugInfoLoop(struct Eco_DwarfDie* die, struct Eco_FFI
         has_name = Eco_DwarfDie_AttrName(die, name, sizeof(name));
         if (has_name && Eco_DwarfDie_Is(die, "DW_TAG_structure_type") && Eco_DwarfDie_GetFFIType(die, &type)) {
             Eco_FFILib_PutStruct(lib, name, type);
+        } else if (has_name && Eco_DwarfDie_Is(die, "DW_TAG_union_type") && Eco_DwarfDie_GetFFIType(die, &type)) {
+            Eco_FFILib_PutUnion(lib, name, type);
+        } else if (has_name && Eco_DwarfDie_Is(die, "DW_TAG_typedef") && Eco_DwarfDie_GetFFIType(die, &type)) {
+            Eco_FFILib_PutTypedef(lib, name, type);
         }
     }
 

@@ -2,5 +2,7 @@
 #=std/reflect/proxies/ffi/FFILib: {
     static with inherited parent = #<:std/Clonable>;
 
+    at: key => #'ecosphere.ecore.ffi.lib.at'(self, key);
+
     writeOn: writer => writer << '<ffi_lib>';
 }

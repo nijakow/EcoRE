@@ -32,6 +32,8 @@ void Eco_FFILib_Del(struct Eco_FFILib*);
 bool Eco_FFILib_At(struct Eco_FFILib*, struct Eco_Key*, Eco_Any*);
 
 bool Eco_FFILib_PutStruct(struct Eco_FFILib*, const char*, struct Eco_FFIType*);
+bool Eco_FFILib_PutUnion(struct Eco_FFILib*, const char*, struct Eco_FFIType*);
+bool Eco_FFILib_PutTypedef(struct Eco_FFILib*, const char*, struct Eco_FFIType*);
 
 void Eco_FFILib_Init();
 void Eco_FFILib_Terminate();

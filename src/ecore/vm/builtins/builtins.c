@@ -167,6 +167,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.object.dlsym", Eco_VM_Builtin_FFIObjectDLSym);
   #endif
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.lib.open", Eco_VM_Builtin_FFILib_Open);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.ffi.lib.at", Eco_VM_Builtin_FFILib_At);
 #endif
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.io.fd.open_file", Eco_VM_Builtin_OpenFile);

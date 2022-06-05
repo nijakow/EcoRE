@@ -90,7 +90,17 @@ void Eco_FFILib_Del(struct Eco_FFILib* object)
 
 bool Eco_FFILib_At(struct Eco_FFILib* lib, struct Eco_Key* key, Eco_Any* loc)
 {
-    /* TODO */
+    struct Eco_FFILib_Entry*  entry;
+
+    for (entry = lib->entries;
+         entry != NULL;
+         entry = entry->next)
+    {
+        if (entry->name == key) {
+            *loc = Eco_Any_FromPointer(entry->type);
+            return true;
+        }
+    }
     return false;
 }
 
@@ -116,6 +126,16 @@ static bool Eco_FFILib_PutType(struct Eco_FFILib* lib, const char* name, struct 
 
 
 bool Eco_FFILib_PutStruct(struct Eco_FFILib* lib, const char* name, struct Eco_FFIType* type)
+{
+    return Eco_FFILib_PutType(lib, name, type);
+}
+
+bool Eco_FFILib_PutUnion(struct Eco_FFILib* lib, const char* name, struct Eco_FFIType* type)
+{
+    return Eco_FFILib_PutType(lib, name, type);
+}
+
+bool Eco_FFILib_PutTypedef(struct Eco_FFILib* lib, const char* name, struct Eco_FFIType* type)
 {
     return Eco_FFILib_PutType(lib, name, type);
 }
