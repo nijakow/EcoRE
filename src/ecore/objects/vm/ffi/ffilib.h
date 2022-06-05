@@ -12,6 +12,8 @@ struct Eco_GC_State;
 struct Eco_FFILib
 {
     struct Eco_Object  _;
+    
+    void*              dl_handle;
 };
 
 struct Eco_FFILib* Eco_FFILib_New();

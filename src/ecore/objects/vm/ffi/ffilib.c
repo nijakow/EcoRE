@@ -1,7 +1,12 @@
 #include <ecore/base/config.h>
 
+#ifdef ECO_CONFIG_USE_DLOPEN
+# include <dlfcn.h>
+#endif
+
 #include <ecore/objects/base/type/type.h>
 #include <ecore/vm/memory/gc/gc.h>
+#include <ecore/util/dwarf/dwarf.h>
 #include <ecore/util/memory.h>
 
 #include "ffilib.h"
@@ -26,7 +31,7 @@ void Eco_FFILib_Terminate()
 }
 
 
-struct Eco_FFILib* Eco_FFILib_New()
+struct Eco_FFILib* Eco_FFILib_New(const char* path)
 {
     struct Eco_FFILib*  object;
 
@@ -34,6 +39,12 @@ struct Eco_FFILib* Eco_FFILib_New()
 
     if (object != NULL)
     {
+#ifndef ECO_CONFIG_USE_DLOPEN
+        object->dl_handle = dlopen(path, RTLD_NOW);
+#else
+        object->dl_handle = NULL;
+#endif
+        Eco_Dwarf_LoadDebugInfo(path, object);
     }
 
     return object;
@@ -46,6 +57,13 @@ void Eco_FFILib_Mark(struct Eco_GC_State* state, struct Eco_FFILib* object)
 
 void Eco_FFILib_Del(struct Eco_FFILib* object)
 {
+    if (object->dl_handle != NULL)
+    {
+#ifdef ECO_CONFIG_USE_DLOPEN
+        dlclose(object->dl_handle);
+#endif
+        object->dl_handle = NULL;
+    }
     Eco_Object_Del(&object->_);
 }
 

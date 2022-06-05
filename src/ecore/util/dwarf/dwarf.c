@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <stdio.h>
 
+#include <ecore/objects/vm/ffi/ffitype.h>
+#include <ecore/objects/vm/ffi/ffilib.h>
 #include <ecore/util/libc.h>
 #include <ecore/util/memory.h>
 
@@ -382,6 +384,12 @@ void Eco_Dwarf_Test(const char* path)
     if (session.head != NULL)
         Eco_DwarfDie_Print(session.head);
     Eco_Dwarf_Destroy(&session);
+}
+
+bool Eco_Dwarf_LoadDebugInfo(const char* path, struct Eco_FFILib* lib)
+{
+    /* TODO */
+    return false;
 }
 
 #endif

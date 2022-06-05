@@ -5,8 +5,8 @@
 #include <ecore/base/config.h>
 #include <ecore/base/any.h>
 
-#include <ecore/objects/vm/ffi/ffitype.h>
-#include <ecore/objects/vm/ffi/ffilib.h>
+struct Eco_FFIType;
+struct Eco_FFILib;
 
 #ifdef ECO_CONFIG_USE_LIBDWARF
 
@@ -55,9 +55,8 @@ bool Eco_DwarfDie_AttrType(struct Eco_DwarfDie*, struct Eco_DwarfDie**);
 bool Eco_DwarfDie_AttrLocation(struct Eco_DwarfDie*, void**);
 bool Eco_DwarfDie_AttrByteSize(struct Eco_DwarfDie*, Eco_Size_t*);
 bool Eco_DwarfDie_AttrExternal(struct Eco_DwarfDie*, bool*);
-// TODO: bool Eco_DwarfDie_AttrEncoding(struct Eco_DwarfDie*, enum Eco_DwarfEncoding);
 
-void Eco_Dwarf_Test(const char*);
+bool Eco_Dwarf_LoadDebugInfo(const char*, struct Eco_FFILib*);
 
 #endif
 
