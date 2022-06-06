@@ -1,5 +1,7 @@
 #include <ecore/base/config.h>
 
+#include "dwarf.h"
+
 #ifdef ECO_CONFIG_USE_LIBDWARF
 
 #include <fcntl.h>
@@ -10,8 +12,6 @@
 #include <ecore/objects/vm/ffi/ffilib.h>
 #include <ecore/util/libc.h>
 #include <ecore/util/memory.h>
-
-#include "dwarf.h"
 
 static void Eco_DwarfDie_LoadRecursively(struct Eco_DwarfDie* die)
 {
@@ -444,6 +444,13 @@ bool Eco_Dwarf_LoadDebugInfo(const char* path, struct Eco_FFILib* lib)
         Eco_Dwarf_Destroy(&session);
         return true;
     }
+    return false;
+}
+
+#else
+
+bool Eco_Dwarf_LoadDebugInfo(const char* path, struct Eco_FFILib* lib)
+{
     return false;
 }
 

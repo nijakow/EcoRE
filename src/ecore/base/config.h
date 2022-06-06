@@ -37,7 +37,7 @@
 #define ECO_CONFIG_USE_FFI
 #define ECO_CONFIG_LIBFFI_INCLUDE <ffi.h>
 #define ECO_CONFIG_USE_DLOPEN
-#define ECO_CONFIG_USE_LIBDWARF
+//#define ECO_CONFIG_USE_LIBDWARF
 #define ECO_CONFIG_LIBDWARF_INCLUDE1 <libdwarf/dwarf.h>
 #define ECO_CONFIG_LIBDWARF_INCLUDE2 <libdwarf/libdwarf.h>
 

@@ -4,6 +4,7 @@
 #include <ecore/base/defs.h>
 #include <ecore/base/config.h>
 #include <ecore/base/any.h>
+#include <ecore/objects/vm/ffi/ffilib.h>
 
 struct Eco_FFIType;
 struct Eco_FFILib;
@@ -57,8 +58,10 @@ bool Eco_DwarfDie_AttrUpperBound(struct Eco_DwarfDie*, long*);
 bool Eco_DwarfDie_AttrByteSize(struct Eco_DwarfDie*, Eco_Size_t*);
 bool Eco_DwarfDie_AttrExternal(struct Eco_DwarfDie*, bool*);
 
+
+#endif
+
 bool Eco_Dwarf_LoadDebugInfo(const char*, struct Eco_FFILib*);
 
 #endif
 
-#endif
