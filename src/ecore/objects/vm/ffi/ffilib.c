@@ -13,11 +13,23 @@
 
 #include "ffilib.h"
 
+enum Eco_FFILib_EntryType
+{
+    Eco_FFILib_EntryType_FFITYPE,
+    Eco_FFILib_EntryType_FFIFUNC,
+    Eco_FFILib_EntryType_VALUE
+};
+
 struct Eco_FFILib_Entry
 {
-    struct Eco_FFILib_Entry*  next;
-    struct Eco_Key*           name;
-    struct Eco_FFIType*       type;
+    struct Eco_FFILib_Entry*   next;
+    struct Eco_Key*            name;
+    enum Eco_FFILib_EntryType  body_type;
+    union {
+        struct Eco_FFIType*    ffitype;
+        struct Eco_FFIFunc*    ffifunc;
+        Eco_Any                value;
+    } body;
 };
 
 
@@ -70,7 +82,18 @@ void Eco_FFILib_Mark(struct Eco_GC_State* state, struct Eco_FFILib* object)
          entry = entry->next)
     {
         Eco_GC_State_MarkObject(state, entry->name);
-        Eco_GC_State_MarkObject(state, entry->type);
+        switch (entry->body_type)
+        {
+            case Eco_FFILib_EntryType_FFITYPE:
+                Eco_GC_State_MarkObject(state, entry->body.ffitype);
+                break;
+            case Eco_FFILib_EntryType_FFIFUNC:
+                Eco_GC_State_MarkObject(state, entry->body.ffifunc);
+                break;
+            case Eco_FFILib_EntryType_VALUE:
+                Eco_GC_State_MarkAny(state, &entry->body.value);
+                break;
+        }
     }
     Eco_Object_Mark(state, &object->_);
 }
@@ -105,7 +128,20 @@ bool Eco_FFILib_At(struct Eco_FFILib* lib, struct Eco_Key* key, Eco_Any* loc)
          entry = entry->next)
     {
         if (entry->name == key) {
-            *loc = Eco_Any_FromPointer(entry->type);
+            switch (entry->body_type)
+            {
+                case Eco_FFILib_EntryType_FFITYPE:
+                    *loc = Eco_Any_FromPointer(entry->body.ffitype);
+                    break;
+                case Eco_FFILib_EntryType_FFIFUNC:
+                    *loc = Eco_Any_FromPointer(entry->body.ffifunc);
+                    break;
+                case Eco_FFILib_EntryType_VALUE:
+                    *loc = entry->body.value;
+                    break;
+                default:
+                    *loc = Eco_Any_FromPointer(lib);
+            }
             return true;
         }
     }
@@ -122,10 +158,32 @@ static bool Eco_FFILib_PutType(struct Eco_FFILib* lib, const char* name, struct 
 
     if (key != NULL && entry != NULL)
     {
-        entry->name  = key;
-        entry->type  = type;
-        entry->next  = lib->entries;
-        lib->entries = entry;
+        entry->name         = key;
+        entry->body_type    = Eco_FFILib_EntryType_FFITYPE;
+        entry->body.ffitype = type;
+        entry->next         = lib->entries;
+        lib->entries        = entry;
+        return true;
+    }
+
+    return false;
+}
+
+static bool Eco_FFILib_PutValue(struct Eco_FFILib* lib, const char* name, Eco_Any value)
+{
+    struct Eco_Key*           key;
+    struct Eco_FFILib_Entry*  entry;
+
+    key   = Eco_Key_Find(name);
+    entry = Eco_Memory_Alloc(sizeof(struct Eco_FFILib_Entry));
+
+    if (key != NULL && entry != NULL)
+    {
+        entry->name       = key;
+        entry->body_type  = Eco_FFILib_EntryType_VALUE;
+        entry->body.value = value;
+        entry->next       = lib->entries;
+        lib->entries      = entry;
         return true;
     }
 
@@ -155,6 +213,5 @@ bool Eco_FFILib_PutEnum(struct Eco_FFILib* lib, const char* name, struct Eco_FFI
 
 bool Eco_FFILib_PutEnumValue(struct Eco_FFILib* lib, const char* name, unsigned int value)
 {
-    /* TODO */
-    return false;
+    return Eco_FFILib_PutValue(lib, name, Eco_Any_FromInteger((Eco_Integer) value));
 }
