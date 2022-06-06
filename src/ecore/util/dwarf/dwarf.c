@@ -433,9 +433,11 @@ bool Eco_DwarfDie_GetFFIType(struct Eco_DwarfDie* die, struct Eco_FFIType **loc)
 static void Eco_Dwarf_LoadDebugInfoLoop(struct Eco_DwarfDie* die, struct Eco_FFILib* lib)
 {
     struct Eco_DwarfDie*  die2;
+    struct Eco_DwarfDie*  die3;
     struct Eco_FFIType*   type;
     struct Eco_FFIFunc*   func;
     unsigned int          i;
+    unsigned int          arg_count;
     bool                  has_name;
     char                  name[128];
 
@@ -464,12 +466,32 @@ static void Eco_Dwarf_LoadDebugInfoLoop(struct Eco_DwarfDie* die, struct Eco_FFI
             }
         } else if (has_name && Eco_DwarfDie_Is(die, "DW_TAG_subprogram")) {
             if (Eco_DwarfDie_AttrType(die, &die2) && Eco_DwarfDie_GetFFIType(die2, &type)) {
-                /*
-                 * TODO: Arguments!
-                 */
-                func = Eco_FFIFunc_New(0, type, NULL);
+                arg_count = 0;
+                for (die2 = Eco_DwarfDie_Child(die);
+                     die2 != NULL;
+                     die2 = Eco_DwarfDie_Sibling(die2))
+                {
+                    if (Eco_DwarfDie_Is(die2, "DW_TAG_unspecified_parameters"))
+                        goto end_function;
+                    else if (Eco_DwarfDie_Is(die2, "DW_TAG_formal_parameter"))
+                        arg_count++;
+                }
+                struct Eco_FFIType* args[arg_count];
+                i = 0;
+                for (die2 = Eco_DwarfDie_Child(die);
+                     die2 != NULL;
+                     die2 = Eco_DwarfDie_Sibling(die2))
+                {
+                    if (Eco_DwarfDie_Is(die2, "DW_TAG_formal_parameter"))
+                    {
+                        if (!(Eco_DwarfDie_AttrType(die2, &die3) && Eco_DwarfDie_GetFFIType(die3, &args[i++])))
+                            goto end_function;
+                    }
+                }
+                func = Eco_FFIFunc_New(arg_count, type, args);
                 Eco_FFILib_PutFunction(lib, name, func);
             }
+          end_function:
         }
     }
 
