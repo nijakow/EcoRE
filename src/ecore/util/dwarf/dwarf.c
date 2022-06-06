@@ -309,7 +309,9 @@ bool Eco_DwarfDie_GetFFIType(struct Eco_DwarfDie* die, struct Eco_FFIType **loc)
     
     if (Eco_DwarfDie_Is(die, "DW_TAG_base_type")) {
         Eco_DwarfDie_AttrName(die, name, sizeof(name) - 1);
-        if (Eco_StrEq(name, "unsigned char"))
+        if (Eco_StrEq(name, "void"))
+            type = Eco_FFIType_GetForIndex(0);
+        else if (Eco_StrEq(name, "unsigned char"))
             type = Eco_FFIType_GetForIndex(11);
         else if (Eco_StrEq(name, "char") || Eco_StrEq(name, "signed char"))
             type = Eco_FFIType_GetForIndex(12);
@@ -327,6 +329,8 @@ bool Eco_DwarfDie_GetFFIType(struct Eco_DwarfDie* die, struct Eco_FFIType **loc)
             type = Eco_FFIType_GetForIndex(18);
         else if (Eco_StrEq(name, "long long") || Eco_StrEq(name, "long long int") || Eco_StrEq(name, "signed long long") || Eco_StrEq(name, "long long signed int"))
             type = Eco_FFIType_GetForIndex(18);
+        else if (Eco_StrEq(name, "unsigned long long") || Eco_StrEq(name, "unsigned long long int") || Eco_StrEq(name, "unsigned long long") || Eco_StrEq(name, "long long unsigned int"))
+            type = Eco_FFIType_GetForIndex(19);
         else if (Eco_StrEq(name, "float"))
             type = Eco_FFIType_GetForIndex(9);
         else if (Eco_StrEq(name, "double"))
@@ -336,7 +340,24 @@ bool Eco_DwarfDie_GetFFIType(struct Eco_DwarfDie* die, struct Eco_FFIType **loc)
     } else if (Eco_DwarfDie_Is(die, "DW_TAG_pointer_type")) {
         if (Eco_DwarfDie_AttrType(die, &die2))
             type = Eco_FFIType_PointerTo(Eco_FFIType_GetForIndex(0)); /* TODO: Eco_FFIType_PointerTo(type2); */
+        else {
+            /*
+             * If no type was given, we use a void pointer
+             */
+            type = Eco_FFIType_PointerTo(Eco_FFIType_GetForIndex(0));
+        }
     } else if (Eco_DwarfDie_Is(die, "DW_TAG_typedef")) {
+        if (Eco_DwarfDie_AttrType(die, &die2))
+            if (Eco_DwarfDie_GetFFIType(die2, &type2))
+                type = type2;
+    } else if (Eco_DwarfDie_Is(die, "DW_TAG_const_type")) {
+        /*
+         * This is absolutely not the safest bet, but since constness
+         * is often only a soft wrapper around the actual type, we
+         * should be able to ignore it. This is not recommended,
+         * of course...
+         *                                        - nijakow
+         */
         if (Eco_DwarfDie_AttrType(die, &die2))
             if (Eco_DwarfDie_GetFFIType(die2, &type2))
                 type = type2;
@@ -348,12 +369,12 @@ bool Eco_DwarfDie_GetFFIType(struct Eco_DwarfDie* die, struct Eco_FFIType **loc)
             struct Eco_FFIType* types[elements];
             element = 0;
             for (die2 = Eco_DwarfDie_Child(die);
-                die2 != NULL;
-                die2 = Eco_DwarfDie_Sibling(die2))
+                 die2 != NULL;
+                 die2 = Eco_DwarfDie_Sibling(die2))
             {
                 if (Eco_DwarfDie_Is(die2, "DW_TAG_member"))
                 {
-                    if (Eco_DwarfDie_AttrName(die2, name, sizeof(name) - 1))
+                    if (Eco_DwarfDie_AttrName(die2, name, sizeof(name)))
                         names[element] = Eco_Key_Find(name);
                     else
                         names[element] = NULL;
