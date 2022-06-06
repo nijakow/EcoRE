@@ -376,6 +376,8 @@ bool Eco_DwarfDie_GetFFIType(struct Eco_DwarfDie* die, struct Eco_FFIType **loc)
         if (Eco_DwarfDie_AttrType(die, &die2))
             if (Eco_DwarfDie_GetFFIType(die2, &type2))
                 type = Eco_FFIType_NewArray(type2, array_size);
+    } else if (Eco_DwarfDie_Is(die, "DW_TAG_enumeration_type")) {
+        type = Eco_FFIType_GetForIndex(15);
     }
 
     die->ffi_type = type;
@@ -383,59 +385,6 @@ bool Eco_DwarfDie_GetFFIType(struct Eco_DwarfDie* die, struct Eco_FFIType **loc)
 
     return type != NULL;
 }
-
-static void Eco_DwarfDie_PrintRecursively(struct Eco_DwarfDie* die, int depth)
-{
-    struct Eco_DwarfDie*  other;
-    struct Eco_DwarfDie*  type;
-    struct Eco_FFIType*   ffitype;
-    char                  buffer[1024];
-
-    for (int x = 0; x < depth; x++)
-        printf("  ");
-    if (Eco_DwarfDie_Name(die, buffer, sizeof(buffer)))
-        printf("%s", buffer);
-    else
-        printf("???");
-    if (Eco_DwarfDie_AttrName(die, buffer, sizeof(buffer)))
-        printf(": %s", buffer);
-    if (Eco_DwarfDie_AttrType(die, &type))
-        printf(", type=%p", type);
-    if (Eco_DwarfDie_GetFFIType(die, &ffitype))
-        printf(", ffitype=%p", ffitype);
-    printf("\n");
-    if ((other = Eco_DwarfDie_Child(die)) != NULL)
-        Eco_DwarfDie_PrintRecursively(other, depth + 1);
-    if ((other = Eco_DwarfDie_Sibling(die)) != NULL)
-        Eco_DwarfDie_PrintRecursively(other, depth);
-}
-
-static void Eco_DwarfDie_Print(struct Eco_DwarfDie* die)
-{
-    Eco_DwarfDie_PrintRecursively(die, 0);
-}
-
-void Eco_Dwarf_Test(const char* path)
-{
-    struct Eco_Dwarf      session;
-
-    Eco_Dwarf_Create(&session, path);
-    if (session.head != NULL)
-        Eco_DwarfDie_Print(session.head);
-    Eco_Dwarf_Destroy(&session);
-}
-
-/*
-static bool Eco_DwarfDie_IsCollectable(struct Eco_DwarfDie* die)
-{
-    return Eco_DwarfDie_Is(die, "DW_TAG_typedef")
-        || Eco_DwarfDie_Is(die, "DW_TAG_enumerator")
-        || Eco_DwarfDie_Is(die, "DW_TAG_structure_type")
-        || Eco_DwarfDie_Is(die, "DW_TAG_union_type")
-        || Eco_DwarfDie_Is(die, "DW_TAG_variable")
-        || Eco_DwarfDie_Is(die, "DW_TAG_subprogram");
-}
-*/
 
 static void Eco_Dwarf_LoadDebugInfoLoop(struct Eco_DwarfDie* die, struct Eco_FFILib* lib)
 {
@@ -455,6 +404,9 @@ static void Eco_Dwarf_LoadDebugInfoLoop(struct Eco_DwarfDie* die, struct Eco_FFI
             Eco_FFILib_PutUnion(lib, name, type);
         } else if (has_name && Eco_DwarfDie_Is(die, "DW_TAG_typedef") && Eco_DwarfDie_GetFFIType(die, &type)) {
             Eco_FFILib_PutTypedef(lib, name, type);
+        } else if (has_name && Eco_DwarfDie_Is(die, "DW_TAG_enumeration_type") && Eco_DwarfDie_GetFFIType(die, &type)) {
+            // TODO: Put the values, too
+            Eco_FFILib_PutEnum(lib, name, type);
         }
     }
 

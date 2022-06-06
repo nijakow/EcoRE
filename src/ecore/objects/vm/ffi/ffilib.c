@@ -139,3 +139,8 @@ bool Eco_FFILib_PutTypedef(struct Eco_FFILib* lib, const char* name, struct Eco_
 {
     return Eco_FFILib_PutType(lib, name, type);
 }
+
+bool Eco_FFILib_PutEnum(struct Eco_FFILib* lib, const char* name, struct Eco_FFIType* type)
+{
+    return Eco_FFILib_PutType(lib, name, type);
+}
