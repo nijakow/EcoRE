@@ -6,6 +6,7 @@
 #include <ecore/objects/misc/key/key.h>
 
 #include "ffitype.h"
+#include "ffifunc.h"
 
 struct Eco_GC_State;
 
@@ -31,6 +32,7 @@ bool Eco_FFILib_PutUnion(struct Eco_FFILib*, const char*, struct Eco_FFIType*);
 bool Eco_FFILib_PutTypedef(struct Eco_FFILib*, const char*, struct Eco_FFIType*);
 bool Eco_FFILib_PutEnum(struct Eco_FFILib*, const char*, struct Eco_FFIType*);
 bool Eco_FFILib_PutEnumValue(struct Eco_FFILib*, const char*, unsigned int);
+bool Eco_FFILib_PutFunction(struct Eco_FFILib*, const char*, struct Eco_FFIFunc*);
 
 void Eco_FFILib_Init();
 void Eco_FFILib_Terminate();

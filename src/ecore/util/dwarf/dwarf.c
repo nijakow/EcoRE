@@ -9,6 +9,7 @@
 #include <stdio.h>
 
 #include <ecore/objects/vm/ffi/ffitype.h>
+#include <ecore/objects/vm/ffi/ffifunc.h>
 #include <ecore/objects/vm/ffi/ffilib.h>
 #include <ecore/util/libc.h>
 #include <ecore/util/memory.h>
@@ -433,6 +434,7 @@ static void Eco_Dwarf_LoadDebugInfoLoop(struct Eco_DwarfDie* die, struct Eco_FFI
 {
     struct Eco_DwarfDie*  die2;
     struct Eco_FFIType*   type;
+    struct Eco_FFIFunc*   func;
     unsigned int          i;
     bool                  has_name;
     char                  name[128];
@@ -459,6 +461,14 @@ static void Eco_Dwarf_LoadDebugInfoLoop(struct Eco_DwarfDie* die, struct Eco_FFI
                  && Eco_DwarfDie_AttrConstValue(die2, &i)) {
                     Eco_FFILib_PutEnumValue(lib, name, i);
                 }
+            }
+        } else if (has_name && Eco_DwarfDie_Is(die, "DW_TAG_subprogram")) {
+            if (Eco_DwarfDie_AttrType(die, &die2) && Eco_DwarfDie_GetFFIType(die2, &type)) {
+                /*
+                 * TODO: Arguments!
+                 */
+                func = Eco_FFIFunc_New(0, type, NULL);
+                Eco_FFILib_PutFunction(lib, name, func);
             }
         }
     }

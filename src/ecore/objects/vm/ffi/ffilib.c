@@ -169,6 +169,27 @@ static bool Eco_FFILib_PutType(struct Eco_FFILib* lib, const char* name, struct 
     return false;
 }
 
+bool Eco_FFILib_PutFunction(struct Eco_FFILib* lib, const char* name, struct Eco_FFIFunc* func)
+{
+    struct Eco_Key*           key;
+    struct Eco_FFILib_Entry*  entry;
+
+    key   = Eco_Key_Find(name);
+    entry = Eco_Memory_Alloc(sizeof(struct Eco_FFILib_Entry));
+
+    if (key != NULL && entry != NULL)
+    {
+        entry->name         = key;
+        entry->body_type    = Eco_FFILib_EntryType_FFIFUNC;
+        entry->body.ffifunc = func;
+        entry->next         = lib->entries;
+        lib->entries        = entry;
+        return true;
+    }
+
+    return false;
+}
+
 static bool Eco_FFILib_PutValue(struct Eco_FFILib* lib, const char* name, Eco_Any value)
 {
     struct Eco_Key*           key;
