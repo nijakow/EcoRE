@@ -30,6 +30,7 @@ bool Eco_FFILib_PutStruct(struct Eco_FFILib*, const char*, struct Eco_FFIType*);
 bool Eco_FFILib_PutUnion(struct Eco_FFILib*, const char*, struct Eco_FFIType*);
 bool Eco_FFILib_PutTypedef(struct Eco_FFILib*, const char*, struct Eco_FFIType*);
 bool Eco_FFILib_PutEnum(struct Eco_FFILib*, const char*, struct Eco_FFIType*);
+bool Eco_FFILib_PutEnumValue(struct Eco_FFILib*, const char*, unsigned int);
 
 void Eco_FFILib_Init();
 void Eco_FFILib_Terminate();

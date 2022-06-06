@@ -152,3 +152,9 @@ bool Eco_FFILib_PutEnum(struct Eco_FFILib* lib, const char* name, struct Eco_FFI
 {
     return Eco_FFILib_PutType(lib, name, type);
 }
+
+bool Eco_FFILib_PutEnumValue(struct Eco_FFILib* lib, const char* name, unsigned int value)
+{
+    /* TODO */
+    return false;
+}

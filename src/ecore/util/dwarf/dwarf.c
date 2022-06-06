@@ -268,6 +268,28 @@ bool Eco_DwarfDie_AttrUpperBound(struct Eco_DwarfDie* die, long* loc)
     return true;
 }
 
+bool Eco_DwarfDie_AttrConstValue(struct Eco_DwarfDie* die, unsigned int* loc)
+{
+    Dwarf_Bool       hasattr;
+    Dwarf_Attribute  attr;
+    Dwarf_Error      error;
+    Dwarf_Unsigned   value;
+
+    if (dwarf_hasattr(die->die, DW_AT_const_value, &hasattr, &error) != DW_DLV_OK)
+        return false;
+    if (!hasattr)
+        return false;
+    if (dwarf_attr(die->die, DW_AT_const_value, &attr, &error) != DW_DLV_OK)
+        return false;
+    if (dwarf_formudata(attr, &value, &error) != DW_DLV_OK)
+    {
+        Eco_Log_Debug("Formsdata failed!\n");
+        return false;
+    }
+    *loc = (long) value;
+    return true;
+}
+
 static unsigned int Eco_DwarfDie_SiblingCount(struct Eco_DwarfDie* die)
 {
     unsigned int  count;
@@ -409,9 +431,11 @@ bool Eco_DwarfDie_GetFFIType(struct Eco_DwarfDie* die, struct Eco_FFIType **loc)
 
 static void Eco_Dwarf_LoadDebugInfoLoop(struct Eco_DwarfDie* die, struct Eco_FFILib* lib)
 {
-    struct Eco_FFIType*  type;
-    bool                 has_name;
-    char                 name[128];
+    struct Eco_DwarfDie*  die2;
+    struct Eco_FFIType*   type;
+    unsigned int          i;
+    bool                  has_name;
+    char                  name[128];
 
     if (die == NULL) return;
 
@@ -426,8 +450,16 @@ static void Eco_Dwarf_LoadDebugInfoLoop(struct Eco_DwarfDie* die, struct Eco_FFI
         } else if (has_name && Eco_DwarfDie_Is(die, "DW_TAG_typedef") && Eco_DwarfDie_GetFFIType(die, &type)) {
             Eco_FFILib_PutTypedef(lib, name, type);
         } else if (has_name && Eco_DwarfDie_Is(die, "DW_TAG_enumeration_type") && Eco_DwarfDie_GetFFIType(die, &type)) {
-            // TODO: Put the values, too
             Eco_FFILib_PutEnum(lib, name, type);
+            for (die2 = Eco_DwarfDie_Child(die);
+                 die2 != NULL;
+                 die2 = Eco_DwarfDie_Sibling(die2))
+            {
+                if (Eco_DwarfDie_AttrName(die2, name, sizeof(name))
+                 && Eco_DwarfDie_AttrConstValue(die2, &i)) {
+                    Eco_FFILib_PutEnumValue(lib, name, i);
+                }
+            }
         }
     }
 
