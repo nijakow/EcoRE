@@ -13,6 +13,14 @@
 
 #include "ffilib.h"
 
+struct Eco_FFILib_Entry
+{
+    struct Eco_FFILib_Entry*  next;
+    struct Eco_Key*           name;
+    struct Eco_FFIType*       type;
+};
+
+
 static struct Eco_TypeCore Eco_FFILib_TYPECORE;
        struct Eco_Type*    Eco_FFILib_TYPE;
 

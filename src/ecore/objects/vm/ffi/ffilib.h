@@ -9,12 +9,7 @@
 
 struct Eco_GC_State;
 
-struct Eco_FFILib_Entry
-{
-    struct Eco_FFILib_Entry*  next;
-    struct Eco_Key*           name;
-    struct Eco_FFIType*       type;
-};
+struct Eco_FFILib_Entry;
 
 struct Eco_FFILib
 {
