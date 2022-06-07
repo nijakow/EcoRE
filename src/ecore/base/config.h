@@ -11,6 +11,7 @@
 
 #ifdef __linux__
 #  define ECO_CONFIG_TARGET_OS LINUX
+#  define ECO_CONFIG_TARGET_LINUX
 #  define ECO_CONFIG_UNIXLIKE
 #else
 # ifdef __FreeBSD__
@@ -37,7 +38,7 @@
 #define ECO_CONFIG_USE_FFI
 #define ECO_CONFIG_LIBFFI_INCLUDE <ffi.h>
 #define ECO_CONFIG_USE_DLOPEN
-#ifdef ECO_CONFIG_UNIXLIKE
+#ifdef ECO_CONFIG_TARGET_LINUX
 # define ECO_CONFIG_USE_LIBDWARF
 # define ECO_CONFIG_LIBDWARF_INCLUDE1 <libdwarf/dwarf.h>
 # define ECO_CONFIG_LIBDWARF_INCLUDE2 <libdwarf/libdwarf.h>
