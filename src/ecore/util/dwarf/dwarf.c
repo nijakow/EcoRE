@@ -283,10 +283,7 @@ bool Eco_DwarfDie_AttrConstValue(struct Eco_DwarfDie* die, unsigned int* loc)
     if (dwarf_attr(die->die, DW_AT_const_value, &attr, &error) != DW_DLV_OK)
         return false;
     if (dwarf_formudata(attr, &value, &error) != DW_DLV_OK)
-    {
-        Eco_Log_Debug("Formsdata failed!\n");
         return false;
-    }
     *loc = (long) value;
     return true;
 }
