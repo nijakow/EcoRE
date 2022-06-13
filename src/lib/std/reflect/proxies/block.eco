@@ -44,6 +44,11 @@
     error: nblock => self catch: nblock;
     ok: yblock error: nblock => [ yblock value(self value) ] catch: nblock;
     error: nblock ok: yblock => [ yblock value(self value) ] catch: nblock;
+    protected: block => (
+        | v <- self catch: [ :v | block value. #'ecosphere.ecore.flow.throw'(v) ] |
+        block value.
+      ^ v
+    );
 
     and:   b   => (
         | v <- self value |

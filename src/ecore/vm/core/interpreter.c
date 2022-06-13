@@ -59,14 +59,21 @@ bool Eco_Fiber_EnterClosure(struct Eco_Fiber*   fiber,
 
 static struct Eco_Closure* Eco_Fiber_FindExceptionHandler(struct Eco_Fiber* fiber)
 {
-    struct Eco_Frame*  frame;
+    struct Eco_Frame*    frame;
+    struct Eco_Closure*  handler;
 
     frame = Eco_Fiber_Top(fiber);
 
     while (frame != NULL)
     {
-        if (frame->handler != NULL)
-            return frame->handler;
+        if (frame->handler != NULL) {
+            handler        = frame->handler;
+            /*
+             * A handler can only be triggered once
+             */
+            frame->handler = NULL;
+            return handler;
+        }
         frame = frame->previous;
     }
     return NULL;
