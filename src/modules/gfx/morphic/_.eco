@@ -74,6 +74,34 @@
         };
     };
 
+    own Point2D = {
+        static with inherited _ = std Clonable;
+        private module = $;
+
+        private x;
+        private y;
+
+        with inherited trait = {
+            NewX: _x Y: _y => self clone initWithX: _x Y: _y;
+
+            initWithX: _x Y: _y => (
+                x <- _x.
+                y <- _y.
+              ^ self
+            );
+
+            x: xv => x <- xv;
+            y: yv => y <- yv;
+
+            x: xv y: yv => x: xv ~ y: yv;
+
+            offsetBy: p => module Point2D NewX: (x + p) Y: (y + p);
+            offsetBy: p Do: block => block value(offsetBy: p);
+
+            writeOn: w => w << 'a point(' << x << ', ' << y << ')';
+        };
+    };
+
     own Morph = {
         static with inherited _ = std Clonable;
         private module = $;
@@ -91,7 +119,56 @@
                 renderer fillRectX: bounds x Y: bounds y W: bounds w H: bounds h.
             );
 
-            writeOn: w => w << 'a morph renderer';
+            beforeRendering: renderer => self;
+            afterRendering: renderer => self;
+
+            childrenDo: block => self;
+
+            writeOn: w => w << 'a morph';
         };
+    };
+
+    own Constraints = {
+
+    };
+
+    own NoConstraints = {
+        static with inherited _ = std Singleton;
+    };
+
+    own ConstraintsMorph = {
+        static with inherited _ = std Clonable;
+        with own super = $ Morph;
+        private module = $;
+
+        constraints;
+
+        private child;
+
+        with inherited trait = {
+            init => (
+                super init.
+                "TODO: Come up with constraints"
+                constraints = module NoConstraints;
+                child <- No.
+              ^ self
+            );
+
+            child: v => child <- Yes: v; "TODO: This should be `own`, but `own`ing No clones a singleton!"
+
+            childrenDo: block => (
+                super childrenDo: block.
+                child yes: [ :c | block value(c) ].
+              ^ self
+            );
+
+            renderOn: renderer => self;
+
+            beforeRendering: renderer => renderer pushConstraints: constraints;
+            afterRendering: renderer => renderer popConstraints;
+
+            writeOn: w => w << 'a constraints morph';
+        };
+
     };
 }
