@@ -30,6 +30,13 @@
             fillRectX: x Y: y W: w H: h => sdlRenderer fillRectX: xOff + x Y: yOff + y W: w H: h;
             fillRect: rect => fillRectX: rect x Y: rect y W: rect w H: rect h;
 
+            accept: morph => (
+                "TODO: Maybe wrap this in a 'protected:` block statement?"
+                morph beforeRendering: self.
+                morph renderOn: self.
+                morph afterRendering: self.
+            );
+
             writeOn: w => w << 'a morphic renderer';
         };
     };

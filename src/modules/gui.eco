@@ -30,7 +30,7 @@
             tick => (
                 renderer setR: 0 G: 0 B: 0.
                 renderer clear.
-                morph renderOn: renderer.
+                renderer accept: morph.
                 renderer present.
             );
 
