@@ -5,15 +5,20 @@
         static with inherited _ = std Clonable;
         private module = $;
 
-        bounds,
+        protected boundsstack,
         protected sdlRenderer;
 
         with inherited trait = {
             initWithSDLRenderer: _sdl_renderer X: _x Y: _y W: _w H: _h => (
                 sdlRenderer <- _sdl_renderer.
-                bounds <- (module Rectangle) newX: _x Y: _y W: _w H: _h.
+                boundsstack <- std util newStack.
+                pushBounds: ((module Rectangle) newX: _x Y: _y W: _w H: _h).
               ^ self
             );
+
+            bounds => boundsstack top;
+            pushBounds: b => boundsstack push: b;
+            popBounds => boundsstack pop;
 
             xOff => bounds x;
             yOff => bounds y;
@@ -30,12 +35,7 @@
             fillRectX: x Y: y W: w H: h => sdlRenderer fillRectX: xOff + x Y: yOff + y W: w H: h;
             fillRect: rect => fillRectX: rect x Y: rect y W: rect w H: rect h;
 
-            accept: morph => (
-                "TODO: Maybe wrap this in a 'protected:` block statement?"
-                morph beforeRendering: self.
-                morph renderOn: self.
-                morph afterRendering: self.
-            );
+            accept: morph => morph renderOn: self;
 
             writeOn: w => w << 'a morphic renderer';
         };
@@ -119,9 +119,6 @@
                 renderer fillRect: renderer bounds.
             );
 
-            beforeRendering: renderer => self;
-            afterRendering: renderer => self;
-
             childrenDo: block => self;
 
             writeOn: w => w << 'a morph';
@@ -162,13 +159,50 @@
               ^ self
             );
 
-            renderOn: renderer => self;
-
-            beforeRendering: renderer => renderer pushConstraints: constraints;
-            afterRendering: renderer => renderer popConstraints;
+            renderOn: renderer => (
+                renderer pushConstraints: constraints.
+                childrenDo: [ :c | renderer accept: c ].
+                renderer popConstraints.
+            );
 
             writeOn: w => w << 'a constraints morph';
         };
+    };
 
+    own HBox = {
+        static with inherited _ = std Clonable;
+        with own super = $ Morph;
+        private module = $;
+
+        private children;
+
+        with inherited trait = {
+            init => (
+                super init.
+                children <- std util newVector.
+              ^ self
+            );
+
+            childrenDo: block => (
+                super childrenDo: block.
+                children do: block.
+              ^ self
+            );
+
+            renderOn: renderer => (
+                |
+                    rbounds <- renderer bounds,
+                    step    <- (rbounds w asFloat / children size) asInt
+                |
+                0 to: children size - 1 do: [ :i |
+                  | b <- module Rectangle newX: (rbounds x) + (step * i) Y: rbounds y W: step H: rbounds h |
+                    renderer pushBounds: b.
+                    renderer accept: (children at: i).
+                    renderer popBounds.
+                ]
+            );
+
+            writeOn: w => w << 'an hbox morph';
+        };
     };
 }
