@@ -149,7 +149,7 @@
             init => (
                 super init.
                 "TODO: Come up with constraints"
-                constraints = module NoConstraints;
+                constraints <- module NoConstraints;
                 child <- No.
               ^ self
             );
