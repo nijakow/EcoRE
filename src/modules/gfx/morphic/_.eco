@@ -5,31 +5,18 @@
         static with inherited _ = std Clonable;
         private module = $;
 
-        protected xOff,
-        protected yOff,
+        bounds,
         protected sdlRenderer;
 
         with inherited trait = {
-            initWithSDLRenderer: _sdl_renderer X: _x Y: _y => (
+            initWithSDLRenderer: _sdl_renderer X: _x Y: _y W: _w H: _h => (
                 sdlRenderer <- _sdl_renderer.
-                xOff <- _x.
-                yOff <- _y.
+                bounds <- (module Rectangle) newX: _x Y: _y W: _w H: _h.
               ^ self
             );
 
-            x: xv y: yv => (
-                xOff <- xv.
-                yOff <- yv.
-              ^ self
-            );
-
-            translateX: x Y: y => clone x: xOff + x y: yOff + y;
-            translatedByX: x Y: y Do: block => (
-                | xv <- xOff. yv <- yOff |
-                x: xOff + x y: yOff + y.
-                block value(self).
-                x: xv y: yv.
-            );
+            xOff => bounds x;
+            yOff => bounds y;
 
             clear => sdlRenderer clear;
             present => sdlRenderer present;
@@ -55,6 +42,14 @@
             init => (
                 x: 0 y: 0 w: 1 h: 1.
               ^ self
+            );
+
+            newX: xv Y: yv W: wv H: hv => (
+              ^ (self new)
+                    x: xv
+                    y: yv
+                    w: wv
+                    h: hv
             );
 
             x: xv => x <- xv;

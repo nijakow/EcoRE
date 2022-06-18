@@ -19,7 +19,12 @@
 
             setProgram: p => (
                 program  <- p.
-                renderer <- morphic Renderer clone initWithSDLRenderer: program window renderer X: 0 Y: 0.
+                renderer <- morphic Renderer clone
+                              initWithSDLRenderer: program window renderer
+                                                X: 0
+                                                Y: 0
+                                                W: program window width
+                                                H: program window height.
             );
 
             tick => (
