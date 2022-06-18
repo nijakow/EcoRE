@@ -28,6 +28,7 @@
             drawLineX: x1 Y: y1 X: x2 Y: y2 => sdlRenderer drawLineX: xOff + x1 Y: yOff + y1 X: xOff + x2 Y: yOff + y2;
             drawRectX: x Y: y W: w H: h => sdlRenderer drawRectX: xOff + x Y: yOff + y W: w H: h;
             fillRectX: x Y: y W: w H: h => sdlRenderer fillRectX: xOff + x Y: yOff + y W: w H: h;
+            fillRect: rect => fillRectX: rect x Y: rect y W: rect w H: rect h;
 
             writeOn: w => w << 'a morphic renderer';
         };
@@ -101,17 +102,14 @@
         static with inherited _ = std Clonable;
         private module = $;
 
-        bounds;
-
         with inherited trait = {
             init => (
-                bounds <- (module Rectangle) clone x: 0 y: 0 w: 50 h: 50.
               ^ self
             );
 
             renderOn: renderer => (
                 renderer setR: 0 G: 255 B: 0.
-                renderer fillRectX: bounds x Y: bounds y W: bounds w H: bounds h.
+                renderer fillRect: renderer bounds.
             );
 
             beforeRendering: renderer => self;
