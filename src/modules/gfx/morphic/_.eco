@@ -76,7 +76,7 @@
               ^ self
             );
 
-            writeOn: w => w << 'a rectangle';
+            writeOn: writer => writer << 'a rectangle(' << x << ', ' << y << ', ' << w << ', ' << h << ')';
         };
     };
 
@@ -108,7 +108,7 @@
         };
     };
 
-    own FlexibleBounds = {
+    own FlexibleSize = {
         static with inherited _ = std Singleton;
 
         with inherited trait = {
@@ -127,7 +127,7 @@
 
             renderOn: renderer => (
                 renderer setR: 0 G: 255 B: 0.
-                renderer drawRect: renderer bounds.
+                renderer fillRectX: 0 Y: 0 W: renderer bounds w H: renderer bounds h.
             );
 
             childrenDo: block => self;
@@ -203,6 +203,8 @@
               ^ self
             );
 
+            addChild: child => children add: child;
+
             childrenWithBoundsDo: block ContextBounds: bounds => (
                 | fixed <- 0, flexCount <- 0 |
                 childrenDo: [ :c |
@@ -215,15 +217,17 @@
                     xPos <- 0
                 |
                 childrenDo: [ :c |
-                    block value(c, bounds offsetX: xPos Y: 0).
+                    | xPosOld <- xPos |
                     c xResizeBehavior
                       ~ isFlexible: [      xPos <- xPos + gap ]
-                           isRigid: [ :s | xPos <- xPos + s   ]
+                           isRigid: [ :s | xPos <- xPos + s   ].
+                    block value(c, module Rectangle newX: bounds x + xPosOld Y: bounds y W: xPos - xPosOld H: bounds h).
                 ].
             );
 
             renderOn: renderer => (
                 childrenWithBoundsDo: [ :c, :b |
+                    (std io out << b) newline.
                     renderer pushBounds: b.
                     renderer accept: c.
                     renderer popBounds.

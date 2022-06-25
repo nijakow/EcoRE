@@ -13,7 +13,10 @@
 
         with inherited trait = {
             init => (
-                morph <- morphic Morph new.
+                | hbox <- morphic HBox new |
+                hbox addChild: (morphic Morph new).
+                hbox addChild: (morphic Morph new).
+                morph <- hbox.
               ^ self
             );
 
