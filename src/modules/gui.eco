@@ -13,9 +13,18 @@
 
         with inherited trait = {
             init => (
-                | hbox <- morphic HBox new |
+                | hbox <- morphic HBox new, hbox2 <- morphic HBox new |
+                hbox addChild: (morphic RigidMorph new).
                 hbox addChild: (morphic Morph new).
+                hbox addChild: (morphic RigidMorph new).
                 hbox addChild: (morphic Morph new).
+                hbox addChild: (morphic RigidMorph new).
+                hbox2 addChild: (morphic Morph new).
+                hbox2 addChild: (morphic RigidMorph new).
+                hbox2 addChild: (morphic Morph new).
+                hbox2 addChild: (morphic RigidMorph new).
+                hbox2 addChild: (morphic Morph new).
+                hbox addChild: hbox2.
                 morph <- hbox.
               ^ self
             );

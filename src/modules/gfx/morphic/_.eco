@@ -116,6 +116,14 @@
         };
     };
 
+    own RigidSize50 = {
+        static with inherited _ = std Singleton;
+
+        with inherited trait = {
+            isFlexible: flexible isRigid: rigid => rigid value(50);
+        };
+    };
+
     own Morph = {
         static with inherited _ = std Clonable;
         private module = $;
@@ -133,6 +141,29 @@
             childrenDo: block => self;
 
             xResizeBehavior => module FlexibleSize;
+            yResizeBehavior => module FlexibleSize;
+
+            writeOn: w => w << 'a morph';
+        };
+    };
+
+    own RigidMorph = {
+        static with inherited _ = std Clonable;
+        private module = $;
+
+        with inherited trait = {
+            init => (
+              ^ self
+            );
+
+            renderOn: renderer => (
+                renderer setR: 255 G: 0 B: 0.
+                renderer fillRectX: 0 Y: 0 W: renderer bounds w H: renderer bounds h.
+            );
+
+            childrenDo: block => self;
+
+            xResizeBehavior => module RigidSize50;
             yResizeBehavior => module FlexibleSize;
 
             writeOn: w => w << 'a morph';
@@ -213,7 +244,7 @@
                            isRigid: [ :s | fixed     <- fixed     + s ]
                 ].
                 |
-                    gap  <- (bounds w - fixed) / flexCount,
+                    gap  <- (flexCount isZero) if: [ 1 ] else: [ (bounds w - fixed) / flexCount ],
                     xPos <- 0
                 |
                 childrenDo: [ :c |
@@ -227,7 +258,6 @@
 
             renderOn: renderer => (
                 childrenWithBoundsDo: [ :c, :b |
-                    (std io out << b) newline.
                     renderer pushBounds: b.
                     renderer accept: c.
                     renderer popBounds.
