@@ -143,6 +143,12 @@
             xResizeBehavior => module FlexibleSize;
             yResizeBehavior => module FlexibleSize;
 
+            boundsForOrientation: orientation => (
+                orientation
+                  ~ ifHorizontal: [ xResizeBehavior ]
+                      ifVertical: [ yResizeBehavior ]
+            );
+
             writeOn: w => w << 'a morph';
         };
     };
@@ -166,21 +172,53 @@
             xResizeBehavior => module RigidSize50;
             yResizeBehavior => module FlexibleSize;
 
+            boundsForOrientation: orientation => (
+                orientation
+                  ~ ifHorizontal: [ xResizeBehavior ]
+                      ifVertical: [ yResizeBehavior ]
+            );
+
             writeOn: w => w << 'a morph';
         };
     };
+
+    own Vertical = {
+        static with inherited _ = std Singleton;
+
+        isHorizontal => false;
+        isVertical   => true;
+
+        ifHorizontal: block => self;
+        ifVertical:   block => block value;
+        ifHorizontal: horiz
+          ifVertical: verti => verti value;
+    },
+
+    own Horizontal = {
+        static with inherited _ = std Singleton;
+
+        isHorizontal => true;
+        isVertical   => false;
+
+        ifHorizontal: block => block value;
+        ifVertical:   block => self;
+        ifHorizontal: horiz
+          ifVertical: verti => horiz value;
+    },
 
     own HBox = {
         static with inherited _ = std Clonable;
         with own super = $ Morph;
         private module = $;
 
+        private orientation,
         private children;
 
         with inherited trait = {
             init => (
                 super init.
-                children <- std util newVector.
+                orientation <- module Horizontal.
+                children    <- std util newVector.
               ^ self
             );
 
@@ -195,7 +233,7 @@
             childrenWithBoundsDo: block ContextBounds: bounds => (
                 | fixed <- 0, flexCount <- 0 |
                 childrenDo: [ :c |
-                    c xResizeBehavior
+                    c boundsForOrientation: orientation
                       ~ isFlexible: [      flexCount <- flexCount + 1 ]
                            isRigid: [ :s | fixed     <- fixed     + s ]
                 ].
@@ -205,7 +243,7 @@
                 |
                 childrenDo: [ :c |
                     | xPosOld <- xPos |
-                    c xResizeBehavior
+                    c boundsForOrientation: orientation
                       ~ isFlexible: [      xPos <- xPos + gap ]
                            isRigid: [ :s | xPos <- xPos + s   ].
                     block value(c, module Rectangle newX: bounds x + xPosOld Y: bounds y W: xPos - xPosOld H: bounds h).
