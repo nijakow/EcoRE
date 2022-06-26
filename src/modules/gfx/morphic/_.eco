@@ -170,50 +170,6 @@
         };
     };
 
-    own Constraints = {
-
-    };
-
-    own NoConstraints = {
-        static with inherited _ = std Singleton;
-    };
-
-    own ConstraintsMorph = {
-        static with inherited _ = std Clonable;
-        with own super = $ Morph;
-        private module = $;
-
-        constraints;
-
-        private child;
-
-        with inherited trait = {
-            init => (
-                super init.
-                "TODO: Come up with constraints"
-                constraints <- module NoConstraints;
-                child <- No.
-              ^ self
-            );
-
-            child: v => child <- Yes: v; "TODO: This should be `own`, but `own`ing No clones a singleton!"
-
-            childrenDo: block => (
-                super childrenDo: block.
-                child yes: [ :c | block value(c) ].
-              ^ self
-            );
-
-            renderOn: renderer => (
-                renderer pushConstraints: constraints.
-                childrenDo: [ :c | renderer accept: c ].
-                renderer popConstraints.
-            );
-
-            writeOn: w => w << 'a constraints morph';
-        };
-    };
-
     own HBox = {
         static with inherited _ = std Clonable;
         with own super = $ Morph;
