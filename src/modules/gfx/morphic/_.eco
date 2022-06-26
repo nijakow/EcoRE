@@ -206,7 +206,7 @@
           ifVertical: verti => horiz value;
     },
 
-    own HBox = {
+    own Box = {
         static with inherited _ = std Clonable;
         with own super = $ Morph;
         private module = $;
@@ -215,12 +215,15 @@
         private children;
 
         with inherited trait = {
-            init => (
+            initWithOrientation: _orientation => (
                 super init.
-                orientation <- module Horizontal.
+                orientation <- _orientation.
                 children    <- std util newVector.
               ^ self
             );
+
+            initHorizontal => initWithOrientation: module Horizontal;
+            initVertical   => initWithOrientation: module Vertical;
 
             childrenDo: block => (
                 super childrenDo: block.
@@ -231,6 +234,11 @@
             addChild: child => children add: child;
 
             childrenWithBoundsDo: block ContextBounds: bounds => (
+                | lower, higher, diff |
+                orientation
+                  ~ ifHorizontal: [ lower <- bounds x. diff <- bounds w ]
+                      ifVertical: [ lower <- bounds y. diff <- bounds h ].
+                higher <- lower + diff.
                 | fixed <- 0, flexCount <- 0 |
                 childrenDo: [ :c |
                     c boundsForOrientation: orientation
@@ -238,7 +246,7 @@
                            isRigid: [ :s | fixed     <- fixed     + s ]
                 ].
                 |
-                    gap  <- (flexCount isZero) if: [ 1 ] else: [ (bounds w - fixed) / flexCount ],
+                    gap  <- (flexCount isZero) if: [ 1 ] else: [ (diff - fixed) / flexCount ],
                     xPos <- 0
                 |
                 childrenDo: [ :c |
@@ -246,7 +254,11 @@
                     c boundsForOrientation: orientation
                       ~ isFlexible: [      xPos <- xPos + gap ]
                            isRigid: [ :s | xPos <- xPos + s   ].
-                    block value(c, module Rectangle newX: bounds x + xPosOld Y: bounds y W: xPos - xPosOld H: bounds h).
+                    | r |
+                    orientation
+                      ~ ifHorizontal: [ r <- module Rectangle newX: lower + xPosOld Y: bounds y W: xPos - xPosOld H: bounds h ]
+                          ifVertical: [ r <- module Rectangle newX: bounds x Y: lower + xPosOld W: bounds w H: xPos - xPosOld ].
+                    block value(c, r).
                 ].
             );
 
@@ -258,7 +270,31 @@
                 ] ContextBounds: renderer bounds
             );
 
-            writeOn: w => w << 'an hbox morph';
+            writeOn: w => w << 'a box morph';
+        };
+    };
+
+    own HBox = {
+        static with inherited _ = std Clonable;
+        with own super = $ Box;
+        private module = $;
+
+        with inherited trait = {
+            init => super initHorizontal;
+
+            writeOn: w => 'an hbox morph';
+        };
+    };
+
+    own VBox = {
+        static with inherited _ = std Clonable;
+        with own super = $ Box;
+        private module = $;
+
+        with inherited trait = {
+            init => super initVertical;
+
+            writeOn: w => 'a vbox morph';
         };
     };
 }
