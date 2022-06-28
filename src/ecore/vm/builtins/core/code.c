@@ -51,7 +51,7 @@ bool Eco_VM_Builtin_Code_Value(struct Eco_Fiber* fiber, unsigned int args)
 
     code = Eco_Any_AsPointer(Eco_Fiber_Top(fiber)->registers[0]);  // TODO: Checks
 
-    return Eco_Fiber_Enter(fiber, NULL, code, args);
+    return Eco_Fiber_Enter(fiber, Eco_Fiber_Top(fiber)->myself, NULL, code, args);  // FIXME: Should MYSELF point to the code proxy?
 }
 
 bool Eco_VM_Builtin_Code_Bytecodes(struct Eco_Fiber* fiber, unsigned int args)

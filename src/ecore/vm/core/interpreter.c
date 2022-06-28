@@ -15,7 +15,7 @@ bool Eco_Fiber_EnterThunk(struct Eco_Fiber* fiber, Eco_Any* lobby, struct Eco_Co
 
     Eco_Fiber_Push(fiber, lobby);
 
-    frame              = Eco_Fiber_PushFrame(fiber, 1, code->arg_count, code->register_count);
+    frame              = Eco_Fiber_PushFrame(fiber, *lobby, 1, code->arg_count, code->register_count);
 
     frame->instruction = code->bytecodes;
     frame->code        = code;
@@ -24,6 +24,7 @@ bool Eco_Fiber_EnterThunk(struct Eco_Fiber* fiber, Eco_Any* lobby, struct Eco_Co
 }
 
 bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
+                     Eco_Any            myself,
                      struct Eco_Frame*  lexical,
                      struct Eco_Code*   code,
                      unsigned int       arg_count)
@@ -35,7 +36,7 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
         return false;
     }
 
-    frame = Eco_Fiber_PushFrame(fiber, arg_count, code->arg_count, code->register_count);
+    frame = Eco_Fiber_PushFrame(fiber, myself, arg_count, code->arg_count, code->register_count);
 
     frame->lexical     = lexical;
     frame->code        = code;
@@ -53,7 +54,7 @@ bool Eco_Fiber_EnterClosure(struct Eco_Fiber*   fiber,
      * TODO: Store SELF in the closure!
      */
     Eco_Any_AssignAny(Eco_Fiber_Nth(fiber, args), &closure->lexical->registers[0]);
-    return Eco_Fiber_Enter(fiber, closure->lexical, closure->code, args);
+    return Eco_Fiber_Enter(fiber, closure->lexical->myself, closure->lexical, closure->code, args);
 }
 
 

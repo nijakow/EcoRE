@@ -21,7 +21,7 @@ bool Eco_VM_Builtin_Value(struct Eco_Fiber* fiber, unsigned int args)
 
     Eco_Any_AssignAny(the_any, &the_closure->lexical->registers[0]);    // TODO: Store SELF in the closure!
 
-    return Eco_Fiber_Enter(fiber, the_closure->lexical, the_closure->code, args);
+    return Eco_Fiber_Enter(fiber, the_closure->lexical->myself, the_closure->lexical, the_closure->code, args);
 }
 
 bool Eco_VM_Builtin_Reset(struct Eco_Fiber* fiber, unsigned int args)

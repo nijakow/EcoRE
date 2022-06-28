@@ -7,7 +7,7 @@
 #include "fiber.h"
 
 
-struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber*, unsigned int, unsigned int, unsigned int);
+struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber*, Eco_Any, unsigned int, unsigned int, unsigned int);
 void Eco_Fiber_PopFrame(struct Eco_Fiber*);
 
 void Eco_Fiber_ResetFrame(struct Eco_Fiber*);

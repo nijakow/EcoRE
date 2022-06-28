@@ -5,6 +5,7 @@
 
 
 struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,
+                                      Eco_Any      myself,
                                       unsigned int argument_count,
                                       unsigned int fixed_argument_count,
                                       unsigned int register_count)
@@ -35,7 +36,7 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,
     the_frame->lexical        = NULL;
     the_frame->closures       = NULL;
     the_frame->handler        = NULL;
-    Eco_Any_Initialize(&the_frame->myself);
+    the_frame->myself         = myself;
     the_frame->vararg_count   = vararg_count;
     the_frame->varargs        = varargs;
     the_frame->registers      = arguments;
