@@ -147,7 +147,7 @@
             );
 
             childrenDo: block => self;
-            childrenWithBoundsDo: block => self;
+            childrenWithBoundsDo: block ContextBounds: bounds => self;
 
             xResizeBehavior => module FlexibleSize;
             yResizeBehavior => module FlexibleSize;
@@ -158,14 +158,15 @@
                       ifVertical: [ yResizeBehavior ]
             );
 
-            processEvent: event AtX: evtX Y: evtY => self;
+            processEvent: event AtX: evtX Y: evtY Bounds: bounds => self;
 
-            issueEvent: event AtX: evtX Y: evtY => (
+            issueEvent: event AtX: evtX Y: evtY Bounds: cbounds => (
+                std io out << 'Received ' << evtX << ' ' << evtY << ' in ' << self ~ newline.
                 childrenWithBoundsDo: [ :child, :bounds |
                     bounds containsX: evtX Y: evtY
-                      ~ if: [ child issueEvent: event AtX: (bounds x - evtX) AtY: (bounds y - evtY) ]
-                ].
-                processEvent: event AtX: evtX Y: evtY.
+                      ~ if: [ child issueEvent: event AtX: (evtX - bounds x) Y: (evtY - bounds y) Bounds: bounds ]
+                ] ContextBounds: cbounds.
+                processEvent: event AtX: evtX Y: evtY Bounds: cbounds.
             );
 
             writeOn: w => w << 'a morph';
@@ -187,6 +188,7 @@
             );
 
             childrenDo: block => self;
+            childrenWithBoundsDo: block ContextBounds: bounds => self;
 
             xResizeBehavior => module RigidSize50;
             yResizeBehavior => module FlexibleSize;
@@ -197,17 +199,17 @@
                       ifVertical: [ yResizeBehavior ]
             );
 
-            processEvent: event AtX: evtX Y: evtY => self;
+            processEvent: event AtX: evtX Y: evtY Bounds: bounds => self;
 
-            issueEvent: event AtX: evtX Y: evtY => (
+            issueEvent: event AtX: evtX Y: evtY Bounds: cbounds => (
                 childrenWithBoundsDo: [ :child, :bounds |
                     bounds containsX: evtX Y: evtY
-                      ~   if: [ child issueEvent: event AtX: (bounds x - evtX) AtY: (bounds y - evtY) ]
-                ].
-                processEvent: event AtX: evtX Y: evtY.
+                      ~ if: [ child issueEvent: event AtX: (evtX - bounds x) AtY: (evtY - bounds y) Bounds: bounds ]
+                ] ContextBounds: cbounds.
+                processEvent: event AtX: evtX Y: evtY Bounds: cbounds.
             );
 
-            writeOn: w => w << 'a morph';
+            writeOn: w => w << 'a rigid morph (for testing)';
         };
     };
 
@@ -237,7 +239,7 @@
 
     own Box = {
         static with inherited _ = std Clonable;
-        with own super = $ Morph;
+        with inherited own super = $ Morph;
         private module = $;
 
         private orientation,
@@ -305,7 +307,7 @@
 
     own HBox = {
         static with inherited _ = std Clonable;
-        with own super = $ Box;
+        with inherited own super = $ Box;
         private module = $;
 
         with inherited trait = {
@@ -317,7 +319,7 @@
 
     own VBox = {
         static with inherited _ = std Clonable;
-        with own super = $ Box;
+        with inherited own super = $ Box;
         private module = $;
 
         with inherited trait = {
