@@ -7,6 +7,14 @@
 #include <ecore/vm/fiber/stackops.h>
 
 
+bool Eco_VM_Builtin_Myself(struct Eco_Fiber* fiber, unsigned int args)
+{
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
+        return false;
+    Eco_Fiber_Push(fiber, &Eco_Fiber_Top(fiber)->myself);
+    return true;
+}
+
 bool Eco_VM_Builtin_Value(struct Eco_Fiber* fiber, unsigned int args)
 {
     Eco_Any*             the_any;
