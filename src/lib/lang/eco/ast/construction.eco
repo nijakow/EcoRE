@@ -57,6 +57,8 @@
 
   newASTSelf => (ast ASTSelf new);
 
+  newASTMy => (ast ASTMy new);
+
   newASTHostRef => (ast ASTHostRef new);
 
   newASTConstantWithValue: value => (ast ASTConstant new) initWithValue: value;

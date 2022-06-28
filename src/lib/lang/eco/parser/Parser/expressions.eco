@@ -10,6 +10,7 @@
 
     parseSimpleExpressionWithFollowups: followups => (
         (check: TokenType SELF)       if: [ ^ newASTSelf     ].
+        (check: TokenType MY)         if: [ ^ newASTMy       ].
         (check: TokenType LPAREN)     if: [ ^ parseCompound  ].
         (check: TokenType LBRACK)     if: [ ^ parseBlock     ].
         (check: TokenType LCURLY)     if: [ ^ parseMolecule  ].

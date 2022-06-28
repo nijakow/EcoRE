@@ -25,6 +25,7 @@
         RARROW = #'rarrow',
         ELLIPSIS = #'ellipsis',
         SELF = #'self',
+        MY = #'my',
         IS = #'is',
         AS = #'as',
         WITH = #'with',

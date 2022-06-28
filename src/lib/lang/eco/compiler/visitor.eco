@@ -58,6 +58,8 @@
     
     visitSelf: ast => compiler loadSelf;
 
+    visitMy: ast => compiler loadMy;
+
     visitHostRef: ast => compiler loadConstant: host;
     
     visitConstant: ast => compiler loadConstant: ast constantValue;

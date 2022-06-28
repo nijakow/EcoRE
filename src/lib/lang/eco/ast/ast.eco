@@ -141,20 +141,26 @@
     };
 
     ASTSelf = {
-        static with inherited parent = #<:std/Clonable>;
+        static with inherited parent = #<:std/Singleton>;
         with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
 
-        new => self;
         isSelfAST => true;
         acceptVisitor: visitor => visitor visitSelf: self;
         writeOn: writer => writer << 'self';
     };
 
-    ASTHostRef = {
+    ASTMy = {
         static with inherited parent = #<:std/Clonable>;
         with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
 
-        new => self;
+        acceptVisitor: visitor => visitor visitMy: self;
+        writeOn: writer => writer << 'my';
+    };
+
+    ASTHostRef = {
+        static with inherited parent = #<:std/Singleton>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
         acceptVisitor: visitor => visitor visitHostRef: self;
         writeOn: writer => writer << '$';
     };

@@ -118,6 +118,7 @@
 
             (sb equals: '')            if: [ ^ newTokenWithType: TokenType EOF        ].
             (sb equals: 'self')        if: [ ^ newTokenWithType: TokenType SELF       ].
+            (sb equals: 'my')          if: [ ^ newTokenWithType: TokenType MY         ].
             (sb equals: 'as')          if: [ ^ newTokenWithType: TokenType AS         ].
             (sb equals: 'with')        if: [ ^ newTokenWithType: TokenType WITH       ].
             (sb equals: 'inherited')   if: [ ^ newTokenWithType: TokenType INHERITED  ].

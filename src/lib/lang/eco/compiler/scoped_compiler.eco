@@ -34,6 +34,7 @@
     finish => scopes finish;
 
     loadSelf => localCompiler loadSelf;
+    loadMy => builtinWithMessage: #'ecosphere.ecore.myself' ArgCount: 0 Varargs: false;
     loadConstant: c => localCompiler loadConstant: c;
     loadClosure: c => localCompiler loadClosure: c;
 
