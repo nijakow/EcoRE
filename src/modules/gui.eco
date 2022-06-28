@@ -47,6 +47,10 @@
             );
 
             handleEvent: event => (
+                event isMouseMotionEvent -> [
+                    (std io out << event mouseMotionX << ' ' << event mouseMotionY) newline commit.
+                    morph issueEvent: No AtX: event mouseMotionY Y: event mouseMotionY
+                ].
                 event isKeyDown -> [ ^ program stop ].
             );
         };

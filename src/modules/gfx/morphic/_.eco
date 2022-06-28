@@ -76,6 +76,14 @@
               ^ self
             );
 
+            containsX: px Y: py => (
+                (px < x) -> [ ^ false ].
+                (py < y) -> [ ^ false ].
+                (px >= (x + w)) -> [ ^ false ].
+                (py >= (y + h)) -> [ ^ false ].
+              ^ true
+            );
+
             writeOn: writer => writer << 'a rectangle(' << x << ', ' << y << ', ' << w << ', ' << h << ')';
         };
     };
@@ -139,6 +147,7 @@
             );
 
             childrenDo: block => self;
+            childrenWithBoundsDo: block => self;
 
             xResizeBehavior => module FlexibleSize;
             yResizeBehavior => module FlexibleSize;
@@ -147,6 +156,16 @@
                 orientation
                   ~ ifHorizontal: [ xResizeBehavior ]
                       ifVertical: [ yResizeBehavior ]
+            );
+
+            processEvent: event AtX: evtX Y: evtY => self;
+
+            issueEvent: event AtX: evtX Y: evtY => (
+                childrenWithBoundsDo: [ :child, :bounds |
+                    bounds containsX: evtX Y: evtY
+                      ~ if: [ child issueEvent: event AtX: (bounds x - evtX) AtY: (bounds y - evtY) ]
+                ].
+                processEvent: event AtX: evtX Y: evtY.
             );
 
             writeOn: w => w << 'a morph';
@@ -176,6 +195,16 @@
                 orientation
                   ~ ifHorizontal: [ xResizeBehavior ]
                       ifVertical: [ yResizeBehavior ]
+            );
+
+            processEvent: event AtX: evtX Y: evtY => self;
+
+            issueEvent: event AtX: evtX Y: evtY => (
+                childrenWithBoundsDo: [ :child, :bounds |
+                    bounds containsX: evtX Y: evtY
+                      ~   if: [ child issueEvent: event AtX: (bounds x - evtX) AtY: (bounds y - evtY) ]
+                ].
+                processEvent: event AtX: evtX Y: evtY.
             );
 
             writeOn: w => w << 'a morph';
