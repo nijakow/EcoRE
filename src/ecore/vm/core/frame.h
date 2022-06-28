@@ -19,6 +19,8 @@ struct Eco_Frame
 
     struct Eco_Code*     code;
     u8*                  instruction;
+
+    Eco_Any              myself;
     
     unsigned int         vararg_count;
     Eco_Any*             varargs;
