@@ -192,7 +192,7 @@
             childrenWithBoundsDo: block ContextBounds: bounds => self;
 
             xResizeBehavior => module RigidSize50;
-            yResizeBehavior => module FlexibleSize;
+            yResizeBehavior => module RigidSize50;
 
             boundsForOrientation: orientation => (
                 orientation
@@ -217,6 +217,7 @@
 
     own Vertical = {
         static with inherited _ = std Singleton;
+        private module = $;
 
         isHorizontal => false;
         isVertical   => true;
@@ -225,10 +226,13 @@
         ifVertical:   block => block value;
         ifHorizontal: horiz
           ifVertical: verti => verti value;
+        
+        opposite => module Horizontal;
     },
 
     own Horizontal = {
         static with inherited _ = std Singleton;
+        private module = $;
 
         isHorizontal => true;
         isVertical   => false;
@@ -237,6 +241,8 @@
         ifVertical:   block => self;
         ifHorizontal: horiz
           ifVertical: verti => horiz value;
+        
+        opposite => module Vertical;
     },
 
     own Box = {
@@ -287,10 +293,14 @@
                     c boundsForOrientation: orientation
                       ~ isFlexible: [      xPos <- xPos + gap ]
                            isRigid: [ :s | xPos <- xPos + s   ].
+                    | yMax |
+                    c boundsForOrientation: orientation opposite
+                      ~ isFlexible: [      yMax <- orientation ifHorizontal: [ bounds w ] ifVertical: [ bounds h ] ]
+                           isRigid: [ :s | yMax <- s        ].
                     | r |
                     orientation
-                      ~ ifHorizontal: [ r <- module Rectangle newX: lower + xPosOld Y: bounds y W: xPos - xPosOld H: bounds h ]
-                          ifVertical: [ r <- module Rectangle newX: bounds x Y: lower + xPosOld W: bounds w H: xPos - xPosOld ].
+                      ~ ifHorizontal: [ r <- module Rectangle newX: lower + xPosOld Y: bounds y W: xPos - xPosOld H: yMax ]
+                          ifVertical: [ r <- module Rectangle newX: bounds x Y: lower + xPosOld W: yMax H: xPos - xPosOld ].
                     block value(c, r).
                 ].
             );
