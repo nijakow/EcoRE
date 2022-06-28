@@ -249,7 +249,7 @@
 
         initWithOrientation: _orientation => (
             std io out << 'Hi!' ~ newline.
-            #'ecosphere.ecore.myself'() super init.
+            my super init.
             std io out << 'Ho!' ~ newline.
             orientation <- _orientation.
             children    <- std util newVector.
@@ -257,7 +257,7 @@
         );
 
         childrenDo: block => (
-            #'ecosphere.ecore.myself'() super childrenDo: block.
+            my super childrenDo: block.
             children do: block.
             ^ self
         );
