@@ -248,9 +248,7 @@
         protected children;
 
         initWithOrientation: _orientation => (
-            std io out << 'Hi!' ~ newline.
             my super init.
-            std io out << 'Ho!' ~ newline.
             orientation <- _orientation.
             children    <- std util newVector.
             ^ self
