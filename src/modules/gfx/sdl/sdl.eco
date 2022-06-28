@@ -42,7 +42,8 @@
     };
 
     with inherited trait = {
-        Init => Setup: 'libSDL2.so';
+        "Init => Setup: 'libSDL2.so';"
+        Init => Setup: '/opt/homebrew/Cellar/sdl2/2.0.22/lib/libSDL2-2.0.0.dylib';
         
         Setup: libpath => (
             lib <- (ffi DLOpen: libpath) yes.
