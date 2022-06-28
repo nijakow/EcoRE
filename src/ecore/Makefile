@@ -11,6 +11,11 @@ EXECUTABLE = ./ecore.app
 BOOTSTRAP_ENVIRONMENT = ../lib
 BOOTSTRAP_MASTER      = $(BOOTSTRAP_ENVIRONMENT)/master.ebf
 
+ENABLE_LIBZ = yes
+ENABLE_LIBFFI = yes
+ENABLE_LIBDL = yes
+ENABLE_LIBDWARF = yes
+
 SOURCES = \
 eco.c \
 objects/objects.c \
@@ -104,11 +109,33 @@ main.c
 OBJECTS = $(patsubst %.c,%.o,$(SOURCES))
 DEPENDS = $(patsubst %.c,%.d,$(SOURCES))
 
-LDFLAGS = -lz -lffi -ldl -lm -ldwarf
+LDFLAGS = -lm
+CONSTANTS = 
 CFLAGS = -I.. -I/opt/homebrew/Cellar/libffi/3.4.2/include/ -Wall -Wextra -Werror -Wno-strict-aliasing -Wno-unused-result -Wno-unused-parameter -Wno-unused-label -g -Ofast -DECO_LATEST_GIT_COMMIT="\"$(shell git rev-parse --short=12 HEAD)\""
 
+ifdef ENABLE_LIBZ
+  LDFLAGS += -lz
+  CONSTANTS += -DECO_CONFIG_MAKEFILE_ENABLE_LIBZ
+endif
+
+ifdef ENABLE_LIBFFI
+  LDFLAGS += -lffi
+  CONSTANTS += -DECO_CONFIG_MAKEFILE_ENABLE_LIBFFI
+endif
+
+ifdef ENABLE_LIBDL
+  LDFLAGS += -ldl
+  CONSTANTS += -DECO_CONFIG_MAKEFILE_ENABLE_LIBDL
+endif
+
+ifdef ENABLE_LIBDWARF
+  LDFLAGS += -ldwarf
+  CONSTANTS += -DECO_CONFIG_MAKEFILE_ENABLE_LIBDWARF
+endif
+
+
 %.o: %.c
-	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@
+	$(CC) $(CFLAGS) $(CONSTANTS) -MMD -MP -c $< -o $@
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $(EXECUTABLE)
