@@ -244,25 +244,27 @@
         with inherited own super = $ Morph;
         private module = $;
 
-        private orientation,
-        private children;
+        protected orientation,
+        protected children;
+
+        initWithOrientation: _orientation => (
+            std io out << 'Hi!' ~ newline.
+            #'ecosphere.ecore.myself'() super init.
+            std io out << 'Ho!' ~ newline.
+            orientation <- _orientation.
+            children    <- std util newVector.
+            ^ self
+        );
+
+        childrenDo: block => (
+            #'ecosphere.ecore.myself'() super childrenDo: block.
+            children do: block.
+            ^ self
+        );
 
         with inherited trait = {
-            initWithOrientation: _orientation => (
-                super init.
-                orientation <- _orientation.
-                children    <- std util newVector.
-              ^ self
-            );
-
             initHorizontal => initWithOrientation: module Horizontal;
             initVertical   => initWithOrientation: module Vertical;
-
-            childrenDo: block => (
-                super childrenDo: block.
-                children do: block.
-              ^ self
-            );
 
             addChild: child => children add: child;
 
@@ -313,9 +315,9 @@
         private module = $;
 
         with inherited trait = {
-            init => super initHorizontal;
+            init => initHorizontal;
 
-            writeOn: w => 'an hbox morph';
+            writeOn: w => w << 'an hbox morph';
         };
     };
 
@@ -325,9 +327,9 @@
         private module = $;
 
         with inherited trait = {
-            init => super initVertical;
+            init => initVertical;
 
-            writeOn: w => 'a vbox morph';
+            writeOn: w => w << 'a vbox morph';
         };
     };
 }
