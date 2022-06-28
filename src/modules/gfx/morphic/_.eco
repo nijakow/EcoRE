@@ -163,6 +163,7 @@
             issueEvent: event AtX: evtX Y: evtY Bounds: cbounds => (
                 std io out << 'Received ' << evtX << ' ' << evtY << ' in ' << self ~ newline.
                 childrenWithBoundsDo: [ :child, :bounds |
+                    std io out << bounds << ' bounds of ' << child ~ newline.
                     bounds containsX: evtX Y: evtY
                       ~ if: [ child issueEvent: event AtX: (evtX - bounds x) Y: (evtY - bounds y) Bounds: bounds ]
                 ] ContextBounds: cbounds.
@@ -202,6 +203,7 @@
             processEvent: event AtX: evtX Y: evtY Bounds: bounds => self;
 
             issueEvent: event AtX: evtX Y: evtY Bounds: cbounds => (
+                std io out << 'Received ' << evtX << ' ' << evtY << ' in ' << self ~ newline.
                 childrenWithBoundsDo: [ :child, :bounds |
                     bounds containsX: evtX Y: evtY
                       ~ if: [ child issueEvent: event AtX: (evtX - bounds x) AtY: (evtY - bounds y) Bounds: bounds ]
