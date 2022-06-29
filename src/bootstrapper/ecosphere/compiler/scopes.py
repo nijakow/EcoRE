@@ -48,8 +48,8 @@ class RootEnvironment(Environment):
         return (None, None)
 
     def add_parameter(self, key, the_type):
+        self._parameter_count += 1 # The increment comes first, so that SELF can be maintained
         self._bindings[key] = (the_type, ecosphere.compiler.storage.Arg(self._parameter_count))
-        self._parameter_count += 1
     
     def enable_varargs(self):
         self._has_varargs = True
