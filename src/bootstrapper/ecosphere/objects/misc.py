@@ -159,7 +159,6 @@ class EcoCode(ecosphere.objects.base.EcoObject):
 
     def serialize(self, serializer, id=0):
         if not serializer.try_serialize_known_object(self):
-            print(EcoCode.Disassembler(self).disassemble())
             serializer.write_message('ecosphere.object.code')
             serializer.write_vlq(serializer.add_object(self))
             serializer.write_vlq(self._register_count)
