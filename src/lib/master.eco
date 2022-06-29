@@ -77,6 +77,8 @@
         |
 
         parser exprDo: [ :expr |
+            (std io out << expr) newline commit.
+
             |
                 env  <- {
                     addVar: name => #'ecosphere.ecore.reflect.add_value_slot'(self, -1, 0, any, name, false);

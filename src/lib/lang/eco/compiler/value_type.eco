@@ -15,6 +15,30 @@
 
         initWithNumber: n => initWithNumber: n Depth: 0;
 
+        bcNumber => number + 128;
+
+        isRegister => true;
+        isConstant => false;
+        isStack => false;
+        isClosure => false;
+        ifRegister: r ifConstant: c ifClosure: cl ifStack: s => r value;
+    },
+    Arg = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited module = #<:lang/eco/compiler>;
+
+        number, depth;
+
+        initWithNumber: n Depth: d => (
+            number <- n.
+            depth <- d.
+          ^ self
+        );
+
+        initWithNumber: n => initWithNumber: n Depth: 0;
+
+        bcNumber => number;
+
         isRegister => true;
         isConstant => false;
         isStack => false;
