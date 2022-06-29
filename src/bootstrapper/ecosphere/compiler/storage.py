@@ -24,19 +24,22 @@ class StackLocation(StorageLocation):
     def __init__(self):
         pass
 
-class Register(StorageLocation):
+class RegisterLike(StorageLocation):
 
     def is_register(self):
         return True
     
     def get_register_number(self):
         return self._number
+    
+    def get_bc_register_number(self):
+        if self.is_arg():
+            return self._number
+        else:
+            return self._number + 128
 
     def get_depth(self):
         return self._depth
-
-    def increase_depth(self):
-        return Register(None, self._number, self._depth + 1)
     
     def free(self):
         self._allocator.free(self)
@@ -46,16 +49,24 @@ class Register(StorageLocation):
         self._number = number
         self._depth = depth
 
-class Arg(StorageLocation):
+class Register(RegisterLike):
+
+    def increase_depth(self):
+        return Register(None, self._number, self._depth + 1)
+
+    def __init__(self, allocator, number, depth=0):
+        super().__init__(allocator, number, depth)
+
+class Arg(RegisterLike):
 
     def is_arg(self):
         return True
     
-    def get_arg_number(self):
-        return self._number
-    
-    def __init__(self, number):
-        self._number = number
+    def increase_depth(self):
+        return Arg(self._number, self._depth + 1)
+
+    def __init__(self, number, depth=0):
+        super().__init__(None, number, depth)
 
 class Constant(StorageLocation):
 

@@ -127,14 +127,6 @@ class EcoCode(ecosphere.objects.base.EcoObject):
                     src = self._u8()
                     dep = self._u8()
                     self._op('L2R ', dst, '<-', src, dep)
-                elif op == Bytecodes.A2R:
-                    dst = self._u8()
-                    src = self._u8()
-                    self._op('A2R ', dst, '<-', src)
-                elif op == Bytecodes.R2A:
-                    dst = self._u8()
-                    src = self._u8()
-                    self._op('R2A ', dst, '<-', src)
                 elif op == Bytecodes.BUILTIN:
                     args = self._u8()
                     self._op('BLT ', args, self._const())

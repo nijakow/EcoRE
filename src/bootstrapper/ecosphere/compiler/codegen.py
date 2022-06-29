@@ -11,16 +11,14 @@ class Bytecodes:
     R2R = 0x07
     R2L = 0x08
     L2R = 0x09
-    A2R = 0x0a
-    R2A = 0x0b
-    BUILTIN = 0x0c
-    BUILTINV = 0x0d
-    SEND = 0x0e
-    SENDV = 0x0f
-    ASSIGN = 0x10
-    AS = 0x11
-    RETURN = 0x12
-    CLOSURE = 0x13
+    BUILTIN = 0x0a
+    BUILTINV = 0x0b
+    SEND = 0x0c
+    SENDV = 0x0d
+    ASSIGN = 0x0e
+    AS = 0x0f
+    RETURN = 0x10
+    CLOSURE = 0x11
 
 
 class CodeWriter:
@@ -177,25 +175,12 @@ class CodeGenerator:
                     self._transfer_value(v, dst)
                     v.free()
                 else:
-                    self._writer.write_push(src.get_register_number())
-            elif src.is_arg():
-                v = self._scope.get_storage_manager().allocate()
-                self._transfer_value(src, v)
-                self._transfer_value(v, dst)
-                v.free()
+                    self._writer.write_push(src.get_bc_register_number())
             elif src.is_constant():
                 cb = self._writer.write_pushc_cb()
                 src.with_value(cb)
             else:
                 pass # TODO: Error
-        elif dst.is_arg():
-            if src.is_register() and src.get_depth() == 0:
-                self._writer.write_r2a(dst.get_arg_number(), src.get_register_number())
-            else:
-                v = self._scope.get_storage_manager().allocate()
-                self._transfer_value(src, v)
-                self._transfer_value(v, dst)
-                v.free()
         elif dst.is_register():
             if src.is_stack():
                 if dst.get_depth() > 0:
@@ -204,22 +189,14 @@ class CodeGenerator:
                     self._transfer_value(v, dst)
                     v.free()
                 else:
-                    self._writer.write_pop(dst.get_register_number())
+                    self._writer.write_pop(dst.get_bc_register_number())
             elif src.is_register():
                 if src.get_depth() == 0 and dst.get_depth() == 0:
-                    self._writer.write_r2r(dst.get_register_number(), src.get_register_number())
+                    self._writer.write_r2r(dst.get_bc_register_number(), src.get_bc_register_number())
                 elif src.get_depth() > 0 and dst.get_depth() == 0:
-                    self._writer.write_l2r(dst.get_register_number(), src.get_register_number(), src.get_depth())
+                    self._writer.write_l2r(dst.get_bc_register_number(), src.get_bc_register_number(), src.get_depth())
                 elif src.get_depth() == 0 and dst.get_depth() > 0:
-                    self._writer.write_r2l(dst.get_register_number(), dst.get_depth(), src.get_register_number())
-                else:
-                    v = self._scope.get_storage_manager().allocate()
-                    self._transfer_value(src, v)
-                    self._transfer_value(v, dst)
-                    v.free()
-            elif src.is_arg():
-                if dst.get_depth() == 0:
-                    self._writer.write_a2r(dst.get_register_number(), src.get_arg_number())
+                    self._writer.write_r2l(dst.get_bc_register_number(), dst.get_depth(), src.get_bc_register_number())
                 else:
                     v = self._scope.get_storage_manager().allocate()
                     self._transfer_value(src, v)
@@ -232,7 +209,7 @@ class CodeGenerator:
                     self._transfer_value(v, dst)
                     v.free()
                 else:
-                    cb = self._writer.write_const_cb(dst.get_register_number())
+                    cb = self._writer.write_const_cb(dst.get_bc_register_number())
                     src.with_value(cb)
             elif src.is_closure():
                 if dst.get_depth() > 0:
@@ -241,7 +218,7 @@ class CodeGenerator:
                     self._transfer_value(v, dst)
                     v.free()
                 else:
-                    self._writer.write_closure(dst.get_register_number(), src.get_code())
+                    self._writer.write_closure(dst.get_bc_register_number(), src.get_code())
             else:
                 pass # TODO: Error
         else:
