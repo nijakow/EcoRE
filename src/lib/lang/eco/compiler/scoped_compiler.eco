@@ -59,7 +59,7 @@
     loadVariable: name IfPresent: present IfNotPresent: notpresent => (
         scopes findVariable: name
                     IfFound: [ :info, :depth |
-                                localCompiler loadRegister: (info index) Depth: depth.
+                                localCompiler loadRegister: (info details) Depth: depth.
                                 present value
                              ]
                  IfNotFound: notpresent
@@ -77,7 +77,7 @@
                                 ] else: [
                                     interlude value.
                                 ].
-                                localCompiler moveLastValueToReg: (info index) Depth: depth.
+                                localCompiler moveLastValueToReg: (info details) Depth: depth.
                                 present value
                              ]
                  IfNotFound: notpresent

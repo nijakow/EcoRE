@@ -25,12 +25,11 @@
     static with inherited parent = #<:std/Clonable>;
     with inherited module = #<:lang/eco/compiler>;
 
-    index, type, isArg;
+    details, type;
 
-    initWithIndex: _index Type: _type IsArg: _isArg => (
-        index <- _index.
-        type  <- _type.
-        isArg <- _isArg.
+    initWithDetails: _details Type: _type => (
+        details <- _details.
+        type    <- _type.
       ^ self
     );
 },
@@ -73,7 +72,7 @@
     bindVariable: varname Type: type => (
       |
           r    <- compiler regAlloc allocate,
-          info <- (#<:lang/eco/compiler/VariableInfo> clone) initWithIndex: r Type: type IsArg: false
+          info <- (#<:lang/eco/compiler/VariableInfo> clone) initWithDetails: (ValueType Reg: r) Type: type
       |
       bindings at: varname put: info
     );
@@ -81,7 +80,7 @@
     bindVariable: name => bindVariable: name Type: any;
 
     bindArg: name => (
-      | info <- (#<:lang/eco/compiler/VariableInfo> clone) initWithIndex: shared argCount Type: any IsArg: true |
+      | info <- (#<:lang/eco/compiler/VariableInfo> clone) initWithDetails: (ValueType Arg: shared argCount) Type: any |
       bindings at: name put: info
     );
 
