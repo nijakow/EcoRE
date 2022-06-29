@@ -317,10 +317,10 @@ class CodeGenerator:
         def writer(target):
             if target is not None:
                 if target.is_register() and target.get_depth() == 0:
-                    self._writer.write_closure(target.get_register_number(), code)
+                    self._writer.write_closure(target.get_bc_register_number(), code)
                 else:
                     v = self._scope.get_storage_manager().allocate()
-                    self._writer.write_closure(v.get_register_number(), code)
+                    self._writer.write_closure(v.get_bc_register_number(), code)
                     self._transfer_value(v, target)
                     v.free()
         self._last_value = writer
