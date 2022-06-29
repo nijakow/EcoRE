@@ -49,7 +49,7 @@ bool Eco_VM_Builtin_Code_Value(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, ECO_VM_BUILTIN_INFINITE_ARGS))
         return false;
 
-    code = Eco_Any_AsPointer(Eco_Fiber_Top(fiber)->registers[0]);  // TODO: Checks
+    code = Eco_Any_AsPointer(Eco_Fiber_Top(fiber)->args[0]);  // TODO: Checks
 
     return Eco_Fiber_Enter(fiber, Eco_Fiber_Top(fiber)->myself, NULL, code, args);  // FIXME: Should MYSELF point to the code proxy?
 }

@@ -1,43 +1,41 @@
 
 
 #=lang/eco/compiler/ValueType: {
+    static with inherited _ = #<:std/Module>;
+
+    RegisterDetails = {
+        static with inherited _ = #<:std/Clonable>;
+        with inherited module = #<:lang/eco/compiler>;
+
+        index, isArg;
+
+        with inherited trait = {
+            initWithIndex: _index IsArg: _isArg => (
+                index <- _index.
+                isArg <- _isArg.
+              ^ self
+            );
+
+            bcIndex => isArg if: [ index ] else: [ index + 128 ];
+        };
+    },
+
+    Reg: index => (RegisterDetails clone) initWithIndex: index IsArg: false;
+    Arg: index => (RegisterDetails clone) initWithIndex: index IsArg: true;
+
     Register = {
         static with inherited parent = #<:std/Clonable>;
         with inherited module = #<:lang/eco/compiler>;
 
-        number, depth;
+        details, depth;
 
-        initWithNumber: n Depth: d => (
-            number <- n.
-            depth <- d.
+        initWithDetails: _details Depth: _depth => (
+            details <- _details.
+            depth   <- _depth.
           ^ self
         );
 
-        initWithNumber: n => initWithNumber: n Depth: 0;
-
-        bcNumber => number + 128;
-
-        isRegister => true;
-        isConstant => false;
-        isStack => false;
-        isClosure => false;
-        ifRegister: r ifConstant: c ifClosure: cl ifStack: s => r value;
-    },
-    Arg = {
-        static with inherited parent = #<:std/Clonable>;
-        with inherited module = #<:lang/eco/compiler>;
-
-        number, depth;
-
-        initWithNumber: n Depth: d => (
-            number <- n.
-            depth <- d.
-          ^ self
-        );
-
-        initWithNumber: n => initWithNumber: n Depth: 0;
-
-        bcNumber => number;
+        initWithDetails: details => initWithDetails: details Depth: depth;
 
         isRegister => true;
         isConstant => false;

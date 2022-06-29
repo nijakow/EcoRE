@@ -21,7 +21,7 @@
         "TODO: Unwind-Protect!"
         |
           v <- allocate.
-          r <- v let: block
+          r <- (ValueType Reg: v) let: block
         |
         deallocate: v.
       ^ r

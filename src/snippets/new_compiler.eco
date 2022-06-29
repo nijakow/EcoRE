@@ -1,0 +1,88 @@
+
+#=lang/eco/compiler: {
+    static with inherited _ = #<:std/Module>;
+
+    own storage = #=lang/eco/compiler/storage: {
+        
+        own ValueTypeTrait = #=lang/eco/compiler/storage/ValueTypeTrait: {
+            isRegister => false;
+            isConstant => false;
+            isStack => false;
+            isClosure => false;
+        },
+
+        own Register = {
+            static with inherited _ = #<:std/Clonable>;
+            private module = #=lang/eco/compiler/storage;
+
+            index, isArg;
+
+            with inherited trait = {
+                with inherited value_type_trait = #<:lang/eco/compiler/storage/ValueTypeTrait>;
+
+                initWithIndex: _index IsArg: _isArg => (
+                    index <- _index.
+                    isArg <- _isArg.
+                  ^ self
+                );
+
+                isRegister => true;
+
+                bcIndex => isArg if: [ index ] else: [ index + 128 ];
+            };
+        },
+
+        
+    },
+
+    own scoping = #=lang/eco/compiler/scoping: {
+
+        own SharedScopeInfo = {
+            static with inherited _ = #<:std/Clonable>;
+
+            lexicalParent;
+
+            with inherited trait = {
+                init => (
+                    lexicalParent <- No.
+                  ^ self
+                );
+
+                initWithLexicalParent: _lexicalParent => (
+                    lexicalParent <- Yes: _lexicalParent.
+                  ^ self
+                );
+
+                depth => (
+                    lexicalParent
+                      ~ yes: [ :p | p depth + 1 ]
+                         no: [                0 ]
+                );
+            }
+        },
+
+        own Scope = {
+            static with inherited _ = #<:std/Clonable>;
+            private module = #<:lang/eco/compiler/scoping>;
+
+            parentScope;
+
+            private shared,
+            private bindings;
+
+            with inherited trait = {
+                initWithShared: _shared ParentScope: _parentScope => (
+                    shared      <- _shared.
+                    parentScope <- _parentScope.
+                    bindings    <- std util newMap.
+                  ^ self
+                );
+
+                createSubscope => ((module Scope) clone) initWithShared: shared ParentScope: (Yes: self);
+
+                lexicalParentScope => shared lexicalParent;
+                depth => shared depth;
+            }
+        }
+    }
+}
