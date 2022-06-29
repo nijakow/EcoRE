@@ -11,14 +11,16 @@ class Bytecodes:
     R2R = 0x07
     R2L = 0x08
     L2R = 0x09
-    BUILTIN = 0x0a
-    BUILTINV = 0x0b
-    SEND = 0x0c
-    SENDV = 0x0d
-    ASSIGN = 0x0e
-    AS = 0x0f
-    RETURN = 0x10
-    CLOSURE = 0x11
+    A2R = 0x0a
+    R2A = 0x0b
+    BUILTIN = 0x0c
+    BUILTINV = 0x0d
+    SEND = 0x0e
+    SENDV = 0x0f
+    ASSIGN = 0x10
+    AS = 0x11
+    RETURN = 0x12
+    CLOSURE = 0x13
 
 
 class CodeWriter:
