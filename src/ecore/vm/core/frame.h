@@ -22,13 +22,24 @@ struct Eco_Frame
 
     Eco_Any              myself;
     
-    unsigned int         vararg_count;
-    Eco_Any*             varargs;
+    unsigned int         named_arg_count;
+    Eco_Any*             args;
     Eco_Any*             registers;
 };
 
 
 void Eco_Frame_Mark(struct Eco_GC_State*, struct Eco_Frame*);
+
+
+static inline unsigned int Eco_Frame_ArgCount(struct Eco_Frame* frame)
+{
+    return frame->registers - frame->args;
+}
+
+static inline unsigned int Eco_Frame_VarargCount(struct Eco_Frame* frame)
+{
+    return Eco_Frame_ArgCount(frame) - frame->named_arg_count;
+}
 
 
 static inline u8 Eco_Frame_NextU8(struct Eco_Frame* frame)

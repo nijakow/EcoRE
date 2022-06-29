@@ -60,4 +60,14 @@ static inline Eco_Any* Eco_Fiber_Peek(struct Eco_Fiber* fiber)
     return Eco_Fiber_Nth(fiber, 1);
 }
 
+static inline void* Eco_Fiber_StackAlloc(struct Eco_Fiber* fiber, unsigned int size)
+{
+    void* ptr;
+
+    ptr                  = fiber->stack_pointer;
+    fiber->stack_pointer = fiber->stack_pointer + size;
+
+    return ptr;
+}
+
 #endif

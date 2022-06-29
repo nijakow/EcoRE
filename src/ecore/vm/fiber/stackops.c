@@ -10,37 +10,29 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,
                                       unsigned int fixed_argument_count,
                                       unsigned int register_count)
 {
-    Eco_Any*           arguments;
-    Eco_Any*           varargs;
     struct Eco_Frame*  the_frame;
+    Eco_Any*           the_args;
+    Eco_Any*           the_regs;
     unsigned int       i;
 
-    const unsigned int frame_size   = sizeof(struct Eco_Frame);
-    const unsigned int vararg_count = (argument_count > fixed_argument_count) ? (argument_count - fixed_argument_count) : 0;
+    the_args  = (Eco_Any*) fiber->stack_pointer;
+    the_regs  = Eco_Fiber_StackAlloc(fiber, sizeof(Eco_Any) * register_count);
+    the_frame = Eco_Fiber_StackAlloc(fiber, sizeof(struct Eco_Frame));
 
-    arguments                 = Eco_Fiber_Nth(fiber, argument_count);
-    the_frame                 = (struct Eco_Frame*) (((char*) arguments) + register_count * sizeof(Eco_Any));
-    varargs                   = (Eco_Any*) (((char*) the_frame) + frame_size);
-    fiber->stack_pointer      = (char*) &varargs[vararg_count];
-
-    for (i = 0; i < vararg_count; i++) {
-        Eco_Any_AssignAny(&varargs[i], &arguments[i + fixed_argument_count]);
+    for (i = 0; i < register_count; i++) {
+        Eco_Any_Initialize(&the_regs[i]);
     }
 
-    for (i = argument_count; i < register_count; i++) {
-        Eco_Any_Initialize(&arguments[i]);
-    }
-
-    the_frame->previous       = fiber->top;
-    the_frame->return_to      = fiber->top;
-    the_frame->lexical        = NULL;
-    the_frame->closures       = NULL;
-    the_frame->handler        = NULL;
-    the_frame->myself         = myself;
-    the_frame->vararg_count   = vararg_count;
-    the_frame->varargs        = varargs;
-    the_frame->registers      = arguments;
-    fiber->top                = the_frame;
+    the_frame->previous        = fiber->top;
+    the_frame->return_to       = fiber->top;
+    the_frame->lexical         = NULL;
+    the_frame->closures        = NULL;
+    the_frame->handler         = NULL;
+    the_frame->myself          = myself;
+    the_frame->named_arg_count = fixed_argument_count;
+    the_frame->args            = the_args;
+    the_frame->registers       = the_regs;
+    fiber->top                 = the_frame;
 
     return the_frame;
 }
@@ -76,5 +68,5 @@ void Eco_Fiber_ResetFrame(struct Eco_Fiber* fiber)
     top                  = Eco_Fiber_Top(fiber);
 
     top->instruction     = top->code->bytecodes;
-    fiber->stack_pointer = (char*) &top->varargs[top->vararg_count];
+    fiber->stack_pointer = ((char*) top) + sizeof(struct Eco_Frame);
 }
