@@ -53,7 +53,7 @@ bool Eco_Fiber_EnterClosure(struct Eco_Fiber*   fiber,
      * TODO, FIXME, XXX: What if arg count is zero?
      * TODO: Store SELF in the closure!
      */
-    Eco_Any_AssignAny(Eco_Fiber_Nth(fiber, args), &closure->lexical->registers[0]);
+    Eco_Any_AssignAny(Eco_Fiber_Nth(fiber, args), &closure->lexical->args[0]);
     return Eco_Fiber_Enter(fiber, closure->lexical->myself, closure->lexical, closure->code, args);
 }
 
@@ -104,7 +104,7 @@ bool Eco_Fiber_Unwind(struct Eco_Fiber* fiber)
 
 static inline u16 CONSTRUCT_U16(u8** ptr) { u16 v = *((u16*) *ptr); *ptr += 2; return v; }
 
-static inline Eco_Any* Eco_Frame_RegisterByBytecode(struct Eco_Frame* frame, u8 address) {
+Eco_Any* Eco_Frame_RegisterByBytecode(struct Eco_Frame* frame, u8 address) {
     if ((address & 0x80) != 0)
         return &frame->registers[address & 0x7f];
     else
@@ -205,6 +205,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             struct Eco_Key*  key  = Eco_Any_AsPointer(*NEXT_CONSTANT());   // TODO: Safety check!
             top->instruction      = instruction;
             fiber->stack_pointer  = sp;
+
             if (!Eco_Key_CallBuiltin(key, fiber, args)) {
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_BUILTIN_TRAP);
                 goto error;
@@ -222,6 +223,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             struct Eco_Key*  key  = Eco_Any_AsPointer(*NEXT_CONSTANT());   // TODO: Safety check!
             top->instruction      = instruction;
             fiber->stack_pointer  = sp;
+
             if (!Eco_Key_CallBuiltin(key, fiber, args)) {
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_BUILTIN_TRAP);
                 goto error;
@@ -242,7 +244,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             if (!Eco_Send(&message,
                            *Eco_Fiber_Nth(fiber, message.body.send.arg_count),
                            *Eco_Fiber_Nth(fiber, message.body.send.arg_count),
-                           Eco_Any_Equals(Eco_Fiber_Top(fiber)->registers[0],
+                           Eco_Any_Equals(Eco_Fiber_Top(fiber)->args[0],
                                          *Eco_Fiber_Nth(fiber, message.body.send.arg_count))
                         || Eco_Any_Equals(Eco_Fiber_Top(fiber)->myself,
                                          *Eco_Fiber_Nth(fiber, message.body.send.arg_count)),
@@ -272,7 +274,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             if (!Eco_Send(&message,
                            *Eco_Fiber_Nth(fiber, message.body.send.arg_count),
                            *Eco_Fiber_Nth(fiber, message.body.send.arg_count),
-                           Eco_Any_Equals(Eco_Fiber_Top(fiber)->registers[0],
+                           Eco_Any_Equals(Eco_Fiber_Top(fiber)->args[0],
                                          *Eco_Fiber_Nth(fiber, message.body.send.arg_count))
                         || Eco_Any_Equals(Eco_Fiber_Top(fiber)->myself,
                                          *Eco_Fiber_Nth(fiber, message.body.send.arg_count)),
@@ -298,7 +300,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             if (!Eco_Send(&message,
                            *Eco_Fiber_Nth(fiber, 1),
                            *Eco_Fiber_Nth(fiber, 1),
-                           Eco_Any_Equals(Eco_Fiber_Top(fiber)->registers[0], *Eco_Fiber_Nth(fiber, 1))
+                           Eco_Any_Equals(Eco_Fiber_Top(fiber)->args[0], *Eco_Fiber_Nth(fiber, 1))
                         || Eco_Any_Equals(Eco_Fiber_Top(fiber)->myself, *Eco_Fiber_Nth(fiber, 1)),
                            false)) {
                 Eco_Log_Warning("Assign failed: %s\n", ((struct Eco_Key*) message.key)->name);
@@ -323,8 +325,8 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             if (!Eco_Send(&message,
                            *Eco_Fiber_Nth(fiber, 1),
                            *Eco_Fiber_Nth(fiber, 1),
-                           Eco_Any_Equals(Eco_Fiber_Top(fiber)->registers[0],
-                                          *Eco_Fiber_Nth(fiber, 1)),
+                           Eco_Any_Equals(Eco_Fiber_Top(fiber)->args[0],
+                                         *Eco_Fiber_Nth(fiber, 1)),
                            false)) {
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ASFAILED);
                 goto error;

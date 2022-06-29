@@ -15,7 +15,7 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,
     Eco_Any*           the_regs;
     unsigned int       i;
 
-    the_args  = (Eco_Any*) fiber->stack_pointer;
+    the_args  = Eco_Fiber_Nth(fiber, argument_count);
     the_regs  = Eco_Fiber_StackAlloc(fiber, sizeof(Eco_Any) * register_count);
     the_frame = Eco_Fiber_StackAlloc(fiber, sizeof(struct Eco_Frame));
 
@@ -56,7 +56,7 @@ void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
     }
 
     fiber->top           = frame->previous;
-    fiber->stack_pointer = (char*) frame->registers;
+    fiber->stack_pointer = (char*) frame->args;
 
     Eco_Fiber_Push(fiber, result);  // Re-push the returned value
 }
