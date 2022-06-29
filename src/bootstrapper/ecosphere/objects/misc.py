@@ -127,6 +127,14 @@ class EcoCode(ecosphere.objects.base.EcoObject):
                     src = self._u8()
                     dep = self._u8()
                     self._op('L2R ', dst, '<-', src, dep)
+                elif op == Bytecodes.A2R:
+                    dst = self._u8()
+                    src = self._u8()
+                    self._op('A2R ', dst, '<-', src)
+                elif op == Bytecodes.R2A:
+                    dst = self._u8()
+                    src = self._u8()
+                    self._op('R2A ', dst, '<-', src)
                 elif op == Bytecodes.BUILTIN:
                     args = self._u8()
                     self._op('BLT ', args, self._const())
@@ -159,6 +167,7 @@ class EcoCode(ecosphere.objects.base.EcoObject):
 
     def serialize(self, serializer, id=0):
         if not serializer.try_serialize_known_object(self):
+            print(EcoCode.Disassembler(self).disassemble())
             serializer.write_message('ecosphere.object.code')
             serializer.write_vlq(serializer.add_object(self))
             serializer.write_vlq(self._register_count)

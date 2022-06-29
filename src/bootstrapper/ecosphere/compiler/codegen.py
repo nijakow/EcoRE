@@ -99,6 +99,16 @@ class CodeWriter:
         self._u8(dest)
         self._u8(src)
         self._u8(depth)
+    
+    def write_a2r(self, dest, src):
+        self._u8(Bytecodes.A2R)
+        self._u8(dest)
+        self._u8(src)
+    
+    def write_r2a(self, dest, src):
+        self._u8(Bytecodes.R2A)
+        self._u8(dest)
+        self._u8(src)
 
     def write_builtin(self, args, key):
         self._u8(Bytecodes.BUILTIN)
@@ -168,11 +178,24 @@ class CodeGenerator:
                     v.free()
                 else:
                     self._writer.write_push(src.get_register_number())
+            elif src.is_arg():
+                v = self._scope.get_storage_manager().allocate()
+                self._transfer_value(src, v)
+                self._transfer_value(v, dst)
+                v.free()
             elif src.is_constant():
                 cb = self._writer.write_pushc_cb()
                 src.with_value(cb)
             else:
                 pass # TODO: Error
+        elif dst.is_arg():
+            if src.is_register() and src.get_depth() == 0:
+                self._writer.write_r2a(dst.get_arg_number(), src.get_register_number())
+            else:
+                v = self._scope.get_storage_manager().allocate()
+                self._transfer_value(src, v)
+                self._transfer_value(v, dst)
+                v.free()
         elif dst.is_register():
             if src.is_stack():
                 if dst.get_depth() > 0:
@@ -189,6 +212,14 @@ class CodeGenerator:
                     self._writer.write_l2r(dst.get_register_number(), src.get_register_number(), src.get_depth())
                 elif src.get_depth() == 0 and dst.get_depth() > 0:
                     self._writer.write_r2l(dst.get_register_number(), dst.get_depth(), src.get_register_number())
+                else:
+                    v = self._scope.get_storage_manager().allocate()
+                    self._transfer_value(src, v)
+                    self._transfer_value(v, dst)
+                    v.free()
+            elif src.is_arg():
+                if dst.get_depth() == 0:
+                    self._writer.write_a2r(dst.get_register_number(), src.get_arg_number())
                 else:
                     v = self._scope.get_storage_manager().allocate()
                     self._transfer_value(src, v)

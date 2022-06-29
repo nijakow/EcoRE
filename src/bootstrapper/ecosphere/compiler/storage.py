@@ -3,6 +3,9 @@ class StorageLocation:
 
     def is_register(self):
         return False
+    
+    def is_arg(self):
+        return False
 
     def is_stack(self):
         return False
@@ -43,6 +46,17 @@ class Register(StorageLocation):
         self._number = number
         self._depth = depth
 
+class Arg(StorageLocation):
+
+    def is_arg(self):
+        return True
+    
+    def get_arg_number(self):
+        return self._number
+    
+    def __init__(self, number):
+        self._number = number
+
 class Constant(StorageLocation):
 
     def is_constant(self):
@@ -67,10 +81,11 @@ class Constant(StorageLocation):
 
 
 class StorageManager:
+    _SELF  = Arg(0)
     _STACK = StackLocation()
 
     def get_self(self):
-        return self.get_register(0)
+        return StorageManager._SELF
 
     def get_register(self, i):
         return self._registers[i]  # TODO: Allocate it if it does not exist
@@ -108,6 +123,5 @@ class StorageManager:
 
     def __init__(self):
         self._registers = list()
-        self._registers.append(Register(self, 0)) # This register will be treated as SELF
         self._bindings = dict()
-        self._max_register_count = 1  # The SELF register is already allocated
+        self._max_register_count = 0
