@@ -64,8 +64,8 @@
                               Varargs: (shared hasVarargs);
 
     addParameter: varname => (
+      bindArg: varname.
       shared addParameter.
-      bindArg: varname
     );
     enableVarargs => shared enableVarargs;
 

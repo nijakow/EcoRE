@@ -30,7 +30,7 @@
                                            varargs if: 1 else: 0)
     );
 
-    protected introduceRegister: r => maxRegister <- maxRegister max: r;
+    protected introduceRegister: r => maxRegister <- maxRegister max: (r mod: 128);
 
     writeU8: b => bytes append: b;
     writeU16: s => (

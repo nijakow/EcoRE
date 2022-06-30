@@ -74,7 +74,7 @@ void Eco_VM_Run(struct Eco_VM* vm)
     {
         Eco_Scheduler_Run(&vm->scheduler);
         Eco_VM_HandleEvents(vm);
-        //Eco_GC_Step(&vm->gc_state); // TODO: Only call this if necessary!
+        Eco_GC_Step(&vm->gc_state); // TODO: Only call this if necessary!
     }
 }
 

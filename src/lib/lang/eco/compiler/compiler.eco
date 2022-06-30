@@ -43,7 +43,7 @@
         lastValue ifRegister: [ (lastValue depth isZero)
                                      if: [ writer writeReg: (lastValue details bcIndex) ToReg: (r bcIndex) Depth: d ]
                                    else: [ (d isZero) if: [
-                                              writer writeReg: (lastValue bcNumber) Depth: (lastValue depth) ToReg: (r bcIndex)
+                                              writer writeReg: (lastValue details bcIndex) Depth: (lastValue depth) ToReg: (r bcIndex)
                                            ] else: [
                                               regAlloc withAllocatedRegister: [
                                                 :tmpReg | moveLastValueToReg: tmpReg.
@@ -69,7 +69,7 @@
                                          ]
                               ]
                      ifStack: [ (d isZero)
-                                     if: [ writer writePopReg: r ]
+                                     if: [ writer writePopReg: (r bcIndex) ]
                                    else: [ regAlloc withAllocatedRegister: [
                                              :tmpReg | moveLastValueToReg: tmpReg.
                                                        moveLastValueToReg: r Depth: d
