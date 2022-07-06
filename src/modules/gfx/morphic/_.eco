@@ -160,11 +160,14 @@
 
             xResizeBehavior => module FlexibleSize;
             yResizeBehavior => module FlexibleSize;
-
-            sizePropertiesForOrientation: orientation Bounds: bounds => (
+            sizePropertiesForOrientation: orientation => (
                 orientation
                   ~ ifHorizontal: [ xResizeBehavior ]
                       ifVertical: [ yResizeBehavior ]
+            );
+
+            sizePropertiesForOrientation: orientation Bounds: bounds => (
+              ^ sizePropertiesForOrientation: orientation
             );
 
             processEvent: event AtX: evtX Y: evtY Bounds: bounds => self;
@@ -201,11 +204,14 @@
 
             xResizeBehavior => module RigidSize50;
             yResizeBehavior => module RigidSize50;
-
-            sizePropertiesForOrientation: orientation Bounds: bounds => (
+            sizePropertiesForOrientation: orientation => (
                 orientation
                   ~ ifHorizontal: [ xResizeBehavior ]
                       ifVertical: [ yResizeBehavior ]
+            );
+
+            sizePropertiesForOrientation: orientation Bounds: bounds => (
+              ^ sizePropertiesForOrientation: orientation
             );
 
             processEvent: event AtX: evtX Y: evtY Bounds: bounds => self;
