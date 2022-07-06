@@ -85,6 +85,12 @@
               ^ true
             );
 
+            dimensionForOrientation: orientation => (
+                orientation
+                  ~ isHorizontal: [ ^ w ]
+                      isVertical: [ ^ h ]
+            );
+
             writeOn: writer => writer << 'a rectangle(' << x << ', ' << y << ', ' << w << ', ' << h << ')';
         };
     };
@@ -155,7 +161,7 @@
             xResizeBehavior => module FlexibleSize;
             yResizeBehavior => module FlexibleSize;
 
-            boundsForOrientation: orientation => (
+            sizePropertiesForOrientation: orientation Bounds: bounds => (
                 orientation
                   ~ ifHorizontal: [ xResizeBehavior ]
                       ifVertical: [ yResizeBehavior ]
@@ -196,7 +202,7 @@
             xResizeBehavior => module RigidSize50;
             yResizeBehavior => module RigidSize50;
 
-            boundsForOrientation: orientation => (
+            sizePropertiesForOrientation: orientation Bounds: bounds => (
                 orientation
                   ~ ifHorizontal: [ xResizeBehavior ]
                       ifVertical: [ yResizeBehavior ]
@@ -282,7 +288,7 @@
                 higher <- lower + diff.
                 | fixed <- 0, flexCount <- 0 |
                 childrenDo: [ :c |
-                    c boundsForOrientation: orientation
+                    c sizePropertiesForOrientation: orientation Bounds: bounds
                       ~ isFlexible: [      flexCount <- flexCount + 1 ]
                            isRigid: [ :s | fixed     <- fixed     + s ]
                 ].
@@ -292,11 +298,11 @@
                 |
                 childrenDo: [ :c |
                     | xPosOld <- xPos |
-                    c boundsForOrientation: orientation
+                    c sizePropertiesForOrientation: orientation Bounds: bounds
                       ~ isFlexible: [      xPos <- xPos + gap ]
                            isRigid: [ :s | xPos <- xPos + s   ].
                     | yMax |
-                    c boundsForOrientation: orientation opposite
+                    c sizePropertiesForOrientation: orientation opposite Bounds: bounds
                       ~ isFlexible: [      yMax <- orientation ifHorizontal: [ bounds h ] ifVertical: [ bounds w ] ]
                            isRigid: [ :s | yMax <- s        ].
                     | r |
