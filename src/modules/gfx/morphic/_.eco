@@ -63,6 +63,7 @@
 
             offsetToX: x Y: y => newX: x Y: y W: w H: h;
             offsetByX: xoff Y: yoff => newX: x + xoff Y: y + yoff W: w H: h;
+            resizeToW: w H: h => newX: x Y: y W: w H: h;
 
             x: xv => x <- xv;
             y: yv => y <- yv;
@@ -129,6 +130,8 @@
         with inherited trait = {
             isFlexible: flexible isRigid: rigid isShrinkWrap: sw => flexible value;
             isFlexible: flexible isRigid: rigid => flexible value;
+
+            cut: dimension => dimension;
         };
     };
 
@@ -138,6 +141,8 @@
         with inherited trait = {
             isFlexible: flexible isRigid: rigid isShrinkWrap: sw => rigid value(50);
             isFlexible: flexible isRigid: rigid => rigid value(50);
+
+            cut: dimension => dimension min: 50;
         };
     };
 
@@ -182,50 +187,6 @@
             );
 
             writeOn: w => w << 'a morph';
-        };
-    };
-
-    own RigidMorph = {
-        static with inherited _ = std Clonable;
-        private module = $;
-
-        with inherited trait = {
-            init => (
-              ^ self
-            );
-
-            renderOn: renderer => (
-                renderer setR: 255 G: 0 B: 0.
-                renderer fillRectX: 0 Y: 0 W: renderer bounds w H: renderer bounds h.
-            );
-
-            childrenDo: block => self;
-            childrenWithBoundsDo: block ContextBounds: bounds => self;
-
-            xResizeBehavior => module RigidSize50;
-            yResizeBehavior => module RigidSize50;
-            sizePropertiesForOrientation: orientation => (
-                orientation
-                  ~ ifHorizontal: [ xResizeBehavior ]
-                      ifVertical: [ yResizeBehavior ]
-            );
-
-            sizePropertiesForOrientation: orientation Bounds: bounds => (
-              ^ sizePropertiesForOrientation: orientation
-            );
-
-            processEvent: event AtX: evtX Y: evtY Bounds: bounds => self;
-
-            issueEvent: event AtX: evtX Y: evtY Bounds: cbounds => (
-                std io out << 'Received ' << evtX << ' ' << evtY << ' in ' << self ~ newline.
-                childrenWithBoundsDo: [ :child, :bounds |
-                    bounds containsX: evtX Y: evtY
-                      ~ if: [ child issueEvent: event AtX: (evtX - bounds x) AtY: (evtY - bounds y) Bounds: (bounds offsetToX: 0 Y: 0) ]
-                ] ContextBounds: cbounds.
-                processEvent: event AtX: evtX Y: evtY Bounds: cbounds.
-            );
-
-            writeOn: w => w << 'a rigid morph (for testing)';
         };
     };
 
@@ -352,6 +313,53 @@
             init => initVertical;
 
             writeOn: w => w << 'a vbox morph';
+        };
+    };
+
+    own Frame = {
+        static with inherited _ = std Clonable;
+        with inherited own super = $ Morph;
+        private module = $;
+
+        xResizeBehavior, yResizeBehavior, child;
+
+        with inherited trait = {
+            init => (
+                super init.
+                xResizeBehavior: module RigidSize50.
+                yResizeBehavior: module RigidSize50.
+                child <- No.
+              ^ self
+            );
+
+            xResizeBehavior: rb => xResizeBehavior <- rb;
+            yResizeBehavior: rb => yResizeBehavior <- rb;
+
+            child: cv => child <- Yes: cv;
+
+            childrenDo: block => (
+                super childrenDo: block.
+                child yes: [ :c | block value(c) ].
+            );
+
+            childrenWithBoundsDo: block ContextBounds: bounds => (
+                |
+                    newBounds <- bounds resizeToW: (sizePropertiesForOrientation: module Horizontal Bounds: bounds ~ cut: bounds w)
+                                                H: (sizePropertiesForOrientation: module Vertical   Bounds: bounds ~ cut: bounds h)
+                |
+                super childrenWithBoundsDo: block ContextBounds: newBounds.
+                child yes: [ :c | block value(c, newBounds) ].
+            );
+
+            renderOn: renderer => (
+                childrenWithBoundsDo: [ :c, :b |
+                    renderer pushBounds: b.
+                    renderer accept: c.
+                    renderer popBounds.
+                ] ContextBounds: renderer bounds
+            );
+
+            writeOn: w => w << 'a frame morph';
         };
     };
 }
