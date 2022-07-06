@@ -121,6 +121,7 @@
         static with inherited _ = std Singleton;
 
         with inherited trait = {
+            isFlexible: flexible isRigid: rigid isShrinkWrap: sw => flexible value;
             isFlexible: flexible isRigid: rigid => flexible value;
         };
     };
@@ -129,6 +130,7 @@
         static with inherited _ = std Singleton;
 
         with inherited trait = {
+            isFlexible: flexible isRigid: rigid isShrinkWrap: sw => rigid value(50);
             isFlexible: flexible isRigid: rigid => rigid value(50);
         };
     };
@@ -295,7 +297,7 @@
                            isRigid: [ :s | xPos <- xPos + s   ].
                     | yMax |
                     c boundsForOrientation: orientation opposite
-                      ~ isFlexible: [      yMax <- orientation ifHorizontal: [ bounds w ] ifVertical: [ bounds h ] ]
+                      ~ isFlexible: [      yMax <- orientation ifHorizontal: [ bounds h ] ifVertical: [ bounds w ] ]
                            isRigid: [ :s | yMax <- s        ].
                     | r |
                     orientation
