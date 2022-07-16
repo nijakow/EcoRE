@@ -155,10 +155,7 @@
               ^ self
             );
 
-            renderOn: renderer => (
-                renderer setR: 0 G: 255 B: 0.
-                renderer fillRectX: 0 Y: 0 W: renderer bounds w H: renderer bounds h.
-            );
+            renderOn: renderer => self;
 
             childrenDo: block => self;
             childrenWithBoundsDo: block ContextBounds: bounds => self;
@@ -245,7 +242,8 @@
             initHorizontal => initWithOrientation: module Horizontal;
             initVertical   => initWithOrientation: module Vertical;
 
-            addChild: child => children add: child;
+            addChild: child => ( children add: child. ^ self );
+            add:      child => addChild: child;
 
             childrenWithBoundsDo: block ContextBounds: bounds => (
                 | lower, higher, diff |
@@ -360,6 +358,36 @@
             );
 
             writeOn: w => w << 'a frame morph';
+        };
+    };
+
+    own ColorMorph = {
+        static with inherited _ = std Clonable;
+        with inherited own super = $ Morph;
+        private module = $;
+
+        r, g, b;
+
+        with inherited trait = {
+            init => (
+                super init.
+                r <- 255.
+                g <- 255.
+                b <- 0.
+              ^ self
+            );
+
+            r: _r g: _g b: _b => (
+                r <- _r.
+                g <- _g.
+                b <- _b.
+              ^ self
+            );
+
+            renderOn: renderer => (
+                renderer setR: r G: g B: b.
+                renderer fillRectX: 0 Y: 0 W: renderer bounds w H: renderer bounds h.
+            );
         };
     };
 }
