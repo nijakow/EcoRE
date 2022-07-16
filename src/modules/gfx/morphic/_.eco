@@ -131,20 +131,31 @@
             isFlexible: flexible isRigid: rigid isShrinkWrap: sw => flexible value;
             isFlexible: flexible isRigid: rigid => flexible value;
 
-            cut: dimension => dimension;
+            cutUpper: dimension => dimension;
         };
     };
 
-    own RigidSize50 = {
-        static with inherited _ = std Singleton;
+    own RigidSize = {
+        static with inherited _ = std Clonable;
+
+        upper;
 
         with inherited trait = {
-            isFlexible: flexible isRigid: rigid isShrinkWrap: sw => rigid value(50);
-            isFlexible: flexible isRigid: rigid => rigid value(50);
+            initWithUpper: _upper => (
+                upper <- _upper.
+              ^ self
+            );
 
-            cut: dimension => dimension min: 50;
+            lower => 0;
+
+            isFlexible: flexible isRigid: rigid isShrinkWrap: sw => rigid value(upper);
+            isFlexible: flexible isRigid: rigid => rigid value(upper);
+
+            cutUpper: dimension => dimension min: upper;
         };
     };
+
+    RigidSize: size => RigidSize clone initWithUpper: size;
 
     own Morph = {
         static with inherited _ = std Clonable;
@@ -324,8 +335,8 @@
         with inherited trait = {
             init => (
                 super init.
-                xResizeBehavior: module RigidSize50.
-                yResizeBehavior: module RigidSize50.
+                xResizeBehavior: module FlexibleSize.
+                yResizeBehavior: module FlexibleSize.
                 child <- No.
               ^ self
             );
@@ -342,8 +353,8 @@
 
             childrenWithBoundsDo: block ContextBounds: bounds => (
                 |
-                    newBounds <- bounds resizeToW: (sizePropertiesForOrientation: module Horizontal Bounds: bounds ~ cut: bounds w)
-                                                H: (sizePropertiesForOrientation: module Vertical   Bounds: bounds ~ cut: bounds h)
+                    newBounds <- bounds resizeToW: (sizePropertiesForOrientation: module Horizontal Bounds: bounds ~ cutUpper: bounds w)
+                                                H: (sizePropertiesForOrientation: module Vertical   Bounds: bounds ~ cutUpper: bounds h)
                 |
                 super childrenWithBoundsDo: block ContextBounds: newBounds.
                 child yes: [ :c | block value(c, newBounds) ].
@@ -388,6 +399,8 @@
                 renderer setR: r G: g B: b.
                 renderer fillRectX: 0 Y: 0 W: renderer bounds w H: renderer bounds h.
             );
+
+            writeOn: w => w << 'a color morph(' << r << ', ' << g << ', ' << b << ')';
         };
     };
 }
