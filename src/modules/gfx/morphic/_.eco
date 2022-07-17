@@ -354,8 +354,8 @@
 
             childrenWithBoundsDo: block ContextBounds: bounds => (
                 |
-                    newBounds <- module Rectangle newX: (sizePropertiesForOrientation: module Horizontal Bounds: bounds ~ cutLower: bounds x)
-                                                     Y: (sizePropertiesForOrientation: module Vertical   Bounds: bounds ~ cutLower: bounds y)
+                    newBounds <- module Rectangle newX: (sizePropertiesForOrientation: module Horizontal Bounds: bounds ~ lower + bounds x)
+                                                     Y: (sizePropertiesForOrientation: module Vertical   Bounds: bounds ~ lower + bounds y)
                                                      W: (sizePropertiesForOrientation: module Horizontal Bounds: bounds ~ cutUpper: bounds w)
                                                      H: (sizePropertiesForOrientation: module Vertical   Bounds: bounds ~ cutUpper: bounds h)
                 |
