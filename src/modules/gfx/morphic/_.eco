@@ -145,7 +145,8 @@
     own RigidSize = {
         static with inherited _ = std Clonable;
 
-        lower, upper;
+        private lower,
+        private upper;
 
         with inherited trait = {
             initWithLower: _lower Upper: _upper => (
@@ -154,16 +155,40 @@
               ^ self
             );
 
+            isFlexible: flexible isRigid: rigid isShrinkWrap: sw => rigid value(self);
+            isFlexible: flexible isRigid: rigid => rigid value(self);
+
             lowerForLower: context_low Upper: context_up => context_low + lower;
             upperForLower: context_low Upper: context_up => context_low + upper;
+        };
+    };
+
+    own RelativeSize = {
+        static with inherited _ = std Clonable;
+
+        private lower,
+        private upper;
+
+        with inherited trait = {
+            initWithLower: _lower Upper: _upper => (
+                lower <- _lower.
+                upper <- _upper.
+              ^ self
+            );
 
             isFlexible: flexible isRigid: rigid isShrinkWrap: sw => rigid value(self);
             isFlexible: flexible isRigid: rigid => rigid value(self);
+
+            lowerForLower: context_low Upper: context_up => context_low + (context_up - context_low) * lower;
+            upperForLower: context_low Upper: context_up => context_up  - (context_up - context_low) * upper;
         };
     };
 
     RigidSize: size => RigidSize clone initWithLower: 0 Upper: size;
     RigidSizeWithLower: lower Upper: upper => RigidSize clone initWithLower: lower Upper: upper;
+
+    MarginLeft: lower Right: upper => RelativeSize clone initWithLower: (lower asFloat / 100.0) Upper: (upper asFloat / 100.0);
+    Margin: both => MarginLeft: both Right: both;
 
     own Morph = {
         static with inherited _ = std Clonable;

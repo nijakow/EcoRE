@@ -32,7 +32,11 @@
                                 morphic HBox new
                                   ~ add: f
                                   ~ add: f
-                            ).
+                            )
+                          ~ add: (
+                              morphic Frame new
+                                ~ child: (morphic ColorMorph new ~ r: 0 g: 0 b: 100)
+                          )
                     ).
                 morph <- frame.
               ^ self
