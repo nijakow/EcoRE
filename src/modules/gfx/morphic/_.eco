@@ -130,8 +130,6 @@
         with inherited trait = {
             isFlexible: flexible isRigid: rigid isShrinkWrap: sw => flexible value;
             isFlexible: flexible isRigid: rigid => flexible value;
-
-            cutUpper: dimension => dimension;
         };
     };
 
@@ -147,11 +145,11 @@
               ^ self
             );
 
+            lowerForLower: context_low Upper: context_up => lower;
+            upperForLower: context_low Upper: context_up => upper;
+
             isFlexible: flexible isRigid: rigid isShrinkWrap: sw => rigid value(self);
             isFlexible: flexible isRigid: rigid => rigid value(self);
-
-            cutLower: dimension => dimension max: lower;
-            cutUpper: dimension => dimension min: upper;
         };
     };
 
@@ -267,7 +265,7 @@
                 childrenDo: [ :c |
                     c sizePropertiesForOrientation: orientation Bounds: bounds
                       ~ isFlexible: [      flexCount <- flexCount + 1       ]
-                           isRigid: [ :s | fixed     <- fixed     + s upper ]
+                           isRigid: [ :s | fixed     <- fixed + (s upperForLower: bounds x Upper: bounds x + bounds w) ]
                 ].
                 |
                     gap  <- (flexCount isZero) if: [ 1 ] else: [ (diff - fixed) / flexCount ],
@@ -277,11 +275,11 @@
                     | xPosOld <- xPos |
                     c sizePropertiesForOrientation: orientation Bounds: bounds
                       ~ isFlexible: [      xPos <- xPos + gap     ]
-                           isRigid: [ :s | xPos <- xPos + s upper ].
+                           isRigid: [ :s | xPos <- xPos + (s upperForLower: bounds x Upper: bounds x + bounds w) ].
                     | yMax |
                     c sizePropertiesForOrientation: orientation opposite Bounds: bounds
                       ~ isFlexible: [      yMax <- orientation ifHorizontal: [ bounds h ] ifVertical: [ bounds w ] ]
-                           isRigid: [ :s | yMax <- s upper ].
+                           isRigid: [ :s | yMax <- s upperForLower: bounds x Upper: bounds x + bounds w ].
                     | r |
                     orientation
                       ~ ifHorizontal: [ r <- module Rectangle newX: lower + xPosOld Y: bounds y W: xPos - xPosOld H: yMax ]
@@ -354,10 +352,10 @@
 
             childrenWithBoundsDo: block ContextBounds: bounds => (
                 |
-                    newBounds <- module Rectangle newX: (sizePropertiesForOrientation: module Horizontal Bounds: bounds ~ lower + bounds x)
-                                                     Y: (sizePropertiesForOrientation: module Vertical   Bounds: bounds ~ lower + bounds y)
-                                                     W: (sizePropertiesForOrientation: module Horizontal Bounds: bounds ~ cutUpper: bounds w)
-                                                     H: (sizePropertiesForOrientation: module Vertical   Bounds: bounds ~ cutUpper: bounds h)
+                    newBounds <- module Rectangle newX: bounds x + (sizePropertiesForOrientation: module Horizontal Bounds: bounds ~ lowerForLower: bounds x Upper: bounds x + bounds w)
+                                                     Y: bounds y + (sizePropertiesForOrientation: module Vertical   Bounds: bounds ~ lowerForLower: bounds y Upper: bounds y + bounds h)
+                                                     W: (sizePropertiesForOrientation: module Horizontal Bounds: bounds ~ upperForLower: bounds x Upper: bounds x + bounds w)
+                                                     H: (sizePropertiesForOrientation: module Vertical   Bounds: bounds ~ upperForLower: bounds y Upper: bounds y + bounds h)
                 |
                 super childrenWithBoundsDo: block ContextBounds: newBounds.
                 child yes: [ :c | block value(c, newBounds) ].
