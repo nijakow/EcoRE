@@ -262,12 +262,14 @@
             add:      child => addChild: child;
 
             childrenWithBoundsDo: block ContextBounds: bounds => (
-                | lower, higher, diff |
-                orientation
-                  ~ ifHorizontal: [ lower <- bounds x. diff <- bounds w ]
-                      ifVertical: [ lower <- bounds y. diff <- bounds h ].
-                higher <- lower + diff.
-                | fixed <- 0, flexCount <- 0 |
+                |
+                    lower  <- bounds originForOrientation: orientation,
+                    diff   <- bounds dimensionForOrientation: orientation,
+                    higher <- lower + diff,
+                    
+                    fixed     <- 0,
+                    flexCount <- 0
+                |
                 childrenDo: [ :c |
                     c sizePropertiesForOrientation: orientation Bounds: bounds
                       ~ isFlexible: [      flexCount <- flexCount + 1       ]
