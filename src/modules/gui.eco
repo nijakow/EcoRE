@@ -15,7 +15,7 @@
             init => (
                 | frame <- morphic Frame new |
                 frame
-                  ~ xResizeBehavior: (morphic RigidSizeWithLower: 50 Upper: 200)
+                  ~ xResizeBehavior: (morphic RigidSizeWithLower: 50 Upper: 400)
                   ~ yResizeBehavior: (morphic RigidSizeWithLower: 50 Upper: 250)
                   ~ child: (
                         morphic VBox new
@@ -30,8 +30,7 @@
                                                 ~ child: (morphic ColorMorph new ~ r: 100 g: 0 b: 0)
                                           ).
                                 morphic HBox new
-                                  ~ add: f
-                                  ~ add: f
+                                  run: [ :me | 1 to: 3 do: [ :i | me add: f ] ].
                             )
                           ~ add: (
                               morphic Frame new

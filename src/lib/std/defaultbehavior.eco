@@ -12,6 +12,7 @@
     != other      => (== other) not;
 
     let: block    => block value(self);
+    run: block   => ( block value(self). self );
 
     if: t else: f => t value;
     if: block     => if: block else: [];
