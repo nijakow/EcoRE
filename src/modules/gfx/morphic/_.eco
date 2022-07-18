@@ -179,8 +179,8 @@
             isFlexible: flexible isRigid: rigid isShrinkWrap: sw => rigid value(self);
             isFlexible: flexible isRigid: rigid => rigid value(self);
 
-            lowerForLower: context_low Upper: context_up => context_low + (context_up - context_low) * lower;
-            upperForLower: context_low Upper: context_up => context_up  - (context_up - context_low) * upper;
+            lowerForLower: context_low Upper: context_up => (context_low + ((context_up - context_low) * lower)) asInt;
+            upperForLower: context_low Upper: context_up => (context_up  - ((context_up - context_low) * upper)) asInt;
         };
     };
 

@@ -35,6 +35,7 @@
                             )
                           ~ add: (
                               morphic Frame new
+                                ~ xResizeBehavior: (morphic Margin: 25)
                                 ~ child: (morphic ColorMorph new ~ r: 0 g: 0 b: 100)
                           )
                     ).
