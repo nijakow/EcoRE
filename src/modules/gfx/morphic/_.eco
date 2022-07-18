@@ -440,4 +440,43 @@
             writeOn: w => w << 'a color morph(' << r << ', ' << g << ', ' << b << ')';
         };
     };
+
+    own DemoMorph = {
+        static with inherited _ = std Clonable;
+        with inherited own super = $ Morph;
+        private module = $;
+
+        r, g, b, c;
+
+        with inherited trait = {
+            init => (
+                super init.
+                r <- 255.
+                g <- 255.
+                b <- 0.
+                c <- 0.
+              ^ self
+            );
+
+            r: _r g: _g b: _b => (
+                r <- _r.
+                g <- _g.
+                b <- _b.
+              ^ self
+            );
+
+            renderOn: renderer => (
+                renderer setR: r G: g B: b.
+                renderer fillRectX: 0 Y: 0 W: renderer bounds w H: renderer bounds h.
+                renderer setR: 200 G: 0 B: 0.
+                renderer drawLineX: renderer bounds w / 2
+                                 Y: renderer bounds h / 2
+                                 X: (renderer bounds w / 2) + (((renderer bounds w) * ((c / 360.0) cos) * -0.5) asInt)
+                                 Y: (renderer bounds h / 2) + (((renderer bounds h) * ((c / 360.0) sin) *  0.5) asInt).
+                c <- c + 1.
+            );
+
+            writeOn: w => w << 'a demo morph(' << r << ', ' << g << ', ' << b << ')';
+        };
+    };
 }

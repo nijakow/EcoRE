@@ -27,7 +27,7 @@
                                             morphic Frame new
                                                 ~ xResizeBehavior: (morphic RigidSizeWithLower: 10 Upper: 40)
                                                 ~ yResizeBehavior: (morphic RigidSizeWithLower: 10 Upper: 40)
-                                                ~ child: (morphic ColorMorph new ~ r: 100 g: 0 b: 0)
+                                                ~ child: (morphic DemoMorph new ~ r: 100 g: 0 b: 0)
                                           ).
                                 morphic HBox new
                                   run: [ :me | 1 to: 3 do: [ :i | me add: f ] ].
