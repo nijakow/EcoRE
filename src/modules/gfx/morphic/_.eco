@@ -136,6 +136,9 @@
         with inherited trait = {
             isFlexible: flexible isRigid: rigid isShrinkWrap: sw => flexible value;
             isFlexible: flexible isRigid: rigid => flexible value;
+
+            lowerForLower: lower Upper: upper => lower;
+            upperForLower: lower Upper: upper => upper;
         };
     };
 
@@ -286,7 +289,7 @@
                            isRigid: [ :s | xPos <- xPos + (s upperForLower: 0 Upper: (bounds dimensionForOrientation: orientation)) ].
                     | yMax |
                     c sizePropertiesForOrientation: orientation opposite Bounds: bounds
-                      ~ isFlexible: [      yMax <- orientation ifHorizontal: [ bounds h ] ifVertical: [ bounds w ] ]
+                      ~ isFlexible: [      yMax <- bounds dimensionForOrientation: orientation opposite ]
                            isRigid: [ :s | yMax <- s upperForLower: 0 Upper: (bounds dimensionForOrientation: orientation opposite) ].
                     | r |
                     orientation
