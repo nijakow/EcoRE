@@ -18,7 +18,7 @@
                         ~ yLayout: (morphic RigidSize: 50)
                         ~ r: 100 g: 0 b: 0;
             init => (
-                | frame <- morphic Morph new |
+                | frame <- morphic FrameMorph new |
                 frame
                   ~ add: (
                         morphic VBox new

@@ -252,15 +252,7 @@
                       ifVertical: [ yLayout ]
             );
 
-            recalculateLayout => (
-                childrenDo: [ :c |
-                    c boundsX: (c xLayout lowerForLower: 0 Upper: bounds w)
-                            Y: (c yLayout lowerForLower: 0 Upper: bounds h)
-                            W: (c xLayout upperForLower: 0 Upper: bounds w)
-                            H: (c yLayout upperForLower: 0 Upper: bounds h).
-                    c recalculateLayout.
-                ]
-            );
+            recalculateLayout => childrenDo: [ :c | c recalculateLayout ];
 
             renderOn: renderer => (
                 childrenWithBoundsDo: [ :c, :b |
@@ -385,6 +377,31 @@
             init => initVertical;
 
             writeOn: w => w << 'a vbox morph';
+        };
+    };
+
+    own FrameMorph = {
+        static with inherited _ = std Clonable;
+        with inherited own super = $ Morph;
+        private module = $;
+
+        with inherited trait = {
+            init => (
+                super init.
+              ^ self
+            );
+
+            recalculateLayout => (
+                childrenDo: [ :c |
+                    c boundsX: (c xLayout lowerForLower: 0 Upper: bounds w)
+                            Y: (c yLayout lowerForLower: 0 Upper: bounds h)
+                            W: (c xLayout upperForLower: 0 Upper: bounds w)
+                            H: (c yLayout upperForLower: 0 Upper: bounds h).
+                    c recalculateLayout.
+                ]
+            );
+
+            writeOn: w => w << 'a frame morph';
         };
     };
 
