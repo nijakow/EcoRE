@@ -13,30 +13,22 @@
         protected grabbedMorph;
 
         with inherited trait = {
-            makeF => morphic Frame new
-                        ~ add: (
-                            morphic Frame new
-                                ~ xLayout: (morphic RigidSizeWithLower: 10 Upper: 40)
-                                ~ yLayout: (morphic RigidSizeWithLower: 10 Upper: 40)
-                                ~ add: (morphic DemoMorph new ~ r: 100 g: 0 b: 0)
-                            );
+            makeF => morphic DemoMorph new
+                        ~ xLayout: (morphic RigidSize: 50)
+                        ~ yLayout: (morphic RigidSize: 50)
+                        ~ r: 100 g: 0 b: 0;
             init => (
-                | frame <- morphic Frame new |
+                | frame <- morphic Morph new |
                 frame
                   ~ add: (
                         morphic VBox new
-                          ~ xLayout: (morphic RigidSizeWithLower: 50 Upper: 400)
-                          ~ yLayout: (morphic RigidSizeWithLower: 50 Upper: 250)
+                          ~ xLayout: (morphic RigidSize: 400)
+                          ~ yLayout: (morphic RigidSize: 250)
                           ~ add: (morphic ColorMorph new)
                           ~ add: (
                                 morphic HBox new
                                   run: [ :me | 1 to: 3 do: [ :i | me add: makeF ] ].
                             )
-                          ~ add: (
-                              morphic Frame new
-                                ~ xLayout: (morphic Margin: 25)
-                                ~ add: (morphic ColorMorph new ~ r: 0 g: 0 b: 100)
-                          )
                     ).
                 morph <- frame.
               ^ self
