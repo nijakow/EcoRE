@@ -13,33 +13,32 @@
         protected grabbedMorph;
 
         with inherited trait = {
+            makeF => morphic Frame new
+                        ~ add: (
+                            morphic Frame new
+                                ~ xLayout: (morphic RigidSizeWithLower: 10 Upper: 40)
+                                ~ yLayout: (morphic RigidSizeWithLower: 10 Upper: 40)
+                                ~ add: (morphic DemoMorph new ~ r: 100 g: 0 b: 0)
+                            );
             init => (
-                "| frame <- morphic Frame new |
+                | frame <- morphic Frame new |
                 frame
-                  ~ xResizeBehavior: (morphic RigidSizeWithLower: 50 Upper: 400)
-                  ~ yResizeBehavior: (morphic RigidSizeWithLower: 50 Upper: 250)
-                  ~ child: (
+                  ~ xLayout: (morphic RigidSizeWithLower: 50 Upper: 400)
+                  ~ yLayout: (morphic RigidSizeWithLower: 50 Upper: 250)
+                  ~ add: (
                         morphic VBox new
                           ~ add: (morphic ColorMorph new)
                           ~ add: (
-                                | f |
-                                f <- morphic Frame new
-                                        ~ child: (
-                                            morphic Frame new
-                                                ~ xResizeBehavior: (morphic RigidSizeWithLower: 10 Upper: 40)
-                                                ~ yResizeBehavior: (morphic RigidSizeWithLower: 10 Upper: 40)
-                                                ~ child: (morphic DemoMorph new ~ r: 100 g: 0 b: 0)
-                                          ).
                                 morphic HBox new
-                                  run: [ :me | 1 to: 3 do: [ :i | me add: f ] ].
+                                  run: [ :me | 1 to: 3 do: [ :i | me add: makeF ] ].
                             )
                           ~ add: (
                               morphic Frame new
-                                ~ xResizeBehavior: (morphic Margin: 25)
-                                ~ child: (morphic ColorMorph new ~ r: 0 g: 0 b: 100)
+                                ~ xLayout: (morphic Margin: 25)
+                                ~ add: (morphic ColorMorph new ~ r: 0 g: 0 b: 100)
                           )
-                    )."
-                morph <- morphic DemoMorph new.
+                    ).
+                morph <- frame.
               ^ self
             );
 

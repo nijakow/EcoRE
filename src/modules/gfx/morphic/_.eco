@@ -417,6 +417,8 @@
                                                          W: (c layoutForOrientation: module Horizontal ~ upperForLower: 0 Upper: bounds w)
                                                          H: (c layoutForOrientation: module Vertical   ~ upperForLower: 0 Upper: bounds h)
                     |
+                    c bounds: newBounds.
+                    c recalculateLayout.
                 ]
             );
 
@@ -425,7 +427,7 @@
                     renderer pushBounds: b.
                     renderer accept: c.
                     renderer popBounds.
-                ] ContextBounds: renderer bounds
+                ]
             );
 
             writeOn: w => w << 'a frame morph';
