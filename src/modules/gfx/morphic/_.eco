@@ -12,12 +12,12 @@
             initWithSDLRenderer: _sdl_renderer X: _x Y: _y W: _w H: _h => (
                 sdlRenderer <- _sdl_renderer.
                 boundsstack <- std util newStack.
-                pushBounds: ((module Rectangle) newX: _x Y: _y W: _w H: _h).
+                boundsstack push: ((module Rectangle) newX: _x Y: _y W: _w H: _h).
               ^ self
             );
 
             bounds => boundsstack top;
-            pushBounds: b => boundsstack push: b;
+            pushBounds: b => boundsstack push: (b offsetByX: xOff Y: yOff);
             popBounds => boundsstack pop;
 
             xOff => bounds x;
@@ -235,6 +235,7 @@
             childrenWithBoundsDo: block => children do: [ :c | block value(c, c bounds) ];
 
             bounds: b => bounds fromRectangle: b;
+            boundsX: x Y: y W: w H: h => bounds x: x y: y w: w h: h;
             moveToX: x Y: y => bounds x: x y: y;
             resizeToW: w H: h => bounds w: w h: h;
 
@@ -328,7 +329,7 @@
 
             recalculateLayout => (
                 |
-                    lower  <- bounds originForOrientation: orientation,
+                    lower  <- 0,
                     diff   <- bounds dimensionForOrientation: orientation,
                     higher <- lower + diff,
                     
@@ -349,14 +350,15 @@
                     c layoutForOrientation: orientation
                       ~ isFlexible: [      xPos <- xPos + gap     ]
                            isRigid: [ :s | xPos <- xPos + (s upperForLower: 0 Upper: (bounds dimensionForOrientation: orientation)) ].
-                    | yMax |
+                    | yMin, yMax |
                     c layoutForOrientation: orientation opposite
-                      ~ isFlexible: [      yMax <- bounds dimensionForOrientation: orientation opposite ]
-                           isRigid: [ :s | yMax <- s upperForLower: 0 Upper: (bounds dimensionForOrientation: orientation opposite) ].
+                      ~ isFlexible: [      yMin <- 0. yMax <- bounds dimensionForOrientation: orientation opposite ]
+                           isRigid: [ :s | yMin <- s lowerForLower: 0 Upper: (bounds dimensionForOrientation: orientation opposite).
+                                           yMax <- s upperForLower: 0 Upper: (bounds dimensionForOrientation: orientation opposite)  ].
                     | r |
                     orientation
-                      ~ ifHorizontal: [ r <- module Rectangle newX: lower + xPosOld Y: bounds y W: xPos - xPosOld H: yMax ]
-                          ifVertical: [ r <- module Rectangle newX: bounds x Y: lower + xPosOld W: yMax H: xPos - xPosOld ].
+                      ~ ifHorizontal: [ r <- module Rectangle newX: lower + xPosOld Y: yMin W: xPos - xPosOld H: yMax ]
+                          ifVertical: [ r <- module Rectangle newX: yMin Y: lower + xPosOld W: yMax H: xPos - xPosOld ].
                     c bounds: r.
                     c recalculateLayout.
                 ].
@@ -411,13 +413,10 @@
 
             recalculateLayout => (
                 childrenDo: [ :c |
-                    |
-                        newBounds <- module Rectangle newX: (c layoutForOrientation: module Horizontal ~ lowerForLower: bounds x Upper: bounds x + bounds w)
-                                                         Y: (c layoutForOrientation: module Vertical   ~ lowerForLower: bounds y Upper: bounds y + bounds h)
-                                                         W: (c layoutForOrientation: module Horizontal ~ upperForLower: 0 Upper: bounds w)
-                                                         H: (c layoutForOrientation: module Vertical   ~ upperForLower: 0 Upper: bounds h)
-                    |
-                    c bounds: newBounds.
+                    c boundsX: (c xLayout lowerForLower: 0 Upper: bounds w)
+                            Y: (c yLayout lowerForLower: 0 Upper: bounds h)
+                            W: (c xLayout upperForLower: 0 Upper: bounds w)
+                            H: (c yLayout upperForLower: 0 Upper: bounds h).
                     c recalculateLayout.
                 ]
             );
