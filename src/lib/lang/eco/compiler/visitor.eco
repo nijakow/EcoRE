@@ -61,6 +61,8 @@
     visitMy: ast => compiler loadMy;
 
     visitHostRef: ast => compiler loadConstant: host;
+
+    visitResend: ast => ast resendValue acceptVisitor: self; "TODO!"
     
     visitConstant: ast => compiler loadConstant: ast constantValue;
 

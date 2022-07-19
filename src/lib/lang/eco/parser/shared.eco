@@ -16,6 +16,7 @@
         HASHLPAREN = #'hashlparen',
         PERCLBRACK = #'perclbrack',
         DOLLAR = #'dollar',
+        RESEND = #'resend',
         SEPARATOR = #'separator',
         COLON = #'colon',
         TILDE = #'tilde',

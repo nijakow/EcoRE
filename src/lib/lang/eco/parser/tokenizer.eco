@@ -91,6 +91,7 @@
             (peeks: '}')   if: [ ^ newTokenWithType: TokenType RCURLY     ].
             (peeks: '#(')  if: [ ^ newTokenWithType: TokenType HASHLPAREN ].
             (peeks: '%[')  if: [ ^ newTokenWithType: TokenType PERCLBRACK ].
+            (peeks: '$(')  if: [ ^ newTokenWithType: TokenType RESEND     ].
             (peeks: '$')   if: [ ^ newTokenWithType: TokenType DOLLAR     ].
             (peeks: '.')   if: [ ^ newTokenWithType: TokenType SEPARATOR  ].
             (peeks: ',')   if: [ ^ newTokenWithType: TokenType SEPARATOR  ].

@@ -8,6 +8,12 @@
     parseExpression => parseExpressionWithFollowups: #<:lang/eco/parser/Parser/Followups> all;
     parseExpressions => parseExpressionsWithTerminator: TokenType RPAREN;
 
+    parseResend => (
+        | v <- parseExpression |
+        expect: TokenType RPAREN.
+      ^ newASTResendWithValue: v
+    );
+
     parseSimpleExpressionWithFollowups: followups => (
         (check: TokenType SELF)       if: [ ^ newASTSelf     ].
         (check: TokenType MY)         if: [ ^ newASTMy       ].
@@ -17,6 +23,7 @@
         (check: TokenType HASHLPAREN) if: [ ^ parseArray     ].
         (check: TokenType PERCLBRACK) if: [ ^ parseInterface ].
         (check: TokenType DOLLAR)     if: [ ^ newASTHostRef  ].
+        (check: TokenType RESEND)     if: [ ^ parseResend    ].
 
         (check: TokenType KEY) when: [ :kw |
             (check: TokenType LPAREN) if: [

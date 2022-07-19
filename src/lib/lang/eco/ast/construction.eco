@@ -61,6 +61,8 @@
 
   newASTHostRef => (ast ASTHostRef new);
 
+  newASTResendWithValue: value => (ast ASTResend new) initWithValue: value;
+
   newASTConstantWithValue: value => (ast ASTConstant new) initWithValue: value;
 
   newASTArrayWithExpressions: exprs => (ast ASTArray new) initWithExprs: exprs;

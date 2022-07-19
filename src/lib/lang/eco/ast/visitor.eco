@@ -5,6 +5,7 @@
     #'visitSelf:'(ast),
     #'visitMy:'(ast),
     #'visitHostRef:'(ast),
+    #'visitResend:'(ast),
     #'visitConstant:'(ast),
 
     #'visitArray:'(ast),

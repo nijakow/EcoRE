@@ -165,6 +165,21 @@
         writeOn: writer => writer << '$';
     };
 
+    ASTResend = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
+        resendValue;
+
+        initWithValue: v => (
+            resendValue <- v.
+          ^ self
+        );
+
+        acceptVisitor: visitor => visitor visitResend: self;
+        writeOn: writer => writer << '$(' << resendValue << ')';
+    };
+
     ASTConstant = {
         static with inherited parent = #<:std/Clonable>;
         with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
