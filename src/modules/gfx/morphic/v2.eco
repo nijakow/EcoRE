@@ -173,10 +173,8 @@
         static with inherited _ = std Singleton;
 
         with inherited trait = {
-            isShrinkWrap: sw isFlexible: flexible isRigid: rigid => flexible value;
             isFlexible: flexible isRigid: rigid isShrinkWrap: sw => flexible value;
             isFlexible: flexible isRigid: rigid => flexible value;
-            isShrinkWrap: sw isFlexible: flexible => flexible value;
 
             lowerForLower: lower Upper: upper => lower;
             upperForLower: lower Upper: upper => upper;
@@ -194,10 +192,8 @@
               ^ self
             );
 
-            isShrinkWrap: sw isFlexible: flexible isRigid: rigid => rigid value(self);
             isFlexible: flexible isRigid: rigid isShrinkWrap: sw => rigid value(self);
             isFlexible: flexible isRigid: rigid => rigid value(self);
-            isShrinkWrap: sw isFlexible: flexible => self;
 
             lowerForLower: context_low Upper: context_up => context_low;
             upperForLower: context_low Upper: context_up => context_low + size;
@@ -254,14 +250,6 @@
                 orientation
                   ~ ifHorizontal: [ xLayout ]
                       ifVertical: [ yLayout ]
-            );
-
-            packToW: w H: h => (
-                xLayout isShrinkWrap: [ bounds w: w ]
-                          isFlexible: [ bounds w: w ].
-                yLayout isShrinkWrap: [ bounds h: h ]
-                          isFlexible: [ bounds h: h ].
-              ^ self
             );
 
             recalculateLayout => childrenDo: [ :c | c recalculateLayout ];
@@ -330,14 +318,12 @@
                 |
                 childrenDo: [ :c |
                     c layoutForOrientation: orientation
-                      ~ isShrinkWrap: [      c recalculateLayout. fixed <- fixed + c bounds w ]
-                          isFlexible: [      flexCount <- flexCount + 1                       ]
-                             isRigid: [ :s | fixed     <- fixed + (s upperForLower: 0 Upper: (bounds dimensionForOrientation: orientation)) ]
+                      ~ isFlexible: [      flexCount <- flexCount + 1       ]
+                           isRigid: [ :s | fixed     <- fixed + (s upperForLower: 0 Upper: (bounds dimensionForOrientation: orientation)) ]
                 ].
                 |
                     gap  <- (flexCount isZero) if: [ 1 ] else: [ (diff - fixed) / flexCount ],
-                    xPos <- 0,
-                    yPos <- 0
+                    xPos <- 0
                 |
                 childrenDo: [ :c |
                     | xPosOld <- xPos |
@@ -349,16 +335,13 @@
                       ~ isFlexible: [      yMin <- 0. yMax <- bounds dimensionForOrientation: orientation opposite ]
                            isRigid: [ :s | yMin <- s lowerForLower: 0 Upper: (bounds dimensionForOrientation: orientation opposite).
                                            yMax <- s upperForLower: 0 Upper: (bounds dimensionForOrientation: orientation opposite)  ].
-                    yPos <- yPos max: yMax.
                     | r |
                     orientation
                       ~ ifHorizontal: [ r <- module Rectangle newX: lower + xPosOld Y: yMin W: xPos - xPosOld H: yMax ]
                           ifVertical: [ r <- module Rectangle newX: yMin Y: lower + xPosOld W: yMax H: xPos - xPosOld ].
                     c bounds: r.
+                    c recalculateLayout.
                 ].
-                orientation
-                  ~ ifHorizontal: [ packToW: xPos H: yPos ]
-                      ifVertical: [ packToW: yPos H: xPos ].
             );
 
             renderOn: renderer => (
