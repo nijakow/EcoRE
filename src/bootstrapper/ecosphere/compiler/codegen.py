@@ -15,10 +15,12 @@ class Bytecodes:
     BUILTINV = 0x0b
     SEND = 0x0c
     SENDV = 0x0d
-    ASSIGN = 0x0e
-    AS = 0x0f
-    RETURN = 0x10
-    CLOSURE = 0x11
+    DELEGATE = 0x0e
+    DELEGATEV = 0x0f
+    ASSIGN = 0x10
+    AS = 0x11
+    RETURN = 0x12
+    CLOSURE = 0x13
 
 
 class CodeWriter:
