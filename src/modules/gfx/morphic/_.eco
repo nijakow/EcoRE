@@ -42,6 +42,36 @@
         };
     };
 
+    own Vertical = {
+        static with inherited _ = std Singleton;
+        private module = $;
+
+        isHorizontal => false;
+        isVertical   => true;
+
+        ifHorizontal: block => self;
+        ifVertical:   block => block value;
+        ifHorizontal: horiz
+          ifVertical: verti => verti value;
+        
+        opposite => module Horizontal;
+    },
+
+    own Horizontal = {
+        static with inherited _ = std Singleton;
+        private module = $;
+
+        isHorizontal => true;
+        isVertical   => false;
+
+        ifHorizontal: block => block value;
+        ifVertical:   block => self;
+        ifHorizontal: horiz
+          ifVertical: verti => horiz value;
+        
+        opposite => module Vertical;
+    },
+
     own Rectangle = {
         static with inherited _ = std Clonable;
 
@@ -172,6 +202,7 @@
 
     RigidSize: size => RigidSize clone initWithSize: size;
 
+
     own Morph = {
         static with inherited _ = std Clonable;
         private module = $;
@@ -267,36 +298,6 @@
         };
     };
 
-    own Vertical = {
-        static with inherited _ = std Singleton;
-        private module = $;
-
-        isHorizontal => false;
-        isVertical   => true;
-
-        ifHorizontal: block => self;
-        ifVertical:   block => block value;
-        ifHorizontal: horiz
-          ifVertical: verti => verti value;
-        
-        opposite => module Horizontal;
-    },
-
-    own Horizontal = {
-        static with inherited _ = std Singleton;
-        private module = $;
-
-        isHorizontal => true;
-        isVertical   => false;
-
-        ifHorizontal: block => block value;
-        ifVertical:   block => self;
-        ifHorizontal: horiz
-          ifVertical: verti => horiz value;
-        
-        opposite => module Vertical;
-    },
-
     own Box = {
         static with inherited _ = std Clonable;
         with inherited own super = $ Morph;
@@ -384,21 +385,6 @@
             init => initVertical;
 
             writeOn: w => w << 'a vbox morph';
-        };
-    };
-
-    own Frame = {
-        static with inherited _ = std Clonable;
-        with inherited own super = $ Morph;
-        private module = $;
-
-        with inherited trait = {
-            init => (
-                super init.
-              ^ self
-            );
-
-            writeOn: w => w << 'a frame morph';
         };
     };
 

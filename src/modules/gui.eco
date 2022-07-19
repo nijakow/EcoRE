@@ -29,6 +29,7 @@
                                 morphic HBox new
                                   run: [ :me | 1 to: 3 do: [ :i | me add: makeF ] ].
                             )
+                          ~ add: (morphic ColorMorph new ~ r: 0 g: 0 b: 80)
                     ).
                 morph <- frame.
               ^ self
