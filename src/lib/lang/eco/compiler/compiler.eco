@@ -111,6 +111,14 @@
         sendWithMessage: msg ArgCount: args Varargs: false
     );
 
+    resendWithMessage: msg ArgCount: args Varargs: varargs => (
+        writer writeResend: msg Args: args Varargs: varargs.
+        lastValue <- stackTopValue
+    );
+    resendWithMessage: msg ArgCount: args => (
+        resendWithMessage: msg ArgCount: args Varargs: false
+    );
+
     assignWithKey: key => (
         writer writeAssign: key.
         lastValue <- stackTopValue

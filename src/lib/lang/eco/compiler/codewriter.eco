@@ -132,6 +132,15 @@
 
     writeSend: message Args: args => writeSend: message Args: args Varargs: false;
 
+    writeResend: message Args: args Varargs: varargs => (
+        (varargs) if: [ writeU8: Bytecodes RESENDV ]
+                else: [ writeU8: Bytecodes RESEND  ].
+        writeU8: args.
+        addConstant: message
+    );
+
+    writeResend: message Args: args => writeResend: message Args: args Varargs: false;
+
     writeAssign: key => (
         writeU8: Bytecodes ASSIGN.
         addConstant: key

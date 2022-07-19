@@ -285,7 +285,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             }
             SLOW_DISPATCH();
         }
-        TARGET(Eco_Bytecode_DELEGATE) {
+        TARGET(Eco_Bytecode_RESEND) {
             struct Eco_Message  message;
 
             message.body.send.arg_count = NEXT_U8();
@@ -307,7 +307,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             }
             SLOW_DISPATCH();
         }
-        TARGET(Eco_Bytecode_DELEGATEV) {
+        TARGET(Eco_Bytecode_RESENDV) {
             struct Eco_Message  message;
             Eco_Any*            vararg;
 

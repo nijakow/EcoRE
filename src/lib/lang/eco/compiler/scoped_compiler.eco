@@ -43,6 +43,9 @@
     sendWithMessage: msg ArgCount: args Varargs: varargs => (
         localCompiler sendWithMessage: msg ArgCount: args Varargs: varargs
     );
+    resendWithMessage: msg ArgCount: args Varargs: varargs => (
+        localCompiler resendWithMessage: msg ArgCount: args Varargs: varargs
+    );
     builtinWithMessage: msg ArgCount: args Varargs: varargs => (
         localCompiler builtinWithMessage: msg ArgCount: args Varargs: varargs
     );
