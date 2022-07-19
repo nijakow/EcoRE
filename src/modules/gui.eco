@@ -23,10 +23,10 @@
             init => (
                 | frame <- morphic Frame new |
                 frame
-                  ~ xLayout: (morphic RigidSizeWithLower: 50 Upper: 400)
-                  ~ yLayout: (morphic RigidSizeWithLower: 50 Upper: 250)
                   ~ add: (
                         morphic VBox new
+                          ~ xLayout: (morphic RigidSizeWithLower: 50 Upper: 400)
+                          ~ yLayout: (morphic RigidSizeWithLower: 50 Upper: 250)
                           ~ add: (morphic ColorMorph new)
                           ~ add: (
                                 morphic HBox new
