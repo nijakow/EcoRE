@@ -123,6 +123,8 @@
 
             isMouseButtonDown => (type == sdl SDL_EventTypes MOUSEBUTTONDOWN);
             isMouseButtonUp => (type == sdl SDL_EventTypes MOUSEBUTTONUP);
+            mouseButtonX => mouseMotionX;
+            mouseButtonY => mouseMotionY;
 
             isKeyDown => (type == sdl SDL_EventTypes KEYDOWN);
             isKeyUp => (type == sdl SDL_EventTypes KEYUP);

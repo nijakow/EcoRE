@@ -227,6 +227,19 @@
                 processEvent: event AtX: evtX Y: evtY Bounds: cbounds.
             );
 
+            xRayAtX: x Y: y Bounds: bounds Do: block => (
+                block value(self).
+                childrenWithBoundsDo: [ :child, :bounds |
+                    bounds containsX: x Y: y
+                      ~ if: [
+                            child xRayAtX: (x - bounds x)
+                                        Y: (y - bounds y)
+                                   Bounds: (bounds offsetToX: 0 Y: 0)
+                                       Do: block
+                        ]
+                ] ContextBounds: bounds.
+            );
+
             writeOn: w => w << 'a morph';
         };
     };

@@ -9,7 +9,8 @@
 
         protected program,
         protected renderer,
-        protected morph;
+        protected morph,
+        protected grabbedMorph;
 
         with inherited trait = {
             init => (
@@ -63,6 +64,13 @@
                 event isMouseMotionEvent -> [
                     (std io out << event mouseMotionX << ' ' << event mouseMotionY) newline commit.
                     morph issueEvent: No AtX: event mouseMotionX Y: event mouseMotionY Bounds: renderer bounds.
+                ].
+                event isMouseButtonDown -> [
+                    (std io out << 'Click!') newline.
+                    morph xRayAtX: event mouseButtonX Y: event mouseButtonY Bounds: renderer bounds Do: [
+                        :morph | (std io out << morph) newline.
+                    ].
+                    (std io out) commit.
                 ].
                 event isKeyDown -> [ ^ program stop ].
             );
