@@ -21,6 +21,7 @@
         evaluateInEnv: env Host: host => evaluateInEnv: env Host: host NextHost: host;
         evaluateInEnv: env Host: host NextHost: nexthost => (compileInEnv: env Host: host NextHost: nexthost) execute(env);
         isSelfAST => false;
+        isResendAST => false;
     };
 
     ASTFlags = {
@@ -176,6 +177,7 @@
           ^ self
         );
 
+        isResendAST => true;
         acceptVisitor: visitor => visitor visitResend: self;
         writeOn: writer => writer << '$(' << resendValue << ')';
     };
