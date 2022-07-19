@@ -14,7 +14,7 @@
 
         with inherited trait = {
             init => (
-                | frame <- morphic Frame new |
+                "| frame <- morphic Frame new |
                 frame
                   ~ xResizeBehavior: (morphic RigidSizeWithLower: 50 Upper: 400)
                   ~ yResizeBehavior: (morphic RigidSizeWithLower: 50 Upper: 250)
@@ -38,8 +38,8 @@
                                 ~ xResizeBehavior: (morphic Margin: 25)
                                 ~ child: (morphic ColorMorph new ~ r: 0 g: 0 b: 100)
                           )
-                    ).
-                morph <- frame.
+                    )."
+                morph <- morphic DemoMorph new.
               ^ self
             );
 
@@ -51,6 +51,8 @@
                                                 Y: 0
                                                 W: program window width
                                                 H: program window height.
+                morph bounds: renderer bounds.
+                morph recalculateLayout.
             );
 
             tick => (
@@ -63,11 +65,11 @@
             handleEvent: event => (
                 event isMouseMotionEvent -> [
                     (std io out << event mouseMotionX << ' ' << event mouseMotionY) newline commit.
-                    morph issueEvent: No AtX: event mouseMotionX Y: event mouseMotionY Bounds: renderer bounds.
+                    morph issueEvent: No AtX: event mouseMotionX Y: event mouseMotionY
                 ].
                 event isMouseButtonDown -> [
                     (std io out << 'Click!') newline.
-                    morph xRayAtX: event mouseButtonX Y: event mouseButtonY Bounds: renderer bounds Do: [
+                    morph xRayAtX: event mouseButtonX Y: event mouseButtonY Do: [
                         :morph | (std io out << morph) newline.
                     ].
                     (std io out) commit.
