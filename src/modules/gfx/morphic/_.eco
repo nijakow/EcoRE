@@ -384,8 +384,8 @@
                 w <- w max: (orientation ifHorizontal: [ baseMinWidth  ] ifVertical: [ baseMinHeight ]).
                 h <- h max: (orientation ifHorizontal: [ baseMinHeight ] ifVertical: [ baseMinWidth  ]).
                 orientation
-                  ~ ifHorizontal: [ cachedMinWidth:  w. cachedMinHeight: h. ]
-                      ifVertical: [ cachedMinHeight: h. cachedMinWidth:  w. ].
+                  ~ ifHorizontal: [ cachedMinWidth: w. cachedMinHeight: h. ]
+                      ifVertical: [ cachedMinWidth: h. cachedMinHeight: w. ].
             );
 
             layoutInPlace => (

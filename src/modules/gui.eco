@@ -14,7 +14,8 @@
 
         with inherited trait = {
             makeF => ( morphic VBoxMorph new
-                        ~ rigidWidth: 50
+                        "~ rigidWidth: 50"
+                        ~ xLayout: morphic layouts ShrinkWrap
                         ~ add: ( morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: 50 ~ rigidHeight: 50 )
                         ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 0 )
                         ~ add: ( morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: 50 ~ rigidHeight: 50 )
