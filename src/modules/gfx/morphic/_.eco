@@ -154,7 +154,7 @@
             initWithX: _x Y: _y => (
                 x <- _x.
                 y <- _y.
-              ^ self
+            ^ self
             );
 
             x: xv => x <- xv;
@@ -169,83 +169,75 @@
         };
     };
 
-    own FlexibleSize = {
-        static with inherited _ = std Singleton;
+    own layouts = {
+        own ShrinkWrap = {
+            static with inherited _ = std Singleton;
 
-        with inherited trait = {
-            isShrinkWrap: sw isFlexible: flexible isRigid: rigid => flexible value;
-            isFlexible: flexible isRigid: rigid isShrinkWrap: sw => flexible value;
-            isFlexible: flexible isRigid: rigid => flexible value;
-            isShrinkWrap: sw isFlexible: flexible => flexible value;
+            with inherited trait = {
+                ifShrinkWrap: shrinkwrap ifFlexible: flexible ifRigid: rigid => shrinkwrap value;
+            };
+        };
 
-            lowerForLower: lower Upper: upper => lower;
-            upperForLower: lower Upper: upper => upper;
+        own Flexible = {
+            static with inherited _ = std Singleton;
+
+            with inherited trait = {
+                ifShrinkWrap: shrinkwrap ifFlexible: flexible ifRigid: rigid => flexible value;
+            };
+        };
+
+        own Rigid = {
+            static with inherited _ = std Singleton;
+
+            with inherited trait = {
+                ifShrinkWrap: shrinkwrap ifFlexible: flexible ifRigid: rigid => rigid value;
+            };
         };
     };
-
-    own RigidSize = {
-        static with inherited _ = std Clonable;
-
-        private size;
-
-        with inherited trait = {
-            initWithSize: _size => (
-                size <- _size.
-              ^ self
-            );
-
-            isShrinkWrap: sw isFlexible: flexible isRigid: rigid => rigid value(self);
-            isFlexible: flexible isRigid: rigid isShrinkWrap: sw => rigid value(self);
-            isFlexible: flexible isRigid: rigid => rigid value(self);
-            isShrinkWrap: sw isFlexible: flexible => self;
-
-            lowerForLower: context_low Upper: context_up => context_low;
-            upperForLower: context_low Upper: context_up => context_low + size;
-        };
-    };
-
-    RigidSize: size => RigidSize clone initWithSize: size;
-
 
     own Morph = {
         static with inherited _ = std Clonable;
         private module = $;
 
-        parent, own bounds;
+        bounds,
         xLayout, yLayout;
-        protected children;
+        parent, children;
 
         with inherited trait = {
             init => (
-                parent   <- No.
                 bounds   <- (module Rectangle) new.
+                xLayout  <- module layouts Flexible.
+                yLayout  <- module layouts Flexible.
+                parent   <- No.
                 children <- std util newVector.
-                xLayout  <- module FlexibleSize.
-                yLayout  <- module FlexibleSize.
               ^ self
             );
 
-            add: child => (
-                children add: child.
-                child parent: self.
-              ^ self
-            );
-            remove: child => children remove: child;
-
-            parent: morph => parent <- Yes: morph;
-            unlink        => (
-                parent yes: [ :p | p remove: self ].
-                parent <- No.
+            boundsX: x Y: y W: w H: h => (
+                bounds x: x y: y w: w h: h.
               ^ self
             );
 
-            childrenDo: block => children do: block;
-            childrenWithBoundsDo: block => children do: [ :c | block value(c, c bounds) ];
+            moveToX: x Y: y   => boundsX: x Y: y W: bounds w H: bounds h;
+            resizeToW: w H: h => boundsX: bounds x Y: bounds y W: w H: h;
 
-            bounds: b => bounds fromRectangle: b;
-            boundsX: x Y: y W: w H: h => bounds x: x y: y w: w h: h;
-            moveToX: x Y: y => bounds x: x y: y;
-            resizeToW: w H: h => bounds w: w h: h;
+            width  => bounds w;
+            height => bounds h;
+
+            extentForOrientation: orientation => (
+                orientation
+                  ~ ifHorizontal: [ width  ]
+                      ifVertical: [ height ]
+            );
+
+            minWidth  => width;  "TODO"
+            minHeight => height; "TODO"
+
+            minExtentForOrientation: orientation => (
+                orientation
+                  ~ ifHorizontal: [ minWidth  ]
+                      ifVertical: [ minHeight ]
+            );
 
             xLayout: layout => xLayout <- layout;
             yLayout: layout => yLayout <- layout;
@@ -256,45 +248,32 @@
                       ifVertical: [ yLayout ]
             );
 
-            packToW: w H: h => (
-                xLayout isShrinkWrap: [ bounds w: w ]
-                          isFlexible: [ bounds w: w ].
-                yLayout isShrinkWrap: [ bounds h: h ]
-                          isFlexible: [ bounds h: h ].
+            root => (
+                parent yes: [ :p | p root ]
+                        no: [      self   ]
+            );
+
+            childrenDo: block => children do: block;
+            allChildrenDo: block => childrenDo: [ :c | block value(c). c allChildrenDo: block ];
+
+            unlink => (
+                parent yes: [ :p | p remove: self ].
               ^ self
             );
 
-            recalculateLayout => childrenDo: [ :c | c recalculateLayout ];
+            noParent  => parent <- No.
+            parent: p => parent <- Yes: p;
 
-            renderOn: renderer => (
-                childrenWithBoundsDo: [ :c, :b |
-                    renderer pushBounds: b.
-                    renderer accept: c.
-                    renderer popBounds.
-                ]
+            add: child => (
+                child unlink.
+                children add: child.
+                child parent: self.
+              ^ self
             );
 
-            processEvent: event AtX: evtX Y: evtY Bounds: bounds => self;
-
-            issueEvent: event AtX: evtX Y: evtY => (
-                std io out << 'Received ' << evtX << ' ' << evtY << ' in ' << self ~ newline.
-                childrenWithBoundsDo: [ :child, :bounds |
-                    bounds containsX: evtX Y: evtY
-                      ~ if: [ child issueEvent: event AtX: (evtX - bounds x) Y: (evtY - bounds y) ]
-                ].
-                processEvent: event AtX: evtX Y: evtY Bounds: bounds.
-            );
-
-            xRayAtX: x Y: y Do: block => (
-                block value(self).
-                childrenWithBoundsDo: [ :child, :bounds |
-                    bounds containsX: x Y: y
-                      ~ if: [
-                            child xRayAtX: (x - bounds x)
-                                        Y: (y - bounds y)
-                                       Do: block
-                        ]
-                ].
+            remove: child => (
+                children remove: child
+                  ~ yes: [ child noParent ].
               ^ self
             );
 
@@ -302,194 +281,112 @@
         };
     };
 
-    own Box = {
+    own BoxMorph = {
         static with inherited _ = std Clonable;
         with inherited own super = $ Morph;
         private module = $;
 
-        protected orientation,
-
-        initWithOrientation: _orientation => (
-            my super init.
-            orientation <- _orientation.
-            ^ self
-        );
+        private orientation;
 
         with inherited trait = {
-            initHorizontal => initWithOrientation: module Horizontal;
-            initVertical   => initWithOrientation: module Vertical;
+            initWithOrientation: _orientation => (
+                $(super) init.
+                orientation <- _orientation.
+              ^ self
+            );
 
-            recalculateLayout => (
+            initHorizontal => initWithOrientation: my module Horizontal;
+            initVertical   => initWithOrientation: my module Vertical;
+
+            layoutInPlace => (
                 |
                     lower  <- 0,
-                    diff   <- bounds dimensionForOrientation: orientation,
-                    higher <- lower + diff,
+                    higher <- layoutBounds dimensionForOrientation: orientation,
+                    diff   <- higher - lower,
+
+                    flexCount <- 0,
+                    reservedF <- 0,
+                    reservedN <- 0,
+                    budget    <- 0
+                |
+
+                childrenDo: [ :c |
+                    (c layoutForOrientation: orientation) isFlexible
+                      ~   if: [ flexCount <- flexCount + 1.
+                                reservedF <- reservedF + c minExtentForOrientation: orientation ]
+                        else: [ reservedN <- reservedN + c minExtentForOrientation: orientation ]
+                ].
+
+                budget <- (bounds dimensionForOrientation: orientation) max: (reservedF + reservedN).
+
+                |
+                    offset <- 0
+                |
+
+                childrenDo: [ :c |
+                    |
+                        minSpace <- c minExtentForOrientation: orientation,
+                        spaceForM
+                    |
+                    (c layoutForOrientation: orientation) isFlexible if: [
+                        | available <- budget - reservedN - (reservedF - minSpace) |
+                        spaceForM <- (budget - reservedN) / flexCount.
+                        (spaceForM > available) -> [ spaceForM <- available ].
+                        (spaceForM < minSpace)  -> [ spaceForM <- minSpace  ].
+                        flexCount <- flexCount - 1.
+                        reservedF <- reservedF - minSpace.
+                    ] else: [
+                        spaceForM <- minSpace.
+                        reservedN <- reservedN - minSpace.
+                    ].
+
+                    |
+                        heightForM
+                    |
                     
-                    fixed     <- 0,
-                    flexCount <- 0
-                |
-                childrenDo: [ :c |
-                    c layoutForOrientation: orientation
-                      ~ isShrinkWrap: [      c recalculateLayout. fixed <- fixed + c bounds w ]
-                          isFlexible: [      flexCount <- flexCount + 1                       ]
-                             isRigid: [ :s | fixed     <- fixed + (s upperForLower: 0 Upper: (bounds dimensionForOrientation: orientation)) ]
-                ].
-                |
-                    gap  <- (flexCount isZero) if: [ 1 ] else: [ (diff - fixed) / flexCount ],
-                    xPos <- 0,
-                    yPos <- 0
-                |
-                childrenDo: [ :c |
-                    | xPosOld <- xPos |
-                    c layoutForOrientation: orientation
-                      ~ isFlexible: [      xPos <- xPos + gap     ]
-                           isRigid: [ :s | xPos <- xPos + (s upperForLower: 0 Upper: (bounds dimensionForOrientation: orientation)) ].
-                    | yMin, yMax |
-                    c layoutForOrientation: orientation opposite
-                      ~ isFlexible: [      yMin <- 0. yMax <- bounds dimensionForOrientation: orientation opposite ]
-                           isRigid: [ :s | yMin <- s lowerForLower: 0 Upper: (bounds dimensionForOrientation: orientation opposite).
-                                           yMax <- s upperForLower: 0 Upper: (bounds dimensionForOrientation: orientation opposite)  ].
-                    yPos <- yPos max: yMax.
-                    | r |
+                    (c layoutForOrientation: orientation opposite) isFlexible if: [
+                        heightForM <- height
+                    ] else: [
+                        heightForM <- c minHeight
+                    ].
+
                     orientation
-                      ~ ifHorizontal: [ r <- module Rectangle newX: lower + xPosOld Y: yMin W: xPos - xPosOld H: yMax ]
-                          ifVertical: [ r <- module Rectangle newX: yMin Y: lower + xPosOld W: yMax H: xPos - xPosOld ].
-                    c bounds: r.
+                      ~ ifHorizontal: [ c boundsX: offset Y: 0 W: spaceForM H: heightForM ]
+                          ifVertical: [ c boundsX: 0 Y: offset W: heightForM H: spaceForM ].
+                    
+                    offset <- offset + spaceForM.
                 ].
-                orientation
-                  ~ ifHorizontal: [ packToW: xPos H: yPos ]
-                      ifVertical: [ packToW: yPos H: xPos ].
             );
-
-            renderOn: renderer => (
-                childrenWithBoundsDo: [ :c, :b |
-                    renderer pushBounds: b.
-                    renderer accept: c.
-                    renderer popBounds.
-                ]
-            );
-
-            writeOn: w => w << 'a box morph';
         };
     };
 
-    own HBox = {
+    own HBoxMorph = {
         static with inherited _ = std Clonable;
-        with inherited own super = $ Box;
+        with inherited own super = $ BoxMorph;
         private module = $;
 
         with inherited trait = {
-            init => initHorizontal;
+            init => (
+                $(super) initHorizontal.
+              ^ self
+            );
 
             writeOn: w => w << 'an hbox morph';
         };
     };
 
-    own VBox = {
+    own VBoxMorph = {
         static with inherited _ = std Clonable;
-        with inherited own super = $ Box;
+        with inherited own super = $ BoxMorph;
         private module = $;
 
         with inherited trait = {
-            init => initVertical;
+            init => (
+                $(super) initVertical.
+              ^ self
+            );
 
             writeOn: w => w << 'a vbox morph';
-        };
-    };
-
-    own FrameMorph = {
-        static with inherited _ = std Clonable;
-        with inherited own super = $ Morph;
-        private module = $;
-
-        with inherited trait = {
-            init => (
-                super init.
-              ^ self
-            );
-
-            recalculateLayout => (
-                childrenDo: [ :c |
-                    c boundsX: (c xLayout lowerForLower: 0 Upper: bounds w)
-                            Y: (c yLayout lowerForLower: 0 Upper: bounds h)
-                            W: (c xLayout upperForLower: 0 Upper: bounds w)
-                            H: (c yLayout upperForLower: 0 Upper: bounds h).
-                    c recalculateLayout.
-                ]
-            );
-
-            writeOn: w => w << 'a frame morph';
-        };
-    };
-
-    own ColorMorph = {
-        static with inherited _ = std Clonable;
-        with inherited own super = $ Morph;
-        private module = $;
-
-        r, g, b;
-
-        with inherited trait = {
-            init => (
-                super init.
-                r <- 255.
-                g <- 255.
-                b <- 0.
-              ^ self
-            );
-
-            r: _r g: _g b: _b => (
-                r <- _r.
-                g <- _g.
-                b <- _b.
-              ^ self
-            );
-
-            renderOn: renderer => (
-                renderer setR: r G: g B: b.
-                renderer fillRectX: 0 Y: 0 W: renderer bounds w H: renderer bounds h.
-            );
-
-            writeOn: w => w << 'a color morph(' << r << ', ' << g << ', ' << b << ')';
-        };
-    };
-
-    own DemoMorph = {
-        static with inherited _ = std Clonable;
-        with inherited own super = $ Morph;
-        private module = $;
-
-        r, g, b, c;
-
-        with inherited trait = {
-            init => (
-                super init.
-                r <- 255.
-                g <- 255.
-                b <- 0.
-                c <- 0.
-              ^ self
-            );
-
-            r: _r g: _g b: _b => (
-                r <- _r.
-                g <- _g.
-                b <- _b.
-              ^ self
-            );
-
-            renderOn: renderer => (
-                renderer setR: r G: g B: b.
-                renderer fillRectX: 0 Y: 0 W: renderer bounds w H: renderer bounds h.
-                renderer setR: 200 G: 0 B: 0.
-                renderer drawLineX: renderer bounds w / 2
-                                 Y: renderer bounds h / 2
-                                 X: (renderer bounds w / 2) + (((renderer bounds w) * ((c / 360.0) cos) * -0.5) asInt)
-                                 Y: (renderer bounds h / 2) + (((renderer bounds h) * ((c / 360.0) sin) *  0.5) asInt).
-                c <- c + 1.
-            );
-
-            writeOn: w => w << 'a demo morph(' << r << ', ' << g << ', ' << b << ')';
         };
     };
 }
