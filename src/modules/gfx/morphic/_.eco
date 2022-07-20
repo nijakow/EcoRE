@@ -209,7 +209,7 @@
 
     own Morph = {
         static with inherited _ = std Clonable;
-        private module = $;
+        protected module = $;
 
         bounds,
         xLayout, yLayout;
@@ -229,12 +229,16 @@
                 bounds x: x y: y w: w h: h.
               ^ self
             );
+            bounds: rect => boundsX: rect x Y: rect y W: rect w H: rect h;
 
             moveToX: x Y: y   => boundsX: x Y: y W: bounds w H: bounds h;
             resizeToW: w H: h => boundsX: bounds x Y: bounds y W: w H: h;
 
             width  => bounds w;
             height => bounds h;
+
+            resizeToW: w => resizeToW: w H: height;
+            resizeToH: h => resizeToW: width H: h;
 
             extentForOrientation: orientation => (
                 orientation
@@ -254,6 +258,9 @@
             xLayout: layout => xLayout <- layout;
             yLayout: layout => yLayout <- layout;
 
+            rigidWidth: w  => xLayout: module layouts Rigid ~ resizeToW: w;
+            rigidHeight: h => yLayout: module layouts Rigid ~ resizeToH: h;
+
             layoutForOrientation: orientation => (
                 orientation
                   ~ ifHorizontal: [ xLayout ]
@@ -267,6 +274,7 @@
 
             childrenDo: block => children do: block;
             allChildrenDo: block => childrenDo: [ :c | block value(c). c allChildrenDo: block ];
+            childrenWithBoundsDo: block => childrenDo: [ :c | block value(c, c bounds) ];
 
             unlink => (
                 parent yes: [ :p | p remove: self ].
@@ -286,6 +294,29 @@
             remove: child => (
                 children remove: child
                   ~ yes: [ child noParent ].
+              ^ self
+            );
+
+            layoutInPlace => childrenDo: [ :c | c layoutInPlace ];
+
+            renderOn: renderer => (
+                childrenDo: [ :c |
+                    renderer pushBounds: c bounds.
+                    renderer accept: c.
+                    renderer popBounds.
+                ].
+            );
+
+            processEvent: event AtX: x Y: y => (
+                (std io out << 'Received event in ' << self << '(' << x << ', ' << y << ')') newline commit.
+            );
+
+            issueEvent: event AtX: evtX Y: evtY => (
+                processEvent: event AtX: evtX Y: evtY.
+                childrenWithBoundsDo: [ :c, :b |
+                    b containsX: evtX Y: evtY
+                      ~ if: [ c issueEvent: event AtX: (evtX - b x) Y: (evtY - b y) ]
+                ].
               ^ self
             );
 
@@ -357,7 +388,7 @@
                     |
                     
                     (c layoutForOrientation: orientation opposite) isFlexible if: [
-                        heightForM <- height
+                        heightForM <- extentForOrientation: orientation opposite
                     ] else: [
                         heightForM <- c minHeight
                     ].
@@ -401,6 +432,37 @@
             );
 
             writeOn: w => w << 'a vbox morph';
+        };
+    };
+
+    own DemoMorph = {
+        static with inherited _ = std Clonable;
+        with inherited own Morph = $ Morph;
+
+        protected r,
+        protected g,
+        protected b;
+
+        with inherited trait = {
+            init => (
+                $(Morph) init.
+                r: 0 g: 200 b: 0.
+              ^ self
+            );
+
+            r: _r g: _g b: _b => (
+                r <- _r.
+                g <- _g.
+                b <- _b.
+              ^ self
+            );
+
+            renderOn: renderer => (
+                renderer setR: r G: g B: b.
+                renderer fillRectX: 0 Y: 0 W: bounds w H: bounds h.
+            );
+
+            writeOn: w => w << 'a demo morph';
         };
     };
 }
