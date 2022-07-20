@@ -13,22 +13,35 @@
         protected grabbedMorph;
 
         with inherited trait = {
+            makeF => ( morphic VBoxMorph new
+                        ~ rigidWidth: 50
+                        ~ add: ( morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: 50 ~ rigidHeight: 50 )
+                        ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 0 )
+                        ~ add: ( morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: 50 ~ rigidHeight: 50 )
+                        ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 0 )
+                        ~ add: ( morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: 50 ~ rigidHeight: 50 )
+                        ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 0 )
+                        ~ add: ( morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: 50 ~ rigidHeight: 50 )
+                        ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 0 )
+                        ~ add: ( morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: 50 ~ rigidHeight: 50 )
+                    );
+            makeX => (
+                morphic HBoxMorph new
+                    ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 100 )
+                    ~ add: makeF
+                    ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 100 )
+                    ~ add: makeF
+                    ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 100 )
+            );
+            makeY => (
+                morphic VBoxMorph new
+                  ~ add: makeX
+                  ~ add: ( morphic DemoMorph new ~ r: 0 g: 0 b: 100 )
+                  ~ add: makeX
+            );
+
             init => (
-                morph <- morphic HBoxMorph new
-                           ~ add: ( morphic DemoMorph new
-                                      ~ r: 100 g: 100 b: 100 )
-                           ~ add: ( morphic VBoxMorph new
-                                      ~ rigidWidth: 50
-                                      ~ add: ( morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: 50 ~ rigidHeight: 50 )
-                                      ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 0 )
-                                      ~ add: ( morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: 50 ~ rigidHeight: 50 )
-                                      ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 0 )
-                                      ~ add: ( morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: 50 ~ rigidHeight: 50 )
-                                      ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 0 )
-                                      ~ add: ( morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: 50 ~ rigidHeight: 50 )
-                                      ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 0 )
-                                      ~ add: ( morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: 50 ~ rigidHeight: 50 )
-                                  ).
+                morph <- makeX.
               ^ self
             );
 

@@ -215,6 +215,9 @@
         xLayout, yLayout;
         parent, children;
 
+        protected cachedMinWidth,
+        protected cachedMinHeight;
+
         with inherited trait = {
             init => (
                 bounds   <- (morphic Rectangle) new.
@@ -222,6 +225,8 @@
                 yLayout  <- (morphic layouts Flexible).
                 parent   <- No.
                 children <- std util newVector.
+                cachedMinWidth  <- No.
+                cachedMinHeight <- No.
               ^ self
             );
 
@@ -237,6 +242,9 @@
             width  => bounds w;
             height => bounds h;
 
+            baseMinWidth  => 0;
+            baseMinHeight => 0;
+
             resizeToW: w => resizeToW: w H: height;
             resizeToH: h => resizeToW: width H: h;
 
@@ -246,8 +254,30 @@
                       ifVertical: [ height ]
             );
 
-            minWidth  => width;  "TODO"
-            minHeight => height; "TODO"
+            cachedMinWidth:  v => cachedMinWidth  <- Yes: v;
+            cachedMinHeight: v => cachedMinHeight <- Yes: v;
+            invalidateMinSizeCaches => (
+                cachedMinWidth  <- No.
+                cachedMinHeight <- No.
+            );
+            updateMinSizeCaches => (
+                "TODO: Go through all the submorphs"
+                cachedMinWidth:  baseMinWidth.
+                cachedMinHeight: baseMinHeight.
+            );
+
+            minWidth => (
+              ^ width.
+                xLayout isRigid -> [ width ].
+                cachedMinWidth no: [ updateMinSizeCaches ].
+              ^ cachedMinWidth yes
+            );
+            minHeight => (
+              ^ height.
+                yLayout isRigid -> [ height ].
+                cachedMinHeight no: [ updateMinSizeCaches ].
+              ^ cachedMinHeight yes
+            );
 
             minExtentForOrientation: orientation => (
                 orientation
@@ -258,7 +288,7 @@
             xLayout: layout => xLayout <- layout;
             yLayout: layout => yLayout <- layout;
 
-            rigidWidth: w  => xLayout: morphic layouts Rigid ~ resizeToW: w;
+            rigidWidth:  w => xLayout: morphic layouts Rigid ~ resizeToW: w;
             rigidHeight: h => yLayout: morphic layouts Rigid ~ resizeToH: h;
 
             layoutForOrientation: orientation => (
@@ -298,6 +328,7 @@
             );
 
             layoutInPlace => childrenDo: [ :c | c layoutInPlace ];
+            shrinkToFit   => resizeToW: minWidth H: minHeight;
 
             renderOn: renderer => (
                 childrenDo: [ :c |
@@ -340,7 +371,21 @@
             initHorizontal => initWithOrientation: morphic Horizontal;
             initVertical   => initWithOrientation: morphic Vertical;
 
+            updateMinSizeCaches => (
+                | w <- 0, h <- (orientation ifHorizontal: [ baseMinWidth ] ifVertical: [ baseMinHeight ]) |
+                childrenDo: [ :m |
+                    w <- w + (m minExtentForOrientation: orientation).
+                    h <- h max: (m minExtentForOrientation: orientation opposite).
+                ].
+                w <- w max: (orientation ifHorizontal: [ baseMinWidth  ] ifVertical: [ baseMinHeight ]).
+                h <- h max: (orientation ifHorizontal: [ baseMinHeight ] ifVertical: [ baseMinWidth  ]).
+                orientation
+                  ~ ifHorizontal: [ cachedMinWidth:  w. cachedMinHeight: h. ]
+                      ifVertical: [ cachedMinHeight: h. cachedMinWidth:  w. ].
+            );
+
             layoutInPlace => (
+                shrinkToFit.
                 |
                     lower  <- 0,
                     higher <- bounds dimensionForOrientation: orientation,
