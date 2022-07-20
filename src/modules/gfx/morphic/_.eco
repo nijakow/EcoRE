@@ -162,7 +162,7 @@
 
             x: xv y: yv => x: xv ~ y: yv;
 
-            offsetBy: p => my module Point2D NewX: (x + p) Y: (y + p);
+            offsetBy: p => module Point2D NewX: (x + p) Y: (y + p);
             offsetBy: p Do: block => block value(offsetBy: p);
 
             writeOn: w => w << 'a point(' << x << ', ' << y << ')';
@@ -175,6 +175,10 @@
 
             with inherited trait = {
                 ifShrinkWrap: shrinkwrap ifFlexible: flexible ifRigid: rigid => shrinkwrap value;
+
+                isShrinkWrap => true;
+                isFlexible => false;
+                isRigid => false;
             };
         };
 
@@ -183,6 +187,10 @@
 
             with inherited trait = {
                 ifShrinkWrap: shrinkwrap ifFlexible: flexible ifRigid: rigid => flexible value;
+
+                isShrinkWrap => false;
+                isFlexible => true;
+                isRigid => false;
             };
         };
 
@@ -191,6 +199,10 @@
 
             with inherited trait = {
                 ifShrinkWrap: shrinkwrap ifFlexible: flexible ifRigid: rigid => rigid value;
+
+                isShrinkWrap => false;
+                isFlexible => false;
+                isRigid => true;
             };
         };
     };
@@ -205,9 +217,9 @@
 
         with inherited trait = {
             init => (
-                bounds   <- (my module Rectangle) new.
-                xLayout  <- my module layouts Flexible.
-                yLayout  <- my module layouts Flexible.
+                bounds   <- (module Rectangle) new.
+                xLayout  <- module layouts Flexible.
+                yLayout  <- module layouts Flexible.
                 parent   <- No.
                 children <- std util newVector.
               ^ self
@@ -286,7 +298,7 @@
         with inherited own super = $ Morph;
         private module = $;
 
-        private orientation;
+        protected orientation;
 
         with inherited trait = {
             initWithOrientation: _orientation => (
@@ -295,13 +307,13 @@
               ^ self
             );
 
-            initHorizontal => initWithOrientation: my module Horizontal;
-            initVertical   => initWithOrientation: my module Vertical;
+            initHorizontal => initWithOrientation: module Horizontal;
+            initVertical   => initWithOrientation: module Vertical;
 
             layoutInPlace => (
                 |
                     lower  <- 0,
-                    higher <- layoutBounds dimensionForOrientation: orientation,
+                    higher <- bounds dimensionForOrientation: orientation,
                     diff   <- higher - lower,
 
                     flexCount <- 0,
@@ -313,8 +325,8 @@
                 childrenDo: [ :c |
                     (c layoutForOrientation: orientation) isFlexible
                       ~   if: [ flexCount <- flexCount + 1.
-                                reservedF <- reservedF + c minExtentForOrientation: orientation ]
-                        else: [ reservedN <- reservedN + c minExtentForOrientation: orientation ]
+                                reservedF <- reservedF + (c minExtentForOrientation: orientation) ]
+                        else: [ reservedN <- reservedN + (c minExtentForOrientation: orientation) ]
                 ].
 
                 budget <- (bounds dimensionForOrientation: orientation) max: (reservedF + reservedN).
