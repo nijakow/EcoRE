@@ -209,7 +209,7 @@
 
     own Morph = {
         static with inherited _ = std Clonable;
-        protected module = $;
+        protected morphic = $;
 
         bounds,
         xLayout, yLayout;
@@ -217,9 +217,9 @@
 
         with inherited trait = {
             init => (
-                bounds   <- (module Rectangle) new.
-                xLayout  <- module layouts Flexible.
-                yLayout  <- module layouts Flexible.
+                bounds   <- (morphic Rectangle) new.
+                xLayout  <- (morphic layouts Flexible).
+                yLayout  <- (morphic layouts Flexible).
                 parent   <- No.
                 children <- std util newVector.
               ^ self
@@ -258,8 +258,8 @@
             xLayout: layout => xLayout <- layout;
             yLayout: layout => yLayout <- layout;
 
-            rigidWidth: w  => xLayout: module layouts Rigid ~ resizeToW: w;
-            rigidHeight: h => yLayout: module layouts Rigid ~ resizeToH: h;
+            rigidWidth: w  => xLayout: morphic layouts Rigid ~ resizeToW: w;
+            rigidHeight: h => yLayout: morphic layouts Rigid ~ resizeToH: h;
 
             layoutForOrientation: orientation => (
                 orientation
@@ -327,7 +327,6 @@
     own BoxMorph = {
         static with inherited _ = std Clonable;
         with inherited own super = $ Morph;
-        private module = $;
 
         protected orientation;
 
@@ -338,8 +337,8 @@
               ^ self
             );
 
-            initHorizontal => initWithOrientation: module Horizontal;
-            initVertical   => initWithOrientation: module Vertical;
+            initHorizontal => initWithOrientation: morphic Horizontal;
+            initVertical   => initWithOrientation: morphic Vertical;
 
             layoutInPlace => (
                 |
@@ -409,7 +408,6 @@
     own HBoxMorph = {
         static with inherited _ = std Clonable;
         with inherited own super = $ BoxMorph;
-        private module = $;
 
         with inherited trait = {
             init => (
@@ -424,7 +422,6 @@
     own VBoxMorph = {
         static with inherited _ = std Clonable;
         with inherited own super = $ BoxMorph;
-        private module = $;
 
         with inherited trait = {
             init => (
