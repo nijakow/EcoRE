@@ -368,6 +368,8 @@
                     
                     offset <- offset + spaceForM.
                 ].
+
+                childrenDo: [ :c | c layoutInPlace ].
             );
         };
     };
