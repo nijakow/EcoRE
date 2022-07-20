@@ -162,7 +162,7 @@
 
             x: xv y: yv => x: xv ~ y: yv;
 
-            offsetBy: p => module Point2D NewX: (x + p) Y: (y + p);
+            offsetBy: p => my module Point2D NewX: (x + p) Y: (y + p);
             offsetBy: p Do: block => block value(offsetBy: p);
 
             writeOn: w => w << 'a point(' << x << ', ' << y << ')';
@@ -205,9 +205,9 @@
 
         with inherited trait = {
             init => (
-                bounds   <- (module Rectangle) new.
-                xLayout  <- module layouts Flexible.
-                yLayout  <- module layouts Flexible.
+                bounds   <- (my module Rectangle) new.
+                xLayout  <- my module layouts Flexible.
+                yLayout  <- my module layouts Flexible.
                 parent   <- No.
                 children <- std util newVector.
               ^ self
