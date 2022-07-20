@@ -267,14 +267,12 @@
             );
 
             minWidth => (
-              ^ width.
-                xLayout isRigid -> [ width ].
+                xLayout isRigid -> [ ^ width ].
                 cachedMinWidth no: [ updateMinSizeCaches ].
               ^ cachedMinWidth yes
             );
             minHeight => (
-              ^ height.
-                yLayout isRigid -> [ height ].
+                yLayout isRigid -> [ ^ height ].
                 cachedMinHeight no: [ updateMinSizeCaches ].
               ^ cachedMinHeight yes
             );
@@ -328,7 +326,13 @@
             );
 
             layoutInPlace => childrenDo: [ :c | c layoutInPlace ];
-            shrinkToFit   => resizeToW: minWidth H: minHeight;
+            shrinkToFit   => (
+                "Only shrink if there is a parent"
+                parent yes: [
+                    xLayout isShrinkWrap -> [ resizeToW: minWidth  ].
+                    yLayout isShrinkWrap -> [ resizeToH: minHeight ].
+                ]
+            );
 
             renderOn: renderer => (
                 childrenDo: [ :c |
@@ -386,6 +390,7 @@
 
             layoutInPlace => (
                 shrinkToFit.
+
                 |
                     lower  <- 0,
                     higher <- bounds dimensionForOrientation: orientation,
