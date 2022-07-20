@@ -13,14 +13,31 @@
         protected grabbedMorph;
 
         with inherited trait = {
-            makeF => ( morphic VBoxMorph new
-                        "~ rigidWidth: 50"
-                        ~ xLayout: morphic layouts ShrinkWrap
-                        ~ add: ( morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: 50 ~ rigidHeight: 50 )
-                        ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 0 )
-                        ~ add: ( morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: 50 ~ rigidHeight: 50 )
-                        ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 0 )
-                        ~ add: ( morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: 50 ~ rigidHeight: 50 )
+            VBox(...) => (
+                | box <- (morphic VBoxMorph) new |
+                std util newArray(...) do: [ :e | box add: e ].
+              ^ box
+            );
+
+            HBox(...) => (
+                | box <- (morphic HBoxMorph) new |
+                std util newArray(...) do: [ :e | box add: e ].
+              ^ box
+            );
+
+            ShrinkWrap(e)  => e ~ xLayout: morphic layouts ShrinkWrap ~ yLayout: morphic layouts ShrinkWrap;
+            RedBlock(w, h) => morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: w ~ rigidHeight: h;
+            YellowBlock    => morphic DemoMorph new ~ r: 100 g: 100 b: 0;
+            Spacer         => morphic Morph new;
+            Center(e)      => HBox(Spacer, VBox(Spacer, e, Spacer) ~ xLayout: morphic layouts ShrinkWrap, Spacer);
+
+            makeF => (  VBox(
+                            RedBlock(50, 50),
+                            YellowBlock,
+                            Center(RedBlock(25, 25)),
+                            YellowBlock,
+                            RedBlock(50, 50),
+                        ) ~ xLayout: morphic layouts ShrinkWrap
                     );
             makeX => (
                 morphic HBoxMorph new
