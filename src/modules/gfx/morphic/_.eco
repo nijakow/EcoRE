@@ -215,6 +215,7 @@
         xLayout, yLayout;
         parent, children;
 
+        protected layoutOkay,
         protected cachedMinWidth,
         protected cachedMinHeight;
 
@@ -225,6 +226,7 @@
                 yLayout  <- (morphic layouts Flexible).
                 parent   <- No.
                 children <- std util newVector.
+                layoutOkay      <- false.
                 cachedMinWidth  <- No.
                 cachedMinHeight <- No.
               ^ self
@@ -254,6 +256,9 @@
                       ifVertical: [ height ]
             );
 
+            layoutOkay: v   => layoutOkay <- v;
+            layoutIsNowOkay => layoutOkay: true;
+
             cachedMinWidth:  v => cachedMinWidth  <- Yes: v;
             cachedMinHeight: v => cachedMinHeight <- Yes: v;
             invalidateMinSizeCaches => (
@@ -281,6 +286,15 @@
                 orientation
                   ~ ifHorizontal: [ minWidth  ]
                       ifVertical: [ minHeight ]
+            );
+
+            invalidateLayoutCaches => (
+                layoutOkay: false.
+                invalidateMinSizeCaches.
+            );
+
+            layoutChanged => (
+                invalidateLayoutCaches.
             );
 
             xLayout: layout => xLayout <- layout;
@@ -316,17 +330,20 @@
                 child unlink.
                 children add: child.
                 child parent: self.
+                child invalidateLayoutCaches.
+                layoutChanged.
               ^ self
             );
 
             remove: child => (
                 children remove: child
-                  ~ yes: [ child noParent ].
+                  ~ yes: [ child noParent. layoutChanged ].
               ^ self
             );
 
             layoutInPlace => childrenDo: [ :c | c layoutInPlace ];
-            shrinkToFit   => (
+            layoutInPlaceIfNeeded => layoutOkay false: [ layoutInPlace ];
+            shrinkToFit => (
                 "Only shrink if there is a parent"
                 parent yes: [
                     xLayout isShrinkWrap -> [ resizeToW: minWidth  ].
@@ -450,7 +467,8 @@
                     budget <- budget - spaceForM.
                 ].
 
-                childrenDo: [ :c | c layoutInPlace ].
+                childrenDo: [ :c | c layoutInPlaceIfNeeded ].
+                layoutIsNowOkay.
             );
         };
     };
