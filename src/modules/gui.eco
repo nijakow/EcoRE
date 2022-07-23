@@ -72,6 +72,12 @@
                 morph childrenDo: [ :c | std io out << c bounds ~ newline commit ].
             );
 
+            relayoutAll => (
+                morph layoutChanged.
+                morph allChildrenDo: [ :m | m layoutChanged ].
+                morph layoutInPlaceIfNeeded.
+            );
+
             tick => (
                 renderer setR: 0 G: 0 B: 0.
                 renderer clear.
@@ -98,6 +104,7 @@
                       ~ yes: [ :m |
                             (std io out << 'Morph: ' << m) newline commit.
                             m remove.
+                            relayoutAll.
                         ].
                 ].
                 event isKeyDown -> [ ^ program stop ].
