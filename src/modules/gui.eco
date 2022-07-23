@@ -79,18 +79,24 @@
                 renderer present.
             );
 
+            findMorphAtX: x Y: y => (
+                | v <- No |
+                morph xRayAtX: x Y: y Do: [ :m |
+                    v <- Yes: m
+                ].
+              ^ v
+            );
+
             handleEvent: event => (
                 event isMouseMotionEvent -> [
                     (std io out << event mouseMotionX << ' ' << event mouseMotionY) newline commit.
                     morph issueEvent: No AtX: event mouseMotionX Y: event mouseMotionY
                 ].
-                "event isMouseButtonDown -> [
-                    (std io out << 'Click!') newline.
-                    morph xRayAtX: event mouseButtonX Y: event mouseButtonY Do: [
-                        :morph | (std io out << morph) newline.
-                    ].
-                    (std io out) commit.
-                ]."
+                event isMouseButtonDown -> [
+                    (std io out << 'Click!') newline commit.
+                    findMorphAtX: event mouseButtonX Y: event mouseButtonY
+                      ~ yes: [ :m | (std io out << 'Morph: ' << m) newline commit ].
+                ].
                 event isKeyDown -> [ ^ program stop ].
             );
         };
