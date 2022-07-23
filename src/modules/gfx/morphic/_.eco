@@ -341,6 +341,11 @@
               ^ self
             );
 
+            remove => (
+                parent yes: [ :p | p remove: self ].
+              ^ self
+            );
+
             layoutInPlace => childrenDo: [ :c | c layoutInPlace ];
             layoutInPlaceIfNeeded => layoutOkay false: [ layoutInPlace ];
             shrinkToFit => (

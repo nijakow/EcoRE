@@ -95,7 +95,10 @@
                 event isMouseButtonDown -> [
                     (std io out << 'Click!') newline commit.
                     findMorphAtX: event mouseButtonX Y: event mouseButtonY
-                      ~ yes: [ :m | (std io out << 'Morph: ' << m) newline commit ].
+                      ~ yes: [ :m |
+                            (std io out << 'Morph: ' << m) newline commit.
+                            m remove.
+                        ].
                 ].
                 event isKeyDown -> [ ^ program stop ].
             );
