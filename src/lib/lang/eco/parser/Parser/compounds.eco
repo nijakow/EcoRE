@@ -17,9 +17,8 @@
           begin
             if: [check: TokenType COLON] then: [
               parameters append: parseArgdef.
-              (check: TokenType BAR) unless: [
-                  expect: TokenType SEPARATOR
-              ]
+              check: TokenType SEPARATOR.
+              check: TokenType BAR.
             ] ~
             if: [check: TokenType ELLIPSIS] then: [
                 varargs <- true.
