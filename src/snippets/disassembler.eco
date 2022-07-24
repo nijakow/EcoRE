@@ -41,6 +41,8 @@
                 (opcode == lang eco bytecodes BUILTINV) -> [ (w << 'BUILTINV ' << nextU8 << ' ' << nextConstant) newline ].
                 (opcode == lang eco bytecodes SEND) -> [ (w << 'SEND ' << nextU8 << ' ' << nextConstant) newline ].
                 (opcode == lang eco bytecodes SENDV) -> [ (w << 'SENDV ' << nextU8 << ' ' << nextConstant) newline ].
+                (opcode == lang eco bytecodes RESEND) -> [ (w << 'RESEND ' << nextU8 << ' ' << nextConstant) newline ].
+                (opcode == lang eco bytecodes RESENDV) -> [ (w << 'RESENDV ' << nextU8 << ' ' << nextConstant) newline ].
                 (opcode == lang eco bytecodes ASSIGN) -> [ (w << 'SENDV ' << nextConstant) newline ].
                 (opcode == lang eco bytecodes AS) -> [ (w << 'AS') newline ].
                 (opcode == lang eco bytecodes RETURN) -> [ (w << 'RETURN ' << nextU8) newline ].
