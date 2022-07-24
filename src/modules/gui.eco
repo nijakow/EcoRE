@@ -108,27 +108,12 @@
 
             handleEvent: event => (
                 event isMouseMotionEvent -> [
-                    (std io out << event mouseMotionX << ' ' << event mouseMotionY) newline commit.
-                    morph issueEvent: No AtX: event mouseMotionX Y: event mouseMotionY.
                     mouseX <- event mouseMotionX.
                     mouseY <- event mouseMotionY.
                 ].
                 event isMouseButtonDown -> [
                     (std io out << 'Click!') newline commit.
-                    findMorphAtX: event mouseButtonX Y: event mouseButtonY
-                      ~ yes: [ :m |
-                            (std io out << 'Morph: ' << m) newline commit.
-                            grabbedMorph
-                              ~ yes: [ :gm | m parent yes: [ :p | p add: gm. grabbedMorph <- No. ] ]
-                                 no: [
-                                    m remove.
-                                    "m rigidWidth: 100 ~ rigidHeight: 100."
-                                    m layoutChanged.
-                                    m layoutInPlace.
-                                    grabbedMorph <- Yes: m.
-                                ].
-                            relayoutAll.
-                        ].
+                    morph handMorph grabOrRelease.
                 ].
                 event isKeyDown -> [ ^ program stop ].
             );

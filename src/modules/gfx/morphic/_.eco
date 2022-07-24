@@ -571,12 +571,43 @@
         static with inherited _ = std Clonable;
         with inherited own Morph = $ Morph;
 
+        protected grabbedMorph;
+
         with inherited trait = {
             init => (
                 $(Morph) init.
                 rigidWidth: 1.
                 rigidHeight: 1.
+                grabbedMorph <- No.
               ^ self
+            );
+
+            grab: morph => (
+                add: morph.
+                grabbedMorph <- Yes: morph.
+              ^ self
+            );
+
+            grab => (
+                std io out << 'Grabbing...' ~ newline commit.
+                parent yes: [ :w |
+                ].
+            );
+
+            release => (
+                grabbedMorph
+                  ~ yes: [ :gm |
+                        parent yes: [ :p |
+                            (p dropMorph: gm AtX: bounds x Y: bounds y)
+                              ~ if: [ grabbedMorph <- No ]
+                        ]
+                    ]
+            );
+
+            grabOrRelease => (
+                grabbedMorph
+                  ~ yes: [ release ]
+                     no: [ grab    ]
             );
 
             renderOn: renderer => (
