@@ -58,8 +58,10 @@
             );
 
             init => (
-                morph <- makeY.
+                morph <- morphic WorldMorph new.
                 grabbedMorph <- No.
+                mouseX <- 0.
+                mouseY <- 0.
               ^ self
             );
 
@@ -83,6 +85,7 @@
             );
 
             tick => (
+                morph handMorph moveToX: mouseX Y: mouseY.
                 renderer setR: 0 G: 0 B: 0.
                 renderer clear.
                 renderer accept: morph.

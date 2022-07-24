@@ -362,13 +362,14 @@
                 ]
             );
 
-            renderOn: renderer => (
+            renderChildrenOn: renderer => (
                 childrenDo: [ :c |
                     renderer pushBounds: c bounds.
                     renderer accept: c.
                     renderer popBounds.
                 ].
             );
+            renderOn: renderer => renderChildrenOn: renderer;
 
             processEvent: event AtX: x Y: y => (
                 (std io out << 'Received event in ' << self << '(' << x << ', ' << y << ')') newline commit.
@@ -390,6 +391,19 @@
                       ~ if: [ c xRayAtX: (x - b x) Y: (y - b y) Do: block ]
                 ].
               ^ self
+            );
+
+            handleDropMorph: morph AtX: x Y: y => (
+              ^ false
+            );
+
+            dropMorph: morph AtX: x Y: y => (
+                (handleDropMorph: morph AtX: x Y: y) -> [ ^ true ].
+                childrenWithBoundsDo: [ :c, :b |
+                    b containsX: x Y: y
+                      ~ if: [ (c dropMorph: morph AtX: (x - b x) Y: (y - b y)) -> [ ^ true ] ].
+                ].
+              ^ false
             );
 
             writeOn: w => w << 'a morph';
@@ -546,9 +560,57 @@
             renderOn: renderer => (
                 renderer setR: r G: g B: b.
                 renderer fillRectX: 0 Y: 0 W: bounds w H: bounds h.
+                renderChildrenOn: renderer.
             );
 
             writeOn: w => w << 'a demo morph';
+        };
+    };
+
+    own HandMorph = {
+        static with inherited _ = std Clonable;
+        with inherited own Morph = $ Morph;
+
+        with inherited trait = {
+            init => (
+                $(Morph) init.
+                rigidWidth: 1.
+                rigidHeight: 1.
+              ^ self
+            );
+
+            renderOn: renderer => (
+                renderer setR: 200 G: 0 B: 0.
+                renderer fillRectX: 0 Y: 0 W: 1 H: 1.
+                renderChildrenOn: renderer.
+            );
+
+            writeOn: w => w << 'a hand morph';
+        };
+    };
+
+    own WorldMorph = {
+        static with inherited _ = std Clonable;
+        with inherited own Morph = $ Morph;
+        protected morphic = $;
+
+        handMorph;
+
+        with inherited trait = {
+            init => (
+                $(Morph) init.
+                handMorph <- (morphic HandMorph new).
+                add: handMorph.
+              ^ self
+            );
+
+            renderOn: renderer => (
+                renderer setR: 200 G: 200 B: 200.
+                renderer fillRectX: 0 Y: 0 W: bounds w H: bounds h.
+                renderChildrenOn: renderer.
+            );
+
+            writeOn: w => w << 'a world morph';
         };
     };
 }
