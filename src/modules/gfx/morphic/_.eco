@@ -145,8 +145,7 @@
         static with inherited _ = std Clonable;
         private module = $;
 
-        private x;
-        private y;
+        x, y;
 
         with inherited trait = {
             NewX: _x Y: _y => self clone initWithX: _x Y: _y;
@@ -154,7 +153,7 @@
             initWithX: _x Y: _y => (
                 x <- _x.
                 y <- _y.
-            ^ self
+              ^ self
             );
 
             x: xv => x <- xv;
@@ -247,6 +246,12 @@
             moveToX: x Y: y   => boundsX: x Y: y W: bounds w H: bounds h;
             resizeToW: w H: h => boundsX: bounds x Y: bounds y W: w H: h;
 
+            offset => (morphic Point2D clone) initWithX: bounds x Y: bounds y;
+            globalOffset => (
+                | b <- globalBounds |
+              ^ (morphic Point2D clone) initWithX: b x Y: b y
+            );
+
             width  => bounds w;
             height => bounds h;
 
@@ -301,6 +306,7 @@
 
             layoutChanged => (
                 invalidateLayoutCaches.
+                world yes: [ :w | w dirty ].
             );
 
             xLayout: layout => xLayout <- layout;
@@ -319,6 +325,8 @@
                 parent yes: [ :p | p root ]
                         no: [      self   ]
             );
+
+            world => Yes: root;
 
             childrenDo: block => children do: block;
             allChildrenDo: block => childrenDo: [ :c | block value(c). c allChildrenDo: block ];
@@ -584,13 +592,22 @@
 
             grab: morph => (
                 add: morph.
+                morph moveToX: 0 Y: 0. "TODO: Keep offset"
                 grabbedMorph <- Yes: morph.
               ^ self
             );
 
             grab => (
                 std io out << 'Grabbing...' ~ newline commit.
-                parent yes: [ :w |
+                world yes: [ :w |
+                    | p <- globalOffset, morph <- No |
+                    w xRayAtX: p x Y: p y Do: [ :m |
+                        (self == m) unless: [
+                            morph <- Yes: m
+                        ]
+                    ].
+                    morph
+                      ~ yes: [ :m | (m != w) -> [ grab: m ] ]
                 ].
             );
 
@@ -625,20 +642,39 @@
         with inherited own Morph = $ Morph;
         protected morphic = $;
 
+        protected isDirty,
         handMorph;
 
         with inherited trait = {
             init => (
                 $(Morph) init.
+                isDirty   <- true.
                 handMorph <- (morphic HandMorph new).
                 add: handMorph.
               ^ self
+            );
+
+            dirty => isDirty <- true;
+
+            maybeUpdate => (
+                isDirty -> [
+                    isDirty <- false.
+                    allChildrenDo: [ :c | c layoutChanged ].
+                    layoutChanged.
+                    layoutInPlaceIfNeeded
+                ]
             );
 
             renderOn: renderer => (
                 renderer setR: 200 G: 200 B: 200.
                 renderer fillRectX: 0 Y: 0 W: bounds w H: bounds h.
                 renderChildrenOn: renderer.
+            );
+
+            handleDropMorph: morph AtX: x Y: y => (
+                add: morph.
+                morph moveToX: x Y: y.
+              ^ true
             );
 
             writeOn: w => w << 'a world morph';

@@ -12,8 +12,7 @@
 
         protected program,
         protected renderer,
-        protected morph,
-        protected grabbedMorph;
+        protected morph;
 
         with inherited trait = {
             VBox(...) => (
@@ -58,8 +57,8 @@
             );
 
             init => (
-                morph <- morphic WorldMorph new.
-                grabbedMorph <- No.
+                morph <- morphic WorldMorph new
+                           ~ add: (RedBlock(50, 50) ~ moveToX: 100 Y: 100).
                 mouseX <- 0.
                 mouseY <- 0.
               ^ self
@@ -78,23 +77,12 @@
                 morph childrenDo: [ :c | std io out << c bounds ~ newline commit ].
             );
 
-            relayoutAll => (
-                morph layoutChanged.
-                morph allChildrenDo: [ :m | m layoutChanged ].
-                morph layoutInPlaceIfNeeded.
-            );
-
             tick => (
                 morph handMorph moveToX: mouseX Y: mouseY.
+                morph maybeUpdate.
                 renderer setR: 0 G: 0 B: 0.
                 renderer clear.
                 renderer accept: morph.
-                grabbedMorph yes: [ :gm |
-                    gm moveToX: mouseX Y: mouseY.
-                    renderer pushBounds: gm bounds.
-                    renderer accept: gm.
-                    renderer popBounds.
-                ].
                 renderer present.
             );
 
