@@ -12,7 +12,7 @@ bool Eco_VM_Builtin_IntAsFloat(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     any = Eco_Fiber_Pop(fiber);
     any = Eco_Any_FromFloating((Eco_Floating) Eco_Any_AsInteger(any));
-    Eco_Fiber_Push(fiber, &any);
+    Eco_Fiber_Push(fiber, any);
     return true;
 }
 
@@ -24,7 +24,7 @@ bool Eco_VM_Builtin_FloatAsInt(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     any = Eco_Fiber_Pop(fiber);
     any = Eco_Any_FromInteger((Eco_Integer) Eco_Any_AsFloating(any));
-    Eco_Fiber_Push(fiber, &any);
+    Eco_Fiber_Push(fiber, any);
     return true;
 }
 
@@ -46,7 +46,7 @@ bool Eco_VM_Builtin_AddIntegers(struct Eco_Fiber* fiber, unsigned int args)
     }
 
     any = Eco_Any_FromInteger(value);
-    Eco_Fiber_Push(fiber, &any);
+    Eco_Fiber_Push(fiber, any);
 
     return true;
 }
@@ -79,7 +79,7 @@ bool Eco_VM_Builtin_Add(struct Eco_Fiber* fiber, unsigned int args)
     any = Eco_Any_FromInteger(value);
 
     success:
-    Eco_Fiber_Push(fiber, &any);
+    Eco_Fiber_Push(fiber, any);
     return true;
 
     error:
@@ -124,7 +124,7 @@ bool Eco_VM_Builtin_Subtract2(struct Eco_Fiber* fiber, unsigned int args)
         goto error;
     }
 
-    Eco_Fiber_Push(fiber, &result);
+    Eco_Fiber_Push(fiber, result);
     return true;
   error:
     // TODO: Set error type
@@ -168,7 +168,7 @@ bool Eco_VM_Builtin_Multiply2(struct Eco_Fiber* fiber, unsigned int args)
         goto error;
     }
 
-    Eco_Fiber_Push(fiber, &result);
+    Eco_Fiber_Push(fiber, result);
     return true;
   error:
     // TODO: Set error type
@@ -212,7 +212,7 @@ bool Eco_VM_Builtin_Divide2(struct Eco_Fiber* fiber, unsigned int args)
         goto error;
     }
 
-    Eco_Fiber_Push(fiber, &result);
+    Eco_Fiber_Push(fiber, result);
     return true;
   error:
     // TODO: Set error type
@@ -238,19 +238,19 @@ bool Eco_VM_Builtin_Modulo2(struct Eco_Fiber* fiber, unsigned int args)
 
     if (Eco_Any_IsInteger(arg1) && Eco_Any_IsInteger(arg2)) {
         result = Eco_Any_FromInteger(Eco_Any_AsInteger(arg1) % Eco_Any_AsInteger(arg2));
-        Eco_Fiber_Push(fiber, &result);
+        Eco_Fiber_Push(fiber, result);
         return true;
     } else if (Eco_Any_IsFloating(arg1) && Eco_Any_IsFloating(arg2)) {
         result = Eco_Any_FromFloating(fmod(Eco_Any_AsFloating(arg1), Eco_Any_AsFloating(arg2)));
-        Eco_Fiber_Push(fiber, &result);
+        Eco_Fiber_Push(fiber, result);
         return true;
     } else if (Eco_Any_IsFloating(arg1) && Eco_Any_IsInteger(arg2)) {
         result = Eco_Any_FromFloating(fmod(Eco_Any_AsFloating(arg1), Eco_Any_AsInteger(arg2)));
-        Eco_Fiber_Push(fiber, &result);
+        Eco_Fiber_Push(fiber, result);
         return true;
     } else if (Eco_Any_IsInteger(arg1) && Eco_Any_IsFloating(arg2)) {
         result = Eco_Any_FromFloating(fmod(Eco_Any_AsInteger(arg1), Eco_Any_AsFloating(arg2)));
-        Eco_Fiber_Push(fiber, &result);
+        Eco_Fiber_Push(fiber, result);
         return true;
     } else {
         // TODO: Set error type
@@ -277,7 +277,7 @@ bool Eco_VM_Builtin_BitOr2(struct Eco_Fiber* fiber, unsigned int args)
 
     if (Eco_Any_IsInteger(arg1) && Eco_Any_IsInteger(arg2)) {
         result = Eco_Any_FromInteger(Eco_Any_AsInteger(arg1) | Eco_Any_AsInteger(arg2));
-        Eco_Fiber_Push(fiber, &result);
+        Eco_Fiber_Push(fiber, result);
         return true;
     } else {
         // TODO: Set error type
@@ -304,7 +304,7 @@ bool Eco_VM_Builtin_BitAnd2(struct Eco_Fiber* fiber, unsigned int args)
 
     if (Eco_Any_IsInteger(arg1) && Eco_Any_IsInteger(arg2)) {
         result = Eco_Any_FromInteger(Eco_Any_AsInteger(arg1) & Eco_Any_AsInteger(arg2));
-        Eco_Fiber_Push(fiber, &result);
+        Eco_Fiber_Push(fiber, result);
         return true;
     } else {
         // TODO: Set error type
@@ -331,7 +331,7 @@ bool Eco_VM_Builtin_BitXor2(struct Eco_Fiber* fiber, unsigned int args)
 
     if (Eco_Any_IsInteger(arg1) && Eco_Any_IsInteger(arg2)) {
         result = Eco_Any_FromInteger(Eco_Any_AsInteger(arg1) ^ Eco_Any_AsInteger(arg2));
-        Eco_Fiber_Push(fiber, &result);
+        Eco_Fiber_Push(fiber, result);
         return true;
     } else {
         // TODO: Set error type
@@ -358,7 +358,7 @@ bool Eco_VM_Builtin_LShift2(struct Eco_Fiber* fiber, unsigned int args)
 
     if (Eco_Any_IsInteger(arg1) && Eco_Any_IsInteger(arg2)) {
         result = Eco_Any_FromInteger(Eco_Any_AsInteger(arg1) << Eco_Any_AsInteger(arg2));
-        Eco_Fiber_Push(fiber, &result);
+        Eco_Fiber_Push(fiber, result);
         return true;
     } else {
         // TODO: Set error type
@@ -385,7 +385,7 @@ bool Eco_VM_Builtin_RShift2(struct Eco_Fiber* fiber, unsigned int args)
 
     if (Eco_Any_IsInteger(arg1) && Eco_Any_IsInteger(arg2)) {
         result = Eco_Any_FromInteger(Eco_Any_AsInteger(arg1) >> Eco_Any_AsInteger(arg2));
-        Eco_Fiber_Push(fiber, &result);
+        Eco_Fiber_Push(fiber, result);
         return true;
     } else {
         // TODO: Set error type
@@ -430,7 +430,7 @@ bool Eco_VM_Builtin_Less2(struct Eco_Fiber* fiber, unsigned int args)
         goto error;
     }
 
-    Eco_Fiber_Push(fiber, &result);
+    Eco_Fiber_Push(fiber, result);
     return true;
   error:
     // TODO: Set error type
@@ -450,7 +450,7 @@ bool Eco_VM_Builtin_Sqrt(struct Eco_Fiber* fiber, unsigned int args)
         any = Eco_Any_FromFloating(sqrtf(Eco_Any_AsFloating(any)));
     else
         return false;
-    Eco_Fiber_Push(fiber, &any);
+    Eco_Fiber_Push(fiber, any);
     return true;
 }
 
@@ -467,7 +467,7 @@ bool Eco_VM_Builtin_Sin(struct Eco_Fiber* fiber, unsigned int args)
         any = Eco_Any_FromFloating(sin(Eco_Any_AsFloating(any)));
     else
         return false;
-    Eco_Fiber_Push(fiber, &any);
+    Eco_Fiber_Push(fiber, any);
     return true;
 }
 
@@ -484,7 +484,7 @@ bool Eco_VM_Builtin_Cos(struct Eco_Fiber* fiber, unsigned int args)
         any = Eco_Any_FromFloating(cos(Eco_Any_AsFloating(any)));
     else
         return false;
-    Eco_Fiber_Push(fiber, &any);
+    Eco_Fiber_Push(fiber, any);
     return true;
 }
 
@@ -501,6 +501,6 @@ bool Eco_VM_Builtin_Tan(struct Eco_Fiber* fiber, unsigned int args)
         any = Eco_Any_FromFloating(tan(Eco_Any_AsFloating(any)));
     else
         return false;
-    Eco_Fiber_Push(fiber, &any);
+    Eco_Fiber_Push(fiber, any);
     return true;
 }

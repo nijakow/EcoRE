@@ -74,7 +74,7 @@ void Eco_Fiber_WaitOn(struct Eco_Fiber* fiber, struct Eco_FiberQueue* queue)
 
 void Eco_Fiber_ReactivateWithValue(struct Eco_Fiber* fiber, Eco_Any* value)
 {
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_Push(fiber, *value);
     Eco_Fiber_SetRunning(fiber);
 }
 

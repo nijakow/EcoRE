@@ -16,7 +16,7 @@ bool Eco_VM_Builtin_StringByteAt(struct Eco_Fiber* fiber, unsigned int args)
     string = Eco_Fiber_Pop(fiber);
     // TODO: Type checks!
     codepoint = Eco_Any_FromInteger(Eco_String_ByteAt(Eco_Any_AsPointer(string), Eco_Any_AsInteger(index)));
-    Eco_Fiber_Push(fiber, &codepoint);
+    Eco_Fiber_Push(fiber, codepoint);
     return true;
 }
 
@@ -33,7 +33,7 @@ bool Eco_VM_Builtin_StringCodepointAtByte(struct Eco_Fiber* fiber, unsigned int 
     string = Eco_Fiber_Pop(fiber);
     // TODO: Type checks!
     codepoint = Eco_Any_FromCharacter(Eco_String_At(Eco_Any_AsPointer(string), Eco_Any_AsInteger(index)));
-    Eco_Fiber_Push(fiber, &codepoint);
+    Eco_Fiber_Push(fiber, codepoint);
     return true;
 }
 
@@ -50,7 +50,7 @@ bool Eco_VM_Builtin_StringStepAtByte(struct Eco_Fiber* fiber, unsigned int args)
     string = Eco_Fiber_Pop(fiber);
     // TODO: Type checks!
     result = Eco_Any_FromInteger(Eco_String_StepAt(Eco_Any_AsPointer(string), Eco_Any_AsInteger(index)));
-    Eco_Fiber_Push(fiber, &result);
+    Eco_Fiber_Push(fiber, result);
     return true;
 }
 
@@ -65,7 +65,7 @@ bool Eco_VM_Builtin_StringByteLength(struct Eco_Fiber* fiber, unsigned int args)
     string = Eco_Fiber_Pop(fiber);
     // TODO: Type checks!
     length = Eco_Any_FromInteger(Eco_String_ByteCount(Eco_Any_AsPointer(string)));
-    Eco_Fiber_Push(fiber, &length);
+    Eco_Fiber_Push(fiber, length);
     return true;
 }
 
@@ -80,7 +80,7 @@ bool Eco_VM_Builtin_StringCharLength(struct Eco_Fiber* fiber, unsigned int args)
     string = Eco_Fiber_Pop(fiber);
     // TODO: Type checks!
     length = Eco_Any_FromInteger(Eco_String_CharacterCount(Eco_Any_AsPointer(string)));
-    Eco_Fiber_Push(fiber, &length);
+    Eco_Fiber_Push(fiber, length);
     return true;
 }
 

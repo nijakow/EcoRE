@@ -23,9 +23,9 @@ static inline bool Eco_Fiber_HasTop(struct Eco_Fiber* fiber)
     return Eco_Fiber_Top(fiber) != NULL;
 }
 
-static inline bool Eco_Fiber_Push(struct Eco_Fiber* fiber, Eco_Any* src)
+static inline bool Eco_Fiber_Push(struct Eco_Fiber* fiber, Eco_Any src)
 {
-    Eco_Any_AssignAny((Eco_Any*) fiber->stack_pointer, src);
+    *((Eco_Any*) fiber->stack_pointer) = src;
     fiber->stack_pointer += sizeof(Eco_Any);
     return true;
 }

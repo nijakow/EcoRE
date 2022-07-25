@@ -13,7 +13,7 @@ bool Eco_Fiber_EnterThunk(struct Eco_Fiber* fiber, Eco_Any* lobby, struct Eco_Co
 {
     struct Eco_Frame*  frame;
 
-    Eco_Fiber_Push(fiber, lobby);
+    Eco_Fiber_Push(fiber, *lobby);
 
     frame              = Eco_Fiber_PushFrame(fiber, *lobby, 1, code->arg_count, code->register_count);
 
@@ -97,8 +97,8 @@ bool Eco_Fiber_Unwind(struct Eco_Fiber* fiber)
          */
         Eco_Fiber_SetRunning(fiber);
         value = Eco_Any_FromInteger(0);
-        Eco_Fiber_Push(fiber, &value);
-        Eco_Fiber_Push(fiber, &fiber->thrown);
+        Eco_Fiber_Push(fiber, value);
+        Eco_Fiber_Push(fiber, fiber->thrown);
         Eco_Fiber_EnterClosure(fiber, handler, 2);
         Eco_Fiber_Top(fiber)->return_to = handler->lexical;
         return true;

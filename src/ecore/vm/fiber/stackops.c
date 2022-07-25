@@ -58,7 +58,7 @@ void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
     fiber->top           = frame->previous;
     fiber->stack_pointer = (char*) frame->args;
 
-    Eco_Fiber_Push(fiber, result);  // Re-push the returned value
+    Eco_Fiber_Push(fiber, *result);  // Re-push the returned value
 }
 
 void Eco_Fiber_ResetFrame(struct Eco_Fiber* fiber)
