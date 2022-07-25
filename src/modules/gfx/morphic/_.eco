@@ -663,6 +663,13 @@
               ^ self
             );
 
+            childrenDo: block => (
+                $(Morph) childrenDo: [ :c |
+                    (handMorph != c) -> [ block value(c) ].
+                ].
+                block value(handMorph).
+            );
+
             world => Yes: self;
 
             dirty => isDirty <- true;
