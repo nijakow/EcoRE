@@ -17,9 +17,9 @@ bool Eco_VM_Builtin_GetSlotValue(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
-    Eco_Fiber_Pop(fiber, &any);
+    any  = Eco_Fiber_Pop(fiber);
     name = Eco_Any_AsPointer(any);
-    Eco_Fiber_Pop(fiber, &any);
+    any  = Eco_Fiber_Pop(fiber);
     type = Eco_Any_GetType(any);
     if (type->proxy != NULL)
         molecule = (struct Eco_Molecule*) type->proxy;
@@ -79,8 +79,8 @@ bool Eco_VM_Builtin_GetTypeSlotNames(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Fiber_Pop(fiber, &any);
-    type = (struct Eco_Type*) Eco_Any_AsPointer(any);
+    any   = Eco_Fiber_Pop(fiber);
+    type  = (struct Eco_Type*) Eco_Any_AsPointer(any);
     array = Eco_Array_New(type->slot_count);
     // TODO, FIXME, XXX: Handle array == NULL!
     for (index = 0; index < type->slot_count; index++)
@@ -103,14 +103,12 @@ bool Eco_VM_Builtin_GetTypeSlotInfo(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
         return false;
     
-    Eco_Fiber_Pop(fiber, &any);
+    any      = Eco_Fiber_Pop(fiber);
     subindex = Eco_Any_AsInteger(any);
-
-    Eco_Fiber_Pop(fiber, &any);
-    index = Eco_Any_AsInteger(any);
-    
-    Eco_Fiber_Pop(fiber, &any);
-    type = Eco_Any_AsPointer(any);
+    any      = Eco_Fiber_Pop(fiber);
+    index    = Eco_Any_AsInteger(any);
+    any      = Eco_Fiber_Pop(fiber);
+    type     = Eco_Any_AsPointer(any);
 
     if (subindex == -1)
         any = Eco_Any_FromInteger(type->slot_count);
@@ -146,8 +144,8 @@ bool Eco_VM_Builtin_GetTypeSupers(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Fiber_Pop(fiber, &any);
-    type = Eco_Any_AsPointer(any);
+    any      = Eco_Fiber_Pop(fiber);
+    type     = Eco_Any_AsPointer(any);
     elements = Eco_Array_New(type->inherited_types.fill);
     for (index = 0; index < type->inherited_types.fill; index++)
     {
@@ -168,8 +166,8 @@ bool Eco_VM_Builtin_GetTypeSubs(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Fiber_Pop(fiber, &any);
-    type = Eco_Any_AsPointer(any);
+    any      = Eco_Fiber_Pop(fiber);
+    type     = Eco_Any_AsPointer(any);
     elements = Eco_Array_New(type->inheriting_types.fill);
     for (index = 0; index < type->inheriting_types.fill; index++)
     {
@@ -188,7 +186,7 @@ bool Eco_VM_Builtin_GetTypeProxy(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Fiber_Pop(fiber, &any);
+    any  = Eco_Fiber_Pop(fiber);
     type = Eco_Any_AsPointer(any);
     if (type->proxy != NULL)    // If NULL, any will point to the type itself
         any = Eco_Any_FromPointer(type->proxy);
@@ -206,7 +204,7 @@ bool Eco_VM_Builtin_InterfaceGetParents(struct Eco_Fiber* fiber, unsigned int ar
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
     
-    Eco_Fiber_Pop(fiber, &any);
+    any       = Eco_Fiber_Pop(fiber);
     interface = Eco_Any_AsPointer(any);
 
     parents = Eco_Array_New(Eco_Interface_GetParentCount(interface));
@@ -228,13 +226,11 @@ bool Eco_VM_Builtin_InterfaceGetEntryInfo(struct Eco_Fiber* fiber, unsigned int 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
         return false;
     
-    Eco_Fiber_Pop(fiber, &any);
-    subindex = Eco_Any_AsInteger(any);
-
-    Eco_Fiber_Pop(fiber, &any);
-    index = Eco_Any_AsInteger(any);
-    
-    Eco_Fiber_Pop(fiber, &any);
+    any       = Eco_Fiber_Pop(fiber);
+    subindex  = Eco_Any_AsInteger(any);
+    any       = Eco_Fiber_Pop(fiber);
+    index     = Eco_Any_AsInteger(any);
+    any       = Eco_Fiber_Pop(fiber);
     interface = (struct Eco_Interface*) Eco_Any_AsPointer(any);
 
     if (subindex == -1)
@@ -273,10 +269,9 @@ bool Eco_VM_Builtin_InterfaceAddParent(struct Eco_Fiber* fiber, unsigned int arg
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
 
-    Eco_Fiber_Pop(fiber, &any);
-    parent = Eco_Any_AsPointer(any);
-    
-    Eco_Fiber_Pop(fiber, &any);
+    any           = Eco_Fiber_Pop(fiber);
+    parent        = Eco_Any_AsPointer(any);
+    any           = Eco_Fiber_Pop(fiber);
     old_interface = Eco_Any_AsPointer(any);
 
     new_interface = Eco_Interface_AddParent(old_interface, parent);
@@ -299,10 +294,10 @@ bool Eco_VM_Builtin_InterfaceAddEntry(struct Eco_Fiber* fiber, unsigned int args
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 5, 5))
         return false;
     
-    Eco_Fiber_Pop(fiber, &any);
+    any               = Eco_Fiber_Pop(fiber);
     entry.has_varargs = Eco_Any_AsInteger(any) != 0;
 
-    Eco_Fiber_Pop(fiber, &any);
+    any   = Eco_Fiber_Pop(fiber);
     types = (struct Eco_Array*) Eco_Any_AsPointer(any);
 
     entry.arg_count = Eco_Array_Size(types);
@@ -312,13 +307,13 @@ bool Eco_VM_Builtin_InterfaceAddEntry(struct Eco_Fiber* fiber, unsigned int args
         entry.arg_types[index] = (struct Eco_Interface*) Eco_Any_AsPointer(*Eco_Array_At(types, index));
     }
 
-    Eco_Fiber_Pop(fiber, &any);
+    any       = Eco_Fiber_Pop(fiber);
     entry.key = (struct Eco_Key*) Eco_Any_AsPointer(any);
 
-    Eco_Fiber_Pop(fiber, &any);
+    any               = Eco_Fiber_Pop(fiber);
     entry.return_type = (struct Eco_Interface*) Eco_Any_AsPointer(any);
 
-    Eco_Fiber_Pop(fiber, &any);
+    any       = Eco_Fiber_Pop(fiber);
     interface = (struct Eco_Interface*) Eco_Any_AsPointer(any);
 
     interface = Eco_Interface_AddEntry(interface, &entry);
@@ -340,10 +335,10 @@ bool Eco_VM_Builtin_InterfaceImplementsMessage(struct Eco_Fiber* fiber, unsigned
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
     
-    Eco_Fiber_Pop(fiber, &any);
+    any     = Eco_Fiber_Pop(fiber);
     message = Eco_Any_AsPointer(any);
 
-    Eco_Fiber_Pop(fiber, &any);
+    any       = Eco_Fiber_Pop(fiber);
     interface = Eco_Any_AsPointer(any);
 
     if (Eco_Interface_ImplementsMessage(interface, message)) {
@@ -365,10 +360,10 @@ bool Eco_VM_Builtin_InterfaceImplementsInterface(struct Eco_Fiber* fiber, unsign
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
     
-    Eco_Fiber_Pop(fiber, &any);
+    any          = Eco_Fiber_Pop(fiber);
     subinterface = Eco_Any_AsPointer(any);
 
-    Eco_Fiber_Pop(fiber, &any);
+    any       = Eco_Fiber_Pop(fiber);
     interface = Eco_Any_AsPointer(any);
 
     if (Eco_Interface_ImplementsInterface(interface, subinterface)) {

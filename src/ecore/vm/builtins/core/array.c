@@ -17,7 +17,7 @@ bool Eco_VM_Builtin_Array(struct Eco_Fiber* fiber, unsigned int args)
     while (args > 0)
     {
         args--;
-        Eco_Fiber_Pop(fiber, &any);
+        any = Eco_Fiber_Pop(fiber);
         Eco_Array_Put(array, args, any);
     }
     any = Eco_Any_FromPointer(array);
@@ -35,8 +35,8 @@ bool Eco_VM_Builtin_ArrayNew(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Fiber_Pop(fiber, &length);
-    array = Eco_Any_FromPointer(Eco_Array_New(Eco_Any_AsInteger(length)));
+    length = Eco_Fiber_Pop(fiber);
+    array  = Eco_Any_FromPointer(Eco_Array_New(Eco_Any_AsInteger(length)));
     Eco_Fiber_Push(fiber, &array);
     return true;
 }
@@ -51,7 +51,7 @@ bool Eco_VM_Builtin_ArraySize(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Fiber_Pop(fiber, &array);
+    array = Eco_Fiber_Pop(fiber);
     length = Eco_Any_FromInteger(Eco_Array_Size(Eco_Any_AsPointer(array)));
     Eco_Fiber_Push(fiber, &length);
     return true;
@@ -67,8 +67,8 @@ bool Eco_VM_Builtin_ArrayAt(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
-    Eco_Fiber_Pop(fiber, &index);
-    Eco_Fiber_Pop(fiber, &array);
+    index = Eco_Fiber_Pop(fiber);
+    array = Eco_Fiber_Pop(fiber);
     Eco_Fiber_Push(fiber, Eco_Array_At(Eco_Any_AsPointer(array), Eco_Any_AsInteger(index)));
     return true;
 }
@@ -83,8 +83,8 @@ bool Eco_VM_Builtin_ArrayAtPut(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
         return false;
-    Eco_Fiber_Pop(fiber, &value);
-    Eco_Fiber_Pop(fiber, &index);
+    value = Eco_Fiber_Pop(fiber);
+    index = Eco_Fiber_Pop(fiber);
     Eco_Array_Put((Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber))),
                    Eco_Any_AsInteger(index),
                    value);

@@ -24,12 +24,12 @@ bool Eco_VM_Builtin_AddValueSlot(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 6, 6))
         return false;
     
-    Eco_Fiber_Pop(fiber, &value);
-    Eco_Fiber_Pop(fiber, &key);
-    Eco_Fiber_Pop(fiber, &type);
-    Eco_Fiber_Pop(fiber, &flags);
-    Eco_Fiber_Pop(fiber, &index);
-    Eco_Fiber_Pop(fiber, &object);
+    value  = Eco_Fiber_Pop(fiber);
+    key    = Eco_Fiber_Pop(fiber);
+    type   = Eco_Fiber_Pop(fiber);
+    flags  = Eco_Fiber_Pop(fiber);
+    index  = Eco_Fiber_Pop(fiber);
+    object = Eco_Fiber_Pop(fiber);
 
     // TODO: More flags
     info.key                =  (struct Eco_Key*) Eco_Any_AsPointer(key);
@@ -69,12 +69,12 @@ bool Eco_VM_Builtin_AddCodeSlot(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 6, 6))
         return false;
     
-    Eco_Fiber_Pop(fiber, &code);
-    Eco_Fiber_Pop(fiber, &key);
-    Eco_Fiber_Pop(fiber, &type);
-    Eco_Fiber_Pop(fiber, &flags);
-    Eco_Fiber_Pop(fiber, &index);
-    Eco_Fiber_Pop(fiber, &object);
+    code   = Eco_Fiber_Pop(fiber);
+    key    = Eco_Fiber_Pop(fiber);
+    type   = Eco_Fiber_Pop(fiber);
+    flags  = Eco_Fiber_Pop(fiber);
+    index  = Eco_Fiber_Pop(fiber);
+    object = Eco_Fiber_Pop(fiber);
 
     // TODO: More flags
     info.key                =  (struct Eco_Key*) Eco_Any_AsPointer(key);
@@ -103,8 +103,8 @@ bool Eco_VM_Builtin_RemoveSlot(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
     
-    Eco_Fiber_Pop(fiber, &index);
-    Eco_Fiber_Pop(fiber, &object);
+    index  = Eco_Fiber_Pop(fiber);
+    object = Eco_Fiber_Pop(fiber);
 
     Eco_Molecule_RemoveSlot((struct Eco_Molecule*) Eco_Any_AsPointer(object),
                             Eco_Any_AsInteger(index));

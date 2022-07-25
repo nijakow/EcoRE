@@ -30,14 +30,13 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
                      unsigned int       arg_count)
 {
     struct Eco_Frame*  frame;
-    Eco_Any            any;
 
     if ((arg_count < code->arg_count)) {
         Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ARGERROR);
         return false;
     } else if ((arg_count > code->arg_count) && !(code->has_varargs)) {
         while (arg_count > code->arg_count) {
-            Eco_Fiber_Pop(fiber, &any);
+            Eco_Fiber_Pop(fiber);
             arg_count--;
         }
     }

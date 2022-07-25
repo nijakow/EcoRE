@@ -30,11 +30,10 @@ static inline bool Eco_Fiber_Push(struct Eco_Fiber* fiber, Eco_Any* src)
     return true;
 }
 
-static inline bool Eco_Fiber_Pop(struct Eco_Fiber* fiber, Eco_Any* dest)
+static inline Eco_Any Eco_Fiber_Pop(struct Eco_Fiber* fiber)
 {
     fiber->stack_pointer -= sizeof(Eco_Any);
-    Eco_Any_AssignAny(dest, (Eco_Any*) fiber->stack_pointer);
-    return true;
+    return *((Eco_Any*) fiber->stack_pointer);
 }
 
 static inline bool Eco_Fiber_Drop(struct Eco_Fiber* fiber)

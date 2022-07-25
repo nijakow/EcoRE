@@ -11,8 +11,9 @@ bool Eco_VM_Builtin_StringByteAt(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
-    Eco_Fiber_Pop(fiber, &index);
-    Eco_Fiber_Pop(fiber, &string);
+
+    index  = Eco_Fiber_Pop(fiber);
+    string = Eco_Fiber_Pop(fiber);
     // TODO: Type checks!
     codepoint = Eco_Any_FromInteger(Eco_String_ByteAt(Eco_Any_AsPointer(string), Eco_Any_AsInteger(index)));
     Eco_Fiber_Push(fiber, &codepoint);
@@ -27,8 +28,9 @@ bool Eco_VM_Builtin_StringCodepointAtByte(struct Eco_Fiber* fiber, unsigned int 
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
-    Eco_Fiber_Pop(fiber, &index);
-    Eco_Fiber_Pop(fiber, &string);
+
+    index  = Eco_Fiber_Pop(fiber);
+    string = Eco_Fiber_Pop(fiber);
     // TODO: Type checks!
     codepoint = Eco_Any_FromCharacter(Eco_String_At(Eco_Any_AsPointer(string), Eco_Any_AsInteger(index)));
     Eco_Fiber_Push(fiber, &codepoint);
@@ -43,8 +45,9 @@ bool Eco_VM_Builtin_StringStepAtByte(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
-    Eco_Fiber_Pop(fiber, &index);
-    Eco_Fiber_Pop(fiber, &string);
+
+    index  = Eco_Fiber_Pop(fiber);
+    string = Eco_Fiber_Pop(fiber);
     // TODO: Type checks!
     result = Eco_Any_FromInteger(Eco_String_StepAt(Eco_Any_AsPointer(string), Eco_Any_AsInteger(index)));
     Eco_Fiber_Push(fiber, &result);
@@ -58,7 +61,8 @@ bool Eco_VM_Builtin_StringByteLength(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Fiber_Pop(fiber, &string);
+
+    string = Eco_Fiber_Pop(fiber);
     // TODO: Type checks!
     length = Eco_Any_FromInteger(Eco_String_ByteCount(Eco_Any_AsPointer(string)));
     Eco_Fiber_Push(fiber, &length);
@@ -72,7 +76,8 @@ bool Eco_VM_Builtin_StringCharLength(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Fiber_Pop(fiber, &string);
+
+    string = Eco_Fiber_Pop(fiber);
     // TODO: Type checks!
     length = Eco_Any_FromInteger(Eco_String_CharacterCount(Eco_Any_AsPointer(string)));
     Eco_Fiber_Push(fiber, &length);
@@ -83,6 +88,7 @@ bool Eco_VM_Builtin_StringAsKey(struct Eco_Fiber* fiber, unsigned int args)
 {
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
+
     *Eco_Fiber_Peek(fiber) = Eco_Any_FromPointer(Eco_String_AsKey(Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber))));
     return true;
 }

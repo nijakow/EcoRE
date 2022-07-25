@@ -21,7 +21,7 @@ bool Eco_VM_Builtin_Print(struct Eco_Fiber* fiber, unsigned int args)
 
     while (args --> 0)
     {
-        Eco_Fiber_Pop(fiber, &any);
+        any = Eco_Fiber_Pop(fiber);
         if (Eco_Any_IsInteger(any)) {
             Eco_Log_Info("Integer: %d\n", Eco_Any_AsInteger(any));
         } else if (Eco_Any_IsFloating(any)) {
@@ -50,9 +50,9 @@ bool Eco_VM_Builtin_OpenFile(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
-    Eco_Fiber_Pop(fiber, &any);
+    any  = Eco_Fiber_Pop(fiber);
     bits = Eco_Any_AsInteger(any);
-    Eco_Fiber_Pop(fiber, &any);
+    any  = Eco_Fiber_Pop(fiber);
     path = Eco_Any_AsPointer(any);
 
     char buffer[Eco_String_ByteCount(path) + 1];
@@ -78,7 +78,7 @@ bool Eco_VM_Builtin_FileExists(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Fiber_Pop(fiber, &any);
+    any  = Eco_Fiber_Pop(fiber);
     path = Eco_Any_AsPointer(any);
     if (Eco_LibC_FileExists(path->bytes))
         any = fiber->vm->constants.ctrue;
@@ -95,7 +95,7 @@ bool Eco_VM_Builtin_FileIsDirectory(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Fiber_Pop(fiber, &any);
+    any  = Eco_Fiber_Pop(fiber);
     path = Eco_Any_AsPointer(any);
     if (Eco_LibC_FileIsDirectory(path->bytes))
         any = fiber->vm->constants.ctrue;
@@ -117,7 +117,7 @@ bool Eco_VM_Builtin_ListFiles(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Fiber_Pop(fiber, &any);
+    any  = Eco_Fiber_Pop(fiber);
     path = Eco_Any_AsPointer(any);
     Eco_LibC_ListFiles(path->bytes, entries, 256);
     count = 0;

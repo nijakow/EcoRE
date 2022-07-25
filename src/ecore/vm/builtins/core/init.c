@@ -46,8 +46,8 @@ bool Eco_VM_Builtin_GetEnv(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Fiber_Pop(fiber, &any);
-    var = Eco_Any_AsPointer(any);
+    any      = Eco_Fiber_Pop(fiber);
+    var      = Eco_Any_AsPointer(any);
     val_cstr = Eco_LibC_GetEnv(var->bytes);
     if (val_cstr == NULL)
         any = fiber->vm->constants.cfalse;
@@ -89,7 +89,7 @@ bool Eco_VM_Builtin_SetProxy(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
-    Eco_Fiber_Pop(fiber, &proxy);
+    proxy = Eco_Fiber_Pop(fiber);
     ((struct Eco_Type*) Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber)))->proxy = Eco_Any_AsPointer(proxy);
     return true;
 }

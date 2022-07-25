@@ -16,8 +16,8 @@ bool Eco_VM_Builtin_BlobNew(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Fiber_Pop(fiber, &length);
-    blob = Eco_Any_FromPointer(Eco_Blob_New(Eco_Any_AsInteger(length)));
+    length = Eco_Fiber_Pop(fiber);
+    blob   = Eco_Any_FromPointer(Eco_Blob_New(Eco_Any_AsInteger(length)));
     Eco_Fiber_Push(fiber, &blob);
     return true;
 }
@@ -32,7 +32,7 @@ bool Eco_VM_Builtin_BlobSize(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Fiber_Pop(fiber, &blob);
+    blob   = Eco_Fiber_Pop(fiber);
     length = Eco_Any_FromInteger(Eco_Blob_Size(Eco_Any_AsPointer(blob)));
     Eco_Fiber_Push(fiber, &length);
     return true;
@@ -49,8 +49,8 @@ bool Eco_VM_Builtin_BlobAtInt8(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
-    Eco_Fiber_Pop(fiber, &index);
-    Eco_Fiber_Pop(fiber, &blob);
+    index = Eco_Fiber_Pop(fiber);
+    blob  = Eco_Fiber_Pop(fiber);
     Eco_Blob_AtN(Eco_Any_AsPointer(blob), Eco_Any_AsInteger(index), &v, sizeof(v));
     index = Eco_Any_FromInteger(v);
     Eco_Fiber_Push(fiber, &index);
@@ -68,8 +68,8 @@ bool Eco_VM_Builtin_BlobAtInt16(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
-    Eco_Fiber_Pop(fiber, &index);
-    Eco_Fiber_Pop(fiber, &blob);
+    index = Eco_Fiber_Pop(fiber);
+    blob  = Eco_Fiber_Pop(fiber);
     Eco_Blob_AtN(Eco_Any_AsPointer(blob), Eco_Any_AsInteger(index), &v, sizeof(v));
     index = Eco_Any_FromInteger(v);
     Eco_Fiber_Push(fiber, &index);
@@ -87,8 +87,8 @@ bool Eco_VM_Builtin_BlobAtInt32(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
-    Eco_Fiber_Pop(fiber, &index);
-    Eco_Fiber_Pop(fiber, &blob);
+    index = Eco_Fiber_Pop(fiber);
+    blob  = Eco_Fiber_Pop(fiber);
     Eco_Blob_AtN(Eco_Any_AsPointer(blob), Eco_Any_AsInteger(index), &v, sizeof(v));
     index = Eco_Any_FromInteger(v);
     Eco_Fiber_Push(fiber, &index);
@@ -107,14 +107,14 @@ bool Eco_VM_Builtin_BlobAtPtr(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 4, 4))
         return false;
-    Eco_Fiber_Pop(fiber, &any);
-    size = Eco_Any_AsInteger(any);
-    Eco_Fiber_Pop(fiber, &any);
+    any    = Eco_Fiber_Pop(fiber);
+    size   = Eco_Any_AsInteger(any);
+    any    = Eco_Fiber_Pop(fiber);
     offset = Eco_Any_AsInteger(any);
-    Eco_Fiber_Pop(fiber, &any);
-    index = Eco_Any_AsInteger(any);
-    Eco_Fiber_Pop(fiber, &any);
-    blob = Eco_Any_AsPointer(any);
+    any    = Eco_Fiber_Pop(fiber);
+    index  = Eco_Any_AsInteger(any);
+    any    = Eco_Fiber_Pop(fiber);
+    blob   = Eco_Any_AsPointer(any);
     Eco_Blob_AtN(blob, index, &ptr, sizeof(ptr));
     value = Eco_Blob_NewFromData(ptr + offset, size);
     any = Eco_Any_FromPointer(value);
@@ -133,8 +133,8 @@ bool Eco_VM_Builtin_BlobAtAny(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
-    Eco_Fiber_Pop(fiber, &index);
-    Eco_Fiber_Pop(fiber, &blob);
+    index = Eco_Fiber_Pop(fiber);
+    blob  = Eco_Fiber_Pop(fiber);
     Eco_Blob_AtN(Eco_Any_AsPointer(blob), Eco_Any_AsInteger(index), &value, sizeof(value));
     Eco_Fiber_Push(fiber, &value);
     return true;
@@ -151,8 +151,8 @@ bool Eco_VM_Builtin_BlobAtPutInt8(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
         return false;
-    Eco_Fiber_Pop(fiber, &value);
-    Eco_Fiber_Pop(fiber, &index);
+    value = Eco_Fiber_Pop(fiber);
+    index = Eco_Fiber_Pop(fiber);
     actual_value = Eco_Any_AsInteger(value);
     Eco_Blob_AtPut(Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber)),
                    Eco_Any_AsInteger(index),
@@ -172,8 +172,8 @@ bool Eco_VM_Builtin_BlobAtPutInt16(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
         return false;
-    Eco_Fiber_Pop(fiber, &value);
-    Eco_Fiber_Pop(fiber, &index);
+    value = Eco_Fiber_Pop(fiber);
+    index = Eco_Fiber_Pop(fiber);
     actual_value = Eco_Any_AsInteger(value);
     Eco_Blob_AtPut(Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber)),
                    Eco_Any_AsInteger(index),
@@ -193,8 +193,8 @@ bool Eco_VM_Builtin_BlobAtPutInt32(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
         return false;
-    Eco_Fiber_Pop(fiber, &value);
-    Eco_Fiber_Pop(fiber, &index);
+    value = Eco_Fiber_Pop(fiber);
+    index = Eco_Fiber_Pop(fiber);
     actual_value = Eco_Any_AsInteger(value);
     Eco_Blob_AtPut(Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber)),
                    Eco_Any_AsInteger(index),
@@ -214,14 +214,14 @@ bool Eco_VM_Builtin_BlobAtPutPtr(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 4, 4))
         return false;
-    Eco_Fiber_Pop(fiber, &any);
+    any    = Eco_Fiber_Pop(fiber);
     offset = Eco_Any_AsInteger(any);
-    Eco_Fiber_Pop(fiber, &any);
-    value = Eco_Any_AsPointer(any);
-    Eco_Fiber_Pop(fiber, &any);
-    index = Eco_Any_AsInteger(any);
-    blob = Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber));
-    ptr = Eco_Blob_Size(value) == 0 ? NULL : (value->bytes + offset);
+    any    = Eco_Fiber_Pop(fiber);
+    value  = Eco_Any_AsPointer(any);
+    any    = Eco_Fiber_Pop(fiber);
+    index  = Eco_Any_AsInteger(any);
+    blob   = Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber));
+    ptr    = Eco_Blob_Size(value) == 0 ? NULL : (value->bytes + offset);
     Eco_Blob_AtPut(blob, index, &ptr, sizeof(ptr));
     return true;
 }
@@ -236,8 +236,8 @@ bool Eco_VM_Builtin_BlobAtPutAny(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
         return false;
-    Eco_Fiber_Pop(fiber, &value);
-    Eco_Fiber_Pop(fiber, &index);
+    value = Eco_Fiber_Pop(fiber);
+    index = Eco_Fiber_Pop(fiber);
     Eco_Blob_AtPut(Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber)),
                    Eco_Any_AsInteger(index),
                    &value,
@@ -255,15 +255,15 @@ bool Eco_VM_Builtin_BlobReadFrom(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 4, 4))
         return false;
-    Eco_Fiber_Pop(fiber, &any);
-    bytes = (size_t) Eco_Any_AsInteger(any);
-    Eco_Fiber_Pop(fiber, &any);
+    any    = Eco_Fiber_Pop(fiber);
+    bytes  = (size_t) Eco_Any_AsInteger(any);
+    any    = Eco_Fiber_Pop(fiber);
     offset = Eco_Any_AsInteger(any);
-    Eco_Fiber_Pop(fiber, &any);
-    fd = Eco_Any_AsInteger(any);
-    Eco_Fiber_Pop(fiber, &any);
-    blob = Eco_Any_AsPointer(any);
-    any = Eco_Any_FromInteger(Eco_Blob_ReadFromFD(blob, fd, offset, bytes));
+    any    = Eco_Fiber_Pop(fiber);
+    fd     = Eco_Any_AsInteger(any);
+    any    = Eco_Fiber_Pop(fiber);
+    blob   = Eco_Any_AsPointer(any);
+    any    = Eco_Any_FromInteger(Eco_Blob_ReadFromFD(blob, fd, offset, bytes));
     Eco_Fiber_Push(fiber, &any);
     return true;
 }
@@ -278,15 +278,15 @@ bool Eco_VM_Builtin_BlobWriteTo(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 4, 4))
         return false;
-    Eco_Fiber_Pop(fiber, &any);
-    bytes = Eco_Any_AsInteger(any);
-    Eco_Fiber_Pop(fiber, &any);
+    any    = Eco_Fiber_Pop(fiber);
+    bytes  = Eco_Any_AsInteger(any);
+    any    = Eco_Fiber_Pop(fiber);
     offset = Eco_Any_AsInteger(any);
-    Eco_Fiber_Pop(fiber, &any);
-    fd = Eco_Any_AsInteger(any);
-    Eco_Fiber_Pop(fiber, &any);
-    blob = Eco_Any_AsPointer(any);
-    any = Eco_Any_FromInteger(Eco_Blob_WriteToFD(blob, fd, offset, bytes));
+    any    = Eco_Fiber_Pop(fiber);
+    fd     = Eco_Any_AsInteger(any);
+    any    = Eco_Fiber_Pop(fiber);
+    blob   = Eco_Any_AsPointer(any);
+    any    = Eco_Any_FromInteger(Eco_Blob_WriteToFD(blob, fd, offset, bytes));
     Eco_Fiber_Push(fiber, &any);
     return true;
 }
@@ -299,10 +299,10 @@ bool Eco_VM_Builtin_BlobOpenFile(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Fiber_Pop(fiber, &any);
+    any       = Eco_Fiber_Pop(fiber);
     file_name = Eco_Any_AsPointer(any);
     blob      = Eco_Blob_NewFromFile(file_name->bytes); // TODO, FIXME, XXX! This is unsafe!
-    any = Eco_Any_FromPointer(blob);
+    any       = Eco_Any_FromPointer(blob);
     Eco_Fiber_Push(fiber, &any);
     return true;
 }
