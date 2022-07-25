@@ -29,6 +29,7 @@
 
             ShrinkWrap(e)  => e ~ xLayout: morphic layouts ShrinkWrap ~ yLayout: morphic layouts ShrinkWrap;
             RedBlock(w, h) => morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: w ~ rigidHeight: h;
+            GreenBlock(w, h) => morphic DemoMorph new ~ r: 0 g: 100 b: 0 ~ rigidWidth: w ~ rigidHeight: h;
             YellowBlock    => morphic DemoMorph new ~ r: 100 g: 100 b: 0;
             Spacer         => morphic Morph new;
             Center(e)      => HBox(Spacer, VBox(Spacer, e, Spacer) ~ xLayout: morphic layouts ShrinkWrap, Spacer);
@@ -58,7 +59,8 @@
 
             init => (
                 morph <- morphic WorldMorph new
-                           ~ add: (RedBlock(50, 50) ~ moveToX: 100 Y: 100).
+                           ~ add: (RedBlock(50, 50) ~ moveToX: 100 Y: 100)
+                           ~ add: (GreenBlock(75, 75) ~ moveToX: 250 Y: 50).
                 mouseX <- 0.
                 mouseY <- 0.
               ^ self

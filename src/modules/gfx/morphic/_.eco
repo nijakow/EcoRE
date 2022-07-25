@@ -156,10 +156,10 @@
               ^ self
             );
 
-            x: xv => x <- xv;
-            y: yv => y <- yv;
+            + p => NewX: x + p x Y: y + p y;
+            - p => NewX: x - p x Y: y - p y;
 
-            x: xv y: yv => x: xv ~ y: yv;
+            negate => NewX: x negate Y: y negate;
 
             offsetBy: p => module Point2D NewX: (x + p) Y: (y + p);
             offsetBy: p Do: block => block value(offsetBy: p);
@@ -234,7 +234,7 @@
             globalBounds => (
                 parent
                   ~ yes: [ :p | | pgb <- p globalBounds | ^ bounds offsetByX: pgb x Y: pgb y ]
-                     no: [ ^ bounds                                                               ]
+                     no: [ ^ bounds                                                          ]
             );
 
             boundsX: x Y: y W: w H: h => (
@@ -591,8 +591,9 @@
             );
 
             grab: morph => (
+                | p <- morph globalOffset - globalOffset |
                 add: morph.
-                morph moveToX: 0 Y: 0. "TODO: Keep offset"
+                morph moveToX: p x Y: p y. "TODO: Keep offset"
                 grabbedMorph <- Yes: morph.
               ^ self
             );
@@ -615,7 +616,7 @@
                 grabbedMorph
                   ~ yes: [ :gm |
                         parent yes: [ :p |
-                            (p dropMorph: gm AtX: bounds x Y: bounds y)
+                            (p dropMorph: gm AtX: (bounds x + gm bounds x) Y: (bounds y + gm bounds y))
                               ~ if: [ grabbedMorph <- No ]
                         ]
                     ]
