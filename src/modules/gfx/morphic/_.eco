@@ -332,7 +332,10 @@
                         no: [      self   ]
             );
 
-            world => Yes: root;
+            world => (
+                parent yes: [ :p | p world ]
+                        no: [      No      ]
+            );
 
             childrenDo: block => children do: block;
             allChildrenDo: block => childrenDo: [ :c | block value(c). c allChildrenDo: block ];
@@ -659,6 +662,8 @@
                 add: handMorph.
               ^ self
             );
+
+            world => Yes: self;
 
             dirty => isDirty <- true;
 
