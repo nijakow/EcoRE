@@ -59,8 +59,13 @@
 
             init => (
                 morph <- morphic WorldMorph new
-                           ~ add: (RedBlock(50, 50) ~ moveToX: 100 Y: 100)
+                           ~ add: (RedBlock(50, 50) ~ moveToX: 400 Y: 100)
                            ~ add: (GreenBlock(75, 75) ~ moveToX: 250 Y: 50).
+                1 to: 5 do: [ :x |
+                    1 to: 5 do: [ :y |
+                        morph add: (RedBlock(20, 20) ~ moveToX: x * 40 Y: y * 40)
+                    ].
+                ].
                 mouseX <- 0.
                 mouseY <- 0.
               ^ self
@@ -76,7 +81,6 @@
                                                 H: program window height.
                 morph bounds: renderer bounds.
                 morph layoutInPlace.
-                morph childrenDo: [ :c | std io out << c bounds ~ newline commit ].
             );
 
             tick => (
@@ -102,7 +106,6 @@
                     mouseY <- event mouseMotionY.
                 ].
                 event isMouseButtonDown -> [
-                    (std io out << 'Click!') newline commit.
                     morph handMorph grabOrRelease.
                 ].
                 event isKeyDown -> [ ^ program stop ].

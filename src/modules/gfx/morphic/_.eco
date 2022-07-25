@@ -19,6 +19,12 @@
             bounds => boundsstack top;
             pushBounds: b => boundsstack push: (b offsetByX: xOff Y: yOff);
             popBounds => boundsstack pop;
+            withPushedBounds: b Do: block => (
+                pushBounds: b.
+                block value.
+                popBounds.
+              ^ self
+            );
 
             xOff => bounds x;
             yOff => bounds y;
@@ -599,7 +605,6 @@
             );
 
             grab => (
-                std io out << 'Grabbing...' ~ newline commit.
                 world yes: [ :w |
                     | p <- globalOffset, morph <- No |
                     w xRayAtX: p x Y: p y Do: [ :m |
