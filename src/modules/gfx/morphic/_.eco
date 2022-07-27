@@ -350,14 +350,25 @@
             noParent  => parent <- No.
             parent: p => parent <- Yes: p;
 
-            add: child => (
-                child unlink.
-                children add: child.
-                child parent: self.
-                child invalidateLayoutCaches.
-                layoutChanged.
-              ^ self
+            isIn: morph => (
+                (self == morph) -> [ ^ true ].
+                parent yes: [ :p | ^ p isIn: morph ]
+                        no: [      ^ false         ]
             );
+
+            tryAdd: child => (
+                ((self isIn: child) not) -> [
+                    child unlink.
+                    children add: child.
+                    child parent: self.
+                    child invalidateLayoutCaches.
+                    layoutChanged.
+                  ^ true
+                ].
+              ^ false
+            );
+
+            add: child => ( tryAdd: child. ^ self );
 
             remove: child => (
                 children remove: child
@@ -519,6 +530,8 @@
                 $(Morph) renderOn: renderer.
             );
 
+            handleDropMorph: morph AtX: x Y: y => ( add: morph. ^ true );
+
             writeOn: w => w << 'a box morph';
         };
     };
@@ -621,6 +634,8 @@
                 renderChildrenOn: renderer.
             );
 
+            dispatchEvent: block AtX: evtX Y: evtY => false; "Avoid dispatching to children"
+
             writeOn: w => w << 'a hand morph';
         };
     };
@@ -670,10 +685,12 @@
 
             handleDropMorph: morph AtX: x Y: y => (
                 | gb <- globalBounds, mgb <- morph globalBounds |
-                add: morph.
-                morph moveToX: (mgb x - gb x) Y: (mgb y - gb y).
+                (tryAdd: morph) -> [
+                    morph moveToX: (mgb x - gb x) Y: (mgb y - gb y).
+                ].
               ^ true
             );
+            handleClickAtX: x Y: y HandMorph: hand => false;
 
             writeOn: w => w << 'a world morph';
         };
