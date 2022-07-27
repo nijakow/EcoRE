@@ -338,6 +338,7 @@
             );
 
             childrenDo: block => children do: block;
+            childrenReverseDo: block => 0 for: children size do: [ :i | block value(children at: (children size - i - 1)) ];
             allChildrenDo: block => childrenDo: [ :c | block value(c). c allChildrenDo: block ];
             childrenWithBoundsDo: block => childrenDo: [ :c | block value(c, c bounds) ];
 
@@ -389,7 +390,8 @@
             renderOn: renderer => renderChildrenOn: renderer;
 
             dispatchEvent: block AtX: evtX Y: evtY => (
-                childrenWithBoundsDo: [ :c, :b |
+                childrenReverseDo: [ :c |
+                    | b <- c bounds |
                     b containsX: evtX Y: evtY
                       ~ if: [ (c dispatchEvent: block AtX: (evtX - b x) Y: (evtY - b y)) -> [ ^ true ] ]
                 ].
