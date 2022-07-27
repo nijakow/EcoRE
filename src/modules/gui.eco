@@ -119,7 +119,7 @@
                     mouseY <- event mouseMotionY.
                 ].
                 event isMouseButtonDown -> [
-                    morph handMorph grabOrRelease.
+                    morph handMorph leftClick.
                 ].
                 event isKeyDown -> [ ^ program stop ].
             );

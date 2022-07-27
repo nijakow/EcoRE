@@ -407,10 +407,10 @@
             );
 
             handleDropMorph: morph AtX: x Y: y => false;
-            handleClickAtX: x Y: y HandMorph: hand => false;
+            handleClickAtX: x Y: y HandMorph: hand => ( hand grab: self. ^ true );
 
             dropMorph: morph AtX: x Y: y => dispatchEvent: [ :e, :ex, :ey | e handleDropMorph: morph AtX: ex Y: ey ] AtX: x Y: y;
-            clickAtX: x Y: y HandMorph: hand => dispatchEvent: [ :e, :ex, :ey | e handleClickAtX: ex Y: ey HandMorph: hand ];
+            clickAtX: x Y: y HandMorph: hand => dispatchEvent: [ :e, :ex, :ey | e handleClickAtX: ex Y: ey HandMorph: hand ] AtX: x Y: y;
 
             writeOn: w => w << 'a morph';
         };
@@ -604,34 +604,14 @@
               ^ self
             );
 
-            grab => (
-                world yes: [ :w |
-                    | p <- globalOffset, morph <- No |
-                    w xRayAtX: p x Y: p y Do: [ :m |
-                        (self == m) unless: [
-                            morph <- Yes: m
-                        ]
-                    ].
-                    morph
-                      ~ yes: [ :m | (m != w) -> [ grab: m ] ]
-                ].
+            click => (
+                | gb <- globalBounds |
+                grabbedMorph
+                  ~ yes: [ :m | world yes: [ :w | (w dropMorph: m AtX: gb x Y: gb y) -> [ grabbedMorph <- No ] ] ]
+                     no: [      world yes: [ :w | w clickAtX: gb x Y: gb y HandMorph: self ] ]
             );
 
-            release => (
-                grabbedMorph
-                  ~ yes: [ :gm |
-                        parent yes: [ :p |
-                            (p dropMorph: gm AtX: (bounds x + gm bounds x) Y: (bounds y + gm bounds y))
-                              ~ if: [ grabbedMorph <- No ]
-                        ]
-                    ]
-            );
-
-            grabOrRelease => (
-                grabbedMorph
-                  ~ yes: [ release ]
-                     no: [ grab    ]
-            );
+            leftClick => click;
 
             renderOn: renderer => (
                 renderer setR: 200 G: 0 B: 0.
@@ -687,8 +667,9 @@
             );
 
             handleDropMorph: morph AtX: x Y: y => (
+                | gb <- globalBounds, mgb <- morph globalBounds |
                 add: morph.
-                morph moveToX: x Y: y.
+                morph moveToX: (mgb x - gb x) Y: (mgb y - gb y).
               ^ true
             );
 
