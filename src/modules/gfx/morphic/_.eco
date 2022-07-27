@@ -388,17 +388,13 @@
             );
             renderOn: renderer => renderChildrenOn: renderer;
 
-            processEvent: event AtX: x Y: y => (
-                (std io out << 'Received event in ' << self << '(' << x << ', ' << y << ')') newline commit.
-            );
-
-            issueEvent: event AtX: evtX Y: evtY => (
-                processEvent: event AtX: evtX Y: evtY.
+            issueEvent: block AtX: evtX Y: evtY => (
                 childrenWithBoundsDo: [ :c, :b |
                     b containsX: evtX Y: evtY
-                      ~ if: [ c issueEvent: event AtX: (evtX - b x) Y: (evtY - b y) ]
+                      ~ if: [ (c issueEvent: event AtX: (evtX - b x) Y: (evtY - b y)) -> [ ^ true ] ]
                 ].
-              ^ self
+                event value(self, evtX, evtY) -> [ ^ true ].
+              ^ false
             );
 
             xRayAtX: x Y: y Do: block => (
@@ -429,13 +425,13 @@
 
     own BoxMorph = {
         static with inherited _ = std Clonable;
-        with inherited own super = $ Morph;
+        with inherited own Morph = $ Morph;
 
         protected orientation;
 
         with inherited trait = {
             initWithOrientation: _orientation => (
-                $(super) init.
+                $(Morph) init.
                 orientation <- _orientation.
               ^ self
             );
@@ -521,16 +517,24 @@
                 childrenDo: [ :c | c layoutInPlaceIfNeeded ].
                 layoutIsNowOkay.
             );
+
+            renderOn: renderer => (
+                renderer setR: 40 G: 40 B: 40.
+                renderer drawRectX: 0 Y: 0 W: bounds w H: bounds h.
+                $(Morph) renderOn: renderer.
+            );
+
+            writeOn: w => w << 'a box morph';
         };
     };
 
     own HBoxMorph = {
         static with inherited _ = std Clonable;
-        with inherited own super = $ BoxMorph;
+        with inherited own BoxMorph = $ BoxMorph;
 
         with inherited trait = {
             init => (
-                $(super) initHorizontal.
+                $(BoxMorph) initHorizontal.
               ^ self
             );
 
@@ -540,11 +544,11 @@
 
     own VBoxMorph = {
         static with inherited _ = std Clonable;
-        with inherited own super = $ BoxMorph;
+        with inherited own BoxMorph = $ BoxMorph;
 
         with inherited trait = {
             init => (
-                $(super) initVertical.
+                $(BoxMorph) initVertical.
               ^ self
             );
 
