@@ -388,12 +388,12 @@
             );
             renderOn: renderer => renderChildrenOn: renderer;
 
-            issueEvent: block AtX: evtX Y: evtY => (
+            dispatchEvent: block AtX: evtX Y: evtY => (
                 childrenWithBoundsDo: [ :c, :b |
                     b containsX: evtX Y: evtY
-                      ~ if: [ (c issueEvent: event AtX: (evtX - b x) Y: (evtY - b y)) -> [ ^ true ] ]
+                      ~ if: [ (c dispatchEvent: block AtX: (evtX - b x) Y: (evtY - b y)) -> [ ^ true ] ]
                 ].
-                event value(self, evtX, evtY) -> [ ^ true ].
+                block value(self, evtX, evtY) -> [ ^ true ].
               ^ false
             );
 
@@ -406,18 +406,11 @@
               ^ self
             );
 
-            handleDropMorph: morph AtX: x Y: y => (
-              ^ false
-            );
+            handleDropMorph: morph AtX: x Y: y => false;
+            handleClickAtX: x Y: y HandMorph: hand => false;
 
-            dropMorph: morph AtX: x Y: y => (
-                (handleDropMorph: morph AtX: x Y: y) -> [ ^ true ].
-                childrenWithBoundsDo: [ :c, :b |
-                    b containsX: x Y: y
-                      ~ if: [ (c dropMorph: morph AtX: (x - b x) Y: (y - b y)) -> [ ^ true ] ].
-                ].
-              ^ false
-            );
+            dropMorph: morph AtX: x Y: y => dispatchEvent: [ :e, :ex, :ey | e handleDropMorph: morph AtX: ex Y: ey ] AtX: x Y: y;
+            clickAtX: x Y: y HandMorph: hand => dispatchEvent: [ :e, :ex, :ey | e handleClickAtX: ex Y: ey HandMorph: hand ];
 
             writeOn: w => w << 'a morph';
         };
