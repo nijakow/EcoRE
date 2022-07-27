@@ -509,7 +509,7 @@
                     (c layoutForOrientation: orientation opposite) isFlexible if: [
                         heightForM <- extentForOrientation: orientation opposite
                     ] else: [
-                        heightForM <- c minHeight
+                        heightForM <- c minExtentForOrientation: orientation opposite
                     ].
 
                     orientation
