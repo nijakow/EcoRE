@@ -39,6 +39,7 @@
             ShrinkWrap(e)  => e ~ xLayout: morphic layouts ShrinkWrap ~ yLayout: morphic layouts ShrinkWrap;
             RedBlock(w, h) => morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: w ~ rigidHeight: h;
             GreenBlock(w, h) => morphic DemoMorph new ~ r: 0 g: 100 b: 0 ~ rigidWidth: w ~ rigidHeight: h;
+            BlueBlock(w, h) => morphic DemoMorph new ~ r: 0 g: 0 b: 100 ~ rigidWidth: w ~ rigidHeight: h;
             YellowBlock    => morphic DemoMorph new ~ r: 100 g: 100 b: 0;
             Spacer         => morphic Morph new;
             Center(e)      => HBox(Spacer, VBox(Spacer, e, Spacer) ~ xLayout: morphic layouts ShrinkWrap, Spacer);
@@ -71,8 +72,9 @@
 
             init => (
                 morph <- morphic WorldMorph new
-                           ~ add: (RedBlock(50, 50) ~ moveToX: 400 Y: 100)
-                           "~ add: (makeF ~ rigidWidth: 500 ~ rigidHeight: 400 ~ moveToX: 250 Y: 50)."
+                           ~ add: (GreenBlock(50, 50) ~ moveToX: 400 Y: 100)
+                           ~ add: (BlueBlock(100, 100) ~ moveToX: 600 Y: 75)
+                           ~ add: ((morphic StackMorph new) ~ rigidWidth: 300 ~ rigidHeight: 300 ~ moveToX: 650 Y: 200)
                            ~ add: (makeFrame ~ moveToX: 250 Y: 50).
                 1 to: 5 do: [ :x |
                     1 to: 5 do: [ :y |
@@ -129,7 +131,7 @@
     Main => (
         sdl Init.
         |
-            win     <- sdl NewWindowWithTitle: 'Morphic' X: 100 Y: 100 W: 800 H: 600,
+            win     <- sdl NewWindowWithTitle: 'Morphic' X: 100 Y: 100 W: 1200 H: 950,
             program <- sdl Program clone initWithWindow: win Handler: (MorphicHandler new)
         |
         program run.
