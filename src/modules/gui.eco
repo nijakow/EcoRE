@@ -138,7 +138,7 @@
     Main => (
         sdl Init.
         |
-            win     <- sdl NewWindowWithTitle: 'Morphic' X: 100 Y: 100 W: 1200 H: 950,
+            win     <- sdl NewWindowWithTitle: 'Morphic' X: 100 Y: 100 W: 1200 H: 850,
             program <- sdl Program clone initWithWindow: win Handler: (MorphicHandler new)
         |
         program run.
