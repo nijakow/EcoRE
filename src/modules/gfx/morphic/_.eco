@@ -739,4 +739,28 @@
             writeOn: w => w << 'a world morph';
         };
     };
+
+    own ButtonMorph = {
+        static with inherited _ = std Clonable;
+        with inherited own Morph = $ Morph;
+        protected morphic = $;
+
+        protected action;
+
+        with inherited trait = {
+            init => (
+                $(Morph) init.
+                action <- No.
+              ^ self
+            );
+
+            action: act => action <- Yes: act;
+
+            handleClickAtX: x Y: y HandMorph: hand => (
+                (std io out << 'Click!') newline commit.
+                action yes: [ :a | a value ].
+              ^ self
+            );
+        };
+    };
 }
