@@ -71,11 +71,6 @@
         io out newline.
         io out commit.
 
-        (
-            "To make development a bit easier"
-            std os files here / '..' / 'modules' / 'gui.eco' ~ import ~ Init ~ Main.
-        ).
-
         |
             tok    <- ((lang eco tokenizer Tokenizer) clone) init: (io in),
             parser <- ((lang eco parser Parser) clone) init: tok
