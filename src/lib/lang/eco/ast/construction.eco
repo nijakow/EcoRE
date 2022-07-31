@@ -55,6 +55,8 @@
 
   newASTType: t AndName: n => (ast ASTTypeAndName new) initWithType: t Name: n;
 
+  newASTImplicit => (ast ASTImplicit new);
+
   newASTSelf => (ast ASTSelf new);
 
   newASTMy => (ast ASTMy new);

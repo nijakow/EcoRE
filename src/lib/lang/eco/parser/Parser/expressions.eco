@@ -42,7 +42,7 @@
 
         (check: TokenType CHARACTER) when: [ :kw | ^ newASTConstantWithValue: (kw payload) ].
 
-      ^ newASTSelf
+      ^ newASTImplicit
     );
 
     parseExpressionWithFollowups: followups => (

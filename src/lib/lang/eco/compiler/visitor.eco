@@ -14,7 +14,7 @@
     visitUnknown: ast => ( io out << 'Visiting unknown AST for assignment'. io out newline. io out commit );
 
     visitSend: ast => (
-        (ast subject isSelfAST) if: [
+        (ast subject isImplicitAST) if: [
             (compiler isLocal: ast message) if: [
                 compiler storeVariable: ast message
                              Interlude: [ rhs acceptVisitor: visitor ]
@@ -55,6 +55,8 @@
     );
 
     visitUnknown: ast => ( io out << 'Visiting unknown AST'. io out newline. io out commit );
+
+    visitImplicit: ast => compiler loadSelf;
     
     visitSelf: ast => compiler loadSelf;
 
@@ -97,7 +99,7 @@
     visitSend: ast => (
         | args <- ast getArgs |
 
-        (ast subject isSelfAST) if: [
+        (ast subject isImplicitAST) if: [
             compiler loadVariable: ast message IfPresent: [ ^ ] IfNotPresent: []
         ].
         ast subject acceptVisitor: self.

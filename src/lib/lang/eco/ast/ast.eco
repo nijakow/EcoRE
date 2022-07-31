@@ -20,6 +20,7 @@
         evaluateInEnv: env => (compileInEnv: env) execute(env);
         evaluateInEnv: env Host: host => evaluateInEnv: env Host: host NextHost: host;
         evaluateInEnv: env Host: host NextHost: nexthost => (compileInEnv: env Host: host NextHost: nexthost) execute(env);
+        isImplicitAST => false;
         isSelfAST => false;
         isResendAST => false;
     };
@@ -139,6 +140,15 @@
             ].
           ^ molecule
         );
+    };
+
+    ASTImplicit = {
+        static with inherited parent = #<:std/Singleton>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
+        isImplicitAST => true;
+        acceptVisitor: visitor => visitor visitImplicit: self;
+        writeOn: writer => writer << 'implicit';
     };
 
     ASTSelf = {
