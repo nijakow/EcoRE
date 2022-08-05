@@ -11,4 +11,37 @@
     Scope = #<:lang/eco/compiler/Scope>;
     Compiler = #<:lang/eco/compiler/Compiler>;
     ScopedCompiler = #<:lang/eco/compiler/ScopedCompiler>;
+
+    CompilationDriver = {
+        static with inherited _ = #<:std/Clonable>;
+        protected module = #<:lang/eco/compiler>;
+
+        protected subject;
+        protected selfOverride;
+        protected environmentOverride;
+        protected hostOverride;
+
+        with inherited trait = {
+            initWithSubject: _subject => (
+                subject             <- _subject.
+                selfOverride        <- No.
+                environmentOverride <- No.
+                hostOverride        <- No.
+              ^ self
+            );
+
+            commit => (
+                |
+                    compiler <- (module ScopedCompiler) new,
+                    visitor  <- ((module Visitor) clone)
+                                  ~ initWithCompiler: compiler
+                                         Environment: (environmentOverride yes: [ :e | e ] no: [ lobby ])
+                                                Host: (hostOverride yes: [ :e | e ] no: [ lobby ])
+                                            NextHost: (selfOverride yes: [ :e | e ] no: [ lobby ])
+                |
+                subject acceptVisitor: visitor.
+              ^ compiler finish
+            );
+        }
+    }
 }

@@ -51,7 +51,7 @@
        environment <- _env.
        host        <- _host.
        nexthost    <- _nexthost.
-      ^ self
+     ^ self
     );
 
     visitUnknown: ast => ( io out << 'Visiting unknown AST'. io out newline. io out commit );
