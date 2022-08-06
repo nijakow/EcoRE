@@ -10,15 +10,16 @@
         compileInEnv: env => compileInEnv: env Host: lobby;
         compileInEnv: env Host: host => compileInEnv: env Host: host NextHost: host;
         compileInEnv: env Host: host NextHost: nexthost => (
+            | driver <- (lang eco compiler CompilationDriver) new
+                          ~ subject: self
+                          ~ self: nexthost
+                          ~ host: host
+                          ~ environment: env
             |
-                compiler <- (lang eco compiler ScopedCompiler) new,
-                visitor  <- ((lang eco compiler Visitor) clone) initWithCompiler: compiler Environment: env Host: host NextHost: nexthost
-            |
-            acceptVisitor: visitor.
-          ^ compiler finish
+          ^ driver commit
         );
         evaluateInEnv: env => (compileInEnv: env) execute(env);
-        evaluateInEnv: env Host: host => evaluateInEnv: env Host: host NextHost: host;
+        evaluateInEnv: env Host: host => (compileInEnv: env Host: host) execute(env);
         evaluateInEnv: env Host: host NextHost: nexthost => (compileInEnv: env Host: host NextHost: nexthost) execute(env);
         isImplicitAST => false;
         isSelfAST => false;
