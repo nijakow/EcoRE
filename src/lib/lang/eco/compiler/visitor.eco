@@ -54,6 +54,8 @@
      ^ self
     );
 
+    protected EvaluateExpression: expr => expr evaluateInEnv: environment Host: nexthost;
+
     visitUnknown: ast => ( io out << 'Visiting unknown AST'. io out newline. io out commit );
 
     visitImplicit: ast => compiler loadSelf;
@@ -116,7 +118,7 @@
     );
 
     visitVariableDeclaration: ast => (
-        compiler bindVariable: ast name Type: ((ast type) evaluateInEnv: environment Host: nexthost).
+        compiler bindVariable: ast name Type: (EvaluateExpression: ast type).
         compiler storeVariable: ast name Interlude: [ ast getValue acceptVisitor: self ].
         ast getFollowup acceptVisitor: self
     );
@@ -133,14 +135,14 @@
 
     visitArray: ast => (
         | array <- std util newArray: ast exprs size |
-        ast exprs forEach: [ :i, :v | array at: i put: (v evaluateInEnv: environment Host: nexthost) ].
+        ast exprs forEach: [ :i, :v | array at: i put: (EvaluateExpression: v) ].
         compiler loadConstant: array
     );
 
     visitInterface: ast => (
         | i <- %[] |
         "TODO, FIXME, XXX: Move this builtin to a different place!"
-        ast parents do: [ :p | i <- i addParent: (p evaluateInEnv: environment Host: nexthost) ].
+        ast parents do: [ :p | i <- i addParent: (EvaluateExpression: p) ].
         ast entries do: [ :e | i <- e addToInterface: i WithEnv: environment Host: nexthost ].
         compiler loadConstant: i
     );
