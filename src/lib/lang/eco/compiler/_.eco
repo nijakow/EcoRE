@@ -22,13 +22,25 @@
         protected hostOverride;
 
         with inherited trait = {
-            initWithSubject: _subject => (
-                subject             <- _subject.
+            init => (
+                subject             <- No. "TODO: Initialize to ASTNothing"
                 selfOverride        <- No.
                 environmentOverride <- No.
                 hostOverride        <- No.
               ^ self
             );
+
+            initWithSubject: _subject => (
+              | v <- init |
+                v subject: _subject.
+              ^ v
+            );
+
+            subject:   ast => subject <- ast;
+
+            self:        v => selfOverride        <- Yes: v;
+            host:        v => hostOverride        <- Yes: v;
+            environment: v => environmentOverride <- Yes: v;
 
             commit => (
                 |
