@@ -46,30 +46,37 @@
     protected host,
     protected nexthost;
 
-    initWithCompiler: _compiler Environment: _env => initWithCompiler: _compiler Environment: _env Host: lobby;
-    initWithCompiler: _compiler Environment: _env Host: host => initWithCompiler: _compiler Environment: _env Host: host NextHost: host;
-
-    initWithCompiler: _compiler Environment: _env Host: _host NextHost: _nexthost => (
+    initWithCompiler: _compiler => (
        compiler    <- _compiler.
-       environment <- _env.
-       host        <- _host.
-       nexthost    <- _nexthost.
+       environment <- Yes: lobby.
+       host        <- No.
+       nexthost    <- No.
      ^ self
     );
 
-    protected EvaluateExpression: expr => expr evaluateInEnv: environment Host: nexthost;
+    environment: e => environment <- Yes: e;
+    host:        h => host        <- Yes: h;
+    self:        s => nexthost    <- Yes: s;
+
+    protected EvaluateExpression: expr => (
+        nexthost yes: [ :h | expr evaluateInEnv: (environment yes) Host: (nexthost yes) ]
+                  no: [      expr evaluateInEnv: (environment yes)                      ]
+    );
+
     protected EvaluateExpression: expr In: object => (
         |
             driver <- (lang eco compiler CompilationDriver) new
                         ~ subject: expr
-                        ~ environment: environment
-                        ~ self: object
-                        ~ host: nexthost
         |
+        environment yes: [ :e | driver environment: e ].
+        nexthost    yes: [ :s | driver host:        s ].
+        driver self: object.
       ^ driver evaluate
     );
 
-    visitUnknown: ast => ( io out << 'Visiting unknown AST'. io out newline. io out commit );
+    protected ErrorMessage: text OnAST: ast => ('CompileError: ' + text) throw;
+
+    visitUnknown: ast => ErrorMessage: 'Visiting unknown AST' OnAST: ast;
 
     visitImplicit: ast => compiler loadSelf;
     
@@ -77,7 +84,10 @@
 
     visitMy: ast => compiler loadMy;
 
-    visitHostRef: ast => compiler loadConstant: host;
+    visitHostRef: ast => (
+        host yes: [ :h | compiler loadConstant: h]
+              no: [      ErrorMessage: 'No host was defined!' OnAST: ast ]
+    );
 
     visitResend: ast => ast resendValue acceptVisitor: self; "TODO!"
     

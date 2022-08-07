@@ -53,10 +53,10 @@
                 |
                     visitor  <- ((module Visitor) clone)
                                   ~ initWithCompiler: compiler
-                                         Environment: (environmentOverride yes: [ :e | e ] no: [ lobby ])
-                                                Host: (hostOverride yes: [ :e | e ] no: [ lobby ])
-                                            NextHost: (selfOverride yes: [ :e | e ] no: [ lobby ])
                 |
+                environmentOverride yes: [ :e | visitor environment: e ].
+                hostOverride        yes: [ :h | visitor host:        h ].
+                selfOverride        yes: [ :s | visitor self:        s ].
                 subject acceptVisitor: visitor.
               ^ compiler finish
             );
