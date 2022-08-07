@@ -55,6 +55,16 @@
     );
 
     protected EvaluateExpression: expr => expr evaluateInEnv: environment Host: nexthost;
+    protected EvaluateExpression: expr In: object => (
+        |
+            driver <- (lang eco compiler CompilationDriver) new
+                        ~ subject: expr
+                        ~ environment: environment
+                        ~ self: object
+                        ~ host: nexthost
+        |
+      ^ driver evaluate
+    );
 
     visitUnknown: ast => ( io out << 'Visiting unknown AST'. io out newline. io out commit );
 
@@ -139,11 +149,19 @@
         compiler loadConstant: array
     );
 
+
+    AddSlot: slot ToInterface: interface => (
+        | realType <- EvaluateExpression: slot type,
+          realArgs <- std util newArray: slot args size |
+        slot args forEach: [ :i, :v | realArgs at: i put: (EvaluateExpression: v type) ].
+      ^ #'ecosphere.ecore.object.interface.add_entry'(interface, realType, slot name, realArgs, slot varargs if: 1 else: 0)
+    );
+
     visitInterface: ast => (
         | i <- %[] |
         "TODO, FIXME, XXX: Move this builtin to a different place!"
-        ast parents do: [ :p | i <- i addParent: (EvaluateExpression: p) ].
-        ast entries do: [ :e | i <- e addToInterface: i WithEnv: environment Host: nexthost ].
+        ast parents do: [ :p | i <- i addParent: (EvaluateExpression: p In: i) ].
+        ast entries do: [ :s | i <- AddSlot: s ToInterface: i ].
         compiler loadConstant: i
     );
 
@@ -158,7 +176,6 @@
         slot flags isStatic        if: [ flagBits <- flagBits bitOr: 0b10000 ].
 
         slot flags isMethod if: [
-            "TODO, FIXME, XXX: This approach is totally horrendous"
             |
                 driver <- (lang eco compiler CompilationDriver) new
                             ~ subject: slot body
@@ -167,14 +184,7 @@
             slot varargs if: [ driver enableVarargs ].
             #'ecosphere.ecore.reflect.add_code_slot'(molecule, -1, flagBits, realType, slot name, driver commit).
         ] else: [
-            |
-                driver <- (lang eco compiler CompilationDriver) new
-                            ~ subject: slot body
-                            ~ environment: environment
-                            ~ self: molecule
-                            ~ host: nexthost
-            |
-            #'ecosphere.ecore.reflect.add_value_slot'(molecule, -1, flagBits, realType, slot name, driver evaluate).
+            #'ecosphere.ecore.reflect.add_value_slot'(molecule, -1, flagBits, realType, slot name, EvaluateExpression: slot body In: molecule).
         ].
     );
 
