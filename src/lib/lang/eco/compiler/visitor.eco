@@ -147,10 +147,15 @@
         compiler loadConstant: i
     );
 
+
+    AddSlot: slot ToMolecule: m => (
+        slot addToMolecule: m WithEnv: environment Host: nexthost
+    );
+
     visitMolecule: ast => (
         | m <- #'ecosphere.ecore.clone'({}) |  "TODO: Use a different mechanism, maybe Clone: obj"
         "TODO: Parent entries"
-        ast slots do: [ :e | e addToMolecule: m WithEnv: environment Host: nexthost ].
+        ast slots do: [ :s | AddSlot: s ToMolecule: m ].
         compiler loadConstant: m
     );
 } 
