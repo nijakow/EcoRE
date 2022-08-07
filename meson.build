@@ -115,6 +115,7 @@ src = [
     './src/ecore/util/utf8.c',
     './src/ecore/util/libc.c',
     './src/ecore/util/gz.c',
+    './src/ecore/util/dwarf/dwarf.c',
     './src/ecore/objects/misc/key/key.c',
     './src/ecore/objects/misc/blob/blob.c',
     './src/ecore/objects/misc/string/string.c',
@@ -208,10 +209,15 @@ math = cc.find_library('m')
 dl = cc.find_library('dl')
 zlib = dependency('zlib')
 libffi = dependency('libffi')
-libdwarf = dependency('libdwarf')
+# libdwarf = dependency('libdwarf')
 
 executable('ecore.app', sources: src,
                         include_directories: includes,
-                        dependencies: [math, dl, zlib, libffi, libdwarf],
-                        c_args : ['-DECO_CONFIG_COMPILE_WITH_INTEGRATED_BINARY'],
+                        dependencies: [math, dl, zlib, libffi],
+                        c_args : [
+                            '-DECO_CONFIG_COMPILE_WITH_INTEGRATED_BINARY',
+                            '-DECO_CONFIG_MAKEFILE_ENABLE_LIBZ',
+                            '-DECO_CONFIG_MAKEFILE_ENABLE_LIBFFI',
+                            '-DECO_CONFIG_MAKEFILE_ENABLE_LIBDL'
+                        ],
                         install: true)
