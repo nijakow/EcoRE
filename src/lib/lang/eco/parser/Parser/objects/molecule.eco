@@ -15,44 +15,52 @@
         ] repeat
     );
 
+    parseSlotWithBuilder: builder => (
+        | flags <- builder openFlags |
+        parseObjectSlotFlags: flags.
+
+        |
+            type     <- parseOptionalType,
+            decl     <- parseMethodDeclaration,
+            slotname <- decl first,
+            arglist  <- decl second,
+            varargs  <- decl third
+        |
+
+        (check: TokenType RARROW) if: [
+            | body <- parseExpression |
+            builder addCodeSlotWithFlags: flags
+                                    Type: type
+                                    Name: slotname
+                                    Args: arglist
+                                    Varargs: varargs
+                                    Body: body
+        ] else: [
+            | value |
+            (check: TokenType ASSIGNMENT) if: [ value <- parseExpression ]
+                                        else: [ value <- newASTSelf ].
+            builder addValueSlotWithFlags: flags
+                                        Type: type
+                                        Name: slotname
+                                    Value: value
+        ]
+    );
+
     parseMolecule => (
         | builder <- newASTMoleculeBuilder |
-        [ check: TokenType RCURLY ] until: [
-            (check: TokenType CARET) if: [
-                builder addParent: parseExpression
-            ] else: [
-                | flags <- builder openFlags |
-                parseObjectSlotFlags: flags.
-
-                |
-                    type     <- parseOptionalType,
-                    decl     <- parseMethodDeclaration,
-                    slotname <- decl first,
-                    arglist  <- decl second,
-                    varargs  <- decl third
-                |
-
-                (check: TokenType RARROW) if: [
-                    | body <- parseExpression |
-                    builder addCodeSlotWithFlags: flags
-                                            Type: type
-                                            Name: slotname
-                                            Args: arglist
-                                         Varargs: varargs
-                                            Body: body
-                ] else: [
-                    | value |
-                    (check: TokenType ASSIGNMENT) if: [ value <- parseExpression ]
-                                                else: [ value <- newASTSelf ].
-                    builder addValueSlotWithFlags: flags
-                                             Type: type
-                                             Name: slotname
-                                            Value: value
-                ]
-            ].
-            (check: TokenType RCURLY) if: [ ^ builder commit ].
-            expect: TokenType SEPARATOR
-        ].
+        parseMoleculeUntil: TokenType RCURLY WithBuilder: builder.
       ^ builder commit
+    );
+
+    parseMoleculeUntil: stop WithBuilder: builder => (
+        [ :break |
+            begin
+              if: [ check: stop             ] then: [ break value                                               ] ~
+              if: [ check: TokenType LPAREN ] then: [ parseMoleculeUntil: TokenType RPAREN WithBuilder: builder ] ~
+              if: [ check: TokenType CARET  ] then: [ builder addParent: parseExpression                        ] ~
+            default: [ parseSlotWithBuilder: builder ].
+            (check: stop) if: [ break value ].
+            expect: TokenType SEPARATOR
+        ] repeatWithBreak.
     );
 }
