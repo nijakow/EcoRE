@@ -148,8 +148,34 @@
     );
 
 
-    AddSlot: slot ToMolecule: m => (
-        slot addToMolecule: m WithEnv: environment Host: nexthost
+    AddSlot: slot ToMolecule: molecule => (
+        | realType  <- EvaluateExpression: slot type, flagBits  <- 0 |
+            
+        slot flags isWith          if: [ flagBits <- flagBits bitOr: 0b00010 ].
+        slot flags isInherited unless: [ flagBits <- flagBits bitOr: 0b00001 ].
+        slot flags isOwn           if: [ flagBits <- flagBits bitOr: 0b00100 ].
+        slot flags isProtected     if: [ flagBits <- flagBits bitOr: 0b01000 ].
+        slot flags isStatic        if: [ flagBits <- flagBits bitOr: 0b10000 ].
+
+        slot flags isMethod if: [
+            "TODO, FIXME, XXX: This approach is totally horrendous"
+            |
+                driver <- (lang eco compiler CompilationDriver) new
+                            ~ subject: slot body
+            |
+            slot args do: [ :arg | driver addParameter: arg name "TODO: Also compile and add the type" ].
+            slot varargs if: [ driver enableVarargs ].
+            #'ecosphere.ecore.reflect.add_code_slot'(molecule, -1, flagBits, realType, slot name, driver commit).
+        ] else: [
+            |
+                driver <- (lang eco compiler CompilationDriver) new
+                            ~ subject: slot body
+                            ~ environment: environment
+                            ~ self: molecule
+                            ~ host: nexthost
+            |
+            #'ecosphere.ecore.reflect.add_value_slot'(molecule, -1, flagBits, realType, slot name, driver evaluate).
+        ].
     );
 
     visitMolecule: ast => (

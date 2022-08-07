@@ -16,6 +16,8 @@
         static with inherited _ = #<:std/Clonable>;
         protected module = #<:lang/eco/compiler>;
 
+        protected compiler;
+
         protected subject;
         protected selfOverride;
         protected environmentOverride;
@@ -23,6 +25,7 @@
 
         with inherited trait = {
             init => (
+                compiler            <- (module ScopedCompiler) new.
                 subject             <- No. "TODO: Initialize to ASTNothing"
                 selfOverride        <- No.
                 environmentOverride <- No.
@@ -42,9 +45,12 @@
             host:        v => hostOverride        <- Yes: v;
             environment: v => environmentOverride <- Yes: v;
 
+            addParameter: p Type: t => compiler addParameter: p Type: t;
+            addParameter: p         => compiler addParameter: p;
+            enableVarargs           => compiler enableVarargs;
+
             commit => (
                 |
-                    compiler <- (module ScopedCompiler) new,
                     visitor  <- ((module Visitor) clone)
                                   ~ initWithCompiler: compiler
                                          Environment: (environmentOverride yes: [ :e | e ] no: [ lobby ])
@@ -54,6 +60,8 @@
                 subject acceptVisitor: visitor.
               ^ compiler finish
             );
+
+            evaluate => commit execute(environmentOverride yes: [ :e | e ] no: [ lobby ]);
         }
     }
 }

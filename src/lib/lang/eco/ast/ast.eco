@@ -113,34 +113,6 @@
             args forEach: [ :i, :v | realArgs at: i put: (v type evaluateInEnv: env Host: host) ].
           ^ #'ecosphere.ecore.object.interface.add_entry'(interface, realType, name, realArgs, varargs if: 1 else: 0)
         );
-        addToMolecule: molecule WithEnv: env Host: host => (
-            "TODO: Use Mirrors for this!"
-
-            | realType  <- type evaluateInEnv: env Host: host,
-              flagBits  <- 0 |
-            
-            flags isWith          if: [ flagBits <- flagBits bitOr: 0b00010 ].
-            flags isInherited unless: [ flagBits <- flagBits bitOr: 0b00001 ].
-            flags isOwn           if: [ flagBits <- flagBits bitOr: 0b00100 ].
-            flags isProtected     if: [ flagBits <- flagBits bitOr: 0b01000 ].
-            flags isStatic        if: [ flagBits <- flagBits bitOr: 0b10000 ].
-
-            flags isMethod if: [
-                "TODO, FIXME, XXX: This approach is totally horrendous"
-                |
-                    compiler <- (lang eco compiler ScopedCompiler) new,
-                    visitor  <- ((lang eco compiler Visitor) clone) initWithCompiler: compiler Environment: env
-                |
-                args do: [ :arg | compiler addParameter: arg name "TODO: Also compile and add the type" ].
-                varargs if: [ compiler enableVarargs ].
-                body acceptVisitor: visitor.
-                #'ecosphere.ecore.reflect.add_code_slot'(molecule, -1, flagBits, realType, name, compiler finish).
-            ] else: [
-                | realValue <- body evaluateInEnv: env Host: host NextHost: molecule |
-                #'ecosphere.ecore.reflect.add_value_slot'(molecule, -1, flagBits, realType, name, realValue).
-            ].
-          ^ molecule
-        );
     };
 
     ASTImplicit = {
