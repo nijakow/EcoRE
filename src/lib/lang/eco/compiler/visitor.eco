@@ -80,7 +80,10 @@
 
     visitImplicit: ast => compiler loadSelf;
     
-    visitSelf: ast => compiler loadSelf;
+    visitSelf: ast => (
+        nexthost yes: [ :v | compiler loadConstant: v ]
+                  no: [      compiler loadSelf        ]
+    );
 
     visitMy: ast => compiler loadMy;
 
