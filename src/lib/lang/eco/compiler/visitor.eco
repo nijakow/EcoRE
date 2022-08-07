@@ -41,7 +41,10 @@
     static with inherited parent = #<:std/Clonable>;
     with inherited module = #<:lang/eco/compiler>;
 
-    compiler, environment, host, nexthost;
+    protected compiler,
+    protected environment,
+    protected host,
+    protected nexthost;
 
     initWithCompiler: _compiler Environment: _env => initWithCompiler: _compiler Environment: _env Host: lobby;
     initWithCompiler: _compiler Environment: _env Host: host => initWithCompiler: _compiler Environment: _env Host: host NextHost: host;
