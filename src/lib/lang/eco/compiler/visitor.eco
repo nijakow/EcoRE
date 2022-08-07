@@ -159,7 +159,6 @@
 
     visitInterface: ast => (
         | i <- %[] |
-        "TODO, FIXME, XXX: Move this builtin to a different place!"
         ast parents do: [ :p | i <- i addParent: (EvaluateExpression: p In: i) ].
         ast entries do: [ :s | i <- AddSlot: s ToInterface: i ].
         compiler loadConstant: i
