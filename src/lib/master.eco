@@ -87,8 +87,7 @@
             |
 
             [
-                | code <- expr compileInEnv: lobby |
-                result <- (code execute(env)).
+                | result <- expr evaluateInEnv: lobby |
                 io out << '        ' << result.
                 io out newline
             ] catch: [ :e |
