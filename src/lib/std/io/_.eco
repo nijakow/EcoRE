@@ -42,8 +42,9 @@
 
     ParseFile: file => (SlurpFile: file) parse;
     EvaluateFile: file InEnv: env => (ParseFile: file) evaluateInEnv: env;
+    EvaluateFile: file InEnv: env Host: host => (ParseFile: file) evaluateInEnv: env Host: host;
 
-    Import: file Path: path => (
+    Import: file Path: path In: host => (
       (out << 'Importing: ' << file << '...') newline commit.
       |
         env <- {
@@ -54,7 +55,7 @@
           init: _here => here <- _here;
         }
       |
-      EvaluateFile: file InEnv: (env clone init: path)
+      EvaluateFile: file InEnv: (env clone init: path) Host: host
     );
-    Import: file => Import: file Path: (std os files here);
+    Import: file => Import: file Path: (std os files here) In: lobby;
 }

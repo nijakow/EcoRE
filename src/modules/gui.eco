@@ -81,7 +81,8 @@
                            ~ add: (GreenBlock(50, 75) ~ moveToX: 400 Y: 100)
                            ~ add: (BlueBlock(100, 100) ~ moveToX: 600 Y: 75)
                            ~ add: ((morphic StackMorph new) ~ rigidWidth: 300 ~ rigidHeight: 300 ~ moveToX: 650 Y: 200)
-                           ~ add: ((morphic StackMorph new) ~ boundsX: 700 Y: 50 W: 50 H: 50)
+                           ~ add: ((morphic StackMorph new) ~ boundsX: 750 Y: 50 W: 50 H: 50)
+                           ~ add: ((morphic VBoxMorph new) ~ boundsX: 825 Y: 50 W: 50 H: 50)
                            ~ add: (makeFrame ~ moveToX: 250 Y: 350).
                 1 to: 5 do: [ :x |
                     1 to: 5 do: [ :y |
