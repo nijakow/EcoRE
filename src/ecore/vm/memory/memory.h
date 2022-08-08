@@ -6,7 +6,12 @@
 struct Eco_Type;
 
 
-#define Eco_Memory_Alloc   malloc
+static inline void* Eco_Memory_Alloc(size_t size)
+{
+    if (size == 0) size = 1;
+    return malloc(size);
+}
+
 #define Eco_Memory_Free    free
 
 static inline void* Eco_Memory_Realloc(void* ptr, unsigned int new_size)
