@@ -164,6 +164,7 @@ clean:
 	- $(RM) $(EXECUTABLE) $(OBJECTS) $(DEPENDS)
 
 .phony: re
-re: clean all
+re: clean
+	$(MAKE) all
 
 -include $(DEPENDS)

@@ -106,4 +106,5 @@ all: $(NAME)
 clean:
 	- $(RM) $(NAME)
 
-re: clean all
+re: clean
+	$(MAKE) all
