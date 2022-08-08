@@ -1,0 +1,44 @@
+
+    {
+        static with inherited _ = std Clonable;
+        with inherited own Morph = $ Morph;
+
+        protected grabbedMorph;
+
+        with inherited trait = {
+            init => (
+                $(Morph) init.
+                rigidWidth: 1.
+                rigidHeight: 1.
+                grabbedMorph <- No.
+              ^ self
+            );
+
+            grab: morph => (
+                | p <- morph globalOffset - globalOffset |
+                add: morph.
+                morph moveToX: p x Y: p y. "TODO: Keep offset"
+                grabbedMorph <- Yes: morph.
+              ^ self
+            );
+
+            click => (
+                | gb <- globalBounds |
+                grabbedMorph
+                  ~ yes: [ :m | world yes: [ :w | (w dropMorph: m AtX: gb x Y: gb y) -> [ grabbedMorph <- No ] ] ]
+                     no: [      world yes: [ :w | w clickAtX: gb x Y: gb y HandMorph: self ] ]
+            );
+
+            leftClick => click;
+
+            renderOn: renderer => (
+                renderer setR: 200 G: 0 B: 0.
+                renderer fillRectX: 0 Y: 0 W: 1 H: 1.
+                renderChildrenOn: renderer.
+            );
+
+            dispatchEvent: block AtX: evtX Y: evtY => false; "Avoid dispatching to children"
+
+            writeOn: w => w << 'a hand morph';
+        };
+    }

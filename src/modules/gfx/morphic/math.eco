@@ -1,0 +1,100 @@
+{
+    static with inherited _ = std Module;
+    morphic = $;
+
+    own Rectangle = {
+        static with inherited _ = std Clonable;
+
+        x, y, w, h;
+
+        with inherited trait = {
+            init => (
+                x: 0 y: 0 w: 1 h: 1.
+              ^ self
+            );
+
+            newX: xv Y: yv W: wv H: hv => (
+              ^ (self new)
+                    x: xv
+                    y: yv
+                    w: wv
+                    h: hv
+            );
+
+            offsetToX: x Y: y => newX: x Y: y W: w H: h;
+            offsetByX: xoff Y: yoff => newX: x + xoff Y: y + yoff W: w H: h;
+            resizeToW: w H: h => newX: x Y: y W: w H: h;
+
+            x: xv => x <- xv;
+            y: yv => y <- yv;
+            w: wv => w <- wv;
+            h: hv => h <- hv;
+
+            x: xv y: yv => x: xv ~ y: yv;
+
+            x: xv y: yv w: wv h: hv => (
+                x: xv.
+                y: yv.
+                w: wv.
+                h: hv.
+              ^ self
+            );
+
+            fromRectangle: rect => (
+                x: rect x
+                y: rect y
+                w: rect w
+                h: rect h
+            );
+
+            containsX: px Y: py => (
+                (px < x) -> [ ^ false ].
+                (py < y) -> [ ^ false ].
+                (px >= (x + w)) -> [ ^ false ].
+                (py >= (y + h)) -> [ ^ false ].
+              ^ true
+            );
+
+            originForOrientation: orientation => (
+                orientation
+                  ~ ifHorizontal: [ ^ x ]
+                      ifVertical: [ ^ y ]
+            );
+
+            dimensionForOrientation: orientation => (
+                orientation
+                  ~ ifHorizontal: [ ^ w ]
+                      ifVertical: [ ^ h ]
+            );
+
+            writeOn: writer => writer << 'a rectangle(' << x << ', ' << y << ', ' << w << ', ' << h << ')';
+        };
+    };
+
+    own Point2D = {
+        static with inherited _ = std Clonable;
+        private module = $;
+
+        x, y;
+
+        with inherited trait = {
+            NewX: _x Y: _y => self clone initWithX: _x Y: _y;
+
+            initWithX: _x Y: _y => (
+                x <- _x.
+                y <- _y.
+              ^ self
+            );
+
+            + p => NewX: x + p x Y: y + p y;
+            - p => NewX: x - p x Y: y - p y;
+
+            negate => NewX: x negate Y: y negate;
+
+            offsetBy: p => module morphic Point2D NewX: (x + p) Y: (y + p);
+            offsetBy: p Do: block => block value(offsetBy: p);
+
+            writeOn: w => w << 'a point(' << x << ', ' << y << ')';
+        };
+    };
+}

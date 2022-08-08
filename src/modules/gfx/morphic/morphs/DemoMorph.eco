@@ -1,0 +1,32 @@
+
+    {
+        static with inherited _ = std Clonable;
+        with inherited own Morph = $ Morph;
+
+        protected r,
+        protected g,
+        protected b;
+
+        with inherited trait = {
+            init => (
+                $(Morph) init.
+                r: 0 g: 200 b: 0.
+              ^ self
+            );
+
+            r: _r g: _g b: _b => (
+                r <- _r.
+                g <- _g.
+                b <- _b.
+              ^ self
+            );
+
+            renderOn: renderer => (
+                renderer setR: r G: g B: b.
+                renderer fillRectX: 0 Y: 0 W: bounds w H: bounds h.
+                renderChildrenOn: renderer.
+            );
+
+            writeOn: w => w << 'a demo morph';
+        };
+    }

@@ -1,0 +1,33 @@
+{
+    static with inherited _ = std Module;
+    
+    own Vertical = {
+        static with inherited _ = std Singleton;
+        private module = $;
+
+        isHorizontal => false;
+        isVertical   => true;
+
+        ifHorizontal: block => self;
+        ifVertical:   block => block value;
+        ifHorizontal: horiz
+          ifVertical: verti => verti value;
+        
+        opposite => module Horizontal;
+    },
+
+    own Horizontal = {
+        static with inherited _ = std Singleton;
+        private module = $;
+
+        isHorizontal => true;
+        isVertical   => false;
+
+        ifHorizontal: block => block value;
+        ifVertical:   block => self;
+        ifHorizontal: horiz
+          ifVertical: verti => horiz value;
+        
+        opposite => module Vertical;
+    }
+}

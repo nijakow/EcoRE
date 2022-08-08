@@ -1,0 +1,56 @@
+
+    {
+        static with inherited _ = std Clonable;
+        with inherited own Morph = $ Morph;
+        protected morphic = $;
+
+        protected isDirty,
+        handMorph;
+
+        with inherited trait = {
+            init => (
+                $(Morph) init.
+                isDirty   <- true.
+                handMorph <- (morphic HandMorph new).
+                add: handMorph.
+              ^ self
+            );
+
+            childrenDo: block => (
+                $(Morph) childrenDo: [ :c |
+                    (handMorph != c) -> [ block value(c) ].
+                ].
+                block value(handMorph).
+            );
+
+            world => Yes: self;
+
+            dirty => isDirty <- true;
+
+            maybeUpdate => (
+                isDirty -> [
+                    isDirty <- false.
+                    allChildrenDo: [ :c | c layoutChanged ].
+                    layoutChanged.
+                    layoutInPlaceIfNeeded
+                ]
+            );
+
+            renderOn: renderer => (
+                renderer setR: 200 G: 200 B: 200.
+                renderer fillRectX: 0 Y: 0 W: bounds w H: bounds h.
+                renderChildrenOn: renderer.
+            );
+
+            handleDropMorph: morph AtX: x Y: y => (
+                | gb <- globalBounds, mgb <- morph globalBounds |
+                (tryAdd: morph) -> [
+                    morph moveToX: (mgb x - gb x) Y: (mgb y - gb y).
+                ].
+              ^ true
+            );
+            handleClickAtX: x Y: y HandMorph: hand => false;
+
+            writeOn: w => w << 'a world morph';
+        };
+    }

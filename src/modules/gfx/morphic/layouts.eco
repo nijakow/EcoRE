@@ -1,0 +1,39 @@
+{
+    static with inherited _ = std Module;
+    
+    own ShrinkWrap = {
+        static with inherited _ = std Singleton;
+
+        with inherited trait = {
+            ifShrinkWrap: shrinkwrap ifFlexible: flexible ifRigid: rigid => shrinkwrap value;
+
+            isShrinkWrap => true;
+            isFlexible => false;
+            isRigid => false;
+        };
+    };
+
+    own Flexible = {
+        static with inherited _ = std Singleton;
+
+        with inherited trait = {
+            ifShrinkWrap: shrinkwrap ifFlexible: flexible ifRigid: rigid => flexible value;
+
+            isShrinkWrap => false;
+            isFlexible => true;
+            isRigid => false;
+        };
+    };
+
+    own Rigid = {
+        static with inherited _ = std Singleton;
+
+        with inherited trait = {
+            ifShrinkWrap: shrinkwrap ifFlexible: flexible ifRigid: rigid => rigid value;
+
+            isShrinkWrap => false;
+            isFlexible => false;
+            isRigid => true;
+        };
+    };
+}

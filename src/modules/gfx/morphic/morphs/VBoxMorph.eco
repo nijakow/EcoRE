@@ -1,0 +1,14 @@
+
+    {
+        static with inherited _ = std Clonable;
+        with inherited own BoxMorph = $ BoxMorph;
+
+        with inherited trait = {
+            init => (
+                $(BoxMorph) initVertical.
+              ^ self
+            );
+
+            writeOn: w => w << 'a vbox morph';
+        };
+    }
