@@ -1,0 +1,47 @@
+
+    {
+        static with inherited _ = std Clonable;
+        private module = $;
+
+        protected boundsstack,
+        protected sdlRenderer;
+
+        with inherited trait = {
+            initWithSDLRenderer: _sdl_renderer X: _x Y: _y W: _w H: _h => (
+                sdlRenderer <- _sdl_renderer.
+                boundsstack <- std util newStack.
+                boundsstack push: ((module Rectangle) newX: _x Y: _y W: _w H: _h).
+              ^ self
+            );
+
+            bounds => boundsstack top;
+            pushBounds: b => boundsstack push: (b offsetByX: xOff Y: yOff);
+            popBounds => boundsstack pop;
+            withPushedBounds: b Do: block => (
+                pushBounds: b.
+                block value.
+                popBounds.
+              ^ self
+            );
+
+            xOff => bounds x;
+            yOff => bounds y;
+
+            clear => sdlRenderer clear;
+            present => sdlRenderer present;
+
+            setR: r G: g B: b => sdlRenderer setR: r G: g B: b;
+            setColor: color => sdlRenderer setColor: color;
+
+            drawPointX: x Y: y => sdlRenderer drawPointX: xOff + x Y: yOff + y;
+            drawLineX: x1 Y: y1 X: x2 Y: y2 => sdlRenderer drawLineX: xOff + x1 Y: yOff + y1 X: xOff + x2 Y: yOff + y2;
+            drawRectX: x Y: y W: w H: h => sdlRenderer drawRectX: xOff + x Y: yOff + y W: w H: h;
+            drawRect: rect => drawRectX: rect x Y: rect y W: rect w H: rect h;
+            fillRectX: x Y: y W: w H: h => sdlRenderer fillRectX: xOff + x Y: yOff + y W: w H: h;
+            fillRect: rect => fillRectX: rect x Y: rect y W: rect w H: rect h;
+
+            accept: morph => morph renderOn: self;
+
+            writeOn: w => w << 'a morphic renderer';
+        };
+    };
