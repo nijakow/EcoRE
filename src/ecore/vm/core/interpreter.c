@@ -412,13 +412,10 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
         }
         TARGET(MAKE_CLOSURE) {
             u8                   dest;
-            u16                  closure_id;
             struct Eco_Closure*  closure;
 
             dest       = NEXT_U8();
-            closure_id = NEXT_U16();
-
-            closure    = Eco_Closure_New(top->code->code_instances[closure_id], Eco_Fiber_Top(fiber));
+            closure    = Eco_Closure_New(Eco_Any_AsPointer(*NEXT_CONSTANT()), Eco_Fiber_Top(fiber));
 
             *Eco_Frame_RegisterByBytecode(top, dest) = Eco_Any_FromPointer(closure);
 

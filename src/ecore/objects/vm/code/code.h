@@ -22,9 +22,6 @@ struct Eco_Code
     
     unsigned int       constant_count;
     Eco_Any*           constants;
-
-    unsigned int       code_instance_count;
-    struct Eco_Code**  code_instances;
 };
 
 
@@ -33,7 +30,6 @@ void Eco_Code_Mark(struct Eco_GC_State*, struct Eco_Code*);
 void Eco_Code_Del(struct Eco_Code*);
 
 struct Eco_Code* Eco_Code_ConstructFromEco(struct Eco_Blob*,
-                                           struct Eco_Array*,
                                            struct Eco_Array*,
                                            unsigned int,
                                            unsigned int,

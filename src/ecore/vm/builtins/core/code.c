@@ -13,22 +13,19 @@ bool Eco_VM_Builtin_Code_New(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Any           result;
     Eco_Any           bytecodes;
     Eco_Any           constants;
-    Eco_Any           code_instances;
     Eco_Any           registers;
     Eco_Any           fixed_args;
     Eco_Any           flags;
 
-    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 6, 6))
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 5, 5))
         return false;
     flags          = Eco_Fiber_Pop(fiber);
     fixed_args     = Eco_Fiber_Pop(fiber);
     registers      = Eco_Fiber_Pop(fiber);
-    code_instances = Eco_Fiber_Pop(fiber);
     constants      = Eco_Fiber_Pop(fiber);
     bytecodes      = Eco_Fiber_Pop(fiber);
     code           = Eco_Code_ConstructFromEco((struct Eco_Blob*)  Eco_Any_AsPointer(bytecodes),
                                                (struct Eco_Array*) Eco_Any_AsPointer(constants),
-                                               (struct Eco_Array*) Eco_Any_AsPointer(code_instances),
                                                Eco_Any_AsInteger(registers),
                                                Eco_Any_AsInteger(fixed_args),
                                                Eco_Any_AsInteger(flags) != 0);
@@ -90,26 +87,6 @@ bool Eco_VM_Builtin_Code_Constants(struct Eco_Fiber* fiber, unsigned int args)
     for (i = 0; i < code->constant_count; i++)
         Eco_Array_Put(constants, i, code->constants[i]);
     any = Eco_Any_FromPointer(constants);
-    Eco_Fiber_Push(fiber, any);
-    return true;
-}
-
-bool Eco_VM_Builtin_Code_Closures(struct Eco_Fiber* fiber, unsigned int args)
-{
-    struct Eco_Code*   code;
-    struct Eco_Array*  closures;
-    Eco_Any            any;
-    unsigned int       i;
-
-    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
-        return false;
-
-    any      = Eco_Fiber_Pop(fiber);
-    code     = Eco_Any_AsPointer(any);
-    closures = Eco_Array_New(code->code_instance_count);
-    for (i = 0; i < code->code_instance_count; i++)
-        Eco_Array_Put(closures, i, Eco_Any_FromPointer(code->code_instances[i]));
-    any = Eco_Any_FromPointer(closures);
     Eco_Fiber_Push(fiber, any);
     return true;
 }

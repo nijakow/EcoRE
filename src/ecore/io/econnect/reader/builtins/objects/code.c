@@ -31,14 +31,6 @@ bool Eco_EConnect_Builtin_GetCode(struct Eco_EConnect_Reader* reader,
         if (!Eco_EConnect_Reader_ReadAny(reader, result, &the_code->constants[index]))
             return false;
     }
-
-    the_code->code_instance_count = Eco_EConnect_ParseUInt(&reader->stream);
-    the_code->code_instances      = Eco_Memory_Alloc(the_code->code_instance_count * sizeof(struct Eco_Code*));
-    for (index = 0; index < the_code->code_instance_count; index++)
-    {
-        if (!Eco_EConnect_Reader_ReadObject(reader, result, (struct Eco_Object**) &the_code->code_instances[index]))
-            return false;
-    }
     
     the_code->bytecode_count      = Eco_EConnect_ParseUInt(&reader->stream);
     the_code->bytecodes           = Eco_Memory_Alloc(the_code->bytecode_count);

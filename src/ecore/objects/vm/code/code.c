@@ -46,15 +46,8 @@ void Eco_Code_Mark(struct Eco_GC_State* state, struct Eco_Code* code)
 {
     unsigned int  i;
 
-    for (i = 0; i < code->code_instance_count; i++)
-    {
-        Eco_GC_State_MarkObject(state, code->code_instances[i]);
-    }
-
     for (i = 0; i < code->constant_count; i++)
-    {
         Eco_GC_State_MarkAny(state, code->constants[i]);
-    }
 
     Eco_Object_Mark(state, &(code->_));
 }
@@ -65,8 +58,6 @@ void Eco_Code_Del(struct Eco_Code* code)
         Eco_Memory_Free(code->bytecodes);
     if (code->constants != NULL)
         Eco_Memory_Free(code->constants);
-    if (code->code_instances != NULL)
-        Eco_Memory_Free(code->code_instances);
     Eco_Object_Del(&(code->_));
 }
 
@@ -75,16 +66,14 @@ void Eco_Code_Del(struct Eco_Code* code)
  *    C o n s t r u c t i o n
  */
 
-struct Eco_Code* Eco_Code_ConstructFromEco(struct Eco_Blob* bytecodes,
+struct Eco_Code* Eco_Code_ConstructFromEco(struct Eco_Blob*  bytecodes,
                                            struct Eco_Array* constants,
-                                           struct Eco_Array* code_instances,
-                                           unsigned int register_count,
-                                           unsigned int fixed_args,
-                                           bool has_varargs)
+                                           unsigned int      register_count,
+                                           unsigned int      fixed_args,
+                                           bool              has_varargs)
 {
     struct Eco_Code*  code;
     unsigned int      index;
-    struct Eco_Code*  code_instance;
 
     code = Eco_Code_New();
 
@@ -102,12 +91,6 @@ struct Eco_Code* Eco_Code_ConstructFromEco(struct Eco_Blob* bytecodes,
         code->constants           = Eco_Memory_Alloc(code->constant_count * sizeof(Eco_Any));
         for (index = 0; index < code->constant_count; index++)
             Eco_Any_AssignAny(&code->constants[index], Eco_Array_At(constants, index));
-        code->code_instance_count = Eco_Array_Size(code_instances);
-        code->code_instances      = Eco_Memory_Alloc(code->code_instance_count * sizeof(struct Eco_Code*));
-        for (index = 0; index < code->code_instance_count; index++) {
-            code_instance               = Eco_Any_AsPointer(*Eco_Array_At(code_instances, index));
-            code->code_instances[index] = code_instance;
-        }
         code->register_count = register_count;
         code->arg_count      = fixed_args;
         code->has_varargs    = has_varargs;
