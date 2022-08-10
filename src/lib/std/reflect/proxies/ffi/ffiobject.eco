@@ -9,6 +9,16 @@
     store: v => #'ecosphere.ecore.ffi.object.store'(self, v);
     access: index => #'ecosphere.ecore.ffi.object.access'(self, index);
 
+    at: index => (access: index) fetch;
+    at: index put: value => (access: index) store: value;
+
+    "TODO:
+    
+      slot: name => ...;
+      in: slotname => (slot: name) fetch;
+      in: slotname put: value => (slot: name) store: value;
+    "
+
     assignNull => #'ecosphere.ecore.ffi.object.assign_null'(self);
     castTo: type => #'ecosphere.ecore.ffi.object.cast_to'(self, type);
 

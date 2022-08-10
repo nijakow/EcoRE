@@ -75,10 +75,10 @@
                 drawLineX: (x + w) Y: y X: (x + w) Y: (y + h).
             );
             fillRectX: x Y: y W: w H: h => (
-                (rectangle access: 0) store: x.
-                (rectangle access: 1) store: y.
-                (rectangle access: 2) store: w.
-                (rectangle access: 3) store: h.
+                rectangle at: 0 put: x.
+                rectangle at: 1 put: y.
+                rectangle at: 2 put: w.
+                rectangle at: 3 put: h.
                 sdl RenderFillRect(renptr, rectangle address).
             );
 
@@ -115,11 +115,11 @@
             );
 
             poll => sdl PollEvent(event address);
-            type => (event access: 0) fetch;
+            type => (event at: 0);
 
             isMouseMotionEvent => (type == sdl SDL_EventTypes MOUSEMOTION);
-            mouseMotionX => (((event access: 2) fetch) access: 5) fetch;
-            mouseMotionY => (((event access: 2) fetch) access: 6) fetch;
+            mouseMotionX => (event at: 2) at: 5;
+            mouseMotionY => (event at: 2) at: 6;
 
             isMouseButtonDown => (type == sdl SDL_EventTypes MOUSEBUTTONDOWN);
             isMouseButtonUp => (type == sdl SDL_EventTypes MOUSEBUTTONUP);
@@ -136,7 +136,7 @@
                     if: [ isMouseButtonDown  ] then: [ visitor visitMouseButtonEvent: self ] ~
                     if: [ isKeyUp            ] then: [ visitor visitKeyEvent: self         ] ~
                     if: [ isKeyDown          ] then: [ visitor visitKeyEvent: self         ] ~
-                default: [ visitor visitUnknown: self ].
+               default: [ visitor visitUnknown: self ].
             );
 
             writeOn: w => w << 'an sdl event';
