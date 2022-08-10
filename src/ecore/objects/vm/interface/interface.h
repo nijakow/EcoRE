@@ -2,6 +2,7 @@
 #define ECO_OBJECTS_VM_INTERFACE_INTERFACE_H
 
 #include <ecore/objects/base/object.h>
+#include <ecore/objects/base/type/typelist.h>
 #include <ecore/objects/misc/key/key.h>
 
 /*
@@ -23,15 +24,16 @@ struct Eco_InterfaceEntry
 
 struct Eco_Interface
 {
-    struct Eco_Object          _;
-    struct Eco_Interface**     prev;
-    struct Eco_Interface*      next;
-    bool                       allow_all;
-    unsigned int               parent_count;
-    struct Eco_Interface**     parents;
-    unsigned int               entry_count;
-    struct Eco_InterfaceEntry* entries;
-    char                       payload[0];
+    struct Eco_Object           _;
+    struct Eco_Interface**      prev;
+    struct Eco_Interface*       next;
+    struct Eco_TypeList         implementing_types;
+    bool                        allow_all;
+    unsigned int                parent_count;
+    struct Eco_Interface**      parents;
+    unsigned int                entry_count;
+    struct Eco_InterfaceEntry*  entries;
+    char                        payload[0];
 };
 
 static inline unsigned int Eco_Interface_GetParentCount(struct Eco_Interface* interface)
@@ -52,6 +54,9 @@ void Eco_Interface_Del(struct Eco_Interface*);
 
 bool Eco_Interface_ImplementsMessage(struct Eco_Interface*, struct Eco_Key*);
 bool Eco_Interface_ImplementsInterface(struct Eco_Interface*, struct Eco_Interface*);
+
+void Eco_Interface_NotifyImplementedBy(struct Eco_Interface*, struct Eco_Type*);
+void Eco_Interface_NotifyNotImplementedBy(struct Eco_Interface*, struct Eco_Type*);
 
 struct Eco_Interface* Eco_Interface_NewAndInit(unsigned int, struct Eco_InterfaceEntry*);
 struct Eco_Interface* Eco_Interface_AddParent(struct Eco_Interface*, struct Eco_Interface*);

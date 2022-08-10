@@ -64,6 +64,11 @@ void Eco_Type_Del(struct Eco_Type* type)
 {
     unsigned int  index;
 
+    if (type->interface != NULL)
+        Eco_Interface_NotifyNotImplementedBy(type->interface, type);
+    if (type->public_interface != NULL)
+        Eco_Interface_NotifyNotImplementedBy(type->public_interface, type);
+
     for (index = 0; index < type->inheriting_types.fill; index++)
         Eco_TypeList_Remove(&type->inheriting_types.types[index]->inherited_types, type);
     for (index = 0; index < type->inherited_types.fill; index++)

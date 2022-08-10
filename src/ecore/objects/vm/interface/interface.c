@@ -49,6 +49,7 @@ struct Eco_Interface* Eco_Interface_New(unsigned int parent_count, unsigned int 
 
     if (interface != NULL)
     {
+        Eco_TypeList_Create(&interface->implementing_types);
         interface->allow_all    = false;
         interface->parent_count = parent_count;
         interface->parents      = (void*) &interface->payload[0];
@@ -104,6 +105,8 @@ void Eco_Interface_Mark(struct Eco_GC_State* state, struct Eco_Interface* interf
 
 void Eco_Interface_Del(struct Eco_Interface* interface)
 {
+    /* TODO: Remove the interface from all types */
+    Eco_TypeList_Destroy(&interface->implementing_types);
     if (interface->next != NULL)
         interface->next->prev = interface->prev;
     *interface->prev = interface->next;
@@ -189,6 +192,16 @@ void Eco_Interface_EstablishSuperSubRelation(struct Eco_Interface* super_interfa
     /*
      *    TODO: Create a link between these two instances
      */
+}
+
+void Eco_Interface_NotifyImplementedBy(struct Eco_Interface* interface, struct Eco_Type* type)
+{
+    Eco_TypeList_Insert(&interface->implementing_types, type);
+}
+
+void Eco_Interface_NotifyNotImplementedBy(struct Eco_Interface* interface, struct Eco_Type* type)
+{
+    Eco_TypeList_Remove(&interface->implementing_types, type);
 }
 
 struct Eco_Interface* Eco_Interface_NewAndInit(unsigned int size,

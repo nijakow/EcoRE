@@ -97,8 +97,10 @@ struct Eco_Interface* Eco_Type_GetInterface(struct Eco_Type*   type,
      */
     if (private_also) {
         type->interface = interface;
+        Eco_Interface_NotifyImplementedBy(interface, type);
     } else {
         type->public_interface = interface;
+        Eco_Interface_NotifyImplementedBy(interface, type);
     }
 
     /*
