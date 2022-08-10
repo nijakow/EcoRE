@@ -1,7 +1,7 @@
 
     {
         static with inherited _ = std Clonable;
-        protected morphic = $;
+        protected morphic = $ morphic;
 
         bounds,
         xLayout, yLayout;

@@ -2,7 +2,6 @@
     {
         static with inherited _ = std Clonable;
         with inherited own Morph = $ Morph;
-        protected morphic = $;
 
         protected isDirty,
         handMorph;
@@ -11,7 +10,7 @@
             init => (
                 $(Morph) init.
                 isDirty   <- true.
-                handMorph <- (morphic HandMorph new).
+                handMorph <- (morphic morphs HandMorph new).
                 add: handMorph.
               ^ self
             );

@@ -2,7 +2,6 @@
     {
         static with inherited _ = std Clonable;
         with inherited own Morph = $ Morph;
-        protected morphic = $;
 
         protected action;
 

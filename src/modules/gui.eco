@@ -16,23 +16,23 @@
 
         with inherited trait = {
             VBox(...) => (
-                | box <- (morphic VBoxMorph) new |
+                | box <- (morphic morphs VBoxMorph) new |
                 std util newArray(...) do: [ :e | box add: e ].
               ^ box
             );
 
             HBox(...) => (
-                | box <- (morphic HBoxMorph) new |
+                | box <- (morphic morphs HBoxMorph) new |
                 std util newArray(...) do: [ :e | box add: e ].
               ^ box
             );
 
             Button => (
-                morphic StackMorph new
+                morphic morphs StackMorph new
                   ~ rigidWidth: 25
                   ~ rigidHeight: 25
-                  ~ add: (morphic DemoMorph new ~ r: 100 g: 0 b: 100)
-                  ~ add: (morphic ButtonMorph new)
+                  ~ add: (morphic morphs DemoMorph new ~ r: 100 g: 0 b: 100)
+                  ~ add: (morphic morphs ButtonMorph new)
             );
 
             Frame(title, content) => (
@@ -43,11 +43,11 @@
             );
 
             ShrinkWrap(e)  => e ~ xLayout: morphic layouts ShrinkWrap ~ yLayout: morphic layouts ShrinkWrap;
-            RedBlock(w, h) => morphic DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: w ~ rigidHeight: h;
-            GreenBlock(w, h) => morphic DemoMorph new ~ r: 0 g: 100 b: 0 ~ rigidWidth: w ~ rigidHeight: h;
-            BlueBlock(w, h) => morphic DemoMorph new ~ r: 0 g: 0 b: 100 ~ rigidWidth: w ~ rigidHeight: h;
-            YellowBlock    => morphic DemoMorph new ~ r: 100 g: 100 b: 0;
-            Spacer         => morphic Morph new;
+            RedBlock(w, h) => morphic morphs DemoMorph new ~ r: 100 g: 0 b: 0 ~ rigidWidth: w ~ rigidHeight: h;
+            GreenBlock(w, h) => morphic morphs DemoMorph new ~ r: 0 g: 100 b: 0 ~ rigidWidth: w ~ rigidHeight: h;
+            BlueBlock(w, h) => morphic morphs DemoMorph new ~ r: 0 g: 0 b: 100 ~ rigidWidth: w ~ rigidHeight: h;
+            YellowBlock    => morphic morphs DemoMorph new ~ r: 100 g: 100 b: 0;
+            Spacer         => morphic morphs Morph new;
             Center(e)      => HBox(Spacer, VBox(Spacer, e, Spacer) ~ xLayout: morphic layouts ShrinkWrap, Spacer);
 
             makeF => (  VBox(
@@ -59,17 +59,17 @@
                         ) ~ xLayout: morphic layouts ShrinkWrap
                     );
             makeX => (
-                morphic HBoxMorph new
-                    ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 100 )
+                morphic morphs HBoxMorph new
+                    ~ add: ( morphic morphs DemoMorph new ~ r: 100 g: 100 b: 100 )
                     ~ add: makeF
-                    ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 100 )
+                    ~ add: ( morphic morphs DemoMorph new ~ r: 100 g: 100 b: 100 )
                     ~ add: makeF
-                    ~ add: ( morphic DemoMorph new ~ r: 100 g: 100 b: 100 )
+                    ~ add: ( morphic morphs DemoMorph new ~ r: 100 g: 100 b: 100 )
             );
             makeY => (
-                morphic VBoxMorph new
+                morphic morphs VBoxMorph new
                   ~ add: makeX
-                  ~ add: ( morphic DemoMorph new ~ r: 0 g: 0 b: 100 )
+                  ~ add: ( morphic morphs DemoMorph new ~ r: 0 g: 0 b: 100 )
                   ~ add: makeX
             );
             makeFrame => (
@@ -77,12 +77,12 @@
             );
 
             init => (
-                morph <- morphic WorldMorph new
+                morph <- morphic morphs WorldMorph new
                            ~ add: (GreenBlock(50, 75) ~ moveToX: 400 Y: 100)
                            ~ add: (BlueBlock(100, 100) ~ moveToX: 600 Y: 75)
-                           ~ add: ((morphic StackMorph new) ~ rigidWidth: 300 ~ rigidHeight: 300 ~ moveToX: 650 Y: 200)
-                           ~ add: ((morphic StackMorph new) ~ boundsX: 750 Y: 50 W: 50 H: 50)
-                           ~ add: ((morphic VBoxMorph new) ~ boundsX: 825 Y: 50 W: 50 H: 50)
+                           ~ add: ((morphic morphs StackMorph new) ~ rigidWidth: 300 ~ rigidHeight: 300 ~ moveToX: 650 Y: 200)
+                           ~ add: ((morphic morphs StackMorph new) ~ boundsX: 750 Y: 50 W: 50 H: 50)
+                           ~ add: ((morphic morphs VBoxMorph new) ~ boundsX: 825 Y: 50 W: 50 H: 50)
                            ~ add: (makeFrame ~ moveToX: 250 Y: 350).
                 1 to: 5 do: [ :x |
                     1 to: 5 do: [ :y |
