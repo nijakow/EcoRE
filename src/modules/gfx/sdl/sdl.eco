@@ -22,6 +22,8 @@
     protected SDL_RenderFillRect,
     protected SDL_RenderFlush,
     protected SDL_RenderPresent;
+    protected SDL_CreateTextureFromSurface;
+    protected SDL_DestroyTexture;
 
     SDL_Scancode,
     SDL_Keycode,
@@ -76,6 +78,8 @@
             SDL_RenderFillRect <- (lib function: #'SDL_RenderFillRect' type: ((ffi types int) function(ffi types pointer, SDL_Rect pointer))) yes.
             SDL_RenderFlush <- (lib function: #'SDL_RenderFlush' type: ((ffi types int) function(ffi types pointer))) yes.
             SDL_RenderPresent <- (lib function: #'SDL_RenderPresent' type: ((ffi types void) function(ffi types pointer))) yes.
+            SDL_CreateTextureFromSurface <- (lib function: #'SDL_CreateTextureFromSurface' type: ((ffi types pointer) function(ffi types pointer, ffi types uint32, ffi types int, ffi types int, ffi types int))) yes.
+            SDL_DestroyTexture <- (lib function: #'SDL_DestroyTexture' type: ((ffi types void) function(ffi types pointer))) yes.
             InitEverything.
           ^ self
         );
@@ -100,6 +104,8 @@
         RenderFillRect(renderer, rect) => SDL_RenderFillRect value(renderer, rect);
         RenderFlush(renderer) => SDL_RenderFlush value(renderer);
         RenderPresent(renderer) => SDL_RenderPresent value(renderer);
+        CreateTextureFromSurface(surface, w, h) => SDL_CreateTextureFromSurface value(surface, 0, 0, w, h);
+        DestroyTexture(texture) => SDL_DestroyTexture value(texture);
 
         "TODO..."
     };
