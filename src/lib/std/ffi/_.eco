@@ -1,6 +1,6 @@
 
 #=std/ffi: {
-    protected with std = #<:std>;
+    static with inherited _ = #<:std/Module>;
     
     types = {
         protected GetTypeByIndex: index => #'ecosphere.ecore.ffi.type.by_index'(index);

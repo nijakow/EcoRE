@@ -1,5 +1,7 @@
 
 #=lang/eco/parser/Parser/Compounds: {
+    static with inherited _ = #<:std/Module>;
+
     parseCompound => parseCompoundWithTerminator: TokenType RPAREN;
     
     parseCompoundWithTerminator: terminator => (

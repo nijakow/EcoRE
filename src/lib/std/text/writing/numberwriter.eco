@@ -1,5 +1,7 @@
 
 #=std/text/writing/NumberWriter: {
+    static with inherited _ = #<:std/Module>;
+    
     protected own Base10Transformer = {
         base => 10;
         transform: n => ((#\0 asInt) + (n asInt)) asChar;

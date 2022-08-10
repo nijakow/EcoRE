@@ -3,5 +3,7 @@
 "
 
 #=lang: {
+    static with inherited _ = #<:std/Module>;
+    
     eco = #<:lang/eco>;
 }

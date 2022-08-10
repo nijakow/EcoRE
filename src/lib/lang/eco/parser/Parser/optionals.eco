@@ -1,5 +1,7 @@
 
 #=lang/eco/parser/Parser/Optionals: {
+    static with inherited _ = #<:std/Module>;
+
     parseOptionalType => (
         | the_type <- newASTConstantWithValue: any |
         (check: TokenType LBRACK) if: [

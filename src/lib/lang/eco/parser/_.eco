@@ -1,7 +1,10 @@
 
 #=lang/eco/parser: {
+    static with inherited _ = #<:std/Module>;
 
     Parser = {
+        static with inherited _ = #<:std/Clonable>;
+
         tokenizer;
 
         init: _tokenizer => (
@@ -30,6 +33,5 @@
         with inherited molecule = #<:lang/eco/parser/Parser/Molecule>;
         with inherited bars = #<:lang/eco/parser/Parser/Bars>;
         with inherited shared = #<:lang/eco/parser/SharedBehavior>;
-        with inherited parent = #<:std/Clonable>;
     }
 }

@@ -1,5 +1,7 @@
 
 #=std/reflect: {
+    static with inherited _ = #<:std/Module>;
+    
     proxies = #<:std/reflect/proxies>;
 
     Mirror = #<:std/reflect/Mirror>;

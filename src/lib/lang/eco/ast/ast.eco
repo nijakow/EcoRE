@@ -1,5 +1,7 @@
 
 #=lang/eco/ast: {
+    static with inherited _ = #<:std/Module>;
+    
     with construction = #<:lang/eco/ast/ASTConstruction>;
     
     IVisitor = #<:lang/eco/ast/IVisitor>;

@@ -1,10 +1,14 @@
 #=lang/eco/parser/Parser/Followups: {
+    static with inherited _ = #<:std/Module>;
+
     all = { level => 2, dec => #<:lang/eco/parser/Parser/Followups> binary },
     binary = { level => 1, dec => #<:lang/eco/parser/Parser/Followups> unary },
     unary = { level => 0, dec => self }
 },
 
 #=lang/eco/parser/Parser/Expression: {
+    static with inherited _ = #<:std/Module>;
+
     parseExpression => parseExpressionWithFollowups: #<:lang/eco/parser/Parser/Followups> all;
     parseExpressions => parseExpressionsWithTerminator: TokenType RPAREN;
 

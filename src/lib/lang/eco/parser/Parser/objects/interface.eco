@@ -1,5 +1,7 @@
 
 #=lang/eco/parser/Parser/Interface: {
+    static with inherited _ = #<:std/Module>;
+
     parseInterface => (
         | builder <- newASTInterfaceBuilder |
         [ check: TokenType RBRACK ] until: [

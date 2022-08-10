@@ -1,6 +1,9 @@
 #=lang/eco/parser/SharedBehavior: {
+    static with inherited _ = #<:std/Module>;
 
     TokenType = {
+        static with inherited _ = #<:std/Module>;
+        
         EOF = #'eof',
         IDENTIFIER = #'ident',
         STRING = #'string',

@@ -1,5 +1,7 @@
 
 #=lang/eco/parser/Parser/Molecule: {
+    static with inherited _ = #<:std/Module>;
+
     parseObjectSlotFlags: flags => (
         [
             begin

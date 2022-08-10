@@ -1,5 +1,7 @@
 
 #=lang/eco/parser/Parser/Send: {
+    static with inherited _ = #<:std/Module>;
+
     tryParseNArySendWithAST: ast => (
         ( | ident <- checkNAryIdentifier |
             ident if: [

@@ -1,6 +1,6 @@
 
 #=lang/eco/compiler: {
-    with inherited lobby = #<:lobby>;
+    static with inherited _ = #<:std/Module>;
 
     Bytecodes = #<:lang/eco/compiler/Bytecodes>;
     RegisterAllocator = #<:lang/eco/compiler/RegisterAllocator>;

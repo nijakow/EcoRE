@@ -1,5 +1,7 @@
 
 #=std/util/comparators: {
+    static with inherited _ = #<:std/Module>;
+    
     own DefaultComparator = #=std/util/comparators/DefaultComparator: {
         static with inherited _ = std Singleton;
 

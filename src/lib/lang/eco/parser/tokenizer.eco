@@ -1,4 +1,5 @@
 #=lang/eco/tokenizer: {
+    static with inherited _ = #<:std/Module>;
 
     Token = {
         static with inherited parent = #<:std/Clonable>;

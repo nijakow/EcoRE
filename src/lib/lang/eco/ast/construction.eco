@@ -51,6 +51,8 @@
 },
 
 #=lang/eco/ast/ASTConstruction: {
+  static with inherited _ = #<:std/Module>;
+
   ast = #<:lang/eco/ast>;
 
   newASTType: t AndName: n => (ast ASTTypeAndName new) initWithType: t Name: n;

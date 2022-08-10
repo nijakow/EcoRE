@@ -1,5 +1,6 @@
 
 #=std/util/iterators: {
+    static with inherited _ = #<:std/Module>;
 
     IteratorTrait = #=std/util/iterators/IteratorTrait: {
         hasNext => has;

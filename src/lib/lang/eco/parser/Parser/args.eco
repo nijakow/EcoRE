@@ -1,5 +1,7 @@
 
 #=lang/eco/parser/Parser/Args: {
+    static with inherited _ = #<:std/Module>;
+
     parseArgdef => (
         | type <- parseOptionalType,
           name <- (expect: TokenType IDENTIFIER) payload |

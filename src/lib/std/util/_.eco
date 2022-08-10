@@ -45,6 +45,8 @@
 },
 
 #=std/util: {
+    static with inherited _ = #<:std/Module>;
+    
     iterators = #<:std/util/iterators>;
     comparators = #<:std/util/comparators>;
 

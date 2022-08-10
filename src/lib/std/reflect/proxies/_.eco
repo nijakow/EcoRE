@@ -1,5 +1,7 @@
 
 #=std/reflect/proxies: {
+    static with inherited _ = #<:std/Module>;
+
     Type      = #<:std/reflect/proxies/Type>;
     Array     = #<:std/reflect/proxies/Array>;
     Blob      = #<:std/reflect/proxies/Blob>;
@@ -13,6 +15,8 @@
     String    = #<:std/reflect/proxies/String>;
 
     ffi = {
+        static with inherited _ = #<:std/Module>;
+        
         FFIFunc = #<:std/reflect/proxies/FFIFunc>;
         FFIType = #<:std/reflect/proxies/FFIType>;
     }

@@ -1,5 +1,7 @@
 
 #=lang/eco: {
+    static with inherited _ = #<:std/Module>;
+    
     bytecodes = #<:lang/eco/compiler/Bytecodes>;
 
     tokenizer = #<:lang/eco/tokenizer>;

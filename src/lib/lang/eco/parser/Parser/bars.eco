@@ -1,5 +1,7 @@
 
 #=lang/eco/parser/Parser/Bars: {
+    static with inherited _ = #<:std/Module>;
+    
     parseBarAssignmentValue => (
         (check: TokenType ASSIGNMENT)
               if: [ ^ parseExpression ]

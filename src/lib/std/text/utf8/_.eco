@@ -1,4 +1,6 @@
 
 #=std/text/utf8: {
+    static with inherited _ = #<:std/Module>;
+    
     UTF8Iterator = #<:std/text/utf8/UTF8Iterator>;
 }

@@ -1,5 +1,6 @@
 
 #=std/util/iterators/segmented: {
+    static with inherited _ = #<:std/Module>;
 
     SegmentListLink = {
         static with inherited parent = #<:std/Clonable>;

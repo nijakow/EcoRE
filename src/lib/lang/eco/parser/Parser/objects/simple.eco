@@ -1,5 +1,7 @@
 
 #=lang/eco/parser/Parser/SimpleObjects: {
+    static with inherited _ = #<:std/Module>;
+
     parseArray => (
         newASTArrayWithExpressions: parseExpressions
     );

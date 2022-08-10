@@ -1,5 +1,7 @@
 
 #=lang/eco/parser/Parser/CharChecks: {
+    static with inherited _ = #<:std/Module>;
+    
     IsBin(c) => (
         "TODO: Rework this function!"
         ([
