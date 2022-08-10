@@ -113,6 +113,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.open_file", Eco_VM_Builtin_BlobOpenFile);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.get_parents", Eco_VM_Builtin_InterfaceGetParents);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.get_implementing_types", Eco_VM_Builtin_InterfaceGetImplementingTypes);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.get_entry_info", Eco_VM_Builtin_InterfaceGetEntryInfo);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.add_parent", Eco_VM_Builtin_InterfaceAddParent);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.add_entry", Eco_VM_Builtin_InterfaceAddEntry);

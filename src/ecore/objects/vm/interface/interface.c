@@ -275,6 +275,10 @@ struct Eco_Interface* Eco_Interface_AddEntry(struct Eco_Interface* old_interface
     return new_interface;
 }
 
+struct Eco_Array* Eco_Interface_GetAllImplementingTypesAsArray(struct Eco_Interface* interface) {
+    return Eco_TypeList_ToArrayObject(&interface->implementing_types);
+}
+
 struct Eco_Array* Eco_Interface_GetAllInterfacesAsArray()
 {
     struct Eco_Interface*  interface;

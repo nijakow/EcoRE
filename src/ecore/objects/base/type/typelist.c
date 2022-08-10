@@ -1,3 +1,4 @@
+#include <ecore/objects/misc/array/array.h>
 #include <ecore/io/logging/log.h>
 #include <ecore/util/libc.h>
 
@@ -51,4 +52,18 @@ void Eco_TypeList_Remove(struct Eco_TypeList* list, struct Eco_Type* type)
             list->fill--;
         }
     }
+}
+
+struct Eco_Array* Eco_TypeList_ToArrayObject(struct Eco_TypeList* list) {
+    struct Eco_Array*  array;
+    unsigned int       index;
+
+    array = Eco_Array_New(list->fill);
+
+    if (array != NULL) {
+        for (index = 0; index < list->fill; index++)
+            Eco_Array_Put(array, index, Eco_Any_FromPointer(list->types[index]));
+    }
+
+    return array;
 }

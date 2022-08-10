@@ -15,6 +15,7 @@ bool Eco_VM_Builtin_GetTypeSubs(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetTypeProxy(struct Eco_Fiber*, unsigned int);
 
 bool Eco_VM_Builtin_InterfaceGetParents(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_InterfaceGetImplementingTypes(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_InterfaceGetEntryInfo(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_InterfaceAddParent(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_InterfaceAddEntry(struct Eco_Fiber*, unsigned int);

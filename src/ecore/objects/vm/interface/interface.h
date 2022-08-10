@@ -62,6 +62,8 @@ struct Eco_Interface* Eco_Interface_NewAndInit(unsigned int, struct Eco_Interfac
 struct Eco_Interface* Eco_Interface_AddParent(struct Eco_Interface*, struct Eco_Interface*);
 struct Eco_Interface* Eco_Interface_AddEntry(struct Eco_Interface*, struct Eco_InterfaceEntry*);
 
+struct Eco_Array* Eco_Interface_GetAllImplementingTypesAsArray(struct Eco_Interface*);
+
 struct Eco_Array* Eco_Interface_GetAllInterfacesAsArray();
 
 void Eco_Interface_Init();

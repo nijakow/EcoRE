@@ -216,6 +216,20 @@ bool Eco_VM_Builtin_InterfaceGetParents(struct Eco_Fiber* fiber, unsigned int ar
     return true;
 }
 
+bool Eco_VM_Builtin_InterfaceGetImplementingTypes(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Interface*  interface;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    
+    interface = Eco_Any_AsPointer(Eco_Fiber_Pop(fiber));
+
+    Eco_Fiber_Push(fiber, Eco_Any_FromPointer(Eco_Interface_GetAllImplementingTypesAsArray(interface)));
+
+    return true;
+}
+
 bool Eco_VM_Builtin_InterfaceGetEntryInfo(struct Eco_Fiber* fiber, unsigned int args)
 {
     struct Eco_Interface*  interface;

@@ -5,6 +5,7 @@
     size => #'ecosphere.ecore.object.interface.get_entry_info'(self, 0, -1);
 
     parents => #'ecosphere.ecore.object.interface.get_parents'(self);
+    types => #'ecosphere.ecore.object.interface.get_implementing_types'(self);
     nameForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -2);
     returnTypeForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -3);
     argCountForSlotIndex: i => #'ecosphere.ecore.object.interface.get_entry_info'(self, i, -4);

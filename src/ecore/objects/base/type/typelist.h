@@ -15,4 +15,12 @@ void Eco_TypeList_Destroy(struct Eco_TypeList*);
 void Eco_TypeList_Insert(struct Eco_TypeList*, struct Eco_Type*);
 void Eco_TypeList_Remove(struct Eco_TypeList*, struct Eco_Type*);
 
+
+/*
+ * Conversion
+ */
+struct Eco_Array;
+
+struct Eco_Array* Eco_TypeList_ToArrayObject(struct Eco_TypeList*);
+
 #endif
