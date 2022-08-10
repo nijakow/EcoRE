@@ -166,7 +166,7 @@ bool Eco_FFIFunc_EcoCall(struct Eco_FFIFunc* func,
     if (result_loc != NULL) {
         *result_loc = func->return_type->as_any(func->return_type, &argbuffer[argbuffer_size + sizeof(void*) * arg_count], Eco_FFIType_SizeofCType(func->return_type));
     } else {
-        Eco_Any_Initialize(result_loc);
+        *result_loc = Eco_Any_Default();
     }
     return true;
 #else

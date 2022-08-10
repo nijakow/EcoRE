@@ -99,7 +99,7 @@ bool Eco_VM_Builtin_Subtract2(struct Eco_Fiber* fiber, unsigned int args)
     /*
      * To avoid "uninitialized variable" warnings
      */
-    Eco_Any_Initialize(&result);
+    result = Eco_Any_Default();
 
     arg2 = Eco_Fiber_Pop(fiber);
     arg1 = Eco_Fiber_Pop(fiber);
@@ -143,7 +143,7 @@ bool Eco_VM_Builtin_Multiply2(struct Eco_Fiber* fiber, unsigned int args)
     /*
      * To avoid "uninitialized variable" warnings
      */
-    Eco_Any_Initialize(&result);
+    result = Eco_Any_Default();
 
     arg2 = Eco_Fiber_Pop(fiber);
     arg1 = Eco_Fiber_Pop(fiber);
@@ -187,7 +187,7 @@ bool Eco_VM_Builtin_Divide2(struct Eco_Fiber* fiber, unsigned int args)
     /*
      * To avoid "uninitialized variable" warnings
      */
-    Eco_Any_Initialize(&result);
+    result = Eco_Any_Default();
 
     arg2 = Eco_Fiber_Pop(fiber);
     arg1 = Eco_Fiber_Pop(fiber);
@@ -231,7 +231,7 @@ bool Eco_VM_Builtin_Modulo2(struct Eco_Fiber* fiber, unsigned int args)
     /*
      * To avoid "uninitialized variable" warnings
      */
-    Eco_Any_Initialize(&result);
+    result = Eco_Any_Default();
 
     arg2 = Eco_Fiber_Pop(fiber);
     arg1 = Eco_Fiber_Pop(fiber);
@@ -270,7 +270,7 @@ bool Eco_VM_Builtin_BitOr2(struct Eco_Fiber* fiber, unsigned int args)
     /*
      * To avoid "uninitialized variable" warnings
      */
-    Eco_Any_Initialize(&result);
+    result = Eco_Any_Default();
 
     arg2 = Eco_Fiber_Pop(fiber);
     arg1 = Eco_Fiber_Pop(fiber);
@@ -297,7 +297,7 @@ bool Eco_VM_Builtin_BitAnd2(struct Eco_Fiber* fiber, unsigned int args)
     /*
      * To avoid "uninitialized variable" warnings
      */
-    Eco_Any_Initialize(&result);
+    result = Eco_Any_Default();
 
     arg2 = Eco_Fiber_Pop(fiber);
     arg1 = Eco_Fiber_Pop(fiber);
@@ -324,7 +324,7 @@ bool Eco_VM_Builtin_BitXor2(struct Eco_Fiber* fiber, unsigned int args)
     /*
      * To avoid "uninitialized variable" warnings
      */
-    Eco_Any_Initialize(&result);
+    result = Eco_Any_Default();
 
     arg2 = Eco_Fiber_Pop(fiber);
     arg1 = Eco_Fiber_Pop(fiber);
@@ -351,7 +351,7 @@ bool Eco_VM_Builtin_LShift2(struct Eco_Fiber* fiber, unsigned int args)
     /*
      * To avoid "uninitialized variable" warnings
      */
-    Eco_Any_Initialize(&result);
+    result = Eco_Any_Default();
 
     arg2 = Eco_Fiber_Pop(fiber);
     arg1 = Eco_Fiber_Pop(fiber);
@@ -378,7 +378,7 @@ bool Eco_VM_Builtin_RShift2(struct Eco_Fiber* fiber, unsigned int args)
     /*
      * To avoid "uninitialized variable" warnings
      */
-    Eco_Any_Initialize(&result);
+    result = Eco_Any_Default();
 
     arg2 = Eco_Fiber_Pop(fiber);
     arg1 = Eco_Fiber_Pop(fiber);
@@ -405,7 +405,7 @@ bool Eco_VM_Builtin_Less2(struct Eco_Fiber* fiber, unsigned int args)
     /*
      * To avoid "uninitialized variable" warnings
      */
-    Eco_Any_Initialize(&result);
+    result = Eco_Any_Default();
 
     arg2 = Eco_Fiber_Pop(fiber);
     arg1 = Eco_Fiber_Pop(fiber);

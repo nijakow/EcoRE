@@ -20,7 +20,7 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,
     the_frame = Eco_Fiber_StackAlloc(fiber, sizeof(struct Eco_Frame));
 
     for (i = 0; i < register_count; i++) {
-        Eco_Any_Initialize(&the_regs[i]);
+        the_regs[i] = Eco_Any_Default();
     }
 
     the_frame->previous        = fiber->top;

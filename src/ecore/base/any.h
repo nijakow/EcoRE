@@ -269,9 +269,9 @@ static inline bool Eco_Any_Equals(Eco_Any a, Eco_Any b)
 
 #endif
 
-static inline void Eco_Any_Initialize(Eco_Any* any)
+static inline Eco_Any Eco_Any_Default()
 {
-    *any = Eco_Any_FromInteger(0);
+    return Eco_Any_FromInteger(0);
 }
 
 #endif
