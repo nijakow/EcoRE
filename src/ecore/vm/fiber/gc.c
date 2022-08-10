@@ -17,7 +17,7 @@ void Eco_Fiber_Mark(struct Eco_GC_State* state, struct Eco_Fiber* fiber)
         stack_pointer = (Eco_Any*) (frame + 1);
         while (stack_pointer < limit)
         {
-            Eco_GC_State_MarkAny(state, stack_pointer);
+            Eco_GC_State_MarkAny(state, *((Eco_Any*) stack_pointer));
             stack_pointer++;
         }
         Eco_Frame_Mark(state, frame);
@@ -27,7 +27,7 @@ void Eco_Fiber_Mark(struct Eco_GC_State* state, struct Eco_Fiber* fiber)
     stack_pointer = (Eco_Any*) fiber->stack;
     while (stack_pointer < limit)
     {
-        Eco_GC_State_MarkAny(state, stack_pointer);
+        Eco_GC_State_MarkAny(state, *((Eco_Any*) stack_pointer));
         stack_pointer++;
     }
 }

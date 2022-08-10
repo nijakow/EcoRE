@@ -91,7 +91,7 @@ void Eco_FFILib_Mark(struct Eco_GC_State* state, struct Eco_FFILib* object)
                 Eco_GC_State_MarkObject(state, entry->body.ffifunc);
                 break;
             case Eco_FFILib_EntryType_VALUE:
-                Eco_GC_State_MarkAny(state, &entry->body.value);
+                Eco_GC_State_MarkAny(state, entry->body.value);
                 break;
         }
     }

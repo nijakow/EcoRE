@@ -42,9 +42,9 @@ void Eco_VM_Mark(struct Eco_GC_State* state, struct Eco_VM* vm)
     for (fiber = vm->fibers; fiber != NULL; fiber = fiber->next)
         Eco_Fiber_Mark(state, fiber);
     
-    Eco_GC_State_MarkAny(state, &vm->constants.lobby);
-    Eco_GC_State_MarkAny(state, &vm->constants.ctrue);
-    Eco_GC_State_MarkAny(state, &vm->constants.cfalse);
+    Eco_GC_State_MarkAny(state, vm->constants.lobby);
+    Eco_GC_State_MarkAny(state, vm->constants.ctrue);
+    Eco_GC_State_MarkAny(state, vm->constants.cfalse);
 }
 
 void Eco_VM_FreeAll(struct Eco_VM* vm)

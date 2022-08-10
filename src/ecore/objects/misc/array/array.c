@@ -65,9 +65,8 @@ void Eco_Array_Mark(struct Eco_GC_State* state, struct Eco_Array* array)
     unsigned int  index;
 
     for (index = 0; index < Eco_Array_Size(array); index++)
-    {
-        Eco_GC_State_MarkAny(state, &array->values[index]);
-    }
+        Eco_GC_State_MarkAny(state, array->values[index]);
+    
     Eco_Object_Mark(state, &array->_);
 }
 

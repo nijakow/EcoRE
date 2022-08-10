@@ -43,7 +43,7 @@ void Eco_Type_MarkMolecule(struct Eco_GC_State* state,
         switch (type->slots[i].type)
         {
             case Eco_TypeSlotType_INLINED:
-                Eco_GC_State_MarkAny(state, Eco_Molecule_At(molecule, type->slots[i].body.inlined.offset));
+                Eco_GC_State_MarkAny(state, *((Eco_Any*) Eco_Molecule_At(molecule, type->slots[i].body.inlined.offset)));
                 break;
             default:
                 break;

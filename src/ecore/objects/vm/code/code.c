@@ -53,7 +53,7 @@ void Eco_Code_Mark(struct Eco_GC_State* state, struct Eco_Code* code)
 
     for (i = 0; i < code->constant_count; i++)
     {
-        Eco_GC_State_MarkAny(state, &(code->constants[i]));
+        Eco_GC_State_MarkAny(state, code->constants[i]);
     }
 
     Eco_Object_Mark(state, &(code->_));

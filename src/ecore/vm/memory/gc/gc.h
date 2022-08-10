@@ -19,12 +19,12 @@ static inline void Eco_GC_State_MarkObject(struct Eco_GC_State* state, void* obj
     }
 }
 
-static inline void Eco_GC_State_MarkAny(struct Eco_GC_State* state, Eco_Any* any)
+static inline void Eco_GC_State_MarkAny(struct Eco_GC_State* state, Eco_Any any)
 {
     struct Eco_Object*  object;
 
-    if (Eco_Any_IsPointer(*any)) {
-        object = Eco_Any_AsPointer(*any);
+    if (Eco_Any_IsPointer(any)) {
+        object = Eco_Any_AsPointer(any);
         if (object != NULL)
             Eco_GC_State_MarkObject(state, object);
     }

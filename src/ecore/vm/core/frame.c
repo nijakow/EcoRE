@@ -12,7 +12,7 @@ void Eco_Frame_Mark(struct Eco_GC_State* state, struct Eco_Frame* frame)
     }
 
     Eco_GC_State_MarkObject(state, frame->code);
-    Eco_GC_State_MarkAny(state, &frame->myself);
+    Eco_GC_State_MarkAny(state, frame->myself);
 
     /* The args and registers will be marked by Eco_Fiber_Mark(...) */
 }
