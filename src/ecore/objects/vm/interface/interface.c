@@ -150,6 +150,33 @@ bool Eco_Interface_ImplementsMessage(struct Eco_Interface* interface,
     return false;
 }
 
+static bool Eco_Interface_MatchEntries(struct Eco_InterfaceEntry* e1,
+                                       struct Eco_InterfaceEntry* e2)
+{
+    /* TODO */
+    return (e1->key) == (e2->key);
+}
+
+bool Eco_Interface_ContainsEntry(struct Eco_Interface*      interface,
+                                 struct Eco_InterfaceEntry* entry)
+{
+    unsigned int  index;
+    
+    for (index = 0; index < interface->entry_count; index++)
+    {
+        if (Eco_Interface_MatchEntries(&interface->entries[index], entry))
+            return true;
+    }
+
+    for (index = 0; index < interface->parent_count; index++)
+    {
+        if (Eco_Interface_ContainsEntry(interface->parents[index], entry))
+            return true;
+    }
+
+    return false;
+}
+
 bool Eco_Interface_ImplementsInterface(struct Eco_Interface* interface,
                                        struct Eco_Interface* subinterface)
 {
@@ -165,7 +192,7 @@ bool Eco_Interface_ImplementsInterface(struct Eco_Interface* interface,
         /*
          * TODO: Check for the full slot (including args, varargs and types)
          */
-        if (!Eco_Interface_ImplementsMessage(interface, subinterface->entries[index].key))
+        if (!Eco_Interface_ContainsEntry(interface, &subinterface->entries[index]))
             return false;
     }
 
