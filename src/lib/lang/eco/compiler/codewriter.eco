@@ -3,12 +3,11 @@
     static with inherited parent = #<:std/Clonable>;
     with inherited module = #<:lang/eco/compiler>;
 
-    bytes, constants, closures, maxRegister;
+    bytes, constants, maxRegister;
 
     init => (
         bytes       <- std util newVector.
         constants   <- std util newVector.
-        closures    <- std util newVector.
         maxRegister <- 0.
       ^ self
     );
@@ -19,13 +18,11 @@
             io out << 'Dumping newly created code object...'. io out newline.
             io out << bytes. io out newline.
             io out << constants. io out newline.
-            io out << closures. io out newline.
             io out << 'Registers: ' << (maxRegister + 1) << ' Args: ' << args << ' Varargs: ' << varargs. io out newline.
             io out commit.
         "/
         #'ecosphere.ecore.object.code.new'(bytes asBlob,
                                            constants asArray,
-                                           closures asArray,
                                            maxRegister + 1,
                                            args,
                                            varargs if: 1 else: 0)
@@ -42,12 +39,7 @@
         writeU16: constants size.
         constants append: c
     );
-    addClosure: c => (
-        (closures find: c)
-            yes: [ :i | writeU16: i         ]
-             no: [ writeU16: closures size.
-                   closures append: c       ]
-    );
+    addClosure: c => addConstant: c;
 
     writeNOOP => writeU8: Bytecodes NOOP;
 
