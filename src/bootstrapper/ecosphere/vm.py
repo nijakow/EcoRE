@@ -58,20 +58,17 @@ class Code(AObject):
     def set_constants(self, c):
         self[3] = c
     
-    def set_closures(self, c):
-        self[4] = c
-    
     def set_register_count(self, r):
-        self[5] = r
+        self[4] = r
     
     def set_parameters(self, p):
-        self[6] = p
+        self[5] = p
     
     def set_has_varargs(self, v):
-        self[7] = v
+        self[6] = v
 
     def __init__(self):
-        super().__init__(None, 8)
+        super().__init__(None, 7)
 
 class Type(AObject):
 

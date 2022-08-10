@@ -168,7 +168,6 @@ class EcoCode(ecosphere.objects.base.EcoObject):
             else:
                 serializer.write_vlq(0x00)
             serializer.write_objects(self._constants)
-            serializer.write_objects(self._closures)
             serializer.write_bytes(self._instructions)
     
     def transform(self, transformer):
@@ -176,17 +175,15 @@ class EcoCode(ecosphere.objects.base.EcoObject):
         transformer.put(self, c)
         c.set_bytecodes(transformer.get(self._instructions))
         c.set_constants(transformer.make_array(self._constants))
-        c.set_closures(transformer.make_array(self._closures))
         c.set_register_count(self._register_count)
         c.set_parameters(self._parameters)
         c.set_has_varargs(self._has_varargs)
         return c
 
-    def __init__(self, instructions, constants, closures, register_count, parameter_count, has_varargs):
+    def __init__(self, instructions, constants, register_count, parameter_count, has_varargs):
         super().__init__()
         self._instructions = instructions
         self._constants = constants
-        self._closures = closures
         self._register_count = register_count
         self._parameters = parameter_count
         self._has_varargs = has_varargs

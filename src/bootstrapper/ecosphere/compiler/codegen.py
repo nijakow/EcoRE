@@ -44,10 +44,6 @@ class CodeWriter:
             self._constants[index] = value
         return callback
 
-    def _add_code_object(self, c):
-        self._u16(len(self._code_objects))
-        self._code_objects.append(c)
-
     def write_noop(self):
         self._u8(Bytecodes.NOOP)
 
@@ -144,15 +140,14 @@ class CodeWriter:
     def write_closure(self, dest, code_object):
         self._u8(Bytecodes.CLOSURE)
         self._u8(dest)
-        self._add_code_object(code_object)
+        self._add_constant(code_object)
 
     def finish(self):
-        return bytes(self._instructions), self._constants, list(self._code_objects)
+        return bytes(self._instructions), self._constants
 
     def __init__(self):
         self._instructions = bytearray()
         self._constants = list()
-        self._code_objects = list()
 
 class CodeGenerator:
 
@@ -334,11 +329,10 @@ class CodeGenerator:
     
     def finish(self, the_type, visitor):
         self.op_return(0, the_type, visitor)
-        instructions, constants, objects = self._writer.finish()
+        instructions, constants = self._writer.finish()
         self._writer = None
         return ecosphere.objects.misc.EcoCode(instructions,
                                               constants,
-                                              objects,
                                               self._scope.get_storage_manager().get_max_register_count(),
                                               self._scope.get_parameter_count() + 1,  # One more for "self"
                                               self._scope.has_varargs())
