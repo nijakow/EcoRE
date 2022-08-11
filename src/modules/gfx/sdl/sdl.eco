@@ -22,6 +22,8 @@
     protected SDL_RenderFillRect,
     protected SDL_RenderFlush,
     protected SDL_RenderPresent;
+    protected SDL_SetRenderTarget;
+    protected SDL_CreateTexture;
     protected SDL_CreateTextureFromSurface;
     protected SDL_DestroyTexture;
 
@@ -34,8 +36,47 @@
     SDL_Event,
     SDL_Rect;
 
-    INIT_EVERYTHING,
+    INIT_EVERYTHING;
+
+    SDL_PIXELFORMAT_UNKNOWN <- 0,
+    SDL_PIXELFORMAT_INDEX1LSB <- 1,
+    SDL_PIXELFORMAT_INDEX1MSB <- 2,
+    SDL_PIXELFORMAT_INDEX4LSB <- 3,
+    SDL_PIXELFORMAT_INDEX4MSB <- 4,
+    SDL_PIXELFORMAT_INDEX8 <- 5,
+    SDL_PIXELFORMAT_RGB332 <- 6,
+    SDL_PIXELFORMAT_RGB444 <- 7,
+    SDL_PIXELFORMAT_RGB555 <- 8,
+    SDL_PIXELFORMAT_BGR555 <- 9,
+    SDL_PIXELFORMAT_ARGB4444 <- 10,
+    SDL_PIXELFORMAT_RGBA4444 <- 11,
+    SDL_PIXELFORMAT_ABGR4444 <- 12,
+    SDL_PIXELFORMAT_BGRA4444 <- 13,
+    SDL_PIXELFORMAT_ARGB1555 <- 14,
+    SDL_PIXELFORMAT_RGBA5551 <- 15,
+    SDL_PIXELFORMAT_ABGR1555 <- 16,
+    SDL_PIXELFORMAT_BGRA5551 <- 17,
+    SDL_PIXELFORMAT_RGB565 <- 18,
+    SDL_PIXELFORMAT_BGR565 <- 19,
+    SDL_PIXELFORMAT_RGB24 <- 20,
+    SDL_PIXELFORMAT_BGR24 <- 21,
+    SDL_PIXELFORMAT_RGB888 <- 22,
+    SDL_PIXELFORMAT_RGBX8888 <- 23,
+    SDL_PIXELFORMAT_BGR888 <- 24,
+    SDL_PIXELFORMAT_BGRX8888 <- 25,
+    SDL_PIXELFORMAT_ARGB8888 <- 26,
+    SDL_PIXELFORMAT_RGBA8888 <- 27,
+    SDL_PIXELFORMAT_ABGR8888 <- 28,
+    SDL_PIXELFORMAT_BGRA8888 <- 29,
+    SDL_PIXELFORMAT_ARGB2101010 <- 30;
+
+    SDL_TEXTUREACCESS_STATIC    <- 0,
+    SDL_TEXTUREACCESS_STREAMING <- 1.
+    SDL_TEXTUREACCESS_TARGET    <- 2;
+
     SDL_EventTypes = {
+        static with inherited _ = std Module;
+
         KEYDOWN = 768,
         KEYUP = 769,
         MOUSEMOTION = 1024,
@@ -78,7 +119,9 @@
             SDL_RenderFillRect <- (lib function: #'SDL_RenderFillRect' type: ((ffi types int) function(ffi types pointer, SDL_Rect pointer))) yes.
             SDL_RenderFlush <- (lib function: #'SDL_RenderFlush' type: ((ffi types int) function(ffi types pointer))) yes.
             SDL_RenderPresent <- (lib function: #'SDL_RenderPresent' type: ((ffi types void) function(ffi types pointer))) yes.
-            SDL_CreateTextureFromSurface <- (lib function: #'SDL_CreateTextureFromSurface' type: ((ffi types pointer) function(ffi types pointer, ffi types uint32, ffi types int, ffi types int, ffi types int))) yes.
+            SDL_SetRenderTarget <- (lib function: #'SDL_SetRenderTarget' type: ((ffi types int) function(ffi types pointer, ffi types pointer))) yes.
+            SDL_CreateTexture <- (lib function: #'SDL_CreateTexture' type: ((ffi types pointer) function(ffi types pointer, ffi types uint32, ffi types int, ffi types int, ffi types int))) yes.
+            SDL_CreateTextureFromSurface <- (lib function: #'SDL_CreateTextureFromSurface' type: ((ffi types pointer) function(ffi types pointer, ffi types pointer))) yes.
             SDL_DestroyTexture <- (lib function: #'SDL_DestroyTexture' type: ((ffi types void) function(ffi types pointer))) yes.
             InitEverything.
           ^ self
@@ -104,7 +147,9 @@
         RenderFillRect(renderer, rect) => SDL_RenderFillRect value(renderer, rect);
         RenderFlush(renderer) => SDL_RenderFlush value(renderer);
         RenderPresent(renderer) => SDL_RenderPresent value(renderer);
-        CreateTextureFromSurface(surface, w, h) => SDL_CreateTextureFromSurface value(surface, 0, 0, w, h);
+        SetRenderTarget(renderer, texture) => SDL_SetRenderTarget value(renderer, texture);
+        CreateTexture(renderer, pixelformat, access, width, height) => SDL_CreateTexture value(renderer, pixelformat, access, width, height);
+        CreateTextureFromSurface(renderer, surface) => SDL_CreateTextureFromSurface value(renderer, surface);
         DestroyTexture(texture) => SDL_DestroyTexture value(texture);
 
         "TODO..."
