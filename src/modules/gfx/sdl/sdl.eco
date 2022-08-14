@@ -23,6 +23,7 @@
     protected SDL_RenderFlush,
     protected SDL_RenderPresent;
     protected SDL_SetRenderTarget;
+    protected SDL_GetRenderTarget;
     protected SDL_CreateTexture;
     protected SDL_CreateTextureFromSurface;
     protected SDL_DestroyTexture;
@@ -120,6 +121,7 @@
             SDL_RenderFlush <- (lib function: #'SDL_RenderFlush' type: ((ffi types int) function(ffi types pointer))) yes.
             SDL_RenderPresent <- (lib function: #'SDL_RenderPresent' type: ((ffi types void) function(ffi types pointer))) yes.
             SDL_SetRenderTarget <- (lib function: #'SDL_SetRenderTarget' type: ((ffi types int) function(ffi types pointer, ffi types pointer))) yes.
+            SDL_GetRenderTarget <- (lib function: #'SDL_GetRenderTarget' type: ((ffi types pointer) function(ffi types pointer))) yes.
             SDL_CreateTexture <- (lib function: #'SDL_CreateTexture' type: ((ffi types pointer) function(ffi types pointer, ffi types uint32, ffi types int, ffi types int, ffi types int))) yes.
             SDL_CreateTextureFromSurface <- (lib function: #'SDL_CreateTextureFromSurface' type: ((ffi types pointer) function(ffi types pointer, ffi types pointer))) yes.
             SDL_DestroyTexture <- (lib function: #'SDL_DestroyTexture' type: ((ffi types void) function(ffi types pointer))) yes.
@@ -148,6 +150,7 @@
         RenderFlush(renderer) => SDL_RenderFlush value(renderer);
         RenderPresent(renderer) => SDL_RenderPresent value(renderer);
         SetRenderTarget(renderer, texture) => SDL_SetRenderTarget value(renderer, texture);
+        GetRenderTarget(renderer) => SDL_GetRenderTarget value(renderer);
         CreateTexture(renderer, pixelformat, access, width, height) => SDL_CreateTexture value(renderer, pixelformat, access, width, height);
         CreateTextureFromSurface(renderer, surface) => SDL_CreateTextureFromSurface value(renderer, surface);
         DestroyTexture(texture) => SDL_DestroyTexture value(texture);

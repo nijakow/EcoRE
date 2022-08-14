@@ -82,6 +82,20 @@
                 sdl RenderFillRect(renptr, rectangle address).
             );
 
+            withRenderTarget: texture Do: block => (
+                | prev <- sdl GetRenderTarget(renptr) |
+                [
+                    sdl SetRenderTarget(renptr, texture texptr).
+                    block value.
+                ] protected: [
+                    sdl SetRenderTarget(renptr, prev).
+                ]
+            );
+
+            makeTextureW: w H: h => (
+                (sdl Texture) clone init: (sdl CreateTexture(renptr, sdl SDL_PIXELFORMAT_UNKNOWN, sdl SDL_TEXTUREACCESS_TARGET, w, h))
+            );
+
             writeOn: w => w << 'an sdl renderer';
         };
     };
@@ -89,7 +103,7 @@
     own Texture = {
         static with inherited _ = std Clonable;
 
-        protected texptr;
+        texptr;
 
         with inherited trait = {
             init: _texptr => (
