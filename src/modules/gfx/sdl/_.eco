@@ -86,6 +86,23 @@
         };
     };
 
+    own Texture = {
+        static with inherited _ = std Clonable;
+
+        protected texptr;
+
+        with inherited trait = {
+            init: _texptr => (
+                texptr <- _texptr.
+              ^ self
+            );
+
+            destroy => sdl DestroyTexture(texptr);
+
+            writeOn: w => w << 'an sdl texture';
+        };
+    };
+
     own EventVisitor = {
         static with inherited _ = std Clonable;
 
