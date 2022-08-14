@@ -20,6 +20,7 @@
     protected SDL_RenderDrawLine,
     protected SDL_RenderDrawRect,
     protected SDL_RenderFillRect,
+    protected SDL_RenderCopy,
     protected SDL_RenderFlush,
     protected SDL_RenderPresent;
     protected SDL_SetRenderTarget;
@@ -118,6 +119,7 @@
             SDL_RenderDrawLine <- (lib function: #'SDL_RenderDrawLine' type: ((ffi types int) function(ffi types pointer, ffi types int, ffi types int, ffi types int, ffi types int))) yes.
             SDL_RenderDrawRect <- (lib function: #'SDL_RenderDrawRect' type: ((ffi types int) function(ffi types pointer, SDL_Rect pointer))) yes.
             SDL_RenderFillRect <- (lib function: #'SDL_RenderFillRect' type: ((ffi types int) function(ffi types pointer, SDL_Rect pointer))) yes.
+            SDL_RenderCopy <- (lib function: #'SDL_RenderCopy' type: ((ffi types int) function(ffi types pointer, ffi types pointer, ffi types pointer, ffi types pointer))) yes.
             SDL_RenderFlush <- (lib function: #'SDL_RenderFlush' type: ((ffi types int) function(ffi types pointer))) yes.
             SDL_RenderPresent <- (lib function: #'SDL_RenderPresent' type: ((ffi types void) function(ffi types pointer))) yes.
             SDL_SetRenderTarget <- (lib function: #'SDL_SetRenderTarget' type: ((ffi types int) function(ffi types pointer, ffi types pointer))) yes.
@@ -147,6 +149,7 @@
         RenderDrawLine(renderer, x1, y1, x2, y2) => SDL_RenderDrawLine value(renderer, x1, y1, x2, y2);
         RenderDrawRect(renderer, rect) => SDL_RenderDrawRect value(renderer, rect);
         RenderFillRect(renderer, rect) => SDL_RenderFillRect value(renderer, rect);
+        RenderCopy(renderer, texture, srcrect, dstrect) => SDL_RenderCopy value(renderer, texture, srcrect, dstrect);
         RenderFlush(renderer) => SDL_RenderFlush value(renderer);
         RenderPresent(renderer) => SDL_RenderPresent value(renderer);
         SetRenderTarget(renderer, texture) => SDL_SetRenderTarget value(renderer, texture);

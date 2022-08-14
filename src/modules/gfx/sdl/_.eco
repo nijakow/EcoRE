@@ -46,13 +46,15 @@
 
         protected     renptr,
         protected own rectangle;
+        protected own rectangle2;
 
         with inherited trait = {
             protected sdl => wrapper sdl;
 
             init: _renptr => (
-                renptr    <- _renptr.
-                rectangle <- sdl SDL_Rect alloc.
+                renptr     <- _renptr.
+                rectangle  <- sdl SDL_Rect alloc.
+                rectangle2 <- sdl SDL_Rect alloc.
               ^ self
             );
 
@@ -80,6 +82,17 @@
                 rectangle at: 2 put: w.
                 rectangle at: 3 put: h.
                 sdl RenderFillRect(renptr, rectangle address).
+            );
+            drawTexture: texture X: tx Y: ty W: tw H: th ToX: x Y: y W: w H: h => (
+                rectangle at: 0 put: tx.
+                rectangle at: 1 put: ty.
+                rectangle at: 2 put: tw.
+                rectangle at: 3 put: th.
+                rectangle2 at: 0 put: x.
+                rectangle2 at: 1 put: y.
+                rectangle2 at: 2 put: w.
+                rectangle2 at: 3 put: h.
+                sdl RenderCopy(renptr, texture texptr, rectangle, rectangle2).
             );
 
             withRenderTarget: texture Do: block => (
