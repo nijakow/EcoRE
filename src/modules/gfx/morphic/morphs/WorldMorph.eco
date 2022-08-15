@@ -3,17 +3,21 @@
         static with inherited _ = std Clonable;
         with inherited own Morph = $ Morph;
 
+        protected renderer,
         protected isDirty,
         handMorph;
 
         with inherited trait = {
             init => (
                 $(Morph) init.
+                renderer  <- No.
                 isDirty   <- true.
                 handMorph <- (morphic morphs HandMorph new).
                 add: handMorph.
               ^ self
             );
+
+            renderer: r => renderer <- r;
 
             childrenDo: block => (
                 $(Morph) childrenDo: [ :c |
@@ -39,6 +43,11 @@
                 renderer setR: 200 G: 200 B: 200.
                 renderer fillRectX: 0 Y: 0 W: bounds w H: bounds h.
                 renderChildrenOn: renderer.
+            );
+
+            render => (
+                renderer accept: self.
+                renderer present.
             );
 
             handleDropMorph: morph AtX: x Y: y => (

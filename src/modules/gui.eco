@@ -104,16 +104,14 @@
                                                 W: program window width
                                                 H: program window height.
                 morph bounds: renderer bounds.
+                morph renderer: renderer.
                 morph layoutInPlace.
             );
 
             tick => (
                 morph handMorph moveToX: mouseX Y: mouseY.
                 morph maybeUpdate.
-                renderer setR: 0 G: 0 B: 0.
-                renderer clear.
-                renderer accept: morph.
-                renderer present.
+                morph render.
             );
 
             findMorphAtX: x Y: y => (
