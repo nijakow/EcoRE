@@ -1,0 +1,38 @@
+
+    {
+        static with inherited _ = std Clonable;
+        protected wrapper = $;
+
+        window,
+        protected handler,
+        private running;
+
+        with inherited trait = {
+            sdl => wrapper sdl;
+
+            initWithWindow: _window Handler: _handler => (
+                window  <- _window.
+                handler <- _handler.
+                running <- true.
+                handler setProgram: self.
+              ^ self
+            );
+
+            run => (
+                | event <- wrapper NewEvent |
+                running <- true.
+                [
+                    (running not) -> [ ^ self ].
+                    handler tick.
+                    (event poll != 0) -> [
+                        handler handleEvent: event.
+                    ].
+                    "TODO: Sleep for a while to avoid eating up CPU resources"
+                ] repeat.
+            );
+
+            stop => running <- false;
+
+            writeOn: w => w << 'an sdl program';
+        };
+    };

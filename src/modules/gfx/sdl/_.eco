@@ -2,7 +2,7 @@
 {
     static with inherited _ = std Module;
 
-    sdl = (here / 'sdl.eco') import;
+    sdl = (here / 'sdl.eco') importIn: self;
 
     Init => (
         sdl Init.
@@ -12,233 +12,17 @@
     NewWindowWithTitle: title X: x Y: y W: w H: h => (Window clone) initWithHandle: (sdl CreateWindow(title, x, y, w, h, 0)) Width: w Height: h;
     NewEvent => (Event clone) init: sdl SDL_Event alloc;
 
-    own Window = {
-        static with inherited _ = std Clonable;
-        protected wrapper = $;
+    own Window = (here / 'Window.eco') importIn: self;
 
-        protected winptr,
-        width, height,
-        renderer;
+    own Renderer = (here / 'Renderer.eco') importIn: self;
 
-        with inherited trait = {
-            protected sdl => wrapper sdl;
+    own Texture = (here / 'Texture.eco') importIn: self;
 
-            initWithHandle: _winptr Width: _width Height: _height => (
-                winptr   <- _winptr.
-                width    <- _width.
-                height   <- _height.
-                renderer <- (wrapper Renderer clone) init: (sdl CreateRenderer(_winptr, -1, 0));
-              ^ self
-            );
+    own EventVisitor = (here / 'EventVisitor.eco') importIn: self;
 
-            destroy => sdl DestroyWindow(winptr);
+    own Event = (here / 'Event.eco') importIn: self;
 
-            show => sdl ShowWindow(winptr);
-            hide => sdl HideWindow(winptr);
+    own Program = (here / 'Program.eco') importIn: self;
 
-            writeOn: w => w << 'an sdl window';
-        };
-    };
-
-    own Renderer = {
-        static with inherited _ = std Clonable;
-        protected wrapper = $;
-
-        protected     renptr,
-        protected own rectangle;
-        protected own rectangle2;
-
-        with inherited trait = {
-            protected sdl => wrapper sdl;
-
-            init: _renptr => (
-                renptr     <- _renptr.
-                rectangle  <- sdl SDL_Rect alloc.
-                rectangle2 <- sdl SDL_Rect alloc.
-              ^ self
-            );
-
-            destroy => sdl DestroyRenderer(renptr);
-
-            flush => sdl RenderFlush(renptr);
-            present => sdl RenderPresent(renptr);
-
-            setR: r G: g B: b A: a => sdl SetRenderDrawColor(renptr, r, g, b, a);
-            setR: r G: g B: b => setR: r G: g B: b A: 255;
-            setColor: color => setR: color r G: g B: b;
-
-            clear => sdl RenderClear(renptr);
-            drawPointX: x Y: y => sdl RenderDrawPoint(renptr, x, y);
-            drawLineX: x1 Y: y1 X: x2 Y: y2 => sdl RenderDrawLine(renptr, x1, y1, x2, y2);
-            drawRectX: x Y: y W: w H: h => (
-                drawLineX: x Y: y X: (x + w) Y: y.
-                drawLineX: x Y: y X: x Y: (y + h).
-                drawLineX: x Y: (y + h) X: (x + w) Y: (y + h).
-                drawLineX: (x + w) Y: y X: (x + w) Y: (y + h).
-            );
-            fillRectX: x Y: y W: w H: h => (
-                rectangle at: 0 put: x.
-                rectangle at: 1 put: y.
-                rectangle at: 2 put: w.
-                rectangle at: 3 put: h.
-                sdl RenderFillRect(renptr, rectangle address).
-            );
-            drawTexture: texture X: tx Y: ty W: tw H: th ToX: x Y: y W: w H: h => (
-                rectangle at: 0 put: tx.
-                rectangle at: 1 put: ty.
-                rectangle at: 2 put: tw.
-                rectangle at: 3 put: th.
-                rectangle2 at: 0 put: x.
-                rectangle2 at: 1 put: y.
-                rectangle2 at: 2 put: w.
-                rectangle2 at: 3 put: h.
-                sdl RenderCopy(renptr, texture texptr, rectangle, rectangle2).
-            );
-
-            withRenderTarget: texture Do: block => (
-                | prev <- sdl GetRenderTarget(renptr) |
-                [
-                    sdl SetRenderTarget(renptr, texture texptr).
-                    block value.
-                ] protected: [
-                    sdl SetRenderTarget(renptr, prev).
-                ]
-            );
-
-            makeTextureW: w H: h => (
-                (sdl Texture) clone init: (sdl CreateTexture(renptr, sdl SDL_PIXELFORMAT_UNKNOWN, sdl SDL_TEXTUREACCESS_TARGET, w, h))
-            );
-
-            writeOn: w => w << 'an sdl renderer';
-        };
-    };
-
-    own Texture = {
-        static with inherited _ = std Clonable;
-
-        texptr;
-
-        with inherited trait = {
-            init: _texptr => (
-                texptr <- _texptr.
-              ^ self
-            );
-
-            destroy => sdl DestroyTexture(texptr);
-
-            writeOn: w => w << 'an sdl texture';
-        };
-    };
-
-    own EventVisitor = {
-        static with inherited _ = std Clonable;
-
-        visitUnknown: event => event;
-
-        visitMouseMotionEvent: event => visitUnknown: event;
-
-        visitMouseButtonEvent: event => visitUnknown: event;
-
-        visitKeyEvent: event => visitUnknown: event;
-
-        writeOn: w => w << 'an sdl event visitor';
-    };
-
-    own Event = {
-        static with inherited _ = std Clonable;
-        protected wrapper = $;
-
-        protected event;
-
-        with inherited trait = {
-            protected sdl => wrapper sdl;
-
-            init: _event => (
-                event <- _event.
-              ^ self
-            );
-
-            poll => sdl PollEvent(event address);
-            type => (event at: 0);
-
-            isMouseMotionEvent => (type == sdl SDL_EventTypes MOUSEMOTION);
-            mouseMotionX => (event at: 2) at: 5;
-            mouseMotionY => (event at: 2) at: 6;
-
-            isMouseButtonDown => (type == sdl SDL_EventTypes MOUSEBUTTONDOWN);
-            isMouseButtonUp => (type == sdl SDL_EventTypes MOUSEBUTTONUP);
-            mouseButtonX => mouseMotionX;
-            mouseButtonY => mouseMotionY;
-
-            isKeyDown => (type == sdl SDL_EventTypes KEYDOWN);
-            isKeyUp => (type == sdl SDL_EventTypes KEYUP);
-
-            acceptEventVisitor: visitor => (
-                begin
-                    if: [ isMouseMotionEvent ] then: [ visitor visitMouseMotionEvent: self ] ~
-                    if: [ isMouseButtonUp    ] then: [ visitor visitMouseButtonEvent: self ] ~
-                    if: [ isMouseButtonDown  ] then: [ visitor visitMouseButtonEvent: self ] ~
-                    if: [ isKeyUp            ] then: [ visitor visitKeyEvent: self         ] ~
-                    if: [ isKeyDown          ] then: [ visitor visitKeyEvent: self         ] ~
-               default: [ visitor visitUnknown: self ].
-            );
-
-            writeOn: w => w << 'an sdl event';
-        };
-    };
-
-    own Program = {
-        static with inherited _ = std Clonable;
-        protected wrapper = $;
-
-        window,
-        protected handler,
-        private running;
-
-        with inherited trait = {
-            sdl => wrapper sdl;
-
-            initWithWindow: _window Handler: _handler => (
-                window  <- _window.
-                handler <- _handler.
-                running <- true.
-                handler setProgram: self.
-              ^ self
-            );
-
-            run => (
-                | event <- wrapper NewEvent |
-                running <- true.
-                [
-                    (running not) -> [ ^ self ].
-                    handler tick.
-                    (event poll != 0) -> [
-                        handler handleEvent: event.
-                    ].
-                    "TODO: Sleep for a while to avoid eating up CPU resources"
-                ] repeat.
-            );
-
-            stop => running <- false;
-
-            writeOn: w => w << 'an sdl program';
-        };
-    };
-
-    own Color = {
-        static with inherited _ = std Clonable;
-
-        r, g, b;
-
-        with inherited trait = {
-            initWithR: _r G: _g B: _b => (
-                r <- _r.
-                g <- _g.
-                b <- _b.
-              ^ self
-            );
-
-            writeOn: w => w << 'a color';
-        };
-    };
+    own Color = (here / 'Color.eco') importIn: self;
 }

@@ -1,0 +1,43 @@
+
+    {
+        static with inherited _ = std Clonable;
+        protected wrapper = $;
+
+        protected event;
+
+        with inherited trait = {
+            protected sdl => wrapper sdl;
+
+            init: _event => (
+                event <- _event.
+              ^ self
+            );
+
+            poll => sdl PollEvent(event address);
+            type => (event at: 0);
+
+            isMouseMotionEvent => (type == sdl SDL_EventTypes MOUSEMOTION);
+            mouseMotionX => (event at: 2) at: 5;
+            mouseMotionY => (event at: 2) at: 6;
+
+            isMouseButtonDown => (type == sdl SDL_EventTypes MOUSEBUTTONDOWN);
+            isMouseButtonUp => (type == sdl SDL_EventTypes MOUSEBUTTONUP);
+            mouseButtonX => mouseMotionX;
+            mouseButtonY => mouseMotionY;
+
+            isKeyDown => (type == sdl SDL_EventTypes KEYDOWN);
+            isKeyUp => (type == sdl SDL_EventTypes KEYUP);
+
+            acceptEventVisitor: visitor => (
+                begin
+                    if: [ isMouseMotionEvent ] then: [ visitor visitMouseMotionEvent: self ] ~
+                    if: [ isMouseButtonUp    ] then: [ visitor visitMouseButtonEvent: self ] ~
+                    if: [ isMouseButtonDown  ] then: [ visitor visitMouseButtonEvent: self ] ~
+                    if: [ isKeyUp            ] then: [ visitor visitKeyEvent: self         ] ~
+                    if: [ isKeyDown          ] then: [ visitor visitKeyEvent: self         ] ~
+               default: [ visitor visitUnknown: self ].
+            );
+
+            writeOn: w => w << 'an sdl event';
+        };
+    };

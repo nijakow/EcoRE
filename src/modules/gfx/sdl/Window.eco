@@ -1,0 +1,28 @@
+
+    {
+        static with inherited _ = std Clonable;
+        protected wrapper = $;
+
+        protected winptr,
+        width, height,
+        renderer;
+
+        with inherited trait = {
+            protected sdl => wrapper sdl;
+
+            initWithHandle: _winptr Width: _width Height: _height => (
+                winptr   <- _winptr.
+                width    <- _width.
+                height   <- _height.
+                renderer <- (wrapper Renderer clone) init: (sdl CreateRenderer(_winptr, -1, 0));
+              ^ self
+            );
+
+            destroy => sdl DestroyWindow(winptr);
+
+            show => sdl ShowWindow(winptr);
+            hide => sdl HideWindow(winptr);
+
+            writeOn: w => w << 'an sdl window';
+        };
+    };

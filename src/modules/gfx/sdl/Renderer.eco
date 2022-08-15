@@ -1,0 +1,73 @@
+
+    {
+        static with inherited _ = std Clonable;
+        protected wrapper = $;
+
+        protected     renptr,
+        protected own rectangle;
+        protected own rectangle2;
+
+        with inherited trait = {
+            protected sdl => wrapper sdl;
+
+            init: _renptr => (
+                renptr     <- _renptr.
+                rectangle  <- sdl SDL_Rect alloc.
+                rectangle2 <- sdl SDL_Rect alloc.
+              ^ self
+            );
+
+            destroy => sdl DestroyRenderer(renptr);
+
+            flush => sdl RenderFlush(renptr);
+            present => sdl RenderPresent(renptr);
+
+            setR: r G: g B: b A: a => sdl SetRenderDrawColor(renptr, r, g, b, a);
+            setR: r G: g B: b => setR: r G: g B: b A: 255;
+            setColor: color => setR: color r G: g B: b;
+
+            clear => sdl RenderClear(renptr);
+            drawPointX: x Y: y => sdl RenderDrawPoint(renptr, x, y);
+            drawLineX: x1 Y: y1 X: x2 Y: y2 => sdl RenderDrawLine(renptr, x1, y1, x2, y2);
+            drawRectX: x Y: y W: w H: h => (
+                drawLineX: x Y: y X: (x + w) Y: y.
+                drawLineX: x Y: y X: x Y: (y + h).
+                drawLineX: x Y: (y + h) X: (x + w) Y: (y + h).
+                drawLineX: (x + w) Y: y X: (x + w) Y: (y + h).
+            );
+            fillRectX: x Y: y W: w H: h => (
+                rectangle at: 0 put: x.
+                rectangle at: 1 put: y.
+                rectangle at: 2 put: w.
+                rectangle at: 3 put: h.
+                sdl RenderFillRect(renptr, rectangle address).
+            );
+            drawTexture: texture X: tx Y: ty W: tw H: th ToX: x Y: y W: w H: h => (
+                rectangle at: 0 put: tx.
+                rectangle at: 1 put: ty.
+                rectangle at: 2 put: tw.
+                rectangle at: 3 put: th.
+                rectangle2 at: 0 put: x.
+                rectangle2 at: 1 put: y.
+                rectangle2 at: 2 put: w.
+                rectangle2 at: 3 put: h.
+                sdl RenderCopy(renptr, texture texptr, rectangle, rectangle2).
+            );
+
+            withRenderTarget: texture Do: block => (
+                | prev <- sdl GetRenderTarget(renptr) |
+                [
+                    sdl SetRenderTarget(renptr, texture texptr).
+                    block value.
+                ] protected: [
+                    sdl SetRenderTarget(renptr, prev).
+                ]
+            );
+
+            makeTextureW: w H: h => (
+                (sdl Texture) clone init: (sdl CreateTexture(renptr, sdl SDL_PIXELFORMAT_UNKNOWN, sdl SDL_TEXTUREACCESS_TARGET, w, h))
+            );
+
+            writeOn: w => w << 'an sdl renderer';
+        };
+    };
