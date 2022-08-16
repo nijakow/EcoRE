@@ -10,12 +10,17 @@
     );
 
     NewWindowWithTitle: title X: x Y: y W: w H: h => (Window clone) initWithHandle: (sdl CreateWindow(title, x, y, w, h, 0)) Width: w Height: h;
+
+    DefaultPixelFormat => sdl SDL_PIXELFORMAT_ARGB8888;
+    NewSurfaceWithW: w H: h => (Surface clone) init: (sdl CreateRGBSurfaceWithFormat(w, h, 32, DefaultPixelFormat));
+
     NewEvent => (Event clone) init: sdl SDL_Event alloc;
 
     own Window = (here / 'Window.eco') importIn: self;
 
     own Renderer = (here / 'Renderer.eco') importIn: self;
 
+    own Surface = (here / 'Surface.eco') importIn: self;
     own Texture = (here / 'Texture.eco') importIn: self;
 
     own EventVisitor = (here / 'EventVisitor.eco') importIn: self;

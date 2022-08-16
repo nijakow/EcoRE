@@ -1,0 +1,17 @@
+
+    {
+        static with inherited _ = std Clonable;
+
+        surptr;
+
+        with inherited trait = {
+            init: _surptr => (
+                surptr <- _surptr.
+              ^ self
+            );
+
+            destroy => sdl DestroySurface(texptr);
+
+            writeOn: w => w << 'an sdl surface';
+        };
+    };

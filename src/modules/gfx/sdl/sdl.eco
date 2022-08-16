@@ -25,6 +25,7 @@
     protected SDL_RenderPresent;
     protected SDL_SetRenderTarget;
     protected SDL_GetRenderTarget;
+    protected SDL_CreateRGBSurfaceWithFormat;
     protected SDL_CreateTexture;
     protected SDL_CreateTextureFromSurface;
     protected SDL_DestroyTexture;
@@ -87,8 +88,8 @@
     };
 
     with inherited trait = {
-        "Init => Setup: 'libSDL2.so';"
-        Init => Setup: '/opt/homebrew/Cellar/sdl2/2.0.22/lib/libSDL2-2.0.0.dylib';
+        Init => Setup: 'libSDL2.so';
+        "Init => Setup: '/opt/homebrew/Cellar/sdl2/2.0.22/lib/libSDL2-2.0.0.dylib'";
         
         Setup: libpath => (
             lib <- (ffi DLOpen: libpath) yes.
@@ -124,6 +125,7 @@
             SDL_RenderPresent <- (lib function: #'SDL_RenderPresent' type: ((ffi types void) function(ffi types pointer))) yes.
             SDL_SetRenderTarget <- (lib function: #'SDL_SetRenderTarget' type: ((ffi types int) function(ffi types pointer, ffi types pointer))) yes.
             SDL_GetRenderTarget <- (lib function: #'SDL_GetRenderTarget' type: ((ffi types pointer) function(ffi types pointer))) yes.
+            SDL_CreateRGBSurfaceWithFormat <- (lib function: #'SDL_CreateRGBSurfaceWithFormat' type: ((ffi types pointer) function(ffi types uint32, ffi types int, ffi types int, ffi types int, ffi types uint32))) yes.
             SDL_CreateTexture <- (lib function: #'SDL_CreateTexture' type: ((ffi types pointer) function(ffi types pointer, ffi types uint32, ffi types int, ffi types int, ffi types int))) yes.
             SDL_CreateTextureFromSurface <- (lib function: #'SDL_CreateTextureFromSurface' type: ((ffi types pointer) function(ffi types pointer, ffi types pointer))) yes.
             SDL_DestroyTexture <- (lib function: #'SDL_DestroyTexture' type: ((ffi types void) function(ffi types pointer))) yes.
@@ -154,6 +156,7 @@
         RenderPresent(renderer) => SDL_RenderPresent value(renderer);
         SetRenderTarget(renderer, texture) => SDL_SetRenderTarget value(renderer, texture);
         GetRenderTarget(renderer) => SDL_GetRenderTarget value(renderer);
+        CreateRGBSurfaceWithFormat(width, height, depth, format) => SDL_CreateRGBSurfaceWithFormat value(0, width, height, depth, format);
         CreateTexture(renderer, pixelformat, access, width, height) => SDL_CreateTexture value(renderer, pixelformat, access, width, height);
         CreateTextureFromSurface(renderer, surface) => SDL_CreateTextureFromSurface value(renderer, surface);
         DestroyTexture(texture) => SDL_DestroyTexture value(texture);
