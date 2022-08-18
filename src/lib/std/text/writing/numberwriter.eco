@@ -20,7 +20,14 @@
     );
 
     WriteInt: i To: writer => (
-        (i isNegative) -> [ writer << '-'. i <- i negate ].
+        (i isNegative) -> [
+            (i == -2147483648) -> [
+                writer << '-2147483648'.  "TODO: This is only for 32 bit integers"
+              ^ self
+            ].
+            writer << '-'.
+            i <- i negate
+        ].
         WriteUInt: i To: writer.
     );
 
