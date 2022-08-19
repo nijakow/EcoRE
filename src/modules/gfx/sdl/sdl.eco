@@ -1,7 +1,8 @@
 {
     static with inherited _ = std Module;
 
-    protected lib;
+    protected lib,
+    protected libttf;
 
     protected SDL_Init,
     protected SDL_Quit,
@@ -92,11 +93,12 @@
     };
 
     with inherited trait = {
-        Init => Setup: 'libSDL2.so';
+        Init => Setup: 'libSDL2.so' And: 'libSDL2_ttf.so';
         "Init => Setup: '/opt/homebrew/Cellar/sdl2/2.0.22/lib/libSDL2-2.0.0.dylib'";
         
-        Setup: libpath => (
+        Setup: libpath And: ttfpath => (
             lib <- (ffi DLOpen: libpath) yes.
+            libttf <- (ffi DLOpen: ttfpath) yes.
             INIT_EVERYTHING <- 62001.
 
             SDL_Rect <- ffi struct(ffi types int, ffi types int, ffi types int, ffi types int).
@@ -134,11 +136,11 @@
             SDL_CreateTextureFromSurface <- (lib function: #'SDL_CreateTextureFromSurface' type: ((ffi types pointer) function(ffi types pointer, ffi types pointer))) yes.
             SDL_DestroyTexture <- (lib function: #'SDL_DestroyTexture' type: ((ffi types void) function(ffi types pointer))) yes.
 
-            TTF_OpenFont <- (lib function: #'TTF_OpenFont' type: (ffi types pointer) function(ffi types char pointer, ffi types int)) yes.
-            TTF_CloseFont <- (lib function: #'TTF_CloseFont' type: (ffi types void) function(ffi types pointer)) yes.
+            TTF_OpenFont <- (libttf function: #'TTF_OpenFont' type: (ffi types pointer) function(ffi types char pointer, ffi types int)) yes.
+            TTF_CloseFont <- (libttf function: #'TTF_CloseFont' type: (ffi types void) function(ffi types pointer)) yes.
 
             "We're using a trick to define TTF_RenderText_Solid since using an SDL_Color struct isn't possible with libffi right now"
-            TTF_RenderText_Solid <- (lib function: #'TTF_RenderText_Solid' type: (ffi types void) function(ffi types pointer, ffi types char pointer, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8)) yes.
+            TTF_RenderText_Solid <- (libttf function: #'TTF_RenderText_Solid' type: (ffi types void) function(ffi types pointer, ffi types char pointer, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8)) yes.
 
             InitEverything.
           ^ self
