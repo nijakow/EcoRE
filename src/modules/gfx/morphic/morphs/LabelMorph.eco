@@ -1,0 +1,14 @@
+
+{
+    static with inherited _ = std Clonable;
+    with inherited own Morph = $ Morph;
+
+    with inherited trait = {
+        init => (
+            $(Morph) init.
+          ^ self
+        );
+
+        "TODO"
+    };
+}

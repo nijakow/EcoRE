@@ -215,7 +215,7 @@ struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType** members,
                     type->type->size = s;
             }
         } else {
-            ffi_get_struct_offsets(FFI_DEFAULT_ABI, &type->payload, offsets);
+            ffi_get_struct_offsets(FFI_DEFAULT_ABI, type->type, offsets);
         }
 #endif
         for (index = 0; index < member_count; index++)
