@@ -31,6 +31,7 @@
     protected SDL_DestroyTexture;
 
     protected TTF_OpenFont;
+    protected TTF_CloseFont;
     protected TTF_RenderText_Solid;
 
     SDL_Scancode,
@@ -134,6 +135,7 @@
             SDL_DestroyTexture <- (lib function: #'SDL_DestroyTexture' type: ((ffi types void) function(ffi types pointer))) yes.
 
             TTF_OpenFont <- (lib function: #'TTF_OpenFont' type: (ffi types pointer) function(ffi types char pointer, ffi types int)) yes.
+            TTF_CloseFont <- (lib function: #'TTF_CloseFont' type: (ffi types void) function(ffi types pointer)) yes.
 
             "We're using a trick to define TTF_RenderText_Solid since using an SDL_Color struct isn't possible with libffi right now"
             TTF_RenderText_Solid <- (lib function: #'TTF_RenderText_Solid' type: (ffi types void) function(ffi types pointer, ffi types char pointer, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8)) yes.
@@ -171,6 +173,7 @@
         DestroyTexture(texture) => SDL_DestroyTexture value(texture);
 
         TTF_OpenFont(name) => TTF_OpenFont value(name);
+        TTF_CloseFont(font) => TTF_CloseFont value(font);
         TTF_RenderText_Solid(font, text, r, g, b, a) => TTF_RenderText_Solid value(font, text, r, g, b, a);
 
         "TODO..."
