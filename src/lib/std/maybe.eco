@@ -24,7 +24,7 @@
             no: block => block value;
             yes: yblock no: nblock => nblock value;
             no: nblock yes: yblock => nblock value;
-            yes => self;  "TODO: Throw an error"
+            yes => 'Expected a value, got No' throw;
             writeOn: writer => writer << 'No';
         };
     };
