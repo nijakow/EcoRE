@@ -42,6 +42,8 @@
             drawTexture: tex X: x Y: y W: w H: h => sdlRenderer drawTexture: tex X: xOff + x Y: yOff + y W: w H: h;
             drawTexture: tex W: w H: h => drawTexture: tex X: 0 Y: 0 W: w H: h;
 
+            makeTextTexture: text => sdlRenderer makeTextTexture: text;
+
             accept: morph => morph renderOn: self;
 
             writeOn: w => w << 'a morphic renderer';

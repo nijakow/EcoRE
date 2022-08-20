@@ -53,7 +53,7 @@
                 rectangle2 at: 1 put: y.
                 rectangle2 at: 2 put: w.
                 rectangle2 at: 3 put: h.
-                sdl RenderCopy(renptr, texture handle, rectangle, rectangle2).
+                sdl RenderCopy(renptr, texture handle, rectangle address, rectangle2 address).
             );
             drawTexture: texture X: x Y: y W: w H: h => (
                 drawTexture: texture X: 0 Y: 0 W: w H: h ToX: x Y: y W: w H: h
@@ -70,14 +70,14 @@
             );
 
             makeTextureW: w H: h => (
-                (sdl Texture) clone init: (sdl CreateTexture(renptr, sdl SDL_PIXELFORMAT_UNKNOWN, sdl SDL_TEXTUREACCESS_TARGET, w, h))
+                (wrapper Texture) clone init: (sdl CreateTexture(renptr, sdl SDL_PIXELFORMAT_UNKNOWN, sdl SDL_TEXTUREACCESS_TARGET, w, h))
             );
 
             makeTextSurface: text => (
-                (sdl Surface) clone init: (sdl TTF_RenderText_Solid(sdl DefaultFont, text, 128, 128, 128, 128))
+                (wrapper Surface) clone init: (sdl RenderText_Solid(sdl DefaultFont, text, 128, 128, 128, 255))
             );
 
-            makeTextTexture: text => (makeTextSurface: text) asTextureWithRenderer: self.
+            makeTextTexture: text => (makeTextSurface: text) asTextureWithRenderer: self;
 
             writeOn: w => w << 'an sdl renderer';
         };

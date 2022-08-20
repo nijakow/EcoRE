@@ -31,8 +31,9 @@
     protected SDL_CreateTextureFromSurface;
     protected SDL_DestroyTexture;
 
-    protected TTF_OpenFont;
-    protected TTF_CloseFont;
+    protected TTF_Init,
+    protected TTF_OpenFont,
+    protected TTF_CloseFont,
     protected TTF_RenderText_Solid;
 
     SDL_Scancode,
@@ -92,6 +93,8 @@
         MOUSEBUTTONUP = 1026
     };
 
+    DefaultFont;
+
     with inherited trait = {
         Init => Setup: 'libSDL2.so' And: 'libSDL2_ttf.so';
         "Init => Setup: '/opt/homebrew/Cellar/sdl2/2.0.22/lib/libSDL2-2.0.0.dylib'";
@@ -136,18 +139,20 @@
             SDL_CreateTextureFromSurface <- (lib function: #'SDL_CreateTextureFromSurface' type: ((ffi types pointer) function(ffi types pointer, ffi types pointer))) yes.
             SDL_DestroyTexture <- (lib function: #'SDL_DestroyTexture' type: ((ffi types void) function(ffi types pointer))) yes.
 
-            TTF_OpenFont <- (libttf function: #'TTF_OpenFont' type: (ffi types pointer) function(ffi types char pointer, ffi types int)) yes.
+            TTF_Init <- (libttf function: #'TTF_Init' type: (ffi types int) function()) yes.
+            TTF_OpenFont <- (libttf function: #'TTF_OpenFont' type: (ffi types pointer) function(ffi types string, ffi types int)) yes.
             TTF_CloseFont <- (libttf function: #'TTF_CloseFont' type: (ffi types void) function(ffi types pointer)) yes.
 
             "We're using a trick to define TTF_RenderText_Solid since using an SDL_Color struct isn't possible with libffi right now"
-            TTF_RenderText_Solid <- (libttf function: #'TTF_RenderText_Solid' type: (ffi types void) function(ffi types pointer, ffi types char pointer, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8)) yes.
+            TTF_RenderText_Solid <- (libttf function: #'TTF_RenderText_Solid' type: (ffi types void) function(ffi types pointer, ffi types string, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8)) yes.
 
             InitEverything.
+            DefaultFont <- OpenFont('/usr/share/fonts/truetype/DejaVuSansMono.ttf', 12).
           ^ self
         );
 
         InitEverything => Init: INIT_EVERYTHING;
-        Init: flags => SDL_Init value(flags);
+        Init: flags => ( SDL_Init value(flags). TTF_Init value. );
         Quit => SDL_Quit value();
         PollEvent(event_ptr) => SDL_PollEvent value(event_ptr);
         CreateWindow(name, x, y, w, h, flags) => SDL_CreateWindow value(name, x, y, w, h, flags);
@@ -174,9 +179,9 @@
         CreateTextureFromSurface(renderer, surface) => SDL_CreateTextureFromSurface value(renderer, surface);
         DestroyTexture(texture) => SDL_DestroyTexture value(texture);
 
-        TTF_OpenFont(name) => TTF_OpenFont value(name);
-        TTF_CloseFont(font) => TTF_CloseFont value(font);
-        TTF_RenderText_Solid(font, text, r, g, b, a) => TTF_RenderText_Solid value(font, text, r, g, b, a);
+        OpenFont(name, size) => TTF_OpenFont value(name, size);
+        CloseFont(font) => TTF_CloseFont value(font);
+        RenderText_Solid(font, text, r, g, b, a) => TTF_RenderText_Solid value(font, text, r, g, b, a);
 
         "TODO..."
     };
