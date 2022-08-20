@@ -184,11 +184,7 @@
 
         OpenFont(name, size) => TTF_OpenFont value(name, size);
         CloseFont(font) => TTF_CloseFont value(font);
-        RenderText_Solid(font, text, r, g, b, a) => (
-            "For some very odd reason this only works if we store the value in a register"
-            | r <- TTF_RenderText_Solid value(font, text, r, g, b, a) |
-          ^ r
-        );
+        RenderText_Solid(font, text, r, g, b, a) => TTF_RenderText_Solid value(font, text, r, g, b, a);
 
         "TODO..."
     };
