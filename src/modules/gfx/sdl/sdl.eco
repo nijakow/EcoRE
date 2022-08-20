@@ -44,7 +44,8 @@
     SDL_MouseMotionEvent,
     SDL_MouseButtonEvent,
     SDL_Event,
-    SDL_Rect;
+    SDL_Rect,
+    SDL_Color;
 
     INIT_EVERYTHING;
 
@@ -106,6 +107,7 @@
             INIT_EVERYTHING <- 62001.
 
             SDL_Rect <- ffi struct(ffi types int, ffi types int, ffi types int, ffi types int).
+            SDL_Color <- ffi struct(ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8).
             SDL_Scancode <- ffi types enum.
             SDL_Keycode <- ffi types enum.
             SDL_Keysym <- ffi struct(SDL_Scancode, SDL_Keycode, ffi types uint16, ffi types uint32).
@@ -146,7 +148,7 @@
             TTF_CloseFont <- (libttf function: #'TTF_CloseFont' type: (ffi types void) function(ffi types pointer)) yes.
 
             "We're using a trick to define TTF_RenderText_Solid since using an SDL_Color struct isn't possible with libffi right now"
-            TTF_RenderText_Solid <- (libttf function: #'TTF_RenderText_Solid' type: (ffi types pointer) function(ffi types pointer, ffi types string, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8)) yes.
+            TTF_RenderText_Solid <- (libttf function: #'TTF_RenderText_Solid' type: (ffi types pointer) function(ffi types pointer, ffi types string, SDL_Color)) yes.
 
             InitEverything.
             DefaultFont <- OpenFont('/usr/share/fonts/truetype/DejaVuSansMono.ttf', 12).
@@ -184,7 +186,14 @@
 
         OpenFont(name, size) => TTF_OpenFont value(name, size);
         CloseFont(font) => TTF_CloseFont value(font);
-        RenderText_Solid(font, text, r, g, b, a) => TTF_RenderText_Solid value(font, text, r, g, b, a);
+        RenderText_Solid(font, text, r, g, b, a) => (
+            | color <- SDL_Color alloc |
+            color at: 0 put: r.
+            color at: 1 put: g.
+            color at: 2 put: b.
+            color at: 3 put: a.
+            TTF_RenderText_Solid value(font, text, color)
+        );
 
         "TODO..."
     };
