@@ -24,8 +24,6 @@
         );
 
         renderOn: renderer => (
-            renderer setR: 128 G: 0 B: 0.
-            renderer fillRectX: 0 Y: 0 W: bounds w H: bounds h.
             (getOrMakeTexture: renderer) yes: [ :t | renderer drawTexture: t W: bounds w H: bounds h ].
             renderChildrenOn: renderer.
         );
