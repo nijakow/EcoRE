@@ -14,7 +14,7 @@
           ^ self
         );
 
-        text: txt => text <- Yes: txt;
+        text: txt => ( text <- Yes: txt. texture <- No. );
 
         protected getOrMakeTexture: renderer => (
             texture no: [
