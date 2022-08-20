@@ -20,6 +20,7 @@
         own BoxMorph = (here / 'morphs' / 'BoxMorph.eco') importIn: self;
         own HBoxMorph = (here / 'morphs' / 'HBoxMorph.eco') importIn: self;
         own VBoxMorph = (here / 'morphs' / 'VBoxMorph.eco') importIn: self;
+        own LabelMorph = (here / 'morphs' / 'LabelMorph.eco') importIn: self;
         own DemoMorph = (here / 'morphs' / 'DemoMorph.eco') importIn: self;
         own HandMorph = (here / 'morphs' / 'HandMorph.eco') importIn: self;
         own WorldMorph = (here / 'morphs' / 'WorldMorph.eco') importIn: self;

@@ -1,16 +1,23 @@
 
     {
         static with inherited _ = std Clonable;
+        protected wrapper = $;
 
         surptr;
 
         with inherited trait = {
+            protected sdl => wrapper sdl;
+
             init: _surptr => (
                 surptr <- _surptr.
               ^ self
             );
 
+            handle => surptr;
+
             destroy => sdl DestroySurface(texptr);
+
+            asTextureWithRenderer: renderer => (wrapper Texture) clone init: (sdl CreateTextureFromSurface(renderer handle, surptr));
 
             writeOn: w => w << 'an sdl surface';
         };

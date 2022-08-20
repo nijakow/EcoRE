@@ -10,6 +10,8 @@
               ^ self
             );
 
+            handle => texptr;
+
             destroy => sdl DestroyTexture(texptr);
 
             writeOn: w => w << 'an sdl texture';

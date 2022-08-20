@@ -3,10 +3,29 @@
     static with inherited _ = std Clonable;
     with inherited own Morph = $ Morph;
 
+    protected text,
+    protected texture;
+
     with inherited trait = {
         init => (
             $(Morph) init.
+            text     <- No.
+            texture  <- No.
           ^ self
+        );
+
+        text: txt => text <- Yes: txt;
+
+        protected getOrMakeTexture: renderer => (
+            texture no: [
+                text yes: [ :t | texture <- Yes: (renderer makeTextTexture: t) ]
+            ].
+          ^ texture
+        );
+
+        renderOn: renderer => (
+            (getOrMakeTexture: renderer) yes: [ :t | renderer drawTexture: t ]
+            renderChildrenOn: renderer.
         );
 
         "TODO"
