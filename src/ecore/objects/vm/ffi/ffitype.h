@@ -24,7 +24,7 @@ struct Eco_FFIType
 
 #ifdef ECO_CONFIG_USE_FFI
     ffi_type*                 type;
-    ffi_type                  payload;
+    ffi_type                  type_instance;
 #endif
     struct Eco_FFIType*       pointer;
     struct Eco_FFIType*       pointee;

@@ -163,7 +163,7 @@ struct Eco_FFIType* Eco_FFIType_New(void* ffi_type_ptr)
         type->pointee      = NULL;
 #ifdef ECO_CONFIG_USE_FFI
         if (ffi_type_ptr == NULL)
-            type->type = &type->payload;    // TODO: Initialize payload
+            type->type = &type->type_instance;    // TODO: Initialize the type
         else
             type->type = ffi_type_ptr;
 #endif
@@ -200,11 +200,11 @@ struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType** members,
         for (index = 0; index < member_count; index++)
             ((ffi_type**) payload)[index] = members[index]->type;
         ((ffi_type**) payload)[index] = NULL;
-        type->payload.size      = 0; /* LibFFI initializes this */
-        type->payload.alignment = 0; /* LibFFI initializes this */
-        type->payload.type      = FFI_TYPE_STRUCT;
-        type->payload.elements  = (ffi_type**) payload;
-        type->type = &type->payload;
+        type->type = &type->type_instance;
+        type->type->size      = 0; /* LibFFI initializes this */
+        type->type->alignment = 0; /* LibFFI initializes this */
+        type->type->type      = FFI_TYPE_STRUCT;
+        type->type->elements  = (ffi_type**) payload;
         if (is_union) {
             type->type->size = 0;
             for (index = 0; index < member_count; index++)
