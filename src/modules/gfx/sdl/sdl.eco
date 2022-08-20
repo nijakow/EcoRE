@@ -6,6 +6,7 @@
 
     protected SDL_Init,
     protected SDL_Quit,
+    protected SDL_GetError,
     protected SDL_PollEvent,
     protected SDL_CreateWindow,
     protected SDL_DestroyWindow,
@@ -114,6 +115,7 @@
             SDL_Event <- ffi union(ffi types uint32, SDL_KeyboardEvent, SDL_MouseMotionEvent, SDL_MouseButtonEvent, (ffi types char) array: 56).
             SDL_Init <- (lib function: #'SDL_Init' type: ((ffi types int) function(ffi types uint32))) yes.
             SDL_Quit <- (lib function: #'SDL_Quit' type: ((ffi types void) function)) yes.
+            SDL_GetError <- (lib function: #'SDL_GetError' type: ((ffi types string) function)) yes.
             SDL_PollEvent <- (lib function: #'SDL_PollEvent' type: ((ffi types int) function(SDL_Event pointer))) yes.
             SDL_CreateWindow <- (lib function: #'SDL_CreateWindow' type: ((ffi types pointer) function(ffi types string, ffi types int, ffi types int, ffi types int, ffi types int, ffi types uint32))) yes.
             SDL_DestroyWindow <- (lib function: #'SDL_DestroyWindow' type: ((ffi types void) function(ffi types pointer))) yes.
@@ -144,7 +146,7 @@
             TTF_CloseFont <- (libttf function: #'TTF_CloseFont' type: (ffi types void) function(ffi types pointer)) yes.
 
             "We're using a trick to define TTF_RenderText_Solid since using an SDL_Color struct isn't possible with libffi right now"
-            TTF_RenderText_Solid <- (libttf function: #'TTF_RenderText_Solid' type: (ffi types void) function(ffi types pointer, ffi types string, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8)) yes.
+            TTF_RenderText_Solid <- (libttf function: #'TTF_RenderText_Solid' type: (ffi types pointer) function(ffi types pointer, ffi types string, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8)) yes.
 
             InitEverything.
             DefaultFont <- OpenFont('/usr/share/fonts/truetype/DejaVuSansMono.ttf', 12).
@@ -154,6 +156,7 @@
         InitEverything => Init: INIT_EVERYTHING;
         Init: flags => ( SDL_Init value(flags). TTF_Init value. );
         Quit => SDL_Quit value();
+        GetError => SDL_GetError value();
         PollEvent(event_ptr) => SDL_PollEvent value(event_ptr);
         CreateWindow(name, x, y, w, h, flags) => SDL_CreateWindow value(name, x, y, w, h, flags);
         DestroyWindow(window) => SDL_DestroyWindow value(window);
@@ -181,7 +184,11 @@
 
         OpenFont(name, size) => TTF_OpenFont value(name, size);
         CloseFont(font) => TTF_CloseFont value(font);
-        RenderText_Solid(font, text, r, g, b, a) => TTF_RenderText_Solid value(font, text, r, g, b, a);
+        RenderText_Solid(font, text, r, g, b, a) => (
+            "For some very odd reason this only works if we store the value in a register"
+            | r <- TTF_RenderText_Solid value(font, text, r, g, b, a) |
+          ^ r
+        );
 
         "TODO..."
     };
