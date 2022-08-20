@@ -31,7 +31,8 @@ struct Eco_FFIType
     Eco_Any                 (*as_any)(struct Eco_FFIType*, void*, unsigned long);
     bool                    (*from_any)(struct Eco_FFIType*, void*, unsigned long, Eco_Any);
     unsigned int              member_count;
-    struct Eco_FFIType_Entry  members[0];
+    struct Eco_FFIType_Entry* members;
+    char                      payload[0];
 };
 
 #ifdef ECO_CONFIG_USE_FFI

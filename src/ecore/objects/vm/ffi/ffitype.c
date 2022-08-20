@@ -182,25 +182,26 @@ struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType** members,
     unsigned int         index;
 
 #ifdef ECO_CONFIG_USE_FFI
-    type = Eco_Object_New(Eco_FFIType_TYPE, sizeof(struct Eco_FFIType) + sizeof(struct Eco_FFIType*) * member_count + sizeof(struct Eco_FFIType_Entry) * (member_count + 1));
+    type = Eco_Object_New(Eco_FFIType_TYPE, sizeof(struct Eco_FFIType) + sizeof(struct Eco_FFIType_Entry) * member_count + sizeof(ffi_type*) * (member_count + 1));
 #else
-    type = Eco_Object_New(Eco_FFIType_TYPE, sizeof(struct Eco_FFIType) + sizeof(struct Eco_FFIType*) * member_count);
+    type = Eco_Object_New(Eco_FFIType_TYPE, sizeof(struct Eco_FFIType) + sizeof(struct Eco_FFIType_Entry) * member_count);
 #endif
 
     if (type != NULL)
     {
-        payload = ((char*) type) + sizeof(struct Eco_FFIType) + sizeof(struct Eco_FFIType*) * member_count;
-        type->member_count = member_count;
-        type->as_any       = Eco_FFIType_AsAny_Default;
-        type->from_any     = Eco_FFIType_FromAny_Default;
-        type->pointer      = NULL;
-        type->pointee      = NULL;
+        payload = ((char*) type) + sizeof(struct Eco_FFIType) + sizeof(struct Eco_FFIType_Entry) * member_count;
+        type->member_count =  member_count;
+        type->as_any       =  Eco_FFIType_AsAny_Default;
+        type->from_any     =  Eco_FFIType_FromAny_Default;
+        type->pointer      =  NULL;
+        type->pointee      =  NULL;
+        type->members      = (void*) type->payload;
         size_t offsets[member_count];
 #ifdef ECO_CONFIG_USE_FFI
         for (index = 0; index < member_count; index++)
             ((ffi_type**) payload)[index] = members[index]->type;
         ((ffi_type**) payload)[index] = NULL;
-        type->type = &type->type_instance;
+        type->type            = &type->type_instance;
         type->type->size      = 0; /* LibFFI initializes this */
         type->type->alignment = 0; /* LibFFI initializes this */
         type->type->type      = FFI_TYPE_STRUCT;
