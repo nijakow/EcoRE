@@ -20,9 +20,10 @@
             );
 
             layoutInPlace => (
+                shrinkToFit.
                 childrenDo: [ :c |
                     |
-                        w <- (c xLayout isFlexible) if: [ bounds w ] else: [ c minWidth ],
+                        w <- (c xLayout isFlexible) if: [ bounds w ] else: [ c minWidth  ],
                         h <- (c yLayout isFlexible) if: [ bounds h ] else: [ c minHeight ]
                     |
                     c boundsX: 0 Y: 0 W: w H: h.

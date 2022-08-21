@@ -35,6 +35,15 @@
                   ~ add: (morphic morphs ButtonMorph new)
             );
 
+            LabeledButton: text => (
+                morphic morphs StackMorph new
+                  ~ xLayout: (morphic layouts ShrinkWrap)
+                  ~ yLayout: (morphic layouts ShrinkWrap)
+                  ~ add: (morphic morphs DemoMorph new ~ r: 100 g: 0 b: 100)
+                  ~ add: (Label: text)
+                  ~ add: (morphic morphs ButtonMorph new)
+            );
+
             Frame(title, content) => (
                 VBox(
                     HBox(title, HBox(Button, Spacer, Button, Spacer, Button) ~ rigidWidth: 100) ~ rigidHeight: 50,
@@ -92,7 +101,7 @@
                         morph add: (RedBlock(20, 20) ~ moveToX: x * 40 Y: y * 40)
                     ].
                 ].
-                morph add: (Button ~ moveToX: 50 Y: 300).
+                morph add: ((LabeledButton: 'Click me!') ~ moveToX: 50 Y: 300).
                 mouseX <- 0.
                 mouseY <- 0.
               ^ self
