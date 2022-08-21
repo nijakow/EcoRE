@@ -22,5 +22,7 @@
     assignNull => #'ecosphere.ecore.ffi.object.assign_null'(self);
     castTo: type => #'ecosphere.ecore.ffi.object.cast_to'(self, type);
 
+    unwrap => address fetch; "Convert to an Eco value"
+
     writeOn: writer => writer << '<ffi_object:' << type << ':' << size << '>';
 }
