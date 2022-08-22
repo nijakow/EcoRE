@@ -98,6 +98,8 @@
 
     DefaultFont;
 
+    private DefaultFontPath <- (here / 'resources' / 'DejaVuSansMono.ttf') path;
+
     with inherited trait = {
         Init => Setup: 'libSDL2.so' And: 'libSDL2_ttf.so';
         "Init => Setup: '/opt/homebrew/Cellar/sdl2/2.0.22/lib/libSDL2-2.0.0.dylib'";
@@ -153,7 +155,7 @@
             TTF_RenderText_Solid <- (libttf function: #'TTF_RenderText_Solid' type: (ffi types pointer) function(ffi types pointer, ffi types string, SDL_Color)) yes.
 
             InitEverything.
-            DefaultFont <- OpenFont('/usr/share/fonts/truetype/DejaVuSansMono.ttf', 12).
+            DefaultFont <- OpenFont(DefaultFontPath, 12).
           ^ self
         );
 
