@@ -146,6 +146,13 @@ class Tokenizer:
         while self._s.has() and self._s.peek().isspace():
             self._s.read()
     
+    def string_to_char(self, str):
+        if len(str) == 1: return str
+        elif str == 'newline': return '\n'
+        elif str == 'tab': return '\t'
+        elif str == 'escape': return '\033'
+        raise Exception('Invalid character identifier: ' + str)
+
     def parse_char(self, end=None):
         c = self._s.read()
         if c == '\\':
@@ -208,6 +215,9 @@ class Tokenizer:
         elif self._s.peeks('#\\'):
             c = self.parse_char()
             return CharacterToken(self, ord(c))
+        elif self._s.peeks('$\''):
+            c = self.parse_string('\'')
+            return CharacterToken(self, ord(self.string_to_char(c)))
         elif self._s.peeks('\"'): self.parse_string('\"'); return self.read()  # Comment
         elif self._s.peeks("/\""): self.parse_nested_comment(); return self.read() # Nested comment
 

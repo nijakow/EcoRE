@@ -54,6 +54,15 @@
         newTokenWithType: type Payload: pl => (#<:lang/eco/tokenizer> Token) new tokenizer: self type: type payload: pl;
         newTokenWithType: type => newTokenWithType: type Payload: false;
 
+        StringToChar: str => (
+            (str size == 1) -> [ ^ str at: 0 ].
+            (str equals: '') -> [ ^ $'?' "TODO" ].
+            (str equals: 'newline') -> [ ^ $'newline' ].
+            (str equals: 'tab') -> [ ^ $'tab' ].
+            (str equals: 'escape') -> [ ^ $'escape' ].
+          ^ str at: 0
+        );
+
         parseChar => (
             | c <- in next |
             (c == #\\\) if: [
@@ -99,7 +108,6 @@
             (peeks: '#(')  if: [ ^ newTokenWithType: TokenType HASHLPAREN ].
             (peeks: '%[')  if: [ ^ newTokenWithType: TokenType PERCLBRACK ].
             (peeks: '$(')  if: [ ^ newTokenWithType: TokenType RESEND     ].
-            (peeks: '$')   if: [ ^ newTokenWithType: TokenType DOLLAR     ].
             (peeks: '.')   if: [ ^ newTokenWithType: TokenType SEPARATOR  ].
             (peeks: ',')   if: [ ^ newTokenWithType: TokenType SEPARATOR  ].
             (peeks: ';')   if: [ ^ newTokenWithType: TokenType SEPARATOR  ].
@@ -111,6 +119,8 @@
             (peeks: '#=')  if: [ ^ newTokenWithType: TokenType LABEL  Payload: (parseString: #\:) ].
             (peeks: '#<')  if: [ ^ newTokenWithType: TokenType PROXY  Payload: (parseString: #\>) ].
             (peeks: '#\\') if: [ ^ newTokenWithType: TokenType CHARACTER  Payload: parseChar      ].
+            (peeks: '$\'') if: [ ^ newTokenWithType: TokenType CHARACTER  Payload: (StringToChar: (parseString: #\')) ].
+            (peeks: '$')   if: [ ^ newTokenWithType: TokenType DOLLAR     ].
             (peeks: '"')   if: [ parseString: #\". ^ nextToken ].
 
             (std text parsing number ParseNumberFromStream: in)
