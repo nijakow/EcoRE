@@ -67,9 +67,8 @@
 
         Quote.
 
-        io out << 'EcoRE v' << (#'ecosphere.ecore.init.version_string'()) << ' online and ready.'.
-        io out newline.
-        io out commit.
+        (std io out << 'EcoRE v' << (#'ecosphere.ecore.init.version_string'()) << ' online and ready.') newline.
+        (std io out << 'Type `ui.` to start the graphical user interface.') newline commit.
 
         |
             tok    <- ((lang eco tokenizer Tokenizer) clone) init: (io in),
@@ -80,6 +79,12 @@
             |
                 env  <- {
                     addVar: name => #'ecosphere.ecore.reflect.add_value_slot'(self, -1, 0, any, name, false);
+                    ui => (
+                        std os files here / '..' / 'modules' / 'gui.eco'
+                          ~ import
+                          ~ Init
+                          ~ Main.
+                    );
                     writeOn: writer => writer << '<session>';
                     with inherited parent = #<:std/Clonable>;
                 },
