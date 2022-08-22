@@ -146,21 +146,24 @@ class Tokenizer:
         while self._s.has() and self._s.peek().isspace():
             self._s.read()
     
+    def parse_char(self, end=None):
+        c = self._s.read()
+        if c == '\\':
+            e = self._s.read()
+            if e == '\\': c = '\\'
+            elif e == 'n': c = '\n'
+            elif e == 't': c = '\t'
+            elif e == 'r': c = '\r'
+            elif e == 'e': c = '\033'
+            # TODO: More
+            elif e == end: c = end
+            else: c += e
+        return c
+    
     def parse_string(self, end) -> str:
         s = ''
         while (self._s.has() and self._s.peek() != end):
-            c = self._s.read()
-            if c == '\\':
-                e = self._s.read()
-                if e == '\\': c = '\\'
-                elif e == 'n': c = '\n'
-                elif e == 't': c = '\t'
-                elif e == 'r': c = '\r'
-                elif e == 'e': c = '\033'
-                # TODO: More
-                elif e == end: c = end
-                else: c += e
-            s += c
+            s += self.parse_char(end)
         self._s.read()
         return s
     
@@ -203,7 +206,7 @@ class Tokenizer:
         elif self._s.peeks('#='): return LabelToken(self, self.parse_string(':'))
         elif self._s.peeks('#<'): return ProxyToken(self, self.parse_string('>'))
         elif self._s.peeks('#\\'):
-            c = self._s.read()
+            c = self.parse_char()
             return CharacterToken(self, ord(c))
         elif self._s.peeks('\"'): self.parse_string('\"'); return self.read()  # Comment
         elif self._s.peeks("/\""): self.parse_nested_comment(); return self.read() # Nested comment
