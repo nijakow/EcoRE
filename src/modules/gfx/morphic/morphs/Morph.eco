@@ -108,6 +108,14 @@
             rigidWidth:  w => xLayout: morphic layouts Rigid ~ resizeToW: w;
             rigidHeight: h => yLayout: morphic layouts Rigid ~ resizeToH: h;
 
+            flexibleWidth  => xLayout: morphic layouts Flexible;
+            flexibleHeight => yLayout: morphic layouts Flexible;
+            flexibleSize   => ( flexibleWidth. flexibleHeight. );
+
+            shrinkWrapWidth  => xLayout: morphic layouts ShrinkWrap;
+            shrinkWrapHeight => yLayout: morphic layouts ShrinkWrap;
+            shrinkWrapSize   => ( shrinkWrapWidth. shrinkWrapHeight. );
+
             layoutForOrientation: orientation => (
                 orientation
                   ~ ifHorizontal: [ xLayout ]
