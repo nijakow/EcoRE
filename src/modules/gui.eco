@@ -95,7 +95,7 @@
                            ~ add: ((morphic morphs FrameMorph new) ~ rigidWidth: 300 ~ rigidHeight: 300 ~ moveToX: 650 Y: 200)
                            ~ add: ((morphic morphs StackMorph new) ~ boundsX: 750 Y: 50 W: 50 H: 50)
                            ~ add: ((morphic morphs VBoxMorph new) ~ boundsX: 825 Y: 50 W: 50 H: 50)
-                           ~ add: (makeFrame ~ moveToX: 250 Y: 350).
+                           ~ add: (makeFrame ~ moveToX: 250 Y: 320).
                 1 to: 5 do: [ :x |
                     1 to: 5 do: [ :y |
                         morph add: (RedBlock(20, 20) ~ moveToX: x * 40 Y: y * 40)
@@ -150,7 +150,7 @@
     Main => (
         sdl Init.
         |
-            win     <- sdl NewWindowWithTitle: 'Morphic' X: 100 Y: 100 W: 1200 H: 850,
+            win     <- sdl NewWindowWithTitle: 'Morphic' X: 100 Y: 100 W: 1200 H: 750,
             program <- sdl Program clone initWithWindow: win Handler: (MorphicHandler new)
         |
         program run.
