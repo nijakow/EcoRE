@@ -1,0 +1,73 @@
+{
+    static with inherited _ = std Module;
+    morphic = $;
+    sdl = (here / '..' / 'sdl' / '_.eco') importIn: self;
+
+    own MorphicHandler = {
+        static with inherited _ = std Module;
+        private morphic = $ morphic;
+
+        protected mouseX,
+        protected mouseY;
+
+        protected program,
+        protected renderer,
+        protected morph;
+
+        with inherited trait = {
+            init => (
+                mouseX <- 0.
+                mouseY <- 0.
+                morph  <- morphic morphs WorldMorph new.
+              ^ self
+            );
+
+            setProgram: p => (
+                program  <- p.
+                renderer <- morphic Renderer clone
+                              initWithSDLRenderer: program window renderer
+                                                X: 0
+                                                Y: 0
+                                                W: program window width
+                                                H: program window height.
+                morph bounds: renderer bounds.
+                morph renderer: renderer.
+                morph layoutInPlace.
+            );
+
+            tick => (
+                morph handMorph moveToX: mouseX Y: mouseY.
+                morph maybeUpdate.
+                morph render.
+            );
+
+            findMorphAtX: x Y: y => (
+                | v <- No |
+                morph xRayAtX: x Y: y Do: [ :m |
+                    v <- Yes: m
+                ].
+              ^ v
+            );
+
+            handleEvent: event => (
+                event isMouseMotionEvent -> [
+                    mouseX <- event mouseMotionX.
+                    mouseY <- event mouseMotionY.
+                ].
+                event isMouseButtonDown -> [
+                    morph handMorph leftClick.
+                ].
+                event isKeyDown -> [ ^ program stop ].
+            );
+        };
+    };
+
+    RunWithWidth: w Height: h => (
+        sdl Init.
+        |
+            win     <- sdl NewWindowWithTitle: 'Morphic' X: 100 Y: 100 W: w H: h,
+            program <- sdl Program clone initWithWindow: win Handler: (MorphicHandler new)
+        |
+        program run.
+    );
+}
