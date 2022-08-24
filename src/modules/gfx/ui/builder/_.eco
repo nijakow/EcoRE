@@ -1,0 +1,45 @@
+
+{
+    static with inherited _ = std Module;
+    protected wrapper = $;
+
+    protected morphic => wrapper morphic;
+
+    Flexible   => morphic layouts Flexible;
+    ShrinkWrap => morphic layouts ShrinkWrap;
+    Rigid      => morphic layouts Rigid;
+
+    VBox(...) => (
+        | box <- (morphic morphs VBoxMorph) new |
+        std util newArray(...) do: [ :e | box add: e ].
+      ^ box
+    );
+
+    HBox(...) => (
+        | box <- (morphic morphs HBoxMorph) new |
+        std util newArray(...) do: [ :e | box add: e ].
+      ^ box
+    );
+
+    Stacked(...) => (
+        | box <- (morphic morphs StackMorph) new |
+        std util newArray(...) do: [ :e | box add: e ].
+      ^ box
+    );
+
+    Framed(element) => (
+      ^ (morphic morphs FrameMorph) new
+          ~ add: element
+    );
+
+    Scrollable(element) => element;
+
+    Label: text => (morphic morphs LabelMorph) new ~ text: text;
+
+    Button(caption, action) => (
+      ^ Stacked(
+            (morphic morphs ButtonMorph) new,
+            caption
+        )
+    );
+}

@@ -79,7 +79,7 @@
             |
                 env  <- {
                     addVar: name => #'ecosphere.ecore.reflect.add_value_slot'(self, -1, 0, any, name, false);
-                    ui => (std os files here / '..' / 'modules' / 'gfx' / 'ui' / 'start_ui.eco') import;
+                    ui => (std os files here / '..' / 'modules' / 'gfx' / 'ui' / '_.eco') import ~ Init ~ Main;
                     writeOn: writer => writer << '<session>';
                     with inherited parent = #<:std/Clonable>;
                 },
