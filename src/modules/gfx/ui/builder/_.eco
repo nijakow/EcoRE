@@ -5,9 +5,14 @@
 
     protected morphic => wrapper morphic;
 
-    Flexible   => morphic layouts Flexible;
-    ShrinkWrap => morphic layouts ShrinkWrap;
-    Rigid      => morphic layouts Rigid;
+    layouts = {
+      static with inherited _ = std Module;
+      protected wrapper = $;
+
+      Flexible   => wrapper morphic layouts Flexible;
+      ShrinkWrap => wrapper morphic layouts ShrinkWrap;
+      Rigid      => wrapper morphic layouts Rigid;
+    };
 
     VBox(...) => (
         | box <- (morphic morphs VBoxMorph) new |
