@@ -5,6 +5,9 @@
         with inherited trait = {
             asBool           => self;
             not              => false;
+            -> block         => block value;
+            if: block        => block value;
+            unless: block    => self;
             if: t else: f    => t value;
             true: t false: f => if: t else: f;
             true: t          => if: t;
@@ -20,6 +23,9 @@
         with inherited trait = {
             asBool           => self;
             not              => true;
+            -> block         => self;
+            if: block        => self;
+            unless: block    => block value;
             if: t else: f    => f value;
             true: t false: f => if: t else: f;
             true: t          => if: t;

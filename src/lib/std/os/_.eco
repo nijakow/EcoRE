@@ -9,7 +9,7 @@
 
         Lookup: var => (
             | v <- #'ecosphere.ecore.os.getenv'(var) |
-            v -> [ ^ Yes: v ].
+            v asBool -> [ ^ Yes: v ].
           ^ No
         );
     };

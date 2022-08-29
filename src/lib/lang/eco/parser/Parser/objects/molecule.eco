@@ -5,14 +5,14 @@
     parseObjectSlotFlags: flags => (
         [
             begin
-              if: [ check: TokenType DEPRECATED ] then: [ flags setDeprecated ] ~
-              if: [ check: TokenType PROTECTED  ] then: [ flags setProtected  ] ~
-              if: [ check: TokenType STATIC     ] then: [ flags setStatic     ] ~
-              if: [ check: TokenType PRIVATE    ] then: [ flags setPrivate    ] ~
-              if: [ check: TokenType FINAL      ] then: [ flags setFinal      ] ~
-              if: [ check: TokenType WITH       ] then: [ flags setWith       ] ~
-              if: [ check: TokenType OWN        ] then: [ flags setOwn        ] ~
-              if: [ check: TokenType INHERITED  ] then: [ flags setInherited  ] ~
+              if: [ (check: TokenType DEPRECATED) isYes ] then: [ flags setDeprecated ] ~
+              if: [ (check: TokenType PROTECTED)  isYes ] then: [ flags setProtected  ] ~
+              if: [ (check: TokenType STATIC)     isYes ] then: [ flags setStatic     ] ~
+              if: [ (check: TokenType PRIVATE)    isYes ] then: [ flags setPrivate    ] ~
+              if: [ (check: TokenType FINAL)      isYes ] then: [ flags setFinal      ] ~
+              if: [ (check: TokenType WITH)       isYes ] then: [ flags setWith       ] ~
+              if: [ (check: TokenType OWN)        isYes ] then: [ flags setOwn        ] ~
+              if: [ (check: TokenType INHERITED)  isYes ] then: [ flags setInherited  ] ~
             default: [ ^ flags ]
         ] repeat
     );
@@ -29,7 +29,7 @@
             varargs  <- decl third
         |
 
-        (check: TokenType RARROW) if: [
+        (check: TokenType RARROW) yes: [
             | body <- parseExpression |
             builder addCodeSlotWithFlags: flags
                                     Type: type
@@ -37,13 +37,13 @@
                                     Args: arglist
                                     Varargs: varargs
                                     Body: body
-        ] else: [
+        ] no: [
             | value |
-            (check: TokenType ASSIGNMENT) if: [ value <- parseExpression ]
-                                        else: [ value <- newASTSelf ].
+            (check: TokenType ASSIGNMENT) yes: [ value <- parseExpression ]
+                                           no: [ value <- newASTSelf ].
             builder addValueSlotWithFlags: flags
-                                        Type: type
-                                        Name: slotname
+                                     Type: type
+                                     Name: slotname
                                     Value: value
         ]
     );
@@ -57,11 +57,11 @@
     parseMoleculeUntil: stop WithBuilder: builder => (
         [ :break |
             begin
-              if: [ check: stop             ] then: [ break value                                               ] ~
-              if: [ check: TokenType LPAREN ] then: [ parseMoleculeUntil: TokenType RPAREN WithBuilder: builder ] ~
-              if: [ check: TokenType CARET  ] then: [ builder addParent: parseExpression                        ] ~
+              if: [ (check: stop)             isYes ] then: [ break value                                               ] ~
+              if: [ (check: TokenType LPAREN) isYes ] then: [ parseMoleculeUntil: TokenType RPAREN WithBuilder: builder ] ~
+              if: [ (check: TokenType CARET)  isYes ] then: [ builder addParent: parseExpression                        ] ~
             default: [ parseSlotWithBuilder: builder ].
-            (check: stop) if: [ break value ].
+            (check: stop) yes: [ break value ].
             expect: TokenType SEPARATOR
         ] repeatWithBreak.
     );

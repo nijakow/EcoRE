@@ -17,12 +17,12 @@
         |
         [
           begin
-            if: [check: TokenType COLON] then: [
+            if: [ (check: TokenType COLON) isYes ] then: [
               parameters append: parseArgdef.
               check: TokenType SEPARATOR.
               check: TokenType BAR.
             ] ~
-            if: [check: TokenType ELLIPSIS] then: [
+            if: [ (check: TokenType ELLIPSIS) isYes ] then: [
                 varargs <- true.
                 expect: TokenType BAR.
               ^ newASTBlockWithArgs: (parameters)

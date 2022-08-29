@@ -4,17 +4,18 @@
 
     tryParseNArySendWithAST: ast => (
         ( | ident <- checkNAryIdentifier |
-            ident if: [
+            ident yes: [ :v |
                 |
                     nameStr <- '',
                     arglist <- std util newVector
                 |
 
                 [
-                    nameStr <- nameStr + (ident payload asString).
+                    nameStr <- nameStr + (v payload asString).
                     arglist append: (parseExpressionWithFollowups: #<:lang/eco/parser/Parser/Followups> binary).
                     ident <- checkNAryIdentifier.
-                    ident unless: [
+                    ident yes: [ :val | v <- val ]
+                           no: [
                       ^ newASTSendWithSubject: ast
                                       Message: nameStr asKey
                                          Args: arglist
@@ -28,10 +29,10 @@
 
     parseSendWithAST: ast Followups: followups => (
         ( | ident <- checkUnaryIdentifierOrKey |
-            ident if: [
+            ident yes: [ :v |
                 | arglist <- parseOptionalArglist |
               ^ newASTSendWithSubject: ast
-                              Message: ident payload
+                              Message: v payload
                                  Args: arglist first
                            HasVarargs: arglist second
             ]
@@ -40,11 +41,11 @@
         (followups level > 0) unless: [ ^ ast ].
 
         ( | ident <- checkBinaryIdentifier |
-            ident if: [
+            ident yes: [ :v |
                 | args <- std util newVector |
                 args append: (parseExpressionWithFollowups: #<:lang/eco/parser/Parser/Followups> unary).
               ^ newASTSendWithSubject: ast
-                              Message: ident payload
+                              Message: v payload
                                  Args: args
                            HasVarargs: false
             ]

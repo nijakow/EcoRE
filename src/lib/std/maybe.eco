@@ -11,6 +11,12 @@
             no: block => self;
             yes: yblock no: nblock => yblock value(yes);
             no: nblock yes: yblock => yblock value(yes);
+
+            or: other => self;
+
+            isYes => true;
+            isNo  => false;
+
             writeOn: writer => writer << 'Yes: ' << yes;
         };
     };
@@ -25,6 +31,11 @@
             yes: yblock no: nblock => nblock value;
             no: nblock yes: yblock => nblock value;
             yes => 'Expected a value, got No' throw;
+            or: other => other;
+
+            isYes => false;
+            isNo  => true;
+
             writeOn: writer => writer << 'No';
         };
     };

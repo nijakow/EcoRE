@@ -4,8 +4,8 @@
     
     parseBarAssignmentValue => (
         (check: TokenType ASSIGNMENT)
-              if: [ ^ parseExpression ]
-            else: [ ^ newASTSelf      ]
+          ~ yes: [ ^ parseExpression ]
+             no: [ ^ newASTSelf      ]
     );
 
     parseBar => (
@@ -17,12 +17,12 @@
 
         check: TokenType SEPARATOR.
 
-        (check: TokenType BAR) if: [
+        (check: TokenType BAR) yes: [
           ^ newASTBarWithType: type
                           Var: varname
                         Value: value
                      Followup: parseExpression
-        ] else: [
+        ] no: [
           ^ newASTBarWithType: type
                           Var: varname
                         Value: value

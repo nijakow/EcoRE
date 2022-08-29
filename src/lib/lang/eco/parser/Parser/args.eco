@@ -10,30 +10,33 @@
 
     parseArgdefs => (
         | defs <- std util newVector |
-        [ check: TokenType RPAREN ] until: [
-            (check: TokenType ELLIPSIS) if: [
+        [ (check: TokenType RPAREN) isYes ] until: [
+            (check: TokenType ELLIPSIS) yes: [
                 expect: TokenType RPAREN.
               ^ defs & true
             ].
             defs append: parseArgdef.
-            (check: TokenType RPAREN) if: [ ^ defs & false ].
+            (check: TokenType RPAREN) yes: [ ^ defs & false ].
             expect: TokenType SEPARATOR
         ].
       ^ defs & false
     );
 
     parseOptionalArgdefs => (
-        (check: TokenType LPAREN) if: [ parseArgdefs ]
-                                else: [ std util newVector & false ]
+        (check: TokenType LPAREN)
+          ~ yes: [ parseArgdefs                 ]
+             no: [ (std util newVector) & false ]
     );
 
     parseMethodDeclaration => (
-        ([ check: TokenType KEY ] or: [ checkUnaryIdentifier ]) when: [
+        | v <- check: TokenType KEY |
+        v no: [ v <- checkUnaryIdentifier ].
+        v yes: [
             :tok |  | lst <- parseOptionalArgdefs |
             ^ (tok payload) & (lst first) & (lst second)
         ].
 
-        checkBinaryIdentifier when: [
+        checkBinaryIdentifier yes: [
             :tok |  | args <- std util newVector |
             args append: parseArgdef.
           ^ (tok payload) & args & false
@@ -47,28 +50,28 @@
         [
             | ident <- checkNAryIdentifier |
 
-            ident unless: [ ^ (name asKey) & args & false ].
-            name <- name + (ident payload asString).
+            ident no: [ ^ (name asKey) & args & false ].
+            name <- name + (ident yes payload asString).
             args append: parseArgdef.
         ] repeat
     );
 
     parseArglist => (
         | exprs <- std util newVector |
-        [ check: TokenType RPAREN ] until: [
-            (check: TokenType ELLIPSIS) if: [
+        [ (check: TokenType RPAREN) isYes ] until: [
+            (check: TokenType ELLIPSIS) yes: [
                 expect: TokenType RPAREN.
               ^ exprs & true
             ].
             exprs append: parseExpression.
-            (check: TokenType RPAREN) if: [ ^ exprs & false ].
+            (check: TokenType RPAREN) yes: [ ^ exprs & false ].
             expect: TokenType SEPARATOR
         ].
       ^ exprs & false
     );
 
     parseOptionalArglist => (
-        (check: TokenType LPAREN) if: [ parseArglist ]
-                                else: [ std util newVector & false ]
+        (check: TokenType LPAREN) yes: [ parseArglist ]
+                                   no: [ std util newVector & false ]
     );
 }

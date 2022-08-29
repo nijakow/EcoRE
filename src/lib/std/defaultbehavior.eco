@@ -5,7 +5,6 @@
     value         => self;
     mirror        => (std reflect Mirror) clone init: self;
     asBool        => true;
-    not           => asBool not;
     is: other     => #'ecosphere.ecore.is'(self, other);
     equals: e     => is: e;
     == other      => is: other;
@@ -14,12 +13,8 @@
     let: block    => block value(self);
     run: block   => ( block value(self). self );
 
-    if: t else: f => t value;
-    if: block     => if: block else: [];
-    unless: block => if: [] else: block;
-    -> block      => if: block;
-    when: block   => if: [ block value(self) ];
-    not           => if: [ false ] else: [ true ];
+    when: block   => asBool if: [ block value(self) ];
+    not           => asBool if: [ false ] else: [ true ];
 
     & value       => (((std util Collector) clone) init: self) & value;
     ~> value      => ((std util MutablePair) clone) initWithFirst: self Second: value;

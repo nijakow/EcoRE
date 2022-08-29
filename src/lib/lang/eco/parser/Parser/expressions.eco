@@ -19,18 +19,18 @@
     );
 
     parseSimpleExpressionWithFollowups: followups => (
-        (check: TokenType SELF)       if: [ ^ newASTSelf     ].
-        (check: TokenType MY)         if: [ ^ newASTMy       ].
-        (check: TokenType LPAREN)     if: [ ^ parseCompound  ].
-        (check: TokenType LBRACK)     if: [ ^ parseBlock     ].
-        (check: TokenType LCURLY)     if: [ ^ parseMolecule  ].
-        (check: TokenType HASHLPAREN) if: [ ^ parseArray     ].
-        (check: TokenType PERCLBRACK) if: [ ^ parseInterface ].
-        (check: TokenType DOLLAR)     if: [ ^ newASTHostRef  ].
-        (check: TokenType RESEND)     if: [ ^ parseResend    ].
+        (check: TokenType SELF)       yes: [ ^ newASTSelf     ].
+        (check: TokenType MY)         yes: [ ^ newASTMy       ].
+        (check: TokenType LPAREN)     yes: [ ^ parseCompound  ].
+        (check: TokenType LBRACK)     yes: [ ^ parseBlock     ].
+        (check: TokenType LCURLY)     yes: [ ^ parseMolecule  ].
+        (check: TokenType HASHLPAREN) yes: [ ^ parseArray     ].
+        (check: TokenType PERCLBRACK) yes: [ ^ parseInterface ].
+        (check: TokenType DOLLAR)     yes: [ ^ newASTHostRef  ].
+        (check: TokenType RESEND)     yes: [ ^ parseResend    ].
 
-        (check: TokenType KEY) when: [ :kw |
-            (check: TokenType LPAREN) if: [
+        (check: TokenType KEY) yes: [ :kw |
+            (check: TokenType LPAREN) yes: [
                 parseArglist let: [ :arglist |
                   ^ newASTBuiltinWithName: (kw payload)
                                      Args: (arglist first)
@@ -40,20 +40,20 @@
           ^ newASTConstantWithValue: kw payload
         ].
 
-        (check: TokenType STRING) when: [ :kw | ^ newASTConstantWithValue: (kw payload) ].
+        (check: TokenType STRING) yes: [ :kw | ^ newASTConstantWithValue: (kw payload) ].
 
-        (check: TokenType NUMBER) when: [ :kw | ^ newASTConstantWithValue: (kw payload) ].
+        (check: TokenType NUMBER) yes: [ :kw | ^ newASTConstantWithValue: (kw payload) ].
 
-        (check: TokenType CHARACTER) when: [ :kw | ^ newASTConstantWithValue: (kw payload) ].
+        (check: TokenType CHARACTER) yes: [ :kw | ^ newASTConstantWithValue: (kw payload) ].
 
       ^ newASTImplicit
     );
 
     parseExpressionWithFollowups: followups => (
-        ([ followups level > 1 ] and: [ check: TokenType CARET ]) if: [
+        ([ followups level > 1 ] and: [ (check: TokenType CARET) isYes ]) if: [
           ^ newASTReturnWithValue: (parseExpressionWithFollowups: followups)
         ].
-        ([ followups level > 1 ] and: [ check: TokenType BAR ]) if: [ ^ parseBar ].
+        ([ followups level > 1 ] and: [ (check: TokenType BAR) isYes ]) if: [ ^ parseBar ].
 
         |
             ast <- parseSimpleExpressionWithFollowups: followups,
@@ -64,22 +64,22 @@
             next <- ast.
             ast  <- parseSendWithAST: ast Followups: followups.
             begin
-              if: [ check: TokenType LPAREN ] then: [
+              if: [ (check: TokenType LPAREN) isYes ] then: [
                 parseArglist let: [
                   :arglist | ast <- newASTCallWithSubject: (ast)
                                                      Args: (arglist first)
                                                HasVarargs: (arglist second)
                 ]
               ] ~
-              if: [ check: TokenType AS ] then: [
+              if: [ (check: TokenType AS) isYes ] then: [
                   ast <- newASTAsWithLHS: (ast)
                                      RHS: (parseExpressionWithFollowups: false)
               ] ~
-              if: [ check: TokenType ASSIGNMENT ] then: [
+              if: [ (check: TokenType ASSIGNMENT) isYes ] then: [
                   ast <- newASTAssignmentWithLHS: (ast)
                                              RHS: (parseExpressionWithFollowups: followups)
               ] ~
-              if: [ [ followups level > 1 ] and: [ check: TokenType TILDE ] ] then: [
+              if: [ [ followups level > 1 ] and: [ (check: TokenType TILDE) isYes ] ] then: [
               ] ~
               if: [ ast is: next ] then: [
                 ^ ast
@@ -90,9 +90,9 @@
 
     parseExpressionsWithTerminator: terminator => (
         | exprs <- std util newVector |
-        [ check: terminator ] until: [
+        [ (check: terminator) isYes ] until: [
             exprs append: parseExpression.
-            (check: terminator) if: [ ^ exprs ].
+            (check: terminator) yes: [ ^ exprs ].
             expect: TokenType SEPARATOR
         ].
       ^ exprs

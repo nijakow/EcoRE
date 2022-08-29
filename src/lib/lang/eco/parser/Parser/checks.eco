@@ -7,7 +7,9 @@
     check: type => check: type withProperty: [ :token | true ];
     check: type withProperty: block => (
         | t <- tokenizer nextToken |
-        ([t hasType: type] and: [block value(t)]) if: [t] else: [ t fail. false ]
+        ([t hasType: type] and: [block value(t)])
+          ~ if: [ Yes: t     ]
+          else: [ t fail. No ]
     );
 
     checkIdentifier => check: TokenType IDENTIFIER;
@@ -34,12 +36,12 @@
         ]
     );
     checkUnaryIdentifierOrKey => (
-        checkUnaryIdentifier when: [ :value | ^ value ].
+        checkUnaryIdentifier yes: [ :value | ^ Yes: value ].
       ^ check: TokenType KEY
     );
 
     expect: type => (
-        (check: type) when: [ :v | ^ v ].
+        (check: type) yes: [ :v | ^ v ].
         error: 'Expected a different token!'
     );
 }

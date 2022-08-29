@@ -4,7 +4,7 @@
 
     parseOptionalType => (
         | the_type <- newASTConstantWithValue: any |
-        (check: TokenType LBRACK) if: [
+        (check: TokenType LBRACK) yes: [
             the_type <- parseExpression.
             expect: TokenType RBRACK
         ].
@@ -12,11 +12,8 @@
     );
 
     parseKeyOrIdentifier => (
-        | t |
-        t <- check: TokenType KEY.
-        t if: [ ^ t payload ].
-        t <- check: TokenType IDENTIFIER.
-        t if: [ ^ t payload ].
+        (check: TokenType KEY)        yes: [ :v | ^ v payload ].
+        (check: TokenType IDENTIFIER) yes: [ :v | ^ v payload ].
         error: 'Expected key or identifier!'
     );
 }

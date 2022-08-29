@@ -4,10 +4,10 @@
 
     parseInterface => (
         | builder <- newASTInterfaceBuilder |
-        [ check: TokenType RBRACK ] until: [
-            (check: TokenType WITH) if: [
+        [ (check: TokenType RBRACK) isYes ] until: [
+            (check: TokenType WITH) yes: [
                 builder addParent: parseExpression
-            ] else: [
+            ] no: [
               | type <- parseOptionalType |
               parseMethodDeclaration let: [ :decl |
                   builder addEntryWithType: type
@@ -16,7 +16,7 @@
                                    Varargs: (decl third)
               ]
             ].
-            (check: TokenType RBRACK) if: [ ^ builder commit ].
+            (check: TokenType RBRACK) yes: [ ^ builder commit ].
             expect: TokenType SEPARATOR
         ].
       ^ builder commit
