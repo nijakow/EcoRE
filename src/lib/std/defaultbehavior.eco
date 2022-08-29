@@ -11,10 +11,7 @@
     != other      => (== other) not;
 
     let: block    => block value(self);
-    run: block   => ( block value(self). self );
-
-    when: block   => asBool if: [ block value(self) ];
-    not           => asBool if: [ false ] else: [ true ];
+    run: block    => ( block value(self). self );
 
     & value       => (((std util Collector) clone) init: self) & value;
     ~> value      => ((std util MutablePair) clone) initWithFirst: self Second: value;

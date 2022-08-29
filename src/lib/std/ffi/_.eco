@@ -92,10 +92,9 @@
             );
 
             symbol: name => (
-                #'ecosphere.ecore.ffi.object.dlsym'(library, name) when: [ :sym |
-                  ^ Yes: sym
-                ].
-              ^ No
+                | sym <- #'ecosphere.ecore.ffi.object.dlsym'(library, name) |
+                (sym == false) -> [ ^ No ].
+              ^ Yes: sym
             );
 
             function: name type: t => (
@@ -112,10 +111,9 @@
         static with inherited parent = #<:std/Singleton>;
         
         symbol: name => (
-            #'ecosphere.ecore.ffi.object.dlsym'(name) when: [ :sym |
-              ^ Yes: sym
-            ].
-          ^ No
+            | sym <- #'ecosphere.ecore.ffi.object.dlsym'(name) |
+            (sym == false) -> [ ^ No ].
+          ^ Yes: sym
         );
 
         function: name type: t => (
@@ -128,10 +126,9 @@
     };
 
     DLOpen: path => (
-        #'ecosphere.ecore.ffi.object.dlopen'(path) when: [ :lib |
-          ^ Yes: ((SharedLibrary clone) initWithName: path Library: lib)
-        ].
-      ^ No
+        | lib <- #'ecosphere.ecore.ffi.object.dlopen'(path) |
+        (lib == false) -> [ ^ No ].
+      ^ Yes: ((SharedLibrary clone) initWithName: path Library: lib)
     );
 
     Open: path => #'ecosphere.ecore.ffi.lib.open'(path);
