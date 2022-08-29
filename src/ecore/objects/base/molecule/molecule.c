@@ -111,13 +111,12 @@ struct Eco_Molecule* Eco_Molecule_Clone(struct Eco_CloneState* state,
     clone = (struct Eco_Molecule*) Eco_CloneState_QueryClone(state, (struct Eco_Object*) molecule);
     if (clone == NULL)
     {
-        up = molecule->_.up == NULL ? NULL : Eco_CloneState_QueryClone(state, molecule->_.up);
+        up = NULL;
 
         if (up == NULL && !forced)
             return molecule;
 
         clone = Eco_Molecule_New(molecule->_.type);
-        clone->_.up = up;
         Eco_CloneState_RegisterClone(state, (struct Eco_Object*) molecule, (struct Eco_Object*) clone);
         Eco_Type_Subclone(state, molecule->_.type, molecule, clone);
     }

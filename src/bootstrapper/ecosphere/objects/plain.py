@@ -123,9 +123,6 @@ class EcoPlainObject(ecosphere.objects.base.EcoObject):
         if not serializer.try_serialize_known_object(self):
             serializer.write_message('ecosphere.object.molecule')
             serializer.write_vlq(serializer.add_object(self))
-            serializer.write_vlq(len(self._ups))
-            for up in self._ups:
-                serializer.write_object(up)
             serializer.write_vlq(len(self._slots))
             for slot in self._slots:
                 slot.serialize(serializer)

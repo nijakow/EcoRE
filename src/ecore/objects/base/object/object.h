@@ -21,7 +21,6 @@ struct Eco_ObjectBits
 struct Eco_Object
 {
     struct Eco_Type*       type;
-    struct Eco_Object*     up;
     struct Eco_ObjectBits  bits;
     struct Eco_Object*     next;
 };

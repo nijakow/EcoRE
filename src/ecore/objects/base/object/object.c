@@ -47,7 +47,6 @@ void* Eco_Object_NewInArena(struct Eco_Type* type,
     object = Eco_Memory_Alloc(size);
 
     object->type              = type;
-    object->up                = NULL;
 
     object->bits.mark_queued  = false;
     object->bits.mark_done    = false;
@@ -87,13 +86,5 @@ void Eco_Object_Del(struct Eco_Object* object)
 
 bool Eco_Object_IsBlessedBy(struct Eco_Object* object, struct Eco_Object* root)
 {
-    if (root != NULL) {
-        while (object != NULL)
-        {
-            if (object->up == root)
-                return true;
-            object = object->up;
-        }
-    }
     return false;
 }
