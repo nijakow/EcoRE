@@ -1,0 +1,21 @@
+
+{
+    static with inherited _ = std Module;
+
+    own ActionObject = {
+        static with inherited _ = std Clonable;
+
+        protected core;
+
+        with inherited trait = {
+            init: _core => (
+                core   <- _core.
+              ^ self
+            );
+
+            value(...) => core value(...);
+        };
+    };
+
+    Action(core) => ActionObject new: core;
+}

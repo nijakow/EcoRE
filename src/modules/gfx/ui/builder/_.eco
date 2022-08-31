@@ -5,6 +5,8 @@
 
     protected morphic => wrapper morphic;
 
+    with actions = (here / 'actions.eco') importIn: self;
+
     layouts = {
       static with inherited _ = std Module;
       protected wrapper = $;
