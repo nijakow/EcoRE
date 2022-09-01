@@ -30,5 +30,5 @@
 
     driver = (here / 'driver.eco') importIn: self;
 
-    RunWithWidth: w Height: h => driver RunWithWidth: w Height: h;
+    RunWithWidth: w Height: h App: app => driver RunWithWidth: w Height: h App: app;
 }

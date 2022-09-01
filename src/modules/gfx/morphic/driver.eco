@@ -12,10 +12,12 @@
 
         protected program,
         protected renderer,
-        protected morph;
+        protected morph,
+        protected app;
 
         with inherited trait = {
-            init => (
+            init: _app => (
+                app    <- _app.
                 mouseX <- 0.
                 mouseY <- 0.
                 morph  <- morphic morphs WorldMorph new.
@@ -33,6 +35,7 @@
                 morph bounds: renderer bounds.
                 morph renderer: renderer.
                 morph layoutInPlace.
+                app openInWorld: morph.
             );
 
             tick => (
@@ -62,11 +65,11 @@
         };
     };
 
-    RunWithWidth: w Height: h => (
+    RunWithWidth: w Height: h App: app => (
         sdl Init.
         |
             win     <- sdl NewWindowWithTitle: 'Morphic' X: 100 Y: 100 W: w H: h,
-            program <- sdl Program clone initWithWindow: win Handler: (MorphicHandler new)
+            program <- sdl Program clone initWithWindow: win Handler: (MorphicHandler new: app)
         |
         program run.
     );

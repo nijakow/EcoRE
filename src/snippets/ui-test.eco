@@ -1,0 +1,25 @@
+{
+    static with inherited _ = std MorphicApp;
+
+    Main => (
+        ui Window(
+            Label: 'Menu!',
+            VBox(
+                Button(Label: 'Create an object', ActionOn(state, { value(state) => state createObject })),
+                Button(Label: 'Spawn an Alien', ActionOn(state, { value(state) => state spawnAlien }))
+            )
+        )
+    );
+}
+
+
+
+
+own Action = {
+    static with inherited _ = std Clonable;
+    
+    protected state,
+    protected implementation;
+
+    value(...) => implementation value(state, implementation);
+}

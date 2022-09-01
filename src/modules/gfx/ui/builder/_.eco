@@ -3,7 +3,7 @@
     static with inherited _ = std Module;
     protected wrapper = $;
 
-    protected morphic => wrapper morphic;
+    morphic => wrapper morphic;
 
     with actions = (here / 'actions.eco') importIn: self;
 
@@ -15,6 +15,11 @@
       ShrinkWrap => wrapper morphic layouts ShrinkWrap;
       Rigid      => wrapper morphic layouts Rigid;
     };
+
+    ShrinkWrap(element) => (
+        element ~ xLayout: layouts ShrinkWrap
+                ~ yLayout: layouts ShrinkWrap
+    );
 
     VBox(...) => (
         | box <- (morphic morphs VBoxMorph) new |
@@ -30,7 +35,7 @@
 
     Stacked(...) => (
         | box <- (morphic morphs StackMorph) new |
-        std util newArray(...) do: [ :e | box add: e ].
+        std util newArray(...) reverseDo: [ :e | box add: e ].
       ^ box
     );
 
@@ -44,9 +49,9 @@
     Label: text => (morphic morphs LabelMorph) new ~ text: text;
 
     Button(caption, action) => (
-      ^ Stacked(
+      ^ ShrinkWrap(Stacked(
             (morphic morphs ButtonMorph) new,
             caption
-        )
+        ))
     );
 }

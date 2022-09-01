@@ -5,5 +5,9 @@
 
     builder = (here / 'builder' / '_.eco') importIn: self;
 
-    Main => morphic RunWithWidth: 800 Height: 600;
+    openInWorld: world => (
+        world add: ((builder Button(builder Label: 'Hello!', { value => 42 }))).
+    );
+
+    Main => morphic RunWithWidth: 800 Height: 600 App: self;
 }
