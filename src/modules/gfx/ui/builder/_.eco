@@ -50,7 +50,7 @@
 
     Button(caption, action) => (
       ^ ShrinkWrap(Stacked(
-            (morphic morphs ButtonMorph) new,
+            (morphic morphs ButtonMorph) new ~ action: action,
             caption
         ))
     );
