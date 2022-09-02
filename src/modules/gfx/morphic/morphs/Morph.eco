@@ -217,8 +217,8 @@
             );
 
             handleDropMorph: morph AtX: x Y: y => false;
-            "handleClickAtX: x Y: y HandMorph: hand => false;"
-            handleClickAtX: x Y: y HandMorph: hand => ( hand grab: self. ^ true );
+            handleClickAtX: x Y: y HandMorph: hand => false;
+            "handleClickAtX: x Y: y HandMorph: hand => ( hand grab: self. ^ true );"
 
             dropMorph: morph AtX: x Y: y => dispatchEvent: [ :e, :ex, :ey | e handleDropMorph: morph AtX: ex Y: ey ] AtX: x Y: y;
             clickAtX: x Y: y HandMorph: hand => dispatchEvent: [ :e, :ex, :ey | e handleClickAtX: ex Y: ey HandMorph: hand ] AtX: x Y: y;

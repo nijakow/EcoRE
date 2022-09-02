@@ -26,6 +26,7 @@
         own HandMorph = (here / 'morphs' / 'HandMorph.eco') importIn: self;
         own WorldMorph = (here / 'morphs' / 'WorldMorph.eco') importIn: self;
         own ButtonMorph = (here / 'morphs' / 'ButtonMorph.eco') importIn: self;
+        own DraggableMorph = (here / 'morphs' / 'DraggableMorph.eco') importIn: self;
     };
 
     driver = (here / 'driver.eco') importIn: self;

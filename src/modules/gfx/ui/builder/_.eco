@@ -54,4 +54,11 @@
             caption
         ))
     );
+
+    Window(w, h, content) => (
+      ^ (morphic morphs DraggableMorph) new
+          ~ add: content
+          ~ rigidWidth: w
+          ~ rigidHeight: h
+    );
 }
