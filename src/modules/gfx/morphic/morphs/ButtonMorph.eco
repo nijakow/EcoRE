@@ -15,7 +15,6 @@
             action: act => action <- Yes: act;
 
             handleClickAtX: x Y: y HandMorph: hand => (
-                (std io out << 'Click!') newline commit.
                 action yes: [ :a | a value ].
               ^ true
             );
