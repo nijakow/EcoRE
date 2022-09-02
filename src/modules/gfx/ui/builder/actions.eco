@@ -4,16 +4,13 @@
 
     own ActionObject = {
         static with inherited _ = std Clonable;
-
-        protected core;
+        static with inherited core = self;
 
         with inherited trait = {
             init: _core => (
-                core   <- _core.
+                core <- _core.
               ^ self
             );
-
-            value(...) => core value(...);
         };
     };
 

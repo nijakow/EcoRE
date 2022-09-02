@@ -8,8 +8,8 @@
     openInWorld: world => (
         world add: builder ShrinkWrap(
             builder VBox(
-                builder Button(builder Label: 'Hello!', { static with inherited _ = std Clonable; value => (std io out << 'Hey!') newline commit; }),
-                builder Button(builder Label: 'What\'s up?', { static with inherited _ = std Clonable; value => (std io out << 'Sup!') newline commit; }),
+                builder Button(builder Label: 'Hello!', builder Action({ value => (std io out << 'Hey!') newline commit; })),
+                builder Button(builder Label: 'What\'s up?', builder Action({ value => (std io out << 'Sup!') newline commit; })),
             )
         ).
     );
