@@ -45,7 +45,7 @@
             $(Morph) renderOn: renderer.
         );
 
-        handleDropMorph: morph AtX: x Y: y => ( add: morph. ^ true );
+        "handleDropMorph: morph AtX: x Y: y => ( add: morph. ^ true );"
 
         writeOn: w => w << 'a frame morph';
     };

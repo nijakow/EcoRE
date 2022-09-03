@@ -6,13 +6,25 @@
         static with inherited _ = std Clonable;
         static with inherited core = self;
 
+        protected state_v;
+
         with inherited trait = {
-            init: _core => (
+            initWithCore: _core => (
                 core <- _core.
+                state_v <- No.
               ^ self
             );
+
+            initWithCore: _core State: _state => (
+                core <- _core.
+                state_v <- Yes: _state.
+              ^ self
+            );
+
+            state => state_v yes;
         };
     };
 
-    Action(core) => ActionObject new: core;
+    Action: core => ActionObject clone initWithCore: core;
+    Action(state, core) => ActionObject clone initWithCore: core State: state;
 }
