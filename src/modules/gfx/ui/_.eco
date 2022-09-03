@@ -6,7 +6,7 @@
     builder = (here / 'builder' / '_.eco') importIn: self;
 
     openInWorld: world => (
-        world add: builder Window(200, 200,
+        world open: builder Window(200, 200,
             builder VBox(
                 builder Button(builder Label: 'Hello!', builder Action({ value => (std io out << 'Hey!') newline commit; })),
                 builder Button(builder Label: 'What\'s up?', builder Action({ value => (std io out << 'Sup!') newline commit; })),

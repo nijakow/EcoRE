@@ -59,6 +59,12 @@
             );
             handleClickAtX: x Y: y HandMorph: hand => false;
 
+            open: morph => (
+                add: morph.
+                morph boundsX: 100 Y: 100 W: (morph minWidth) H: (morph minHeight).
+              ^ self
+            );
+
             writeOn: w => w << 'a world morph';
         };
     }
