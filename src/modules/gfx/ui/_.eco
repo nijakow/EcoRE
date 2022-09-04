@@ -3,31 +3,13 @@
     static with inherited _ = std Module;
     morphic = (here / '..' / 'morphic' / '_.eco') import;
 
-    builder = (here / 'builder' / '_.eco') importIn: self;
+    ui => self;
 
-    counter <- 0.
+    with builder = (here / 'builder' / '_.eco') importIn: self;
 
-    counter: v => counter <- v;
+    MorphicApp = (here / 'morphicapp.eco') importIn: self;
 
-    openInWorld: world => (
-        world open: builder Window(200, 200,
-            builder VBox(
-                builder Button(builder Label: 'Hello!', builder Action: { value => (std io out << 'Hey!') newline commit; }),
-                builder Button(builder Label: 'What\'s up?', builder Action: { value => (std io out << 'Sup!') newline commit; }),
-                builder Button(builder Label: 'Count!', builder Action(self, {
-                    value => (
-                        (std io out << state counter) newline commit.
-                        state counter: state counter + 1.
-                    );
-                })),
-                builder Button(builder Label: 'Another!', builder Action(self & world, {
-                    value => (
-                        state first openInWorld: (state second)
-                    )
-                }))
-            )
-        ).
-    );
+    App = (here / 'testapp.eco') importIn: self;
 
-    Main => morphic RunWithWidth: 800 Height: 600 App: self;
+    Main => morphic RunWithWidth: 800 Height: 600 App: App new;
 }

@@ -1,0 +1,28 @@
+{
+    static with inherited _ = std Clonable;
+    with inherited own MorphicApp = $ MorphicApp;
+
+    counter;
+    counter: v => counter <- v;
+
+    init => (
+        $(MorphicApp) init.
+        counter <- 0.
+      ^ self
+    );
+
+    build => (
+        ui Window(200, 200,
+            ui VBox(
+                ui Button(ui Label: 'Count',
+                          Action: {
+                            value => (
+                                (std io out << counter) newline commit.
+                                counter: counter + 1.
+                            )
+                          }),
+                ui Button(ui Label: 'Another!', Action: { value(sender) => (state new) openInWorld: (sender world yes) })
+            )
+        )
+    );
+}

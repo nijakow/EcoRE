@@ -1,0 +1,16 @@
+{
+    static with inherited _ = std Clonable;
+    protected wrapper = $;
+
+    with inherited trait = {
+        ui => wrapper ui;
+
+        build => 'Error: Not implemented' throw;
+
+        Action: body => ui StateAction(self, body);
+
+        openInWorld: world => ( world open: build );
+
+        writeOn: w => w << 'a morphic app';
+    };
+}

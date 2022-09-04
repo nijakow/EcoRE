@@ -15,8 +15,10 @@
             action: act => action <- Yes: act;
 
             handleClickAtX: x Y: y HandMorph: hand => (
-                action yes: [ :a | a value ].
+                action yes: [ :a | a value(self) ].
               ^ true
             );
+
+            writeOn: w => w << 'a button morph';
         };
     }

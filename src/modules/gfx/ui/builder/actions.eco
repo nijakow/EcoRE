@@ -4,27 +4,24 @@
 
     own ActionObject = {
         static with inherited _ = std Clonable;
-        static with inherited core = self;
-
-        protected state_v;
+        with inherited core = self;
+        with state = self;
 
         with inherited trait = {
             initWithCore: _core => (
                 core <- _core.
-                state_v <- No.
               ^ self
             );
 
             initWithCore: _core State: _state => (
                 core <- _core.
-                state_v <- Yes: _state.
+                state <- _state.
               ^ self
             );
-
-            state => state_v yes;
         };
     };
 
     Action: core => ActionObject clone initWithCore: core;
-    Action(state, core) => ActionObject clone initWithCore: core State: state;
+    StateAction(state, core) => ActionObject clone initWithCore: core State: state;
+    Action(state, core) => StateAction(state, core);
 }
