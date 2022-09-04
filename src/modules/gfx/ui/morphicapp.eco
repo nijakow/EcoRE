@@ -5,6 +5,10 @@
     with inherited trait = {
         ui => wrapper ui;
 
+        init => ( reset. ^ self );
+
+        reset => self;
+
         build => 'Error: Not implemented' throw;
 
         Action: body => ui StateAction(self, body);

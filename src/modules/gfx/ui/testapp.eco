@@ -5,8 +5,7 @@
     counter;
     counter: v => counter <- v;
 
-    init => (
-        $(MorphicApp) init.
+    reset => (
         counter <- 0.
       ^ self
     );
