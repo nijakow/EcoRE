@@ -57,6 +57,28 @@
             ToString(a) => #'ecosphere.ecore.object.to_string'(a);
         };
 
+        blob = {
+            static with inherited _ = #<:std/Module>;
+
+            New(size) => #'ecosphere.ecore.object.blob.new'(size);
+            Size(b) => #'ecosphere.ecore.object.blob.size'(b);
+
+            AtInt8(b, i)   => #'ecosphere.ecore.object.blob.at_int8'(b, i);
+            AtInt16(b, i)  => #'ecosphere.ecore.object.blob.at_int16'(b, i);
+            AtInt32(b, i)  => #'ecosphere.ecore.object.blob.at_int32'(b, i);
+            AtIntPtr(b, i) => #'ecosphere.ecore.object.blob.at_ptr'(b, i);
+            AtIntAny(b, i) => #'ecosphere.ecore.object.blob.at_any'(b, i);
+
+            AtPutInt8(b, i, v)   => #'ecosphere.ecore.object.blob.at_put_int8'(b, i, v);
+            AtPutInt16(b, i, v)  => #'ecosphere.ecore.object.blob.at_put_int16'(b, i, v);
+            AtPutInt32(b, i, v)  => #'ecosphere.ecore.object.blob.at_put_int32'(b, i, v);
+            AtPutIntPtr(b, i, v) => #'ecosphere.ecore.object.blob.at_put_ptr'(b, i, v);
+            AtPutIntAny(b, i, v) => #'ecosphere.ecore.object.blob.at_put_any'(b, i, v);
+
+            ReadFrom(b, fd) => #'ecosphere.ecore.object.blob.read_from'(b, fd);
+            WriteTo(b, fd) => #'ecosphere.ecore.object.blob.write_to'(b, fd);
+        };
+
         code = {
             static with inherited _ = #<:std/Module>;
 
@@ -90,5 +112,26 @@
         Sin(x) => #'ecosphere.ecore.math.sin'(x);
         Cos(x) => #'ecosphere.ecore.math.cos'(x);
         Tan(x) => #'ecosphere.ecore.math.tan'(x);
+    };
+
+    io = {
+        static with inherited _ = #<:std/Module>;
+
+        OpenFile(path) => #'ecosphere.ecore.io.fd.open_file'(path);
+        FileExists(path) => #'ecosphere.ecore.io.file_exists'(path);
+        FileIsDirectory(path) => #'ecosphere.ecore.io.file_is_directory'(path);
+        ListFiles(path) => #'ecosphere.ecore.io.list_files'(path);
+    };
+
+    os = {
+        static with inherited _ = #<:std/Module>;
+
+        GetEnv(var) => #'ecosphere.ecore.os.getenv'(var);
+    };
+
+    sys = {
+        static with inherited _ = #<:std/Module>;
+
+        VersionString => #'ecosphere.ecore.init.version_string'();
     };
 }
