@@ -64,6 +64,8 @@ eco_src = [
     './src/lib/std/text/parsing/number.eco',
     './src/lib/std/text/parsing/_.eco',
     './src/lib/std/text/_.eco',
+    './src/lib/std/sys/builtins.eco',
+    './src/lib/std/sys/_.eco',
     './src/lib/std/reflect/mirror.eco',
     './src/lib/std/reflect/proxies/key.eco',
     './src/lib/std/reflect/proxies/string.eco',

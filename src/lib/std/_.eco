@@ -19,6 +19,7 @@
     io = #<:std/io>;
     os = #<:std/os>;
     reflect = #<:std/reflect>;
+    sys = #<:std/sys>;
     text = #<:std/text>;
     util = #<:std/util>;
 }

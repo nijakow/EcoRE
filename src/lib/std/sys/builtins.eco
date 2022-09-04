@@ -1,0 +1,94 @@
+
+#=std/sys/Builtins: {
+    static with inherited _ = #<:std/Module>;
+
+    Is(a, b) => #'ecosphere.ecore.is'(a, b);
+    Clone(e) => #'ecosphere.ecore.clone'(e);
+
+    Value(e) => #'ecosphere.ecore.flow.value'(e);
+    Throw(e) => #'ecosphere.ecore.flow.throw'(e);
+
+    object = {
+        static with inherited _ = #<:std/Module>;
+
+        char = {
+            static with inherited _ = #<:std/Module>;
+
+            AsInt(f) => #'ecosphere.ecore.char.as_int'(f);
+        };
+
+        int = {
+            static with inherited _ = #<:std/Module>;
+
+            AsFloat(i) => #'ecosphere.ecore.int.as_float'(i);
+            AsChar(i) => #'ecosphere.ecore.int.as_char'(i);
+        };
+
+        float = {
+            static with inherited _ = #<:std/Module>;
+
+            AsInt(f) => #'ecosphere.ecore.float.as_int'(f);
+        };
+
+        key = {
+            static with inherited _ = #<:std/Module>;
+
+            AsString(k) => #'ecosphere.ecore.key.as_string'(k);
+        };
+
+        string = {
+            static with inherited _ = #<:std/Module>;
+
+            ByteAt(s, i) => #'ecosphere.ecore.object.string.byte_at'(s, i);
+            ByteLength(s) => #'ecosphere.ecore.object.string.byte_length'(s);
+
+            AsKey(s) => #'ecosphere.ecore.string.as_key'(s);
+        };
+
+        array = {
+            static with inherited _ = #<:std/Module>;
+
+            Array(...) => #'ecosphere.ecore.object.array.array'(...);
+            New(size) => #'ecosphere.ecore.object.array.new'(size);
+            Size(a) => #'ecosphere.ecore.object.array.size'(a);
+            At(a, i) => #'ecosphere.ecore.object.array.at'(a, i);
+            AtPut(a, i, v) => #'ecosphere.ecore.object.array.at_put'(a, i, v);
+
+            ToString(a) => #'ecosphere.ecore.object.to_string'(a);
+        };
+
+        code = {
+            static with inherited _ = #<:std/Module>;
+
+            New(bytecode, constants, registers, fixed_args, flags) => #'ecosphere.ecore.object.code.new'(bytecode, constants, registers, fixed_args, flags);
+            Bytecodes(code) => #'ecosphere.ecore.object.code.bytecodes'(code);
+            Constants(code) => #'ecosphere.ecore.object.code.constants'(code);
+        };
+    };
+    
+    math = {
+        static with inherited _ = #<:std/Module>;
+
+        AddIntegers(x, y) => #'ecosphere.ecore.math.add_integers'(x, y);
+
+        Add(x, y) => #'ecosphere.ecore.math.add'(x, y);
+        Sub(x, y) => #'ecosphere.ecore.math.sub'(x, y);
+        Mul(x, y) => #'ecosphere.ecore.math.mul'(x, y);
+        Div(x, y) => #'ecosphere.ecore.math.div'(x, y);
+        Mod(x, y) => #'ecosphere.ecore.math.mod'(x, y);
+
+        BitOr(x, y) => #'ecosphere.ecore.math.bit_or'(x, y);
+        BitAnd(x, y) => #'ecosphere.ecore.math.bit_and'(x, y);
+        BitXor(x, y) => #'ecosphere.ecore.math.bit_xor'(x, y);
+
+        BitshiftLeft(x, y) => #'ecosphere.ecore.math.bitshift_left'(x, y);
+        BitshiftRight(x, y) => #'ecosphere.ecore.math.bitshift_right'(x, y);
+
+        Less(x, y) => #'ecosphere.ecore.math.less'(x, y);
+
+        Sqrt(x) => #'ecosphere.ecore.math.sqrt'(x);
+        Sin(x) => #'ecosphere.ecore.math.sin'(x);
+        Cos(x) => #'ecosphere.ecore.math.cos'(x);
+        Tan(x) => #'ecosphere.ecore.math.tan'(x);
+    };
+}

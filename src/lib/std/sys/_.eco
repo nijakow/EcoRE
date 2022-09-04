@@ -1,0 +1,6 @@
+
+#=std/sys: {
+    static with inherited _ = #<:std/Module>;
+
+    builtins = #<:std/sys/Builtins>;
+}

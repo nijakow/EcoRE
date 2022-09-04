@@ -46,6 +46,8 @@ std/reflect/proxies/ffi/ffifunc.eco \
 std/reflect/proxies/ffi/ffiobject.eco \
 std/reflect/proxies/ffi/ffitype.eco \
 std/reflect/proxies/ffi/ffilib.eco \
+std/sys/_.eco \
+std/sys/builtins.eco \
 std/text/_.eco \
 std/text/parsing/_.eco \
 std/text/parsing/number.eco \
