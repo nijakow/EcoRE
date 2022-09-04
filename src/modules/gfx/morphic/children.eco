@@ -1,0 +1,42 @@
+{
+    static with inherited _ = std Module;
+
+    None = {
+        static with inherited _ = std Singleton;
+
+        childrenDo: block => self;
+        childrenReverseDo: block => self;
+
+        add: child => false;
+        remove: child => self;
+    },
+    One = {
+        static with inherited _ = std Clonable;
+
+        protected child <- No;
+        protected child: v => child <- Yes: v;
+
+        childrenDo: block => child yes: [ :c | block value(c) ];
+        childrenReverseDo: block => childrenDo: block;
+
+        add: _child => child yes: [ ^ false ] no: [ child: _child. ^ true ];
+        remove: _child => (
+            child yes: [ :c | (c == _child) -> [ child <- No. ] ].
+          ^ self
+        );
+    },
+    Many = {
+        static with inherited _ = std Clonable;
+
+        protected children <- std util newVector;
+
+        childrenDo: block => children do: block;
+        childrenReverseDo: block => children reverseDo: block;
+
+        add: child => children add: child;
+        remove: child => (
+            children remove: child.
+          ^ self
+        );
+    }
+}
