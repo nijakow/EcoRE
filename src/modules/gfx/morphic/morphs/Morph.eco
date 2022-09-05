@@ -165,7 +165,11 @@
               ^ false
             );
 
-            add: child => ( tryAdd: child. ^ self );
+            add: child => (
+                (tryAdd: child)
+                    unless: [ 'Morph can not be added!' throw ].
+              ^ self
+            );
 
             remove: child => (
                 children remove: child
