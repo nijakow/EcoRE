@@ -12,17 +12,23 @@
         protected cachedMinHeight;
 
         with inherited trait = {
-            init => (
+            initWithChildConfig: config => (
                 bounds          <- (morphic Rectangle) new.
                 xLayout         <- (morphic layouts Flexible).
                 yLayout         <- (morphic layouts Flexible).
                 parent          <- No.
-                children        <- (morphic children Many) new.
+                children        <- config new.
                 layoutOkay      <- false.
                 cachedMinWidth  <- No.
                 cachedMinHeight <- No.
               ^ self
             );
+
+            initWithNoChildren   => initWithChildConfig: (morphic children None);
+            initWithOneChild     => initWithChildConfig: (morphic children One);
+            initWithManyChildren => initWithChildConfig: (morphic children Many);
+
+            init => initWithManyChildren;
 
             globalBounds => (
                 parent
