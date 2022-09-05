@@ -47,7 +47,7 @@
     Spacer => (morphic morphs Morph) new;
 
     Center(element) => (
-      ^ VBox( Spacer, HBox(Spacer, element, Spacer), Spacer )
+      ^ VBox( Spacer, HBox(Spacer, element, Spacer) ~ yLayout: layouts ShrinkWrap, Spacer )
     );
 
     Scrollable(element) => element;
