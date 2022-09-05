@@ -5,16 +5,6 @@
     own instructions = {
         static with inherited _ = std Module;
 
-        own StopInstruction = {
-            static with inherited _ = std Singleton;
-
-            next => self;
-
-            isStop => true;
-
-            writeOn: w => w << 'a stop bytecode pseudo-instruction';
-        },
-
         own ByteCodeInstruction = {
             static with inherited _ = std Clonable;
             private instructions = $;
@@ -22,11 +12,12 @@
             next;
 
             with inherited trait = {
-                init => next: (instructions StopInstruction new);
+                init => (
+                    next <- No.
+                  ^ self
+                );
 
-                next: v => next <- v;
-
-                isStop => false;
+                next: v => next <- Yes: v;
 
                 writeOn: w => w << 'a bytecode instruction';
             };
@@ -404,10 +395,10 @@
     };
 
     Print(expr) => (
-        [ expr isStop ] until: [
+        [ :break |
             (std io out << expr) newline commit.
-            expr <- expr next.
-        ].
+            expr next yes: [ :v | expr <- v ] no: [ break value ].
+        ] repeatWithBreak.
       ^ expr
     );
 
