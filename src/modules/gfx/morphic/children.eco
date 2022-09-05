@@ -8,35 +8,47 @@
         childrenReverseDo: block => self;
 
         add: child => false;
-        remove: child => self;
+        remove: child => false;
     },
+    
     One = {
         static with inherited _ = std Clonable;
 
-        protected child <- No;
-        protected child: v => child <- Yes: v;
+        protected child;
+
+        init => (
+            child <- No.
+          ^ self
+        );
 
         childrenDo: block => child yes: [ :c | block value(c) ];
         childrenReverseDo: block => childrenDo: block;
 
-        add: _child => child yes: [ ^ false ] no: [ child: _child. ^ true ];
+        add: _child => child yes: [ ^ false ] no: [ child <- Yes: _child. ^ true ];
         remove: _child => (
-            child yes: [ :c | (c == _child) -> [ child <- No. ] ].
-          ^ self
+            child yes: [ :c | (c == _child) -> [ child <- No. ^ true ] ].
+          ^ false
         );
     },
+
     Many = {
         static with inherited _ = std Clonable;
 
-        protected children <- std util newVector;
+        protected children;
+
+        init => (
+            children <- std util newVector.
+          ^ self
+        );
 
         childrenDo: block => children do: block;
         childrenReverseDo: block => children reverseDo: block;
 
         add: child => children add: child;
         remove: child => (
-            children remove: child.
-          ^ self
+            children remove: child
+              ~ yes: [ ^ true  ]
+                 no: [ ^ false ]
         );
     }
 }

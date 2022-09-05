@@ -10,6 +10,7 @@
     with own math = (here / 'math.eco') importIn: self;
 
     own layouts = (here / 'layouts.eco') importIn: self;
+    own children = (here / 'children.eco') importIn: self;
 
     own morphs = {
         static with inherited _ = std Module;

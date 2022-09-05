@@ -13,11 +13,11 @@
 
         with inherited trait = {
             init => (
-                bounds   <- (morphic Rectangle) new.
-                xLayout  <- (morphic layouts Flexible).
-                yLayout  <- (morphic layouts Flexible).
-                parent   <- No.
-                children <- std util newVector.
+                bounds          <- (morphic Rectangle) new.
+                xLayout         <- (morphic layouts Flexible).
+                yLayout         <- (morphic layouts Flexible).
+                parent          <- No.
+                children        <- (morphic children Many) new.
                 layoutOkay      <- false.
                 cachedMinWidth  <- No.
                 cachedMinHeight <- No.
@@ -134,8 +134,8 @@
                         no: [      No      ]
             );
 
-            childrenDo: block => children do: block;
-            childrenReverseDo: block => 0 for: children size do: [ :i | block value(children at: (children size - i - 1)) ];
+            childrenDo: block => children childrenDo: block;
+            childrenReverseDo: block => children childrenReverseDo: block;
             allChildrenDo: block => childrenDo: [ :c | block value(c). c allChildrenDo: block ];
             childrenWithBoundsDo: block => childrenDo: [ :c | block value(c, c bounds) ];
 
@@ -172,8 +172,8 @@
             );
 
             remove: child => (
-                children remove: child
-                  ~ yes: [ child noParent. layoutChanged ].
+                (children remove: child)
+                  ~ if: [ child noParent. layoutChanged ].
               ^ self
             );
 
