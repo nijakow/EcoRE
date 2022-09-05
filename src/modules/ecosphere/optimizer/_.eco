@@ -10,6 +10,8 @@
 
             next => self;
 
+            isStop => true;
+
             writeOn: w => w << 'a stop bytecode pseudo-instruction';
         },
 
@@ -23,6 +25,8 @@
                 init => next: (instructions StopInstruction new);
 
                 next: v => next <- v;
+
+                isStop => false;
 
                 writeOn: w => w << 'a bytecode instruction';
             };
@@ -339,23 +343,21 @@
 
     own Disassembler = {
         static with inherited parent = std Clonable;
-        private optimizer = $;
-        private instructions = $ instructions;
+        protected optimizer = $;
+        protected instructions = $ instructions;
 
-        private bytecodes,
-        private it,
-        private constants,
-        private closures;
+        protected bytecodes,
+        protected it,
+        protected constants;
 
         with inherited trait = {
-            initWithBytecodes: _bytecodes Constants: _constants Closures: _closures => (
+            initWithBytecodes: _bytecodes Constants: _constants => (
                 bytecodes <- _bytecodes.
                 constants <- _constants.
-                closures  <- _closures.
                 it        <- _bytecodes iterator.
               ^ self
             );
-            initWithCode: _code => initWithBytecodes: (_code bytecodes) Constants: (_code constants) Closures: (_code closures);
+            initWithCode: _code => initWithBytecodes: (_code bytecodes) Constants: (_code constants);
 
             protected nextU8 => (it next) bitAnd: 255;
             protected nextU16 => (
@@ -365,7 +367,7 @@
             );
 
             protected nextConstant => constants at: nextU16;
-            protected nextCode => closures at: nextU16;
+            protected nextCode => nextConstant;
 
             disassemble => (
                 | builder <- (optimizer InstructionGraphBuilder) new |
@@ -399,7 +401,21 @@
 
             writeOn: w => w << 'a disassembler';
         };
-    },
+    };
 
-    Disassemble: code => (Disassembler clone initWithCode: code) disassemble;
+    Print(expr) => (
+        [ expr isStop ] until: [
+            (std io out << expr) newline commit.
+            expr <- expr next.
+        ].
+      ^ expr
+    );
+
+    Disassemble: code => Print((Disassembler clone initWithCode: code) disassemble);
+
+    Disassemble: name In: object => (
+        Disassemble: ((std reflect Mirror: object)
+                        ~ slot: name
+                        ~ slotValue).
+    );
 }
