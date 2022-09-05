@@ -13,13 +13,15 @@
     build => (
         ui Window(200, 200,
             ui VBox(
-                ui Button(ui Label: 'Count',
+                ui Button(ui Center(ui Label: 'Count'),
                           Action: {
                             value => (
                                 (std io out << counter) newline commit.
                                 counter: counter + 1.
                             )
-                          }),
+                          })
+                    ~ xLayout: ui layouts Flexible
+                    ~ yLayout: ui layouts Flexible,
                 ui Button(ui Label: 'Another!', Action: { value(sender) => (state new) openInWorld: (sender world yes) })
             )
         )

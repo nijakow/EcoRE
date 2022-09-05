@@ -44,6 +44,12 @@
           ~ add: element
     );
 
+    Spacer => (morphic morphs Morph) new;
+
+    Center(element) => (
+      ^ VBox( Spacer, HBox(Spacer, element, Spacer), Spacer )
+    );
+
     Scrollable(element) => element;
 
     Label: text => (morphic morphs LabelMorph) new ~ text: text;
