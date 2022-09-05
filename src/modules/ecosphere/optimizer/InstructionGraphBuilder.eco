@@ -21,7 +21,7 @@
           ^ self
         );
 
-        commit => first;
+        commit => first next;
 
         writeOn: w => w << 'an instruction graph builder';
     }

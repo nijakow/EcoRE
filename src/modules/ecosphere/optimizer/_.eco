@@ -11,10 +11,11 @@
 
     Print(expr) => (
         [ :break |
+            expr yes: [ :v | expr <- v ] no: [ break value ].
             (std io out << expr) newline commit.
-            expr next yes: [ :v | expr <- v ] no: [ break value ].
+            expr <- expr next.
         ] repeatWithBreak.
-      ^ expr
+      ^ self
     );
 
     Disassemble: code => Print((Disassembler clone initWithCode: code) disassemble);
