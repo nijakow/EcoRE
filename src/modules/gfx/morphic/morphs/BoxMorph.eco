@@ -7,7 +7,7 @@
 
         with inherited trait = {
             initWithOrientation: _orientation => (
-                $(Morph) init.
+                $(Morph) initWithManyChildren.
                 orientation <- _orientation.
               ^ self
             );

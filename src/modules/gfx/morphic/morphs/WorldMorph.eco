@@ -9,7 +9,7 @@
 
         with inherited trait = {
             init => (
-                $(Morph) init.
+                $(Morph) initWithManyChildren.
                 renderer  <- No.
                 isDirty   <- true.
                 handMorph <- (morphic morphs HandMorph new).

@@ -28,7 +28,7 @@
             initWithOneChild     => initWithChildConfig: (morphic children One);
             initWithManyChildren => initWithChildConfig: (morphic children Many);
 
-            init => initWithManyChildren;
+            init => initWithNoChildren;
 
             globalBounds => (
                 parent
@@ -161,8 +161,8 @@
 
             tryAdd: child => (
                 ((self isIn: child) not) -> [
+                    (children add: child) unless: [ ^ false ].
                     child unlink.
-                    children add: child.
                     child parent: self.
                     child invalidateLayoutCaches.
                     layoutChanged.

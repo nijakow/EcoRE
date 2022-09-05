@@ -7,7 +7,7 @@
         morphic => $(Morph) morphic;
 
         init => (
-            $(Morph) init.
+            $(Morph) initWithOneChild.
           ^ self
         );
 

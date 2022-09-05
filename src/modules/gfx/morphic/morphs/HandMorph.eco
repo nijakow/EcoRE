@@ -7,7 +7,7 @@
 
         with inherited trait = {
             init => (
-                $(Morph) init.
+                $(Morph) initWithOneChild.
                 rigidWidth: 1.
                 rigidHeight: 1.
                 grabbedMorph <- No.

@@ -5,7 +5,7 @@
 
         with inherited trait = {
             init => (
-                $(Morph) init.
+                $(Morph) initWithManyChildren.
               ^ self
             );
 

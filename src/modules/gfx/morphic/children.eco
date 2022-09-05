@@ -44,7 +44,11 @@
         childrenDo: block => children do: block;
         childrenReverseDo: block => children reverseDo: block;
 
-        add: child => children add: child;
+        add: child => (
+            children add: child.
+          ^ true
+        );
+
         remove: child => (
             children remove: child
               ~ yes: [ ^ true  ]
