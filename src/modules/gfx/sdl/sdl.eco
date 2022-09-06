@@ -104,7 +104,7 @@
         InitLinux => Setup: 'libSDL2.so' And: 'libSDL2_ttf.so';
         InitMac => Setup: '/opt/homebrew/Cellar/sdl2/2.0.22/lib/libSDL2-2.0.0.dylib'
                      And: '/opt/homebrew/Cellar/sdl2_ttf/2.20.1/lib/libSDL2_ttf-2.0.0.dylib';
-        Init => InitLinux;
+        Init => InitMac;
         
         Setup: libpath And: ttfpath => (
             lib <- (ffi DLOpen: libpath) yes.

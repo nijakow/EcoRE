@@ -11,9 +11,8 @@
 
     Print(expr) => (
         [ :break |
-            expr yes: [ :v | expr <- v ] no: [ break value ].
             (std io out << expr) newline commit.
-            expr <- expr next.
+            expr next yes: [ :v | expr <- v ] no: [ break value ].
         ] repeatWithBreak.
       ^ self
     );
