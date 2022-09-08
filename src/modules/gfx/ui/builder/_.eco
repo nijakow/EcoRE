@@ -62,9 +62,10 @@
     );
 
     Window(w, h, content) => (
-      ^ (morphic morphs DraggableMorph) new
+      | window <- (morphic morphs DraggableMorph) new |
+      window
           ~ add: VBox(
-                    HBox(Spacer, Button(Label: 'X', { value => self })) ~ yLayout: layouts ShrinkWrap,
+                    HBox(Spacer, Button(Label: 'X', StateAction(window, { value => unlink }))) ~ yLayout: layouts ShrinkWrap,
                     content
                   )
           ~ rigidWidth: w
