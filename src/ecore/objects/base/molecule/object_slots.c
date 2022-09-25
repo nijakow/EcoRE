@@ -4,6 +4,7 @@
 #include <ecore/objects/base/object.h>
 #include <ecore/objects/base/type/type.h>
 #include <ecore/objects/base/type/copying.h>
+#include <ecore/objects/base/type_transfer.h>
 
 #include <ecore/objects/misc/key/key.h>
 
@@ -37,6 +38,7 @@ bool Eco_Molecule_AddSlot(struct Eco_Molecule*      self,
     if (Eco_Type_CopyWithNewInlinedSlot(self->_.type, pos, info, interface, &new_type, &slot)) {
         Eco_Molecule_SwitchType(self, new_type);
         Eco_TypeSlot_SetValue(new_type, Eco_Type_SlotIndexOf(new_type, slot), self, value);
+        Eco_TypeTransfer_Patch();
         return true;
     } else {
         return false;
@@ -53,6 +55,7 @@ bool Eco_Molecule_AddCodeSlot(struct Eco_Molecule*      self,
 
     if (Eco_Type_CopyWithNewCodeSlot(self->_.type, pos, info, interface, code, &new_type)) {
         Eco_Molecule_SwitchType(self, new_type);
+        Eco_TypeTransfer_Patch();
         return true;
     } else {
         return false;
@@ -65,6 +68,7 @@ bool Eco_Molecule_RemoveSlot(struct Eco_Molecule* self, unsigned int pos)
 
     if (Eco_Type_CopyWithRemovedSlot(self->_.type, pos, &new_type)) {
         Eco_Molecule_SwitchType(self, new_type);
+        Eco_TypeTransfer_Patch();
         return true;
     } else {
         return false;

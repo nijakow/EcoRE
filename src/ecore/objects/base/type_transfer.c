@@ -8,7 +8,7 @@ static void Eco_TypeTransfer1(struct Eco_Molecule*, unsigned int, struct Eco_Typ
 extern struct Eco_Type*  Eco_ALL_TYPES;
 
 
-static void Eco_TypeTransfer_Patch()
+void Eco_TypeTransfer_Patch()
 {
     struct Eco_Type*              type;
     struct Eco_Type*              referenced_type;
