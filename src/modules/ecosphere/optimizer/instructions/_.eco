@@ -140,7 +140,7 @@
             from, to;
 
             with inherited trait = {
-                initWithFrom: _from To: _to => (
+                initWithTo: _to From: _from => (
                     super init.
                     from <- _from.
                     to   <- _to.
