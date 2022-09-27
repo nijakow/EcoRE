@@ -16,6 +16,8 @@
 
                 next: v => next <- Yes: v;
 
+                withSubCode: block => self;
+
                 writeOn: w => w << 'a bytecode instruction';
             };
         },
@@ -227,7 +229,7 @@
                 initWithArgs: args Key: key => initWithKey: key Args: args;
                 initWithArgs: args Key: key Varargs: varargs => initWithKey: key Args: args Varargs: varargs;
 
-                writeOn: w => w << 'a send bytecode instruction';
+                writeOn: w => w << 'a send bytecode instruction (' << key << ', ' << args << ')';
             };
         },
 
@@ -279,6 +281,8 @@
                     code     <- _code.
                   ^ self
                 );
+
+                withSubCode: block => block value(code);
 
                 writeOn: w => w << 'a closure bytecode instruction';
             };

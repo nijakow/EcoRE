@@ -9,15 +9,17 @@
     own Disassembler = (here / 'Disassembler.eco') importIn: self;
     
 
-    Print(expr) => (
+    Print(expr, indent) => (
         [ :break |
+            1 to: indent do: [ std io out << '    ' ].
             (std io out << expr) newline commit.
+            expr withSubCode: [ :c | Print((Disassembler clone initWithCode: c) disassemble, indent + 1) ].
             expr next yes: [ :v | expr <- v ] no: [ break value ].
         ] repeatWithBreak.
       ^ self
     );
 
-    Disassemble: code => Print((Disassembler clone initWithCode: code) disassemble);
+    Disassemble: code => Print((Disassembler clone initWithCode: code) disassemble, 0);
 
     Disassemble: name In: object => (
         Disassemble: ((std reflect Mirror: object)
