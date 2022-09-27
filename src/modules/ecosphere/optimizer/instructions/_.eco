@@ -177,7 +177,7 @@
             from, depth, to;
 
             with inherited trait = {
-                initWithFrom: _from Depth: _depth To: _to => (
+                initWithTo: _to From: _from Depth: _depth => (
                     super init.
                     from  <- _from.
                     depth <- _depth.
