@@ -7,23 +7,43 @@
     own InstructionGraphBuilder = (here / 'InstructionGraphBuilder.eco') importIn: self;
 
     own Disassembler = (here / 'Disassembler.eco') importIn: self;
+
+    own DisassembledFunction = {
+        static with inherited _ = std Clonable;
+
+        instructions;
+
+        with inherited trait = {
+            initWithInstructions: _instructions => (
+                instructions <- _instructions.
+              ^ self
+            );
+
+            writeOn: w => w << 'a disassembled function';
+        };
+    };
     
 
-    Print(expr, indent) => (
+    Print(f, indent) => (
+        | expr <- f instructions |
         [ :break |
             1 to: indent do: [ std io out << '    ' ].
             (std io out << expr) newline commit.
-            expr withSubCode: [ :c | Print((Disassembler clone initWithCode: c) disassemble, indent + 1) ].
+            expr withSubCode: [ :c | Print(DisassembleCodeObject: c, indent + 1) ].
             expr next yes: [ :v | expr <- v ] no: [ break value ].
         ] repeatWithBreak.
       ^ self
     );
 
-    Disassemble: code => Print((Disassembler clone initWithCode: code) disassemble, 0);
+    DisassembleCodeObject: code => (Disassembler clone initWithCode: code) disassemble;
+
+    Disassemble: code => DisassembleCodeObject: code;
 
     Disassemble: name In: object => (
         Disassemble: ((std reflect Mirror: object)
                         ~ slot: name
                         ~ slotValue).
     );
+
+    Print: name In: object => Print(Disassemble: name In: object, 0);
 }
