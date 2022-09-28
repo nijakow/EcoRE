@@ -29,7 +29,7 @@
         [ :break |
             1 to: indent do: [ std io out << '    ' ].
             (std io out << expr) newline commit.
-            expr withSubCode: [ :c | Print(DisassembleCodeObject: c, indent + 1) ].
+            expr withSubCode: [ :c | Print(c, indent + 1) ].
             expr next yes: [ :v | expr <- v ] no: [ break value ].
         ] repeatWithBreak.
       ^ self

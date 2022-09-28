@@ -8,7 +8,7 @@
 
         with inherited trait = {
             init => (
-                | node <- optimizer instructions NoopInstruction |
+                | node <- (optimizer instructions NoopInstruction) new |
                 first <- node.
                 last  <- node.
               ^ self

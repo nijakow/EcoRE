@@ -52,7 +52,7 @@
                     (opcode == lang eco bytecodes SENDV) -> [ builder add: ((instructions SendInstruction) clone initWithArgs: nextU8 Key: nextConstant Varargs: true) ].
                     (opcode == lang eco bytecodes ASSIGN) -> [ builder add: ((instructions AssignInstruction) clone initWithKey: nextConstant) ].
                     (opcode == lang eco bytecodes RETURN) -> [ builder add: ((instructions ReturnInstruction) clone initWithDepth: nextU8) ].
-                    (opcode == lang eco bytecodes CLOSURE) -> [ builder add: ((instructions ClosureInstruction) clone initWithRegister: nextU8 Code: nextCode) ].
+                    (opcode == lang eco bytecodes CLOSURE) -> [ builder add: ((instructions ClosureInstruction) clone initWithRegister: nextU8 Code: (optimizer DisassembleCodeObject: nextCode)) ].
                 ].
               ^ ((optimizer DisassembledFunction clone) initWithInstructions: (builder commit))
             );
