@@ -1,4 +1,24 @@
 {
     static with inherited _ = std Clonable;
 
+    protected function;
+
+    with inherited trait = {
+        initWithFunction: _function => (
+            function <- _function.
+          ^ self
+        );
+
+        buildAST => (
+            |
+                expr  <- function instructions,
+                stack <- std util newStack
+            |
+            
+            [ :break |
+                "TODO: Build AST based on expr"
+                expr next yes: [ :v | expr <- v ] no: [ break value ].
+            ] repeatWithBreak.
+        );
+    };
 }
