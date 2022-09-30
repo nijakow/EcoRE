@@ -13,6 +13,25 @@
         };
     };
 
+    own ASTRegister = {
+        static with inherited _ = std Clonable;
+        with inherited own AST = $ AST;
+
+        protected depth;
+        protected index;
+
+        with inherited trait = {
+            initWithDepth: _depth Index: _index => (
+                $(AST) init.
+                depth <- _depth.
+                index <- _index.
+              ^ self
+            );
+
+            writeOn: w => w << 'an optimizer ASTRegister';
+        };
+    };
+
     own ASTBlock = {
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;

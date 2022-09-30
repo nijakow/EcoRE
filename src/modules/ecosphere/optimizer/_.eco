@@ -7,6 +7,8 @@
 
     own InstructionGraphBuilder = (here / 'InstructionGraphBuilder.eco') importIn: self;
 
+    own ASTBuilder = (here / 'ASTBuilder.eco') importIn: self;
+
     own Disassembler = (here / 'Disassembler.eco') importIn: self;
 
     own DisassembledFunction = {
