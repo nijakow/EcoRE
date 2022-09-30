@@ -1,0 +1,74 @@
+{
+    static with inherited _ = std Module;
+
+    own AST = {
+        static with inherited _ = std Clonable;
+
+        with inherited trait = {
+            init => self;
+
+            acceptVisitor: visitor => visitor visitAST: self;
+
+            writeOn: w => 'an optimizer AST';
+        };
+    };
+
+    own ASTBlock = {
+        static with inherited _ = std Clonable;
+        with inherited own AST = $ AST;
+
+        protected instructions;
+
+        with inherited trait = {
+            initWithInstructions: _instructions => (
+                $(AST) init.
+                instructions <- _instructions asArray.
+              ^ self
+            );
+
+            writeOn: w => 'an optimizer ASTBlock';
+        };
+    };
+
+    own ASTAssignment = {
+        static with inherited _ = std Clonable;
+        with inherited own AST = $ AST;
+
+        protected lhs;
+        protected rhs;
+
+        with inherited trait = {
+            initWithLHS: _lhs RHS: _rhs => (
+                $(AST) init.
+                lhs <- _lhs.
+                rhs <- _rhs.
+              ^ self
+            );
+
+            writeOn: w => 'an optimizer ASTAssignment';
+        };
+    };
+
+    own ASTSend = {
+        static with inherited _ = std Clonable;
+        with inherited own AST = $ AST;
+
+        protected receiver;
+        protected message;
+        protected args;
+        protected varargs;
+
+        with inherited trait = {
+            initWithReceiver: _receiver Message: _message Args: _args Varargs: _varargs => (
+                $(AST) init.
+                receiver <- _receiver.
+                message  <- _message.
+                args     <- _args asArray.
+                varargs  <- _varargs.
+              ^ self
+            );
+
+            writeOn: w => 'an optimizer ASTSend';
+        };
+    };
+}

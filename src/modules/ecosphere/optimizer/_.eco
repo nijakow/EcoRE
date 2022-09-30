@@ -2,6 +2,7 @@
 {
     static with inherited _ = std Module;
 
+    own ast = (here / 'ast' / '_.eco') importIn: self;
     own instructions = (here / 'instructions' / '_.eco') importIn: self;
 
     own InstructionGraphBuilder = (here / 'InstructionGraphBuilder.eco') importIn: self;
