@@ -32,7 +32,7 @@
         };
     };
 
-    own ASTBlock = {
+    own ASTCompound = {
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
 
@@ -45,7 +45,7 @@
               ^ self
             );
 
-            writeOn: w => 'an optimizer ASTBlock';
+            writeOn: w => 'an optimizer ASTCompound';
         };
     };
 
