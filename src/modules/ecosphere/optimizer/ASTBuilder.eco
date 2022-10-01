@@ -4,7 +4,7 @@
 
     protected function;
     protected stack;
-    protected asts;
+    protected compound;
 
     visitInstruction: instr => (std io out << 'Visiting ' << instr) newline;
 
@@ -12,7 +12,7 @@
         initWithFunction: _function => (
             function <- _function.
             stack    <- std util newStack.
-            asts     <- std util newVector.
+            compound <- std util newVector.
           ^ self
         );
 
@@ -34,7 +34,7 @@
         protected Return: depth => UnknownInstruction;
         protected JumpBack => UnknownInstruction;
 
-        protected Compound: asts => UnknownInstruction;
+        protected Compound: elements => UnknownInstruction;
 
         protected popN: amount => (
             | v <- std util newVector |
@@ -43,7 +43,7 @@
         );
 
         protected OnStack: expr => stack push: expr;
-        protected OnAST: expr => asts add: expr;
+        protected OnAST: expr => compound add: expr;
 
         visitNoop: instr => UnknownInstruction;
         visitLoadConstant: instr => OnAST: (builder Move: (builder Constant: instr constant) To: (builder Register: instr register));
@@ -72,7 +72,7 @@
                 expr accept: self;
                 expr next yes: [ :v | expr <- v ] no: [ break value ].
             ] repeatWithBreak.
-          ^ builder Compound: asts
+          ^ builder Compound: compound
         );
     };
 }
