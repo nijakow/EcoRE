@@ -28,7 +28,7 @@
               ^ self
             );
 
-            writeOn: w => w << 'ASTRegister(' << depth << ', ' << index << ')';
+            writeOn: w => w << 'r' << depth << '_' << index;
         };
     };
 
@@ -45,7 +45,7 @@
               ^ self
             );
 
-            writeOn: w => w << 'ASTConstant(' << constant << ')';
+            writeOn: w => w << '(' << constant << ')';
         };
     };
 
@@ -62,7 +62,7 @@
               ^ self
             );
 
-            writeOn: w => w << 'ASTCode(' << (code ast) << ')';
+            writeOn: w => w << '[ ... | ' << (code ast) << ']';
         };
     };
 
@@ -79,7 +79,7 @@
               ^ self
             );
 
-            writeOn: w => w << 'ASTCompound(' << instructions << ')';
+            writeOn: w => w << '(' << instructions << ')';
         };
     };
 
@@ -119,7 +119,20 @@
               ^ self
             );
 
-            writeOn: w => w << 'ASTSend(' << message << ', ' << args << ', ' << varargs << ')';
+            writeOn: w => (
+                w << (args first).
+                w << ' ' << message.
+                (args size > 1) -> [
+                    w << '('.
+                    1 to: (args size - 2) do: [ :i |
+                        w << (args at: i).
+                        w << ', '.
+                    ].
+                    w << (args last).
+                    varargs -> [ w << ', ...' ].
+                    w << ')'.
+                ].
+            );
         };
     };
 
@@ -138,7 +151,7 @@
               ^ self
             );
 
-            writeOn: w => w << 'ASTReturn(' << depth << ', ' << returnValue << ')';
+            writeOn: w => w << '^ ' << returnValue;
         };
     };
 
