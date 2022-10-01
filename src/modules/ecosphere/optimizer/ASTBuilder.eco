@@ -16,30 +16,51 @@
           ^ self
         );
 
-        "TODO"
-        protected constant: c => c;
-        protected register: i => i;
-        protected register: i depth: d => i;
+        builder => self;
 
-        protected popN: amount => 1 to: amount do: [ stack pop ];
+        protected UnknownInstruction => 42;
 
-        "TODO: Add ASTs"
-        visitNoop: instr => ;
-        visitLoadConstant: instr => "TODO: register, constant";
-        visitPushConstant: instr => stack push: (constant: instr constant); "TODO: ASTConstant"
-        visitPush: instr => stack push: (register: instr register);
-        visitPop: instr => stack pop;
+        protected Register: i => Register: i Depth: 0;
+        protected Register: i Depth: i => UnknownInstruction;
+        protected Constant: v => UnknownInstruction;
+        protected Code: c => UnknownInstruction;
+
+        protected Move: from To: to => UnknownInstruction;
+
+        protected Builtin: key Args: args Varargs: varargs => UnknownInstruction;
+        protected Send: key Args: args Varargs: varargs => UnknownInstruction;
+        protected Assign: key To: arg Key: key => UnknownInstruction;
+
+        protected Return: depth => UnknownInstruction;
+        protected JumpBack => UnknownInstruction;
+
+        protected Compound: asts => UnknownInstruction;
+
+        protected popN: amount => (
+            | v <- std util newVector |
+            1 to: amount do: [ v add: (stack pop) ].
+          ^ v asArray
+        );
+
+        protected OnStack: expr => stack push: expr;
+        protected OnAST: expr => asts add: expr;
+
+        visitNoop: instr => UnknownInstruction;
+        visitLoadConstant: instr => OnAST: (builder Move: (builder Constant: instr constant) To: (builder Register: instr register));
+        visitPushConstant: instr => OnStack: (builder Constant: instr constant);
+        visitPush: instr => OnStack: (Register: instr register);
+        visitPop: instr => OnAST: (stack pop);
         visitDrop: instr => stack pop;
-        visitDup: instr => stack push: (stack pop);
-        visitR2R: instr => "TODO: from, to";
-        visitR2L: instr => "TODO: from, to, depth";
-        visitL2R: instr => "TODO: from, depth, to";
-        visitBuiltin: instr => popN: (instr args);
-        visitSend: instr => popN: (instr args);
-        visitAssign: instr => ;
-        visitReturn: instr => "TODO: depth";
-        visitClosure: instr => "TODO: register, code";
-        visitJump: instr => "TODO: target";
+        visitDup: instr => ( | v <- stack pop | stack push: v. stack push: v. );
+        visitR2R: instr => OnAST: (builder Move: (builder Register: instr from) To: (builder Register: instr to));
+        visitR2L: instr => OnAST: (builder Move: (builder Register: instr from) To: (builder Register: instr to Depth: instr depth));
+        visitL2R: instr => OnAST: (builder Move: (builder Register: instr from Depth: instr depth) To: (builder Register: instr to));
+        visitBuiltin: instr => OnStack: (builder Builtin: instr key Args: (popN: (instr args)) Varargs: instr varargs);
+        visitSend: instr => OnStack: (builder Send: instr key Args: (popN: (instr args)) Varargs: instr varargs);
+        visitAssign: instr => ( | v <- stack pop | OnStack: (builder Assign: v To: stack pop Key: instr key));
+        visitReturn: instr => OnAST: (builder Return: instr depth);
+        visitClosure: instr => OnAST: (builder Move: (builder Code: instr code) To: (builder Register: instr register));
+        visitJump: instr => OnAST: (builder JumpBack);
 
         buildAST => (
             |
@@ -47,10 +68,11 @@
             |
             
             [ :break |
+                (std io out << expr) newline commit.
                 expr accept: self;
                 expr next yes: [ :v | expr <- v ] no: [ break value ].
             ] repeatWithBreak.
-          ^ 42
+          ^ builder Compound: asts
         );
     };
 }
