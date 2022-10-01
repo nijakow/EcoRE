@@ -6,6 +6,7 @@
     own instructions = (here / 'instructions' / '_.eco') importIn: self;
 
     own InstructionGraphBuilder = (here / 'InstructionGraphBuilder.eco') importIn: self;
+    own InstructionVisitor = (here / 'InstructionVisitor.eco') importIn: self;
 
     own ASTBuilder = (here / 'ASTBuilder.eco') importIn: self;
 
