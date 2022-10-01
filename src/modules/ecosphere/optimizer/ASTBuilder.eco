@@ -39,8 +39,17 @@
         protected Compound: elements => (asts ASTCompound clone) initWithInstructions: elements;
 
         protected popN: amount => (
-            | v <- std util newVector |
-            1 to: amount do: [ v add: (stack pop) ].
+            "
+                This is a very ugly implementation,
+                which will (hopefully!) change in the future.
+            "
+
+            |
+                s <- std util newStack,
+                v <- std util newVector
+            |
+            1 to: amount do: [ s push: (stack pop) ].
+            1 to: amount do: [ v add: (s pop) ].
           ^ v asArray
         );
 
@@ -51,8 +60,8 @@
         visitLoadConstant: instr => OnAST: (builder Move: (builder Constant: instr constant) To: (builder Register: instr register));
         visitPushConstant: instr => OnStack: (builder Constant: instr constant);
         visitPush: instr => OnStack: (Register: instr register);
-        visitPop: instr => OnAST: (stack pop);
-        visitDrop: instr => stack pop;
+        visitPop: instr => OnAST: (builder Move: stack pop To: (builder Register: instr register));
+        visitDrop: instr => OnAST: (stack pop);
         visitDup: instr => ( | v <- stack pop | stack push: v. stack push: v. );
         visitR2R: instr => OnAST: (builder Move: (builder Register: instr from) To: (builder Register: instr to));
         visitR2L: instr => OnAST: (builder Move: (builder Register: instr from) To: (builder Register: instr to Depth: instr depth));
@@ -70,7 +79,6 @@
             |
             
             [ :break |
-                (std io out << expr) newline commit.
                 expr accept: self;
                 expr next yes: [ :v | expr <- v ] no: [ break value ].
             ] repeatWithBreak.

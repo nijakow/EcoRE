@@ -9,7 +9,7 @@
 
             acceptVisitor: visitor => visitor visitAST: self;
 
-            writeOn: w => 'an optimizer AST';
+            writeOn: w => 'AST()';
         };
     };
 
@@ -28,7 +28,7 @@
               ^ self
             );
 
-            writeOn: w => w << 'an optimizer ASTRegister';
+            writeOn: w => w << 'ASTRegister(' << depth << ', ' << index << ')';
         };
     };
 
@@ -45,7 +45,7 @@
               ^ self
             );
 
-            writeOn: w => w << 'an optimizer ASTConstant';
+            writeOn: w => w << 'ASTConstant(' << constant << ')';
         };
     };
 
@@ -62,7 +62,7 @@
               ^ self
             );
 
-            writeOn: w => w << 'an optimizer ASTCode';
+            writeOn: w => w << 'ASTCode(' << (code ast) << ')';
         };
     };
 
@@ -79,7 +79,7 @@
               ^ self
             );
 
-            writeOn: w => w << 'an optimizer ASTCompound';
+            writeOn: w => w << 'ASTCompound(' << instructions << ')';
         };
     };
 
@@ -98,7 +98,7 @@
               ^ self
             );
 
-            writeOn: w => w << 'an optimizer ASTAssignment';
+            writeOn: w => w << '(' << lhs << ' <- ' << rhs << ')';
         };
     };
 
@@ -119,7 +119,7 @@
               ^ self
             );
 
-            writeOn: w => w << 'an optimizer ASTSend';
+            writeOn: w => w << 'ASTSend(' << message << ', ' << args << ', ' << varargs << ')';
         };
     };
 
@@ -138,7 +138,7 @@
               ^ self
             );
 
-            writeOn: w => w << 'an optimizer ASTReturn';
+            writeOn: w => w << 'ASTReturn(' << depth << ', ' << returnValue << ')';
         };
     };
 
@@ -152,7 +152,7 @@
               ^ self
             );
 
-            writeOn: w => w << 'an optimizer ASTJumpBack';
+            writeOn: w => w << 'ASTJumpBack()';
         };
     };
 }
