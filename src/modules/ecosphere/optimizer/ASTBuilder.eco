@@ -3,19 +3,47 @@
     with inherited visitor = $ InstructionVisitor;
 
     protected function;
+    protected stack;
+    protected asts;
 
     visitInstruction: instr => (std io out << 'Visiting ' << instr) newline;
 
     with inherited trait = {
         initWithFunction: _function => (
             function <- _function.
+            stack    <- std util newStack.
+            asts     <- std util newVector.
           ^ self
         );
+
+        "TODO"
+        protected constant: c => c;
+        protected register: i => i;
+        protected register: i depth: d => i;
+
+        protected popN: amount => 1 to: amount do: [ stack pop ];
+
+        "TODO: Add ASTs"
+        visitNoop: instr => ;
+        visitLoadConstant: instr => "TODO: register, constant";
+        visitPushConstant: instr => stack push: (constant: instr constant); "TODO: ASTConstant"
+        visitPush: instr => stack push: (register: instr register);
+        visitPop: instr => stack pop;
+        visitDrop: instr => stack pop;
+        visitDup: instr => stack push: (stack pop);
+        visitR2R: instr => "TODO: from, to";
+        visitR2L: instr => "TODO: from, to, depth";
+        visitL2R: instr => "TODO: from, depth, to";
+        visitBuiltin: instr => popN: (instr args);
+        visitSend: instr => popN: (instr args);
+        visitAssign: instr => ;
+        visitReturn: instr => "TODO: depth";
+        visitClosure: instr => "TODO: register, code";
+        visitJump: instr => "TODO: target";
 
         buildAST => (
             |
                 expr  <- function instructions,
-                stack <- std util newStack
             |
             
             [ :break |
