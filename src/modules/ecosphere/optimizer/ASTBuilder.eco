@@ -1,5 +1,6 @@
 {
     static with inherited _ = std Clonable;
+    protected optimizer = $;
     with inherited visitor = $ InstructionVisitor;
 
     protected function;
@@ -17,24 +18,25 @@
         );
 
         builder => self;
+        asts => optimizer ast;
 
         protected UnknownInstruction => 42;
 
         protected Register: i => Register: i Depth: 0;
-        protected Register: i Depth: d => UnknownInstruction;
-        protected Constant: v => UnknownInstruction;
-        protected Code: c => UnknownInstruction;
+        protected Register: i Depth: d => (asts ASTRegister clone) initWithDepth: d Index: i;
+        protected Constant: c => (asts ASTConstant clone) initWithConstant: c;
+        protected Code: code => (asts ASTCode clone) initWithCode: code;
 
-        protected Move: from To: to => UnknownInstruction;
+        protected Move: from To: to => (asts ASTAssignment clone) initWithLHS: to RHS: from;
 
         protected Builtin: key Args: args Varargs: varargs => UnknownInstruction;
-        protected Send: key Args: args Varargs: varargs => UnknownInstruction;
+        protected Send: key Args: args Varargs: varargs => (asts ASTSend clone) initWithMessage: key Args: args Varargs: varargs;
         protected Assign: key To: arg Key: key => UnknownInstruction;
 
-        protected Return: depth => UnknownInstruction;
-        protected JumpBack => UnknownInstruction;
+        protected Return: v Depth: d => (asts ASTReturn clone) initWithValue: v Depth: d;
+        protected JumpBack => (asts ASTJumpBack clone) init;
 
-        protected Compound: elements => UnknownInstruction;
+        protected Compound: elements => (asts ASTCompound clone) initWithInstructions: elements;
 
         protected popN: amount => (
             | v <- std util newVector |
@@ -58,7 +60,7 @@
         visitBuiltin: instr => OnStack: (builder Builtin: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitSend: instr => OnStack: (builder Send: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitAssign: instr => ( | v <- stack pop | OnStack: (builder Assign: v To: stack pop Key: instr key));
-        visitReturn: instr => OnAST: (builder Return: instr depth);
+        visitReturn: instr => OnAST: (builder Return: stack pop Depth: instr depth);
         visitClosure: instr => OnAST: (builder Move: (builder Code: instr code) To: (builder Register: instr register));
         visitJump: instr => OnAST: (builder JumpBack);
 

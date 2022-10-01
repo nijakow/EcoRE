@@ -32,6 +32,40 @@
         };
     };
 
+    own ASTConstant = {
+        static with inherited _ = std Clonable;
+        with inherited own AST = $ AST;
+
+        protected constant;
+
+        with inherited trait = {
+            initWithConstant: _constant => (
+                $(AST) init.
+                constant <- _constant;
+              ^ self
+            );
+
+            writeOn: w => w << 'an optimizer ASTConstant';
+        };
+    };
+
+    own ASTCode = {
+        static with inherited _ = std Clonable;
+        with inherited own AST = $ AST;
+
+        protected code;
+
+        with inherited trait = {
+            initWithCode: _code => (
+                $(AST) init.
+                code <- _code.
+              ^ self
+            );
+
+            writeOn: w => w << 'an optimizer ASTCode';
+        };
+    };
+
     own ASTCompound = {
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
@@ -45,7 +79,7 @@
               ^ self
             );
 
-            writeOn: w => 'an optimizer ASTCompound';
+            writeOn: w => w << 'an optimizer ASTCompound';
         };
     };
 
@@ -64,7 +98,7 @@
               ^ self
             );
 
-            writeOn: w => 'an optimizer ASTAssignment';
+            writeOn: w => w << 'an optimizer ASTAssignment';
         };
     };
 
@@ -72,22 +106,53 @@
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
 
-        protected receiver;
         protected message;
         protected args;
         protected varargs;
 
         with inherited trait = {
-            initWithReceiver: _receiver Message: _message Args: _args Varargs: _varargs => (
+            initWithMessage: _message Args: _args Varargs: _varargs => (
                 $(AST) init.
-                receiver <- _receiver.
                 message  <- _message.
                 args     <- _args asArray.
                 varargs  <- _varargs.
               ^ self
             );
 
-            writeOn: w => 'an optimizer ASTSend';
+            writeOn: w => w << 'an optimizer ASTSend';
+        };
+    };
+
+    own ASTReturn = {
+        static with inherited _ = std Clonable;
+        with inherited own AST = $ AST;
+
+        protected returnValue;
+        protected depth;
+
+        with inherited trait = {
+            initWithValue: _value Depth: _depth => (
+                $(AST) init.
+                returnValue <- _value.
+                depth       <- _depth.
+              ^ self
+            );
+
+            writeOn: w => w << 'an optimizer ASTReturn';
+        };
+    };
+
+    own ASTJumpBack = {
+        static with inherited _ = std Clonable;
+        with inherited own AST = $ AST;
+
+        with inherited trait = {
+            init => (
+                $(AST) init.
+              ^ self
+            );
+
+            writeOn: w => w << 'an optimizer ASTJumpBack';
         };
     };
 }
