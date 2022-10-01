@@ -18,7 +18,7 @@
 
                 withSubCode: block => self;
 
-                accept: visitor => visitInstruction: self;
+                accept: visitor => visitor visitInstruction: self;
 
                 writeOn: w => w << 'a bytecode instruction';
             };
@@ -34,7 +34,7 @@
                   ^ self
                 );
 
-                accept: visitor => visitNoop: self;
+                accept: visitor => visitor visitNoop: self;
 
                 writeOn: w => w << 'a noop bytecode instruction';
             };
@@ -54,7 +54,7 @@
                   ^ self
                 );
 
-                accept: visitor => visitLoadConstant: self;
+                accept: visitor => visitor visitLoadConstant: self;
 
                 writeOn: w => w << 'a load constant bytecode instruction';
             };
@@ -73,7 +73,7 @@
                   ^ self
                 );
 
-                accept: visitor => visitPushConstant: self;
+                accept: visitor => visitor visitPushConstant: self;
 
                 writeOn: w => w << 'a push constant bytecode instruction';
             };
@@ -92,7 +92,7 @@
                   ^ self
                 );
 
-                accept: visitor => visitPush: self;
+                accept: visitor => visitor visitPush: self;
 
                 writeOn: w => w << 'a push bytecode instruction';
             };
@@ -111,7 +111,7 @@
                   ^ self
                 );
 
-                accept: visitor => visitPop: self;
+                accept: visitor => visitor visitPop: self;
 
                 writeOn: w => w << 'a pop bytecode instruction';
             };
@@ -127,7 +127,7 @@
                   ^ self
                 );
 
-                accept: visitor => visitDrop: self;
+                accept: visitor => visitor visitDrop: self;
 
                 writeOn: w => w << 'a drop bytecode instruction';
             };
@@ -143,7 +143,7 @@
                   ^ self
                 );
 
-                accept: visitor => visitDup: self;
+                accept: visitor => visitor visitDup: self;
 
                 writeOn: w => w << 'a dup bytecode instruction';
             };
@@ -163,7 +163,7 @@
                   ^ self
                 );
 
-                accept: visitor => visitR2R: self;
+                accept: visitor => visitor visitR2R: self;
 
                 writeOn: w => w << 'a register-to-register bytecode instruction';
             };
@@ -184,7 +184,7 @@
                   ^ self
                 );
 
-                accept: visitor => visitR2L: self;
+                accept: visitor => visitor visitR2L: self;
 
                 writeOn: w => w << 'a register-to-lexical bytecode instruction';
             };
@@ -205,7 +205,7 @@
                   ^ self
                 );
 
-                accept: visitor => visitL2R: self;
+                accept: visitor => visitor visitL2R: self;
 
                 writeOn: w => w << 'a lexical-to-register bytecode instruction';
             };
@@ -229,7 +229,7 @@
                 initWithArgs: args Key: key => initWithKey: key Args: args;
                 initWithArgs: args Key: key Varargs: varargs => initWithKey: key Args: args Varargs: varargs;
 
-                accept: visitor => visitBuiltin: self;
+                accept: visitor => visitor visitBuiltin: self;
 
                 writeOn: w => w << 'a call-builtin bytecode instruction';
             };
@@ -253,7 +253,7 @@
                 initWithArgs: args Key: key => initWithKey: key Args: args;
                 initWithArgs: args Key: key Varargs: varargs => initWithKey: key Args: args Varargs: varargs;
 
-                accept: visitor => visitSend: self;
+                accept: visitor => visitor visitSend: self;
 
                 writeOn: w => w << 'a send bytecode instruction (' << key << ', ' << args << ')';
             };
@@ -272,7 +272,7 @@
                   ^ self
                 );
 
-                accept: visitor => visitAssign: self;
+                accept: visitor => visitor visitAssign: self;
 
                 writeOn: w => w << 'an assign bytecode instruction';
             };
@@ -292,7 +292,7 @@
                 );
                 init => initWithDepth: 0;
 
-                accept: visitor => visitReturn: self;
+                accept: visitor => visitor visitReturn: self;
 
                 writeOn: w => w << 'a return bytecode instruction';
             };
@@ -314,7 +314,7 @@
 
                 withSubCode: block => block value(code);
 
-                accept: visitor => visitClosure: self;
+                accept: visitor => visitor visitClosure: self;
 
                 writeOn: w => w << 'a closure bytecode instruction';
             };
@@ -333,7 +333,7 @@
                   ^ self
                 );
 
-                accept: visitor => visitJump: self;
+                accept: visitor => visitor visitJump: self;
 
                 writeOn: w => w << 'a jump bytecode instruction';
             };

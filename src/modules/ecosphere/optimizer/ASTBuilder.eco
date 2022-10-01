@@ -1,7 +1,10 @@
 {
     static with inherited _ = std Clonable;
+    with inherited visitor = $ InstructionVisitor;
 
     protected function;
+
+    visitInstruction: instr => (std io out << 'Visiting ' << instr) newline;
 
     with inherited trait = {
         initWithFunction: _function => (
@@ -16,9 +19,10 @@
             |
             
             [ :break |
-                "TODO: Build AST based on expr"
+                expr accept: self;
                 expr next yes: [ :v | expr <- v ] no: [ break value ].
             ] repeatWithBreak.
+          ^ 42
         );
     };
 }

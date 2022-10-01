@@ -14,6 +14,7 @@
 
     own DisassembledFunction = {
         static with inherited _ = std Clonable;
+        protected optimizer = $;
 
         instructions;
 
@@ -22,6 +23,8 @@
                 instructions <- _instructions.
               ^ self
             );
+
+            ast => ((optimizer ASTBuilder clone) initWithFunction: self) buildAST;
 
             writeOn: w => w << 'a disassembled function';
         };
@@ -36,7 +39,7 @@
             expr withSubCode: [ :c | Print(c, indent + 1) ].
             expr next yes: [ :v | expr <- v ] no: [ break value ].
         ] repeatWithBreak.
-      ^ self
+      ^ f
     );
 
     DisassembleCodeObject: code => (Disassembler clone initWithCode: code) disassemble;
