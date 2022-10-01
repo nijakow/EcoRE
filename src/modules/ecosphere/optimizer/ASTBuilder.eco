@@ -21,7 +21,7 @@
         protected UnknownInstruction => 42;
 
         protected Register: i => Register: i Depth: 0;
-        protected Register: i Depth: i => UnknownInstruction;
+        protected Register: i Depth: d => UnknownInstruction;
         protected Constant: v => UnknownInstruction;
         protected Code: c => UnknownInstruction;
 
