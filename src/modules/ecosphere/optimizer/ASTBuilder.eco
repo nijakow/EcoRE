@@ -44,8 +44,10 @@
         protected Code: code => (asts ASTCode clone) initWithCode: code;
 
         protected Move: from To: to => (
-            bindings at: to put: from.
-            (asts ASTAssignment clone) initWithLHS: to RHS: from.
+            | v <- (asts ASTAssignment clone) initWithLHS: to RHS: from |
+            (to depth != 0) -> [ ^ v ].
+            bindings at: to put: v.
+          ^ v
         );
 
         protected Builtin: key Args: args Varargs: varargs => UnknownInstruction;
@@ -79,17 +81,17 @@
         visitLoadConstant: instr => OnAST: (builder Move: (builder Constant: instr constant) To: (builder Register: instr register));
         visitPushConstant: instr => OnStack: (builder Constant: instr constant);
         visitPush: instr => OnStack: (GetRegister: instr register);
-        visitPop: instr => (builder Move: stack pop To: (builder Register: instr register));
+        visitPop: instr => OnAST: (builder Move: stack pop To: (builder Register: instr register));
         visitDrop: instr => OnAST: (stack pop);
         visitDup: instr => ( | v <- stack pop | stack push: v. stack push: v. );
-        visitR2R: instr => (builder Move: (builder GetRegister: instr from) To: (builder Register: instr to));
-        visitR2L: instr => (builder Move: (builder GetRegister: instr from) To: (builder Register: instr to Depth: instr depth));
-        visitL2R: instr => (builder Move: (builder GetRegister: instr from Depth: instr depth) To: (builder Register: instr to));
+        visitR2R: instr => OnAST: (builder Move: (builder GetRegister: instr from) To: (builder Register: instr to));
+        visitR2L: instr => OnAST: (builder Move: (builder GetRegister: instr from) To: (builder Register: instr to Depth: instr depth));
+        visitL2R: instr => OnAST: (builder Move: (builder GetRegister: instr from Depth: instr depth) To: (builder Register: instr to));
         visitBuiltin: instr => OnStack: (builder Builtin: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitSend: instr => OnStack: (builder Send: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitAssign: instr => ( | v <- stack pop | OnStack: (builder Assign: v To: stack pop Key: instr key));
         visitReturn: instr => OnAST: (builder Return: stack pop Depth: instr depth);
-        visitClosure: instr => (builder Move: (builder Code: instr code) To: (builder Register: instr register));
+        visitClosure: instr => OnAST: (builder Move: (builder Code: instr code) To: (builder Register: instr register));
         visitJump: instr => OnAST: (builder JumpBack);
 
         buildAST => (
