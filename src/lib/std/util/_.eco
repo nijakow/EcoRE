@@ -68,6 +68,7 @@
     newQueue       => (#<:std/util> Queue) new;
     newSet         => (#<:std/util> Set) new;
     newMap         => (#<:std/util> Map) new;
+    newMapWithComparator: comp => (#<:std/util> Map clone) initWithComparator: comp;
     newRangeFrom: start To: end => ((#<:std/util> Range) clone) initWithStart: start End: end;
 
     WriteIterable: it On: writer => (

@@ -2,12 +2,15 @@
     static with inherited parent = #<:std/Clonable>;
     
     protected pairs;
+    protected comparator;
 
     with inherited trait = {
-        init => (
-            pairs <- std util newVector.
-            ^ self
+        initWithComparator: _comparator => (
+            pairs      <- std util newVector.
+            comparator <- _comparator.
+          ^ self
         );
+        init => initWithComparator: std util comparators DefaultComparator;
 
         forEach: block => pairs do: [ :v | block value(v first, v second) ];
         do: block => forEach: [ :k, :v | block value(k) ];
@@ -15,10 +18,10 @@
         from: collection => ( collection forEach: [ :k, :v | at: k put: v ]. ^ self );
         into: collection => collection from: self;
 
-        at: index => ( forEach: [ :k, :v | (k == index) if: [ ^ Yes: v ] ]. No );
+        at: index => ( forEach: [ :k, :v | (comparator value(k, index)) if: [ ^ Yes: v ] ]. No );
 
         at: index put: value => (
-            pairs do: [ :p | (p first == index) if: [ p second: value. ^ self ] ].
+            pairs do: [ :p | (comparator value(p first, index)) if: [ p second: value. ^ self ] ].
             pairs append: (index ~> value).
             ^ self
         );

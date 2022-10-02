@@ -6,6 +6,8 @@
         static with inherited _ = std Singleton;
 
         compare(a, b) => a == b;
+        value(a, b) => compare(a, b);
+        
         writeOn: w => w << 'the default comparator';
     }
 }
