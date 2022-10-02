@@ -5,14 +5,22 @@
 
     protected function;
     protected stack;
+    protected bindings;
     protected compound;
 
     visitInstruction: instr => (std io out << 'Visiting ' << instr) newline;
 
     with inherited trait = {
+        protected RegisterComparator = {
+            static with inherited _ = std Singleton;
+
+            value(a, b) => a equalsRegister: b;
+        };
+
         initWithFunction: _function => (
             function <- _function.
             stack    <- std util newStack.
+            bindings <- std util newAlistWithComparator: RegisterComparator;
             compound <- std util newVector.
           ^ self
         );
@@ -22,12 +30,23 @@
 
         protected UnknownInstruction => 42;
 
+        protected GetRegister: i => GetRegister: i Depth: 0;
+        protected GetRegister: i Depth: d => (
+            | r <- (Register: i Depth: d) |
+            bindings at: r
+              ~ yes: [ :v | ^ v ]
+                 no: [      ^ r ]
+        );
+
         protected Register: i => Register: i Depth: 0;
         protected Register: i Depth: d => (asts ASTRegister clone) initWithDepth: d Index: i;
         protected Constant: c => (asts ASTConstant clone) initWithConstant: c;
         protected Code: code => (asts ASTCode clone) initWithCode: code;
 
-        protected Move: from To: to => (asts ASTAssignment clone) initWithLHS: to RHS: from;
+        protected Move: from To: to => (
+            bindings at: to put: from.
+            (asts ASTAssignment clone) initWithLHS: to RHS: from.
+        );
 
         protected Builtin: key Args: args Varargs: varargs => UnknownInstruction;
         protected Send: key Args: args Varargs: varargs => (asts ASTSend clone) initWithMessage: key Args: args Varargs: varargs;
@@ -59,18 +78,18 @@
         visitNoop: instr => UnknownInstruction;
         visitLoadConstant: instr => OnAST: (builder Move: (builder Constant: instr constant) To: (builder Register: instr register));
         visitPushConstant: instr => OnStack: (builder Constant: instr constant);
-        visitPush: instr => OnStack: (Register: instr register);
-        visitPop: instr => OnAST: (builder Move: stack pop To: (builder Register: instr register));
+        visitPush: instr => OnStack: (GetRegister: instr register);
+        visitPop: instr => (builder Move: stack pop To: (builder Register: instr register));
         visitDrop: instr => OnAST: (stack pop);
         visitDup: instr => ( | v <- stack pop | stack push: v. stack push: v. );
-        visitR2R: instr => OnAST: (builder Move: (builder Register: instr from) To: (builder Register: instr to));
-        visitR2L: instr => OnAST: (builder Move: (builder Register: instr from) To: (builder Register: instr to Depth: instr depth));
-        visitL2R: instr => OnAST: (builder Move: (builder Register: instr from Depth: instr depth) To: (builder Register: instr to));
+        visitR2R: instr => (builder Move: (builder GetRegister: instr from) To: (builder Register: instr to));
+        visitR2L: instr => (builder Move: (builder GetRegister: instr from) To: (builder Register: instr to Depth: instr depth));
+        visitL2R: instr => (builder Move: (builder GetRegister: instr from Depth: instr depth) To: (builder Register: instr to));
         visitBuiltin: instr => OnStack: (builder Builtin: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitSend: instr => OnStack: (builder Send: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitAssign: instr => ( | v <- stack pop | OnStack: (builder Assign: v To: stack pop Key: instr key));
         visitReturn: instr => OnAST: (builder Return: stack pop Depth: instr depth);
-        visitClosure: instr => OnAST: (builder Move: (builder Code: instr code) To: (builder Register: instr register));
+        visitClosure: instr => (builder Move: (builder Code: instr code) To: (builder Register: instr register));
         visitJump: instr => OnAST: (builder JumpBack);
 
         buildAST => (

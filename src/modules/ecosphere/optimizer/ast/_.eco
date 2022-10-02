@@ -17,8 +17,7 @@
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
 
-        protected depth;
-        protected index;
+        depth, index;
 
         with inherited trait = {
             initWithDepth: _depth Index: _index => (
@@ -27,6 +26,8 @@
                 index <- _index.
               ^ self
             );
+
+            equalsRegister: other => [ index == other index ] and: [ depth == other depth ];
 
             writeOn: w => w << 'r' << depth << '_' << index;
         };
