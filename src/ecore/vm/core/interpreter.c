@@ -176,15 +176,15 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             ULTRAFAST_DISPATCH();
         }
         TARGET(LOAD_LEXICAL) {
-            u8 from  = NEXT_U8();
             u8 depth = NEXT_U8();
+            u8 from  = NEXT_U8();
             bottom   = Eco_Frame_NthLexical(top, depth);
             Eco_Fiber_SetAccu(fiber, *Eco_Frame_RegisterByBytecode(bottom, from));
             ULTRAFAST_DISPATCH();
         }
         TARGET(STORE_LEXICAL) {
-            u8 to    = NEXT_U8();
             u8 depth = NEXT_U8();
+            u8 to    = NEXT_U8();
             bottom   = Eco_Frame_NthLexical(top, depth);
             *Eco_Frame_RegisterByBytecode(bottom, to) = Eco_Fiber_GetAccu(fiber);
             ULTRAFAST_DISPATCH();

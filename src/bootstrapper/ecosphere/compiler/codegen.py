@@ -3,24 +3,21 @@ import ecosphere.objects.misc
 class Bytecodes:
     NOOP = 0x00
     CONST = 0x01
-    PUSHC = 0x02
-    PUSH = 0x03
-    POP = 0x04
-    DROP = 0x05
-    DUP = 0x06
-    R2R = 0x07
-    R2L = 0x08
-    L2R = 0x09
-    BUILTIN = 0x0a
-    BUILTINV = 0x0b
-    SEND = 0x0c
-    SENDV = 0x0d
-    RESEND = 0x0e
-    RESENDV = 0x0f
-    ASSIGN = 0x10
-    AS = 0x11
-    RETURN = 0x12
-    CLOSURE = 0x13
+    PUSH = 0x02
+    POP = 0x03
+    LOAD_LOCAL = 0x04
+    STORE_LOCAL = 0x05
+    LOAD_LEXICAL = 0x06
+    STORE_LEXICAL = 0x07
+    BUILTIN = 0x08
+    BUILTINV = 0x09
+    SEND = 0x0a
+    SENDV = 0x0b
+    RESEND = 0x0c
+    RESENDV = 0x0d
+    ASSIGN = 0x0e
+    RETURN = 0x0f
+    CLOSURE = 0x10
 
 
 class CodeWriter:
@@ -47,64 +44,52 @@ class CodeWriter:
     def write_noop(self):
         self._u8(Bytecodes.NOOP)
 
-    def write_const(self, r, c):
+    def write_const(self, c):
         self._u8(Bytecodes.CONST)
-        self._u8(r)
         self._add_constant(c)
     
-    def write_const_cb(self, r):
+    def write_const_cb(self):
         self._u8(Bytecodes.CONST)
-        self._u8(r)
         return self._add_cb_constant()
 
     def write_pushc(self, c):
-        self._u8(Bytecodes.PUSHC)
-        self._add_constant(c)
+        self.write_const(c)
+        self.write_push()
     
     def write_pushc_cb(self):
-        self._u8(Bytecodes.PUSHC)
-        return self._add_cb_constant()
+        c = self.write_const_cb()
+        self.write_push()
+        return c
 
-    def write_push(self, r):
+    def write_push(self):
         self._u8(Bytecodes.PUSH)
-        self._u8(r)
 
-    def write_pop(self, r):
+    def write_pop(self):
         self._u8(Bytecodes.POP)
-        self._u8(r)
 
-    def write_drop(self):
-        self._u8(Bytecodes.DROP)
-
-    def write_dup(self):
-        self._u8(Bytecodes.DUP)
-
-    def write_r2r(self, dest, src):
-        self._u8(Bytecodes.R2R)
-        self._u8(dest)
-        self._u8(src)
-
-    def write_r2l(self, dest, depth, src):
-        self._u8(Bytecodes.R2L)
-        self._u8(dest)
-        self._u8(depth)
-        self._u8(src)
-
-    def write_l2r(self, dest, src, depth):
-        self._u8(Bytecodes.L2R)
-        self._u8(dest)
-        self._u8(src)
-        self._u8(depth)
+    def write_load_arg(self, i):
+        self.write_load_local(i)
     
-    def write_a2r(self, dest, src):
-        self._u8(Bytecodes.A2R)
-        self._u8(dest)
-        self._u8(src)
+    def write_store_arg(self, i):
+        self.write_load_local(i)
+
+    def write_load_local(self, i):
+        self._u8(Bytecodes.LOAD_LOCAL)
+        self._u8(i)
     
-    def write_r2a(self, dest, src):
-        self._u8(Bytecodes.R2A)
-        self._u8(dest)
-        self._u8(src)
+    def write_store_local(self, i):
+        self._u8(Bytecodes.STORE_LOCAL)
+        self._u8(i)
+
+    def write_load_lexical(self, d, i):
+        self._u8(Bytecodes.LOAD_LEXICAL)
+        self._u8(d)
+        self._u8(i)
+    
+    def write_store_local(self, d, i):
+        self._u8(Bytecodes.STORE_LEXICAL)
+        self._u8(d)
+        self._u8(i)
 
     def write_builtin(self, args, key):
         self._u8(Bytecodes.BUILTIN)
@@ -129,17 +114,13 @@ class CodeWriter:
     def write_assign(self, key):
         self._u8(Bytecodes.ASSIGN)
         self._add_constant(key)
-    
-    def write_as(self):
-        self._u8(Bytecodes.AS)
 
     def write_return(self, depth):
         self._u8(Bytecodes.RETURN)
         self._u8(depth)
 
-    def write_closure(self, dest, code_object):
+    def write_closure(self, code_object):
         self._u8(Bytecodes.CLOSURE)
-        self._u8(dest)
         self._add_constant(code_object)
 
     def finish(self):
