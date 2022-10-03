@@ -125,7 +125,7 @@
     );
 
     returnWithDepth: depth => (
-      pushLastValue.
-      writer writeReturn: depth
+        pushLastValue.
+        writer writeReturn: depth
     );
 }

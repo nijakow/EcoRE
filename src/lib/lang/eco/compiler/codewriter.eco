@@ -94,6 +94,9 @@
         writeU8: r.
     );
 
+    writeLoad: r => writeLoadLocal: r;
+    writeStore: r => writeStoreLocal: r;
+
     writeLoad: r Depth: d => (
         (r isZero)
           ~ if: [ writeLoadLocal: r            ]
