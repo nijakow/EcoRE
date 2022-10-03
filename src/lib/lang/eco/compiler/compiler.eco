@@ -22,59 +22,30 @@
     lastValue: nv => (dropLastValue. lastValue <- nv);
     dropLastValue => lastValue isStack if: [ writer writeDrop ];
     pushLastValue => (
-        lastValue ifRegister: [ (lastValue depth isZero)
-                                     if: [ writer writePushReg: lastValue details bcIndex ]
-                                   else: [ regAlloc withAllocatedRegister: [
-                                             :r | moveLastValueToReg: r.
-                                                  pushLastValue
-                                           ]
-                                         ]
+        lastValue ifRegister: [ writer writeLoad: lastValue details bcIndex Depth: lastValue depth.
+                                writer writePush.
                               ]
-                  ifConstant: [ writer writePushConst: lastValue constantValue ]
-                   ifClosure: [ regAlloc withAllocatedRegister: [
-                                  :r | moveLastValueToReg: r.
-                                       pushLastValue
-                                ]
+                  ifConstant: [ writer writeConst: lastValue constantValue.
+                                writer writePush.
+                              ]
+                   ifClosure: [ writer writeClosure: (lastValue closureValue).
+                                writer writePush.
                               ]
                      ifStack: [].
         lastValue <- selfValue
     );
     moveLastValueToReg: r Depth: d => (
-        lastValue ifRegister: [ (lastValue depth isZero)
-                                     if: [ writer writeReg: (lastValue details bcIndex) ToReg: (r bcIndex) Depth: d ]
-                                   else: [ (d isZero) if: [
-                                              writer writeReg: (lastValue details bcIndex) Depth: (lastValue depth) ToReg: (r bcIndex)
-                                           ] else: [
-                                              regAlloc withAllocatedRegister: [
-                                                :tmpReg | moveLastValueToReg: tmpReg.
-                                                          moveLastValueToReg: r Depth: d
-                                              ]
-                                           ]
-                                         ]
+        lastValue ifRegister: [ writer writeLoad: lastValue details bcIndex Depth: lastValue depth.
+                                writer writeStore: r Depth: d.
                               ]
-                  ifConstant: [ (d isZero)
-                                     if: [ writer writeConst: (lastValue constantValue) ToReg: (r bcIndex) ]
-                                   else: [ regAlloc withAllocatedRegister: [
-                                             :tmpReg | moveLastValueToReg: tmpReg.
-                                                       moveLastValueToReg: r Depth: d
-                                           ]
-                                         ]
+                  ifConstant: [ writer writeConst: (lastValue constantValue).
+                                writer writeStore: r Depth: d.
                               ]
-                   ifClosure: [ (d isZero)
-                                     if: [ writer writeClosure: (lastValue closureValue) ToReg: (r bcIndex) ]
-                                   else: [ regAlloc withAllocatedRegister: [
-                                             :tmpReg | moveLastValueToReg: tmpReg.
-                                                       moveLastValueToReg: r Depth: d
-                                           ]
-                                         ]
+                   ifClosure: [ writer writeClosure: (lastValue closureValue).
+                                writer writeStore: r Depth: d.
                               ]
-                     ifStack: [ (d isZero)
-                                     if: [ writer writePopReg: (r bcIndex) ]
-                                   else: [ regAlloc withAllocatedRegister: [
-                                             :tmpReg | moveLastValueToReg: tmpReg.
-                                                       moveLastValueToReg: r Depth: d
-                                           ]
-                                         ]
+                     ifStack: [ writer writePop.
+                                writer writeStore: r Depth: d.
                               ].
         lastValue <- registerValue: r Depth: d
     );

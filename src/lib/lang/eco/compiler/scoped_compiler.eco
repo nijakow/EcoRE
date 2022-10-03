@@ -80,7 +80,7 @@
                                 ] else: [
                                     interlude value.
                                 ].
-                                localCompiler moveLastValueToReg: (info details) Depth: depth.
+                                localCompiler moveLastValueToReg: (info details bcIndex) Depth: depth.
                                 present value
                              ]
                  IfNotFound: notpresent

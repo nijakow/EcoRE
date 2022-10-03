@@ -88,7 +88,7 @@
         writeU8: r.
     );
 
-    writeStoreLexical: r => (
+    writeStoreLexical: r Depth: d => (
         writeU8: Bytecodes STORE_LOCAL.
         writeU8: d.
         writeU8: r.
