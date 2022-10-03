@@ -66,6 +66,14 @@ class CodeWriter:
 
     def write_pop(self):
         self._u8(Bytecodes.POP)
+    
+    def write_drop(self):
+        self.write_pop()
+    
+    def write_dup(self):
+        self.write_pop()
+        self.write_push()
+        self.write_push()
 
     def write_load_arg(self, i):
         self.write_load_local(i)
@@ -86,10 +94,22 @@ class CodeWriter:
         self._u8(d)
         self._u8(i)
     
-    def write_store_local(self, d, i):
+    def write_store_lexical(self, d, i):
         self._u8(Bytecodes.STORE_LEXICAL)
         self._u8(d)
         self._u8(i)
+    
+    def write_load(self, d, i):
+        if d == 0:
+            self.write_load_local(i)
+        else:
+            self.write_load_lexical(d, i)
+    
+    def write_store(self, d, i):
+        if d == 0:
+            self.write_store_local(i)
+        else:
+            self.write_store_lexical(d, i)
 
     def write_builtin(self, args, key):
         self._u8(Bytecodes.BUILTIN)
@@ -147,56 +167,31 @@ class CodeGenerator:
             if src.is_stack():
                 pass
             elif src.is_register():
-                if src.get_depth() > 0:
-                    v = self._scope.get_storage_manager().allocate()
-                    self._transfer_value(src, v)
-                    self._transfer_value(v, dst)
-                    v.free()
-                else:
-                    self._writer.write_push(src.get_bc_register_number())
+                self._writer.write_load(src.get_depth(), src.get_bc_register_number())
+                self._writer.write_push()
             elif src.is_constant():
-                cb = self._writer.write_pushc_cb()
+                cb = self._writer.write_const_cb()
                 src.with_value(cb)
+                self._writer.write_push()
+            elif src.is_closure():
+                self._writer.write_closure(src.get_code())
+                self._writer.write_push()
             else:
                 pass # TODO: Error
         elif dst.is_register():
             if src.is_stack():
-                if dst.get_depth() > 0:
-                    v = self._scope.get_storage_manager().allocate()
-                    self._transfer_value(src, v)
-                    self._transfer_value(v, dst)
-                    v.free()
-                else:
-                    self._writer.write_pop(dst.get_bc_register_number())
+                self._writer.write_pop()
+                self._writer.write_store(dst.get_depth(), dst.get_bc_register_number())
             elif src.is_register():
-                if src.get_depth() == 0 and dst.get_depth() == 0:
-                    self._writer.write_r2r(dst.get_bc_register_number(), src.get_bc_register_number())
-                elif src.get_depth() > 0 and dst.get_depth() == 0:
-                    self._writer.write_l2r(dst.get_bc_register_number(), src.get_bc_register_number(), src.get_depth())
-                elif src.get_depth() == 0 and dst.get_depth() > 0:
-                    self._writer.write_r2l(dst.get_bc_register_number(), dst.get_depth(), src.get_bc_register_number())
-                else:
-                    v = self._scope.get_storage_manager().allocate()
-                    self._transfer_value(src, v)
-                    self._transfer_value(v, dst)
-                    v.free()
+                self._writer.write_load(src.get_depth(), src.get_bc_register_number())
+                self._writer.write_store(dst.get_depth(), dst.get_bc_register_number())
             elif src.is_constant():
-                if dst.get_depth() > 0:
-                    v = self._scope.get_storage_manager().allocate()
-                    self._transfer_value(src, v)
-                    self._transfer_value(v, dst)
-                    v.free()
-                else:
-                    cb = self._writer.write_const_cb(dst.get_bc_register_number())
-                    src.with_value(cb)
+                cb = self._writer.write_const_cb()
+                src.with_value(cb)
+                self._writer.write_store(dst.get_depth(), dst.get_bc_register_number())
             elif src.is_closure():
-                if dst.get_depth() > 0:
-                    v = self._scope.get_storage_manager().allocate()
-                    self._transfer_value(src, v)
-                    self._transfer_value(v, dst)
-                    v.free()
-                else:
-                    self._writer.write_closure(dst.get_bc_register_number(), src.get_code())
+                self._writer.write_closure(src.get_code())
+                self._writer.write_store(dst.get_depth(), dst.get_bc_register_number())
             else:
                 pass # TODO: Error
         else:
@@ -294,19 +289,14 @@ class CodeGenerator:
         self._drop_last_value()
         def writer(target):
             if target is not None:
-                if target.is_register() and target.get_depth() == 0:
-                    self._writer.write_closure(target.get_bc_register_number(), code)
+                self._writer.write_closure(code)
+                if target.is_register():
+                    self._writer.write_store(target.get_depth(), target.get_bc_register_number())
+                elif target.is_stack():
+                    self._writer.write_push()
                 else:
-                    v = self._scope.get_storage_manager().allocate()
-                    self._writer.write_closure(v.get_bc_register_number(), code)
-                    self._transfer_value(v, target)
-                    v.free()
+                    raise Exception('Ow')
         self._last_value = writer
-    
-    def op_as(self):
-        self.push()
-        self._writer.write_as()
-        self._set_last_value_to_stack()
     
     def finish(self, the_type, visitor):
         self.op_return(0, the_type, visitor)
