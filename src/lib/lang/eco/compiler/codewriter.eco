@@ -43,67 +43,87 @@
 
     writeNOOP => writeU8: Bytecodes NOOP;
 
-    writeConst: c ToReg: r => (
-        introduceRegister: r.
+    writeConst: c => (
         writeU8: Bytecodes CONST.
-        writeU8: r.
-        addConstant: c
+        addConstant: c.
     );
 
     writePushConst: c => (
-        writeU8: Bytecodes PUSHC.
-        addConstant: c
+        writeConst: c.
+        writePush.
     );
 
-    writeClosure: c ToReg: r => (
-        introduceRegister: r.
+    writeClosure: c => (
         writeU8: Bytecodes CLOSURE.
-        writeU8: r.
-        addClosure: c
+        addClosure: c.
     );
 
-    writePushReg: r => (
-        introduceRegister: r.
+    writePush => (
         writeU8: Bytecodes PUSH.
-        writeU8: r
     );
 
-    writePopReg: r => (
-        introduceRegister: r.
+    writePop => (
         writeU8: Bytecodes POP.
-        writeU8: r
     );
 
-    writeDrop => writeU8: Bytecodes DROP;
+    writeDrop => writePop;
 
-    writeDup => writeU8: Bytecodes DUP;
+    writeDup => ( writePop. writePush. writePush. );
+
+    writeLoadLocal: r => (
+        introduceRegister: r.
+        writeU8: Bytecodes LOAD_LOCAL.
+        writeU8: r.
+    );
+
+    writeStoreLocal: r => (
+        introduceRegister: r.
+        writeU8: Bytecodes STORE_LOCAL.
+        writeU8: r.
+    );
+
+    writeLoadLexical: r Depth: d => (
+        writeU8: Bytecodes LOAD_LEXICAL.
+        writeU8: d.
+        writeU8: r.
+    );
+
+    writeStoreLexical: r => (
+        writeU8: Bytecodes STORE_LOCAL.
+        writeU8: d.
+        writeU8: r.
+    );
+
+    writeLoad: r Depth: d => (
+        (r isZero)
+          ~ if: [ writeLoadLocal: r            ]
+          else: [ writeLoadLexical: r Depth: d ].
+    );
+
+    writeStore: r Depth: d => (
+        (r isZero)
+          ~ if: [ writeStoreLocal: r            ]
+          else: [ writeStoreLexical: r Depth: d ].
+    );
 
     writeReg: src ToReg: dst => (
-        introduceRegister: src.
-        introduceRegister: dst.
-        writeU8: Bytecodes R2R.
-        writeU8: dst.
-        writeU8: src
+        writeLoadLocal: src.
+        writeStoreLocal: dst.
     );
 
     writeReg: src ToReg: dst Depth: depth => (
-        (depth isZero)
-              if: [ writeReg: src ToReg: dst ]
-            else: [ introduceRegister: src.
-                    writeU8: Bytecodes R2L.
-                    writeU8: dst.
-                    writeU8: depth.
-                    writeU8: src             ]
+        writeLoadLexical: src.
+        writeStore: dst Depth: depth.
     );
 
     writeReg: src Depth: depth ToReg: dst => (
-        (depth isZero)
-              if: [ writeReg: src ToReg: dst ]
-            else: [ introduceRegister: dst.
-                    writeU8: Bytecodes L2R.
-                    writeU8: dst.
-                    writeU8: src.
-                    writeU8: depth           ]
+        writeLoad: src Depth: depth.
+        writeStoreLexical: dst.
+    );
+
+    writeReg: src Depth: srcdepth ToReg: dst Depth: dstdepth => (
+        writeLoad: src Depth: srcdepth.
+        writeStore: dst Depth: dstdepth.
     );
 
     writeBuiltin: key Args: args Varargs: varargs => (
@@ -137,8 +157,6 @@
         writeU8: Bytecodes ASSIGN.
         addConstant: key
     );
-
-    writeAs => writeU8: Bytecodes AS;
 
     writeReturn: depth => (
         writeU8: Bytecodes RETURN.
