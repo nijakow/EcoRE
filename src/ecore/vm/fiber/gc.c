@@ -10,6 +10,8 @@ void Eco_Fiber_Mark(struct Eco_GC_State* state, struct Eco_Fiber* fiber)
     Eco_Any*           stack_pointer;
     Eco_Any*           limit;
 
+    Eco_GC_State_MarkAny(state, Eco_Fiber_GetAccu(fiber));
+
     frame = fiber->top;
     limit = (Eco_Any*) fiber->stack_pointer;
     while (frame != NULL)

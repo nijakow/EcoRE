@@ -154,60 +154,44 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             ULTRAFAST_DISPATCH();
         }
         TARGET(CONST) {
-            u8 to = NEXT_U8();
-            Eco_Any_AssignAny(Eco_Frame_RegisterByBytecode(top, to), NEXT_CONSTANT());
-            ULTRAFAST_DISPATCH();
-        }
-        TARGET(PUSHC) {
-            FAST_PUSH(NEXT_CONSTANT());
+            Eco_Fiber_SetAccu(fiber, NEXT_DIRECT_CONSTANT());
             ULTRAFAST_DISPATCH();
         }
         TARGET(PUSH) {
-            u8 reg = NEXT_U8();
-            FAST_PUSH(Eco_Frame_RegisterByBytecode(top, reg));
+            FAST_PUSH(Eco_Fiber_Accu(fiber));
             ULTRAFAST_DISPATCH();
         }
         TARGET(POP) {
-            u8 reg = NEXT_U8();
-            FAST_POP(Eco_Frame_RegisterByBytecode(top, reg));
+            FAST_POP(Eco_Fiber_Accu(fiber));
             ULTRAFAST_DISPATCH();
         }
-        TARGET(DROP) {
-            FAST_DROP();
-            ULTRAFAST_DISPATCH();
-        }
-        TARGET(DUP) {
-            FAST_DUP();
-            ULTRAFAST_DISPATCH();
-        }
-        TARGET(R2R) {
-            u8 to   = NEXT_U8();
+        TARGET(LOAD_LOCAL) {
             u8 from = NEXT_U8();
-            Eco_Any_AssignAny(Eco_Frame_RegisterByBytecode(top, to),
-                              Eco_Frame_RegisterByBytecode(top, from));
+            Eco_Fiber_SetAccu(fiber, *Eco_Frame_RegisterByBytecode(top, from));
             ULTRAFAST_DISPATCH();
         }
-        TARGET(R2L) {
+        TARGET(STORE_LOCAL) {
             u8 to    = NEXT_U8();
-            u8 depth = NEXT_U8();
-            u8 from  = NEXT_U8();
-            bottom   = Eco_Frame_NthLexical(top, depth);
-            Eco_Any_AssignAny(Eco_Frame_RegisterByBytecode(bottom, to),
-                              Eco_Frame_RegisterByBytecode(top, from));
+            *Eco_Frame_RegisterByBytecode(top, to) = Eco_Fiber_GetAccu(fiber);
             ULTRAFAST_DISPATCH();
         }
-        TARGET(L2R) {
-            u8 to    = NEXT_U8();
+        TARGET(LOAD_LEXICAL) {
             u8 from  = NEXT_U8();
             u8 depth = NEXT_U8();
             bottom   = Eco_Frame_NthLexical(top, depth);
-            Eco_Any_AssignAny(Eco_Frame_RegisterByBytecode(top, to),
-                              Eco_Frame_RegisterByBytecode(bottom, from));
+            Eco_Fiber_SetAccu(fiber, *Eco_Frame_RegisterByBytecode(bottom, from));
+            ULTRAFAST_DISPATCH();
+        }
+        TARGET(STORE_LEXICAL) {
+            u8 to    = NEXT_U8();
+            u8 depth = NEXT_U8();
+            bottom   = Eco_Frame_NthLexical(top, depth);
+            *Eco_Frame_RegisterByBytecode(bottom, to) = Eco_Fiber_GetAccu(fiber);
             ULTRAFAST_DISPATCH();
         }
         TARGET(BUILTIN) {
             u8               args = NEXT_U8();
-            struct Eco_Key*  key  = Eco_Any_AsPointer(*NEXT_CONSTANT());   // TODO: Safety check!
+            struct Eco_Key*  key  = Eco_Any_AsPointer(NEXT_DIRECT_CONSTANT());   // TODO: Safety check!
             top->instruction      = instruction;
             fiber->stack_pointer  = sp;
 
@@ -225,7 +209,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             }
 
             u8               args = NEXT_U8() + Eco_Frame_VarargCount(top);
-            struct Eco_Key*  key  = Eco_Any_AsPointer(*NEXT_CONSTANT());   // TODO: Safety check!
+            struct Eco_Key*  key  = Eco_Any_AsPointer(NEXT_DIRECT_CONSTANT());   // TODO: Safety check!
             top->instruction      = instruction;
             fiber->stack_pointer  = sp;
 
@@ -239,7 +223,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             struct Eco_Message  message;
 
             message.body.send.arg_count = NEXT_U8();
-            message.key                 = Eco_Any_AsPointer(*NEXT_CONSTANT());
+            message.key                 = Eco_Any_AsPointer(NEXT_DIRECT_CONSTANT());
             message.fiber               = fiber;
             message.type                = Eco_Message_Type_SEND;
 
@@ -269,7 +253,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             }
 
             message.body.send.arg_count = NEXT_U8() + Eco_Frame_VarargCount(top);
-            message.key                 = Eco_Any_AsPointer(*NEXT_CONSTANT());
+            message.key                 = Eco_Any_AsPointer(NEXT_DIRECT_CONSTANT());
             message.fiber               = fiber;
             message.type                = Eco_Message_Type_SEND;
 
@@ -294,7 +278,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             struct Eco_Message  message;
 
             message.body.send.arg_count = NEXT_U8();
-            message.key                 = Eco_Any_AsPointer(*NEXT_CONSTANT());
+            message.key                 = Eco_Any_AsPointer(NEXT_DIRECT_CONSTANT());
             message.fiber               = fiber;
             message.type                = Eco_Message_Type_SEND;
 
@@ -321,7 +305,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             }
 
             message.body.send.arg_count = NEXT_U8() + Eco_Frame_VarargCount(top);
-            message.key                 = Eco_Any_AsPointer(*NEXT_CONSTANT());
+            message.key                 = Eco_Any_AsPointer(NEXT_DIRECT_CONSTANT());
             message.fiber               = fiber;
             message.type                = Eco_Message_Type_SEND;
 
@@ -342,7 +326,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
         TARGET(ASSIGN) {
             struct Eco_Message  message;
 
-            message.key               = Eco_Any_AsPointer(*NEXT_CONSTANT());
+            message.key               = Eco_Any_AsPointer(NEXT_DIRECT_CONSTANT());
             message.fiber             = fiber;
             message.type              = Eco_Message_Type_ASSIGN;
 
@@ -359,30 +343,6 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                            false)) {
                 Eco_Log_Warning("Assign failed: %s\n", ((struct Eco_Key*) message.key)->name);
                 Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ASSIGNFAILED);
-                goto error;
-            }
-
-            SLOW_DISPATCH();
-        }
-        TARGET(AS) {
-            struct Eco_Message  message;
-
-            message.key               = Eco_Any_AsPointer(*NEXT_CONSTANT());
-            message.fiber             = fiber;
-            message.type              = Eco_Message_Type_AS;
-
-            FAST_POP(&message.body.as.value);
-
-            top->instruction          = instruction;
-            fiber->stack_pointer      = sp;
-
-            if (!Eco_Send(&message,
-                           *Eco_Fiber_Nth(fiber, 1),
-                           *Eco_Fiber_Nth(fiber, 1),
-                           Eco_Any_Equals(Eco_Fiber_Top(fiber)->args[0],
-                                         *Eco_Fiber_Nth(fiber, 1)),
-                           false)) {
-                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ASFAILED);
                 goto error;
             }
 
@@ -411,13 +371,11 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             SLOW_DISPATCH();
         }
         TARGET(MAKE_CLOSURE) {
-            u8                   dest;
             struct Eco_Closure*  closure;
 
-            dest       = NEXT_U8();
-            closure    = Eco_Closure_New(Eco_Any_AsPointer(*NEXT_CONSTANT()), Eco_Fiber_Top(fiber));
+            closure = Eco_Closure_New(Eco_Any_AsPointer(*NEXT_CONSTANT()), Eco_Fiber_Top(fiber));
 
-            *Eco_Frame_RegisterByBytecode(top, dest) = Eco_Any_FromPointer(closure);
+            Eco_Fiber_SetAccu(fiber, Eco_Any_FromPointer(closure));
 
             FAST_DISPATCH();
         }

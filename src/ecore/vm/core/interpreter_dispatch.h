@@ -4,14 +4,12 @@
 static void* DISPATCH_TABLE[] = {
     DEFDISPATCH(NOOP),
     DEFDISPATCH(CONST),
-    DEFDISPATCH(PUSHC),
     DEFDISPATCH(PUSH),
     DEFDISPATCH(POP),
-    DEFDISPATCH(DROP),
-    DEFDISPATCH(DUP),
-    DEFDISPATCH(R2R),
-    DEFDISPATCH(R2L),
-    DEFDISPATCH(L2R),
+    DEFDISPATCH(LOAD_LOCAL),
+    DEFDISPATCH(STORE_LOCAL),
+    DEFDISPATCH(LOAD_LEXICAL),
+    DEFDISPATCH(STORE_LEXICAL),
     DEFDISPATCH(BUILTIN),
     DEFDISPATCH(BUILTINV),
     DEFDISPATCH(SEND),
@@ -19,7 +17,6 @@ static void* DISPATCH_TABLE[] = {
     DEFDISPATCH(RESEND),
     DEFDISPATCH(RESENDV),
     DEFDISPATCH(ASSIGN),
-    DEFDISPATCH(AS),
     DEFDISPATCH(RETURN),
     DEFDISPATCH(MAKE_CLOSURE),
 };
@@ -28,6 +25,7 @@ static void* DISPATCH_TABLE[] = {
 #define NEXT_U8()             *(instruction++)
 #define NEXT_U16()            CONSTRUCT_U16(&instruction)
 #define NEXT_CONSTANT()       &top->code->constants[NEXT_U16()]
+#define NEXT_DIRECT_CONSTANT() top->code->constants[NEXT_U16()]
 #define TARGET(T)             dispatch_label_ ## T:
 #define DEFAULT_TARGET()      /* TARGET(DEFAULT) */
 #define DISPATCH(B)           goto *DISPATCH_TABLE[B];

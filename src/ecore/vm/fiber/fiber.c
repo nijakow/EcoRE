@@ -14,6 +14,8 @@ struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
 
     fiber = Eco_Memory_Alloc(sizeof(struct Eco_Fiber) + stack_size);
 
+    fiber->accu             = Eco_Any_Default();
+
     fiber->vm               =  vm;
     fiber->prev             = &vm->fibers;
     fiber->next             =  vm->fibers;
