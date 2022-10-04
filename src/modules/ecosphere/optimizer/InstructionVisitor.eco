@@ -2,15 +2,13 @@
     visitInstruction: instr => self;
 
     visitNoop: instr => visitInstruction: instr;
-    visitLoadConstant: instr => visitInstruction: instr;
-    visitPushConstant: instr => visitInstruction: instr;
+    visitConst: instr => visitInstruction: instr;
     visitPush: instr => visitInstruction: instr;
     visitPop: instr => visitInstruction: instr;
-    visitDrop: instr => visitInstruction: instr;
-    visitDup: instr => visitInstruction: instr;
-    visitR2R: instr => visitInstruction: instr;
-    visitR2L: instr => visitInstruction: instr;
-    visitL2R: instr => visitInstruction: instr;
+    visitLoadLocal: instr => visitInstruction: instr;
+    visitStoreLocal: instr => visitInstruction: instr;
+    visitLoadLexical: instr => visitInstruction: instr;
+    visitStoreLexical: instr => visitInstruction: instr;
     visitBuiltin: instr => visitInstruction: instr;
     visitSend: instr => visitInstruction: instr;
     visitAssign: instr => visitInstruction: instr;

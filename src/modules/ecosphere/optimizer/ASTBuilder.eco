@@ -6,6 +6,7 @@
     protected function;
     protected stack;
     protected bindings;
+    protected accu;
     protected compound;
 
     visitInstruction: instr => (std io out << 'Visiting ' << instr) newline;
@@ -21,6 +22,7 @@
             function <- _function.
             stack    <- std util newStack.
             bindings <- std util newAlistWithComparator: RegisterComparator;
+            accu     <- builder Register: 0.
             compound <- std util newVector.
           ^ self
         );
@@ -37,6 +39,8 @@
               ~ yes: [ :v | ^ v ]
                  no: [      ^ r ]
         );
+
+        protected GetAccu => accu;
 
         protected Register: i => Register: i Depth: 0;
         protected Register: i Depth: d => (asts ASTRegister clone) initWithDepth: d Index: i;
@@ -76,22 +80,21 @@
 
         protected OnStack: expr => stack push: expr;
         protected OnAST: expr => compound add: expr;
+        protected Accu: expr => accu <- expr;
 
         visitNoop: instr => UnknownInstruction;
-        visitLoadConstant: instr => OnAST: (builder Move: (builder Constant: instr constant) To: (builder Register: instr register));
-        visitPushConstant: instr => OnStack: (builder Constant: instr constant);
-        visitPush: instr => OnStack: (GetRegister: instr register);
-        visitPop: instr => OnAST: (builder Move: stack pop To: (builder Register: instr register));
-        visitDrop: instr => OnAST: (stack pop);
-        visitDup: instr => ( | v <- stack pop | stack push: v. stack push: v. );
-        visitR2R: instr => OnAST: (builder Move: (builder GetRegister: instr from) To: (builder Register: instr to));
-        visitR2L: instr => OnAST: (builder Move: (builder GetRegister: instr from) To: (builder Register: instr to Depth: instr depth));
-        visitL2R: instr => OnAST: (builder Move: (builder GetRegister: instr from Depth: instr depth) To: (builder Register: instr to));
+        visitConst: instr => Accu: (builder Constant: instr constant);
+        visitPush: instr => OnStack: GetAccu;
+        visitPop: instr => Accu: stack pop;
+        visitLoadLocal: instr => Accu: (builder Register: instr register);
+        visitStoreLocal: instr => OnAST: (builder Move: GetAccu To: (builder Register: instr register));
+        visitLoadLexical: instr => Accu: (builder Register: instr register Depth: instr depth);
+        visitStoreLexical: instr => OnAST: (builder Move: GetAccu To: (builder Register: instr register Depth: instr depth));
         visitBuiltin: instr => OnStack: (builder Builtin: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitSend: instr => OnStack: (builder Send: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitAssign: instr => ( | v <- stack pop | OnStack: (builder Assign: v To: stack pop Key: instr key));
         visitReturn: instr => OnAST: (builder Return: stack pop Depth: instr depth);
-        visitClosure: instr => OnAST: (builder Move: (builder Code: instr code) To: (builder Register: instr register));
+        visitClosure: instr => Accu: (builder Code: instr code);
         visitJump: instr => OnAST: (builder JumpBack);
 
         buildAST => (
