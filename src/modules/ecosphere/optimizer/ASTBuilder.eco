@@ -93,9 +93,15 @@
         visitPush: instr => ( OnStack: GetAccu. cleared <- true );
         visitPop: instr => Accu: stack pop;
         visitLoadLocal: instr => Accu: (builder Register: instr register);
-        visitStoreLocal: instr => OnAST: (builder Move: GetAccu To: (builder Register: instr register));
+        visitStoreLocal: instr => (
+            OnAST: (builder Move: GetAccu To: (builder Register: instr register)).
+            cleared <- true.
+        );
         visitLoadLexical: instr => Accu: (builder Register: instr register Depth: instr depth);
-        visitStoreLexical: instr => OnAST: (builder Move: GetAccu To: (builder Register: instr register Depth: instr depth));
+        visitStoreLexical: instr => (
+            OnAST: (builder Move: GetAccu To: (builder Register: instr register Depth: instr depth)).
+            cleared <- true.
+        );
         visitBuiltin: instr => OnStack: (builder Builtin: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitSend: instr => OnStack: (builder Send: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitAssign: instr => ( | v <- stack pop | OnStack: (builder Assign: v To: stack pop Key: instr key));
