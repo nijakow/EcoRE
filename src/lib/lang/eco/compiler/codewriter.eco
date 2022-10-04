@@ -98,13 +98,13 @@
     writeStore: r => writeStoreLocal: r;
 
     writeLoad: r Depth: d => (
-        (r isZero)
+        (d isZero)
           ~ if: [ writeLoadLocal: r            ]
           else: [ writeLoadLexical: r Depth: d ].
     );
 
     writeStore: r Depth: d => (
-        (r isZero)
+        (d isZero)
           ~ if: [ writeStoreLocal: r            ]
           else: [ writeStoreLexical: r Depth: d ].
     );

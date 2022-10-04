@@ -42,6 +42,8 @@
         isStack => false;
         isClosure => false;
         ifRegister: r ifConstant: c ifClosure: cl ifStack: s => r value;
+
+        writeOn: w => w << 'register value ' << details;
     },
     Stack = {
         static with inherited parent = #<:std/Clonable>;

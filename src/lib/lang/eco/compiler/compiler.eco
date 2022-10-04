@@ -36,16 +36,16 @@
     );
     moveLastValueToReg: r Depth: d => (
         lastValue ifRegister: [ writer writeLoad: lastValue details bcIndex Depth: lastValue depth.
-                                writer writeStore: r Depth: d.
+                                writer writeStore: r bcIndex Depth: d.
                               ]
                   ifConstant: [ writer writeConst: (lastValue constantValue).
-                                writer writeStore: r Depth: d.
+                                writer writeStore: r bcIndex Depth: d.
                               ]
                    ifClosure: [ writer writeClosure: (lastValue closureValue).
-                                writer writeStore: r Depth: d.
+                                writer writeStore: r bcIndex Depth: d.
                               ]
                      ifStack: [ writer writePop.
-                                writer writeStore: r Depth: d.
+                                writer writeStore: r bcIndex Depth: d.
                               ].
         lastValue <- registerValue: r Depth: d
     );
