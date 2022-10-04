@@ -89,7 +89,7 @@
     );
 
     writeStoreLexical: r Depth: d => (
-        writeU8: Bytecodes STORE_LOCAL.
+        writeU8: Bytecodes STORE_LEXICAL.
         writeU8: d.
         writeU8: r.
     );
