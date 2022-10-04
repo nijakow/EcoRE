@@ -3,13 +3,12 @@
     static with inherited parent = #<:std/Clonable>;
     with inherited module = #<:lang/eco/compiler>;
 
-    writer, depth, regAlloc, lastValue;
+    writer, depth, regAlloc;
 
     initWithWriter: w Depth: d => (
         writer    <- w.
         depth     <- d.
         regAlloc  <- RegisterAllocator new.
-        lastValue <- selfValue.
       ^ self
     );
     initWithDepth: d => initWithWriter: (CodeWriter new) Depth: d;
@@ -19,56 +18,28 @@
       ^ writer finishWithArgs: args Varargs: varargs
     );
 
-    lastValue: nv => (dropLastValue. lastValue <- nv);
-    dropLastValue => lastValue isStack if: [ writer writeDrop ];
-    pushLastValue => (
-        lastValue ifRegister: [ writer writeLoad: lastValue details bcIndex Depth: lastValue depth.
-                                writer writePush.
-                              ]
-                  ifConstant: [ writer writeConst: lastValue constantValue.
-                                writer writePush.
-                              ]
-                   ifClosure: [ writer writeClosure: (lastValue closureValue).
-                                writer writePush.
-                              ]
-                     ifStack: [].
-        lastValue <- selfValue
-    );
-    moveLastValueToReg: r Depth: d => (
-        lastValue ifRegister: [ writer writeLoad: lastValue details bcIndex Depth: lastValue depth.
-                                writer writeStore: r bcIndex Depth: d.
-                              ]
-                  ifConstant: [ writer writeConst: (lastValue constantValue).
-                                writer writeStore: r bcIndex Depth: d.
-                              ]
-                   ifClosure: [ writer writeClosure: (lastValue closureValue).
-                                writer writeStore: r bcIndex Depth: d.
-                              ]
-                     ifStack: [ writer writePop.
-                                writer writeStore: r bcIndex Depth: d.
-                              ].
-        lastValue <- registerValue: r Depth: d
-    );
-    moveLastValueToReg: r => moveLastValueToReg: r Depth: 0;
-
     selfValue => registerValue: (ValueType Arg: 0) Depth: 0;
     constantValue: c => (ValueType Constant) clone initWithValue: c;
     closureValue: c => (ValueType Closure) clone initWithValue: c;
     registerValue: details Depth: d => (ValueType Register) clone initWithDetails: details Depth: d;
     stackTopValue => (ValueType Stack) clone;
 
-    loadSelf => lastValue: selfValue;
-    loadConstant: c => lastValue: (constantValue: c);
-    loadClosure: c => lastValue: (closureValue: c);
-    loadRegister: r Depth: d => lastValue: (registerValue: r Depth: d);
+    loadSelf => loadRegister: (registerValue: (Arg: 0));
+    loadConstant: c => writer writeConst: c;
+    loadClosure: c => writer writeClosure: c;
+    loadRegister: r Depth: d => writer writeLoad: r bcIndex Depth: d;
     loadRegister: r => loadRegister: r Depth: 0;
+    storeRegister: r Depth: d => writer writeStore: r bcIndex Depth: d;
+    storeRegister: r => writer writeStore: r bcIndex;
 
-    push => pushLastValue;
+    push => writer writePush;
     drop => loadSelf;
+
+    protected lastValueIsOnStack => writer writePop;
 
     builtinWithMessage: msg ArgCount: args Varargs: varargs => (
         writer writeBuiltin: msg Args: args Varargs: varargs.
-        lastValue <- stackTopValue
+        lastValueIsOnStack.
     );
     builtinWithMessage: msg ArgCount: args => (
         builtinWithMessage: msg ArgCount: args Varargs: false
@@ -76,7 +47,7 @@
 
     sendWithMessage: msg ArgCount: args Varargs: varargs => (
         writer writeSend: msg Args: args Varargs: varargs.
-        lastValue <- stackTopValue
+        lastValueIsOnStack.
     );
     sendWithMessage: msg ArgCount: args => (
         sendWithMessage: msg ArgCount: args Varargs: false
@@ -84,7 +55,7 @@
 
     resendWithMessage: msg ArgCount: args Varargs: varargs => (
         writer writeResend: msg Args: args Varargs: varargs.
-        lastValue <- stackTopValue
+        lastValueIsOnStack.
     );
     resendWithMessage: msg ArgCount: args => (
         resendWithMessage: msg ArgCount: args Varargs: false
@@ -92,11 +63,10 @@
 
     assignWithKey: key => (
         writer writeAssign: key.
-        lastValue <- stackTopValue
+        lastValueIsOnStack.
     );
 
     returnWithDepth: depth => (
-        pushLastValue.
-        writer writeReturn: depth
+        writer writeReturn: depth.
     );
 }
