@@ -32,15 +32,13 @@
                 [ it hasNext ] while: [
                     | opcode <- nextU8 |
                     (opcode == lang eco bytecodes NOOP)  -> [ builder add: ((instructions NoopInstruction) clone init) ].
-                    (opcode == lang eco bytecodes CONST) -> [ builder add: ((instructions LoadConstantInstruction) clone initWithRegister: nextU8 Constant: nextConstant) ].
-                    (opcode == lang eco bytecodes PUSHC) -> [ builder add: ((instructions PushConstantInstruction) clone initWithConstant: nextConstant) ].
-                    (opcode == lang eco bytecodes PUSH)  -> [ builder add: ((instructions PushInstruction) clone initWithRegister: nextU8) ].
-                    (opcode == lang eco bytecodes POP)   -> [ builder add: ((instructions PopInstruction) clone initWithRegister: nextU8) ].
-                    (opcode == lang eco bytecodes DROP)  -> [ builder add: ((instructions DropInstruction) clone init) ].
-                    (opcode == lang eco bytecodes DUP)   -> [ builder add: ((instructions DupInstruction) clone init) ].
-                    (opcode == lang eco bytecodes R2R)   -> [ builder add: ((instructions R2RInstruction) clone initWithTo: nextU8 From: nextU8) ].
-                    (opcode == lang eco bytecodes R2L)   -> [ builder add: ((instructions R2LInstruction) clone initWithTo: nextU8 Depth: nextU8 From: nextU8) ].
-                    (opcode == lang eco bytecodes L2R)   -> [ builder add: ((instructions L2RInstruction) clone initWithTo: nextU8 From: nextU8 Depth: nextU8) ].
+                    (opcode == lang eco bytecodes CONST) -> [ builder add: ((instructions ConstantInstruction) clone initWithConstant: nextConstant) ].
+                    (opcode == lang eco bytecodes PUSH)  -> [ builder add: ((instructions PushInstruction) clone init) ].
+                    (opcode == lang eco bytecodes POP)   -> [ builder add: ((instructions PopInstruction) clone init) ].
+                    (opcode == lang eco bytecodes LOAD_LOCAL) -> [ builder add: ((instructions LoadLocalInstruction) clone initWithRegister: nextU8)].
+                    (opcode == lang eco bytecodes STORE_LOCAL) -> [ builder add: ((instructions StoreLocalInstruction) clone initWithRegister: nextU8)].
+                    (opcode == lang eco bytecodes LOAD_LEXICAL) -> [ builder add: ((instructions LoadLexicalInstruction) clone initWithDepth: nextU8 Register: nextU8)].
+                    (opcode == lang eco bytecodes STORE_LEXICAL) -> [ builder add: ((instructions StoreLexicalInstruction) clone initWithDepth: nextU8 Register: nextU8)].
                     (opcode == lang eco bytecodes BUILTIN) -> [
                         | args <- nextU8, key <- nextConstant |
                         (#'ecosphere.ecore.flow.reset' == key)
@@ -52,7 +50,7 @@
                     (opcode == lang eco bytecodes SENDV) -> [ builder add: ((instructions SendInstruction) clone initWithArgs: nextU8 Key: nextConstant Varargs: true) ].
                     (opcode == lang eco bytecodes ASSIGN) -> [ builder add: ((instructions AssignInstruction) clone initWithKey: nextConstant) ].
                     (opcode == lang eco bytecodes RETURN) -> [ builder add: ((instructions ReturnInstruction) clone initWithDepth: nextU8) ].
-                    (opcode == lang eco bytecodes CLOSURE) -> [ builder add: ((instructions ClosureInstruction) clone initWithRegister: nextU8 Code: (optimizer DisassembleCodeObject: nextCode)) ].
+                    (opcode == lang eco bytecodes CLOSURE) -> [ builder add: ((instructions ClosureInstruction) clone initWithCode: (optimizer DisassembleCodeObject: nextCode)) ].
                 ].
               ^ ((optimizer DisassembledFunction clone) initWithInstructions: (builder commit))
             );

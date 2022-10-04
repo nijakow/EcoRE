@@ -40,27 +40,7 @@
             };
         },
 
-        own LoadConstantInstruction = {
-            static with inherited _ = std Clonable;
-            with inherited own super = $ ByteCodeInstruction;
-
-            register, constant;
-
-            with inherited trait = {
-                initWithRegister: _register Constant: _constant => (
-                    super init.
-                    register <- _register.
-                    constant <- _constant.
-                  ^ self
-                );
-
-                accept: visitor => visitor visitLoadConstant: self;
-
-                writeOn: w => w << 'a load constant bytecode instruction';
-            };
-        },
-
-        own PushConstantInstruction = {
+        own ConstantInstruction = {
             static with inherited _ = std Clonable;
             with inherited own super = $ ByteCodeInstruction;
 
@@ -73,9 +53,9 @@
                   ^ self
                 );
 
-                accept: visitor => visitor visitPushConstant: self;
+                accept: visitor => visitor visitConst: self;
 
-                writeOn: w => w << 'a push constant bytecode instruction';
+                writeOn: w => w << 'a constant bytecode instruction';
             };
         },
 
@@ -83,12 +63,9 @@
             static with inherited _ = std Clonable;
             with inherited own super = $ ByteCodeInstruction;
 
-            register;
-
             with inherited trait = {
-                initWithRegister: _register => (
+                init => (
                     super init.
-                    register <- _register.
                   ^ self
                 );
 
@@ -102,12 +79,9 @@
             static with inherited _ = std Clonable;
             with inherited own super = $ ByteCodeInstruction;
 
-            register;
-
             with inherited trait = {
-                initWithRegister: _register => (
+                init => (
                     super init.
-                    register <- _register.
                   ^ self
                 );
 
@@ -117,97 +91,81 @@
             };
         },
 
-        own DropInstruction = {
+        own LoadLocalInstruction = {
             static with inherited _ = std Clonable;
             with inherited own super = $ ByteCodeInstruction;
 
+            register;
+
             with inherited trait = {
-                init => (
+                initWithRegister: _register => (
                     super init.
+                    register <- _register.
                   ^ self
                 );
 
-                accept: visitor => visitor visitDrop: self;
+                accept: visitor => visitor visitLoadLocal: self;
 
-                writeOn: w => w << 'a drop bytecode instruction';
+                writeOn: w => w << 'a load local bytecode instruction';
             };
         },
 
-        own DupInstruction = {
+        own StoreLocalInstruction = {
             static with inherited _ = std Clonable;
             with inherited own super = $ ByteCodeInstruction;
 
+            register;
+
             with inherited trait = {
-                init => (
+                initWithRegister: _register => (
                     super init.
+                    register <- _register.
                   ^ self
                 );
 
-                accept: visitor => visitor visitDup: self;
+                accept: visitor => visitor visitStoreLocal: self;
 
-                writeOn: w => w << 'a dup bytecode instruction';
+                writeOn: w => w << 'a store local bytecode instruction';
             };
         },
 
-        own R2RInstruction = {
+        own LoadLexicalInstruction = {
             static with inherited _ = std Clonable;
             with inherited own super = $ ByteCodeInstruction;
 
-            from, to;
+            depth, register;
 
             with inherited trait = {
-                initWithTo: _to From: _from => (
+                initWithDepth: _depth Register: _register => (
                     super init.
-                    from <- _from.
-                    to   <- _to.
-                  ^ self
-                );
-
-                accept: visitor => visitor visitR2R: self;
-
-                writeOn: w => w << 'a register-to-register bytecode instruction';
-            };
-        },
-
-        own R2LInstruction = {
-            static with inherited _ = std Clonable;
-            with inherited own super = $ ByteCodeInstruction;
-
-            from, to, depth;
-
-            with inherited trait = {
-                initWithTo: _to Depth: _depth From: _from => (
-                    super init.
-                    from  <- _from.
-                    to    <- _to.
                     depth <- _depth.
+                    register <- _register.
                   ^ self
                 );
 
-                accept: visitor => visitor visitR2L: self;
+                accept: visitor => visitor visitLoadLexical: self;
 
-                writeOn: w => w << 'a register-to-lexical bytecode instruction';
+                writeOn: w => w << 'a load lexical bytecode instruction';
             };
         },
 
-        own L2RInstruction = {
+        own StoreLexicalInstruction = {
             static with inherited _ = std Clonable;
             with inherited own super = $ ByteCodeInstruction;
 
-            from, depth, to;
+            depth, register;
 
             with inherited trait = {
-                initWithTo: _to From: _from Depth: _depth => (
+                initWithDepth: _depth Register: _register => (
                     super init.
-                    from  <- _from.
                     depth <- _depth.
-                    to    <- _to.
+                    register <- _register.
                   ^ self
                 );
 
-                accept: visitor => visitor visitL2R: self;
+                accept: visitor => visitor visitStoreLexical: self;
 
-                writeOn: w => w << 'a lexical-to-register bytecode instruction';
+                writeOn: w => w << 'a store lexical bytecode instruction';
             };
         },
 
@@ -302,12 +260,11 @@
             static with inherited _ = std Clonable;
             with inherited own super = $ ByteCodeInstruction;
 
-            register, code;
+            code;
 
             with inherited trait = {
-                initWithRegister: _register Code: _code => (
+                initWithCode: _code => (
                     super init.
-                    register <- _register.
                     code     <- _code.
                   ^ self
                 );
