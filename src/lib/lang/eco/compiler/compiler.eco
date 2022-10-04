@@ -24,7 +24,7 @@
     registerValue: details Depth: d => (ValueType Register) clone initWithDetails: details Depth: d;
     stackTopValue => (ValueType Stack) clone;
 
-    loadSelf => loadRegister: (registerValue: (Arg: 0));
+    loadSelf => loadRegister: (ValueType Arg: 0);
     loadConstant: c => writer writeConst: c;
     loadClosure: c => writer writeClosure: c;
     loadRegister: r Depth: d => writer writeLoad: r bcIndex Depth: d;
@@ -67,6 +67,7 @@
     );
 
     returnWithDepth: depth => (
+        writer writePush. "Ensure that the value is on the stack"
         writer writeReturn: depth.
     );
 }

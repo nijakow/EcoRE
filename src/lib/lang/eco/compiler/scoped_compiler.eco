@@ -80,7 +80,7 @@
                                 ] else: [
                                     interlude value.
                                 ].
-                                localCompiler moveLastValueToReg: (info details) Depth: depth.
+                                localCompiler storeRegister: (info details) Depth: depth.
                                 present value
                              ]
                  IfNotFound: notpresent
