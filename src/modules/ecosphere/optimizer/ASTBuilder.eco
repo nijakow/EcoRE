@@ -7,6 +7,7 @@
     protected stack;
     protected bindings;
     protected accu;
+    protected cleared;
     protected compound;
 
     visitInstruction: instr => (std io out << 'Visiting ' << instr) newline;
@@ -23,6 +24,7 @@
             stack    <- std util newStack.
             bindings <- std util newAlistWithComparator: RegisterComparator;
             accu     <- builder Register: 0.
+            cleared  <- false.
             compound <- std util newVector.
           ^ self
         );
@@ -80,11 +82,15 @@
 
         protected OnStack: expr => stack push: expr;
         protected OnAST: expr => compound add: expr;
-        protected Accu: expr => accu <- expr;
+        protected Accu: expr => (
+            cleared not -> [ OnAST: accu ].
+            accu <- expr.
+            cleared <- false.
+        );
 
         visitNoop: instr => UnknownInstruction;
         visitConst: instr => Accu: (builder Constant: instr constant);
-        visitPush: instr => OnStack: GetAccu;
+        visitPush: instr => ( OnStack: GetAccu. cleared <- true );
         visitPop: instr => Accu: stack pop;
         visitLoadLocal: instr => Accu: (builder Register: instr register);
         visitStoreLocal: instr => OnAST: (builder Move: GetAccu To: (builder Register: instr register));
