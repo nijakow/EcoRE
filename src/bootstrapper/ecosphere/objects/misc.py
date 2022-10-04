@@ -101,32 +101,25 @@ class EcoCode(ecosphere.objects.base.EcoObject):
                 if op == Bytecodes.NOOP:
                     self._op('NOOP')
                 elif op == Bytecodes.CONST:
-                    reg = self._u8()
-                    self._op('LOAD', reg, '<-', self._const())
-                elif op == Bytecodes.PUSHC:
-                    self._op('PSHC', self._const())
+                    self._op('CONST', self._const())
                 elif op == Bytecodes.PUSH:
-                    self._op('PUSH', self._u8())
+                    self._op('PUSH')
                 elif op == Bytecodes.POP:
-                    self._op('POP ', self._u8())
-                elif op == Bytecodes.DROP:
-                    self._op('DROP')
-                elif op == Bytecodes.DUP:
-                    self._op('DUP ')
-                elif op == Bytecodes.R2R:
-                    dst = self._u8()
-                    src = self._u8()
-                    self._op('R2R ', dst, '<-', src)
-                elif op == Bytecodes.R2L:
-                    dst = self._u8()
-                    dep = self._u8()
-                    src = self._u8()
-                    self._op('R2L ', dst, dep, '<-', src)
-                elif op == Bytecodes.L2R:
-                    dst = self._u8()
-                    src = self._u8()
-                    dep = self._u8()
-                    self._op('L2R ', dst, '<-', src, dep)
+                    self._op('POP')
+                elif op == Bytecodes.LOAD_LOCAL:
+                    i = self._u8()
+                    self._op('LOAD_LOCAL', i)
+                elif op == Bytecodes.STORE_LOCAL:
+                    i = self._u8()
+                    self._op('STORE_LOCAL', i)
+                elif op == Bytecodes.LOAD_LEXICAL:
+                    d = self._u8()
+                    i = self._u8()
+                    self._op('LOAD_LEXICAL', d, i)
+                elif op == Bytecodes.STORE_LEXICAL:
+                    d = self._u8()
+                    i = self._u8()
+                    self._op('LEXICAL', d, i)
                 elif op == Bytecodes.BUILTIN:
                     args = self._u8()
                     self._op('BLT ', args, self._const())
@@ -141,15 +134,13 @@ class EcoCode(ecosphere.objects.base.EcoObject):
                     self._op('SNDV', args, self._const())
                 elif op == Bytecodes.ASSIGN:
                     self._op('ASGN', self._const())
-                elif op == Bytecodes.AS:
-                    self._op('AS')
                 elif op == Bytecodes.RETURN:
                     self._op('RET ', self._u8())
                 elif op == Bytecodes.CLOSURE:
-                    dst = self._u8()
-                    self._op('CLSR', dst, '<-', self._u16())
+                    self._op('CLOSURE', self._const())
                 else:
                     self._op('???')
+                    raise Exception('Huh? Unknown bytecode!')
             return self._text
 
         def __init__(self, code):
