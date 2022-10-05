@@ -11,6 +11,7 @@
     visitStoreLexical: instr => visitInstruction: instr;
     visitBuiltin: instr => visitInstruction: instr;
     visitSend: instr => visitInstruction: instr;
+    visitResend: instr => visitInstruction: instr;
     visitAssign: instr => visitInstruction: instr;
     visitReturn: instr => visitInstruction: instr;
     visitClosure: instr => visitInstruction: instr;

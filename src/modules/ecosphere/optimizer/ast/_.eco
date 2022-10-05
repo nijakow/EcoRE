@@ -103,6 +103,58 @@
         };
     };
 
+    own ASTSlotAssignment = {
+        static with inherited _ = std Clonable;
+        with inherited own AST = $ AST;
+
+        protected slot;
+        protected lhs;
+        protected rhs;
+
+        with inherited trait = {
+            initWithLHS: _lhs RHS: _rhs Slot: _slot => (
+                $(AST) init.
+                lhs <- _lhs.
+                rhs <- _rhs.
+                slot <- _slot.
+              ^ self
+            );
+
+            writeOn: w => w << '(' << lhs << ' ' << slot << ' <- ' << rhs << ')';
+        };
+    };
+
+    own ASTBuiltin = {
+        static with inherited _ = std Clonable;
+        with inherited own AST = $ AST;
+
+        protected message;
+        protected args;
+        protected varargs;
+
+        with inherited trait = {
+            initWithMessage: _message Args: _args Varargs: _varargs => (
+                $(AST) init.
+                message  <- _message.
+                args     <- _args asArray.
+                varargs  <- _varargs.
+              ^ self
+            );
+
+            writeOn: w => (
+                w << message.
+                w << '('.
+                0 to: (args size - 2) do: [ :i |
+                    w << (args at: i).
+                    w << ', '.
+                ].
+                w << (args last).
+                varargs -> [ w << ', ...' ].
+                w << ')'.
+            );
+        };
+    };
+
     own ASTSend = {
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
@@ -123,6 +175,40 @@
             writeOn: w => (
                 w << (args first).
                 w << ' ' << message.
+                (args size > 1) -> [
+                    w << '('.
+                    1 to: (args size - 2) do: [ :i |
+                        w << (args at: i).
+                        w << ', '.
+                    ].
+                    w << (args last).
+                    varargs -> [ w << ', ...' ].
+                    w << ')'.
+                ].
+            );
+        };
+    };
+
+    own ASTResend = {
+        static with inherited _ = std Clonable;
+        with inherited own AST = $ AST;
+
+        protected message;
+        protected args;
+        protected varargs;
+
+        with inherited trait = {
+            initWithMessage: _message Args: _args Varargs: _varargs => (
+                $(AST) init.
+                message  <- _message.
+                args     <- _args asArray.
+                varargs  <- _varargs.
+              ^ self
+            );
+
+            writeOn: w => (
+                w << '$(' << (args first).
+                w << ') ' << message.
                 (args size > 1) -> [
                     w << '('.
                     1 to: (args size - 2) do: [ :i |

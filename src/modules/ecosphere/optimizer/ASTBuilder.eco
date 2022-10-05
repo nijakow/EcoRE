@@ -56,9 +56,10 @@
           ^ v
         );
 
-        protected Builtin: key Args: args Varargs: varargs => UnknownInstruction;
+        protected Builtin: key Args: args Varargs: varargs => (asts ASTBuiltin clone) initWithMessage: key Args: args Varargs: varargs;
         protected Send: key Args: args Varargs: varargs => (asts ASTSend clone) initWithMessage: key Args: args Varargs: varargs;
-        protected Assign: key To: arg Key: key => UnknownInstruction;
+        protected Resend: key Args: args Varargs: varargs => (asts ASTResend clone) initWithMessage: key Args: args Varargs: varargs;
+        protected Assign: v To: arg Slot: key => (asts ASTSlotAssignment clone) initWithLHS: arg RHS: v Slot: key;
 
         protected Return: v Depth: d => (asts ASTReturn clone) initWithValue: v Depth: d;
         protected JumpBack => (asts ASTJumpBack clone) init;
@@ -104,7 +105,8 @@
         );
         visitBuiltin: instr => OnStack: (builder Builtin: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitSend: instr => OnStack: (builder Send: instr key Args: (popN: (instr args)) Varargs: instr varargs);
-        visitAssign: instr => ( | v <- stack pop | OnStack: (builder Assign: v To: stack pop Key: instr key));
+        visitResend: instr => OnStack: (builder Resend: instr key Args: (popN: (instr args)) Varargs: instr varargs);
+        visitAssign: instr => ( | v <- stack pop | OnStack: (builder Assign: v To: stack pop Slot: instr key));
         visitReturn: instr => OnAST: (builder Return: stack pop Depth: instr depth);
         visitClosure: instr => Accu: (builder Code: instr code);
         visitJump: instr => OnAST: (builder JumpBack);

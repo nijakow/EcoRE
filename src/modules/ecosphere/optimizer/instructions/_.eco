@@ -22,7 +22,7 @@
 
                 writeOn: w => w << 'a bytecode instruction';
             };
-        },
+        };
 
         own NoopInstruction = {
             static with inherited _ = std Clonable;
@@ -38,7 +38,7 @@
 
                 writeOn: w => w << 'a noop bytecode instruction';
             };
-        },
+        };
 
         own ConstantInstruction = {
             static with inherited _ = std Clonable;
@@ -57,7 +57,7 @@
 
                 writeOn: w => w << 'a constant bytecode instruction';
             };
-        },
+        };
 
         own PushInstruction = {
             static with inherited _ = std Clonable;
@@ -73,7 +73,7 @@
 
                 writeOn: w => w << 'a push bytecode instruction';
             };
-        },
+        };
 
         own PopInstruction = {
             static with inherited _ = std Clonable;
@@ -89,7 +89,7 @@
 
                 writeOn: w => w << 'a pop bytecode instruction';
             };
-        },
+        };
 
         own LoadLocalInstruction = {
             static with inherited _ = std Clonable;
@@ -108,7 +108,7 @@
 
                 writeOn: w => w << 'a load local bytecode instruction';
             };
-        },
+        };
 
         own StoreLocalInstruction = {
             static with inherited _ = std Clonable;
@@ -127,7 +127,7 @@
 
                 writeOn: w => w << 'a store local bytecode instruction';
             };
-        },
+        };
 
         own LoadLexicalInstruction = {
             static with inherited _ = std Clonable;
@@ -147,7 +147,7 @@
 
                 writeOn: w => w << 'a load lexical bytecode instruction';
             };
-        },
+        };
 
         own StoreLexicalInstruction = {
             static with inherited _ = std Clonable;
@@ -167,7 +167,7 @@
 
                 writeOn: w => w << 'a store lexical bytecode instruction';
             };
-        },
+        };
 
         own BuiltinInstruction = {
             static with inherited _ = std Clonable;
@@ -191,9 +191,9 @@
 
                 writeOn: w => w << 'a call-builtin bytecode instruction';
             };
-        },
+        };
 
-        own SendInstruction = {
+        own SendLikeInstruction = {
             static with inherited _ = std Clonable;
             with inherited own super = $ ByteCodeInstruction;
 
@@ -211,11 +211,31 @@
                 initWithArgs: args Key: key => initWithKey: key Args: args;
                 initWithArgs: args Key: key Varargs: varargs => initWithKey: key Args: args Varargs: varargs;
 
+                writeOn: w => w << 'a sendlike bytecode instruction (' << key << ', ' << args << ')';
+            };
+        };
+
+        own SendInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own SendLikeInstruction = $ SendLikeInstruction;
+
+            with inherited trait = {
                 accept: visitor => visitor visitSend: self;
 
                 writeOn: w => w << 'a send bytecode instruction (' << key << ', ' << args << ')';
             };
-        },
+        };
+
+        own ResendInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own SendLikeInstruction = $ SendLikeInstruction;
+
+            with inherited trait = {
+                accept: visitor => visitor visitResend: self;
+
+                writeOn: w => w << 'a resend bytecode instruction (' << key << ', ' << args << ')';
+            };
+        };
 
         own AssignInstruction = {
             static with inherited _ = std Clonable;
@@ -234,7 +254,7 @@
 
                 writeOn: w => w << 'an assign bytecode instruction';
             };
-        },
+        };
 
         own ReturnInstruction = {
             static with inherited _ = std Clonable;
@@ -254,7 +274,7 @@
 
                 writeOn: w => w << 'a return bytecode instruction';
             };
-        },
+        };
 
         own ClosureInstruction = {
             static with inherited _ = std Clonable;
@@ -275,7 +295,7 @@
 
                 writeOn: w => w << 'a closure bytecode instruction';
             };
-        },
+        };
 
         own JumpInstruction = {
             static with inherited _ = std Clonable;
@@ -294,5 +314,5 @@
 
                 writeOn: w => w << 'a jump bytecode instruction';
             };
-        },
+        };
     }
