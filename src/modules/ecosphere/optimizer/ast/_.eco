@@ -29,6 +29,8 @@
               ^ self
             );
 
+            acceptVisitor: visitor => visitor visitASTRegister: self;
+
             equalsRegister: other => [ index == other index ] and: [ depth == other depth ];
 
             isAtomic => true;
@@ -50,6 +52,8 @@
               ^ self
             );
 
+            acceptVisitor: visitor => visitor visitASTConstant: self;
+
             isAtomic => true;
 
             writeOn: w => w << '(' << constant << ')';
@@ -68,6 +72,8 @@
                 code <- _code.
               ^ self
             );
+
+            acceptVisitor: visitor => visitor visitASTCode: self;
 
             isAtomic => true;
 
@@ -88,6 +94,8 @@
               ^ self
             );
 
+            acceptVisitor: visitor => visitor visitASTCompound: self;
+
             writeOn: w => w << '(' << instructions << ')';
         };
     };
@@ -106,6 +114,8 @@
                 rhs <- _rhs.
               ^ self
             );
+
+            acceptVisitor: visitor => visitor visitASTAssignment: self;
 
             writeOn: w => w << '(' << lhs << ' <- ' << rhs << ')';
         };
@@ -128,6 +138,8 @@
               ^ self
             );
 
+            acceptVisitor: visitor => visitor visitASTSlotAssignment: self;
+
             writeOn: w => w << '(' << lhs << ' ' << slot << ' <- ' << rhs << ')';
         };
     };
@@ -148,6 +160,8 @@
                 varargs  <- _varargs.
               ^ self
             );
+
+            acceptVisitor: visitor => visitor visitASTBuiltin: self;
 
             writeOn: w => (
                 w << message.
@@ -179,6 +193,8 @@
                 varargs  <- _varargs.
               ^ self
             );
+
+            acceptVisitor: visitor => visitor visitASTSend: self;
 
             writeOn: w => (
                 w << (args first).
@@ -214,6 +230,8 @@
               ^ self
             );
 
+            acceptVisitor: visitor => visitor visitASTResend: self;
+
             writeOn: w => (
                 w << '$(' << (args first).
                 w << ') ' << message.
@@ -246,6 +264,8 @@
               ^ self
             );
 
+            acceptVisitor: visitor => visitor visitASTReturn: self;
+
             writeOn: w => w << '^ ' << returnValue;
         };
     };
@@ -259,6 +279,8 @@
                 $(AST) init.
               ^ self
             );
+
+            acceptVisitor: visitor => visitor visitASTJumpBack: self;
 
             writeOn: w => w << 'ASTJumpBack()';
         };
