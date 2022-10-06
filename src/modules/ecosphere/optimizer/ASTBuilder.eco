@@ -82,7 +82,7 @@
         );
 
         protected OnStack: expr => stack push: expr;
-        protected OnAST: expr => compound add: expr;
+        protected OnAST: expr => (expr isAtomic not) if: [ compound add: expr ];
         protected Accu: expr => (
             cleared not -> [ OnAST: accu ].
             accu <- expr.

@@ -9,6 +9,8 @@
 
             acceptVisitor: visitor => visitor visitAST: self;
 
+            isAtomic => false;
+
             writeOn: w => 'AST()';
         };
     };
@@ -29,6 +31,8 @@
 
             equalsRegister: other => [ index == other index ] and: [ depth == other depth ];
 
+            isAtomic => true;
+
             writeOn: w => w << 'r' << depth << '_' << index;
         };
     };
@@ -46,6 +50,8 @@
               ^ self
             );
 
+            isAtomic => true;
+
             writeOn: w => w << '(' << constant << ')';
         };
     };
@@ -62,6 +68,8 @@
                 code <- _code.
               ^ self
             );
+
+            isAtomic => true;
 
             writeOn: w => w << '[ ... | ' << (code ast) << ']';
         };
