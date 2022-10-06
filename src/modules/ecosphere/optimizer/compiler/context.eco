@@ -1,0 +1,17 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    typeMapping;
+    nextMapping; "Keeps track of the next node"
+
+    with inherited trait = {
+        init => (
+            typeMapping <- std util newMap.
+            nextMapping <- std util newMap.
+          ^ self
+        );
+
+        NextOf: node => nextMapping at: node;
+    };
+}
