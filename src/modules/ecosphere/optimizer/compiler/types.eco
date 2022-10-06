@@ -1,0 +1,23 @@
+
+{
+    static with inherited _ = std Module;
+
+    own Anything = {
+        static with inherited _ = std Singleton;
+    };
+
+    own ConstantType = {
+        static with inherited _ = std Clonable;
+
+        constant;
+
+        with inherited trait = {
+            initWithConstant: _constant => (
+                constant <- _constant.
+              ^ self
+            );
+        };
+    };
+
+    ConstantType: c => (ConstantType clone) initWithConstant: c;
+}
