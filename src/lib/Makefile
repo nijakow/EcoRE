@@ -8,6 +8,7 @@ std/_.eco \
 std/bool.eco \
 std/clonable.eco \
 std/defaultbehavior.eco \
+std/enum.eco \
 std/globals.eco \
 std/maybe.eco \
 std/module.eco \

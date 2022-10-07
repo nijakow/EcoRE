@@ -1,0 +1,11 @@
+
+{
+    static with inherited _ = std Module;
+    
+    CalculateTypeFor: ast State: state => (
+        (Switch: ast type)
+          ~ case: astTypes Constant do: [ types Constant: (ast constant) ]
+          ~ default: [ types Unknown ]
+        ~ end
+    );
+}

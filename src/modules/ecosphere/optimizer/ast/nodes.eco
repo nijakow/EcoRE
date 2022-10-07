@@ -1,11 +1,20 @@
 {
     static with inherited _ = std Module;
 
+    own ASTType = {
+        own Default = { static with inherited _ = std Enum };
+        own Constant = { static with inherited _ = std Enum };
+        own Register = { static with inherited _ = std Enum };
+    };
+
     own AST = {
         static with inherited _ = std Clonable;
+        protected context = $;
 
         with inherited trait = {
             init => self;
+
+            type => context ASTType Default;
 
             acceptVisitor: visitor => visitor visitAST: self;
 
@@ -29,13 +38,15 @@
               ^ self
             );
 
+            type => context ASTType Register;
+
             acceptVisitor: visitor => visitor visitASTRegister: self;
 
             equalsRegister: other => [ index == other index ] and: [ depth == other depth ];
 
             isAtomic => true;
 
-            writeOn: w => w << 'r' << depth << '_' << index;
+            writeOn: w => w << 'r' << depth << '_' << index << ' ' << type;
         };
     };
 
@@ -51,6 +62,8 @@
                 constant <- _constant;
               ^ self
             );
+
+            type => context ASTType Constant;
 
             acceptVisitor: visitor => visitor visitASTConstant: self;
 

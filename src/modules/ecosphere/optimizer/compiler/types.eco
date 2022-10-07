@@ -6,6 +6,8 @@
         static with inherited _ = std Singleton;
     };
 
+    Unknown => Anything;
+
     own ConstantType = {
         static with inherited _ = std Clonable;
 

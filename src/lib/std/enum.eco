@@ -1,0 +1,5 @@
+
+#=std/Enum: {
+    with inherited _ = #<:std/Singleton>;
+    writeOn: writer => writer << 'an enum';
+}
