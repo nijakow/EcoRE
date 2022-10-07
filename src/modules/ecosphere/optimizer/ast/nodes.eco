@@ -46,7 +46,7 @@
 
             isAtomic => true;
 
-            writeOn: w => w << 'r' << depth << '_' << index << ' ' << type;
+            writeOn: w => w << 'r' << depth << '_' << index;
         };
     };
 
