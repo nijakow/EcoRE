@@ -1,0 +1,36 @@
+
+{
+    static with inherited _ = std Module;
+
+    own ValueSwitch = {
+        static with inherited _ = std Clonable;
+        protected own switch = $;
+
+        switchValue;
+
+        static with inherited trait = {
+            initWithValue: _switchValue => (
+                switchValue <- _switchValue.
+              ^ self
+            );
+
+            protected compare(a, b) => a == b;
+
+            case: caseValue do: block => (
+                compare(switchValue, caseValue) if: [ block value. ^ switch Fallthrough ].
+              ^ self
+            );
+
+            default: block => ( block value. switch Fallthrough );
+        };
+    };
+
+    own Fallthrough = {
+        static with inherited _ = std Singleton;
+
+        case: caseValue do: block => self;
+        default: block => self;
+    };
+
+    Switch: expr => (ValueSwitch new) initWithValue: expr;
+}
