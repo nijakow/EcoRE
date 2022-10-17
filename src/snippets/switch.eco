@@ -32,5 +32,5 @@
         default: block => self;
     };
 
-    Switch: expr => (ValueSwitch new) initWithValue: expr;
+    Switch: expr => (ValueSwitch clone) initWithValue: expr;
 }

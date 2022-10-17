@@ -8,6 +8,44 @@
     with inherited trait = {
         init => (
             typeMapping <- std util newMap.
+{
+    static with inherited _ = std Module;
+
+    own RegisterContext = {
+        static with inherited _ = std Clonable;
+
+        surroundingContext,
+        bindings;
+
+        static with inherited trait = {
+            initWithSurroundingContext: context => (
+                surroundingContext <- Yes: context.
+                bindings           <- std util newMap.
+              ^ self
+            );
+
+            init => (
+                surroundingContext <- No.
+                bindings           <- std util newMap.
+              ^ self
+            );
+
+            lookup: var => lookup: var depth: 0;
+            lookup: var depth: d => (
+                (depth isZero)
+                  ~   if: [ ^ bindings at: var ]
+                    else: [
+                        surroundingContext
+                          ~ yes: [ :sc | ^ sc lookup: var depth: (d - 1) ]
+                             no: [       ^ No                            ]
+                    ]
+            );
+        };
+
+        WrapContext: context => (RegisterContext clone) initWithSurroundingContext: context;
+    }
+}
+
             nextMapping <- std util newMap.
           ^ self
         );
