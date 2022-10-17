@@ -10,6 +10,7 @@
     Singleton = #<:std/Singleton>;
     Module = #<:std/Module>;
     Enum = #<:std/Enum>;
+    Trait = #<:std/Trait>;
     modules = #<:std/modules>;
 
     with bool = #<:std/bool>;

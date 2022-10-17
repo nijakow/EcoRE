@@ -89,6 +89,7 @@ eco_src = [
     './src/lib/std/singleton.eco',
     './src/lib/std/module.eco',
     './src/lib/std/modules.eco',
+    './src/lib/std/trait.eco',
     './src/lib/std/enum.eco',
     './src/lib/std/defaultbehavior.eco',
     './src/lib/std/globals.eco',
