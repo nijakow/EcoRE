@@ -1,0 +1,26 @@
+{
+    static with inherited _ = std Module;
+
+    protected asts => "TODO";
+
+    Constant: c => (asts ASTRegister) clone initWithConstant: c;
+    Register(depth, index) => (asts ASTRegister) clone initWithDepth: depth Index: index;
+    Register: index => Register(0, index);
+
+    Code: code => (asts ASTCode) clone initWithCode: code;
+
+    Compound: instructions => (asts ASTCompound) clone initWithInstructions: instructions;
+    Compound(...) => Compound: (std util newArray);
+
+    Assign: rhs To: lhs => (asts ASTAssignment) clone initWithLHS: lhs RHS: rhs;
+
+    Assign: rhs To: lhs Slot: slot => (asts ASTSlotAssignment) clone initWithLHS: lhs RHS: rhs Slot: slot;
+
+    Builtin: name Args: args Varargs: varargs => (asts ASTBuiltin) clone initWithMessage: name Args: args Varargs: varargs;
+
+    Send: name Args: args Varargs: varargs => (asts ASTSend) clone initWithMessage: name Args: args Varargs: varargs;
+
+    Resend: name Args: args Varargs: varargs => (asts ASTResend) clone initWithMessage: name Args: args Varargs: varargs;
+
+    Return => (asts ASTReturn) clone;
+}

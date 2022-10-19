@@ -2,7 +2,12 @@
     static with inherited _ = std Module;
 
     LookupMethod: name InKind: kind => (
+        "TODO"
       ^ No
+    );
+
+    InlineMethod: m Args: args Varargs: varargs Context: context => (
+        "TODO"
     );
 
     RewriteAST: ast Context: context => (
@@ -15,8 +20,8 @@
                     kind   <- ResultTypeOfExpression: (ast receiver) Context: context,
                     method <- LookupMethod: ast message InKind: kind
                 |
-                method yes: [ :m |       ]
-                        no: [      ^ ast ]
+                method yes: [ :m | ^ InlineMethod: m Args: ast args Varargs: ast varargs Context: context ]
+                        no: [      ^ ast                                                                  ]
             ]
           ~ default: [ ^ ast ]
     );
