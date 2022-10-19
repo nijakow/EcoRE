@@ -2,9 +2,12 @@
     static with inherited _ = std Module;
 
     own ASTType = {
-        own Default = { static with inherited _ = std Enum };
+        own Default  = { static with inherited _ = std Enum };
         own Constant = { static with inherited _ = std Enum };
         own Register = { static with inherited _ = std Enum };
+
+        own Builtin  = { static with inherited _ = std Enum };
+        own Send     = { static with inherited _ = std Enum };
     };
 
     own AST = {
@@ -207,6 +210,8 @@
               ^ self
             );
 
+            receiver => args at: 0;
+
             acceptVisitor: visitor => visitor visitASTSend: self;
 
             writeOn: w => (
@@ -242,6 +247,8 @@
                 varargs  <- _varargs.
               ^ self
             );
+
+            receiver => args at: 0;
 
             acceptVisitor: visitor => visitor visitASTResend: self;
 

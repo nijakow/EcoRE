@@ -1,0 +1,30 @@
+{
+    static with inherited _ = std Module;
+
+    LookupMethod: name InKind: kind => (
+      ^ No
+    );
+
+    RewriteAST: ast Context: context => (
+        (Switch: context type)
+          ~ case: astTypes Builtin do: [
+              ^ ast
+            ]
+          ~ case: astTypes Send do: [
+                |
+                    kind   <- ResultTypeOfExpression: (ast receiver) Context: context,
+                    method <- LookupMethod: ast message InKind: kind
+                |
+                method yes: [ :m |       ]
+                        no: [      ^ ast ]
+            ]
+          ~ default: [ ^ ast ]
+    );
+
+
+    Rewrite: ast Context: context => (
+
+    );
+
+    Rewrite: ast => Rewrite: ast Context: newContext;
+}

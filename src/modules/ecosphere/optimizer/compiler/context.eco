@@ -2,7 +2,7 @@
 {
     static with inherited _ = std Module;
 
-    own RegisterContext = {
+    own RegisterBindings = {
         static with inherited _ = std Clonable;
 
         surroundingContext,

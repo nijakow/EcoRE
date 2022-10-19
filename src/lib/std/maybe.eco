@@ -17,6 +17,8 @@
             isYes => true;
             isNo  => false;
 
+            ?? v => yes;
+
             writeOn: writer => writer << 'Yes: ' << yes;
         };
     };
@@ -35,6 +37,8 @@
 
             isYes => false;
             isNo  => true;
+
+            ?? v => v;
 
             writeOn: writer => writer << 'No';
         };
