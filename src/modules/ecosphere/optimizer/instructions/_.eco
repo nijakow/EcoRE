@@ -296,23 +296,4 @@
                 writeOn: w => w << 'a closure bytecode instruction';
             };
         };
-
-        own JumpInstruction = {
-            static with inherited _ = std Clonable;
-            with inherited own super = $ ByteCodeInstruction;
-
-            target;
-
-            with inherited trait = {
-                initWithTarget: _target => (
-                    super init.
-                    target <- _target.
-                  ^ self
-                );
-
-                accept: visitor => visitor visitJump: self;
-
-                writeOn: w => w << 'a jump bytecode instruction';
-            };
-        };
     }

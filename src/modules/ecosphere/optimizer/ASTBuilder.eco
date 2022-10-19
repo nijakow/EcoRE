@@ -109,7 +109,6 @@
         visitAssign: instr => ( | v <- stack pop | OnStack: (builder Assign: v To: stack pop Slot: instr key));
         visitReturn: instr => OnAST: (builder Return: stack pop Depth: instr depth);
         visitClosure: instr => Accu: (builder Code: instr code);
-        visitJump: instr => OnAST: (builder JumpBack);
 
         buildAST => (
             |
