@@ -1,14 +1,5 @@
 
 {
-    static with inherited _ = std Clonable;
-
-    typeMapping;
-    nextMapping; "Keeps track of the next node"
-
-    with inherited trait = {
-        init => (
-            typeMapping <- std util newMap.
-{
     static with inherited _ = std Module;
 
     own RegisterContext = {
@@ -44,12 +35,4 @@
 
         WrapContext: context => (RegisterContext clone) initWithSurroundingContext: context;
     }
-}
-
-            nextMapping <- std util newMap.
-          ^ self
-        );
-
-        NextOf: node => nextMapping at: node;
-    };
 }
