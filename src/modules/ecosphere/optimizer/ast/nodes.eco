@@ -6,8 +6,14 @@
         own Constant = { static with inherited _ = std Enum };
         own Register = { static with inherited _ = std Enum };
 
+        own Compound = { static with inherited _ = std Enum };
+        own Block    = { static with inherited _ = std Enum };
+
         own Builtin  = { static with inherited _ = std Enum };
         own Send     = { static with inherited _ = std Enum };
+        own Resend   = { static with inherited _ = std Enum };
+
+        own Return   = { static with inherited _ = std Enum };
     };
 
     own AST = {
