@@ -1,9 +1,11 @@
 {
     static with inherited _ = std Module;
 
-    protected asts => "TODO";
+    protected context = $;
 
-    Constant: c => (asts ASTRegister) clone initWithConstant: c;
+    protected asts => context nodes;
+
+    Constant: c => (asts ASTConstant) clone initWithConstant: c;
     Register(depth, index) => (asts ASTRegister) clone initWithDepth: depth Index: index;
     Register: index => Register(0, index);
 

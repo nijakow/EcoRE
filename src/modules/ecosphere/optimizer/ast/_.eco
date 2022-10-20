@@ -1,0 +1,6 @@
+{
+    static with inherited _ = std Module;
+
+    nodes   = (here / 'nodes.eco') importIn: self;
+    builder = (here / 'builder.eco') importIn: self;
+}
