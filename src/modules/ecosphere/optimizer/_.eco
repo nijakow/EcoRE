@@ -2,13 +2,13 @@
 {
     static with inherited _ = std Module;
 
-    own ast = (here / 'ast' / 'nodes.eco') importIn: self;
+    own ast = (here / 'ast' / '_.eco') importIn: self;
     own instructions = (here / 'instructions' / '_.eco') importIn: self;
 
     own InstructionGraphBuilder = (here / 'InstructionGraphBuilder.eco') importIn: self;
     own InstructionVisitor = (here / 'InstructionVisitor.eco') importIn: self;
 
-    own ASTBuilder = (here / 'ASTBuilder.eco') importIn: self;
+    own Decompiler = (here / 'Decompiler.eco') importIn: self;
 
     own Disassembler = (here / 'Disassembler.eco') importIn: self;
 
@@ -24,7 +24,7 @@
               ^ self
             );
 
-            ast => ((optimizer ASTBuilder clone) initWithFunction: self) buildAST;
+            ast => ((optimizer Decompiler clone) initWithFunction: self) buildAST;
 
             writeOn: w => w << 'a disassembled function';
         };

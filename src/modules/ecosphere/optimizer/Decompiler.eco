@@ -30,7 +30,7 @@
         );
 
         builder => self;
-        asts => optimizer ast;
+        asts => optimizer ast nodes;
 
         protected UnknownInstruction => 42;
 
