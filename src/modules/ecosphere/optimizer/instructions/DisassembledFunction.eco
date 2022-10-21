@@ -1,0 +1,14 @@
+{
+    static with inherited _ = std Clonable;
+
+    instructions;
+
+    with inherited trait = {
+        initWithInstructions: _instructions => (
+            instructions <- _instructions.
+          ^ self
+        );
+
+        writeOn: w => w << 'a disassembled function';
+    };
+}

@@ -6,4 +6,9 @@
     
     own InstructionVisitor = (here / 'InstructionVisitor.eco') importIn: self;
     own InstructionGraphBuilder = (here / 'InstructionGraphBuilder.eco') importIn: self;
+    
+    own DisassembledFunction = (here / 'DisassembledFunction.eco') importIn: self;
+    own Disassembler = (here / 'Disassembler.eco') importIn: self;
+
+    Disassemble: code => (Disassembler clone initWithCode: code) disassemble;
 }

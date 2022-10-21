@@ -5,30 +5,9 @@
     own ast = (here / 'ast' / '_.eco') importIn: self;
     own instructions = (here / 'instructions' / '_.eco') importIn: self;
 
-    InstructionGraphBuilder => instructions InstructionGraphBuilder;
-    InstructionVisitor => instructions InstructionVisitor;
-
     own Decompiler = (here / 'Decompiler.eco') importIn: self;
 
-    own Disassembler = (here / 'Disassembler.eco') importIn: self;
-
-    own DisassembledFunction = {
-        static with inherited _ = std Clonable;
-        protected optimizer = $;
-
-        instructions;
-
-        with inherited trait = {
-            initWithInstructions: _instructions => (
-                instructions <- _instructions.
-              ^ self
-            );
-
-            ast => ((optimizer Decompiler clone) initWithFunction: self) buildAST;
-
-            writeOn: w => w << 'a disassembled function';
-        };
-    };
+    protected Disassembler => instructions Disassembler;
     
 
     Print(f, indent) => (
@@ -42,7 +21,7 @@
       ^ f
     );
 
-    DisassembleCodeObject: code => (Disassembler clone initWithCode: code) disassemble;
+    DisassembleCodeObject: code => instructions Disassemble: code;
 
     Disassemble: code => DisassembleCodeObject: code;
 
@@ -53,4 +32,8 @@
     );
 
     Print: name In: object => Print(Disassemble: name In: object, 0);
+
+    BuildAST: disassembledFunction => (
+      ^ ((Decompiler clone) initWithFunction: disassembledFunction) buildAST
+    );
 }

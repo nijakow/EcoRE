@@ -1,0 +1,57 @@
+
+{
+    static with inherited parent = std Clonable;
+    protected context = $;
+    protected instructions => context instructions;
+
+    protected bytecodes,
+    protected it,
+    protected constants;
+
+    with inherited trait = {
+        initWithBytecodes: _bytecodes Constants: _constants => (
+            bytecodes <- _bytecodes.
+            constants <- _constants.
+            it        <- _bytecodes iterator.
+          ^ self
+        );
+        initWithCode: _code => initWithBytecodes: (_code bytecodes) Constants: (_code constants);
+
+        protected nextU8 => (it next) bitAnd: 255;
+        protected nextU16 => (
+            | v <- nextU8 |
+            v <- v bitOr: (nextU8 rshift: 8).
+          ^ v
+        );
+
+        protected nextConstant => constants at: nextU16;
+        protected nextCode => nextConstant;
+
+        disassemble => (
+            | builder <- (context InstructionGraphBuilder) new |
+            [ it hasNext ] while: [
+                | opcode <- nextU8 |
+                (opcode == lang eco bytecodes NOOP)  -> [ builder add: ((instructions NoopInstruction) clone init) ].
+                (opcode == lang eco bytecodes CONST) -> [ builder add: ((instructions ConstantInstruction) clone initWithConstant: nextConstant) ].
+                (opcode == lang eco bytecodes PUSH)  -> [ builder add: ((instructions PushInstruction) clone init) ].
+                (opcode == lang eco bytecodes POP)   -> [ builder add: ((instructions PopInstruction) clone init) ].
+                (opcode == lang eco bytecodes LOAD_LOCAL) -> [ builder add: ((instructions LoadLocalInstruction) clone initWithRegister: nextU8)].
+                (opcode == lang eco bytecodes STORE_LOCAL) -> [ builder add: ((instructions StoreLocalInstruction) clone initWithRegister: nextU8)].
+                (opcode == lang eco bytecodes LOAD_LEXICAL) -> [ builder add: ((instructions LoadLexicalInstruction) clone initWithDepth: nextU8 Register: nextU8)].
+                (opcode == lang eco bytecodes STORE_LEXICAL) -> [ builder add: ((instructions StoreLexicalInstruction) clone initWithDepth: nextU8 Register: nextU8)].
+                (opcode == lang eco bytecodes BUILTIN) -> [ builder add: ((instructions BuiltinInstruction) clone initWithArgs: nextU8 Key: nextConstant) ].
+                (opcode == lang eco bytecodes BUILTINV) -> [ builder add: ((instructions BuiltinInstruction) clone initWithArgs: nextU8 Key: nextConstant Varargs: true) ].
+                (opcode == lang eco bytecodes SEND) -> [ builder add: ((instructions SendInstruction) clone initWithArgs: nextU8 Key: nextConstant) ].
+                (opcode == lang eco bytecodes SENDV) -> [ builder add: ((instructions SendInstruction) clone initWithArgs: nextU8 Key: nextConstant Varargs: true) ].
+                (opcode == lang eco bytecodes RESEND) -> [ builder add: ((instructions ResendInstruction) clone initWithArgs: nextU8 Key: nextConstant) ].
+                (opcode == lang eco bytecodes RESENDV) -> [ builder add: ((instructions ResendInstruction) clone initWithArgs: nextU8 Key: nextConstant Varargs: true) ].
+                (opcode == lang eco bytecodes ASSIGN) -> [ builder add: ((instructions AssignInstruction) clone initWithKey: nextConstant) ].
+                (opcode == lang eco bytecodes RETURN) -> [ builder add: ((instructions ReturnInstruction) clone initWithDepth: nextU8) ].
+                (opcode == lang eco bytecodes CLOSURE) -> [ builder add: ((instructions ClosureInstruction) clone initWithCode: (context Disassemble: nextCode)) ].
+            ].
+          ^ ((context DisassembledFunction clone) initWithInstructions: (builder commit))
+        );
+
+        writeOn: w => w << 'a disassembler';
+    };
+}

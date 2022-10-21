@@ -1,7 +1,7 @@
 {
     static with inherited _ = std Clonable;
     protected optimizer = $;
-    with inherited visitor = $ InstructionVisitor;
+    with inherited visitor = $ instructions InstructionVisitor;
 
     protected function;
     protected stack;
@@ -44,7 +44,7 @@
         protected GetAccu => accu;
 
         protected Move: from To: to => (
-            | v <- (asts ASTAssignment clone) initWithLHS: to RHS: from |
+            | v <- builder Assign: from To: to |
             (to depth != 0) -> [ ^ v ].
             bindings at: to put: v.
           ^ v
@@ -92,7 +92,7 @@
         visitResend: instr => OnStack: (builder Resend: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitAssign: instr => ( | v <- stack pop | OnStack: (builder Assign: v To: stack pop Slot: instr key));
         visitReturn: instr => OnAST: (builder Return: stack pop Depth: instr depth);
-        visitClosure: instr => Accu: (builder Code: instr code);
+        visitClosure: instr => Accu: (builder Code: (optimizer BuildAST: instr code));
 
         buildAST => (
             |

@@ -99,7 +99,7 @@
 
             isAtomic => true;
 
-            writeOn: w => w << '[ ... | ' << (code ast) << ']';
+            writeOn: w => w << '[ ... | ' << code << ']';
         };
     };
 
