@@ -29,6 +29,8 @@
 
             isAtomic => false;
 
+            childrenDo: block => self;
+
             writeOn: w => 'AST()';
         };
     };
@@ -99,6 +101,8 @@
 
             isAtomic => true;
 
+            childrenDo: block => ( block value(code). $(AST) childrenDo: block );
+
             writeOn: w => w << '[ ... | ' << code << ']';
         };
     };
@@ -117,6 +121,8 @@
             );
 
             acceptVisitor: visitor => visitor visitASTCompound: self;
+
+            childrenDo: block => ( instructions do: [ :i | block value(i) ]. $(AST) childrenDo: block );
 
             writeOn: w => w << '(' << instructions << ')';
         };
@@ -138,6 +144,8 @@
             );
 
             acceptVisitor: visitor => visitor visitASTAssignment: self;
+
+            childrenDo: block => ( block value(lhs). block value(rhs). $(AST) childrenDo: block );
 
             writeOn: w => w << '(' << lhs << ' <- ' << rhs << ')';
         };
@@ -162,6 +170,8 @@
 
             acceptVisitor: visitor => visitor visitASTSlotAssignment: self;
 
+            childrenDo: block => ( block value(lhs). block value(rhs). $(AST) childrenDo: block );
+
             writeOn: w => w << '(' << lhs << ' ' << slot << ' <- ' << rhs << ')';
         };
     };
@@ -184,6 +194,8 @@
             );
 
             acceptVisitor: visitor => visitor visitASTBuiltin: self;
+
+            childrenDo: block => ( args do: [ :a | block value(a) ]. $(AST) childrenDo: block );
 
             writeOn: w => (
                 w << message.
@@ -219,6 +231,8 @@
             receiver => args at: 0;
 
             acceptVisitor: visitor => visitor visitASTSend: self;
+
+            childrenDo: block => ( args do: [ :a | block value(a) ]. $(AST) childrenDo: block );
 
             writeOn: w => (
                 w << (args first).
@@ -258,6 +272,8 @@
 
             acceptVisitor: visitor => visitor visitASTResend: self;
 
+            childrenDo: block => ( args do: [ :a | block value(a) ]. $(AST) childrenDo: block );
+
             writeOn: w => (
                 w << '$(' << (args first).
                 w << ') ' << message.
@@ -291,6 +307,8 @@
             );
 
             acceptVisitor: visitor => visitor visitASTReturn: self;
+
+            childrenDo: block => ( block value(returnValue). $(AST) childrenDo: block );
 
             writeOn: w => w << '^ ' << returnValue;
         };

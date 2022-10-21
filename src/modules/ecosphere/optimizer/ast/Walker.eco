@@ -11,11 +11,14 @@
         );
 
         up => ( stack pop. ^ self );
+        protected enter: ast => ( stask push: ast. ^ self );
 
         current => stack top;
 
-        arity => "TODO";
-        nth: n => "TODO";
+        arity => ( | i <- 0 | childrenDo: [ i <- i + 1 ]. ^ i );
+        child: n => ( | i <- 0 | childrenDo: [ :c | (i == n) if: [ ^ c ]. i <- i + 1. ] );
+
+        nth: n => enter: (child: n);
 
         left  => nth: 0;
         right => nth: (arity - 1);
