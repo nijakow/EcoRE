@@ -1,0 +1,33 @@
+{
+    static with inherited _ = std Clonable;
+
+    protected stack;
+
+    static with inherited trait = {
+        initWithAST: ast => (
+            stack <- std util newStack.
+            stack push: ast.
+          ^ self
+        );
+
+        up => ( stack pop. ^ self );
+
+        current => stack top;
+
+        arity => "TODO";
+        nth: n => "TODO";
+
+        left  => nth: 0;
+        right => nth: (arity - 1);
+
+        excursion: block => "TODO";
+
+        childrenDo: block => current childrenDo: block;
+        recursivelyDo: block => (
+            block value(current).
+            childrenDo: [ :c | c recursivelyDo: block ].
+        );
+
+        writeOn: w => w << 'an AST walker';
+    }
+}
