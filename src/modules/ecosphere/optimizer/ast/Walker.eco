@@ -3,7 +3,7 @@
 
     protected stack;
 
-    static with inherited trait = {
+    with inherited trait = {
         initWithAST: ast => (
             stack <- std util newStack.
             stack push: ast.
