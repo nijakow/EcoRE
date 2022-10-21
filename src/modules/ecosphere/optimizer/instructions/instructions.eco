@@ -1,0 +1,299 @@
+
+    {
+        static with inherited _ = std Module;
+
+        own ByteCodeInstruction = {
+            static with inherited _ = std Clonable;
+            private instructions = $;
+
+            next;
+
+            with inherited trait = {
+                init => (
+                    next <- No.
+                  ^ self
+                );
+
+                next: v => next <- Yes: v;
+
+                withSubCode: block => self;
+
+                accept: visitor => visitor visitInstruction: self;
+
+                writeOn: w => w << 'a bytecode instruction';
+            };
+        };
+
+        own NoopInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            with inherited trait = {
+                init => (
+                    super init.
+                  ^ self
+                );
+
+                accept: visitor => visitor visitNoop: self;
+
+                writeOn: w => w << 'a noop bytecode instruction';
+            };
+        };
+
+        own ConstantInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            constant;
+
+            with inherited trait = {
+                initWithConstant: _constant => (
+                    super init.
+                    constant <- _constant.
+                  ^ self
+                );
+
+                accept: visitor => visitor visitConst: self;
+
+                writeOn: w => w << 'a constant bytecode instruction';
+            };
+        };
+
+        own PushInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            with inherited trait = {
+                init => (
+                    super init.
+                  ^ self
+                );
+
+                accept: visitor => visitor visitPush: self;
+
+                writeOn: w => w << 'a push bytecode instruction';
+            };
+        };
+
+        own PopInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            with inherited trait = {
+                init => (
+                    super init.
+                  ^ self
+                );
+
+                accept: visitor => visitor visitPop: self;
+
+                writeOn: w => w << 'a pop bytecode instruction';
+            };
+        };
+
+        own LoadLocalInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            register;
+
+            with inherited trait = {
+                initWithRegister: _register => (
+                    super init.
+                    register <- _register.
+                  ^ self
+                );
+
+                accept: visitor => visitor visitLoadLocal: self;
+
+                writeOn: w => w << 'a load local bytecode instruction';
+            };
+        };
+
+        own StoreLocalInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            register;
+
+            with inherited trait = {
+                initWithRegister: _register => (
+                    super init.
+                    register <- _register.
+                  ^ self
+                );
+
+                accept: visitor => visitor visitStoreLocal: self;
+
+                writeOn: w => w << 'a store local bytecode instruction';
+            };
+        };
+
+        own LoadLexicalInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            depth, register;
+
+            with inherited trait = {
+                initWithDepth: _depth Register: _register => (
+                    super init.
+                    depth <- _depth.
+                    register <- _register.
+                  ^ self
+                );
+
+                accept: visitor => visitor visitLoadLexical: self;
+
+                writeOn: w => w << 'a load lexical bytecode instruction';
+            };
+        };
+
+        own StoreLexicalInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            depth, register;
+
+            with inherited trait = {
+                initWithDepth: _depth Register: _register => (
+                    super init.
+                    depth <- _depth.
+                    register <- _register.
+                  ^ self
+                );
+
+                accept: visitor => visitor visitStoreLexical: self;
+
+                writeOn: w => w << 'a store lexical bytecode instruction';
+            };
+        };
+
+        own BuiltinInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            key, args, varargs;
+
+            with inherited trait = {
+                initWithKey: _key Args: _args Varargs: _varargs => (
+                    super init.
+                    key     <- _key.
+                    args    <- _args.
+                    varargs <- _varargs.
+                  ^ self
+                );
+                initWithKey: key Args: args => initWithKey: key Args: args Varargs: false;
+                initWithArgs: args Key: key => initWithKey: key Args: args;
+                initWithArgs: args Key: key Varargs: varargs => initWithKey: key Args: args Varargs: varargs;
+
+                accept: visitor => visitor visitBuiltin: self;
+
+                writeOn: w => w << 'a call-builtin bytecode instruction';
+            };
+        };
+
+        own SendLikeInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            key, args, varargs;
+
+            with inherited trait = {
+                initWithKey: _key Args: _args Varargs: _varargs => (
+                    super init.
+                    key     <- _key.
+                    args    <- _args.
+                    varargs <- _varargs.
+                  ^ self
+                );
+                initWithKey: key Args: args => initWithKey: key Args: args Varargs: false;
+                initWithArgs: args Key: key => initWithKey: key Args: args;
+                initWithArgs: args Key: key Varargs: varargs => initWithKey: key Args: args Varargs: varargs;
+
+                writeOn: w => w << 'a sendlike bytecode instruction (' << key << ', ' << args << ')';
+            };
+        };
+
+        own SendInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own SendLikeInstruction = $ SendLikeInstruction;
+
+            with inherited trait = {
+                accept: visitor => visitor visitSend: self;
+
+                writeOn: w => w << 'a send bytecode instruction (' << key << ', ' << args << ')';
+            };
+        };
+
+        own ResendInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own SendLikeInstruction = $ SendLikeInstruction;
+
+            with inherited trait = {
+                accept: visitor => visitor visitResend: self;
+
+                writeOn: w => w << 'a resend bytecode instruction (' << key << ', ' << args << ')';
+            };
+        };
+
+        own AssignInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            key;
+
+            with inherited trait = {
+                initWithKey: _key => (
+                    super init.
+                    key <- _key.
+                  ^ self
+                );
+
+                accept: visitor => visitor visitAssign: self;
+
+                writeOn: w => w << 'an assign bytecode instruction';
+            };
+        };
+
+        own ReturnInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            depth;
+
+            with inherited trait = {
+                initWithDepth: _depth => (
+                    super init.
+                    depth <- _depth.
+                  ^ self
+                );
+                init => initWithDepth: 0;
+
+                accept: visitor => visitor visitReturn: self;
+
+                writeOn: w => w << 'a return bytecode instruction';
+            };
+        };
+
+        own ClosureInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            code;
+
+            with inherited trait = {
+                initWithCode: _code => (
+                    super init.
+                    code     <- _code.
+                  ^ self
+                );
+
+                withSubCode: block => block value(code);
+
+                accept: visitor => visitor visitClosure: self;
+
+                writeOn: w => w << 'a closure bytecode instruction';
+            };
+        };
+    }

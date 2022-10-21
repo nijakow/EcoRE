@@ -1,0 +1,27 @@
+
+{
+    static with inherited _ = std Clonable;
+    private instructions = $;
+
+    private first,
+    private last;
+
+    with inherited trait = {
+        init => (
+            | node <- (instructions NoopInstruction) new |
+            first <- node.
+            last  <- node.
+          ^ self
+        );
+    };
+
+    add: instruction => (
+        last next: instruction.
+        last <- instruction.
+      ^ self
+    );
+
+    commit => first;
+
+    writeOn: w => w << 'an instruction graph builder';
+}

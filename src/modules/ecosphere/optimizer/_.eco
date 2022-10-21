@@ -5,8 +5,8 @@
     own ast = (here / 'ast' / '_.eco') importIn: self;
     own instructions = (here / 'instructions' / '_.eco') importIn: self;
 
-    own InstructionGraphBuilder = (here / 'InstructionGraphBuilder.eco') importIn: self;
-    own InstructionVisitor = (here / 'InstructionVisitor.eco') importIn: self;
+    InstructionGraphBuilder => instructions InstructionGraphBuilder;
+    InstructionVisitor => instructions InstructionVisitor;
 
     own Decompiler = (here / 'Decompiler.eco') importIn: self;
 
