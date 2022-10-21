@@ -29,8 +29,7 @@
           ^ self
         );
 
-        builder => self;
-        asts => optimizer ast nodes;
+        builder => optimizer ast builder;
 
         protected UnknownInstruction => 42;
 
@@ -44,27 +43,12 @@
 
         protected GetAccu => accu;
 
-        protected Register: i => Register: i Depth: 0;
-        protected Register: i Depth: d => (asts ASTRegister clone) initWithDepth: d Index: i;
-        protected Constant: c => (asts ASTConstant clone) initWithConstant: c;
-        protected Code: code => (asts ASTCode clone) initWithCode: code;
-
         protected Move: from To: to => (
             | v <- (asts ASTAssignment clone) initWithLHS: to RHS: from |
             (to depth != 0) -> [ ^ v ].
             bindings at: to put: v.
           ^ v
         );
-
-        protected Builtin: key Args: args Varargs: varargs => (asts ASTBuiltin clone) initWithMessage: key Args: args Varargs: varargs;
-        protected Send: key Args: args Varargs: varargs => (asts ASTSend clone) initWithMessage: key Args: args Varargs: varargs;
-        protected Resend: key Args: args Varargs: varargs => (asts ASTResend clone) initWithMessage: key Args: args Varargs: varargs;
-        protected Assign: v To: arg Slot: key => (asts ASTSlotAssignment clone) initWithLHS: arg RHS: v Slot: key;
-
-        protected Return: v Depth: d => (asts ASTReturn clone) initWithValue: v Depth: d;
-        protected JumpBack => (asts ASTJumpBack clone) init;
-
-        protected Compound: elements => (asts ASTCompound clone) initWithInstructions: elements;
 
         protected popN: amount => (
             "

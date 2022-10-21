@@ -8,6 +8,7 @@
     Constant: c => (asts ASTConstant) clone initWithConstant: c;
     Register(depth, index) => (asts ASTRegister) clone initWithDepth: depth Index: index;
     Register: index => Register(0, index);
+    Register: index Depth: depth => Register(depth, index);
 
     Code: code => (asts ASTCode) clone initWithCode: code;
 
@@ -24,5 +25,5 @@
 
     Resend: name Args: args Varargs: varargs => (asts ASTResend) clone initWithMessage: name Args: args Varargs: varargs;
 
-    Return => (asts ASTReturn) clone;
+    Return: v Depth: d => (asts ASTReturn clone) initWithValue: v Depth: d;
 }
