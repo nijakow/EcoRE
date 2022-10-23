@@ -25,11 +25,4 @@
             ]
           ~ default: [ ^ ast ]
     );
-
-
-    Rewrite: ast Context: context => (
-
-    );
-
-    Rewrite: ast => Rewrite: ast Context: newContext;
 }

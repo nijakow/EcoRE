@@ -1,4 +1,8 @@
 
 {
     static with inherited _ = std Module;
+
+    Rewrite: ast Context: context => ast;
+
+    Rewrite: ast => ast;
 }
