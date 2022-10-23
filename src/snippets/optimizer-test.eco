@@ -1,0 +1,11 @@
+{
+    static with inherited _ = std Module;
+
+    optimizer <- (std os files here / '..' / 'modules' / 'ecosphere' / 'optimizer' / '_.eco') import Init;
+
+    f(x) => [ x * x ] value;
+
+    Main => (
+        optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'f' In: self)).
+    );
+} Main.
