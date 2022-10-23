@@ -2,12 +2,12 @@
 {
     static with inherited _ = std Module;
 
+    own asm = (here / 'asm' / '_.eco') importIn: self;
     own ast = (here / 'ast' / '_.eco') importIn: self;
-    own instructions = (here / 'instructions' / '_.eco') importIn: self;
 
     own Decompiler = (here / 'Decompiler.eco') importIn: self;
 
-    protected Disassembler => instructions Disassembler;
+    protected Disassembler => asm Disassembler;
     
 
     Print(f, indent) => (
@@ -21,7 +21,7 @@
       ^ f
     );
 
-    DisassembleCodeObject: code => instructions Disassemble: code;
+    DisassembleCodeObject: code => asm Disassemble: code;
 
     Disassemble: code => DisassembleCodeObject: code;
 

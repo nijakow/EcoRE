@@ -1,7 +1,7 @@
 {
     static with inherited _ = std Clonable;
     protected optimizer = $;
-    with inherited visitor = $ instructions InstructionVisitor;
+    with inherited visitor = $ asm InstructionVisitor;
 
     protected function;
     protected stack;
