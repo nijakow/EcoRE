@@ -4,25 +4,11 @@
 
     own asm = (here / 'asm' / '_.eco') importIn: self;
     own ast = (here / 'ast' / '_.eco') importIn: self;
+    own rewriter = (here / 'rewriter' / '_.eco') importIn: self;
 
     own AsmDecompiler = (here / 'AsmDecompiler.eco') importIn: self;
 
-    protected Disassembler => asm Disassembler;
-    
-
-    Print(f, indent) => (
-        | expr <- f instructions |
-        [ :break |
-            1 to: indent do: [ std io out << '    ' ].
-            (std io out << expr) newline commit.
-            expr withSubCode: [ :c | Print(c, indent + 1) ].
-            expr next yes: [ :v | expr <- v ] no: [ break value ].
-        ] repeatWithBreak.
-      ^ f
-    );
-
     DisassembleCodeObject: code => asm Disassemble: code;
-
     Disassemble: code => DisassembleCodeObject: code;
 
     Disassemble: name In: object => (
@@ -30,8 +16,6 @@
                         ~ slot: name
                         ~ slotValue).
     );
-
-    Print: name In: object => Print(Disassemble: name In: object, 0);
 
     BuildAST: disassembledFunction => (
       ^ ((AsmDecompiler clone) initWithFunction: disassembledFunction) buildAST

@@ -1,0 +1,4 @@
+
+{
+    static with inherited _ = std Module;
+}
