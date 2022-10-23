@@ -5,7 +5,7 @@
     own asm = (here / 'asm' / '_.eco') importIn: self;
     own ast = (here / 'ast' / '_.eco') importIn: self;
 
-    own Decompiler = (here / 'Decompiler.eco') importIn: self;
+    own AsmDecompiler = (here / 'AsmDecompiler.eco') importIn: self;
 
     protected Disassembler => asm Disassembler;
     
@@ -34,7 +34,7 @@
     Print: name In: object => Print(Disassemble: name In: object, 0);
 
     BuildAST: disassembledFunction => (
-      ^ ((Decompiler clone) initWithFunction: disassembledFunction) buildAST
+      ^ ((AsmDecompiler clone) initWithFunction: disassembledFunction) buildAST
     );
 
     RewriteAST: ast => ast;
