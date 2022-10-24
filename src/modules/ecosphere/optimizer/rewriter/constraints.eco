@@ -8,7 +8,7 @@
 
     Unknown => Anything;
 
-    own ConstantType = {
+    own Constant = {
         static with inherited _ = std Clonable;
 
         constant;
@@ -21,5 +21,5 @@
         };
     };
 
-    ConstantType: c => (ConstantType clone) initWithConstant: c;
+    Constant: c => (ConstantType clone) initWithConstant: c;
 }

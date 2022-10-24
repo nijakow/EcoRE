@@ -2,6 +2,9 @@
 {
     static with inherited _ = std Module;
 
+    constraints = (here / 'constraints.eco') importIn: self;
+    context = (here / 'context.eco') importIn: self;
+
     Rewrite: ast Context: context => ast;
 
     Rewrite: ast => ast;
