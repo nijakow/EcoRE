@@ -2,10 +2,18 @@
 {
     static with inherited _ = std Module;
 
-    constraints = (here / 'constraints.eco') importIn: self;
-    context = (here / 'context.eco') importIn: self;
+    ast = $ ast;
 
-    Rewrite: ast Context: context => ast;
+    with own switch = (here / 'switch.eco') importIn: self;
+
+    own constraints = (here / 'constraints.eco') importIn: self;
+    own context = (here / 'context.eco') importIn: self;
+    own calc = (here / 'calc.eco') importIn: self;
+
+    Rewrite: ast Context: context => (
+        std io out << (calc ConstraintsFor: (ast returnValue) Context: context) ~ newline commit.
+      ^ ast
+    );
 
     Rewrite: ast => Rewrite: ast Context: context NewContext;
 }

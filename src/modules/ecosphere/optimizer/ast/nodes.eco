@@ -1,20 +1,8 @@
 {
     static with inherited _ = std Module;
+    protected context = $;
 
-    own ASTType = {
-        own Default  = { static with inherited _ = std Enum };
-        own Constant = { static with inherited _ = std Enum };
-        own Register = { static with inherited _ = std Enum };
-
-        own Compound = { static with inherited _ = std Enum };
-        own Block    = { static with inherited _ = std Enum };
-
-        own Builtin  = { static with inherited _ = std Enum };
-        own Send     = { static with inherited _ = std Enum };
-        own Resend   = { static with inherited _ = std Enum };
-
-        own Return   = { static with inherited _ = std Enum };
-    };
+    own ASTType => context types;
 
     own AST = {
         static with inherited _ = std Clonable;
@@ -65,7 +53,7 @@
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
 
-        protected constant;
+        constant;
 
         with inherited trait = {
             initWithConstant: _constant => (
@@ -111,7 +99,7 @@
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
 
-        protected instructions;
+        instructions;
 
         with inherited trait = {
             initWithInstructions: _instructions => (
@@ -295,8 +283,8 @@
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
 
-        protected returnValue;
-        protected depth;
+        returnValue;
+        depth;
 
         with inherited trait = {
             initWithValue: _value Depth: _depth => (

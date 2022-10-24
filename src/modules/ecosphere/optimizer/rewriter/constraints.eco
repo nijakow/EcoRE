@@ -4,6 +4,8 @@
 
     own Anything = {
         static with inherited _ = std Singleton;
+
+        writeOn: w => w << 'anything';
     };
 
     Unknown => Anything;
@@ -18,8 +20,10 @@
                 constant <- _constant.
               ^ self
             );
+
+            writeOn: w => w << 'a constant constraint(' << constant << ')';
         };
     };
 
-    Constant: c => (ConstantType clone) initWithConstant: c;
+    Constant: c => (Constant clone) initWithConstant: c;
 }

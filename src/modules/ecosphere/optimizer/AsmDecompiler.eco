@@ -103,7 +103,7 @@
                 expr accept: self;
                 expr next yes: [ :v | expr <- v ] no: [ break value ].
             ] repeatWithBreak.
-          ^ builder Compound: compound
+          ^ (compound size == 1) if: [ compound at: 0 ] else: [ builder Compound: compound ]
         );
     };
 }

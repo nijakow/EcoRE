@@ -4,8 +4,9 @@
     optimizer <- (std os files here / '..' / 'modules' / 'ecosphere' / 'optimizer' / '_.eco') import Init;
 
     f(x) => [ x * x ] value;
+    g(x) => 42;
 
     Main => (
-        optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'f' In: self)).
+        optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'g' In: self)).
     );
 } Main.
