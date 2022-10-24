@@ -1,0 +1,33 @@
+
+{
+    static with inherited _ = std Module;
+
+    own Argument = {
+        static with inherited _ = std Clonable;
+
+        name;
+
+        with inherited trait = {
+            initWithName: _name => (
+                name <- _name.
+              ^ self
+            );
+        };
+    };
+
+    own Signature = {
+        static with inherited _ = std Clonable;
+
+        args, varargs;
+
+        with inherited trait = {
+            initWithArgs: _args Varargs: _varargs => (
+                args    <- _args.
+                varargs <- _varargs.
+              ^ self
+            );
+
+            argCount => args size;
+        };
+    };
+}

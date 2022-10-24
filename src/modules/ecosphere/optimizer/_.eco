@@ -2,6 +2,8 @@
 {
     static with inherited _ = std Module;
 
+    own common = (here / 'common' / '_.eco') importIn: self;
+
     own asm = (here / 'asm' / '_.eco') importIn: self;
     own ast = (here / 'ast' / '_.eco') importIn: self;
     own rewriter = (here / 'rewriter' / '_.eco') importIn: self;

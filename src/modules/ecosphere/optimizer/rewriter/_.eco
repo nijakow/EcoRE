@@ -7,5 +7,5 @@
 
     Rewrite: ast Context: context => ast;
 
-    Rewrite: ast => ast;
+    Rewrite: ast => Rewrite: ast Context: context NewContext;
 }

@@ -2,8 +2,21 @@
 {
     static with inherited _ = std Module;
 
+    own RegisterInfo = {
+        static with inherited _ = std Clonable;
+
+        with inherited trait = {
+            init => (
+              ^ self
+            );
+
+            writeOn: w => w << 'some register info';
+        };
+    };
+
     own Context = {
         static with inherited _ = std Clonable;
+        protected context = $;
 
         surroundingContext,
         registers;
@@ -27,9 +40,20 @@
                     else: [ ^ surroundingContext yes depth: (d - 1) ]
             );
 
-            register: index => registers at: index;
-        };
+            register: index => (
+                (registers at: index)
+                  ~ yes: [ :r | ^ r ]
+                     no: [
+                          | ri <- (context RegisterInfo) new |
+                          registers at: index put: ri.
+                        ^ ri
+                     ]
+            );
 
-        WrapContext: context => (Context clone) initWithSurroundingContext: context;
-    }
+            writeOn: w => w << 'a context';
+        };
+    };
+
+    WrapContext: context => (Context clone) initWithSurroundingContext: context;
+    NewContext => (Context clone) init;
 }
