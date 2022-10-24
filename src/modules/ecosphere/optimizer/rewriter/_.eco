@@ -10,10 +10,7 @@
     own context = (here / 'context.eco') importIn: self;
     own calc = (here / 'calc.eco') importIn: self;
 
-    Rewrite: ast Context: context => (
-        std io out << (calc ConstraintsFor: (ast returnValue) Context: context) ~ newline commit.
-      ^ ast
-    );
+    Rewrite: ast Context: context => ast;
 
     Rewrite: ast => Rewrite: ast Context: context NewContext;
 }
