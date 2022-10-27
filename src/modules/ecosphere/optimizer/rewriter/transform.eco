@@ -11,7 +11,7 @@
     protected calc => module calc;
     protected builder => module builder;
 
-    InlineMethod: m Args: args Varargs: varargs Context: context => (
+    InlineAST: m Args: args Varargs: varargs Context: context => (
         "TODO"
         (io out << 'Inlining method ' << m) newline commit.
         | newContext <- context wrap |
@@ -22,6 +22,8 @@
         "TODO: Stop condition for rewriting and inlining (maybe based on context depth?)"
       ^ Rewrite: m Context: newContext
     );
+
+    InlineFunction: m Args: args Varargs: varargs Context: context => InlineAST: m code Args: args Varargs: varargs Context: context;
 
     LookupCodeMethod: name => (
         (name == #'value') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'value' In: (std reflect proxies Block))) ].
@@ -46,16 +48,17 @@
                 c ifConstant: [ ^ c constant ] else: [ ^ ast ]
             ]
           ~ case: astTypes Builtin do: [
-                (ast message == #'ecosphere.ecore.flow.value') -> [ ^ InlineMethod: (ast args at: 0) Args: (ast args map: [ :arg | Rewrite: arg Context: context ]) Varargs: (ast varargs) Context: context ].
-              ^ builder Builtin: (ast message) Args: (ast args map: [ :arg | Rewrite: arg Context: context ]) Varargs: (ast varargs)
+                | args2 <- ast args map: [ :arg | Rewrite: arg Context: context ] |
+                (ast message == #'ecosphere.ecore.flow.value') -> [ ^ InlineFunction: (args2 at: 0) Args: (args2) Varargs: (ast varargs) Context: context ].
+              ^ builder Builtin: (ast message) Args: (args2) Varargs: (ast varargs)
             ]
           ~ case: astTypes Send do: [
                 |
                     ast2   <- builder Send: (ast message) Args: (ast args map: [ :arg | Rewrite: arg Context: context ]) Varargs: (ast varargs),
                     method <- LookupMethod: (ast2 message) InAST: (ast2 receiver)
                 |
-                method yes: [ :m | ^ InlineMethod: m Args: ast2 args Varargs: ast2 varargs Context: context ]
-                        no: [      ^ ast2                                                                   ]
+                method yes: [ :m | ^ InlineAST: m Args: ast2 args Varargs: ast2 varargs Context: context ]
+                        no: [      ^ ast2                                                                ]
             ]
           ~ case: astTypes Return do: [
               ^ builder Return: (Rewrite: ast returnValue Context: context) Depth: (ast depth)
