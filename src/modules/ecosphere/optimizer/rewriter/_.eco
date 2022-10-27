@@ -1,6 +1,7 @@
 
 {
     static with inherited _ = std Module;
+    optimizer = $;
 
     ast = $ ast;
     builder => ast builder;

@@ -195,6 +195,7 @@
 
             writeOn: w => (
                 w << message.
+                (args size == 0) -> [ w << '()'. ^ self ].
                 w << '('.
                 0 to: (args size - 2) do: [ :i |
                     w << (args at: i).

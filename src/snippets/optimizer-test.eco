@@ -5,8 +5,9 @@
 
     f(x) => [ x * x ] value;
     g(x) => 42;
+    h(x) => [ (std io out << 'Hi!') newline commit ] repeat;
 
     Main => (
-        optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'f' In: self)).
+        optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'h' In: self)).
     );
 } Main.

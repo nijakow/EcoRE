@@ -2,6 +2,8 @@
     static with inherited _ = std Module;
     module = $;
 
+    optimizer => module optimizer;
+
     with own switch = self module switch;
 
     protected astTypes => module ast types;
@@ -11,11 +13,20 @@
 
     InlineMethod: m Args: args Varargs: varargs Context: context => (
         "TODO"
+        (io out << 'Inlining method ' << m) newline commit.
+      ^ 42
     );
 
-    LookupMethod: name Constraints: constr => (
-        (std io out << 'Looking up ' << name) newline commit.
+    LookupCodeMethod: name => (
+        (name == #'value') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'value' In: (std reflect proxies Block))) ].
+        (name == #'repeat') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'repeat' In: (std reflect proxies Block))) ].
       ^ No
+    );
+
+    LookupMethod: name InAST: ast => (
+        ((ast type) == (astTypes Code))
+              if: [ ^ LookupCodeMethod: name ]
+            else: [ ^ No                     ]
     );
 
     Rewrite: ast Context: context => (
@@ -25,8 +36,7 @@
             ]
           ~ case: astTypes Send do: [
                 |
-                    constr <- calc ConstraintsFor: (ast receiver) Context: context,
-                    method <- LookupMethod: ast message Constraints: constr
+                    method <- LookupMethod: (ast message) InAST: (ast receiver)
                 |
                 method yes: [ :m | ^ InlineMethod: m Args: ast args Varargs: ast varargs Context: context ]
                         no: [      ^ ast                                                                  ]
