@@ -2,9 +2,16 @@
 {
     static with inherited _ = std Module;
 
+    own types = {
+        Anything = { static with inherited _ = std Enum };
+        Constant = { static with inherited _ = std Enum };
+    };
+
     own Anything = {
         static with inherited _ = std Singleton;
+        protected module = $;
 
+        type => module types Anything;
         writeOn: w => w << 'anything';
     };
 
@@ -12,6 +19,7 @@
 
     own Constant = {
         static with inherited _ = std Clonable;
+        protected module = $;
 
         constant;
 
@@ -20,6 +28,8 @@
                 constant <- _constant.
               ^ self
             );
+
+            type => module types Constant;
 
             writeOn: w => w << 'a constant constraint(' << constant << ')';
         };
