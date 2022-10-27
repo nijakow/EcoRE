@@ -10,8 +10,8 @@
     
     ConstraintsFor: ast Context: context => (
         (Switch: ast type)
-          ~ case: astTypes Constant do: [ ^ constraints Constant: (ast constant)               ]
-          ~ case: astTypes Code     do: [ ^ constraints Constant: (ast code)                   ]
+          ~ case: astTypes Constant do: [ ^ constraints Constant: ast                          ]
+          ~ case: astTypes Code     do: [ ^ constraints Constant: ast                          ]
           ~ case: astTypes Register do: [ ^ context depth: (ast depth) ~ register: (ast index) ]
           ~ default: [ ^ constraints Unknown ]
         ~ end
