@@ -76,7 +76,7 @@
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
 
-        protected code;
+        code;
 
         with inherited trait = {
             initWithCode: _code => (

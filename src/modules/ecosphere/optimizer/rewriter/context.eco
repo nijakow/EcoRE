@@ -1,14 +1,23 @@
 
 {
     static with inherited _ = std Module;
+    protected module = $;
+
+    constraints => module constraints;
 
     own RegisterInfo = {
         static with inherited _ = std Clonable;
+        protected context = $;
+
+        constraints;
 
         with inherited trait = {
             init => (
+                constraints <- context constraints Anything.
               ^ self
             );
+
+            constraints: c => constraints <- c;
 
             writeOn: w => w << 'some register info';
         };
@@ -49,6 +58,8 @@
                         ^ ri
                      ]
             );
+
+            wrap => context WrapContext: self;
 
             writeOn: w => w << 'a context';
         };

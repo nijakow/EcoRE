@@ -14,7 +14,13 @@
     InlineMethod: m Args: args Varargs: varargs Context: context => (
         "TODO"
         (io out << 'Inlining method ' << m) newline commit.
-      ^ 42
+        | newContext <- context wrap |
+        args forEach: [ :i, :arg |
+            (newContext register: i) constraints: (calc ConstraintsFor: arg Context: context).
+            (std io out << i << ' ' << (calc ConstraintsFor: arg Context: context)) newline commit.
+        ].
+        "TODO: Stop condition for rewriting and inlining (maybe based on context depth?)"
+      ^ Rewrite: m Context: newContext
     );
 
     LookupCodeMethod: name => (
@@ -31,6 +37,14 @@
 
     Rewrite: ast Context: context => (
         (Switch: ast type)
+          ~ case: astTypes Register do: [
+                | c <- context
+                           ~ depth: (ast depth)
+                           ~ register: (ast index)
+                           ~ constraints
+                |
+                c ifConstant: [ ^ c constant ] else: [ ^ ast ]
+            ]
           ~ case: astTypes Builtin do: [
               ^ ast
             ]

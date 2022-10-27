@@ -11,6 +11,8 @@
         static with inherited _ = std Singleton;
         protected module = $;
 
+        ifConstant: y else: n => n value;
+
         type => module types Anything;
         writeOn: w => w << 'anything';
     };
@@ -30,6 +32,8 @@
             );
 
             type => module types Constant;
+
+            ifConstant: y else: n => y value;
 
             writeOn: w => w << 'a constant constraint(' << constant << ')';
         };
