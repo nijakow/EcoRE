@@ -85,6 +85,8 @@
               ^ self
             );
 
+            type => context ASTType Code;
+
             acceptVisitor: visitor => visitor visitASTCode: self;
 
             isAtomic => true;
@@ -108,6 +110,8 @@
               ^ self
             );
 
+            type => context ASTType Compound;
+
             acceptVisitor: visitor => visitor visitASTCompound: self;
 
             childrenDo: block => ( instructions do: [ :i | block value(i) ]. $(AST) childrenDo: block );
@@ -130,6 +134,8 @@
                 rhs <- _rhs.
               ^ self
             );
+
+            type => context ASTType Assignment;
 
             acceptVisitor: visitor => visitor visitASTAssignment: self;
 
@@ -156,6 +162,8 @@
               ^ self
             );
 
+            type => context ASTType SlotAssignment;
+
             acceptVisitor: visitor => visitor visitASTSlotAssignment: self;
 
             childrenDo: block => ( block value(lhs). block value(rhs). $(AST) childrenDo: block );
@@ -168,9 +176,7 @@
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
 
-        protected message;
-        protected args;
-        protected varargs;
+        message, args, varargs;
 
         with inherited trait = {
             initWithMessage: _message Args: _args Varargs: _varargs => (
@@ -180,6 +186,8 @@
                 varargs  <- _varargs.
               ^ self
             );
+
+            type => context ASTType Builtin;
 
             acceptVisitor: visitor => visitor visitASTBuiltin: self;
 
@@ -203,9 +211,7 @@
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
 
-        protected message;
-        protected args;
-        protected varargs;
+        message, args, varargs;
 
         with inherited trait = {
             initWithMessage: _message Args: _args Varargs: _varargs => (
@@ -215,6 +221,8 @@
                 varargs  <- _varargs.
               ^ self
             );
+
+            type => context ASTType Send;
 
             receiver => args at: 0;
 
@@ -243,9 +251,7 @@
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
 
-        protected message;
-        protected args;
-        protected varargs;
+        message, args, varargs;
 
         with inherited trait = {
             initWithMessage: _message Args: _args Varargs: _varargs => (
@@ -255,6 +261,8 @@
                 varargs  <- _varargs.
               ^ self
             );
+
+            type => context ASTType Resend;
 
             receiver => args at: 0;
 
@@ -293,6 +301,8 @@
                 depth       <- _depth.
               ^ self
             );
+
+            type => context ASTType Return;
 
             acceptVisitor: visitor => visitor visitASTReturn: self;
 

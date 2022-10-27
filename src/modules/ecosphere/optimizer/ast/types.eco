@@ -7,10 +7,14 @@
 
     own Compound = { static with inherited _ = std Enum };
     own Block    = { static with inherited _ = std Enum };
+    own Code     = { static with inherited _ = std Enum };
 
     own Builtin  = { static with inherited _ = std Enum };
     own Send     = { static with inherited _ = std Enum };
     own Resend   = { static with inherited _ = std Enum };
+
+    own Assignment      = { static with inherited _ = std Enum };
+    own SlotAssignment  = { static with inherited _ = std Enum };
 
     own Return   = { static with inherited _ = std Enum };
 }

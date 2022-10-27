@@ -3,14 +3,14 @@
     static with inherited _ = std Module;
 
     ast = $ ast;
+    builder => ast builder;
 
     with own switch = (here / 'switch.eco') importIn: self;
 
     own constraints = (here / 'constraints.eco') importIn: self;
     own context = (here / 'context.eco') importIn: self;
     own calc = (here / 'calc.eco') importIn: self;
+    own transform = (here / 'transform.eco') importIn: self;
 
-    Rewrite: ast Context: context => ast;
-
-    Rewrite: ast => Rewrite: ast Context: context NewContext;
+    Rewrite: ast => transform Rewrite: ast Context: context NewContext;
 }

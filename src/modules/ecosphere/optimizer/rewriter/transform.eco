@@ -1,0 +1,39 @@
+{
+    static with inherited _ = std Module;
+    module = $;
+
+    with own switch = self module switch;
+
+    protected astTypes => module ast types;
+    protected constraints => module constraints;
+    protected calc => module calc;
+    protected builder => module builder;
+
+    InlineMethod: m Args: args Varargs: varargs Context: context => (
+        "TODO"
+    );
+
+    LookupMethod: name Constraints: constr => (
+        (std io out << 'Looking up ' << name) newline commit.
+      ^ No
+    );
+
+    Rewrite: ast Context: context => (
+        (Switch: ast type)
+          ~ case: astTypes Builtin do: [
+              ^ ast
+            ]
+          ~ case: astTypes Send do: [
+                |
+                    constr <- calc ConstraintsFor: (ast receiver) Context: context,
+                    method <- LookupMethod: ast message Constraints: constr
+                |
+                method yes: [ :m | ^ InlineMethod: m Args: ast args Varargs: ast varargs Context: context ]
+                        no: [      ^ ast                                                                  ]
+            ]
+          ~ case: astTypes Return do: [
+              ^ builder Return: (Rewrite: ast returnValue Context: context) Depth: (ast depth)
+            ]
+          ~ default: [ ^ ast ]
+    );
+}
