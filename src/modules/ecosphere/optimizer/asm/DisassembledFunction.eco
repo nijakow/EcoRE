@@ -9,6 +9,11 @@
             instructions <- _instructions.
           ^ self
         );
+        initWithInstructions: _instructions => (
+            codeObject   <- No.
+            instructions <- _instructions.
+          ^ self
+        );
 
         writeOn: w => w << 'a disassembled function';
     };
