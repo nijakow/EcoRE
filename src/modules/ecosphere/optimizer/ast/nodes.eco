@@ -97,6 +97,31 @@
         };
     };
 
+    own ASTScope = {
+        static with inherited _ = std Clonable;
+        with inherited own AST = $ AST;
+
+        body;
+
+        with inherited trait = {
+            initWithBody: _body => (
+                $(AST) init.
+                body <- _body.
+              ^ self
+            );
+
+            type => context ASTType Scope;
+
+            acceptVisitor: visitor => visitor visitASTScope: self;
+
+            isAtomic => body isAtomic;
+
+            childrenDo: block => ( block value(body). $(AST) childrenDo: block );
+
+            writeOn: w => w << '<| ' << body << ' |>';
+        };
+    };
+
     own ASTCompound = {
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
@@ -309,7 +334,7 @@
 
             childrenDo: block => ( block value(returnValue). $(AST) childrenDo: block );
 
-            writeOn: w => w << '^ ' << returnValue;
+            writeOn: w => w << '^..' << depth << ' ' << returnValue;
         };
     };
 

@@ -20,7 +20,7 @@
             (std io out << i << ' ' << (calc ConstraintsFor: arg Context: context)) newline commit.
         ].
         "TODO: Stop condition for rewriting and inlining (maybe based on context depth?)"
-      ^ Rewrite: m Context: newContext
+      ^ Rewrite: (builder Scope: m) Context: newContext
     );
 
     InlineFunction: m Args: args Varargs: varargs Context: context => InlineAST: m code Args: args Varargs: varargs Context: context;
@@ -66,6 +66,9 @@
             ]
           ~ case: astTypes Compound do: [
               ^ builder Compound: (ast instructions map: [ :arg | Rewrite: arg Context: context ])
+            ]
+          ~ case: astTypes Scope do: [
+              ^ builder Scope: (Rewrite: (ast body) Context: context)  "TODO: Wrap context?"
             ]
           ~ default: [ ^ ast ]
     );
