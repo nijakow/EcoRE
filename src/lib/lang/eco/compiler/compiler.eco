@@ -18,13 +18,13 @@
       ^ writer finishWithArgs: args Varargs: varargs
     );
 
-    selfValue => registerValue: (ValueType Arg: 0) Depth: 0;
+    selfValue => registerValue: (ValueType Arg: 0) Depth: depth;
     constantValue: c => (ValueType Constant) clone initWithValue: c;
     closureValue: c => (ValueType Closure) clone initWithValue: c;
     registerValue: details Depth: d => (ValueType Register) clone initWithDetails: details Depth: d;
     stackTopValue => (ValueType Stack) clone;
 
-    loadSelf => loadRegister: (ValueType Arg: 0);
+    loadSelf => loadRegister: (ValueType Arg: 0) Depth: depth;
     loadConstant: c => writer writeConst: c;
     loadClosure: c => writer writeClosure: c;
     loadRegister: r Depth: d => writer writeLoad: r bcIndex Depth: d;
