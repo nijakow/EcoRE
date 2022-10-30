@@ -1,10 +1,11 @@
 {
     static with inherited _ = std Clonable;
 
-    instructions;
+    codeObject, instructions;
 
     with inherited trait = {
-        initWithInstructions: _instructions => (
+        initWithCodeObject: _object Instructions: _instructions => (
+            codeObject   <- Yes: _object.
             instructions <- _instructions.
           ^ self
         );

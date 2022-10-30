@@ -4,18 +4,19 @@
     protected context = $;
     protected instructions => context instructions;
 
+    protected codeObject,
     protected bytecodes,
     protected it,
     protected constants;
 
     with inherited trait = {
-        initWithBytecodes: _bytecodes Constants: _constants => (
+        protected initWithBytecodes: _bytecodes Constants: _constants => (
             bytecodes <- _bytecodes.
             constants <- _constants.
             it        <- _bytecodes iterator.
           ^ self
         );
-        initWithCode: _code => initWithBytecodes: (_code bytecodes) Constants: (_code constants);
+        initWithCode: _code => ( codeObject <- _code. initWithBytecodes: (_code bytecodes) Constants: (_code constants) );
 
         protected nextU8 => (it next) bitAnd: 255;
         protected nextU16 => (
@@ -49,7 +50,7 @@
                 (opcode == lang eco bytecodes RETURN) -> [ builder add: ((instructions ReturnInstruction) clone initWithDepth: nextU8) ].
                 (opcode == lang eco bytecodes CLOSURE) -> [ builder add: ((instructions ClosureInstruction) clone initWithCode: (context Disassemble: nextCode)) ].
             ].
-          ^ ((context DisassembledFunction clone) initWithInstructions: (builder commit))
+          ^ ((context DisassembledFunction clone) initWithCodeObject: codeObject Instructions: (builder commit))
         );
 
         writeOn: w => w << 'a disassembler';
