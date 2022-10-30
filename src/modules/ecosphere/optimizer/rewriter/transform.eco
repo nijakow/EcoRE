@@ -21,6 +21,7 @@
     InlineAST: m Args: args Varargs: varargs Context: context => InlineAST: m Args: args Varargs: varargs Context: context NewContext: context wrap;
 
     InlineFunction: m Args: args Varargs: varargs Context: context => InlineAST: m code Args: args Varargs: varargs Context: context;
+    InlineFunction: m Args: args Varargs: varargs Context: context NewContext: newContext => InlineAST: m code Args: args Varargs: varargs Context: context NewContext: newContext;
 
     LookupCodeMethod: name => (
         (name == #'std') -> [ ^ Yes: (builder Constant: std) ].
