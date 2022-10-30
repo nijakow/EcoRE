@@ -48,7 +48,9 @@
             ]
           ~ case: astTypes Builtin do: [
                 | args2 <- ast args map: [ :arg | Rewrite: arg Context: context ] |
-                ( [ast message == #'ecosphere.ecore.flow.value'] and: [(args2 at: 0) type == astTypes Code]) -> [ ^ InlineFunction: (args2 at: 0) Args: (args2) Varargs: (ast varargs) Context: context ].
+                ( [ast message == #'ecosphere.ecore.flow.value'] and: [(args2 at: 0) type == astTypes Code]) -> [
+                  ^ InlineFunction: (args2 at: 0) Args: args2 Varargs: (ast varargs) Context: context
+                ].
               ^ builder Builtin: (ast message) Args: (args2) Varargs: (ast varargs)
             ]
           ~ case: astTypes Send do: [
