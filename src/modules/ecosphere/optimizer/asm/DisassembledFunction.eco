@@ -1,5 +1,6 @@
 {
     static with inherited _ = std Clonable;
+    module = $;
 
     codeObject, instructions;
 
@@ -14,6 +15,8 @@
             instructions <- _instructions.
           ^ self
         );
+
+        dumpOn: w => module InstructionWriter PrintDisassembledFunction: self;
 
         writeOn: w => w << 'a disassembled function';
     };

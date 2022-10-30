@@ -106,7 +106,7 @@
 
                 accept: visitor => visitor visitLoadLocal: self;
 
-                writeOn: w => w << 'a load local bytecode instruction';
+                writeOn: w => w << 'a load local bytecode instruction(' << register << ')';
             };
         };
 
@@ -125,7 +125,7 @@
 
                 accept: visitor => visitor visitStoreLocal: self;
 
-                writeOn: w => w << 'a store local bytecode instruction';
+                writeOn: w => w << 'a store local bytecode instruction(' << register << ')';
             };
         };
 
@@ -145,7 +145,7 @@
 
                 accept: visitor => visitor visitLoadLexical: self;
 
-                writeOn: w => w << 'a load lexical bytecode instruction';
+                writeOn: w => w << 'a load lexical bytecode instruction(' << depth << ', ' << register << ')';
             };
         };
 
@@ -165,7 +165,7 @@
 
                 accept: visitor => visitor visitStoreLexical: self;
 
-                writeOn: w => w << 'a store lexical bytecode instruction';
+                writeOn: w => w << 'a store lexical bytecode instruction(' << depth << ', ' << register << ')';
             };
         };
 

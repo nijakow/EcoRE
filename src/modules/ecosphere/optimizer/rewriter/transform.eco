@@ -11,15 +11,14 @@
     protected calc => module calc;
     protected builder => module builder;
 
-    InlineAST: m Args: args Varargs: varargs Context: context => (
-        "TODO"
-        | newContext <- context wrap |
+    InlineAST: m Args: args Varargs: varargs Context: context NewContext: newContext => (
         args forEach: [ :i, :arg |
             (newContext register: i) constraints: (calc ConstraintsFor: arg Context: context).
         ].
         "TODO: Stop condition for rewriting and inlining (maybe based on context depth?)"
       ^ Rewrite: (builder Scope: m) Context: newContext
     );
+    InlineAST: m Args: args Varargs: varargs Context: context => InlineAST: m Args: args Varargs: varargs Context: context NewContext: context wrap;
 
     InlineFunction: m Args: args Varargs: varargs Context: context => InlineAST: m code Args: args Varargs: varargs Context: context;
 

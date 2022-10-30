@@ -6,9 +6,11 @@
     f(x) => [ x * x ] value;
     g(x) => 42;
     h(x) => [ (std io out << 'Hi!') newline commit ] repeat;
-    i(x) => [ [ [ std a ] repeat. [ std b ] repeat ] repeat ] value;
+    i(x) => [ [ [ a ] repeat. [ b ] repeat ] repeat ] value;
+    j(x) => [ foo ] value;
 
     Main => (
-        optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'i' In: self)).
+        (optimizer Disassemble: #'j' In: self) dumpOn: (std io out).
+        optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'j' In: self)).
     );
 } Main.
