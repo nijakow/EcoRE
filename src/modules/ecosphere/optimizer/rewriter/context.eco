@@ -28,17 +28,24 @@
         protected context = $;
 
         surroundingContext,
+        lexicalContext,
         registers;
 
         with inherited trait = {
-            initWithSurroundingContext: context => (
+            initWithSurroundingContext: context LexicalContext: lexical => (
                 surroundingContext <- Yes: context.
+                lexicalContext     <- Yes: lexical.
                 registers          <- std util newMap.
               ^ self
             );
 
+            initWithSurroundingContext: context => (
+              ^ initWithSurroundingContext: context LexicalContext: context
+            );
+
             init => (
                 surroundingContext <- No.
+                lexicalContext     <- No.
                 registers          <- std util newMap.
               ^ self
             );
@@ -47,6 +54,12 @@
                 (d isZero)
                   ~   if: [ ^ self                                  ]
                     else: [ ^ surroundingContext yes depth: (d - 1) ]
+            );
+
+            lexical: d => (
+                (d isZero)
+                  ~   if: [ ^ self                                  ]
+                    else: [ ^ lexicalContext yes depth: (d - 1) ]
             );
 
             register: index => (
@@ -60,11 +73,13 @@
             );
 
             wrap => context WrapContext: self;
+            wrapLexical: other => context WrapContext: self Lexical: other;
 
             writeOn: w => w << 'a context';
         };
     };
 
     WrapContext: context => (Context clone) initWithSurroundingContext: context;
+    WrapContext: context Lexical: lexical => (Context clone) initWithSurroundingContext: context LexicalContext: lexical;
     NewContext => (Context clone) init;
 }
