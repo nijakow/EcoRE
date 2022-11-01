@@ -16,7 +16,7 @@
             (newContext register: i) constraints: (calc ConstraintsFor: arg Context: context).
         ].
         "TODO: Stop condition for rewriting and inlining (maybe based on context depth?)"
-      ^ Rewrite: (builder Scope: m) Context: newContext
+      ^ Rewrite: (builder Scope: m Context: newContext) Context: newContext
     );
     InlineAST: m Args: args Varargs: varargs Context: context => InlineAST: m Args: args Varargs: varargs Context: context NewContext: context wrap;
 
@@ -68,7 +68,7 @@
               ^ builder Compound: (ast instructions map: [ :arg | Rewrite: arg Context: context ])
             ]
           ~ case: astTypes Scope do: [
-              ^ builder Scope: (Rewrite: (ast body) Context: context)  "TODO: Wrap context?"
+              ^ builder Scope: (Rewrite: (ast body) Context: (ast context)) Context: (ast context)
             ]
           ~ default: [ ^ ast ]
     );

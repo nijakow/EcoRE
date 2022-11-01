@@ -1,17 +1,17 @@
 {
     static with inherited _ = std Module;
-    protected context = $;
+    protected contextModule = $;
 
-    own ASTType => context types;
+    own ASTType => contextModule types;
 
     own AST = {
         static with inherited _ = std Clonable;
-        protected context = $;
+        protected contextModule = $;
 
         with inherited trait = {
             init => self;
 
-            type => context ASTType Default;
+            type => contextModule ASTType Default;
 
             acceptVisitor: visitor => visitor visitAST: self;
 
@@ -37,7 +37,7 @@
               ^ self
             );
 
-            type => context ASTType Register;
+            type => contextModule ASTType Register;
 
             acceptVisitor: visitor => visitor visitASTRegister: self;
 
@@ -62,7 +62,7 @@
               ^ self
             );
 
-            type => context ASTType Constant;
+            type => contextModule ASTType Constant;
 
             acceptVisitor: visitor => visitor visitASTConstant: self;
 
@@ -85,7 +85,7 @@
               ^ self
             );
 
-            type => context ASTType Code;
+            type => contextModule ASTType Code;
 
             acceptVisitor: visitor => visitor visitASTCode: self;
 
@@ -101,16 +101,17 @@
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
 
-        body;
+        body, context;
 
         with inherited trait = {
-            initWithBody: _body => (
+            initWithBody: _body Context: _context => (
                 $(AST) init.
-                body <- _body.
+                body    <- _body.
+                context <- _context.
               ^ self
             );
 
-            type => context ASTType Scope;
+            type => contextModule ASTType Scope;
 
             acceptVisitor: visitor => visitor visitASTScope: self;
 
@@ -135,7 +136,7 @@
               ^ self
             );
 
-            type => context ASTType Compound;
+            type => contextModule ASTType Compound;
 
             acceptVisitor: visitor => visitor visitASTCompound: self;
 
@@ -160,7 +161,7 @@
               ^ self
             );
 
-            type => context ASTType Assignment;
+            type => contextModule ASTType Assignment;
 
             acceptVisitor: visitor => visitor visitASTAssignment: self;
 
@@ -187,7 +188,7 @@
               ^ self
             );
 
-            type => context ASTType SlotAssignment;
+            type => contextModule ASTType SlotAssignment;
 
             acceptVisitor: visitor => visitor visitASTSlotAssignment: self;
 
@@ -212,7 +213,7 @@
               ^ self
             );
 
-            type => context ASTType Builtin;
+            type => contextModule ASTType Builtin;
 
             acceptVisitor: visitor => visitor visitASTBuiltin: self;
 
@@ -248,7 +249,7 @@
               ^ self
             );
 
-            type => context ASTType Send;
+            type => contextModule ASTType Send;
 
             receiver => args at: 0;
 
@@ -288,7 +289,7 @@
               ^ self
             );
 
-            type => context ASTType Resend;
+            type => contextModule ASTType Resend;
 
             receiver => args at: 0;
 
@@ -328,7 +329,7 @@
               ^ self
             );
 
-            type => context ASTType Return;
+            type => contextModule ASTType Return;
 
             acceptVisitor: visitor => visitor visitASTReturn: self;
 

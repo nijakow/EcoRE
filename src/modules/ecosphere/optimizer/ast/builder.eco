@@ -11,7 +11,7 @@
     Register: index Depth: depth => Register(depth, index);
 
     Code: code => (asts ASTCode) clone initWithCode: code;
-    Scope: body => (asts ASTScope) clone initWithBody: body;
+    Scope: body Context: context => (asts ASTScope) clone initWithBody: body Context: context;
 
     Compound: instructions => (asts ASTCompound) clone initWithInstructions: instructions;
     Compound(...) => Compound: (std util newArray);
