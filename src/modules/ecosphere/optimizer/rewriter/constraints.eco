@@ -23,11 +23,12 @@
         static with inherited _ = std Clonable;
         protected module = $;
 
-        constant;
+        constant, context;
 
         with inherited trait = {
-            initWithConstant: _constant => (
+            initWithConstant: _constant Context: _context => (
                 constant <- _constant.
+                context  <- _context.
               ^ self
             );
 
@@ -39,5 +40,5 @@
         };
     };
 
-    Constant: c => (Constant clone) initWithConstant: c;
+    Constant: c Context: context => (Constant clone) initWithConstant: c Context: context;
 }
