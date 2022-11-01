@@ -20,8 +20,8 @@
     );
     InlineAST: m Args: args Varargs: varargs Context: context => InlineAST: m Args: args Varargs: varargs Context: context NewContext: context wrap;
 
-    InlineFunction: m Args: args Varargs: varargs Context: context => InlineAST: m code Args: args Varargs: varargs Context: context;
     InlineFunction: m Args: args Varargs: varargs Context: context NewContext: newContext => InlineAST: m code Args: args Varargs: varargs Context: context NewContext: newContext;
+    InlineFunction: m Args: args Varargs: varargs Context: context => InlineAST: m code Args: args Varargs: varargs Context: context NewContext: (context wrapLexical: context);
 
     LookupCodeMethod: name => (
         (name == #'std') -> [ ^ Yes: (builder Constant: std) ].
@@ -40,7 +40,7 @@
         (Switch: ast type)
           ~ case: astTypes Register do: [
                 | c <- context
-                           ~ depth: (ast depth)
+                           ~ lexical: (ast depth)
                            ~ register: (ast index)
                            ~ constraints
                 |

@@ -10,10 +10,10 @@
     
     ConstraintsFor: ast Context: context => (
         (Switch: ast type)
-          ~ case: astTypes Constant do: [ ^ constraints Constant: ast Context: context                       ]
-          ~ case: astTypes Code     do: [ ^ constraints Constant: ast Context: context                       ]
-          ~ case: astTypes Register do: [ ^ context depth: (ast depth) ~ register: (ast index) ~ constraints ]
-          ~ case: astTypes Scope    do: [ ^ ConstraintsFor: (ast body) Context: (ast context)                ]  "TODO: Maybe wrap context?"
+          ~ case: astTypes Constant do: [ ^ constraints Constant: ast Context: context                         ]
+          ~ case: astTypes Code     do: [ ^ constraints Constant: ast Context: context                         ]
+          ~ case: astTypes Register do: [ ^ context lexical: (ast depth) ~ register: (ast index) ~ constraints ]
+          ~ case: astTypes Scope    do: [ ^ ConstraintsFor: (ast body) Context: (ast context)                  ]  "TODO: Maybe wrap context?"
           ~ default: [ ^ constraints Unknown ]
         ~ end
     );

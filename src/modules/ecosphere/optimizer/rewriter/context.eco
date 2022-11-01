@@ -43,6 +43,13 @@
               ^ initWithSurroundingContext: context LexicalContext: context
             );
 
+            initWithLexicalContext: context => (
+                surroundingContext <- No.
+                lexicalContext     <- Yes: context.
+                registers          <- std util newMap.
+              ^ self
+            );
+
             init => (
                 surroundingContext <- No.
                 lexicalContext     <- No.
