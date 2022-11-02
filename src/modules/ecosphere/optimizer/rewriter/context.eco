@@ -68,8 +68,8 @@
 
             lexical: d => (
                 (d isZero)
-                  ~   if: [ ^ self                                  ]
-                    else: [ ^ lexicalContext yes depth: (d - 1) ]
+                  ~   if: [ ^ self                                ]
+                    else: [ ^ lexicalContext yes lexical: (d - 1) ]
             );
 
             register: index => (

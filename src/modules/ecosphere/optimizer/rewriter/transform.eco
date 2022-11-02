@@ -44,7 +44,7 @@
                            ~ register: (ast index)
                            ~ constraints
                 |
-              ^ c ifConstant: [ ^ c constant ] else: [ ^ ast ]
+              ^ c ifConstant: [ c constant ] else: [ ast ]
             ]
           ~ case: astTypes Builtin do: [
                 | args2 <- ast args map: [ :arg | Rewrite: arg Context: context ] |
