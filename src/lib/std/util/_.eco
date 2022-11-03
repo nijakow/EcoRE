@@ -50,6 +50,11 @@
     ninth => at: 8;
     tenth => at: 9;
     last => at: (size - 1);
+
+    let1: block => block value(first);
+    let2: block => block value(first, second);
+    let3: block => block value(first, second, third);
+    let4: block => block value(first, second, third, fourth);
 },
 
 #=std/util/StandardListSearch: {
