@@ -11,6 +11,6 @@
 
     Main => (
         "(optimizer Disassemble: #'j' In: self) dumpOn: (std io out)."
-        optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'j' In: self)).
+        optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'h' In: self)).
     );
 } Main.

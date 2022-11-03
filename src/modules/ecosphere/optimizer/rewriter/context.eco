@@ -72,6 +72,16 @@
                     else: [ ^ lexicalContext yes lexical: (d - 1) ]
             );
 
+            depth => (
+                surroundingContext yes: [ :lc | lc depth + 1 ]
+                                    no: [       0            ]
+            );
+
+            lexicalDepth => (
+                lexicalContext yes: [ :lc | lc lexicalDepth + 1 ]
+                                no: [       0                   ]
+            );
+
             register: index => (
                 (registers at: index)
                   ~ yes: [ :r | ^ r ]
@@ -85,7 +95,7 @@
             wrap => context WrapContext: self;
             wrapLexical: other => context WrapContext: self Lexical: other;
 
-            writeOn: w => w << 'a context';
+            writeOn: w => w << 'a context (' << depth << ', ' << lexicalDepth << ')';
         };
     };
 

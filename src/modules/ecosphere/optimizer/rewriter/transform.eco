@@ -13,6 +13,7 @@
 
     InlineAST: m Args: args Varargs: varargs Context: context NewContext: newContext => (
         args forEach: [ :i, :arg |
+            "OOF! BUG FOUND! The [...] will be interpreted as coming from the surrounding context, even though it is from a deeper one! 'ConstraintsFor: arg Context: context' will not return the correct context, since the AST doesn't even store it!"
             (newContext register: i) constraints: (calc ConstraintsFor: arg Context: context).
         ].
         "TODO: Stop condition for rewriting and inlining (maybe based on context depth?)"
@@ -35,7 +36,7 @@
             else: [ ^ No                     ]
     );
 
-    Rewrite: ast Context: context => (
+    ImplForRewrite: ast Context: context => (
         (Switch: ast type)
           ~ case: astTypes Register do: [
                 | c <- context
@@ -67,8 +68,14 @@
               ^ (builder Compound: (ast instructions map: [ :arg | (Rewrite: arg Context: context) first ])) & context
             ]
           ~ case: astTypes Scope do: [
-              ^ (builder Scope: (Rewrite: (ast body) Context: (ast context)) first Context: (ast context)) & context
+              ^ (builder Scope: (Rewrite: (ast body) Context: (ast context)) first Context: (ast context)) & (ast context)
             ]
           ~ default: [ ^ ast & context ]
+    );
+
+    Rewrite: ast Context: context => (
+        | v <- ImplForRewrite: ast Context: context |
+        (std io out << '<<< Rewriting ' << ast << ' in ' << context << ' => ' << v) newline commit.
+      ^ v
     );
 }
