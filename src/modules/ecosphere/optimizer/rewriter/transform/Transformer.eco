@@ -2,6 +2,7 @@
     static with inherited _ = std Clonable;
 
     protected transform = $;
+    protected optimizer => transform optimizer;
 
     context;
 
@@ -44,6 +45,22 @@
         );
     };
 
+    with inherited _lookup = {
+        static with inherited _ = std Trait;
+
+        LookupCodeMethod: name => (
+            (name == #'value') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'value' In: (std reflect proxies Block))) ].
+            (name == #'repeat') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'repeat' In: (std reflect proxies Block))) ].
+          ^ No
+        );
+
+        LookupMethod: name InAST: ast => (
+            ((ast type) == (astTypes Code))
+                  if: [ ^ LookupCodeMethod: name ]
+                else: [ ^ No                     ]
+        );
+    };
+
     with inherited _register = {
         static with inherited _ = std Trait;
 
@@ -71,7 +88,7 @@
         );
 
         RewriteBuiltin: ast Args: args => (
-            ^ (builder Builtin: (ast message) Args: (args) Varargs: (ast varargs))
+          ^ (builder Builtin: (ast message) Args: (args) Varargs: (ast varargs))
         );
 
         transformBuiltin: ast => (
@@ -96,7 +113,7 @@
         transformSend: ast => (
             |
                 args   <- transformMultiple: (ast args),
-                method <- LookupMethod: (ast2 message) InAST: (ast2 receiver)
+                method <- LookupMethod: (ast message) InAST: ((Unscope: (args at: 0)) ast)
             |
             method yes: [ :m | ^ Answer: (InlineMethod: m Args: args Varargs: ast2 varargs) ]
                     no: [      ^ Answer: (RewriteSend: ast Args: args)                      ]
@@ -128,7 +145,7 @@
     };
 
     transform: ast => (
-        Switch: (ast type)
+        transform Switch: (ast type)
           ~ case: astTypes Register do: [ ^ transformRegister: ast ]
           ~ case: astTypes Builtin  do: [ ^ transformBuiltin:  ast ]
           ~ case: astTypes Send     do: [ ^ transformSend:     ast ]
