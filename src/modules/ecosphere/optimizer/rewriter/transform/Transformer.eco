@@ -5,7 +5,7 @@
 
     context;
 
-    Answer: ast In: context => "TODO: Return a pair of AST and Context";
+    Answer: ast In: context => (transform Answer) clone initWithAST: ast Context: context;
     Answer: ast => Answer: ast In: context;
 
     In: context => (transform Transformer) clone init: context;

@@ -1,0 +1,21 @@
+{
+    static with inherited _ = std Clonable;
+
+    protected transform = $;
+
+    ast, context;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+
+        initWithAST: _ast Context: _context => (
+            ast     <- _ast.
+            context <- _context.
+          ^ self
+        );
+
+        wrap => (transform optimizer builder) Scope: ast Context: context;
+
+        writeOn: w => w << 'a transformer answer';
+    };
+}
