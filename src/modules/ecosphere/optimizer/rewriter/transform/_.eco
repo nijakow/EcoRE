@@ -76,9 +76,16 @@
           ~ default: [ ^ ast & context ]
     );
 
+    "
     Rewrite: ast Context: context => (
         | v <- ImplForRewrite: ast Context: context |
         (std io out << '<<< Rewriting ' << ast << ' in ' << context << ' => ' << v) newline commit.
       ^ v
+    );
+    "
+
+    Rewrite: ast Context: context => (
+        Transformer clone init: context
+          ~ transform: ast
     );
 }

@@ -14,7 +14,7 @@
           ^ self
         );
 
-        wrap => (transform optimizer builder) Scope: ast Context: context;
+        wrap => (transform module builder) Scope: ast Context: context;
 
         writeOn: w => w << 'a transformer answer';
     };

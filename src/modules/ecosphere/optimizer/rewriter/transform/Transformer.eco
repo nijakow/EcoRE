@@ -2,7 +2,15 @@
     static with inherited _ = std Clonable;
 
     protected transform = $;
-    protected optimizer => transform optimizer;
+    protected module => transform module;
+    protected optimizer => module optimizer;
+
+    with own switch = $ module switch;
+
+    protected astTypes => module ast types;
+    protected constraints => module constraints;
+    protected calc => module calc;
+    protected builder => module builder;
 
     context;
 
@@ -32,8 +40,10 @@
                 (newContext register: i) constraints: (calc ConstraintsFor: arg)
             ].
             "TODO: Stop condition for rewriting and inlining (maybe based on context depth?)"
-          ^ (In: newContext) transform: ast
+          ^ ((In: newContext) transform: ast) wrap
         );
+        InlineAST: ast Args: args Varargs: varargs =>
+            InlineAST: ast Args: args Varargs: varargs NewContext: context wrap;
 
         InlineLambda: lambda Args: args Varargs: varargs => (
             | ast <- lambda ast, newContext <- lambda context |
@@ -71,8 +81,8 @@
                                 ~ constraints
             |
             
-            c ifConstant: [
-                ^ Answer: (c constant) In: (c context)
+            constraints ifConstant: [
+                ^ Answer: (constraints constant) In: (constraints context)
             ] else: [
                 ^ Answer: ast
             ]
@@ -82,9 +92,9 @@
     with inherited _builtin = {
         static with inherited _ = std Trait;
 
-        InlineValueBuiltin: ast Args: args => (
-            | lambda <- (Unscope: args first) |
-          ^ (InlineLambda: (lambda) Args: (args) Varargs: (ast varargs))
+        InlineValueBuiltin: args Varargs: varargs => (
+            | lambda <- args first |
+          ^ (InlineLambda: (lambda) Args: (args) Varargs: (varargs))
         );
 
         RewriteBuiltin: ast Args: args => (
@@ -98,7 +108,7 @@
 
                  [ ast message == #'ecosphere.ecore.flow.value' ]
             and: [ args first ast type == astTypes Code         ] 
-               ~ if: [ ^ Answer: (InlineValueBuiltin: args Args: args) ]
+               ~ if: [ ^ Answer: (InlineValueBuiltin: args Varargs: ast varargs) ]
                else: [ ^ Answer: (RewriteBuiltin: ast Args: args)      ].
         );
     };
@@ -113,9 +123,9 @@
         transformSend: ast => (
             |
                 args   <- transformMultiple: (ast args),
-                method <- LookupMethod: (ast message) InAST: ((Unscope: (args at: 0)) ast)
+                method <- LookupMethod: (ast message) InAST: ((args at: 0) ast)
             |
-            method yes: [ :m | ^ Answer: (InlineMethod: m Args: args Varargs: ast2 varargs) ]
+            method yes: [ :m | ^ Answer: (InlineMethod: m Args: args Varargs: ast varargs) ]
                     no: [      ^ Answer: (RewriteSend: ast Args: args)                      ]
         );
     };
@@ -140,12 +150,12 @@
         static with inherited _ = std Trait;
 
         transformScope: ast => (
-            ^ ((In: ast context) transform: (ast body) ~ wrap)
+          ^ (In: ast context) transform: (ast body)
         );
     };
 
     transform: ast => (
-        transform Switch: (ast type)
+        Switch: (ast type)
           ~ case: astTypes Register do: [ ^ transformRegister: ast ]
           ~ case: astTypes Builtin  do: [ ^ transformBuiltin:  ast ]
           ~ case: astTypes Send     do: [ ^ transformSend:     ast ]

@@ -10,7 +10,9 @@
     j(x) => [ foo ] value;
 
     Main => (
-        "(optimizer Disassemble: #'j' In: self) dumpOn: (std io out)."
-        optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'h' In: self)).
+        |
+            answer <- optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'f' In: self))
+        |
+        answer ast
     );
 } Main.
