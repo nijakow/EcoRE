@@ -9,10 +9,18 @@
     i(x) => [ [ [ a ] repeat. [ b ] repeat ] repeat ] value;
     j(x) => [ foo ] value;
     k(x) => [ condition ] while: [ body ];
+    mega(x) => (
+        [
+            | i <- 0 |
+            [ i < 42 ] while: [
+                (std io out << i) newline commit.
+            ]
+        ] repeat
+    );
 
     Main => (
         |
-            answer <- optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'k' In: self))
+            answer <- optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'mega' In: self))
         |
         answer ast
     );
