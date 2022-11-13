@@ -11,7 +11,7 @@
     own constraints = (here / 'constraints.eco') importIn: self;
     own context = (here / 'context.eco') importIn: self;
     own calc = (here / 'calc.eco') importIn: self;
-    own transform = (here / 'transform.eco') importIn: self;
+    own transform = (here / 'transform' / '_.eco') importIn: self;
 
     Rewrite: ast => transform Rewrite: ast Context: context NewContext;
 }

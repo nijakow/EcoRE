@@ -1,12 +1,14 @@
 {
     static with inherited _ = std Clonable;
 
+    protected transform = $;
+
     context;
 
     Answer: ast In: context => "TODO: Return a pair of AST and Context";
     Answer: ast => Answer: ast In: context;
 
-    In: context => "TODO: Create a new transformer";
+    In: context => (transform Transformer) clone init: context;
 
     "
         Sometimes we don't want to have all those ASTScope's flying
@@ -138,4 +140,12 @@
 
     transformMultiple: exprs =>
         exprs map: [ :expr | transform: expr ];
+    
+
+    init: _context => (
+        context <- _context.
+      ^ self
+    );
+
+    writeOn: w => w << 'a transformer';
 }

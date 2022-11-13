@@ -11,6 +11,8 @@
     protected calc => module calc;
     protected builder => module builder;
 
+    with own Transformer = (here / 'Transformer.eco') importIn: self;
+
     InlineAST: m Args: args Varargs: varargs Context: context NewContext: newContext => (
         args forEach: [ :i, :arg |
             "OOF! BUG FOUND! The [...] will be interpreted as coming from the surrounding context, even though it is from a deeper one! 'ConstraintsFor: arg Context: context' will not return the correct context, since the AST doesn't even store it!"
