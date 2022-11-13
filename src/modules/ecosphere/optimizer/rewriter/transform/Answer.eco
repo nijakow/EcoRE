@@ -15,6 +15,7 @@
         );
 
         wrap => (transform module builder) Scope: ast Context: context;
+        wrapIn: otherContext => (otherContext == context) if: [ ^ ast ] else: [ ^ wrap ];
 
         writeOn: w => w << 'a transformer answer';
     };

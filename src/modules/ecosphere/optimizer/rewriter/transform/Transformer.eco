@@ -118,7 +118,7 @@
         static with inherited _ = std Trait;
 
         RewriteSend: ast Args: args => (
-            ^ (builder Send: (ast message) Args: (args map: [ :arg | arg wrap ]) Varargs: (ast varargs))
+            ^ (builder Send: (ast message) Args: (args map: [ :arg | arg wrapIn: context ]) Varargs: (ast varargs))
         );
 
         transformSend: ast => (
@@ -135,7 +135,7 @@
         static with inherited _ = std Trait;
 
         transformReturn: ast => (
-            ^ Answer: (builder Return: (transform: ast returnValue) wrap Depth: (ast depth))
+            ^ Answer: (builder Return: ((transform: ast returnValue) wrapIn: context) Depth: (ast depth))
         );
     };
 
@@ -143,7 +143,7 @@
         static with inherited _ = std Trait;
 
         transformCompound: ast => (
-            ^ Answer: (builder Compound: (ast instructions map: [ :arg | (transform: arg) wrap ]))
+            ^ Answer: (builder Compound: (ast instructions map: [ :arg | (transform: arg) wrapIn: context ]))
         );
     };
 
