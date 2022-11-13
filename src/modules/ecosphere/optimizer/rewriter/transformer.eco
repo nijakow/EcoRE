@@ -1,0 +1,68 @@
+{
+    static with inherited _ = std Clonable;
+
+    context;
+
+    Answer: ast In: context => "TODO: Return a pair of AST and Context";
+    Answer: ast => Answer: ast In: context;
+
+    In: context => "TODO: Create a new transformer";
+    
+
+    transformMultiple: exprs => (
+        exprs map: [ :expr | transform: expr ]
+    );
+
+    transformRegister: ast => (
+        | constraints  <- context
+                            ~ lexical: (ast depth)
+                            ~ register: (ast index)
+                            ~ constraints
+        |
+        
+        c ifConstant: [
+            ^ Answer: (c constant) In: (c context)
+        ] else: [
+            ^ Answer: ast
+        ]
+    );
+
+    with inherited _builtin = {
+        static with inherited _ = std Trait;
+
+        InlineValueBuiltin: ast Args: args => (
+            ^ (InlineFunction: (args first ast) Args: (args map: [ :e | e ast ]) Varargs: (ast varargs) Context: (args first context))
+        );
+
+        RewriteBuiltin: ast Args: args => (
+            ^ (builder Builtin: (ast message) Args: (args) Varargs: (ast varargs)) & context
+        );
+
+        transformBuiltin: ast => (
+            | args <- transformMultiple: (ast args) |
+
+                 [ ast message == #'ecosphere.ecore.flow.value' ]
+            and: [ args first ast type == astTypes Code         ] 
+               ~ if: [ ^ Answer: (InlineValueBuiltin: args Args: args) ]
+               else: [ ^ Answer: (RewriteBuiltin: ast Args: args)      ].
+        );
+    };
+
+    transformSend: ast => (
+        |
+            args   <- transformMultiple: (ast args),
+            ast2   <- builder Send: (ast message) Args: (ast args map: [ :arg | (Rewrite: arg Context: context) first ]) Varargs: (ast varargs),
+            method <- LookupMethod: (ast2 message) InAST: (ast2 receiver)
+        |
+        method yes: [ :m | ^ InlineAST: m Args: ast2 args Varargs: ast2 varargs Context: context ]
+                no: [      ^ ast2 & context                                                      ]
+    );
+
+    transform: ast => (
+        Switch: (ast type)
+          ~ case: astTypes Register do: [ ^ transformRegister: ast ]
+          ~ case: astTypes Builtin  do: [ ^ transformBuiltin:  ast ]
+          ~ case: astTypes Send     do: [ ^ transformSend:     ast ]
+        ~ default: [ ^ Answer: ast In: context ]
+    );
+}
