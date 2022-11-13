@@ -7,7 +7,19 @@
     Answer: ast => Answer: ast In: context;
 
     In: context => "TODO: Create a new transformer";
-    
+
+    "
+        Sometimes we don't want to have all those ASTScope's flying
+        around. This function neatly unwraps them for us.
+    "
+    Unscope: ast => (
+        | c <- context |
+        [ ast type == astTypes Scope ] while: [
+            ast <- ast body.
+            c <- ast context.
+        ].
+      ^ Answer: ast In: c
+    );
 
     transformMultiple: exprs => (
         exprs map: [ :expr | transform: expr ]
@@ -31,15 +43,18 @@
         static with inherited _ = std Trait;
 
         InlineValueBuiltin: ast Args: args => (
-            ^ (InlineFunction: (args first ast) Args: (args map: [ :e | e ast ]) Varargs: (ast varargs) Context: (args first context))
+            "The 'InlineFunction:' function will take 'Answer's as parameters"
+            ^ (InlineFunction: ((Unscope: args first) ast) Args: args Varargs: (ast varargs) Context: ((Unscope: args first) context))
         );
 
         RewriteBuiltin: ast Args: args => (
-            ^ (builder Builtin: (ast message) Args: (args) Varargs: (ast varargs)) & context
+            ^ (builder Builtin: (ast message) Args: (args) Varargs: (ast varargs))
         );
 
         transformBuiltin: ast => (
             | args <- transformMultiple: (ast args) |
+
+            "TODO: Call 'Unscope:' on 'args first'"
 
                  [ ast message == #'ecosphere.ecore.flow.value' ]
             and: [ args first ast type == astTypes Code         ] 
