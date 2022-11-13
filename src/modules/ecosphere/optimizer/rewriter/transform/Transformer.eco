@@ -47,7 +47,8 @@
 
         InlineLambda: lambda Args: args Varargs: varargs => (
             | ast <- lambda ast, newContext <- lambda context |
-          ^ (InlineAST: ast Args: args Varargs: varargs NewContext: newContext)
+            "TODO: Maybe do argument checking?"
+          ^ (InlineAST: ast code Args: args Varargs: varargs NewContext: (newContext wrapLexical: newContext))
         );
 
         InlineMethod: method Args: args Varargs: varargs => (
@@ -117,7 +118,7 @@
         static with inherited _ = std Trait;
 
         RewriteSend: ast Args: args => (
-            ^ (builder Send: (ast message) Args: (args) Varargs: (ast varargs))
+            ^ (builder Send: (ast message) Args: (args map: [ :arg | arg wrap ]) Varargs: (ast varargs))
         );
 
         transformSend: ast => (
