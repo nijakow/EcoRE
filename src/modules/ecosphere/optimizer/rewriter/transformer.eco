@@ -63,21 +63,59 @@
         );
     };
 
-    transformSend: ast => (
-        |
-            args   <- transformMultiple: (ast args),
-            ast2   <- builder Send: (ast message) Args: (ast args map: [ :arg | (Rewrite: arg Context: context) first ]) Varargs: (ast varargs),
-            method <- LookupMethod: (ast2 message) InAST: (ast2 receiver)
-        |
-        method yes: [ :m | ^ InlineAST: m Args: ast2 args Varargs: ast2 varargs Context: context ]
-                no: [      ^ ast2 & context                                                      ]
-    );
+    with inherited _send = {
+        static with inherited _ = std Trait;
+
+        InlineMethod: method Args: args Varargs: varargs => (
+            ^ (InlineAST: method Args: args Varargs: varargs)
+        );
+
+        RewriteSend: ast Args: args => (
+            ^ (builder Send: (ast message) Args: (args) Varargs: (ast varargs))
+        );
+
+        transformSend: ast => (
+            |
+                args   <- transformMultiple: (ast args),
+                method <- LookupMethod: (ast2 message) InAST: (ast2 receiver)
+            |
+            method yes: [ :m | ^ Answer: (InlineMethod: m Args: args Varargs: ast2 varargs) ]
+                    no: [      ^ Answer: (RewriteSend: ast Args: args)                      ]
+        );
+    };
+
+    with inherited _return = {
+        static with inherited _ = std Trait;
+
+        transformReturn: ast => (
+            ^ Answer: (builder Return: (transform: ast returnValue) wrap Depth: (ast depth))
+        );
+    };
+
+    with inherited _compound = {
+        static with inherited _ = std Trait;
+
+        transformCompound: ast => (
+            ^ Answer: (builder Compound: (ast instructions map: [ :arg | (transform: arg) wrap ]))
+        );
+    };
+
+    with inherited _scope = {
+        static with inherited _ = std Trait;
+
+        transformScope: ast => (
+            ^ ((In: ast context) transform: (ast body) ~ wrap)
+        );
+    };
 
     transform: ast => (
         Switch: (ast type)
           ~ case: astTypes Register do: [ ^ transformRegister: ast ]
           ~ case: astTypes Builtin  do: [ ^ transformBuiltin:  ast ]
           ~ case: astTypes Send     do: [ ^ transformSend:     ast ]
-        ~ default: [ ^ Answer: ast In: context ]
+          ~ case: astTypes Return   do: [ ^ transformReturn:   ast ]
+          ~ case: astTypes Compound do: [ ^ transformCompound: ast ]
+          ~ case: astTypes Scope    do: [ ^ transformScope:    ast ]
+        ~ default: [ ^ Answer: ast ]
     );
 }
