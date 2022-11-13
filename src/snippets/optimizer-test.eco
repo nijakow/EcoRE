@@ -8,10 +8,11 @@
     h(x) => [ (std io out << 'Hi!') newline commit ] repeat;
     i(x) => [ [ [ a ] repeat. [ b ] repeat ] repeat ] value;
     j(x) => [ foo ] value;
+    k(x) => [ condition ] while: [ body ];
 
     Main => (
         |
-            answer <- optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'h' In: self))
+            answer <- optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'k' In: self))
         |
         answer ast
     );
