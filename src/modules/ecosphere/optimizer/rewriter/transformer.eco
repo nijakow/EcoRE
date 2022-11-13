@@ -21,30 +21,51 @@
       ^ Answer: ast In: c
     );
 
-    transformMultiple: exprs => (
-        exprs map: [ :expr | transform: expr ]
-    );
+    with inherited _inlining = {
+        static with inherited _ = std Trait;
 
-    transformRegister: ast => (
-        | constraints  <- context
-                            ~ lexical: (ast depth)
-                            ~ register: (ast index)
-                            ~ constraints
-        |
-        
-        c ifConstant: [
-            ^ Answer: (c constant) In: (c context)
-        ] else: [
-            ^ Answer: ast
-        ]
-    );
+        InlineAST: ast Args: args Varargs: varargs NewContext: newContext => (
+            args forEach: [ :i, :arg |
+                (newContext register: i) constraints: (calc ConstraintsFor: arg)
+            ].
+            "TODO: Stop condition for rewriting and inlining (maybe based on context depth?)"
+          ^ (In: newContext) transform: ast
+        );
+
+        InlineLambda: lambda Args: args Varargs: varargs => (
+            | ast <- lambda ast, newContext <- lambda context |
+          ^ (InlineAST: ast Args: args Varargs: varargs NewContext: newContext)
+        );
+
+        InlineMethod: method Args: args Varargs: varargs => (
+          ^ (InlineAST: method Args: args Varargs: varargs)
+        );
+    };
+
+    with inherited _register = {
+        static with inherited _ = std Trait;
+
+        transformRegister: ast => (
+            | constraints  <- context
+                                ~ lexical: (ast depth)
+                                ~ register: (ast index)
+                                ~ constraints
+            |
+            
+            c ifConstant: [
+                ^ Answer: (c constant) In: (c context)
+            ] else: [
+                ^ Answer: ast
+            ]
+        );
+    };
 
     with inherited _builtin = {
         static with inherited _ = std Trait;
 
         InlineValueBuiltin: ast Args: args => (
-            "The 'InlineFunction:' function will take 'Answer's as parameters"
-            ^ (InlineFunction: ((Unscope: args first) ast) Args: args Varargs: (ast varargs) Context: ((Unscope: args first) context))
+            | lambda <- (Unscope: args first) |
+          ^ (InlineLambda: (lambda) Args: (args) Varargs: (ast varargs))
         );
 
         RewriteBuiltin: ast Args: args => (
@@ -65,10 +86,6 @@
 
     with inherited _send = {
         static with inherited _ = std Trait;
-
-        InlineMethod: method Args: args Varargs: varargs => (
-            ^ (InlineAST: method Args: args Varargs: varargs)
-        );
 
         RewriteSend: ast Args: args => (
             ^ (builder Send: (ast message) Args: (args) Varargs: (ast varargs))
@@ -118,4 +135,7 @@
           ~ case: astTypes Scope    do: [ ^ transformScope:    ast ]
         ~ default: [ ^ Answer: ast ]
     );
+
+    transformMultiple: exprs =>
+        exprs map: [ :expr | transform: expr ];
 }
