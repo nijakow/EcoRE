@@ -151,6 +151,18 @@
             wrap => context WrapContext: self;
             wrapLexical: other => context WrapContext: self Lexical: other;
 
+            rewriteRegister: n Depth: d => lexicalDepth: d ~ rewriteRegister: n;
+            rewriteRegister: n => (
+                "TODO: Error if it's an argument register"
+                (registers at: n)
+                  ~ yes: [ :v | ^ v ]
+                     no: [
+                             | r <- core registerAllocator allocate |
+                             registers at: n put: r.
+                           ^ r
+                         ]
+            );
+
             writeOn: w => w << 'a context (' << depth << ', ' << lexicalDepth << ')';
         };
     };
