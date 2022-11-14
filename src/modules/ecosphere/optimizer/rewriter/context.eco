@@ -38,7 +38,7 @@
         
         with inherited trait = {
             init => (
-                counter <- 0.
+                counter <- 128.
                 freed   <- std util newStack.
               ^ self
             );
@@ -159,10 +159,10 @@
             wrap => context WrapContext: self;
             wrapLexical: other => context WrapContext: self Lexical: other;
 
-            translateRegister: n Depth: d => lexicalDepth: d ~ translateRegister: n;
+            translateRegister: n Depth: d => lexical: d ~ translateRegister: n;
             translateRegister: n => (
-                "TODO: Error if it's an argument register"
-              ^ (register: n) translationUsingAllocator: core registerAllocator
+                (n < 128) if: [ ^ No ].
+              ^ Yes: ((register: n) translationUsingAllocator: core registerAllocator)
             );
 
             writeOn: w => w << 'a context (' << depth << ', ' << lexicalDepth << ')';

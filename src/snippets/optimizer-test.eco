@@ -27,10 +27,19 @@
             ]
         ] repeat.
     );
+    regs(x) => (
+        |
+            v <- 0,
+            i <- 21,
+            j <- i * 2,
+            k <- i + i
+        |
+      ^ [ j * k + x ] value
+    );
 
     Main => (
         |
-            answer <- optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'iter' In: self))
+            answer <- optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'regs' In: self))
         |
         ((optimizer ast Printer) clone initWithWriter: std io out) print: answer ast.
         (std io out) newline commit.

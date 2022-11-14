@@ -77,8 +77,9 @@
         static with inherited _ = std Trait;
 
         TranslateRegister: r => (
-            (std io out << (context translateRegister: r index)).
-          ^ (builder Register: (context translateRegister: r index) Depth: 0)
+            (context translateRegister: r index Depth: r depth)
+              ~ yes: [ :id | ^ (builder Register: id Depth: 0) ]
+                 no: [       ^ r                               ]
         );
 
         transformRegister: ast => (
@@ -92,6 +93,7 @@
                 ^ Answer: (constraints constant) In: (constraints context)
             ] else: [
                 "This is an early test for register rewriting."
+                "TODO: If the translation was successful, the answer *MUST* be in 'root context'!!!"
                 ^ Answer: (TranslateRegister: ast)
             ]
         );
