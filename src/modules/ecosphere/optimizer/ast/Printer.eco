@@ -1,0 +1,70 @@
+{
+    static with inherited _ = std Clonable;
+    protected ast = $;
+    protected with switch = (here / '..' / 'rewriter' / 'switch.eco') importIn: self;
+
+    writer, indentation;
+
+    Indented: n => (ast Printer) clone initWithWriter: writer Indentation: (indentation + 1);
+
+
+    protected indent: relative => (
+        1 to: (indentation + relative) do: [
+            writer << '  '.
+        ]
+    );
+
+    protected indent => indent: 0;
+
+    protected newline => ( writer newline. indent. );
+
+    protected indented: block => (
+        indentation <- indentation + 1.
+        block value.
+        indentation <- indentation - 1.
+    );
+
+
+    printCompound: expr => (
+        writer << '('.
+        indented: [
+            expr instructions do: [ :instr | newline. print: instr ]
+        ].
+        writer << ')'.
+    );
+
+    printReturn: expr => (
+        writer << '^ '.
+        rprint: expr returnValue.
+    );
+
+    printScope: expr => (
+        writer << '<| ' << (expr context depth - 1) << ' / ' << expr context lexicalDepth.
+        indented: [
+            newline.
+            print: expr body.
+        ].
+        newline.
+        writer << '|>'.
+    );
+
+    print: expr => (
+        Switch: (expr type)
+          ~ case: ast types Compound do: [ printCompound: expr ]
+          ~ case: ast types Return   do: [ printReturn: expr   ]
+          ~ case: ast types Scope    do: [ printScope: expr    ]
+        ~ default: [ writer << '?' << expr ]
+    );
+
+    rprint: expr => (
+        indented: [ print: expr ]
+    );
+
+    initWithWriter: _writer Indentation: _i => (
+        writer      <- _writer.
+        indentation <- _i.
+      ^ self
+    );
+
+    initWithWriter: _writer => initWithWriter: _writer Indentation: 0;
+}

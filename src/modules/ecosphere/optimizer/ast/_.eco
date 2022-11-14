@@ -6,4 +6,5 @@
     builder = (here / 'builder.eco') importIn: self;
 
     Walker = (here / 'Walker.eco') importIn: self;
+    Printer = (here / 'Printer.eco') importIn: self;
 }
