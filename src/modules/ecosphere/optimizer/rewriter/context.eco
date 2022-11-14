@@ -59,6 +59,8 @@
                         [ block value(r) ]
                 ensure: [ free: r        ].
             );
+
+            writeOn: w => w << 'a register allocator';
         };
     };
 
