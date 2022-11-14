@@ -86,7 +86,8 @@
             constraints ifConstant: [
                 ^ Answer: (constraints constant) In: (constraints context)
             ] else: [
-                ^ Answer: ast
+                "This is an early test for register rewriting."
+                ^ Answer: (builder Register: (context translateRegister: ast index) Depth: 0)
             ]
         );
     };
@@ -164,6 +165,7 @@
           ~ case: astTypes Return   do: [ ^ transformReturn:   ast ]
           ~ case: astTypes Compound do: [ ^ transformCompound: ast ]
           ~ case: astTypes Scope    do: [ ^ transformScope:    ast ]
+          "TODO: Assignments, ..."
         ~ default: [ ^ Answer: ast ]
     );
 

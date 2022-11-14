@@ -47,7 +47,7 @@
             );
 
             allocate => (
-                (counter empty)
+                (freed isEmpty)
                   ~ if: [ ^ allocateNew   ]
                   else: [ ^ allocateFreed ]
             );
@@ -151,8 +151,8 @@
             wrap => context WrapContext: self;
             wrapLexical: other => context WrapContext: self Lexical: other;
 
-            rewriteRegister: n Depth: d => lexicalDepth: d ~ rewriteRegister: n;
-            rewriteRegister: n => (
+            translateRegister: n Depth: d => lexicalDepth: d ~ translateRegister: n;
+            translateRegister: n => (
                 "TODO: Error if it's an argument register"
                 (registers at: n)
                   ~ yes: [ :v | ^ v ]
