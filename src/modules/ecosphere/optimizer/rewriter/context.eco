@@ -87,39 +87,33 @@
         core,
         surroundingContext,
         lexicalContext,
-        registers;
+        protected registers;
 
         with inherited trait = {
-            initWithSurroundingContext: context LexicalContext: lexical => (
-                core               <- context core.
-                surroundingContext <- Yes: context.
-                lexicalContext     <- Yes: lexical.
+
+            _initWithSurroundingContext: surr Lexical: lex => (
+                (surr or: lex) yes: [ :con | core <- con core                ]
+                                no: [        core <- context ContextCore new ].
+                surroundingContext <- surr.
+                lexicalContext     <- lex.
                 registers          <- std util newMap.
               ^ self
+            );
+
+            initWithSurroundingContext: context LexicalContext: lexical => (
+              ^ _initWithSurroundingContext: (Yes: context) Lexical: (Yes: lexical)
             );
 
             initWithSurroundingContext: context => (
-                core               <- context core.
-                surroundingContext <- Yes: context.
-                lexicalContext     <- No.
-                registers          <- std util newMap.
-              ^ self
+              ^ _initWithSurroundingContext: (Yes: context) Lexical: No
             );
 
             initWithLexicalContext: context => (
-                core               <- context core.
-                surroundingContext <- No.
-                lexicalContext     <- Yes: context.
-                registers          <- std util newMap.
-              ^ self
+              ^ _initWithSurroundingContext: No Lexical: (Yes: lexical)
             );
 
             init => (
-                core               <- context ContextCore new.
-                surroundingContext <- No.
-                lexicalContext     <- No.
-                registers          <- std util newMap.
-              ^ self
+              ^ _initWithSurroundingContext: No Lexical: No
             );
 
             depth: d => (
