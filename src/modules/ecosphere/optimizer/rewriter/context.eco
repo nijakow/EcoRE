@@ -23,11 +23,59 @@
         };
     };
 
+    own RegisterAllocator = {
+        static with inherited _ = std Clonable;
+
+        protected counter,
+        protected freed;
+        
+        with inherited trait = {
+            init => (
+                counter <- 0.
+                freed   <- std util newStack.
+              ^ self
+            );
+
+            protected allocateNew => (
+                | reg <- counter |
+                counter <- counter + 1.
+              ^ reg
+            );
+
+            protected allocateFreed => (
+              ^ freed pop
+            );
+
+            allocate => (
+                (counter empty)
+                  ~ if: [ ^ allocateNew   ]
+                  else: [ ^ allocateFreed ]
+            );
+
+            free: n => freed push: n;
+
+            withRegister: block => (
+                | r <- allocate |
+                        [ block value(r) ]
+                ensure: [ free: r        ].
+            );
+        };
+    };
+
     own ContextCore = {
         static with inherited _ = std Clonable;
         protected context = $;
 
-        writeOn: w => w << 'a context core';
+        registerAllocator;
+
+        with inherited trait = {
+            init => (
+                registerAllocator <- (context RegisterAllocator) new.
+              ^ self
+            );
+
+            writeOn: w => w << 'a context core';
+        };
     };
 
     own Context = {

@@ -49,6 +49,7 @@
         block value.
       ^ v
     );
+    ensure: block => protected: block;
 
     and:   b   => (
         | v <- self value |
