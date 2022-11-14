@@ -23,16 +23,25 @@
         };
     };
 
+    own ContextCore = {
+        static with inherited _ = std Clonable;
+        protected context = $;
+
+        writeOn: w => w << 'a context core';
+    };
+
     own Context = {
         static with inherited _ = std Clonable;
         protected context = $;
 
+        core,
         surroundingContext,
         lexicalContext,
         registers;
 
         with inherited trait = {
             initWithSurroundingContext: context LexicalContext: lexical => (
+                core               <- context core.
                 surroundingContext <- Yes: context.
                 lexicalContext     <- Yes: lexical.
                 registers          <- std util newMap.
@@ -40,6 +49,7 @@
             );
 
             initWithSurroundingContext: context => (
+                core               <- context core.
                 surroundingContext <- Yes: context.
                 lexicalContext     <- No.
                 registers          <- std util newMap.
@@ -47,6 +57,7 @@
             );
 
             initWithLexicalContext: context => (
+                core               <- context core.
                 surroundingContext <- No.
                 lexicalContext     <- Yes: context.
                 registers          <- std util newMap.
@@ -54,6 +65,7 @@
             );
 
             init => (
+                core               <- context ContextCore new.
                 surroundingContext <- No.
                 lexicalContext     <- No.
                 registers          <- std util newMap.
