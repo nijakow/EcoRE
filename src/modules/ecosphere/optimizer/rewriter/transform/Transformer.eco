@@ -76,6 +76,11 @@
     with inherited _register = {
         static with inherited _ = std Trait;
 
+        TranslateRegister: r => (
+            (std io out << (context translateRegister: r index)).
+          ^ (builder Register: (context translateRegister: r index) Depth: 0)
+        );
+
         transformRegister: ast => (
             | constraints  <- context
                                 ~ lexical: (ast depth)
@@ -87,7 +92,7 @@
                 ^ Answer: (constraints constant) In: (constraints context)
             ] else: [
                 "This is an early test for register rewriting."
-                ^ Answer: (builder Register: (context translateRegister: ast index) Depth: 0)
+                ^ Answer: (TranslateRegister: ast)
             ]
         );
     };
@@ -149,6 +154,14 @@
         );
     };
 
+    with inherited _assignment = {
+        static with inherited _ = std Trait;
+
+        transformAssignment: ast => (
+          ^ Answer: (builder Assign: ((transform: ast rhs) wrapIn: context) To: ((transform: ast lhs) wrapIn: context))
+        );
+    };
+
     with inherited _scope = {
         static with inherited _ = std Trait;
 
@@ -159,13 +172,14 @@
 
     transform: ast => (
         Switch: (ast type)
-          ~ case: astTypes Register do: [ ^ transformRegister: ast ]
-          ~ case: astTypes Builtin  do: [ ^ transformBuiltin:  ast ]
-          ~ case: astTypes Send     do: [ ^ transformSend:     ast ]
-          ~ case: astTypes Return   do: [ ^ transformReturn:   ast ]
-          ~ case: astTypes Compound do: [ ^ transformCompound: ast ]
-          ~ case: astTypes Scope    do: [ ^ transformScope:    ast ]
-          "TODO: Assignments, ..."
+          ~ case: astTypes Register   do: [ ^ transformRegister:   ast ]
+          ~ case: astTypes Builtin    do: [ ^ transformBuiltin:    ast ]
+          ~ case: astTypes Send       do: [ ^ transformSend:       ast ]
+          ~ case: astTypes Return     do: [ ^ transformReturn:     ast ]
+          ~ case: astTypes Compound   do: [ ^ transformCompound:   ast ]
+          ~ case: astTypes Assignment do: [ ^ transformAssignment: ast ]
+          ~ case: astTypes Scope      do: [ ^ transformScope:      ast ]
+          "TODO: Slot Assignments, ..."
         ~ default: [ ^ Answer: ast ]
     );
 

@@ -9,15 +9,22 @@
         static with inherited _ = std Clonable;
         protected context = $;
 
-        constraints;
+                  constraints,
+        protected translation;
 
         with inherited trait = {
             init => (
                 constraints <- context constraints Anything.
+                translation <- No.
               ^ self
             );
 
             constraints: c => constraints <- c;
+
+            translationUsingAllocator: alloc => (
+                translation yes: [ :t | ^ t                                              ]
+                             no: [ translation <- Yes: alloc allocate. ^ translation yes ]
+            );
 
             writeOn: w => w << 'some register info';
         };
@@ -87,7 +94,8 @@
         core,
         surroundingContext,
         lexicalContext,
-        protected registers;
+        protected registers,
+        protected registerTranslations;
 
         with inherited trait = {
 
@@ -154,13 +162,7 @@
             translateRegister: n Depth: d => lexicalDepth: d ~ translateRegister: n;
             translateRegister: n => (
                 "TODO: Error if it's an argument register"
-                (registers at: n)
-                  ~ yes: [ :v | ^ v ]
-                     no: [
-                             | r <- core registerAllocator allocate |
-                             registers at: n put: r.
-                           ^ r
-                         ]
+              ^ (register: n) translationUsingAllocator: core registerAllocator
             );
 
             writeOn: w => w << 'a context (' << depth << ', ' << lexicalDepth << ')';

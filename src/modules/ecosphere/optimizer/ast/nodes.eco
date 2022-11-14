@@ -150,8 +150,7 @@
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
 
-        protected lhs;
-        protected rhs;
+        lhs, rhs;
 
         with inherited trait = {
             initWithLHS: _lhs RHS: _rhs => (
