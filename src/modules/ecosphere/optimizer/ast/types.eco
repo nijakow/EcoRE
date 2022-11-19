@@ -6,7 +6,6 @@
     own Register = { static with inherited _ = std Enum };
 
     own Compound = { static with inherited _ = std Enum };
-    own Block    = { static with inherited _ = std Enum };
     own Code     = { static with inherited _ = std Enum };
     own Scope    = { static with inherited _ = std Enum };
 

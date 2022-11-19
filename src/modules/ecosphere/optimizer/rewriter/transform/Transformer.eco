@@ -48,7 +48,7 @@
         InlineLambda: lambda Args: args Varargs: varargs => (
             | ast <- lambda ast, newContext <- lambda context |
             "TODO: Maybe do argument checking?"
-          ^ (InlineAST: ast code Args: args Varargs: varargs NewContext: (newContext wrapLexical: newContext))
+          ^ (InlineAST: ast code Args: args Varargs: varargs NewContext: (newContext wrapLexical))
         );
 
         InlineMethod: method Args: args Varargs: varargs => (
@@ -164,6 +164,14 @@
         );
     };
 
+    with inherited _code = {
+        static with inherited _ = std Trait;
+
+        transformCode: ast => (
+          ^ Answer: (builder Code: (((In: context wrapLexical) transform: ast code) wrapIn: context))
+        );
+    };
+
     with inherited _scope = {
         static with inherited _ = std Trait;
 
@@ -180,6 +188,7 @@
           ~ case: astTypes Return     do: [ ^ transformReturn:     ast ]
           ~ case: astTypes Compound   do: [ ^ transformCompound:   ast ]
           ~ case: astTypes Assignment do: [ ^ transformAssignment: ast ]
+          ~ case: astTypes Code       do: [ ^ transformCode:       ast ]
           ~ case: astTypes Scope      do: [ ^ transformScope:      ast ]
           "TODO: Slot Assignments, ..."
         ~ default: [ ^ Answer: ast ]
