@@ -36,6 +36,8 @@
         static with inherited _ = std Trait;
 
         InlineAST: ast Args: args Varargs: varargs NewContext: newContext => (
+            "TODO: To make inlining easier, let the program store all arguments in variables and
+                   make the local variables point to them."
             args forEach: [ :i, :arg |
                 (newContext register: i) constraints: (calc ConstraintsFor: arg)
             ].
