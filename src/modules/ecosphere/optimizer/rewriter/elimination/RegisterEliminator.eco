@@ -70,18 +70,18 @@
 
     process: ast => (
         switch Switch: (ast type)
-          ~ case: astTypes Constant   do: [ processConstant:   ast ]
-          ~ case: astTypes Register   do: [ processRegister:   ast ]
-          ~ case: astTypes Compound   do: [ processCompound:   ast ]
-          ~ case: astTypes Block      do: [ processBlock:      ast ]
-          ~ case: astTypes Scope      do: [ processScope:      ast ]
-          ~ case: astTypes Builtin    do: [ processBuiltin:    ast ]
-          ~ case: astTypes Send       do: [ processSend:       ast ]
-          ~ case: astTypes Resend     do: [ processResend:     ast ]
-          ~ case: astTypes Assignment do: [ processAssignment: ast ]
-          ~ case: astTypes SlotAssignment do: [ processSlotAssignment: ast ]
-          ~ case: astTypes Return     do: [ processReturn:     ast ]
-        ~ default: [ processDefault: ast ]
+          ~ case: astTypes Constant       do: [ ^ processConstant:   ast ]
+          ~ case: astTypes Register       do: [ ^ processRegister:   ast ]
+          ~ case: astTypes Compound       do: [ ^ processCompound:   ast ]
+          ~ case: astTypes Block          do: [ ^ processBlock:      ast ]
+          ~ case: astTypes Scope          do: [ ^ processScope:      ast ]
+          ~ case: astTypes Builtin        do: [ ^ processBuiltin:    ast ]
+          ~ case: astTypes Send           do: [ ^ processSend:       ast ]
+          ~ case: astTypes Resend         do: [ ^ processResend:     ast ]
+          ~ case: astTypes Assignment     do: [ ^ processAssignment: ast ]
+          ~ case: astTypes SlotAssignment do: [ ^ processSlotAssignment: ast ]
+          ~ case: astTypes Return         do: [ ^ processReturn:     ast ]
+        ~ default: [ ^ processDefault: ast ]
     );
 
 
