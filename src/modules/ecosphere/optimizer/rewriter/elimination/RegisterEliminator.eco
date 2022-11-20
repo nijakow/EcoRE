@@ -1,0 +1,47 @@
+{
+    static with inherited _ = std Clonable;
+
+    protected elimination = $;
+    protected optimizer => elimination optimizer;
+    protected astTypes => optimizer ast types;
+    protected switch => optimizer switch;
+
+    context;
+
+    In: context => (elimination RegisterEliminator) clone init: context;
+
+    processDefault: ast => ast;
+    processConstant: ast => processDefault: ast;
+    processRegister: ast => processDefault: ast;
+    processCompound: ast => processDefault: ast;
+    processCode: ast => processDefault: ast;
+    processScope: ast => processDefault: ast;
+    processBuiltin: ast => processDefault: ast;
+    processSend: ast => processDefault: ast;
+    processResend: ast => processDefault: ast;
+    processAssignment: ast => processDefault: ast;
+    processSlotAssignment: ast => processDefault: ast;
+    processReturn: ast => processDefault: ast;    
+
+    process: ast => (
+        switch Switch: (ast type)
+          ~ case: astTypes Constant   do: [ processConstant:   ast ]
+          ~ case: astTypes Register   do: [ processRegister:   ast ]
+          ~ case: astTypes Compound   do: [ processCompound:   ast ]
+          ~ case: astTypes Code       do: [ processCode:       ast ]
+          ~ case: astTypes Scope      do: [ processScope:      ast ]
+          ~ case: astTypes Builtin    do: [ processBuiltin:    ast ]
+          ~ case: astTypes Send       do: [ processSend:       ast ]
+          ~ case: astTypes Resend     do: [ processResend:     ast ]
+          ~ case: astTypes Assignment do: [ processAssignment: ast ]
+          ~ case: astTypes SlotAssignment do: [ processSlotAssignment: ast ]
+          ~ case: astTypes Return     do: [ processReturn:     ast ]
+        ~ default: [ processDefault: ast ]
+    );
+
+
+    init: _context => (
+        context <- _context.
+      ^ self
+    );
+}
