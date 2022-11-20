@@ -1,0 +1,46 @@
+{
+    static with inherited _ = std Module;
+
+    own ValueRef = {
+        static with inherited _ = std Clonable;
+
+        tag;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithTag: _tag => (
+                tag <- Yes: _tag.
+              ^ self
+            );
+
+            writeOn: w => w << 'a ValueRef(' << (tag ?? '') << ')';
+        };
+    };
+
+    own ValueRefAllocator = {
+        static with inherited _ = std Clonable;
+        protected ref = $;
+
+        count;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            init => (
+                count <- 0.
+              ^ self
+            );
+
+            protected nextTag => (
+                | tag <- count |
+                count <- count + 1.
+              ^ tag
+            );
+
+            allocate => (ref ValueRef) clone initWithTag: nextTag;
+
+            writeOn: w => w << 'a ValueRef allocator';
+        }
+    };
+}
