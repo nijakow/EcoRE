@@ -81,7 +81,7 @@
         TranslateRegister: r => (
             (context translateRegister: r index Depth: r depth)
               ~ yes: [ :id | ^ (builder Register: id Depth: 0) ]
-                 no: [       ^ r                               ]
+                 no: [       ^ r "TODO: Still translate inlined register depth ]
         );
 
         transformRegister: ast => (
