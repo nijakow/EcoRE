@@ -19,7 +19,7 @@
     processRegister: ast => (
       ^ context lexical: (ast depth)
               ~ register: (ast index)
-              ~ makeValueAST  "TODO"
+              ~ makeValueRefAST  "TODO"
     );
 
     processCompound: ast => (

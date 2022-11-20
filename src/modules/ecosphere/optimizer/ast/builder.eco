@@ -6,6 +6,9 @@
     protected asts => context nodes;
 
     Constant: c => (asts ASTConstant) clone initWithConstant: c;
+
+    ValueRef: ref => (asts ASTValueRef) clone initWithRef: ref;
+
     Register(depth, index) => (asts ASTRegister) clone initWithDepth: depth Index: index;
     Register: index => Register(0, index);
     Register: index Depth: depth => Register(depth, index);

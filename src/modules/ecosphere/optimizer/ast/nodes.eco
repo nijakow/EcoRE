@@ -23,6 +23,29 @@
         };
     };
 
+    own ASTValueRef = {
+        static with inherited _ = std Clonable;
+        with inherited own AST = $ AST;
+
+        ref;
+
+        with inherited trait = {
+            initWithRef: _ref => (
+                $(AST) init.
+                ref <- _ref.
+              ^ self
+            );
+
+            type => contextModule ASTType ValueRef;
+
+            acceptVisitor: visitor => visitor visitASTValueRef: self;
+
+            isAtomic => true;
+
+            writeOn: w => w << 'Ref(' << ref << ')';
+        };
+    };
+
     own ASTRegister = {
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
