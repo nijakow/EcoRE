@@ -17,9 +17,8 @@
     processConstant: ast => processDefault: ast;
 
     processRegister: ast => (
-      ^ context lexical: (ast depth)
-              ~ register: (ast index)
-              ~ makeValueRefAST  "TODO"
+      ^ context valueRefForRegister: (ast index)
+                              Depth: (ast depth)
     );
 
     processCompound: ast => (

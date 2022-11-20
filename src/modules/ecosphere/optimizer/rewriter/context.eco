@@ -3,6 +3,7 @@
     static with inherited _ = std Module;
     protected module = $;
 
+    ast => module ast;
     constraints => module constraints;
 
     own RegisterInfo = {
@@ -10,12 +11,14 @@
         protected context = $;
 
                   constraints,
-        protected translation;
+        protected translation,
+        protected valueRef;
 
         with inherited trait = {
             init => (
                 constraints <- context constraints Anything.
                 translation <- No.
+                valueRef    <- No.
               ^ self
             );
 
@@ -24,6 +27,11 @@
             translationUsingAllocator: alloc => (
                 translation yes: [ :t | ^ t                                              ]
                              no: [ translation <- Yes: alloc allocate. ^ translation yes ]
+            );
+
+            valueRefUsingAllocator: alloc => (
+                valueRef yes: [ :vr | ^ vr                                      ]
+                          no: [ valueRef <- Yes: alloc allocate. ^ valueRef yes ]
             );
 
             writeOn: w => w << 'some register info';
@@ -75,11 +83,13 @@
         static with inherited _ = std Clonable;
         protected context = $;
 
-        registerAllocator;
+        registerAllocator,
+        valueRefAllocator;
 
         with inherited trait = {
             init => (
                 registerAllocator <- (context RegisterAllocator) new.
+                valueRefAllocator <- (context ast ref ValueRefAllocator) new.
               ^ self
             );
 
@@ -164,6 +174,11 @@
             translateRegister: n => (
                 (n < 128) if: [ ^ No ].
               ^ Yes: ((register: n) translationUsingAllocator: core registerAllocator)
+            );
+
+            valueRefForRegister: n Depth: d => lexical: d ~ valueRefForRegister: n;
+            valueRefForRegister: n => (
+              ^ (register: n) valueRefUsingAllocator: core valueRefAllocator
             );
 
             writeOn: w => w << 'a context (' << depth << ', ' << lexicalDepth << ')';

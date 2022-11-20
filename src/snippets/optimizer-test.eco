@@ -41,7 +41,7 @@
         |
             answer <- optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'f' In: self))
         |
-        ((optimizer ast Printer) clone initWithWriter: std io out) print: answer ast.
+        ((optimizer ast Printer) clone initWithWriter: std io out) print: answer.
         (std io out) newline commit.
     );
 } Main.
