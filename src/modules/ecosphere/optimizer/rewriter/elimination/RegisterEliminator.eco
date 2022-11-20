@@ -27,7 +27,7 @@
     );
 
     processBlock: ast => (
-      ^ builder Block: (process: ast code)
+      ^ builder Block: (process: ast code) "TODO: New scope"
     );
 
     processScope: ast => (

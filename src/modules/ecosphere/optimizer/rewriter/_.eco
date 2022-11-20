@@ -14,5 +14,10 @@
     own transform = (here / 'transform' / '_.eco') importIn: self;
     own elimination = (here / 'elimination' / '_.eco') importIn: self;
 
-    Rewrite: ast => transform Rewrite: ast Context: context NewContext;
+    protected Rewrite: ast Using: component => (
+      ^ component Rewrite: ast Context: context NewContext
+    );
+
+    "Rewrite: ast => Rewrite: ast Using: transform;"
+    Rewrite: ast => Rewrite: ast Using: elimination;
 }
