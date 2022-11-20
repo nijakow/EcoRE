@@ -4,24 +4,70 @@
     protected elimination = $;
     protected optimizer => elimination optimizer;
     protected astTypes => optimizer ast types;
+    protected builder => optimizer ast builder;
     protected switch => optimizer switch;
 
     context;
 
     In: context => (elimination RegisterEliminator) clone init: context;
 
+    
     processDefault: ast => ast;
+
     processConstant: ast => processDefault: ast;
-    processRegister: ast => processDefault: ast;
-    processCompound: ast => processDefault: ast;
-    processBlock: ast => processDefault: ast;
-    processScope: ast => processDefault: ast;
-    processBuiltin: ast => processDefault: ast;
-    processSend: ast => processDefault: ast;
-    processResend: ast => processDefault: ast;
-    processAssignment: ast => processDefault: ast;
-    processSlotAssignment: ast => processDefault: ast;
-    processReturn: ast => processDefault: ast;    
+
+    processRegister: ast => (
+      ^ context lexical: (ast depth)
+              ~ register: (ast index)
+              ~ makeValueAST  "TODO"
+    );
+
+    processCompound: ast => (
+      ^ builder Compound: (ast instructions map: [ :i | process: i ] ~ asArray)
+    );
+
+    processBlock: ast => (
+      ^ builder Block: (process: ast code)
+    );
+
+    processScope: ast => (
+      ^ (In: ast scope) process: (ast body)
+    );
+
+    processBuiltin: ast => (
+      ^ builder Builtin: (ast name)
+                   Args: (ast args map: [ :i | process: i ] ~ asArray)
+                Varargs: (ast varargs)
+    );
+
+    processSend: ast => (
+      ^ builder Send: (ast message)
+                Args: (ast args map: [ :i | process: i ] ~ asArray)
+             Varargs: (ast varargs)
+    );
+
+    processResend: ast => (
+      ^ builder Resend: (ast message)
+                  Args: (ast args map: [ :i | process: i ] ~ asArray)
+               Varargs: (ast varargs)
+    );
+
+    processAssignment: ast => (
+      ^ builder Assign: (process: ast rhs)
+                    To: (process: ast lhs)
+    );
+
+    processSlotAssignment: ast => (
+      ^ builder Assign: (process: ast rhs)
+                    To: (process: ast lhs)
+                  Slot: (ast slot)
+    );
+
+    processReturn: ast => (
+      ^ builder Return: (process: ast returnValue)
+                 Depth: (ast depth)
+    );
+
 
     process: ast => (
         switch Switch: (ast type)
