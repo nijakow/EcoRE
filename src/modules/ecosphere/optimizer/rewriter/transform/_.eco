@@ -27,16 +27,16 @@
     InlineFunction: m Args: args Varargs: varargs Context: context NewContext: newContext => InlineAST: m code Args: args Varargs: varargs Context: context NewContext: newContext;
     InlineFunction: m Args: args Varargs: varargs Context: context => InlineAST: m code Args: args Varargs: varargs Context: context NewContext: (context wrapLexical: context);
 
-    LookupCodeMethod: name => (
+    LookupBlockMethod: name => (
         (name == #'value') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'value' In: (std reflect proxies Block))) ].
         (name == #'repeat') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'repeat' In: (std reflect proxies Block))) ].
       ^ No
     );
 
     LookupMethod: name InAST: ast => (
-        ((ast type) == (astTypes Code))
-              if: [ ^ LookupCodeMethod: name ]
-            else: [ ^ No                     ]
+        ((ast type) == (astTypes Block))
+              if: [ ^ LookupBlockMethod: name ]
+            else: [ ^ No                      ]
     );
 
     ImplForRewrite: ast Context: context => (
@@ -51,7 +51,7 @@
             ]
           ~ case: astTypes Builtin do: [
                 | args2 <- ast args map: [ :arg | Rewrite: arg Context: context ] |
-                ( [ast message == #'ecosphere.ecore.flow.value'] and: [(args2 at: 0) first type == astTypes Code]) -> [
+                ( [ast message == #'ecosphere.ecore.flow.value'] and: [(args2 at: 0) first type == astTypes Block]) -> [
                   ^ (InlineFunction: (args2 at: 0) first Args: (args2 map: [ :e | e first ]) Varargs: (ast varargs) Context: (args2 at: 0) second) & context
                 ].
               ^ (builder Builtin: (ast message) Args: (args2) Varargs: (ast varargs)) & context

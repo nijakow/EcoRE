@@ -61,7 +61,7 @@
     with inherited _lookup = {
         static with inherited _ = std Trait;
 
-        LookupCodeMethod: name => (
+        LookupBlockMethod: name => (
             (name == #'value') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'value' In: (std reflect proxies Block))) ].
             (name == #'repeat') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'repeat' In: (std reflect proxies Block))) ].
             (name == #'while:') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'while:' In: (std reflect proxies Block))) ].
@@ -69,9 +69,9 @@
         );
 
         LookupMethod: name InAST: ast => (
-            ((ast type) == (astTypes Code))
-                  if: [ ^ LookupCodeMethod: name ]
-                else: [ ^ No                     ]
+            ((ast type) == (astTypes Block))
+                  if: [ ^ LookupBlockMethod: name ]
+                else: [ ^ No                      ]
         );
     };
 
@@ -81,7 +81,7 @@
         TranslateRegister: r => (
             (context translateRegister: r index Depth: r depth)
               ~ yes: [ :id | ^ (builder Register: id Depth: 0) ]
-                 no: [       ^ r "TODO: Still translate inlined register depth ]
+                 no: [       ^ r "TODO: Still translate inlined register depth" ]
         );
 
         transformRegister: ast => (
@@ -119,7 +119,7 @@
             "TODO: Call 'Unscope:' on 'args first'"
 
                  [ ast message == #'ecosphere.ecore.flow.value' ]
-            and: [ args first ast type == astTypes Code         ] 
+            and: [ args first ast type == astTypes Block        ]
                ~ if: [ ^ Answer: (InlineValueBuiltin: args Varargs: ast varargs) ]
                else: [ ^ Answer: (RewriteBuiltin: ast Args: args)      ].
         );
@@ -169,8 +169,8 @@
     with inherited _code = {
         static with inherited _ = std Trait;
 
-        transformCode: ast => (
-          ^ Answer: (builder Code: (((In: context wrapLexical) transform: ast code) wrapIn: context))
+        transformBlock: ast => (
+          ^ Answer: (builder Block: (((In: context wrapLexical) transform: ast code) wrapIn: context))
         );
     };
 
@@ -190,7 +190,7 @@
           ~ case: astTypes Return     do: [ ^ transformReturn:     ast ]
           ~ case: astTypes Compound   do: [ ^ transformCompound:   ast ]
           ~ case: astTypes Assignment do: [ ^ transformAssignment: ast ]
-          ~ case: astTypes Code       do: [ ^ transformCode:       ast ]
+          ~ case: astTypes Block      do: [ ^ transformBlock:      ast ]
           ~ case: astTypes Scope      do: [ ^ transformScope:      ast ]
           "TODO: Slot Assignments, ..."
         ~ default: [ ^ Answer: ast ]

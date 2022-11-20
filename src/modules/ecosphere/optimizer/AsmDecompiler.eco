@@ -92,7 +92,7 @@
         visitResend: instr => OnStack: (builder Resend: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitAssign: instr => ( | v <- stack pop | OnStack: (builder Assign: v To: stack pop Slot: instr key));
         visitReturn: instr => OnAST: (builder Return: stack pop Depth: instr depth);
-        visitClosure: instr => Accu: (builder Code: (optimizer BuildAST: instr code));
+        visitClosure: instr => Accu: (builder Block: (optimizer BuildAST: instr code));
 
         buildAST => (
             |

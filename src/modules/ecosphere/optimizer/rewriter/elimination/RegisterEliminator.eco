@@ -14,7 +14,7 @@
     processConstant: ast => processDefault: ast;
     processRegister: ast => processDefault: ast;
     processCompound: ast => processDefault: ast;
-    processCode: ast => processDefault: ast;
+    processBlock: ast => processDefault: ast;
     processScope: ast => processDefault: ast;
     processBuiltin: ast => processDefault: ast;
     processSend: ast => processDefault: ast;
@@ -28,7 +28,7 @@
           ~ case: astTypes Constant   do: [ processConstant:   ast ]
           ~ case: astTypes Register   do: [ processRegister:   ast ]
           ~ case: astTypes Compound   do: [ processCompound:   ast ]
-          ~ case: astTypes Code       do: [ processCode:       ast ]
+          ~ case: astTypes Block      do: [ processBlock:      ast ]
           ~ case: astTypes Scope      do: [ processScope:      ast ]
           ~ case: astTypes Builtin    do: [ processBuiltin:    ast ]
           ~ case: astTypes Send       do: [ processSend:       ast ]

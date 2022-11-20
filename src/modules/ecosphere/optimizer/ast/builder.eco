@@ -10,7 +10,7 @@
     Register: index => Register(0, index);
     Register: index Depth: depth => Register(depth, index);
 
-    Code: code => (asts ASTCode) clone initWithCode: code;
+    Block: code => (asts ASTBlock) clone initWithCode: code;
     Scope: body Context: context => (asts ASTScope) clone initWithBody: body Context: context;
 
     Compound: instructions => (asts ASTCompound) clone initWithInstructions: instructions;

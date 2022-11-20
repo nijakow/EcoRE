@@ -72,7 +72,7 @@
         };
     };
 
-    own ASTCode = {
+    own ASTBlock = {
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
 
@@ -85,9 +85,9 @@
               ^ self
             );
 
-            type => contextModule ASTType Code;
+            type => contextModule ASTType Block;
 
-            acceptVisitor: visitor => visitor visitASTCode: self;
+            acceptVisitor: visitor => visitor visitASTBlock: self;
 
             isAtomic => true;
 
