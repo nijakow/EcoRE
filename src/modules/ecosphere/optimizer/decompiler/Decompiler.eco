@@ -1,13 +1,13 @@
 {
     static with inherited _ = std Clonable;
-    protected optimizer = $;
-    with inherited visitor = $ asm InstructionVisitor;
+    protected optimizer = $ optimizer;
+    with inherited visitor = $ optimizer asm InstructionVisitor;
 
-    protected function;
-    protected stack;
-    protected bindings;
-    protected accu;
-    protected cleared;
+    protected function,
+    protected stack,
+    protected bindings,
+    protected accu,
+    protected cleared,
     protected compound;
 
     visitInstruction: instr => (std io out << 'Visiting ' << instr) newline;
@@ -29,7 +29,8 @@
           ^ self
         );
 
-        builder => optimizer ast builder;
+        protected ast => optimizer ast;
+        protected builder => optimizer ast builder;
 
         protected UnknownInstruction => 42;
 

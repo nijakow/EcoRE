@@ -39,7 +39,7 @@
 
     Main => (
         |
-            answer <- optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'f' In: self))
+            answer <- optimizer BuildAST: (optimizer Disassemble: #'f' In: self)
         |
         "((optimizer ast Printer) clone initWithWriter: std io out) print: answer."
         (std io out << answer) newline commit.
