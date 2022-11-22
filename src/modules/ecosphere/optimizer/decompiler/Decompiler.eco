@@ -13,19 +13,14 @@
     visitInstruction: instr => (std io out << 'Visiting ' << instr) newline;
 
     with inherited trait = {
-        protected RegisterComparator = {
-            static with inherited _ = std Singleton;
-
-            value(a, b) => a equalsRegister: b;
-        };
 
         _initWithFunction: _function Context: _context => (
             function <- _function.
             context  <- _context.
             stack    <- std util newStack.
-            accu     <- builder Register: 0.
             cleared  <- false.
             compound <- std util newVector.
+            accu     <- Register: 0.
           ^ self
         );
 
@@ -39,12 +34,6 @@
         protected UnknownInstruction => 42;
 
         protected GetAccu => accu;
-
-        protected Move: from To: to => (
-            | v <- builder Assign: from To: to |
-            (to depth != 0) -> [ ^ v ].
-          ^ v
-        );
 
         protected popN: amount => (
             "
@@ -69,21 +58,26 @@
             cleared <- false.
         );
 
+        protected Register: index Depth: depth => (
+            builder ValueRef: (context lexical: depth ~ translateRegister: index)
+        );
+        protected Register: index => Register: index Depth: 0;
+
         visitNoop: instr => UnknownInstruction;
         visitConst: instr => Accu: (builder Constant: instr constant);
         visitPush: instr => ( OnStack: GetAccu. cleared <- true );
         visitPop: instr => Accu: stack pop;
-        visitLoadLocal: instr => Accu: (builder Register: instr register);
+        visitLoadLocal: instr => Accu: (Register: instr register);
         visitStoreLocal: instr => (
-            OnAST: (Move: GetAccu To: (builder Register: instr register)).
+            OnAST: (builder Assign: GetAccu To: (Register: instr register)).
             cleared <- true.
         );
-        visitLoadLexical: instr => Accu: (builder Register: instr register Depth: instr depth);
+        visitLoadLexical: instr => Accu: (Register: instr register Depth: instr depth);
         visitStoreLexical: instr => (
-            OnAST: (Move: GetAccu To: (builder Register: instr register Depth: instr depth)).
+            OnAST: (builder Assign: GetAccu To: (Register: instr register Depth: instr depth)).
             cleared <- true.
         );
-        visitBuiltin: instr => ( Accu: (builder Register: 0). OnStack: (builder Builtin: instr key Args: (popN: (instr args)) Varargs: instr varargs) );
+        visitBuiltin: instr => ( Accu: (Register: 0). OnStack: (builder Builtin: instr key Args: (popN: (instr args)) Varargs: instr varargs) );
         visitSend: instr => OnStack: (builder Send: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitResend: instr => OnStack: (builder Resend: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitAssign: instr => ( | v <- stack pop | OnStack: (builder Assign: v To: stack pop Slot: instr key));
