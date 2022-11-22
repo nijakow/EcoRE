@@ -57,6 +57,8 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.code.value", Eco_VM_Builtin_Code_Value);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.code.bytecodes", Eco_VM_Builtin_Code_Bytecodes);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.code.constants", Eco_VM_Builtin_Code_Constants);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.code.arguments", Eco_VM_Builtin_Code_ArgCount);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.code.registers", Eco_VM_Builtin_Code_RegisterCount);
     
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add_integers", Eco_VM_Builtin_AddIntegers);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.math.add", Eco_VM_Builtin_Add);

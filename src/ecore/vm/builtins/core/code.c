@@ -90,3 +90,31 @@ bool Eco_VM_Builtin_Code_Constants(struct Eco_Fiber* fiber, unsigned int args)
     Eco_Fiber_Push(fiber, any);
     return true;
 }
+
+bool Eco_VM_Builtin_Code_ArgCount(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Code*   code;
+    Eco_Any            any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+
+    any       = Eco_Fiber_Pop(fiber);
+    code      = Eco_Any_AsPointer(any);
+    Eco_Fiber_Push(fiber, Eco_Any_FromInteger(Eco_Code_ArgCount(code)));
+    return true;
+}
+
+bool Eco_VM_Builtin_Code_RegisterCount(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Code*   code;
+    Eco_Any            any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+
+    any       = Eco_Fiber_Pop(fiber);
+    code      = Eco_Any_AsPointer(any);
+    Eco_Fiber_Push(fiber, Eco_Any_FromInteger(Eco_Code_RegisterCount(code)));
+    return true;
+}

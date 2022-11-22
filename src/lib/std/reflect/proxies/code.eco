@@ -4,6 +4,8 @@
     
     bytecodes => #'ecosphere.ecore.object.code.bytecodes'(self);
     constants => #'ecosphere.ecore.object.code.constants'(self);
+    arguments => #'ecosphere.ecore.object.code.arguments'(self);
+    registers => #'ecosphere.ecore.object.code.registers'(self);
 
     execute(...) => #'ecosphere.ecore.object.code.value'(...);  "TODO: This can lead to lens-breaks"
 

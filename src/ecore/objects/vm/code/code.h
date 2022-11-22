@@ -35,6 +35,9 @@ struct Eco_Code* Eco_Code_ConstructFromEco(struct Eco_Blob*,
                                            unsigned int,
                                            bool);
 
+unsigned int Eco_Code_ArgCount(struct Eco_Code*);
+unsigned int Eco_Code_RegisterCount(struct Eco_Code*);
+
 void Eco_Code_Init();
 void Eco_Code_Terminate();
 
