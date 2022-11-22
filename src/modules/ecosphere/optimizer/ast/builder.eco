@@ -13,7 +13,8 @@
     Register: index => Register(0, index);
     Register: index Depth: depth => Register(depth, index);
 
-    Block: code => (asts ASTBlock) clone initWithCode: code;
+    Block: code Args: args => (asts ASTBlock) clone initWithArgs: args Code: code;
+    Block: code => Block: code Args: (std util newArray);
     Scope: body Context: context => (asts ASTScope) clone initWithBody: body Context: context;
 
     Compound: instructions => (asts ASTCompound) clone initWithInstructions: instructions;

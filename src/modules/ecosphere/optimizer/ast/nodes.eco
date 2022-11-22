@@ -99,11 +99,12 @@
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
 
-        code;
+        args, code;
 
         with inherited trait = {
-            initWithCode: _code => (
+            initWithArgs: _args Code: _code => (
                 $(AST) init.
+                args <- _args.
                 code <- _code.
               ^ self
             );
