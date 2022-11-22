@@ -1,0 +1,7 @@
+{
+    static with inherited _ = std Module;
+    optimizer = $;
+
+    own Decompiler = (here / 'Decompiler.eco') importIn: self;
+    own Context = (here / 'Context.eco');
+}

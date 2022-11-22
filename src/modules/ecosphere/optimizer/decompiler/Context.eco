@@ -1,0 +1,29 @@
+{
+    static with inherited _ = std Clonable;
+    decompiler = $;
+
+              lexical,
+    protected refAlloc;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+
+        protected optimizer => decompiler optimizer;
+
+        _init: _lexical => (
+            lexical  <- _lexical.
+            refAlloc <- (optimizer ast ref ValueRefAllocator) new.
+          ^ self
+        );
+
+        initWithLexical: p => _init: (Yes: p);
+        init => _init: No;
+
+        lexicalDepth => lexical yes: [ :l | (l lexicalDepth + 1) ] no: 0;
+
+        lexical: depth => (
+            (depth == 0) if: [ ^ self ].
+          ^ lexical yes lexical: (depth - 1)
+        );
+    }
+}
