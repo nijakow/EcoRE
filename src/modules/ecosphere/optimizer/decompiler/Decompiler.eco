@@ -82,18 +82,21 @@
         visitResend: instr => OnStack: (builder Resend: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitAssign: instr => ( | v <- stack pop | OnStack: (builder Assign: v To: stack pop Slot: instr key));
         visitReturn: instr => OnAST: (builder Return: stack pop Depth: instr depth);
-        visitClosure: instr => Accu: (builder Block: (((decompiler Decompiler) clone) initWithFunction: instr code Context: (context wrap) ~ buildAST));
+        visitClosure: instr => Accu: (((decompiler Decompiler) clone) initWithFunction: instr code Context: (context wrap) ~ buildAST);
 
         buildAST => (
             |
-                expr  <- function instructions,
+                expr <- function instructions,
+                args <- std util newVector
             |
+
+            0 for: (function arguments) do: [ :i | args add: (context translateRegister: i) ].
             
             [ :break |
                 expr accept: self;
                 expr next yes: [ :v | expr <- v ] no: [ break value ].
             ] repeatWithBreak.
-          ^ builder Block: ((compound size == 1) if: [ compound at: 0 ] else: [ builder Compound: compound ])
+          ^ builder Block: ((compound size == 1) if: [ compound at: 0 ] else: [ builder Compound: compound ]) Args: (args asArray)
         );
     };
 }

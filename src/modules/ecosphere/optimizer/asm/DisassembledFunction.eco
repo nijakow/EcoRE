@@ -16,6 +16,9 @@
           ^ self
         );
 
+        arguments => codeObject yes arguments;
+        registers => codeObject yes registers;
+
         dumpOn: w => module InstructionWriter PrintDisassembledFunction: self;
 
         writeOn: w => w << 'a disassembled function';
