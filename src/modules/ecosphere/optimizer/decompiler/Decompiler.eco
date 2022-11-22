@@ -1,6 +1,6 @@
 {
     static with inherited _ = std Clonable;
-    protected optimizer = $ optimizer;
+    protected decompiler = $;
     with inherited visitor = $ optimizer asm InstructionVisitor;
 
     protected function,
@@ -29,6 +29,7 @@
           ^ self
         );
 
+        protected optimizer => decompiler optimizer;
         protected ast => optimizer ast;
         protected builder => optimizer ast builder;
 
@@ -93,7 +94,7 @@
         visitResend: instr => OnStack: (builder Resend: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitAssign: instr => ( | v <- stack pop | OnStack: (builder Assign: v To: stack pop Slot: instr key));
         visitReturn: instr => OnAST: (builder Return: stack pop Depth: instr depth);
-        visitClosure: instr => Accu: (builder Block: (optimizer BuildAST: instr code));
+        visitClosure: instr => Accu: (builder Block: (((decompiler Decompiler) clone) initWithFunction: instr code ~ buildAST));
 
         buildAST => (
             |
