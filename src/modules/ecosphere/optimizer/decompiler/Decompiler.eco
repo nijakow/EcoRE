@@ -6,7 +6,6 @@
     protected function,
     protected context,
     protected stack,
-    protected bindings,
     protected accu,
     protected cleared,
     protected compound;
@@ -24,7 +23,6 @@
             function <- _function.
             context  <- _context.
             stack    <- std util newStack.
-            bindings <- std util newAlistWithComparator: RegisterComparator;
             accu     <- builder Register: 0.
             cleared  <- false.
             compound <- std util newVector.
@@ -40,20 +38,11 @@
 
         protected UnknownInstruction => 42;
 
-        protected GetRegister: i => GetRegister: i Depth: 0;
-        protected GetRegister: i Depth: d => (
-            | r <- (Register: i Depth: d) |
-            bindings at: r
-              ~ yes: [ :v | ^ v ]
-                 no: [      ^ r ]
-        );
-
         protected GetAccu => accu;
 
         protected Move: from To: to => (
             | v <- builder Assign: from To: to |
             (to depth != 0) -> [ ^ v ].
-            bindings at: to put: v.
           ^ v
         );
 
