@@ -98,3 +98,11 @@ struct Eco_Code* Eco_Code_ConstructFromEco(struct Eco_Blob*  bytecodes,
 
     return code;
 }
+
+unsigned int Eco_Code_ArgCount(struct Eco_Code* code) {
+    return code->arg_count;
+}
+
+unsigned int Eco_Code_RegisterCount(struct Eco_Code* code) {
+    return code->register_count;
+}
