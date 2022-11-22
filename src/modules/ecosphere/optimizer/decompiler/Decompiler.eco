@@ -4,6 +4,7 @@
     with inherited visitor = $ optimizer asm InstructionVisitor;
 
     protected function,
+    protected context,
     protected stack,
     protected bindings,
     protected accu,
@@ -19,8 +20,9 @@
             value(a, b) => a equalsRegister: b;
         };
 
-        initWithFunction: _function => (
+        _initWithFunction: _function Context: _context => (
             function <- _function.
+            context  <- _context.
             stack    <- std util newStack.
             bindings <- std util newAlistWithComparator: RegisterComparator;
             accu     <- builder Register: 0.
@@ -28,6 +30,9 @@
             compound <- std util newVector.
           ^ self
         );
+
+        initWithFunction: f Context: c => _initWithFunction: f Context: c;
+        initWithFunction: f => _initWithFunction: f Context: (decompiler Context) new;
 
         protected optimizer => decompiler optimizer;
         protected ast => optimizer ast;
@@ -94,7 +99,7 @@
         visitResend: instr => OnStack: (builder Resend: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitAssign: instr => ( | v <- stack pop | OnStack: (builder Assign: v To: stack pop Slot: instr key));
         visitReturn: instr => OnAST: (builder Return: stack pop Depth: instr depth);
-        visitClosure: instr => Accu: (builder Block: (((decompiler Decompiler) clone) initWithFunction: instr code ~ buildAST));
+        visitClosure: instr => Accu: (builder Block: (((decompiler Decompiler) clone) initWithFunction: instr code Context: (context wrap) ~ buildAST));
 
         buildAST => (
             |
