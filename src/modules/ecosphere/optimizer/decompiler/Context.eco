@@ -3,7 +3,8 @@
     decompiler = $;
 
               lexical,
-    protected refAlloc;
+    protected refAlloc,
+    protected regs;
 
     with inherited trait = {
         static with inherited _ = std Trait;
@@ -13,6 +14,7 @@
         _init: _lexical => (
             lexical  <- _lexical.
             refAlloc <- (optimizer ast ref ValueRefAllocator) new.
+            regs     <- std util newMap.
           ^ self
         );
 
@@ -25,5 +27,16 @@
             (depth == 0) if: [ ^ self ].
           ^ lexical yes lexical: (depth - 1)
         );
+
+        translateRegister: n => (
+            (regs at: n) yes: [ :v | ^ v ].
+
+            | r <- refAlloc allocate |
+
+            regs at: n put: r.
+          ^ r
+        );
+
+        wrap => (decompiler Context) clone initWithLexical: self;
     }
 }
