@@ -117,7 +117,11 @@
 
             childrenDo: block => ( block value(code). $(AST) childrenDo: block );
 
-            writeOn: w => w << '[ ... | ' << code << ']';
+            writeOn: w => (
+                w << '['.
+                args do: [ :arg | w << ' :' << arg ].
+                w << ' | ' << code << ']'.
+            );
         };
     };
 
