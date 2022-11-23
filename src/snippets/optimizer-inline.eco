@@ -1,0 +1,43 @@
+{
+
+    AllConstant: args => (
+        args do: [ :arg | (IsConstant: arg) -> [ ^ false ] ].
+      ^ true
+    );
+
+    ConstantInline: function Args: args => (
+        | mapping <- std util newMapping |
+
+        function args forEach: [ :i :arg |
+            mapping at: arg put: (args at: i)
+        ].
+
+      ^ ReplaceAll: mapping In: function ast
+    );
+
+    VarInline: function Args: args => (
+        | refs    <- std util newVector,
+          mapping <- std util newMapping,
+          cb      <- CompoundBuilder new |
+
+        function args forEach: [ :i :arg |
+            | v <- allocValueRef |
+            refs add: v.
+            mapping at: arg put: v.
+            cb add: (builder Assign: (args at: i) To: v)
+        ].
+
+        cb add: (ReplaceAll: mapping In: function ast).
+
+        refs do: [ :ref | freeValueRef: ref ].
+
+      ^ cb finish
+    );
+
+    Inline: function Args: args => (
+        (AllConstant: args)
+          ~ if: [ ConstantInline: function Args: args ]
+          else: [      VarInline: function Args: args ]
+    );
+
+}
