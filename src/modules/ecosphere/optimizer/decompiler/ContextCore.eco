@@ -1,0 +1,17 @@
+{
+    static with inherited _ = std Clonable;
+    protected decompiler = $;
+
+    allocator;
+
+    with inherited _ = {
+        static with inherited _ = std Trait;
+
+        protected optimizer => decompiler optimizer;
+
+        init => (
+            allocator <- (optimizer ast ref ValueRefAllocator) new.
+          ^ self
+        );
+    }
+}

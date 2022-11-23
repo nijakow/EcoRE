@@ -34,12 +34,77 @@
             j <- i * 2,
             k <- i + i
         |
-      ^ [ j * k + x ] value
+      ^ [ :xx | j * k + x + xx ] value
     );
+    layoutInPlace => (
+                shrinkToFit.
+
+                |
+                    lower  <- 0,
+                    higher <- bounds dimensionForOrientation: orientation,
+                    diff   <- higher - lower,
+
+                    flexCount <- 0,
+                    reservedF <- 0,
+                    reservedN <- 0,
+                    budget    <- 0
+                |
+
+                childrenDo: [ :c |
+                    (c layoutForOrientation: orientation) isFlexible
+                      ~   if: [ flexCount <- flexCount + 1.
+                                reservedF <- reservedF + (c minExtentForOrientation: orientation) ]
+                        else: [ reservedN <- reservedN + (c minExtentForOrientation: orientation) ].
+                ].
+
+                budget <- (bounds dimensionForOrientation: orientation) max: (reservedF + reservedN).
+
+                |
+                    offset <- 0
+                |
+
+                childrenDo: [ :c |
+                    |
+                        minSpace <- c minExtentForOrientation: orientation,
+                        spaceForM
+                    |
+                    (c layoutForOrientation: orientation) isFlexible if: [
+                        | available <- (budget - reservedN) - (reservedF - minSpace) |
+                        spaceForM <- (budget - reservedN) / flexCount.
+                        (spaceForM > available) -> [ spaceForM <- available ].
+                        (spaceForM < minSpace)  -> [ spaceForM <- minSpace  ].
+                        flexCount <- flexCount - 1.
+                        reservedF <- reservedF - minSpace.
+                    ] else: [
+                        spaceForM <- minSpace.
+                        reservedN <- reservedN - spaceForM.
+                    ].
+
+                    |
+                        heightForM
+                    |
+                    
+                    (c layoutForOrientation: orientation opposite) isFlexible if: [
+                        heightForM <- extentForOrientation: orientation opposite
+                    ] else: [
+                        heightForM <- c minExtentForOrientation: orientation opposite
+                    ].
+
+                    orientation
+                      ~ ifHorizontal: [ c boundsX: offset Y: 0 W: spaceForM H: heightForM ]
+                          ifVertical: [ c boundsX: 0 Y: offset W: heightForM H: spaceForM ].
+                    
+                    offset <- offset + spaceForM.
+                    budget <- budget - spaceForM.
+                ].
+
+                childrenDo: [ :c | c layoutInPlaceIfNeeded ].
+                layoutIsNowOkay.
+            );
 
     Main => (
         |
-            answer <- optimizer BuildAST: (optimizer Disassemble: #'f' In: self)
+            answer <- optimizer BuildAST: (optimizer Disassemble: #'regs' In: self)
         |
         "((optimizer ast Printer) clone initWithWriter: std io out) print: answer."
         (std io out << answer) newline commit.

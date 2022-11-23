@@ -2,24 +2,24 @@
     static with inherited _ = std Clonable;
     decompiler = $;
 
-              lexical,
-    protected refAlloc,
+    lexical, core,
     protected regs;
 
     with inherited trait = {
         static with inherited _ = std Trait;
 
         protected optimizer => decompiler optimizer;
+        protected refAlloc  => core allocator;
 
-        _init: _lexical => (
+        _init: _lexical core: _core => (
             lexical  <- _lexical.
-            refAlloc <- (optimizer ast ref ValueRefAllocator) new.
+            core     <- _core.
             regs     <- std util newMap.
           ^ self
         );
 
-        initWithLexical: p => _init: (Yes: p);
-        init => _init: No;
+        initWithLexical: p => _init: (Yes: p) core: (p core);
+        init => _init: No core: ((decompiler ContextCore) new);
 
         lexicalDepth => lexical yes: [ :l | (l lexicalDepth + 1) ] no: 0;
 

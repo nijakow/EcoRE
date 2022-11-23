@@ -3,5 +3,6 @@
     optimizer = $;
 
     own Decompiler = (here / 'Decompiler.eco') importIn: self;
+    own ContextCore = (here / 'ContextCore.eco') importIn: self;
     own Context = (here / 'Context.eco') importIn: self;
 }
