@@ -105,7 +105,13 @@
         static with inherited _ = std Trait;
 
         transformValueRef: ast => (
-            "TODO"
+            | constraints <- calc ConstraintsFor: ast |
+
+            constraints ifConstant: [
+                ^ Answer: (constraints constant) In: (constraints context)
+            ] else: [
+                ^ Answer: ast
+            ].
             ^ Answer: ast
         );
     };
