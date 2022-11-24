@@ -93,6 +93,10 @@
               ^ self
             );
 
+            protected constraints => context constraints;
+
+            constraintsFor: ref => constraints Unknown;
+
             writeOn: w => w << 'a context core';
         };
     };
@@ -180,6 +184,8 @@
             valueRefForRegister: n => (
               ^ (register: n) valueRefUsingAllocator: core valueRefAllocator
             );
+
+            constraintsFor: ref => core constraintsFor: ref;
 
             writeOn: w => w << 'a context (' << depth << ', ' << lexicalDepth << ')';
         };
