@@ -101,6 +101,15 @@
         );
     };
 
+    with inherited _valueref = {
+        static with inherited _ = std Trait;
+
+        transformValueRef: ast => (
+            "TODO"
+            ^ Answer: ast
+        );
+    };
+
     with inherited _builtin = {
         static with inherited _ = std Trait;
 
@@ -185,6 +194,7 @@
     transform: ast => (
         Switch: (ast type)
           ~ case: astTypes Register   do: [ ^ transformRegister:   ast ]
+          ~ case: astTypes ValueRef   do: [ ^ transformValueRef:   ast ]
           ~ case: astTypes Builtin    do: [ ^ transformBuiltin:    ast ]
           ~ case: astTypes Send       do: [ ^ transformSend:       ast ]
           ~ case: astTypes Return     do: [ ^ transformReturn:     ast ]
