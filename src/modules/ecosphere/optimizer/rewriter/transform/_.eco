@@ -41,14 +41,6 @@
 
     ImplForRewrite: ast Context: context => (
         (Switch: ast type)
-          ~ case: astTypes Register do: [
-                | c <- context
-                           ~ lexical: (ast depth)
-                           ~ register: (ast index)
-                           ~ constraints
-                |
-              ^ c ifConstant: [ (c constant) & (c context) ] else: [ ast & context ]
-            ]
           ~ case: astTypes Builtin do: [
                 | args2 <- ast args map: [ :arg | Rewrite: arg Context: context ] |
                 ( [ast message == #'ecosphere.ecore.flow.value'] and: [(args2 at: 0) first type == astTypes Block]) -> [

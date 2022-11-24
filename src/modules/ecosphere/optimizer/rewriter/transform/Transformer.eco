@@ -75,44 +75,19 @@
         );
     };
 
-    with inherited _register = {
-        static with inherited _ = std Trait;
-
-        TranslateRegister: r => (
-            (context translateRegister: r index Depth: r depth)
-              ~ yes: [ :id | ^ (builder Register: id Depth: 0) ]
-                 no: [       ^ r "TODO: Still translate inlined register depth" ]
-        );
-
-        transformRegister: ast => (
-            | constraints  <- context
-                                ~ lexical: (ast depth)
-                                ~ register: (ast index)
-                                ~ constraints
-            |
-            
-            constraints ifConstant: [
-                ^ Answer: (constraints constant) In: (constraints context)
-            ] else: [
-                "This is an early test for register rewriting."
-                "TODO: If the translation was successful, the answer *MUST* be in 'root context'!!!"
-                ^ Answer: (TranslateRegister: ast)
-            ]
-        );
-    };
-
     with inherited _valueref = {
         static with inherited _ = std Trait;
 
         transformValueRef: ast => (
-            | constraints <- calc ConstraintsFor: ast |
+            |
+                constraints <- calc ConstraintsFor: ast
+            |
 
             constraints ifConstant: [
                 ^ Answer: (constraints constant) In: (constraints context)
             ] else: [
                 ^ Answer: ast
-            ].
-            ^ Answer: ast
+            ]
         );
     };
 
@@ -199,7 +174,6 @@
 
     transform: ast => (
         Switch: (ast type)
-          ~ case: astTypes Register   do: [ ^ transformRegister:   ast ]
           ~ case: astTypes ValueRef   do: [ ^ transformValueRef:   ast ]
           ~ case: astTypes Builtin    do: [ ^ transformBuiltin:    ast ]
           ~ case: astTypes Send       do: [ ^ transformSend:       ast ]

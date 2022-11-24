@@ -104,9 +104,9 @@
 
     Main => (
         |
-            answer <- optimizer BuildAST: (optimizer Disassemble: #'regs' In: self)
+            answer <- optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'regs' In: self))
         |
         "((optimizer ast Printer) clone initWithWriter: std io out) print: answer."
-        (std io out << answer) newline commit.
+        (std io out << answer ast) newline commit.
     );
 } Main.

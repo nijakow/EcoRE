@@ -5,7 +5,6 @@
 
     own Constant = { static with inherited _ = std Enum };
     own ValueRef = { static with inherited _ = std Enum };
-    own Register = { static with inherited _ = std Enum };
 
     own Compound = { static with inherited _ = std Enum };
     own Block    = { static with inherited _ = std Enum };
