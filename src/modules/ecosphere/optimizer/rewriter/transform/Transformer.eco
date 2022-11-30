@@ -36,13 +36,25 @@
         static with inherited _ = std Trait;
 
         InlineAST: ast Args: args Varargs: varargs NewContext: newContext => (
-            "TODO: To make inlining easier, let the program store all arguments in variables and
-                   make the local variables point to them."
-            args forEach: [ :i, :arg |
-                (newContext register: i) constraints: (calc ConstraintsFor: arg)
+            "TODO! CompoundBuilder and allocValueRef are missing! Same for ReplaceAll: and the function object itself."
+            |
+                refs    <- std util newVector,
+                mapping <- std util newMapping,
+                cb      <- CompoundBuilder new
+            |
+
+            function args forEach: [ :i :arg |
+                | v <- allocValueRef |
+                refs add: v.
+                mapping at: arg put: v.
+                cb add: (builder Assign: (args at: i) To: v)
             ].
-            "TODO: Stop condition for rewriting and inlining (maybe based on context depth?)"
-          ^ ((In: newContext) transform: ast) wrap
+
+            cb add: (ReplaceAll: mapping In: function ast).
+
+            refs do: [ :ref | freeValueRef: ref ].
+
+          ^ ((In: newContext) transform: (cb finish)) wrap
         );
         InlineAST: ast Args: args Varargs: varargs =>
             InlineAST: ast Args: args Varargs: varargs NewContext: context wrap;
@@ -80,7 +92,7 @@
 
         transformValueRef: ast => (
             |
-                constraints <- calc ConstraintsFor: ast
+                constraints <- calc ConstraintsFor: ast Context: context
             |
 
             constraints ifConstant: [
