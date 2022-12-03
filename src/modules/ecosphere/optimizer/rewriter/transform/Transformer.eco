@@ -35,12 +35,15 @@
     with inherited _inlining = {
         static with inherited _ = std Trait;
 
+        allocValueRef => context core valueRefAllocator allocate;
+        freeValueRef: ref => self; "Not doing anything (yet?)"
+
         InlineAST: ast Args: args Varargs: varargs NewContext: newContext => (
-            "TODO! CompoundBuilder and allocValueRef are missing! Same for ReplaceAll: and the function object itself."
+            "TODO! allocValueRef and freeValueRef are missing! Same for ReplaceAll: and the function object itself."
             |
                 refs    <- std util newVector,
                 mapping <- std util newMapping,
-                cb      <- CompoundBuilder new
+                cb      <- std util newVector
             |
 
             function args forEach: [ :i :arg |
@@ -54,7 +57,7 @@
 
             refs do: [ :ref | freeValueRef: ref ].
 
-          ^ ((In: newContext) transform: (cb finish)) wrap
+          ^ ((In: newContext) transform: (builder Compound: cb asArray)) wrap
         );
         InlineAST: ast Args: args Varargs: varargs =>
             InlineAST: ast Args: args Varargs: varargs NewContext: context wrap;
