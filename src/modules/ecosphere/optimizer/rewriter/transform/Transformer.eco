@@ -39,7 +39,6 @@
         freeValueRef: ref => self; "Not doing anything (yet?)"
 
         InlineAST: ast ArgDefs: argdefs Args: args Varargs: varargs NewContext: newContext => (
-            "TODO! allocValueRef and freeValueRef are missing! Same for ReplaceAll: and the function object itself."
             |
                 refs    <- std util newVector,
                 mapping <- std util newMap,
@@ -47,6 +46,10 @@
             |
 
             argdefs forEach: [ :i :arg |
+                "TODO: If the corresponding argument is a constant (e.g. a block),
+                       then don't generate a ValueRef, but replace the argument directly
+                       by the literal.
+                       This only works if there are no assignments to the variable."
                 |
                      v <- allocValueRef,
                     bv <- builder ValueRef: v
@@ -57,8 +60,6 @@
             ].
 
             cb add: (transform ReplaceAll: mapping In: ast).
-
-            (std io out << cb) newline commit.
 
             refs do: [ :ref | freeValueRef: ref ].
 
