@@ -13,6 +13,7 @@
 
     with own Answer = (here / 'Answer.eco') importIn: self;
     with own Transformer = (here / 'Transformer.eco') importIn: self;
+    with own Replacer = (here / 'Replacer.eco') importIn: self;
 
     InlineAST: m Args: args Varargs: varargs Context: context NewContext: newContext => (
         args forEach: [ :i, :arg |
@@ -79,5 +80,10 @@
     Rewrite: ast Context: context => (
         Transformer clone init: context
           ~ transform: ast
+    );
+
+    ReplaceAll: mapping In: ast => (
+        Replacer clone init: mapping
+          ~ process: ast
     );
 }

@@ -1,0 +1,81 @@
+{
+    static with inherited _ = std Clonable;
+
+    protected transform = $;
+    protected module => transform module;
+    protected optimizer => module optimizer;
+
+    with own switch = $ module switch;
+
+    protected astTypes => module ast types;
+    protected constraints => module constraints;
+    protected calc => module calc;
+    protected builder => module builder;
+
+    replacements;
+
+
+    processValueRef: ast => (
+        (replacements at: ast ref)
+          ~ yes: [ :repl | ^ repl ]
+             no: [         ^ ast  ]
+    );
+
+    processBuiltin: ast => (
+        builder Builtin: (ast message)
+                   Args: (processMultiple: ast args)
+                Varargs: (ast varargs)
+    );
+
+    processSend: ast => (
+        builder   Send: (ast message)
+                  Args: (processMultiple: ast args)
+               Varargs: (ast varargs)
+    );
+
+    processReturn: ast => (
+        builder Return: (process: ast returnValue) Depth: (ast depth)
+    );
+
+    processCompound: ast => (
+        builder Compound: (processMultiple: ast instructions)
+    );
+
+    processAssignment: ast => (
+        builder Assign: (process: ast rhs) To: (process: ast lhs)
+    );
+
+    processBlock: ast => (
+        builder Block: (process: ast code) Args: (ast args)
+    );
+
+    processScope: ast => (
+        builder Scope: (process: ast body) Context: (ast context)
+    );
+
+    
+    process: ast => (
+        Switch: (ast type)
+          ~ case: astTypes ValueRef   do: [ ^ processValueRef:   ast ]
+          ~ case: astTypes Builtin    do: [ ^ processBuiltin:    ast ]
+          ~ case: astTypes Send       do: [ ^ processSend:       ast ]
+          ~ case: astTypes Return     do: [ ^ processReturn:     ast ]
+          ~ case: astTypes Compound   do: [ ^ processCompound:   ast ]
+          ~ case: astTypes Assignment do: [ ^ processAssignment: ast ]
+          ~ case: astTypes Block      do: [ ^ processBlock:      ast ]
+          ~ case: astTypes Scope      do: [ ^ processScope:      ast ]
+          "TODO: Slot Assignments, ..."
+        ~ default: [ ^ ast ]
+    );
+
+    processMultiple: exprs =>
+        exprs map: [ :expr | process: expr ];
+    
+
+    init: _replacements => (
+        replacements <- _replacements.
+      ^ self
+    );
+
+    writeOn: w => w << 'a replacer';
+}
