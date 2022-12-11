@@ -19,4 +19,15 @@
     );
 
     ConstraintsFor: answer => ConstraintsFor: answer ast Context: answer context;
+
+
+
+    IsConstant: ast => (
+        (Switch: ast type)
+          ~ case: astTypes Constant do: [ ^ true                   ]
+          ~ case: astTypes Block    do: [ ^ true                   ]
+          ~ case: astTypes Scope    do: [ ^ IsConstant: (ast body) ]
+          ~ default: [ ^ false ]
+        ~ end
+    );
 }
