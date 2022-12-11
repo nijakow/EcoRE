@@ -187,7 +187,7 @@
         static with inherited _ = std Trait;
 
         transformBlock: ast => (
-          ^ Answer: (builder Block: (((In: context wrapLexical) transform: ast code) wrapIn: context))
+          ^ Answer: (builder Block: (((In: context wrapLexical) transform: ast code) wrapIn: context) Args: (ast args))
         );
     };
 
