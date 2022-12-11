@@ -50,13 +50,18 @@
                        then don't generate a ValueRef, but replace the argument directly
                        by the literal.
                        This only works if there are no assignments to the variable."
-                |
-                     v <- allocValueRef,
-                    bv <- builder ValueRef: v
-                |
-                refs add: v.
-                mapping at: arg put: bv.
-                cb add: (builder Assign: ((args at: i) ast) To: bv)
+                | param <- ((args at: i) ast) |
+                (module IsConstant: param) if: [
+                    mapping at: arg put: param
+                ] else: [
+                    |
+                        v <- allocValueRef,
+                        bv <- builder ValueRef: v
+                    |
+                    refs add: v.
+                    mapping at: arg put: bv.
+                    cb add: (builder Assign: ((args at: i) ast) To: bv)
+                ]
             ].
 
             cb add: (transform ReplaceAll: mapping In: ast).
