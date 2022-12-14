@@ -16,6 +16,7 @@
     with bool = #<:std/bool>;
     with maybe = #<:std/maybe>;
     with try = #<:std/try>;
+    with switch = #<:std/switch>;
 
     ffi = #<:std/ffi>;
     io = #<:std/io>;

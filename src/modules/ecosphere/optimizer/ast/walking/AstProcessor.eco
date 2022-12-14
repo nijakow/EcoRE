@@ -1,0 +1,6 @@
+{
+    static with inherited _ = std Clonable;
+    
+    processAst: ast Walker: walker => self;
+    "..."
+}

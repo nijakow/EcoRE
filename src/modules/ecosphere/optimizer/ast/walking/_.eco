@@ -1,0 +1,6 @@
+{
+    AstWalker = (here / 'AstWalker.eco') importIn: self;
+    AstProcessor = (here / 'AstProcessor.eco') importIn: self;
+
+    Walk: ast Processor: processor => "...";
+}

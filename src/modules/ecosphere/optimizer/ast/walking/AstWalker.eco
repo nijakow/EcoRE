@@ -1,0 +1,20 @@
+{
+    static with inherited _ = std Clonable;
+    protected module = $;
+
+    processor, context;
+
+    In: otherContext => (module AstWalker) clone initWithProcessor: processor Context: otherContext;
+
+    process: ast => (
+        Switch: (ast type)
+          ~ case: astTypes ValueRef do: [ ^ processor processValueRef: ast Walker: self ]
+        ~ default: [ ^ processor processAst: ast Walker: self ]
+    );
+
+    initWithProcessor: _processor Context: _context => (
+        processor <- _processor.
+        context   <- _context.
+      ^ self
+    );
+}

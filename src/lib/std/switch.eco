@@ -1,0 +1,36 @@
+#=std/switch: {
+
+    own Fallthrough = ;
+
+    Switch: expr => (
+        {
+            static with inherited _ = #<:std/Clonable>;
+
+            switchValue;
+
+            static with inherited trait = {
+                initWithValue: _switchValue => (
+                    switchValue <- _switchValue.
+                  ^ self
+                );
+
+                protected compare(a, b) => a == b;
+
+                case: caseValue do: block => (
+                    compare(switchValue, caseValue) if: [
+                        block value.
+                      ^ {
+                            static with inherited _ = #<:std/Singleton>;
+
+                            case: caseValue do: block => self;
+                            default: block => self;
+                        }
+                    ].
+                  ^ self
+                );
+
+                default: block => ( block value. switch Fallthrough );
+            };
+        } initWithValue: expr;
+    );
+}
