@@ -62,7 +62,7 @@
               ^ _initWithSurroundingContext: No Lexical: No
             );
 
-            varargs: va => varargs <- va;
+            varargs: va => varargs <- Yes: va;
 
             depth: d => (
                 (d isZero)

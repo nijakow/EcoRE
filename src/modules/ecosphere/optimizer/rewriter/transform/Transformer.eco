@@ -39,6 +39,11 @@
         freeValueRef: ref => self; "Not doing anything (yet?)"
 
         InlineAST: ast ArgDefs: argdefs Args: args Varargs: varargs NewContext: newContext => (
+            (argdefs size != args size) if: [
+                "TODO: Fill up missing arguments with references to SELF"
+                'Argument error when inlining!' throw
+            ].
+
             |
                 refs    <- std util newVector,
                 mapping <- std util newMap,
@@ -65,6 +70,17 @@
             ].
 
             "TODO: Make a list of all varargs and add them to the context"
+
+            |
+                varargCount <- args size - argdefs size,
+                varargList  <- std util newVector
+            |
+            1 to: (args size) do: [ :i |
+                "TODO: Do the same thing as before, but add to varargList."
+                (std io out << (args at: varargCount + (i - 1))) newline commit.
+            ].
+
+            context varargs: (varargList asArray).
 
             cb add: (transform ReplaceAll: mapping In: ast).
 
