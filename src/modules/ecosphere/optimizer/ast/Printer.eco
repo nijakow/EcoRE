@@ -25,11 +25,25 @@
     );
 
 
+    printBlock: expr => (
+        writer << '['.
+        expr args do: [ :arg |
+            (writer << ' :' << arg).
+        ].
+        indented: [
+            newline.
+            print: expr code.
+        ].
+        newline.
+        writer << ']'.
+    );
+
     printCompound: expr => (
         writer << '('.
         indented: [
             expr instructions do: [ :instr | newline. print: instr ]
         ].
+        newline.
         writer << ')'.
     );
 
@@ -50,6 +64,7 @@
 
     print: expr => (
         Switch: (expr type)
+          ~ case: ast types Block    do: [ printBlock: expr    ]
           ~ case: ast types Compound do: [ printCompound: expr ]
           ~ case: ast types Return   do: [ printReturn: expr   ]
           ~ case: ast types Scope    do: [ printScope: expr    ]
