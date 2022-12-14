@@ -32,7 +32,8 @@
 
         core,
         surroundingContext,
-        lexicalContext;
+        lexicalContext,
+        varargs;
 
         with inherited trait = {
 
@@ -41,6 +42,7 @@
                                 no: [        core <- context ContextCore new ].
                 surroundingContext <- surr.
                 lexicalContext     <- lex.
+                varargs            <- No.
               ^ self
             );
 
@@ -59,6 +61,8 @@
             init => (
               ^ _initWithSurroundingContext: No Lexical: No
             );
+
+            varargs: va => varargs <- va;
 
             depth: d => (
                 (d isZero)
