@@ -32,6 +32,20 @@
       ^ Answer: ast In: c
     );
 
+    ExtendVarargs: args => (
+        | v <- std util newVector |
+        args into: v.
+        (std io out << context lexicalVarargs) newline commit.
+        context lexicalVarargs yes: [ :varargs | varargs do: [ :vararg | v add: vararg ] ].
+        (std io out << 'arg: ' << v) newline commit.
+      ^ v asArray
+    );
+
+    ExtendVarargs: args If: bool => (
+        bool   if: [ ^ ExtendVarargs: args ]
+             else: [ ^ args                ]
+    );
+
     with inherited _inlining = {
         static with inherited _ = std Trait;
 
@@ -39,10 +53,14 @@
         freeValueRef: ref => self; "Not doing anything (yet?)"
 
         InlineAST: ast ArgDefs: argdefs Args: args Varargs: varargs NewContext: newContext => (
-            (argdefs size != args size) if: [
+            (argdefs size < args size) if: [ (std io out << 'Note: Possible argument error while inlining!') newline commit ].
+            (argdefs size > args size) if: [
                 "TODO: Fill up missing arguments with references to SELF"
-                'Argument error when inlining!' throw
+                "'Argument error when inlining!' throw"
+                (std io out << 'Note: Possible argument error while inlining!') newline commit
             ].
+
+            (args) do: [ :arg | (std io out << 'Argument: ' << arg) newline commit ].
 
             |
                 refs    <- std util newVector,
@@ -75,12 +93,27 @@
                 varargCount <- args size - argdefs size,
                 varargList  <- std util newVector
             |
-            1 to: (args size) do: [ :i |
-                "TODO: Do the same thing as before, but add to varargList."
-                (std io out << (args at: varargCount + (i - 1))) newline commit.
+            0 to: (varargCount - 1) do: [ :i |
+                | param <- (args at: varargCount + i) |
+                (module IsConstant: param ast) if: [
+                    varargList add: param
+                ] else: [
+                    |
+                        v <- allocValueRef,
+                        bv <- builder ValueRef: v
+                    |
+                    refs add: v.
+                    varargList add: (Answer: bv).
+                    cb add: (builder Assign: ((args at: i) ast) To: bv)
+                ]
             ].
 
-            context varargs: (varargList asArray).
+            (std io out << 'varargs:') newline commit.
+            varargList do: [ :e |
+                (std io out << '   ' << e) newline commit
+            ].
+
+            newContext varargs: (varargList asArray).
 
             cb add: (transform ReplaceAll: mapping In: ast).
 
@@ -155,8 +188,8 @@
 
                  [ ast message == #'ecosphere.ecore.flow.value' ]
             and: [ args first ast type == astTypes Block        ]
-               ~ if: [ ^ Answer: (InlineValueBuiltin: args Varargs: ast varargs) ]
-               else: [ ^ Answer: (RewriteBuiltin: ast Args: args)      ].
+               ~ if: [ ^ Answer: (InlineValueBuiltin: (ExtendVarargs: args If: ast varargs) Varargs: ast varargs) ]
+               else: [ ^ Answer: (RewriteBuiltin: ast Args: args)                                                 ]
         );
     };
 
@@ -172,8 +205,8 @@
                 args   <- transformMultiple: (ast args),
                 method <- LookupMethod: (ast message) InAST: ((args at: 0) ast)
             |
-            method yes: [ :m | ^ Answer: (InlineMethod: m Args: args Varargs: ast varargs) ]
-                    no: [      ^ Answer: (RewriteSend: ast Args: args)                      ]
+            method yes: [ :m | ^ Answer: (InlineMethod: m Args: (ExtendVarargs: args If: ast varargs) Varargs: ast varargs) ]
+                    no: [      ^ Answer: (RewriteSend: ast Args: args)                                                      ]
         );
     };
 

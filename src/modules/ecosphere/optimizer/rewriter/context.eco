@@ -64,6 +64,12 @@
 
             varargs: va => varargs <- Yes: va;
 
+            lexicalVarargs => (
+                varargs
+                  ~ yes: [ :va | varargs                                                      ]
+                     no: [       lexicalContext yes: [ :lc | lc lexicalVarargs ] no: [ No ]   ]
+            );
+
             depth: d => (
                 (d isZero)
                   ~   if: [ ^ self                                  ]
