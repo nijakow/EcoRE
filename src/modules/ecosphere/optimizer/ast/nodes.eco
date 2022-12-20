@@ -362,19 +362,25 @@
         };
     };
 
-    own ASTJumpBack = {
+    own ASTJumpLabel = {
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
 
+        label;
+
         with inherited trait = {
-            init => (
+            initWithLabel: _label => (
                 $(AST) init.
+                label <- _label.
               ^ self
             );
 
-            acceptVisitor: visitor => visitor visitASTJumpBack: self;
+            type => contextModule ASTType JumpLabel;
 
-            writeOn: w => w << 'ASTJumpBack()';
+            acceptVisitor: visitor => visitor visitASTJumpLabel: self;
+
+            writeOn: w => w << 'ASTJumpLabel(' << label << ')';
         };
     };
+
 }

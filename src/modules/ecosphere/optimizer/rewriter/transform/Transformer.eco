@@ -114,6 +114,7 @@
             newContext varargs: (varargList asArray).
 
             cb add: (transform ReplaceAll: mapping In: ast).
+            cb add: (builder JumpLabel: (newContext exitLabel)).
 
             refs do: [ :ref | freeValueRef: ref ].
 
