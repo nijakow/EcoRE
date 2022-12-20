@@ -37,6 +37,10 @@
         builder Return: (process: ast returnValue) Depth: (ast depth)
     );
 
+    processJump: ast => (
+        builder Jump: (ast label) Value: (process: ast returnValue)
+    );
+
     processCompound: ast => (
         builder Compound: (processMultiple: ast instructions)
     );
@@ -60,6 +64,7 @@
           ~ case: astTypes Builtin    do: [ ^ processBuiltin:    ast ]
           ~ case: astTypes Send       do: [ ^ processSend:       ast ]
           ~ case: astTypes Return     do: [ ^ processReturn:     ast ]
+          ~ case: astTypes Jump       do: [ ^ processJump:       ast ]
           ~ case: astTypes Compound   do: [ ^ processCompound:   ast ]
           ~ case: astTypes Assignment do: [ ^ processAssignment: ast ]
           ~ case: astTypes Block      do: [ ^ processBlock:      ast ]

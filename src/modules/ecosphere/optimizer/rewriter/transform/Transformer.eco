@@ -35,9 +35,7 @@
     ExtendVarargs: args => (
         | v <- std util newVector |
         args into: v.
-        (std io out << context lexicalVarargs) newline commit.
         context lexicalVarargs yes: [ :varargs | varargs do: [ :vararg | v add: vararg ] ].
-        (std io out << 'arg: ' << v) newline commit.
       ^ v asArray
     );
 
@@ -58,7 +56,7 @@
                 'Argument error when inlining!' throw
             ].
 
-            (args) do: [ :arg | (std io out << 'Argument: ' << arg) newline commit ].
+            newContext enableEntryAndExitLabels.
 
             |
                 refs    <- std util newVector,
@@ -106,15 +104,10 @@
                 ]
             ].
 
-            (std io out << 'varargs:') newline commit.
-            varargList do: [ :e |
-                (std io out << '   ' << e) newline commit
-            ].
-
             newContext varargs: (varargList asArray).
 
             cb add: (transform ReplaceAll: mapping In: ast).
-            cb add: (builder JumpLabel: (newContext exitLabel)).
+            cb add: (builder JumpLabel: (newContext exitLabel yes)).
 
             refs do: [ :ref | freeValueRef: ref ].
 
@@ -213,8 +206,10 @@
         static with inherited _ = std Trait;
 
         transformReturn: ast => (
-            ^ Answer: (builder  Jump: ((context lexical: ast depth) exitLabel)
-                               Value: ((transform: ast returnValue) wrapIn: context))
+            | returnValue <- ((transform: ast returnValue) wrapIn: context) |
+            ((context lexical: ast depth) exitLabel)
+                yes: [ :label | ^ Answer: (builder Jump: label Value: returnValue)         ]
+                 no: [          ^ Answer: (builder Return: returnValue Depth: (ast depth)) ]
         );
     };
 

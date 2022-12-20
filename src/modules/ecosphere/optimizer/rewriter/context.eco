@@ -45,8 +45,8 @@
                 surroundingContext <- surr.
                 lexicalContext     <- lex.
                 varargs            <- No.
-                entryLabel         <- core valueRefAllocator allocate. "This is a hack."
-                exitLabel          <- core valueRefAllocator allocate.  "Same here."
+                entryLabel         <- No.
+                exitLabel          <- No.
               ^ self
             );
 
@@ -67,6 +67,12 @@
             );
 
             varargs: va => varargs <- Yes: va;
+
+            enableEntryAndExitLabels => (
+                entryLabel <- Yes: (core valueRefAllocator allocate). "This is a hack."
+                exitLabel  <- Yes: (core valueRefAllocator allocate). "Same here."
+              ^ self
+            );
 
             lexicalVarargs => (
                 varargs
