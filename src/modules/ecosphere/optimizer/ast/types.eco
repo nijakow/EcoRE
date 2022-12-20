@@ -18,4 +18,5 @@
     own SlotAssignment  = { static with inherited _ = std Enum };
 
     own Return   = { static with inherited _ = std Enum };
+    own Jump     = { static with inherited _ = std Enum };
 }

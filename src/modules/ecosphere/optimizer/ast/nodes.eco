@@ -340,6 +340,28 @@
         };
     };
 
+    own ASTJump = {
+        static with inherited _ = std Clonable;
+        with inherited own AST = $ AST;
+
+        label, returnValue;
+
+        with inherited trait = {
+            initWithLabel: _label Value: _value => (
+                $(AST) init.
+                label       <- _label.
+                returnValue <- _value.
+              ^ self
+            );
+
+            type => contextModule ASTType Jump;
+
+            acceptVisitor: visitor => visitor visitASTJump: self;
+
+            writeOn: w => w << 'ASTJump(' << label << ', ' << returnValue << ')';
+        };
+    };
+
     own ASTJumpBack = {
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;

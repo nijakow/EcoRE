@@ -212,7 +212,8 @@
         static with inherited _ = std Trait;
 
         transformReturn: ast => (
-            ^ Answer: (builder Return: ((transform: ast returnValue) wrapIn: context) Depth: (ast depth))
+            ^ Answer: (builder  Jump: ((context lexical: ast depth) exitLabel)
+                               Value: ((transform: ast returnValue) wrapIn: context))
         );
     };
 
