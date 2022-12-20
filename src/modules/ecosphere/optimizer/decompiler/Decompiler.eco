@@ -7,6 +7,7 @@
     protected context,
     protected stack,
     protected accu,
+    protected returned,
     protected cleared,
     protected compound;
 
@@ -18,6 +19,7 @@
             function <- _function.
             context  <- _context.
             stack    <- std util newStack.
+            returned <- false.
             cleared  <- false.
             compound <- std util newVector.
             accu     <- Register: 0.
@@ -51,7 +53,7 @@
         );
 
         protected OnStack: expr => stack push: expr;
-        protected OnAST: expr => (expr isAtomic not) if: [ compound add: expr ];
+        protected OnAST: expr => ([expr isAtomic not] and: [returned not]) if: [ compound add: expr ];
         protected Accu: expr => (
             cleared not -> [ OnAST: accu ].
             accu <- expr.
@@ -81,7 +83,7 @@
         visitSend: instr => OnStack: (builder Send: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitResend: instr => OnStack: (builder Resend: instr key Args: (popN: (instr args)) Varargs: instr varargs);
         visitAssign: instr => ( | v <- stack pop | OnStack: (builder Assign: v To: stack pop Slot: instr key));
-        visitReturn: instr => OnAST: (builder Return: stack pop Depth: instr depth);
+        visitReturn: instr => ( OnAST: (builder Return: stack pop Depth: instr depth). returned <- true );
         visitClosure: instr => Accu: (((decompiler Decompiler) clone) initWithFunction: instr code Context: (context wrap) ~ buildAST);
 
         buildAST => (
