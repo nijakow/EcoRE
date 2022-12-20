@@ -33,7 +33,9 @@
         core,
         surroundingContext,
         lexicalContext,
-        varargs;
+        varargs,
+        entryLabel,
+        exitLabel;
 
         with inherited trait = {
 
@@ -43,6 +45,8 @@
                 surroundingContext <- surr.
                 lexicalContext     <- lex.
                 varargs            <- No.
+                entryLabel         <- core valueRefAllocator allocate. "This is a hack."
+                exitLabel          <- core valueRefAllocator allocate.  "Same here."
               ^ self
             );
 
