@@ -218,6 +218,14 @@
         );
     };
 
+    with inherited _jump = {
+        static with inherited _ = std Trait;
+
+        transformJump: ast => (
+          ^ Answer: (builder Jump: ast label Value: ((transform: ast value) wrapIn: context))
+        );
+    };
+
     with inherited _compound = {
         static with inherited _ = std Trait;
 
@@ -256,6 +264,7 @@
           ~ case: astTypes Builtin    do: [ ^ transformBuiltin:    ast ]
           ~ case: astTypes Send       do: [ ^ transformSend:       ast ]
           ~ case: astTypes Return     do: [ ^ transformReturn:     ast ]
+          ~ case: astTypes Jump       do: [ ^ transformJump:       ast ]
           ~ case: astTypes Compound   do: [ ^ transformCompound:   ast ]
           ~ case: astTypes Assignment do: [ ^ transformAssignment: ast ]
           ~ case: astTypes Block      do: [ ^ transformBlock:      ast ]

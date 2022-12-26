@@ -36,7 +36,7 @@
         |
       ^ [ :xx | j * k + x + xx ] value(42)
     );
-    va => [ :i, ... | foo(i, ...) ] value(222, 333);
+    va => [ :i, ... | foo(i, ...) ] value(222, 333);  "This is still producing weird results... the varargs should be inlined!"
 
     Main => (
         |
