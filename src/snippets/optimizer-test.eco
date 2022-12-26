@@ -36,11 +36,11 @@
         |
       ^ [ :xx | j * k + x + xx ] value(42)
     );
-    va => [ :i | i * i ] value(2);
+    va => [ :i, ... | foo(i, ...) ] value(222, 333);
 
     Main => (
         |
-            answer <- optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'regs' In: self))
+            answer <- optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'va' In: self))
         |
         ((optimizer ast Printer) clone initWithWriter: std io out) print: answer ast.
         "(std io out << answer ast) newline commit."

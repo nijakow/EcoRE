@@ -86,11 +86,13 @@
             "TODO: Make a list of all varargs and add them to the context"
 
             |
+                fixedArgCount <- argdefs size,
                 varargCount <- args size - argdefs size,
                 varargList  <- std util newVector
             |
+
             0 to: (varargCount - 1) do: [ :i |
-                | param <- (args at: varargCount + i) |
+                | param <- (args at: fixedArgCount + i) |
                 (module IsConstant: param ast) if: [
                     varargList add: param
                 ] else: [
@@ -189,7 +191,12 @@
         static with inherited _ = std Trait;
 
         RewriteSend: ast Args: args => (
-            ^ (builder Send: (ast message) Args: (args map: [ :arg | arg wrapIn: context ]) Varargs: (ast varargs))
+            |
+                extargs <- ExtendVarargs: args If: ast varargs
+            |
+            ^ builder Send: (ast message)
+                      Args: (extargs map: [ :arg | arg wrapIn: context ])
+                   Varargs: ([ ast varargs ] and: [ context lexicalVarargs isNo ])
         );
 
         transformSend: ast => (
