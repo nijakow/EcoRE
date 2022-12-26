@@ -83,8 +83,6 @@
                 ]
             ].
 
-            "TODO: Make a list of all varargs and add them to the context"
-
             |
                 fixedArgCount <- argdefs size,
                 varargCount <- args size - argdefs size,
