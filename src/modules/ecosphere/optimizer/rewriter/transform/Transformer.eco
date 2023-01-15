@@ -8,8 +8,6 @@
     with own switch = $ module switch;
 
     protected astTypes => module ast types;
-    protected constraints => module constraints;
-    protected calc => module calc;
     protected builder => module builder;
 
     context;
@@ -149,15 +147,7 @@
         static with inherited _ = std Trait;
 
         transformValueRef: ast => (
-            |
-                constraints <- calc ConstraintsFor: ast Context: context
-            |
-
-            constraints ifConstant: [
-                ^ Answer: (constraints constant) In: (constraints context)
-            ] else: [
-                ^ Answer: ast
-            ]
+            ^ Answer: ast
         );
     };
 
