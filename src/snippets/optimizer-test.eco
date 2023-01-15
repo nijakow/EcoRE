@@ -38,11 +38,17 @@
     );
     va => [ :i, ... | foo(i, ...) ] value(222, 333);  "This is still producing weird results... the varargs should be inlined!"
 
-    Main => (
+    TestMethod: m => (
+        (std io out << 'Now processing method: ' << m) newline commit.
         |
-            answer <- optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: #'va' In: self))
+            answer <- optimizer RewriteAST: (optimizer BuildAST: (optimizer Disassemble: m In: self))
         |
         ((optimizer ast Printer) clone initWithWriter: std io out) print: answer ast.
-        "(std io out << answer ast) newline commit."
+        (std io out) newline commit.
+    );
+
+    Main => (
+        #( #'f', #'g', #'h', #'i', #'j', #'k', #'mega', #'giga', #'iter', #'regs', #'va' )
+            do: [ :m | TestMethod: m ].
     );
 } Main.

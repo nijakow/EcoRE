@@ -5,12 +5,10 @@
     protected module => transform module;
     protected optimizer => module optimizer;
 
-    with own switch = $ module switch;
-
     protected astTypes => module ast types;
-    protected constraints => module constraints;
-    protected calc => module calc;
     protected builder => module builder;
+
+    with own switch = $ module switch;
 
     replacements;
 
