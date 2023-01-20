@@ -9,8 +9,9 @@
     with own Replacer = (here / 'Replacer.eco') importIn: self;
 
     Rewrite: ast Context: context => (
+        "For now, we assume that the ast is a block."
         Transformer clone init: context
-          ~ transform: ast
+          ~ forceTransformBlock: ast
     );
 
     ReplaceAll: mapping In: ast => (

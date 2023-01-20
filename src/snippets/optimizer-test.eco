@@ -37,6 +37,7 @@
       ^ [ :xx | j * k + x + xx ] value(42)
     );
     va => [ :i, ... | foo(i, ...) ] value(222, 333);  "This is still producing weird results... the varargs should be inlined!"
+    vax => [ ... | foo(...) ] value(222, 333);
 
     TestMethod: m => (
         (std io out << 'Now processing method: ' << m) newline commit.
@@ -56,7 +57,7 @@
     );
 
     Main => (
-        #( #'f', #'g', #'h', #'i', #'j', #'k', #'mega', #'giga', #'iter', #'regs', #'va' )
+        #( #'f', #'g', #'h', #'i', #'j', #'k', #'mega', #'giga', #'iter', #'regs', #'va', #'vax' )
             do: [ :m | TestMethod: m ].
     );
 } Main.

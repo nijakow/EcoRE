@@ -77,7 +77,7 @@
                     |
                     refs add: v.
                     mapping at: arg put: bv.
-                    cb add: (builder Assign: ((args at: i) ast) To: bv)
+                    cb add: (builder Assign: ((args at: i) wrapIn: newContext) To: bv)
                 ]
             ].
 
@@ -98,7 +98,7 @@
                     |
                     refs add: v.
                     varargList add: (Answer: bv).
-                    cb add: (builder Assign: ((args at: i) ast) To: bv)
+                    cb add: (builder Assign: ((args at: i) wrapIn: newContext) To: bv)
                 ]
             ].
 
@@ -116,6 +116,7 @@
 
         InlineLambda: lambda Args: args Varargs: varargs => (
             | ast <- lambda ast, newContext <- lambda context |
+            (std io out << 'Lambda ' << ast << ' gets inlined with varargs: ' << newContext lexicalVarargs) newline commit.
             "TODO: Maybe do argument checking?"
           ^ (InlineAST: ast code ArgDefs: ast args Args: args Varargs: varargs NewContext: (newContext wrapLexical))
         );
@@ -130,7 +131,7 @@
         static with inherited _ = std Trait;
 
         LookupBlockMethod: name => (
-            (name == #'value') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'value' In: (std reflect proxies Block))) ].
+            (name == #'value')  -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'value' In: (std reflect proxies Block))) ].
             (name == #'repeat') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'repeat' In: (std reflect proxies Block))) ].
             (name == #'while:') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'while:' In: (std reflect proxies Block))) ].
           ^ No
@@ -156,6 +157,8 @@
 
         InlineValueBuiltin: args Varargs: varargs => (
             | lambda <- args first |
+            (std io out << 'Inlining lambda with args: ') newline commit.
+            args do: [ :arg | (std io out << '  - ' << arg ast) newline commit ].
           ^ (InlineLambda: (lambda) Args: (args) Varargs: (varargs))
         );
 
@@ -232,11 +235,15 @@
         );
     };
 
-    with inherited _code = {
+    with inherited _block = {
         static with inherited _ = std Trait;
 
-        transformBlock: ast => (
+        forceTransformBlock: ast => (
           ^ Answer: (builder Block: (((In: context wrapLexical) transform: ast code) wrapIn: context) Args: (ast args))
+        );
+
+        transformBlock: ast => (
+          ^ Answer: (builder Block: (ast code) Args: (ast args))
         );
     };
 
