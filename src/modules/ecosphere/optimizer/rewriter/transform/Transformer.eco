@@ -212,7 +212,7 @@
         static with inherited _ = std Trait;
 
         transformJump: ast => (
-          ^ Answer: (builder Jump: ast label Value: ((transform: ast value) wrapIn: context))
+          ^ Answer: (builder Jump: ast label Value: ((transform: ast returnValue) wrapIn: context))
         );
     };
 
