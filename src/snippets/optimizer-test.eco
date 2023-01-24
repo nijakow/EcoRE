@@ -38,6 +38,8 @@
     );
     va => [ :i, ... | foo(i, ...) ] value(222, 333);  "This is still producing weird results... the varargs should be inlined!"
     vax => [ ... | foo(...) ] value(222, 333);
+    vbx => [ :i, :j, ... | foo(i, j, ...) ] value(222, 333, 443 + 1, 555, 665 + 1);
+    vcx => [ :i, :j, ... | [ :k, :l, ... | foo(l, k, ...) ] value(j, i, ...) ] value(111, 222 + 1, 333, 444 + 1);
 
     TestMethod: m => (
         (std io out << 'Now processing method: ' << m) newline commit.
@@ -57,7 +59,7 @@
     );
 
     Main => (
-        #( #'f', #'g', #'h', #'i', #'j', #'k', #'mega', #'giga', #'iter', #'regs', #'va', #'vax' )
+        #( #'f', #'g', #'h', #'i', #'j', #'k', #'mega', #'giga', #'iter', #'regs', #'va', #'vax', #'vbx', #'vcx' )
             do: [ :m | TestMethod: m ].
     );
 } Main.
