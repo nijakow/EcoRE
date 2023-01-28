@@ -8,13 +8,12 @@
         );
 
         RewriteBuiltin: ast Args: args => (
-          ^ (builder Builtin: (ast message) Args: (args map: [ :e | e wrapIn: context ]) Varargs: (ast varargs))
+          ^ (builder Builtin: (ast message) Args: (args map: [ :e | (pullAnswer: arg) wrapIn: context ]) Varargs: (ast varargs))
         );
 
         transformBuiltin: ast => (
+            "TODO: #'ecosphere.ecore.flow.reset'() will jump to the beginning of the active context"
             | args <- transformMultiple: (ast args) |
-
-            "TODO: Call 'Unscope:' on 'args first'"
 
                  [ ast message == #'ecosphere.ecore.flow.value' ]
             and: [ args first ast type == astTypes Block        ]

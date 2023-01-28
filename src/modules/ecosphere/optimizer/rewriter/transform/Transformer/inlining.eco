@@ -34,7 +34,7 @@
                     |
                     markers add: v.
                     mapping at: arg put: bv.
-                    cb add: (builder Assign: ((args at: i) wrapIn: newContext) To: bv)
+                    cb add: (builder Assign: ((args at: i) wrapIn: newContext) To: bv)  "TODO: Invoke `pullAnswer:` here?"
                 ]
             ].
 
@@ -55,7 +55,7 @@
                     |
                     markers add: v.
                     varargList add: (Answer: bv).
-                    cb add: (builder Assign: (param wrapIn: newContext) To: bv)
+                    cb add: (builder Assign: (param wrapIn: newContext) To: bv)  "TODO: Invoke `pullAnswer:` here?"
                 ]
             ].
 

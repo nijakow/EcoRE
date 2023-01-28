@@ -73,6 +73,8 @@
     transformMultiple: exprs =>
         exprs map: [ :expr | transform: expr ];
     
+    pullAnswer: answer => pull: (answer wrapIn: context);
+    
 
     init: _context => (
         context <- _context.

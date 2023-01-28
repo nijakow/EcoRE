@@ -7,7 +7,7 @@
                 extargs <- ExtendVarargs: args If: ast varargs
             |
             ^ builder Send: (ast message)
-                      Args: (extargs map: [ :arg | (pull: (arg wrapIn: context)) wrapIn: context ])
+                      Args: (extargs map: [ :arg | (pullAnswer: arg) wrapIn: context ])
                    Varargs: ([ ast varargs ] and: [ context lexicalVarargs isNo ])
         );
 
