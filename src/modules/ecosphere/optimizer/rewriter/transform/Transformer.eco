@@ -47,7 +47,7 @@
         freeMarker: marker => self; "Not doing anything (yet?)"
 
         InlineAST: ast ArgDefs: argdefs Args: args Varargs: varargs NewContext: newContext => (
-            (args size > argdefs size) if: [ (std io out << 'Note: Possible argument error while inlining!') newline commit ].
+            ([args size > argdefs size] and: [varargs not]) if: [ (std io out << 'Note: Possible argument error while inlining!') newline commit ].
             (args size < argdefs size) if: [
                 'Argument error when inlining!' throw
             ].
@@ -238,7 +238,8 @@
         );
 
         transformBlock: ast => (
-          ^ Answer: (builder Block: (ast code) Args: (ast args))
+          "^ Answer: (builder Block: (ast code) Args: (ast args))"
+            forceTransformBlock: ast
         );
     };
 
