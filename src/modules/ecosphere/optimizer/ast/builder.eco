@@ -7,7 +7,7 @@
 
     Constant: c => (asts ASTConstant) clone initWithConstant: c;
 
-    ValueRef: ref => (asts ASTValueRef) clone initWithRef: ref;
+    ValueRef: marker => (asts ASTValueRef) clone initWithMarker: marker;
 
     Block: code Args: args => (asts ASTBlock) clone initWithArgs: args Code: code;
     Block: code => Block: code Args: (std util newArray);

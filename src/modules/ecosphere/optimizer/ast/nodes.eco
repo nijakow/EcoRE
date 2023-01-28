@@ -27,12 +27,12 @@
         static with inherited _ = std Clonable;
         with inherited own AST = $ AST;
 
-        ref;
+        marker;
 
         with inherited trait = {
-            initWithRef: _ref => (
+            initWithMarker: _marker => (
                 $(AST) init.
-                ref <- _ref.
+                marker <- _marker.
               ^ self
             );
 
@@ -42,7 +42,7 @@
 
             isAtomic => true;
 
-            writeOn: w => w << 'Ref(' << ref << ')';
+            writeOn: w => w << 'ValueRef(' << marker << ')';
         };
     };
 

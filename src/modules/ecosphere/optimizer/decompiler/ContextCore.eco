@@ -10,7 +10,7 @@
         protected optimizer => decompiler optimizer;
 
         init => (
-            allocator <- (optimizer ast ref ValueRefAllocator) new.
+            allocator <- (optimizer ast marker MarkerAllocator) new.
           ^ self
         );
     }

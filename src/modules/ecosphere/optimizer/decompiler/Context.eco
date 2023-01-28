@@ -8,8 +8,8 @@
     with inherited trait = {
         static with inherited _ = std Trait;
 
-        protected optimizer => decompiler optimizer;
-        protected refAlloc  => core allocator;
+        protected optimizer   => decompiler optimizer;
+        protected markerAlloc => core allocator;
 
         _init: _lexical core: _core => (
             lexical  <- _lexical.
@@ -31,7 +31,7 @@
         translateRegister: n => (
             (regs at: n) yes: [ :v | ^ v ].
 
-            | r <- refAlloc allocate |
+            | r <- markerAlloc allocate |
 
             regs at: n put: r.
           ^ r

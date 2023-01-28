@@ -45,8 +45,8 @@
     with inherited _inlining = {
         static with inherited _ = std Trait;
 
-        allocValueRef => context core valueRefAllocator allocate;
-        freeValueRef: ref => self; "Not doing anything (yet?)"
+        allocMarker        => context core markerAllocator allocate;
+        freeMarker: marker => self; "Not doing anything (yet?)"
 
         InlineAST: ast ArgDefs: argdefs Args: args Varargs: varargs NewContext: newContext => (
             (args size > argdefs size) if: [ (std io out << 'Note: Possible argument error while inlining!') newline commit ].
@@ -57,7 +57,7 @@
             newContext enableEntryAndExitLabels.
 
             |
-                refs    <- std util newVector,
+                markers <- std util newVector,
                 mapping <- std util newMap,
                 cb      <- std util newVector
             |
@@ -72,10 +72,10 @@
                     mapping at: arg put: param
                 ] else: [
                     |
-                        v <- allocValueRef,
+                        v  <- allocMarker,
                         bv <- builder ValueRef: v
                     |
-                    refs add: v.
+                    markers add: v.
                     mapping at: arg put: bv.
                     cb add: (builder Assign: ((args at: i) wrapIn: newContext) To: bv)
                 ]
@@ -93,10 +93,10 @@
                     varargList add: param
                 ] else: [
                     |
-                        v <- allocValueRef,
+                        v  <- allocMarker,
                         bv <- builder ValueRef: v
                     |
-                    refs add: v.
+                    markers add: v.
                     varargList add: (Answer: bv).
                     cb add: (builder Assign: (param wrapIn: newContext) To: bv)
                 ]
@@ -107,7 +107,7 @@
             cb add: (transform ReplaceAll: mapping In: ast).
             cb add: (builder JumpLabel: (newContext exitLabel yes)).
 
-            refs do: [ :ref | freeValueRef: ref ].
+            markers do: [ :marker | freeMarker: marker ].
 
           ^ ((In: newContext) transform: (builder Compound: cb asArray)) wrap
         );

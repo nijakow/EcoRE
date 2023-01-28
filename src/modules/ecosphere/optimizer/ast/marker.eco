@@ -1,7 +1,7 @@
 {
     static with inherited _ = std Module;
 
-    own ValueRef = {
+    own Marker = {
         static with inherited _ = std Clonable;
 
         tag;
@@ -14,11 +14,11 @@
               ^ self
             );
 
-            writeOn: w => w << 'a ValueRef(' << (tag ?? '') << ')';
+            writeOn: w => w << 'a Marker(' << (tag ?? '') << ')';
         };
     };
 
-    own ValueRefAllocator = {
+    own MarkerAllocator = {
         static with inherited _ = std Clonable;
         protected ref = $;
 
@@ -38,9 +38,9 @@
               ^ tag
             );
 
-            allocate => (ref ValueRef) clone initWithTag: nextTag;
+            allocate => (ref Marker) clone initWithTag: nextTag;
 
-            writeOn: w => w << 'a ValueRef allocator';
+            writeOn: w => w << 'a Marker allocator';
         }
     };
 }

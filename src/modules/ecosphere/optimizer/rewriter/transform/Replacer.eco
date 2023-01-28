@@ -14,7 +14,7 @@
 
 
     processValueRef: ast => (
-        (replacements at: ast ref)
+        (replacements at: ast marker)
           ~ yes: [ :repl | ^ repl ]
              no: [         ^ ast  ]
     );

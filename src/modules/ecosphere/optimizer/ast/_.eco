@@ -4,7 +4,7 @@
     nodes   = (here / 'nodes.eco') importIn: self;
     types   = (here / 'types.eco') importIn: self;
     builder = (here / 'builder.eco') importIn: self;
-    ref     = (here / 'ref.eco') importIn: self;
+    marker  = (here / 'marker.eco') importIn: self;
     walking = (here / 'walking' / '_.eco') importIn: self;
 
     Walker = (here / 'Walker.eco') importIn: self;

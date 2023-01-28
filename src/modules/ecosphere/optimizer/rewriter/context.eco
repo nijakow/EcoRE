@@ -9,11 +9,11 @@
         static with inherited _ = std Clonable;
         protected context = $;
 
-        valueRefAllocator;
+        markerAllocator;
 
         with inherited trait = {
             init => (
-                valueRefAllocator <- (context ast ref ValueRefAllocator) new.
+                markerAllocator <- (context ast marker MarkerAllocator) new.
               ^ self
             );
 
@@ -64,8 +64,8 @@
             varargs: va => varargs <- Yes: va;
 
             enableEntryAndExitLabels => (
-                entryLabel <- Yes: (core valueRefAllocator allocate). "This is a hack."
-                exitLabel  <- Yes: (core valueRefAllocator allocate). "Same here."
+                entryLabel <- Yes: (core markerAllocator allocate). "This is a hack."
+                exitLabel  <- Yes: (core markerAllocator allocate). "Same here."
               ^ self
             );
 
