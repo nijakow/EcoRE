@@ -1,7 +1,6 @@
 {
     static with inherited _ = std Clonable;
     protected ast = $;
-    protected with switch = (here / '..' / 'rewriter' / 'switch.eco') importIn: self;
 
     writer, indentation;
 

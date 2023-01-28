@@ -8,8 +8,6 @@
     protected astTypes => module ast types;
     protected builder => module builder;
 
-    with own switch = $ module switch;
-
     replacements;
 
 

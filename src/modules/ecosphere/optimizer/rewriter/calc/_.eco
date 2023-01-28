@@ -5,8 +5,6 @@
 
     protected astTypes => module ast types;
 
-    protected with switch = $ switch;
-
     IsConstant: ast => (
         (Switch: ast type)
           ~ case: astTypes Constant do: [ ^ true                   ]
