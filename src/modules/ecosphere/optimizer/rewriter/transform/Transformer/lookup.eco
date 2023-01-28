@@ -1,0 +1,17 @@
+
+    {
+        static with inherited _ = std Trait;
+
+        LookupBlockMethod: name => (
+            (name == #'value')  -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'value' In: (std reflect proxies Block))) ].
+            (name == #'repeat') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'repeat' In: (std reflect proxies Block))) ].
+            (name == #'while:') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'while:' In: (std reflect proxies Block))) ].
+          ^ No
+        );
+
+        LookupMethod: name InAST: ast => (
+            ((ast type) == (astTypes Block))
+                  if: [ ^ LookupBlockMethod: name ]
+                else: [ ^ No                      ]
+        );
+    }

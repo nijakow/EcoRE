@@ -1,0 +1,8 @@
+
+    {
+        static with inherited _ = std Trait;
+
+        transformScope: ast => (
+          ^ (In: ast context) transform: (ast body)
+        );
+    }

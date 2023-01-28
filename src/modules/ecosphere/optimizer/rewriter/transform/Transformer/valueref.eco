@@ -1,0 +1,8 @@
+
+    {
+        static with inherited _ = std Trait;
+
+        transformValueRef: ast => (
+            ^ Answer: ast
+        );
+    }

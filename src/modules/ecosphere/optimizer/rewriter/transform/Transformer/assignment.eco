@@ -1,0 +1,8 @@
+
+    {
+        static with inherited _ = std Trait;
+
+        transformAssignment: ast => (
+          ^ Answer: (builder Assign: ((transform: ast rhs) wrapIn: context) To: ((transform: ast lhs) wrapIn: context))
+        );
+    }

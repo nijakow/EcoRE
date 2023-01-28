@@ -1,0 +1,8 @@
+
+    {
+        static with inherited _ = std Trait;
+
+        transformCompound: ast => (
+            ^ Answer: (builder Compound: (ast instructions map: [ :arg | (transform: arg) wrapIn: context ]))
+        );
+    }

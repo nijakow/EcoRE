@@ -1,0 +1,22 @@
+
+    {
+        static with inherited _ = std Trait;
+
+        RewriteSend: ast Args: args => (
+            |
+                extargs <- ExtendVarargs: args If: ast varargs
+            |
+            ^ builder Send: (ast message)
+                      Args: (extargs map: [ :arg | arg wrapIn: context ])
+                   Varargs: ([ ast varargs ] and: [ context lexicalVarargs isNo ])
+        );
+
+        transformSend: ast => (
+            |
+                args   <- transformMultiple: (ast args),
+                method <- LookupMethod: (ast message) InAST: ((args at: 0) ast)
+            |
+            method yes: [ :m | ^ Answer: (InlineMethod: m Args: (ExtendVarargs: args If: ast varargs) Varargs: ast varargs) ]
+                    no: [      ^ Answer: (RewriteSend: ast Args: args)                                                      ]
+        );
+    }

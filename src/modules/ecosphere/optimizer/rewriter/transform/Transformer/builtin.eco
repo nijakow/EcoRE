@@ -1,0 +1,24 @@
+
+    {
+        static with inherited _ = std Trait;
+
+        InlineValueBuiltin: args Varargs: varargs => (
+            | lambda <- args first |
+          ^ (InlineLambda: (lambda) Args: (args) Varargs: (varargs))
+        );
+
+        RewriteBuiltin: ast Args: args => (
+          ^ (builder Builtin: (ast message) Args: (args map: [ :e | e wrapIn: context ]) Varargs: (ast varargs))
+        );
+
+        transformBuiltin: ast => (
+            | args <- transformMultiple: (ast args) |
+
+            "TODO: Call 'Unscope:' on 'args first'"
+
+                 [ ast message == #'ecosphere.ecore.flow.value' ]
+            and: [ args first ast type == astTypes Block        ]
+               ~ if: [ ^ Answer: (InlineValueBuiltin: (ExtendVarargs: args If: ast varargs) Varargs: ast varargs) ]
+               else: [ ^ Answer: (RewriteBuiltin: ast Args: args)                                                 ]
+        );
+    }
