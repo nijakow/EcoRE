@@ -7,7 +7,6 @@
         );
 
         transformBlock: ast => (
-          "^ Answer: (builder Block: (ast code) Args: (ast args))"
-            forceTransformBlock: ast
+          ^ Answer: (builder Block: (ast code) Args: (ast args))
         );
     }
