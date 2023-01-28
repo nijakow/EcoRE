@@ -52,20 +52,23 @@
     with inherited _block = (here / 'block.eco') importIn: self;
     with inherited _scope = (here / 'scope.eco') importIn: self;
 
-    transform: ast => (
+    transform: ast force: force => (
         Switch: (ast type)
-          ~ case: astTypes ValueRef   do: [ ^ transformValueRef:   ast ]
-          ~ case: astTypes Builtin    do: [ ^ transformBuiltin:    ast ]
-          ~ case: astTypes Send       do: [ ^ transformSend:       ast ]
-          ~ case: astTypes Return     do: [ ^ transformReturn:     ast ]
-          ~ case: astTypes Jump       do: [ ^ transformJump:       ast ]
-          ~ case: astTypes Compound   do: [ ^ transformCompound:   ast ]
-          ~ case: astTypes Assignment do: [ ^ transformAssignment: ast ]
-          ~ case: astTypes Block      do: [ ^ transformBlock:      ast ]
-          ~ case: astTypes Scope      do: [ ^ transformScope:      ast ]
+          ~ case: astTypes ValueRef   do: [ ^ transformValueRef:   ast              ]
+          ~ case: astTypes Builtin    do: [ ^ transformBuiltin:    ast              ]
+          ~ case: astTypes Send       do: [ ^ transformSend:       ast              ]
+          ~ case: astTypes Return     do: [ ^ transformReturn:     ast              ]
+          ~ case: astTypes Jump       do: [ ^ transformJump:       ast              ]
+          ~ case: astTypes Compound   do: [ ^ transformCompound:   ast              ]
+          ~ case: astTypes Assignment do: [ ^ transformAssignment: ast              ]
+          ~ case: astTypes Block      do: [ ^ transformBlock:      ast Force: force ]
+          ~ case: astTypes Scope      do: [ ^ transformScope:      ast              ]
           "TODO: Slot Assignments, ..."
         ~ default: [ ^ Answer: ast ]
     );
+
+    transform: ast => transform: ast force: false;
+    pull:      ast => transform: ast force: true;
 
     transformMultiple: exprs =>
         exprs map: [ :expr | transform: expr ];

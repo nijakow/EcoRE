@@ -9,4 +9,9 @@
         transformBlock: ast => (
           ^ Answer: (builder Block: (ast code) Args: (ast args))
         );
+
+        transformBlock: ast Force: force => (
+            force if: [ ^ forceTransformBlock: ast ]
+                else: [ ^ transformBlock:      ast ]
+        );
     }
