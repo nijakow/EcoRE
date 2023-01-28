@@ -116,7 +116,6 @@
 
         InlineLambda: lambda Args: args Varargs: varargs => (
             | ast <- lambda ast, newContext <- lambda context |
-            (std io out << 'Lambda ' << ast << ' gets inlined with varargs: ' << newContext lexicalVarargs) newline commit.
             "TODO: Maybe do argument checking?"
           ^ (InlineAST: ast code ArgDefs: ast args Args: args Varargs: varargs NewContext: (newContext wrapLexical))
         );
@@ -157,8 +156,6 @@
 
         InlineValueBuiltin: args Varargs: varargs => (
             | lambda <- args first |
-            (std io out << 'Inlining lambda with args: ') newline commit.
-            args do: [ :arg | (std io out << '  - ' << arg ast) newline commit ].
           ^ (InlineLambda: (lambda) Args: (args) Varargs: (varargs))
         );
 
