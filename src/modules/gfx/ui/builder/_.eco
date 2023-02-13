@@ -5,6 +5,13 @@
 
     morphic => wrapper morphic;
 
+    make = {
+        static with inherited _ = std Trait;
+        with builder = $;
+
+        VBoxMorph => (builder morphic morphs VBoxMorph) new;
+    };
+
     with actions = (here / 'actions.eco') importIn: self;
 
     layouts = {
