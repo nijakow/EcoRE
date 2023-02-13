@@ -211,6 +211,7 @@
                     isDirty <- true.
                     parent yes: [ :p | p dirty ].
                 ].
+                "renderDirty."
               ^ self
             );
 
