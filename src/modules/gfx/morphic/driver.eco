@@ -39,7 +39,9 @@
             );
 
             tick => (
-                morph handMorph moveToX: mouseX Y: mouseY.
+                ([ morph handMorph bounds x != mouseX ] or: [ morph handMorph bounds y != mouseY ]) -> [
+                    morph handMorph moveToX: mouseX Y: mouseY.
+                ].
                 morph maybeUpdate.
                 morph render.
             );

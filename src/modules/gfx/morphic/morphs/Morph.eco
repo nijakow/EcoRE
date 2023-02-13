@@ -10,6 +10,7 @@
         protected layoutOkay,
         protected cachedMinWidth,
         protected cachedMinHeight,
+        protected isDirty,
         protected isRenderDirty,
         protected isChildRenderDirty;
 
@@ -23,6 +24,7 @@
                 layoutOkay      <- false.
                 cachedMinWidth  <- No.
                 cachedMinHeight <- No.
+                isDirty         <- true.
                 isRenderDirty   <- true.
                 isChildRenderDirty <- true.
               ^ self
@@ -42,6 +44,7 @@
 
             boundsX: x Y: y W: w H: h => (
                 bounds x: x y: y w: w h: h.
+                renderDirty.
               ^ self
             );
             bounds: rect => boundsX: rect x Y: rect y W: rect w H: rect h;
@@ -105,13 +108,12 @@
             invalidateLayoutCaches => (
                 layoutOkay: false.
                 invalidateMinSizeCaches.
+                dirty.
               ^ self
             );
 
             layoutChanged => (
                 invalidateLayoutCaches.
-                world yes: [ :w | w dirty ].
-                renderDirty.
               ^ self
             );
 
@@ -203,8 +205,25 @@
                 ]
             );
 
+            dirty => (
+                isDirty not -> [
+                    (std io out << 'Dirty: ' << self) newline commit.
+                    isDirty <- true.
+                    parent yes: [ :p | p dirty ].
+                ].
+              ^ self
+            );
+
+            undirty => (
+                isDirty -> [
+                    layoutChanged.
+                    childrenDo: [ :c | c dirty. c undirty ].
+                    isDirty <- false.
+                ].
+              ^ self
+            );
+
             renderDirty => (
-                (std io out << 'Render dirty: ' << self) newline commit.
                 isRenderDirty <- true.
                 childRenderDirty.
               ^ self

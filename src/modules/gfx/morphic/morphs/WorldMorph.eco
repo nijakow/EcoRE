@@ -4,14 +4,12 @@
         with inherited own Morph = $ Morph;
 
         protected renderer,
-        protected isDirty,
         handMorph;
 
         with inherited trait = {
             init => (
                 $(Morph) initWithManyChildren.
                 renderer  <- No.
-                isDirty   <- true.
                 handMorph <- (morphic morphs HandMorph new).
                 add: handMorph.
               ^ self
@@ -28,15 +26,9 @@
 
             world => Yes: self;
 
-            dirty => isDirty <- true;
-
             maybeUpdate => (
-                isDirty -> [
-                    isDirty <- false.
-                    allChildrenDo: [ :c | c layoutChanged ].
-                    layoutChanged.
-                    layoutInPlaceIfNeeded
-                ]
+                undirty.
+                layoutInPlaceIfNeeded.
             );
 
             renderOn: renderer => (
@@ -46,8 +38,8 @@
             );
 
             render => (
-                "renderer accept: self."
-                maybeRenderOn: renderer.
+                renderer accept: self.
+                "maybeRenderOn: renderer."
                 renderer present.
             );
 
