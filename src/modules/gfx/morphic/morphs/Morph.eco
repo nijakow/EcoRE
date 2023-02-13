@@ -9,7 +9,9 @@
 
         protected layoutOkay,
         protected cachedMinWidth,
-        protected cachedMinHeight;
+        protected cachedMinHeight,
+        protected isRenderDirty,
+        protected isChildRenderDirty;
 
         with inherited trait = {
             initWithChildConfig: config => (
@@ -21,6 +23,8 @@
                 layoutOkay      <- false.
                 cachedMinWidth  <- No.
                 cachedMinHeight <- No.
+                isRenderDirty   <- true.
+                isChildRenderDirty <- true.
               ^ self
             );
 
@@ -107,6 +111,7 @@
             layoutChanged => (
                 invalidateLayoutCaches.
                 world yes: [ :w | w dirty ].
+                renderDirty.
               ^ self
             );
 
@@ -198,6 +203,20 @@
                 ]
             );
 
+            renderDirty => (
+                (std io out << 'Render dirty: ' << self) newline commit.
+                isRenderDirty <- true.
+                childRenderDirty.
+              ^ self
+            );
+
+            childRenderDirty => (
+                isChildRenderDirty not -> [
+                    isChildRenderDirty <- true.
+                    parent yes: [ :p | p childRenderDirty ].
+                ]
+            );
+
             renderChildrenOn: renderer => (
                 childrenDo: [ :c |
                     renderer pushBounds: c bounds.
@@ -206,6 +225,21 @@
                 ].
             );
             renderOn: renderer => renderChildrenOn: renderer;
+
+            maybeRenderChildrenOn: renderer => (
+                childrenDo: [ :c |
+                    renderer pushBounds: c bounds.
+                    c maybeRenderOn: renderer.
+                    renderer popBounds.
+                ].
+            );
+            maybeRenderOn: renderer => (
+              isChildRenderDirty -> [
+                isChildRenderDirty <- false.
+                isRenderDirty if: [ isRenderDirty <- false. renderOn: renderer ]
+                            else: [ maybeRenderChildrenOn: renderer ]
+              ]
+            );
 
             dispatchEvent: block AtX: evtX Y: evtY => (
                 childrenReverseDo: [ :c |
