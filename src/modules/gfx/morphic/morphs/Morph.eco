@@ -217,7 +217,7 @@
             undirty => (
                 isDirty -> [
                     layoutChanged.
-                    childrenDo: [ :c | c dirty. c undirty ].
+                    childrenDo: [ :c | c undirty ].
                     isDirty <- false.
                 ].
               ^ self
