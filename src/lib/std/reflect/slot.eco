@@ -11,10 +11,17 @@
             reflectee    <- _reflectee.
             name         <- _name.
             owningMirror <- _mirror.
-            ^ self
+          ^ self
         );
 
         slotValue => #'ecosphere.ecore.reflect.slot_value'(reflectee, name);
+
+        isProtected => (#'ecosphere.ecore.reflect.slot_flags'(reflectee, name) bitAnd: 2) != 0;
+        isStatic => (#'ecosphere.ecore.reflect.slot_flags'(reflectee, name) bitAnd: 4) != 0;
+        isFinal => (#'ecosphere.ecore.reflect.slot_flags'(reflectee, name) bitAnd: 8) != 0;
+        isWith => (#'ecosphere.ecore.reflect.slot_flags'(reflectee, name) bitAnd: 16) != 0;
+        isInherited => (#'ecosphere.ecore.reflect.slot_flags'(reflectee, name) bitAnd: 32) != 0;
+        isOwn => (#'ecosphere.ecore.reflect.slot_flags'(reflectee, name) bitAnd: 64) != 0;
 
         writeOn: w => w << 'slot named ' << name;
     };

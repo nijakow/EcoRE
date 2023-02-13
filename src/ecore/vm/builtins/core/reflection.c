@@ -40,6 +40,32 @@ bool Eco_VM_Builtin_GetSlotValue(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_GetSlotFlags(struct Eco_Fiber* fiber, unsigned int args)
+{
+    struct Eco_Key*       name;
+    struct Eco_Type*      type;
+    Eco_Any               any;
+    unsigned int          index;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
+        return false;
+    any  = Eco_Fiber_Pop(fiber);
+    name = Eco_Any_AsPointer(any);
+    any  = Eco_Fiber_Pop(fiber);
+    type = Eco_Any_GetType(any);
+    any  = Eco_Any_FromInteger(0);
+    for (index = 0; index < type->slot_count; index++)
+    {
+        if (type->slots[index].info.key == name)
+        {
+            any = Eco_Any_FromInteger(Eco_SlotFlags_AsInteger(&type->slots[index].info.flags));
+            break;
+        }
+    }
+    Eco_Fiber_Push(fiber, any);
+    return true;
+}
+
 bool Eco_VM_Builtin_GetInterface(struct Eco_Fiber* fiber, unsigned int args)
 {
     struct Eco_Interface* interface;

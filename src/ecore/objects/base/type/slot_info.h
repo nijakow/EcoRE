@@ -23,4 +23,6 @@ struct Eco_BasicSlotInfo
 void Eco_SlotFlags_Create(struct Eco_SlotFlags*);
 void Eco_BasicSlotInfo_Create(struct Eco_BasicSlotInfo*);
 
+Eco_Integer Eco_SlotFlags_AsInteger(struct Eco_SlotFlags*);
+
 #endif

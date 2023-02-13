@@ -52,6 +52,7 @@
     );
 
     Spacer => (morphic morphs Morph) new;
+    SpacerW: w H: h => Spacer ~ rigidWidth: w ~ rigidHeight: h;
 
     Center(element) => (
       ^ VBox( Spacer, HBox(Spacer, element, Spacer) ~ yLayout: layouts ShrinkWrap, Spacer )
