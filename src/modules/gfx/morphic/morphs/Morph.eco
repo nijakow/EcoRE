@@ -195,7 +195,7 @@
               ^ self
             );
 
-            layoutInPlace => childrenDo: [ :c | c layoutInPlace ];
+            layoutInPlace => ( childrenDo: [ :c | c layoutInPlace ]. layoutIsNowOkay. );
             layoutInPlaceIfNeeded => layoutOkay false: [ layoutInPlace ];
             shrinkToFit => (
                 "Only shrink if there is a parent"
@@ -287,5 +287,12 @@
             clickAtX: x Y: y HandMorph: hand => dispatchEvent: [ :e, :ex, :ey | e handleClickAtX: ex Y: ey HandMorph: hand ] AtX: x Y: y;
 
             writeOn: w => w << 'a morph';
+
+            dumpOn: w Indentation: i => (
+                0 to: i do: [ :j | w << '  ' ].
+                (w << self << ' ' << bounds << ' layoutOK: ' << layoutOkay << ', dirty: ' << isDirty << ', renderDirty: ' << isRenderDirty << ', childRenderDirty: ' << isChildRenderDirty) newline commit.
+                childrenDo: [ :c | c dumpOn: w Indentation: (i + 1) ].
+            );
+            dumpOn: w => dumpOn: w Indentation: 0;
         };
     }
