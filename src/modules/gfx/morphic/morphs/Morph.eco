@@ -207,11 +207,10 @@
 
             dirty => (
                 isDirty not -> [
-                    (std io out << 'Dirty: ' << self) newline commit.
                     isDirty <- true.
+                    renderDirty.
                     parent yes: [ :p | p dirty ].
                 ].
-                "renderDirty."
               ^ self
             );
 
@@ -244,7 +243,11 @@
                     renderer popBounds.
                 ].
             );
-            renderOn: renderer => renderChildrenOn: renderer;
+            renderOn: renderer => (
+              isRenderDirty <- false.
+              isChildRenderDirty <- false.
+              renderChildrenOn: renderer;
+            );
 
             maybeRenderChildrenOn: renderer => (
                 childrenDo: [ :c |

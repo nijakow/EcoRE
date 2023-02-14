@@ -41,9 +41,11 @@
             tick => (
                 ([ morph handMorph bounds x != mouseX ] or: [ morph handMorph bounds y != mouseY ]) -> [
                     morph handMorph moveToX: mouseX Y: mouseY.
+                    morph handMorph renderDirty.
                 ].
                 morph maybeUpdate.
                 morph render.
+                1 to: 1000 do: [ :i | i * i ]. "just to slow down rendering"
             );
 
             findMorphAtX: x Y: y => (

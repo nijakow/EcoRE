@@ -32,9 +32,9 @@
             leftClick => click;
 
             renderOn: renderer => (
+                $(Morph) renderOn: renderer.
                 renderer setR: 200 G: 0 B: 0.
                 renderer fillRectX: 0 Y: 0 W: 1 H: 1.
-                renderChildrenOn: renderer.
             );
 
             dispatchEvent: block AtX: evtX Y: evtY => false; "Avoid dispatching to children"
