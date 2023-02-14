@@ -27,7 +27,6 @@
             world => Yes: self;
 
             maybeUpdate => (
-                isDirty -> [ self dumpOn: std io out ].
                 undirty.
                 layoutInPlaceIfNeeded.
             );
