@@ -51,6 +51,11 @@
           ~ add: element
     );
 
+    Clipped(element) => (
+      ^ (morphic morphs ClipMorph) new
+          ~ add: element
+    );
+
     Spacer => (morphic morphs Morph) new;
     SpacerW: w H: h => Spacer ~ rigidWidth: w ~ rigidHeight: h;
 
@@ -58,7 +63,7 @@
       ^ VBox( Spacer, HBox(Spacer, element, Spacer) ~ yLayout: layouts ShrinkWrap, Spacer )
     );
 
-    Scrollable(element) => element;
+    Scrollable(element) => Clipped(element);
 
     Label: text => (morphic morphs LabelMorph) new ~ text: text;
 

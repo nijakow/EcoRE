@@ -34,7 +34,7 @@
 
         OutlinerPaneForObject: object => OutlinerPaneForMirror: (std reflect Mirror: object);
 
-        OutlinerWindowForObject: object => builder Window(200, 300, OutlinerPaneForObject: object);
+        OutlinerWindowForObject: object => builder Window(200, 100, builder Scrollable(OutlinerPaneForObject: object));
     };
 
     counter;
