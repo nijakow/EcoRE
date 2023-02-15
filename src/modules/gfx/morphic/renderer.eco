@@ -4,6 +4,7 @@
         private module = $;
 
         protected boundsstack,
+        protected clipstack,
         protected sdlRenderer;
 
         with inherited trait = {
@@ -11,6 +12,8 @@
                 sdlRenderer <- _sdl_renderer.
                 boundsstack <- std util newStack.
                 boundsstack push: ((module Rectangle) newX: _x Y: _y W: _w H: _h).
+                clipstack <- std util newStack.
+                clipstack push: ((module Rectangle) newX: _x Y: _y W: _w H: _h).
               ^ self
             );
 
@@ -21,6 +24,22 @@
                 pushBounds: b.
                 block value.
                 popBounds.
+              ^ self
+            );
+
+            clips => clipstack top;
+            pushClips: c => (
+              clipstack push: (c offsetByX: xOff Y: yOff).
+              sdlRenderer clip: clips.
+            );
+            popClips => (
+              clipstack pop.
+              sdlRenderer clip: clips.
+            );
+            withPushedClips: c Do: block => (
+                pushClips: c.
+                block value.
+                popClips.
               ^ self
             );
 

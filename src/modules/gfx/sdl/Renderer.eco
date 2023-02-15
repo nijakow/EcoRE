@@ -79,6 +79,15 @@
 
             makeTextTexture: text => (makeTextSurface: text) asTextureWithRenderer: self;
 
+            clipX: x Y: y W: w H: h => (
+                rectangle at: 0 put: x.
+                rectangle at: 1 put: y.
+                rectangle at: 2 put: w.
+                rectangle at: 3 put: h.
+                sdl RenderSetClipRect(renptr, rectangle address).
+            );
+            clip: rect => clipX: rect x Y: rect y W: rect w H: rect h;
+
             writeOn: w => w << 'an sdl renderer';
         };
     };

@@ -32,6 +32,7 @@
     protected SDL_CreateTextureFromSurface;
     protected SDL_DestroyTexture;
     protected SDL_QueryTexture;
+    protected SDL_RenderSetClipRect;
 
     protected TTF_Init,
     protected TTF_OpenFont,
@@ -148,6 +149,7 @@
             SDL_CreateTextureFromSurface <- (lib function: #'SDL_CreateTextureFromSurface' type: ((ffi types pointer) function(ffi types pointer, ffi types pointer))) yes.
             SDL_DestroyTexture <- (lib function: #'SDL_DestroyTexture' type: ((ffi types void) function(ffi types pointer))) yes.
             SDL_QueryTexture <- (lib function: #'SDL_QueryTexture' type: ((ffi types int) function(ffi types pointer, ffi types uint32 pointer, ffi types int pointer, ffi types int pointer, ffi types int pointer))) yes.
+            SDL_RenderSetClipRect <- (lib function: #'SDL_RenderSetClipRect' type: ((ffi types int) function(ffi types pointer, SDL_Rect pointer))) yes.
 
             TTF_Init <- (libttf function: #'TTF_Init' type: (ffi types int) function()) yes.
             TTF_OpenFont <- (libttf function: #'TTF_OpenFont' type: (ffi types pointer) function(ffi types string, ffi types int)) yes.
@@ -190,6 +192,7 @@
         CreateTextureFromSurface(renderer, surface) => SDL_CreateTextureFromSurface value(renderer, surface);
         DestroyTexture(texture) => SDL_DestroyTexture value(texture);
         QueryTexture(texture, format, access, w, h) => SDL_QueryTexture value(texture, format, access, w, h);
+        RenderSetClipRect(renderer, rect) => SDL_RenderSetClipRect value(renderer, rect);
 
         OpenFont(name, size) => TTF_OpenFont value(name, size);
         CloseFont(font) => TTF_CloseFont value(font);
