@@ -8,6 +8,7 @@
 
         init => (
             $(Morph) initWithOneChild.
+            layouter: (morphic layouters Stack).  "TODO: Write a layouter for this."
           ^ self
         );
 
@@ -15,38 +16,11 @@
 
         innerRect => morphic Rectangle newX: margin Y: margin W: (bounds w - (margin * 2)) H: (bounds h - (margin * 2));
 
-        updateMinSizeCaches => (
-            "TODO: Take InnerRect into account."
-            | w <- 0, h <- 0 |
-            childrenDo: [ :m |
-                w <- w max: m minWidth.
-                h <- h max: m minHeight.
-            ].
-            cachedMinWidth: w.
-            cachedMinHeight: h.
-        );
-
-        layoutInPlace => (
-            shrinkToFit.
-            | r <- innerRect |
-            childrenDo: [ :c |
-                |
-                    w <- (c xLayout isFlexible) if: [ r w ] else: [ c minWidth  ],
-                    h <- (c yLayout isFlexible) if: [ r h ] else: [ c minHeight ]
-                |
-                c boundsX: r x Y: r y W: w H: h.
-            ].
-            childrenDo: [ :c | c layoutInPlaceIfNeeded ].
-            layoutIsNowOkay.
-        );
-
         renderOn: renderer => (
             renderer setR: 40 G: 40 B: 40.
             renderer drawRectX: 0 Y: 0 W: bounds w H: bounds h.
             $(Morph) renderOn: renderer.
         );
-
-        "handleDropMorph: morph AtX: x Y: y => ( add: morph. ^ true );"
 
         writeOn: w => w << 'a frame morph';
     };

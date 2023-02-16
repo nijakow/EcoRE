@@ -10,8 +10,8 @@
               ^ self
             );
 
-            initHorizontal => initWithLayouter: morphic layouters HFlexLayouter;
-            initVertical   => initWithLayouter: morphic layouters VFlexLayouter;
+            initHorizontal => initWithLayouter: (morphic layouters HFlexLayouter);
+            initVertical   => initWithLayouter: (morphic layouters VFlexLayouter);
 
             renderOn: renderer => (
                 renderer setR: 40 G: 40 B: 40.

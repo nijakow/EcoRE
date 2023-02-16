@@ -149,6 +149,15 @@
                 Layouting
             "
 
+            baseMinWidth => 0;
+            baseMinHeight => 0;
+
+            baseMinSizeForOrientation: orientation => (
+                orientation
+                  ~ ifHorizontal: [ baseMinWidth  ]
+                      ifVertical: [ baseMinHeight ]
+            );
+
             minSizeForOrientation: orientation => (
                 layouter calculateMinSizeForMorph: self Orientation: orientation
             );
