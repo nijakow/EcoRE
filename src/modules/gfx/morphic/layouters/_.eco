@@ -30,15 +30,15 @@
                                   ].
                                 ^ m
                               ]
-                ifFlexible:   [           ^ 0                               ]
-                ifRigid:      [ :extent | ^ extent                          ]
+                ifFlexible:   [           ^ 0      ]
+                ifRigid:      [ :extent | ^ extent ]
         );
 
-        calculatePreferredSizeForMorph: morph Orientation: orientation => (
+        calculatePreferredSizeForMorph: morph Orientation: orientation Constraint: constraint => (
             morph layoutForOrientation: orientation
-              ~ ifShrinkWrap: [           ^ minSizeForOrientation: orientation                         ]
-                ifFlexible:   [           ^ 'Tried to access preferred size of flexible layout!' throw ]
-                ifRigid:      [ :extent | ^ extent                                                     ]
+              ~ ifShrinkWrap: [           ^ minSizeForOrientation: orientation ]
+                ifFlexible:   [           ^ constraint                         ]
+                ifRigid:      [ :extent | ^ extent                             ]
         );
 
         layoutMorph: morph Constraints: constraints => (
@@ -53,7 +53,6 @@
         "No implementation"
     };
 
-    "TODO: Throw this one away"
     own Flex = {
         static with inherited _ = std Clonable;
         with inherited layouterTrait = $ LayouterTrait;
@@ -70,8 +69,10 @@
         protected Layout: morph => morph layoutForOrientation: orientation;
         protected Extent: morph => morph extentForOrientation: orientation;
         protected OppositeLayout: morph => morph layoutForOrientation: (orientation opposite);
-        protected PreferredSize: morph => morph preferredSizeForOrientation: orientation;
-        protected OppositePreferredSize: morph => morph preferredSizeForOrientation: (orientation opposite);
+        protected OppositePreferredSize: morph Constraints: constraints => (
+            morph preferredSizeForOrientation: (orientation opposite)
+                                   Constraint: (constraints dimensionForOrientation: (orientation opposite))
+        );
 
         protected calculateMinSizeForMorphMainAxis: morph => (
             | minSize <- 0 |
@@ -103,30 +104,67 @@
                 cross      <- 0
             |
             morph childrenDo: [ :child |
+                "
+                    First, we check if the child is flexible or rigid.
+                    If it is flexible, we don't know its size yet, so we just count how
+                    many flexible children there are.
+
+                    Meanwhile, we also calculate the cross axis size.
+
+                    This way, we have all necessary information once this
+                    loop is finished.
+                "
                 (Layout: child) isFlexible
                   ~ if: [ flexCount <- flexCount + 1.
-                          cross     <- cross max: (OppositePreferredSize: child) ]
+                          cross     <- cross max: (OppositePreferredSize: child Constraints: constraints) ]
                   else: [ rigidCount <- rigidCount + 1.
-                          | childDimensions <- child layoutInplaceIfChanged |
+
+                          "
+                              Since we know the size of the child along the main axis,
+                              we can calculate its size directly by layouting it.
+
+                              If the child is flexible along the cross axis, we use our own 'height' constraints
+                              as their preferred 'height'. This way, they will be able to grow to the correct size.
+
+                              Note that we don't move the child, since we don't know the size of the flexible children yet.
+                          "
+                          |
+                              childConstraints <- (TransformedW: 0 H: constraints dimensionForOrientation: (orientation opposite)),
+                              childDimensions  <- child layoutWithPreferredConstraints: childConstraints
+                          |
+
+                          "We add the size of the child to the main axis."
                           offset <- offset + (childDimensions dimensionForOrientation: orientation).
                           cross  <- cross max: (childDimensions dimensionForOrientation: (orientation opposite)).
                         ].
             ].
 
+            "Here we calculate the size of all flexible children."
             |
                 remainingSpace <- (constraints dimensionForOrientation: orientation) - offset,
                 flexSize       <- (flexCount isZero) if: [ 0 ] else: [ remainingSpace / flexCount ],
-                flexDimensions <- (TransformedW: flexSize H: cross)  "We only calculate it once, for efficiency."
+                flexDimensions <- (TransformedW: flexSize H: cross),  "We only calculate it once, for efficiency."
                 position       <- 0
             |
+
+            "This is the main positioning loop. We position all children along the main axis."
             morph childrenDo: [ :child |
-                "TODO: Set the new bounds of the child."
+                "Move the child to the correct position."
                 child moveTo: (TransformedW: position H: 0).
+
+                "Now that we know the size distribution we can also layout the flexible children."
                 (Layout: child) isFlexible
-                  ~ if: [ child layoutDimensionsIfNeeded: flexDimensions ].
-                position <- position + child extentForOrientation: orientation.
+                  ~ if: [ child layoutWithConstraintsIfNeeded: flexDimensions ].
+                
+                "As before, we increment the position along the main axis."
+                position <- position + (child extentForOrientation: orientation).
             ].
 
+            "
+                Finally, we resize the morph to fit the calculated constraints.
+                ShrinkWrap will therefore react to the new size of the children instead of their
+                pre-calculated layouts.
+            "
             FitMorph: morph ToConstraints: constraints Actual: (TransformedW: position H: cross).
         );
 
@@ -135,4 +173,37 @@
 
     own HFlexLayouter = FlexLayouter clone initWithOrientation: (morphic orientation Horizontal);
     own VFlexLayouter = FlexLayouter clone initWithOrientation: (morphic orientation Vertical);
+
+
+    own Stack = {
+        static with inherited _ = std Clonable;
+        with inherited layouterTrait = $ LayouterTrait;
+
+        protected SnapToStack: morph Orientation: orientation => (
+            | position <- 0 |
+            morph childrenDo: [ :child |
+                child moveTo: (morphic Origin X: position).
+                position <- position + (child extentForOrientation: (morphic orientation Horizontal)).
+            ].
+        );
+
+        layoutMorph: morph Constraints: constraints => (
+            |
+                minWidth <- 0,
+                minHeight <- 0
+            |
+
+            morph childrenDo: [ :child |
+                child moveTo: (morphic Origin).
+
+                | childDimensions <- child layoutWithConstraintsIfNeeded: constraints |
+                minWidth  <- minWidth  max: childDimensions width.
+                minHeight <- minHeight max: childDimensions height.
+            ].
+
+            FitMorph: morph ToConstraints: constraints Actual: (morphic W: minWidth H: minHeight).
+        );
+
+        writeOn: w => w << 'a stack layouter';
+    };
 }

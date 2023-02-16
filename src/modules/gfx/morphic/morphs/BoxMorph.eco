@@ -3,104 +3,21 @@
         static with inherited _ = std Clonable;
         with inherited own Morph = $ Morph;
 
-        protected orientation;
-
         with inherited trait = {
-            initWithOrientation: _orientation => (
+            initWithLayouter: _layouter => (
                 $(Morph) initWithManyChildren.
-                orientation <- _orientation.
+                layouter: _layouter.
               ^ self
             );
 
-            initHorizontal => initWithOrientation: morphic Horizontal;
-            initVertical   => initWithOrientation: morphic Vertical;
-
-            updateMinSizeCaches => (
-                | w <- 0, h <- (orientation ifHorizontal: [ baseMinWidth ] ifVertical: [ baseMinHeight ]) |
-                childrenDo: [ :m |
-                    w <- w + (m minExtentForOrientation: orientation).
-                    h <- h max: (m minExtentForOrientation: orientation opposite).
-                ].
-                w <- w max: (orientation ifHorizontal: [ baseMinWidth  ] ifVertical: [ baseMinHeight ]).
-                h <- h max: (orientation ifHorizontal: [ baseMinHeight ] ifVertical: [ baseMinWidth  ]).
-                orientation
-                  ~ ifHorizontal: [ cachedMinWidth: w. cachedMinHeight: h. ]
-                      ifVertical: [ cachedMinWidth: h. cachedMinHeight: w. ].
-            );
-
-            layoutInPlace => (
-                shrinkToFit.
-
-                |
-                    lower  <- 0,
-                    higher <- bounds dimensionForOrientation: orientation,
-                    diff   <- higher - lower,
-
-                    flexCount <- 0,
-                    reservedF <- 0,
-                    reservedN <- 0,
-                    budget    <- 0
-                |
-
-                childrenDo: [ :c |
-                    (c layoutForOrientation: orientation) isFlexible
-                      ~   if: [ flexCount <- flexCount + 1.
-                                reservedF <- reservedF + (c minExtentForOrientation: orientation) ]
-                        else: [ reservedN <- reservedN + (c minExtentForOrientation: orientation) ].
-                ].
-
-                budget <- (bounds dimensionForOrientation: orientation) max: (reservedF + reservedN).
-
-                |
-                    offset <- 0
-                |
-
-                childrenDo: [ :c |
-                    |
-                        minSpace <- c minExtentForOrientation: orientation,
-                        spaceForM
-                    |
-                    (c layoutForOrientation: orientation) isFlexible if: [
-                        | available <- (budget - reservedN) - (reservedF - minSpace) |
-                        spaceForM <- (budget - reservedN) / flexCount.
-                        (spaceForM > available) -> [ spaceForM <- available ].
-                        (spaceForM < minSpace)  -> [ spaceForM <- minSpace  ].
-                        flexCount <- flexCount - 1.
-                        reservedF <- reservedF - minSpace.
-                    ] else: [
-                        spaceForM <- minSpace.
-                        reservedN <- reservedN - spaceForM.
-                    ].
-
-                    |
-                        heightForM
-                    |
-                    
-                    (c layoutForOrientation: orientation opposite) isFlexible if: [
-                        heightForM <- extentForOrientation: orientation opposite
-                    ] else: [
-                        heightForM <- c minExtentForOrientation: orientation opposite
-                    ].
-
-                    orientation
-                      ~ ifHorizontal: [ c boundsX: offset Y: 0 W: spaceForM H: heightForM ]
-                          ifVertical: [ c boundsX: 0 Y: offset W: heightForM H: spaceForM ].
-                    
-                    offset <- offset + spaceForM.
-                    budget <- budget - spaceForM.
-                ].
-
-                childrenDo: [ :c | c layoutInPlaceIfNeeded ].
-                layoutIsNowOkay.
-            );
+            initHorizontal => initWithLayouter: morphic layouters HFlexLayouter;
+            initVertical   => initWithLayouter: morphic layouters VFlexLayouter;
 
             renderOn: renderer => (
                 renderer setR: 40 G: 40 B: 40.
                 renderer drawRectX: 0 Y: 0 W: bounds w H: bounds h.
                 $(Morph) renderOn: renderer.
             );
-
-            "handleDropMorph: morph AtX: x Y: y => ( add: morph. ^ true );"
 
             writeOn: w => w << 'a box morph';
         };

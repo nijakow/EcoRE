@@ -122,6 +122,8 @@
             "
                 Layouts
             "
+            layouter: l => layouter <- l;
+            
             xLayout: layout => xLayout <- layout;
             yLayout: layout => yLayout <- layout;
 
@@ -154,8 +156,13 @@
             minSize => morphic X: (minSizeForOrientation: morphic orientations Horizontal)
                                Y: (minSizeForOrientation: morphic orientations Vertical);
 
-            preferredSizeForOrientation: orientation => (
-                layouter calculatePreferredSizeForMorph: self Orientation: orientation
+            preferredSizeForOrientation: orientation Constraint: constraint => (
+                layouter calculatePreferredSizeForMorph: self Orientation: orientation Constraint: constraint
+            );
+
+            preferredSizeWithConstraints: constraints => (
+                morphic X: (preferredSizeForOrientation: (morphic orientations Horizontal) Constraint: (constraints x))
+                        Y: (preferredSizeForOrientation: (morphic orientations Vertical)   Constraint: (constraints y))
             );
 
             layoutChildrenWithConstraints: constraints => (
@@ -164,8 +171,8 @@
                 ].
             );
             layoutWithConstraints: constraints => layouter layoutMorph: self Constraints: constraints;
-            layoutWithConstraintsIfChanged: constraints => layoutWithConstraints: constraints;
-            layoutInplaceIfChanged => layoutWithConstraintsIfChanged: dimensions;
+            layoutWithPreferredConstraints: constraints => layoutWithConstraints: (preferredSizeWithConstraints: constraints);
+            layoutInplaceIfChanged => layoutWithConstraints: dimensions;
 
             "
                 Rendering
