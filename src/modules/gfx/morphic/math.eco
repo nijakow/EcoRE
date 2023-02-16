@@ -90,6 +90,8 @@
               ^ self
             );
 
+            equalsPoint: p => [ x == p x ] and: [ y == p y ];
+
             width  => x;
             height => y;
 

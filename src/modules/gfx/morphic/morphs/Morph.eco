@@ -4,7 +4,8 @@
         protected morphic = $ morphic;
 
         offset, dimensions,
-        cachedGlobalOffset,
+        protected cachedGlobalOffset,
+        protected cachedLayoutingConstraints,
         xLayout, yLayout, layouter,
         parent, children;
 
@@ -15,6 +16,7 @@
                 offset             <- (morphic X: 0 Y: 0).
                 dimensions         <- (morphic W: 0 H: 0).
                 cachedGlobalOffset <- No.
+                cachedLayoutingConstraints <- No.
                 xLayout            <- (morphic layouts Flexible).
                 yLayout            <- (morphic layouts Flexible).
                 layouter           <- (morphic layouters Default).
@@ -145,6 +147,7 @@
 
             resizeTo: point => (
                 dimensions <- point.
+                layoutChanged.
               ^ self
             );
 
@@ -208,12 +211,28 @@
                         Y: (preferredSizeForOrientation: (morphic orientation Vertical)   Constraint: (constraints y))
             );
 
-            layoutChanged => self;
+            layoutChanged => (
+                cachedLayoutingConstraints <- No.
+                parent yes: [ :p | p layoutChanged ].
+            );
 
-            forceLayoutWithConstraints: constraints => layouter layoutMorph: self Constraints: constraints;
-            layoutWithConstraints: constraints => forceLayoutWithConstraints: constraints;
-            forceLayoutInPlace => layoutWithConstraints: dimensions;
-            layoutInPlace => forceLayoutInPlace;
+            protected layoutDirtyForConstraints: constraints => (
+                cachedLayoutingConstraints
+                  ~ yes: [ :c | (c equalsPoint: constraints) if: [ ^ false ] ].
+              ^ true
+            );
+
+            forceLayoutWithConstraints: constraints => (
+                layouter layoutMorph: self Constraints: constraints.
+                cachedLayoutingConstraints <- Yes: constraints.
+            );
+            forceLayoutInPlace => forceLayoutWithConstraints: dimensions;
+
+            layoutWithConstraints: constraints => (
+                layoutDirtyForConstraints: constraints
+                  ~ if: [ forceLayoutWithConstraints: constraints ]
+            );
+            layoutInPlace => layoutWithConstraints: dimensions;
 
             "
                 Rendering
