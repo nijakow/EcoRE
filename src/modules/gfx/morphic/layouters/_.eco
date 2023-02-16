@@ -140,7 +140,7 @@
                               Note that we don't move the child, since we don't know the size of the flexible children yet.
                           "
                           |
-                              childConstraints <- TransformedW: (morph minSizeForOrientation: orientation)
+                              childConstraints <- TransformedW: (child minSizeForOrientation: orientation)
                                                              H: (shrunkConstraints dimensionForOrientation: (orientation opposite)),
                               childDimensions  <- child layoutWithConstraints: childConstraints
                           |
