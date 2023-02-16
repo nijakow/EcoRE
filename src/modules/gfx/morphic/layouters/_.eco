@@ -11,9 +11,9 @@
 
         protected CalcFitMorph: morph ToConstraints: constraints Actual: actual Orientation: orientation => (
             morph layoutForOrientation: orientation
-              ~ ifShrinkWrap: [           ^ (actual dimensionForOrientation: orientation) min: (constraints dimensionForOrientation: orientation) ]
-                ifFlexible:   [           ^ (constraints dimensionForOrientation: orientation)                                                    ]
-                ifRigid:      [ :extent | ^ extent                                                                                                ]
+              ~ ifShrinkWrap: [           ^ (morph minSizeForOrientation: orientation)         ]
+                ifFlexible:   [           ^ (constraints dimensionForOrientation: orientation) ]
+                ifRigid:      [ :extent | ^ extent                                             ]
         );
 
         protected FitMorph: morph ToConstraints: constraints Actual: actual => (
@@ -25,8 +25,12 @@
             morph baseMinSizeForOrientation: orientation
         );
 
+        calculatePreferredSizeForMorph: morph Orientation: orientation => (
+            morph basePreferredSizeForOrientation: orientation
+        );
+
         layoutMorph: morph Constraints: constraints => (
-            FitMorph: morph ToConstraints: constraints Actual: (morph minSize)
+            FitMorph: morph ToConstraints: constraints Actual: constraints
         );
     };
 

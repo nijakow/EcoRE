@@ -146,7 +146,12 @@
             "
                 Layouting
             "
-            baseMinSizeForOrientation: orientation => 0;
+            baseMinSizeForOrientation: orientation => (
+              layoutForOrientation: orientation
+                  ~ ifShrinkWrap: [           ^ 0 "Take children into account?" ]
+                    ifFlexible:   [           ^ 0                               ]
+                    ifRigid:      [ :extent | ^ extent                          ]
+            );
 
             minSizeForOrientation: orientation => (
                 layouter calculateMinSizeForMorph: self Orientation: orientation
@@ -155,12 +160,19 @@
             minSize => morphic X: (minSizeForOrientation: morphic orientations Horizontal)
                                Y: (minSizeForOrientation: morphic orientations Vertical);
 
-            preferredSizeForOrientation: orientation => (
+            basePreferredSizeForOrientation: orientation => (
                 layoutForOrientation: orientation
-                  ~ ifFlexible:   [ 'Tried to access preferred size of flexible layout!' throw ]
-                    ifRigid:      [ extentForOrientation: orientation                          ]
-                    ifShrinkWrap: [ minSizeForOrientation: orientation                         ]
+                  ~ ifShrinkWrap: [           ^ minSizeForOrientation: orientation                         ]
+                    ifFlexible:   [           ^ 'Tried to access preferred size of flexible layout!' throw ]
+                    ifRigid:      [ :extent | ^ extent                                                     ]
             );
+
+            preferredSizeForOrientation: orientation => (
+                layouter calculatePreferredSizeForMorph: self Orientation: orientation
+            );
+
+            preferredSize => morphic X: (preferredSizeForOrientation: morphic orientations Horizontal)
+                                     Y: (preferredSizeForOrientation: morphic orientations Vertical);
 
             layoutChildrenWithConstraints: constraints => (
                 childrenWithBoundsDo: [ :c :b |
