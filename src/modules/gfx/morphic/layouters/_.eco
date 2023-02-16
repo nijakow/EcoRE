@@ -129,8 +129,9 @@
                               Note that we don't move the child, since we don't know the size of the flexible children yet.
                           "
                           |
-                              childConstraints <- (TransformedW: 0 H: constraints dimensionForOrientation: (orientation opposite)),
-                              childDimensions  <- child layoutWithPreferredConstraints: childConstraints
+                              childConstraints <- TransformedW: (morph minSizeForOrientation: orientation)
+                                                             H: (constraints dimensionForOrientation: (orientation opposite)),
+                              childDimensions  <- child layoutWithConstraints: childConstraints
                           |
 
                           "We add the size of the child to the main axis."
@@ -179,26 +180,18 @@
         static with inherited _ = std Clonable;
         with inherited layouterTrait = $ LayouterTrait;
 
-        protected SnapToStack: morph Orientation: orientation => (
-            | position <- 0 |
-            morph childrenDo: [ :child |
-                child moveTo: (morphic Origin X: position).
-                position <- position + (child extentForOrientation: (morphic orientation Horizontal)).
-            ].
-        );
-
         layoutMorph: morph Constraints: constraints => (
             |
-                minWidth <- 0,
+                minWidth  <- 0,
                 minHeight <- 0
             |
 
             morph childrenDo: [ :child |
                 child moveTo: (morphic Origin).
 
-                | childDimensions <- child layoutWithConstraintsIfNeeded: constraints |
-                minWidth  <- minWidth  max: childDimensions width.
-                minHeight <- minHeight max: childDimensions height.
+                | childDimensions <- child layoutWithConstraints: constraints |
+                minWidth  <- minWidth  max: (childDimensions width).
+                minHeight <- minHeight max: (childDimensions height).
             ].
 
             FitMorph: morph ToConstraints: constraints Actual: (morphic W: minWidth H: minHeight).

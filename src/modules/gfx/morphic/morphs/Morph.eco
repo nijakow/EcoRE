@@ -171,7 +171,6 @@
                 ].
             );
             layoutWithConstraints: constraints => layouter layoutMorph: self Constraints: constraints;
-            layoutWithPreferredConstraints: constraints => layoutWithConstraints: (preferredSizeWithConstraints: constraints);
             layoutInplaceIfChanged => layoutWithConstraints: dimensions;
 
             "
