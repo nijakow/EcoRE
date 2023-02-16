@@ -119,7 +119,7 @@
             SDL_Keysym <- ffi struct(SDL_Scancode, SDL_Keycode, ffi types uint16, ffi types uint32).
             SDL_KeyboardEvent <- ffi struct(ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8, SDL_Keysym).
             SDL_MouseMotionEvent <- ffi struct(ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint32, ffi types sint32, ffi types sint32, ffi types sint32, ffi types sint32).
-            SDL_MouseButtonEvent <- ffi struct(ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8, ffi types sint32, ffi types sint32).
+            SDL_MouseButtonEvent <- ffi struct(ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8, ffi types sint32, ffi types sint32).
             SDL_Event <- ffi union(ffi types uint32, SDL_KeyboardEvent, SDL_MouseMotionEvent, SDL_MouseButtonEvent, (ffi types char) array: 56).
             SDL_Init <- (lib function: #'SDL_Init' type: ((ffi types int) function(ffi types uint32))) yes.
             SDL_Quit <- (lib function: #'SDL_Quit' type: ((ffi types void) function)) yes.

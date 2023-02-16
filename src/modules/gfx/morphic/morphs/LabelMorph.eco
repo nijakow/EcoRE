@@ -50,6 +50,8 @@
             $(Morph) renderOn: renderer.
         );
 
+        handleGrabAt: point HandMorph: hand => ( hand grab: self. true );
+
         "TODO"
     };
 }

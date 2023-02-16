@@ -66,7 +66,15 @@
                     mouseY <- event mouseMotionY.
                 ].
                 event isMouseButtonDown -> [
-                    morph handMorph leftClick.
+                    | button <- event whichMouseButton |
+
+                    Switch: button
+                      ~ case: 1 do: [ morph handMorph leftClick   ]
+                      ~ case: 2 do: [ morph handMorph middleClick ]
+                      ~ case: 3 do: [ morph handMorph rightClick  ]
+                    ~ default: [
+                        (std io out << 'Unknown mouse key!') newline commit.
+                      ].
                 ].
                 event isKeyDown -> [ ^ program stop ].
             );

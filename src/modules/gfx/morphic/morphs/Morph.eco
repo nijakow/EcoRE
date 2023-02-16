@@ -274,9 +274,11 @@
 
             handleDropMorph: morph At: point => false;
             handleClickAt: point HandMorph: hand => false;
+            handleGrabAt: point HandMorph: hand => false;
 
             dropMorph: morph At: point => dispatchEvent: [ :e :point | e handleDropMorph: morph At: point ] At: point;
             clickAt: point HandMorph: hand => dispatchEvent: [ :e :point | e handleClickAt: point HandMorph: hand ] At: point;
+            grabAt: point HandMorph: hand => dispatchEvent: [ :e :point | e handleGrabAt: point HandMorph: hand ] At: point;
 
             dumpOn: w Indentation: i => (
                 0 to: i do: [ :j | w << '  ' ].
