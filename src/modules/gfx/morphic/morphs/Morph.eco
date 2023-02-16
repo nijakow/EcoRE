@@ -80,6 +80,7 @@
                     child unlink.
                     child parent: self.
                     layoutChanged.
+                    child invalidateGlobalOffsetCache.
                   ^ true
                 ].
               ^ false
