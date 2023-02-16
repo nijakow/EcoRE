@@ -8,6 +8,8 @@
         x, y, w, h;
 
         with inherited trait = {
+            static with inherited _ = std Trait;
+
             init => (
                 x: 0 y: 0 w: 1 h: 1.
               ^ self
@@ -78,6 +80,8 @@
         x, y;
 
         with inherited trait = {
+            static with inherited _ = std Trait;
+
             NewX: _x Y: _y => self clone initWithX: _x Y: _y;
 
             initWithX: _x Y: _y => (
@@ -94,7 +98,16 @@
             offsetBy: p => module morphic Point2D NewX: (x + p) Y: (y + p);
             offsetBy: p Do: block => block value(offsetBy: p);
 
+            dimensionForOrientation: orientation => (
+                orientation
+                  ~ ifHorizontal: [ ^ x ]
+                      ifVertical: [ ^ y ]
+            );
+
             writeOn: w => w << 'a point(' << x << ', ' << y << ')';
         };
     };
+
+    X: x Y: y => Point2D NewX: x Y: y;
+    W: w H: h => X: x Y: y;
 }

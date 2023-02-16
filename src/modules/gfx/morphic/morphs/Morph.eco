@@ -3,30 +3,20 @@
         static with inherited _ = std Clonable;
         protected morphic = $ morphic;
 
-        bounds,
+        offset, dimensions,
         xLayout, yLayout;
         parent, children;
 
-        protected layoutOkay,
-        protected cachedMinWidth,
-        protected cachedMinHeight,
-        protected isDirty,
-        protected isRenderDirty,
-        protected isChildRenderDirty;
-
         with inherited trait = {
+            static with inherited _ = std Trait;
+
             initWithChildConfig: config => (
-                bounds          <- (morphic Rectangle) new.
+                offset          <- (morphic X: 0 Y: 0).
+                dimensions      <- (morphic W: 0 H: 0).
                 xLayout         <- (morphic layouts Flexible).
                 yLayout         <- (morphic layouts Flexible).
                 parent          <- No.
                 children        <- config new.
-                layoutOkay      <- false.
-                cachedMinWidth  <- No.
-                cachedMinHeight <- No.
-                isDirty         <- true.
-                isRenderDirty   <- true.
-                isChildRenderDirty <- true.
               ^ self
             );
 
@@ -36,105 +26,17 @@
 
             init => initWithNoChildren;
 
-            globalBounds => (
-                parent
-                  ~ yes: [ :p | | pgb <- p globalBounds | ^ bounds offsetByX: pgb x Y: pgb y ]
-                     no: [ ^ bounds                                                          ]
-            );
+            "
+                Children
+            "
+            childrenDo: block => children childrenDo: block;
+            childrenReverseDo: block => children childrenReverseDo: block;
+            allChildrenDo: block => childrenDo: [ :c | block value(c). c allChildrenDo: block ];
+            childrenWithBoundsDo: block => childrenDo: [ :c | block value(c, c bounds) ];
 
-            boundsX: x Y: y W: w H: h => (
-                bounds x: x y: y w: w h: h.
-                renderDirty.
-              ^ self
-            );
-            bounds: rect => boundsX: rect x Y: rect y W: rect w H: rect h;
-
-            moveToX: x Y: y   => boundsX: x Y: y W: bounds w H: bounds h;
-            resizeToW: w H: h => boundsX: bounds x Y: bounds y W: w H: h;
-
-            offset => (morphic Point2D clone) initWithX: bounds x Y: bounds y;
-            globalOffset => (
-                | b <- globalBounds |
-              ^ (morphic Point2D clone) initWithX: b x Y: b y
-            );
-
-            width  => bounds w;
-            height => bounds h;
-
-            baseMinWidth  => 0;
-            baseMinHeight => 0;
-
-            resizeToW: w => resizeToW: w H: height;
-            resizeToH: h => resizeToW: width H: h;
-
-            extentForOrientation: orientation => (
-                orientation
-                  ~ ifHorizontal: [ width  ]
-                      ifVertical: [ height ]
-            );
-
-            layoutOkay: v   => layoutOkay <- v;
-            layoutIsNowOkay => layoutOkay: true;
-
-            cachedMinWidth:  v => cachedMinWidth  <- Yes: v;
-            cachedMinHeight: v => cachedMinHeight <- Yes: v;
-            invalidateMinSizeCaches => (
-                cachedMinWidth  <- No.
-                cachedMinHeight <- No.
-            );
-            updateMinSizeCaches => (
-                "TODO: Go through all the submorphs"
-                cachedMinWidth:  baseMinWidth.
-                cachedMinHeight: baseMinHeight.
-            );
-
-            minWidth => (
-                xLayout isRigid -> [ ^ width ].
-                cachedMinWidth no: [ updateMinSizeCaches ].
-              ^ cachedMinWidth yes
-            );
-            minHeight => (
-                yLayout isRigid -> [ ^ height ].
-                cachedMinHeight no: [ updateMinSizeCaches ].
-              ^ cachedMinHeight yes
-            );
-
-            minExtentForOrientation: orientation => (
-                orientation
-                  ~ ifHorizontal: [ minWidth  ]
-                      ifVertical: [ minHeight ]
-            );
-
-            invalidateLayoutCaches => (
-                layoutOkay: false.
-                invalidateMinSizeCaches.
-                dirty.
-              ^ self
-            );
-
-            layoutChanged => (
-                invalidateLayoutCaches.
-              ^ self
-            );
-
-            xLayout: layout => xLayout <- layout;
-            yLayout: layout => yLayout <- layout;
-
-            rigidWidth:  w => xLayout: morphic layouts Rigid ~ resizeToW: w;
-            rigidHeight: h => yLayout: morphic layouts Rigid ~ resizeToH: h;
-
-            flexibleWidth  => xLayout: morphic layouts Flexible;
-            flexibleHeight => yLayout: morphic layouts Flexible;
-            flexibleSize   => ( flexibleWidth. flexibleHeight. );
-
-            shrinkWrapWidth  => xLayout: morphic layouts ShrinkWrap;
-            shrinkWrapHeight => yLayout: morphic layouts ShrinkWrap;
-            shrinkWrapSize   => ( shrinkWrapWidth. shrinkWrapHeight. );
-
-            layoutForOrientation: orientation => (
-                orientation
-                  ~ ifHorizontal: [ xLayout ]
-                      ifVertical: [ yLayout ]
+            allParentsDo: block => (
+                parent yes: [ :p | block value(p). p allParentsDo: block ]
+                        no: [      ^ self                                ]
             );
 
             root => (
@@ -146,11 +48,6 @@
                 parent yes: [ :p | p world ]
                         no: [      No      ]
             );
-
-            childrenDo: block => children childrenDo: block;
-            childrenReverseDo: block => children childrenReverseDo: block;
-            allChildrenDo: block => childrenDo: [ :c | block value(c). c allChildrenDo: block ];
-            childrenWithBoundsDo: block => childrenDo: [ :c | block value(c, c bounds) ];
 
             unlink => (
                 parent yes: [ :p | p remove: self ].
@@ -171,8 +68,6 @@
                     (children add: child) unless: [ ^ false ].
                     child unlink.
                     child parent: self.
-                    child invalidateLayoutCaches.
-                    layoutChanged.
                   ^ true
                 ].
               ^ false
@@ -186,7 +81,7 @@
 
             remove: child => (
                 (children remove: child)
-                  ~ if: [ child noParent. layoutChanged ].
+                  ~ if: [ child noParent. ].
               ^ self
             );
 
@@ -195,47 +90,70 @@
               ^ self
             );
 
-            layoutInPlace => ( childrenDo: [ :c | c layoutInPlace ]. layoutIsNowOkay. );
-            layoutInPlaceIfNeeded => layoutOkay false: [ layoutInPlace ];
-            shrinkToFit => (
-                "Only shrink if there is a parent"
-                parent yes: [
-                    xLayout isShrinkWrap -> [ resizeToW: minWidth  ].
-                    yLayout isShrinkWrap -> [ resizeToH: minHeight ].
-                ]
+
+            "
+                Position and Size
+            "
+            offsetForOrientation: orientation => (
+                offset dimensionForOrientation: orientation
             );
 
-            dirty => (
-                isDirty not -> [
-                    isDirty <- true.
-                    renderDirty.
-                    parent yes: [ :p | p dirty ].
+            width  => dimensions x;
+            height => dimensions y;
+
+            extentForOrientation: orientation => (
+                dimensions dimensionForOrientation: orientation
+            );
+
+            moveTo: point => (
+                offset <- point.
+              ^ self
+            );
+
+            resizeTo: point => (
+                dimensions <- point.
+              ^ self
+            );
+
+
+            "
+                Layouts
+            "
+            xLayout: layout => xLayout <- layout;
+            yLayout: layout => yLayout <- layout;
+
+            rigidWidth:  w => xLayout: morphic layouts Rigid ~ resizeToW: w;
+            rigidHeight: h => yLayout: morphic layouts Rigid ~ resizeToH: h;
+
+            flexibleWidth  => xLayout: morphic layouts Flexible;
+            flexibleHeight => yLayout: morphic layouts Flexible;
+            flexibleSize   => ( flexibleWidth. flexibleHeight. );
+
+            shrinkWrapWidth  => xLayout: morphic layouts ShrinkWrap;
+            shrinkWrapHeight => yLayout: morphic layouts ShrinkWrap;
+            shrinkWrapSize   => ( shrinkWrapWidth. shrinkWrapHeight. );
+
+            layoutForOrientation: orientation => (
+                orientation
+                  ~ ifHorizontal: [ xLayout ]
+                      ifVertical: [ yLayout ]
+            );
+
+
+            "
+                Layouting
+            "
+            layoutChildrenWithConstraints: constraints => (
+                childrenWithBoundsDo: [ :c :b |
+                    c layoutWithConstraintsIfChanged: constraints.
                 ].
-              ^ self
             );
+            layoutWithConstraints: constraints => self;
+            layoutWithConstraintsIfChanged: constraints => layoutWithConstraints: constraints;
 
-            undirty => (
-                isDirty -> [
-                    layoutChanged.
-                    childrenDo: [ :c | c undirty ].
-                    isDirty <- false.
-                ].
-              ^ self
-            );
-
-            renderDirty => (
-                isRenderDirty <- true.
-                childRenderDirty.
-              ^ self
-            );
-
-            childRenderDirty => (
-                isChildRenderDirty not -> [
-                    isChildRenderDirty <- true.
-                    parent yes: [ :p | p childRenderDirty ].
-                ]
-            );
-
+            "
+                Rendering
+            "
             renderChildrenOn: renderer => (
                 childrenDo: [ :c |
                     renderer pushBounds: c bounds.
@@ -249,53 +167,6 @@
               renderChildrenOn: renderer;
             );
 
-            maybeRenderChildrenOn: renderer => (
-                childrenDo: [ :c |
-                    renderer pushBounds: c bounds.
-                    c maybeRenderOn: renderer.
-                    renderer popBounds.
-                ].
-            );
-            maybeRenderOn: renderer => (
-              isChildRenderDirty -> [
-                isChildRenderDirty <- false.
-                isRenderDirty if: [ isRenderDirty <- false. renderOn: renderer ]
-                            else: [ maybeRenderChildrenOn: renderer ]
-              ]
-            );
-
-            dispatchEvent: block AtX: evtX Y: evtY => (
-                childrenReverseDo: [ :c |
-                    | b <- c bounds |
-                    b containsX: evtX Y: evtY
-                      ~ if: [ (c dispatchEvent: block AtX: (evtX - b x) Y: (evtY - b y)) -> [ ^ true ] ]
-                ].
-                block value(self, evtX, evtY) -> [ ^ true ].
-              ^ false
-            );
-
-            xRayAtX: x Y: y Do: block => (
-                block value(self).
-                childrenWithBoundsDo: [ :c, :b |
-                    b containsX: x Y: y
-                      ~ if: [ c xRayAtX: (x - b x) Y: (y - b y) Do: block ]
-                ].
-              ^ self
-            );
-
-            handleDropMorph: morph AtX: x Y: y => false;
-            handleClickAtX: x Y: y HandMorph: hand => false;
-
-            dropMorph: morph AtX: x Y: y => dispatchEvent: [ :e, :ex, :ey | e handleDropMorph: morph AtX: ex Y: ey ] AtX: x Y: y;
-            clickAtX: x Y: y HandMorph: hand => dispatchEvent: [ :e, :ex, :ey | e handleClickAtX: ex Y: ey HandMorph: hand ] AtX: x Y: y;
-
             writeOn: w => w << 'a morph';
-
-            dumpOn: w Indentation: i => (
-                0 to: i do: [ :j | w << '  ' ].
-                (w << self << ' ' << bounds << ' layoutOK: ' << layoutOkay << ', dirty: ' << isDirty << ', renderDirty: ' << isRenderDirty << ', childRenderDirty: ' << isChildRenderDirty) newline commit.
-                childrenDo: [ :c | c dumpOn: w Indentation: (i + 1) ].
-            );
-            dumpOn: w => dumpOn: w Indentation: 0;
         };
     }
