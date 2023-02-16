@@ -4,12 +4,16 @@
         private morphic = $;
 
         protected offsets,
+        protected width,
+        protected height,
         protected sdlRenderer;
 
         with inherited trait = {
             initWithSDLRenderer: _sdl_renderer X: _x Y: _y W: _w H: _h => (
                 sdlRenderer <- _sdl_renderer.
                 offsets     <- std util newStack.
+                width       <- _w.
+                height      <- _h.
                 offsets push: (morphic Origin).
               ^ self
             );

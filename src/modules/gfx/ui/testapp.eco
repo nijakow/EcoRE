@@ -37,11 +37,7 @@
         OutlinerWindowForObject: object => builder Window(200, 100, builder Scrollable(OutlinerPaneForObject: object));
     };
 
-    counter;
-    counter: v => counter <- v;
-
     reset => (
-        counter <- 0.
       ^ self
     );
 

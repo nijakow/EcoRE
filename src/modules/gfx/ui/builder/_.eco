@@ -52,8 +52,8 @@
     );
 
     Clipped(element) => (
-      ^ (morphic morphs ClipMorph) new
-          ~ add: element
+        "TODO"
+      ^ element
     );
 
     Spacer => (morphic morphs Morph) new;

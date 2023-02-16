@@ -52,7 +52,7 @@
 
             open: morph => (
                 add: morph.
-                morph boundsX: 100 Y: 100 W: (morph minWidth) H: (morph minHeight).
+                morph reshapeX: 100 Y: 100 W: (morph minWidth) H: (morph minHeight).
               ^ self
             );
 

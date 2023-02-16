@@ -32,8 +32,12 @@
                                                 Y: 0
                                                 W: program window width
                                                 H: program window height.
-                morph bounds: renderer bounds.
+                morph reshapeX: renderer xOff
+                             Y: renderer yOff
+                             W: renderer width
+                             H: renderer height.
                 morph renderer: renderer.
+                
                 morph layoutInPlace.
                 app openInWorld: morph.
             );

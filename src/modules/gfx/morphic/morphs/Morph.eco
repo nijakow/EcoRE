@@ -147,6 +147,9 @@
 
             move: _offset resize: _dimensions => move: _offset ~ resize: _dimensions;
 
+            reshapeX: x Y: y W: w H: h => move: (morphic X: x Y: y) resize: (morphic W: w H: h);
+            bounds: rect => reshapeX: (rect x) Y: (rect y) W: (rect w) H: (rect h);
+
 
             "
                 Layouts
@@ -191,8 +194,10 @@
                 layouter calculateMinSizeForMorph: self Orientation: orientation
             );
 
-            minSize => morphic X: (minSizeForOrientation: morphic orientations Horizontal)
-                               Y: (minSizeForOrientation: morphic orientations Vertical);
+            minWidth => minSizeForOrientation: (morphic orientations Horizontal);
+            minHeight => minSizeForOrientation: (morphic orientations Vertical);
+
+            minSize => morphic X: minWidth Y: minHeight;
 
             preferredSizeForOrientation: orientation Constraint: constraint => (
                 layouter calculatePreferredSizeForMorph: self Orientation: orientation Constraint: constraint
@@ -208,6 +213,7 @@
             forceLayoutWithConstraints: constraints => layouter layoutMorph: self Constraints: constraints;
             layoutWithConstraints: constraints => forceLayoutWithConstraints: constraints;
             layoutInplaceIfChanged => layoutWithConstraints: dimensions;
+            layoutInPlace => layoutInplaceIfChanged;
 
             "
                 Rendering

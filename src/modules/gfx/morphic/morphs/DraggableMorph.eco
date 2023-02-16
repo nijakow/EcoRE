@@ -1,0 +1,22 @@
+
+    {
+        static with inherited _ = std Clonable;
+        with inherited own FrameMorph = $ FrameMorph;
+
+        with inherited trait = {
+            init => (
+                $(FrameMorph) init.
+              ^ self
+            );
+
+            renderOn: renderer => (
+                renderer setR: 80 G: 0 B: 80.
+                renderer fillRectX: 0 Y: 0 W: width H: height.
+                $(FrameMorph) renderOn: renderer.
+            );
+
+            "handleClickAtX: x Y: y HandMorph: hand => ( hand grab: self. ^ true );"
+
+            writeOn: w => w << 'a draggable morph';
+        };
+    }
