@@ -150,6 +150,7 @@
             moveTo: point => (
                 offset <- point.
                 invalidateGlobalOffsetCache.
+                renderDirty.
               ^ self
             );
 
@@ -284,13 +285,15 @@
                 isChildRenderDirty
                   ~ if: [
                             childrenDo: [ :c |
+                               renderer pushOffset: c globalOffset.
                                c maybeRenderOn: renderer.
+                               renderer popOffset.
                             ].
                         ]
             );
             maybeRenderOn: renderer => (
                 isRenderDirty
-                  ~ if: [ renderOn: renderer ]
+                  ~ if: [ renderOn: renderer ].
                 maybeRenderChildrenOn: renderer.
                 childRenderDirty <- false.
             );
