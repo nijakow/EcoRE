@@ -79,4 +79,26 @@
     FullConstraintsMin: min => FullConstraints clone initWithMin: min;
     FullConstraintsMax: max => FullConstraints clone initWithMax: max;
     FullConstraintsMin: min Max: max => FullConstraints clone initWithMin: min Max: max;
+
+
+
+    own Size = {
+        static with inherited _ = std Clonable;
+
+        width, height;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithWidth: _width Height: _height => (
+                width  <- _width.
+                height <- _height.
+              ^ self
+            );
+
+            writeOn: w => w << 'Size(' << width << ',' << height << ')';
+        }
+    };
+
+    SizeW: width Height: height => Size clone initWithWidth: width Height: height;
 }
