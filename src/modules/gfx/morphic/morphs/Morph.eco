@@ -125,8 +125,8 @@
             xLayout: layout => xLayout <- layout;
             yLayout: layout => yLayout <- layout;
 
-            rigidWidth:  w => xLayout: morphic layouts Rigid ~ resizeToW: w;
-            rigidHeight: h => yLayout: morphic layouts Rigid ~ resizeToH: h;
+            rigidWidth:  w => xLayout: (morphic layouts Rigid: w);
+            rigidHeight: h => yLayout: (morphic layouts Rigid: h);
 
             flexibleWidth  => xLayout: morphic layouts Flexible;
             flexibleHeight => yLayout: morphic layouts Flexible;
@@ -146,12 +146,6 @@
             "
                 Layouting
             "
-            baseMinSizeForOrientation: orientation => (
-              layoutForOrientation: orientation
-                  ~ ifShrinkWrap: [           ^ 0 "Take children into account?" ]
-                    ifFlexible:   [           ^ 0                               ]
-                    ifRigid:      [ :extent | ^ extent                          ]
-            );
 
             minSizeForOrientation: orientation => (
                 layouter calculateMinSizeForMorph: self Orientation: orientation
@@ -160,19 +154,9 @@
             minSize => morphic X: (minSizeForOrientation: morphic orientations Horizontal)
                                Y: (minSizeForOrientation: morphic orientations Vertical);
 
-            basePreferredSizeForOrientation: orientation => (
-                layoutForOrientation: orientation
-                  ~ ifShrinkWrap: [           ^ minSizeForOrientation: orientation                         ]
-                    ifFlexible:   [           ^ 'Tried to access preferred size of flexible layout!' throw ]
-                    ifRigid:      [ :extent | ^ extent                                                     ]
-            );
-
             preferredSizeForOrientation: orientation => (
                 layouter calculatePreferredSizeForMorph: self Orientation: orientation
             );
-
-            preferredSize => morphic X: (preferredSizeForOrientation: morphic orientations Horizontal)
-                                     Y: (preferredSizeForOrientation: morphic orientations Vertical);
 
             layoutChildrenWithConstraints: constraints => (
                 childrenWithBoundsDo: [ :c :b |
