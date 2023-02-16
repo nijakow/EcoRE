@@ -9,40 +9,42 @@
 
         writeOn: w => w << 'a layouter';
 
-        protected CalcFitMorph: morph ToConstraints: constraints Actual: actual Orientation: orientation => (
+        protected ShrinkConstraints: constraints ForMorph: morph Orientation: orientation => (
             morph layoutForOrientation: orientation
-              ~ ifShrinkWrap: [           ^ (actual      dimensionForOrientation: orientation) ]
+              ~ ifShrinkWrap: [           ^ (morph minSizeForOrientation: orientation)         ]
                 ifFlexible:   [           ^ (constraints dimensionForOrientation: orientation) ]
                 ifRigid:      [ :extent | ^ extent                                             ]
         );
 
-        protected FitMorph: morph ToConstraints: constraints Actual: actual => (
-            morph resize: (morphic W: (CalcFitMorph: morph ToConstraints: constraints Actual: actual Orientation: (morphic orientation Horizontal))
-                                   H: (CalcFitMorph: morph ToConstraints: constraints Actual: actual Orientation: (morphic orientation Vertical))
+        protected ShrinkConstraints: constraints ForMorph: morph => (
+            morphic X: (ShrinkConstraints: constraints ForMorph: morph Orientation: (morphic orientation Horizontal))
+                    Y: (ShrinkConstraints: constraints ForMorph: morph Orientation: (morphic orientation Vertical))
+        );
+
+        protected baseCalculateMinSizeForMorph: morph Orientation: orientation => (
+            | min <- 0 |
+            morph childrenDo: [ :c |
+                min <- min max: (c minSizeForOrientation: orientation)
+            ].
+          ^ min
         );
 
         calculateMinSizeForMorph: morph Orientation: orientation => (
             morph layoutForOrientation: orientation
-              ~ ifShrinkWrap: [
-                                  | m <- 0 |
-                                  morph childrenDo: [ :c |
-                                      m <- m max: (c minSizeForOrientation: orientation)
-                                  ].
-                                ^ m
-                              ]
-                ifFlexible:   [           ^ 0      ]
-                ifRigid:      [ :extent | ^ extent ]
+              ~ ifShrinkWrap: [           ^ baseCalculateMinSizeForMorph: morph Orientation: orientation ]
+                ifFlexible:   [           ^ baseCalculateMinSizeForMorph: morph Orientation: orientation ]
+                ifRigid:      [ :extent | ^ extent                                                       ]
         );
 
         calculatePreferredSizeForMorph: morph Orientation: orientation Constraint: constraint => (
             morph layoutForOrientation: orientation
-              ~ ifShrinkWrap: [           ^ minSizeForOrientation: orientation ]
-                ifFlexible:   [           ^ constraint                         ]
-                ifRigid:      [ :extent | ^ extent                             ]
+              ~ ifShrinkWrap: [           ^ calculateMinSizeForMorph: morph Orientation: orientation ]
+                ifFlexible:   [           ^ constraint "TODO: Max it with the min size?"             ]
+                ifRigid:      [ :extent | ^ extent                                                   ]
         );
 
         layoutMorph: morph Constraints: constraints => (
-            FitMorph: morph ToConstraints: constraints Actual: (morph minSize)
+            
         );
     };
 
@@ -97,8 +99,9 @@
         );
 
         layoutMorph: morph Constraints: constraints => (
+            | shrunkConstraints <- ShrinkConstraints: constraints ForMorph: morph |
+
             |
-                rigidCount <- 0,
                 flexCount  <- 0,
                 offset     <- 0,
                 cross      <- 0
@@ -116,9 +119,8 @@
                 "
                 (Layout: child) isFlexible
                   ~ if: [ flexCount <- flexCount + 1.
-                          cross     <- cross max: (OppositePreferredSize: child Constraints: constraints) ]
-                  else: [ rigidCount <- rigidCount + 1.
-
+                          cross     <- cross max: (OppositePreferredSize: child Constraints: shrunkConstraints) ]
+                  else: [
                           "
                               Since we know the size of the child along the main axis,
                               we can calculate its size directly by layouting it.
@@ -130,19 +132,19 @@
                           "
                           |
                               childConstraints <- TransformedW: (morph minSizeForOrientation: orientation)
-                                                             H: (constraints dimensionForOrientation: (orientation opposite)),
+                                                             H: (shrunkConstraints dimensionForOrientation: (orientation opposite)),
                               childDimensions  <- child layoutWithConstraints: childConstraints
                           |
 
-                          "We add the size of the child to the main axis."
-                          offset <- offset + (childDimensions dimensionForOrientation: orientation).
-                          cross  <- cross max: (childDimensions dimensionForOrientation: (orientation opposite)).
+                          "We add the preferred size of the child to the main axis."
+                          offset <- offset + (childConstraints dimensionForOrientation: orientation).
+                          cross  <- cross max: (childConstraints dimensionForOrientation: (orientation opposite)).
                         ].
             ].
 
             "Here we calculate the size of all flexible children."
             |
-                remainingSpace <- (constraints dimensionForOrientation: orientation) - offset,
+                remainingSpace <- (shrunkConstraints dimensionForOrientation: orientation) - offset,
                 flexSize       <- (flexCount isZero) if: [ 0 ] else: [ remainingSpace / flexCount ],
                 flexDimensions <- (TransformedW: flexSize H: cross),  "We only calculate it once, for efficiency."
                 position       <- 0
@@ -155,18 +157,16 @@
 
                 "Now that we know the size distribution we can also layout the flexible children."
                 (Layout: child) isFlexible
-                  ~ if: [ child layoutWithConstraintsIfNeeded: flexDimensions ].
+                  ~ if: [ child layoutWithConstraintsIfNeeded: flexDimensions ]
                 
                 "As before, we increment the position along the main axis."
                 position <- position + (child extentForOrientation: orientation).
             ].
 
             "
-                Finally, we resize the morph to fit the calculated constraints.
-                ShrinkWrap will therefore react to the new size of the children instead of their
-                pre-calculated layouts.
+                Finally, we resize the morph to fit the constraints.
             "
-            FitMorph: morph ToConstraints: constraints Actual: (TransformedW: position H: cross).
+            morph resize: shrunkConstraints.
         );
 
         writeOn: w => w << 'a flex layouter';
@@ -181,6 +181,8 @@
         with inherited layouterTrait = $ LayouterTrait;
 
         layoutMorph: morph Constraints: constraints => (
+            | shrunkConstraints <- ShrinkConstraints: constraints ForMorph: morph |
+
             |
                 minWidth  <- 0,
                 minHeight <- 0
@@ -189,12 +191,12 @@
             morph childrenDo: [ :child |
                 child moveTo: (morphic Origin).
 
-                | childDimensions <- child layoutWithConstraints: constraints |
+                | childDimensions <- child layoutWithConstraints: shrunkConstraints |
                 minWidth  <- minWidth  max: (childDimensions width).
                 minHeight <- minHeight max: (childDimensions height).
             ].
 
-            FitMorph: morph ToConstraints: constraints Actual: (morphic W: minWidth H: minHeight).
+            morph resize: shrunkConstraints.
         );
 
         writeOn: w => w << 'a stack layouter';
