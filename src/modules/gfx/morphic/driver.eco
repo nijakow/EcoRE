@@ -46,7 +46,7 @@
                 ([ morph handMorph offset x != mouseX ] or: [ morph handMorph offset y != mouseY ]) -> [
                     morph handMorph moveToX: mouseX Y: mouseY.
                 ].
-                "morph dumpOn: std io out."
+                morph dumpOn: std io out.
                 morph maybeUpdate.
                 morph render.
                 1 to: 10000 do: [ :i | i * i ]. "just to slow down rendering"

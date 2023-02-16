@@ -39,14 +39,16 @@
         calculatePreferredSizeForMorph: morph Orientation: orientation Constraint: constraint => (
             morph layoutForOrientation: orientation
               ~ ifShrinkWrap: [           ^ calculateMinSizeForMorph: morph Orientation: orientation ]
-                ifFlexible:   [           ^ constraint "TODO: Max it with the min size?"             ]
+                ifFlexible:   [           ^ constraint                                               ]
                 ifRigid:      [ :extent | ^ extent                                                   ]
         );
 
         layoutMorph: morph Constraints: constraints => (
+            | shrunkConstraints <- ShrinkConstraints: constraints ForMorph: morph |
             morph childrenDo: [ :c |
                 c layoutInPlace
             ].
+            morph resizeTo: shrunkConstraints.
         );
     };
 
@@ -173,7 +175,7 @@
             "
                 Finally, we resize the morph to fit the constraints.
             "
-            morph resize: shrunkConstraints.
+            morph resizeTo: shrunkConstraints.
         );
 
         writeOn: w => w << 'a flex layouter';
@@ -200,7 +202,7 @@
                 child layoutWithConstraints: shrunkConstraints.
             ].
 
-            morph resize: shrunkConstraints.
+            morph resizeTo: shrunkConstraints.
         );
 
         writeOn: w => w << 'a stack layouter';
