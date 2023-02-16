@@ -27,13 +27,12 @@
             world => Yes: self;
 
             maybeUpdate => (
-                undirty.
-                layoutInPlaceIfNeeded.
+                forcelayoutInPlace.
             );
 
             renderOn: renderer => (
-                "renderer setR: 200 G: 200 B: 200.
-                renderer fillRectX: 0 Y: 0 W: bounds w H: bounds h."
+                renderer setR: 200 G: 200 B: 200.
+                renderer fillRectX: 0 Y: 0 W: width H: height.
                 renderChildrenOn: renderer.
             );
 

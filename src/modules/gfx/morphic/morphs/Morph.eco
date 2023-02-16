@@ -4,6 +4,7 @@
         protected morphic = $ morphic;
 
         offset, dimensions,
+        cachedGlobalOffset,
         xLayout, yLayout, layouter,
         parent, children;
 
@@ -11,13 +12,14 @@
             static with inherited _ = std Trait;
 
             initWithChildConfig: config => (
-                offset          <- (morphic X: 0 Y: 0).
-                dimensions      <- (morphic W: 0 H: 0).
-                xLayout         <- (morphic layouts Flexible).
-                yLayout         <- (morphic layouts Flexible).
-                layouter        <- (morphic layouters Default).
-                parent          <- No.
-                children        <- config new.
+                offset             <- (morphic X: 0 Y: 0).
+                dimensions         <- (morphic W: 0 H: 0).
+                cachedGlobalOffset <- No.
+                xLayout            <- (morphic layouts Flexible).
+                yLayout            <- (morphic layouts Flexible).
+                layouter           <- (morphic layouters Default).
+                parent             <- No.
+                children           <- config new.
               ^ self
             );
 
@@ -55,8 +57,16 @@
               ^ self
             );
 
-            noParent  => parent <- No.
-            parent: p => parent <- Yes: p;
+            noParent  => (
+                parent       <- No.
+                invalidateGlobalOffsetCache.
+              ^ self
+            );
+            parent: p => (
+                parent       <- Yes: p;
+                invalidateGlobalOffsetCache.
+              ^ self
+            );
 
             isIn: morph => (
                 (self == morph) -> [ ^ true ].
@@ -69,6 +79,7 @@
                     (children add: child) unless: [ ^ false ].
                     child unlink.
                     child parent: self.
+                    layoutChanged.
                   ^ true
                 ].
               ^ false
@@ -82,7 +93,7 @@
 
             remove: child => (
                 (children remove: child)
-                  ~ if: [ child noParent. ].
+                  ~ if: [ child noParent. layoutChanged. ].
               ^ self
             );
 
@@ -106,8 +117,26 @@
                 dimensions dimensionForOrientation: orientation
             );
 
+            globalOffset => (
+                cachedGlobalOffset
+                  ~ yes: [ :v | ^ v ]
+                     no: [  |
+                                goffset <- parent yes: [ :p | (p globalOffset + offset) ]
+                                                   no: [      offset                    ]
+                            |
+                            cachedGlobalOffset <- Yes: goffset.
+                          ^ goffset
+                     ].
+            );
+            invalidateGlobalOffsetCache => (
+                cachedGlobalOffset <- No.
+                childrenDo: [ :c | c invalidateGlobalOffsetCache ].
+              ^ self
+            );
+
             move: point => (
-                offset <- point.
+                offset       <- point.
+                globalOffset <- No.  "Invalidates the cached global offset."
               ^ self
             );
 
@@ -174,12 +203,15 @@
                         Y: (preferredSizeForOrientation: (morphic orientations Vertical)   Constraint: (constraints y))
             );
 
+            layoutChanged => self;
+
             layoutChildrenWithConstraints: constraints => (
                 childrenWithBoundsDo: [ :c :b |
-                    c layoutWithConstraintsIfChanged: constraints.
+                    c layoutWithConstraints: constraints.
                 ].
             );
-            layoutWithConstraints: constraints => layouter layoutMorph: self Constraints: constraints;
+            forceLayoutWithConstraints: constraints => layouter layoutMorph: self Constraints: constraints;
+            layoutWithConstraints: constraints => forceLayoutWithConstraints: constraints;
             layoutInplaceIfChanged => layoutWithConstraints: dimensions;
 
             "
