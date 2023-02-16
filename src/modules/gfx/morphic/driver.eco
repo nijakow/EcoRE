@@ -37,7 +37,7 @@
                              W: renderer width
                              H: renderer height.
                 morph renderer: renderer.
-                
+
                 morph layoutInPlace.
                 app openInWorld: morph.
             );
