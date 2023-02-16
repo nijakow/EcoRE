@@ -139,6 +139,9 @@
                 globalOffset <- No.  "Invalidates the cached global offset."
               ^ self
             );
+            moveTo: point => move: point;
+
+            moveToX: x Y: y => move: (morphic X: x Y: y);
 
             resize: point => (
                 dimensions <- point.
@@ -180,7 +183,6 @@
             "
                 Layouting
             "
-
             baseMinWidth => 0;
             baseMinHeight => 0;
 
@@ -194,8 +196,8 @@
                 layouter calculateMinSizeForMorph: self Orientation: orientation
             );
 
-            minWidth => minSizeForOrientation: (morphic orientations Horizontal);
-            minHeight => minSizeForOrientation: (morphic orientations Vertical);
+            minWidth => minSizeForOrientation: (morphic orientation Horizontal);
+            minHeight => minSizeForOrientation: (morphic orientation Vertical);
 
             minSize => morphic X: minWidth Y: minHeight;
 
@@ -204,16 +206,16 @@
             );
 
             preferredSizeWithConstraints: constraints => (
-                morphic X: (preferredSizeForOrientation: (morphic orientations Horizontal) Constraint: (constraints x))
-                        Y: (preferredSizeForOrientation: (morphic orientations Vertical)   Constraint: (constraints y))
+                morphic X: (preferredSizeForOrientation: (morphic orientation Horizontal) Constraint: (constraints x))
+                        Y: (preferredSizeForOrientation: (morphic orientation Vertical)   Constraint: (constraints y))
             );
 
             layoutChanged => self;
 
             forceLayoutWithConstraints: constraints => layouter layoutMorph: self Constraints: constraints;
             layoutWithConstraints: constraints => forceLayoutWithConstraints: constraints;
-            layoutInplaceIfChanged => layoutWithConstraints: dimensions;
-            layoutInPlace => layoutInplaceIfChanged;
+            forceLayoutInPlace => layoutWithConstraints: dimensions;
+            layoutInPlace => forceLayoutInPlace;
 
             "
                 Rendering
@@ -228,6 +230,13 @@
             renderOn: renderer => (
                 renderChildrenOn: renderer;
             );
+
+            dumpOn: w Indentation: i => (
+                0 to: i do: [ :j | w << '  ' ].
+                (w << self << ' ' << offset << ' ' << globalOffset) newline commit.
+                childrenDo: [ :c | c dumpOn: w Indentation: (i + 1) ].
+            );
+            dumpOn: w => dumpOn: w Indentation: 0;
 
             writeOn: w => w << 'a morph';
         };

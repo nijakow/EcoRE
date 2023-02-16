@@ -90,6 +90,9 @@
               ^ self
             );
 
+            width  => x;
+            height => y;
+
             + p => NewX: x + p x Y: y + p y;
             - p => NewX: x - p x Y: y - p y;
 

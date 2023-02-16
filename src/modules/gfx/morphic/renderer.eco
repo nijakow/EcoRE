@@ -3,9 +3,8 @@
         static with inherited _ = std Clonable;
         private morphic = $;
 
+        width, height,
         protected offsets,
-        protected width,
-        protected height,
         protected sdlRenderer;
 
         with inherited trait = {
@@ -20,7 +19,7 @@
 
             offset => offsets top;
             pushOffset: point => offsets push: point;
-            popOffset => boundsstack pop;
+            popOffset => offsets pop;
             withPushedOffset: offset Do: block => (
                 pushOffset: offset.
                 block value.

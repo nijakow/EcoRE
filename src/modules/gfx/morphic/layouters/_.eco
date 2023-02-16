@@ -5,7 +5,7 @@
     own LayouterTrait = {
         static with inherited _ = std Trait;
         protected module = $;
-        protected morphic => morphic morphic;
+        protected morphic => module morphic;
 
         writeOn: w => w << 'a layouter';
 
@@ -44,7 +44,9 @@
         );
 
         layoutMorph: morph Constraints: constraints => (
-            morph childrenDo: [ :c | c layoutInplaceIfChanged ].
+            morph childrenDo: [ :c |
+                c layoutInPlace
+            ].
         );
     };
 
@@ -61,8 +63,8 @@
 
         orientation;
 
-        initWithOrientation: orientation => (
-            orientation <- orientation.
+        initWithOrientation: _orientation => (
+            orientation <- _orientation.
           ^ self
         );
 
@@ -97,7 +99,7 @@
           ^ minSize
         );
 
-        calculateMinSizeForMorph: morph Orientation: morphOrientation => (
+        protected baseCalculateMinSizeForMorph: morph Orientation: morphOrientation => (
             (morphOrientation == orientation)
               ~ if: [ calculateMinSizeForMorphMainAxis:  morph ]
               else: [ calculateMinSizeForMorphCrossAxis: morph ]
@@ -162,7 +164,7 @@
 
                 "Now that we know the size distribution we can also layout the flexible children."
                 (Layout: child) isFlexible
-                  ~ if: [ child layoutWithConstraintsIfNeeded: flexDimensions ]
+                  ~ if: [ child layoutWithConstraints: flexDimensions ].
                 
                 "As before, we increment the position along the main axis."
                 position <- position + (child extentForOrientation: orientation).
@@ -195,10 +197,7 @@
 
             morph childrenDo: [ :child |
                 child moveTo: (morphic Origin).
-
-                | childDimensions <- child layoutWithConstraints: shrunkConstraints |
-                minWidth  <- minWidth  max: (childDimensions width).
-                minHeight <- minHeight max: (childDimensions height).
+                child layoutWithConstraints: shrunkConstraints.
             ].
 
             morph resize: shrunkConstraints.

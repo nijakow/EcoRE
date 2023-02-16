@@ -27,7 +27,7 @@
             world => Yes: self;
 
             maybeUpdate => (
-                forcelayoutInPlace.
+                forceLayoutInPlace.
             );
 
             renderOn: renderer => (
