@@ -1,11 +1,11 @@
 {
     static with inherited _ = std Module;
-    protected morphic = $;
+    morphic = $;
 
     own LayouterTrait = {
         static with inherited _ = std Trait;
         protected module = $;
-        protected morphic => module morphic;
+        protected morphic => morphic morphic;
 
         writeOn: w => w << 'a layouter';
 
@@ -60,6 +60,11 @@
         with inherited layouterTrait = $ LayouterTrait;
 
         orientation;
+
+        initWithOrientation: orientation => (
+            orientation <- orientation.
+          ^ self
+        );
 
         protected W: w H: h => morphic W: w H: h;
         protected TransformedW: w H: h => (
@@ -172,8 +177,8 @@
         writeOn: w => w << 'a flex layouter';
     };
 
-    own HFlexLayouter = FlexLayouter clone initWithOrientation: (morphic orientation Horizontal);
-    own VFlexLayouter = FlexLayouter clone initWithOrientation: (morphic orientation Vertical);
+    own HFlex = self Flex clone initWithOrientation: (self morphic orientation Horizontal);
+    own VFlex = self Flex clone initWithOrientation: (self morphic orientation Vertical);
 
 
     own Stack = {
