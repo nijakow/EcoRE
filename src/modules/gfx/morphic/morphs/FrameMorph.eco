@@ -12,13 +12,9 @@
           ^ self
         );
 
-        margin => 10;
-
-        innerRect => morphic Rectangle newX: margin Y: margin W: (bounds w - (margin * 2)) H: (bounds h - (margin * 2));
-
         renderOn: renderer => (
             renderer setR: 40 G: 40 B: 40.
-            renderer drawRectX: 0 Y: 0 W: bounds w H: bounds h.
+            renderer drawRectX: 0 Y: 0 W: width H: height.
             $(Morph) renderOn: renderer.
         );
 

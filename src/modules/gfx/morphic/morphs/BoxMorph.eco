@@ -15,7 +15,7 @@
 
             renderOn: renderer => (
                 renderer setR: 40 G: 40 B: 40.
-                renderer drawRectX: 0 Y: 0 W: bounds w H: bounds h.
+                renderer drawRectX: 0 Y: 0 W: width H: height.
                 $(Morph) renderOn: renderer.
             );
 

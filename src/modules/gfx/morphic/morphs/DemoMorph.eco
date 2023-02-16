@@ -23,7 +23,7 @@
 
             renderOn: renderer => (
                 renderer setR: r G: g B: b.
-                renderer fillRectX: 0 Y: 0 W: bounds w H: bounds h.
+                renderer fillRectX: 0 Y: 0 W: width H: height.
                 $(Morph) renderOn: renderer.
             );
 
