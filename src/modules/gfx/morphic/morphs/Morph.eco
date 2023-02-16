@@ -4,10 +4,13 @@
         protected morphic = $ morphic;
 
         offset, dimensions,
-        protected cachedGlobalOffset,
-        protected cachedLayoutingConstraints,
         xLayout, yLayout, layouter,
         parent, children;
+
+        protected cachedGlobalOffset,
+        protected cachedLayoutingConstraints,
+        protected isRenderDirty,
+        protected isChildRenderDirty;
 
         with inherited trait = {
             static with inherited _ = std Trait;
@@ -15,13 +18,18 @@
             initWithChildConfig: config => (
                 offset             <- (morphic X: 0 Y: 0).
                 dimensions         <- (morphic W: 0 H: 0).
-                cachedGlobalOffset <- No.
-                cachedLayoutingConstraints <- No.
                 xLayout            <- (morphic layouts Flexible).
                 yLayout            <- (morphic layouts Flexible).
                 layouter           <- (morphic layouters Default).
                 parent             <- No.
                 children           <- config new.
+
+                "Caches"
+                cachedGlobalOffset         <- No.
+                cachedLayoutingConstraints <- No.
+                isRenderDirty              <- true.
+                isChildRenderDirty         <- true.
+
               ^ self
             );
 
@@ -213,9 +221,13 @@
                         Y: (preferredSizeForOrientation: (morphic orientation Vertical)   Constraint: (constraints y))
             );
 
-            layoutChanged => (
+            recursiveLayoutChanged => (
                 cachedLayoutingConstraints <- No.
-                parent yes: [ :p | p layoutChanged ].
+                parent yes: [ :p | p recursiveLayoutChanged ].
+            );
+            layoutChanged => (
+                renderDirty.
+                recursiveLayoutChanged.
             );
 
             protected layoutDirtyForConstraints: constraints => (
@@ -225,6 +237,7 @@
             );
 
             forceLayoutWithConstraints: constraints => (
+                (std io out << 'Relayouting ' << self << ' at ' << offset) newline commit.
                 layouter layoutMorph: self Constraints: constraints.
                 cachedLayoutingConstraints <- Yes: constraints.
             );
@@ -236,9 +249,21 @@
             );
             layoutInPlace => layoutWithConstraints: dimensions;
 
+
             "
                 Rendering
             "
+            childRenderDirty => (
+                (isChildRenderDirty not) if: [
+                    isChildRenderDirty <- true.
+                    parent yes: [ :p | p childRenderDirty ].
+                ]
+            );
+            renderDirty => (
+                isRenderDirty <- true.
+                childRenderDirty.
+            );
+
             renderChildrenOn: renderer => (
                 childrenDo: [ :c |
                     renderer pushOffset: c globalOffset.
@@ -246,11 +271,34 @@
                     renderer popOffset.
                 ].
             );
+            renderImplOn: renderer => (
+                renderChildrenOn: renderer.
+            );
             renderOn: renderer => (
-                renderChildrenOn: renderer;
+                renderImplOn: renderer.
+                isRenderDirty    <- false.
+                childRenderDirty <- false.
+            );
+            
+            maybeRenderChildrenOn: renderer => (
+                isChildRenderDirty
+                  ~ if: [
+                            childrenDo: [ :c |
+                               c maybeRenderOn: renderer.
+                            ].
+                        ]
+            );
+            maybeRenderOn: renderer => (
+                isRenderDirty
+                  ~ if: [ renderOn: renderer ]
+                maybeRenderChildrenOn: renderer.
+                childRenderDirty <- false.
             );
 
 
+            "
+                Events
+            "
             containsPoint: point => (
                      [ [ point x >= offset x ] and: [ point x <= (offset x + dimensions x) ] ]
                 and: [ [ point y >= offset y ] and: [ point y <= (offset y + dimensions y) ] ]

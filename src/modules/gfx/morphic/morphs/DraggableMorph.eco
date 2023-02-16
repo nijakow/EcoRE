@@ -9,10 +9,10 @@
               ^ self
             );
 
-            renderOn: renderer => (
+            renderImplOn: renderer => (
                 renderer setR: 80 G: 0 B: 80.
                 renderer fillRectX: 0 Y: 0 W: width H: height.
-                $(FrameMorph) renderOn: renderer.
+                $(FrameMorph) renderImplOn: renderer.
             );
 
             handleClickAt: point HandMorph: hand => ( hand grab: self. ^ true );

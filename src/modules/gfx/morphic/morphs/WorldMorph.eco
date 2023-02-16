@@ -30,10 +30,10 @@
                 forceLayoutInPlace.
             );
 
-            renderOn: renderer => (
+            renderImplOn: renderer => (
                 renderer setR: 200 G: 200 B: 200.
                 renderer fillRectX: 0 Y: 0 W: width H: height.
-                renderChildrenOn: renderer.
+                $(Morph) renderImplOn: renderer.
             );
 
             render => (

@@ -12,10 +12,10 @@
           ^ self
         );
 
-        renderOn: renderer => (
+        renderImplOn: renderer => (
             renderer setR: 40 G: 40 B: 40.
             renderer drawRectX: 0 Y: 0 W: width H: height.
-            $(Morph) renderOn: renderer.
+            $(Morph) renderImplOn: renderer.
         );
 
         writeOn: w => w << 'a frame morph';

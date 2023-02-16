@@ -21,10 +21,10 @@
               ^ self
             );
 
-            renderOn: renderer => (
+            renderImplOn: renderer => (
                 renderer setR: r G: g B: b.
                 renderer fillRectX: 0 Y: 0 W: width H: height.
-                $(Morph) renderOn: renderer.
+                $(Morph) renderImplOn: renderer.
             );
 
             writeOn: w => w << 'a demo morph';

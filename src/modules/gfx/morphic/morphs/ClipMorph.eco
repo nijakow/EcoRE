@@ -9,9 +9,9 @@
           ^ self
         );
 
-        renderOn: renderer => (
+        renderImplOn: renderer => (
             renderer withClipW: (dimensions width) H: (dimensions height) Do: [
-                $(FrameMorph) renderOn: renderer.
+                $(FrameMorph) renderImplOn: renderer.
             ];
         );
 
