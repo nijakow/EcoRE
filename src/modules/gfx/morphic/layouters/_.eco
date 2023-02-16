@@ -1,0 +1,76 @@
+{
+    static with inherited _ = std Module;
+    protected morphic = $;
+
+    own LayouterTrait = {
+        static with inherited _ = std Trait;
+        protected module = $;
+        protected morphic => module morphic;
+
+        writeOn: w => w << 'a layouter';
+
+        layoutNode: node Dimensions: constraints => self;  "TODO: Return a dimension?"
+    };
+
+    own FlexLayouter = {
+        static with inherited _ = std Clonable;
+        with inherited LayouterTrait = $ LayouterTrait;
+
+        orientation;
+
+        protected W: w H: h => "TODO: Make dimensions" self;
+        protected TransformedW: w H: h => (
+            orientation ifHorizontal: [ W: w H: h ] ifVertical: [ W: h H: w ]
+        );
+        protected Transformed: dimensions => (
+            TransformedW: (dimensions width) H: (dimensions height)
+        );
+        protected Layout: node => node layoutForOrientation: orientation;
+        protected OppositeLayout: node => node layoutForOrientation: (orientation opposite);
+        protected PreferredSize: node => node preferredSizeForOrientation: orientation;
+        protected OppositePreferredSize: node => node preferredSizeForOrientation: (orientation opposite);
+
+        layoutNode: node Dimensions: constraints => (
+            |
+                rigidCount <- 0,
+                flexCount  <- 0,
+                offset     <- 0,
+                cross      <- 0
+            |
+            node childrenDo: [ :child |
+                (Layout: child) isFlexible
+                  ~ if: [ flexCount <- flexCount + 1 ]
+                  else: [ rigidCount <- rigidCount + 1.
+                          "Since we're not flexible, we can just use the preferred size."
+                          "ALSO, WE CAN LAYOUT THE CHILDREN HERE!"
+                          offset <- offset + (PreferredSize: child). ].
+                
+                "TODO: Calculate 'cross', the cross size of the layout."
+                (OppositeLayout: child) isFlexible not
+                  ~ if: [ cross <- cross max: (OppositePreferredSize: child) ].
+            ].
+
+            "Snap the cross size to the constraints."
+            cross <- cross min: (constraints dimensionForOrientation: (orientation opposite)).
+
+            |
+                remainingSpace <- (constraints dimensionForOrientation: orientation) - offset,
+                flexSize       <- remainingSpace / flexCount,
+                flexDimensions <- (TransformedW: flexSize H: cross)  "We only calculate it once, for efficiency."
+                position       <- 0
+            |
+            node childrenDo: [ :child |
+                "TODO: Set the new bounds of the child."
+                (Layout: child) isFlexible
+                  ~ if: [ child layoutDimensionsIfNeeded: flexDimensions                        ]
+                  else: [ child layoutDimensionsIfNeeded: (Transformed: (PreferredSize: child)) ]. "No need for this!"
+                child moveTo: (TransformedW: position H: 0).
+            ]
+        );
+
+        writeOn: w => w << 'a flex layouter';
+    };
+
+    own HFlexLayouter = FlexLayouter clone initWithOrientation: (morphic orientation Horizontal);
+    own VFlexLayouter = FlexLayouter clone initWithOrientation: (morphic orientation Vertical);
+}

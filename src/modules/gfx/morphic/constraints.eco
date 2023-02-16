@@ -67,6 +67,11 @@
               ^ self
             );
 
+            constraintForOrientation: orientation => (
+                orientation ifHorizontal: [ width  ]
+                              ifVertical: [ height ]
+            );
+
             writeOn: w => w << 'Constraints(' << width << ',' << height << ')';
         }
     };
@@ -94,6 +99,11 @@
                 width  <- _width.
                 height <- _height.
               ^ self
+            );
+
+            dimensionForOrientation: orientation => (
+                orientation ifHorizontal: [ width  ]
+                              ifVertical: [ height ]
             );
 
             writeOn: w => w << 'Dimension(' << width << ',' << height << ')';
