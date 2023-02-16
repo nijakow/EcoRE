@@ -248,6 +248,36 @@
                 renderChildrenOn: renderer;
             );
 
+
+            containsPoint: point => (
+                     [ [ point x >= offset x ] and: [ point x <= (offset x + dimensions x) ] ]
+                and: [ [ point y >= offset y ] and: [ point y <= (offset y + dimensions y) ] ]
+            );
+
+            dispatchEvent: block At: point => (
+                childrenReverseDo: [ :c |
+                    c containsPoint: point
+                      ~ if: [ (c dispatchEvent: block At: (point - offset)) -> [ ^ true ] ]
+                ].
+                block value(self, point) -> [ ^ true ].
+              ^ false
+            );
+
+            xRayAt: point Do: block => (
+                block value(self).
+                childrenDo: [ :c |
+                    c containsPoint: point
+                      ~ if: [ c xRayAt: (point - offset) Do: block ]
+                ].
+              ^ self
+            );
+
+            handleDropMorph: morph At: point => false;
+            handleClickAt: point HandMorph: hand => false;
+
+            dropMorph: morph At: point => dispatchEvent: [ :e :point | e handleDropMorph: morph At: point ] At: point;
+            clickAt: point HandMorph: hand => dispatchEvent: [ :e :point | e handleClickAt: point HandMorph: hand ] At: point;
+
             dumpOn: w Indentation: i => (
                 0 to: i do: [ :j | w << '  ' ].
                 (w << self << ' ' << offset << ' ' << globalOffset << ', dimensions ' << dimensions << ' -- ' << xLayout << ' | ' << yLayout) newline commit.

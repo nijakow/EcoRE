@@ -17,16 +17,16 @@
             grab: morph => (
                 | p <- morph globalOffset - globalOffset |
                 add: morph.
-                morph moveToX: p x Y: p y. "TODO: Keep offset"
+                morph moveTo: p. "TODO: Keep offset"
                 grabbedMorph <- Yes: morph.
               ^ self
             );
 
             click => (
-                | gb <- globalBounds |
+                | gb <- globalOffset |
                 grabbedMorph
-                  ~ yes: [ :m | world yes: [ :w | (w dropMorph: m AtX: gb x Y: gb y) -> [ grabbedMorph <- No ] ] ]
-                     no: [      world yes: [ :w | w clickAtX: gb x Y: gb y HandMorph: self ] ]
+                  ~ yes: [ :m | world yes: [ :w | (w dropMorph: m At: gb) -> [ grabbedMorph <- No ] ] ]
+                     no: [      world yes: [ :w | (w clickAt: gb HandMorph: self) ] ]
             );
 
             leftClick => click;

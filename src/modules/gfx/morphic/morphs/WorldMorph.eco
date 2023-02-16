@@ -41,14 +41,14 @@
                 renderer present.
             );
 
-            handleDropMorph: morph AtX: x Y: y => (
-                | gb <- globalBounds, mgb <- morph globalBounds |
+            handleDropMorph: morph At: point => (
+                | gb <- globalOffset, mgb <- morph globalOffset |
                 (tryAdd: morph) -> [
-                    morph moveToX: (mgb x - gb x) Y: (mgb y - gb y).
+                    morph moveTo: (mgb - gb).
                 ].
               ^ true
             );
-            handleClickAtX: x Y: y HandMorph: hand => false;
+            handleClickAt: point HandMorph: hand => false;
 
             open: morph => (
                 add: morph.
