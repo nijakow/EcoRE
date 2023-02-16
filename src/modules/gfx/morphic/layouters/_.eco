@@ -9,63 +9,109 @@
 
         writeOn: w => w << 'a layouter';
 
-        layoutNode: node Dimensions: constraints => self;  "TODO: Return a dimension?"
+        protected CalcFitMorph: morph ToConstraints: constraints Actual: actual Orientation: orientation => (
+            morph layoutForOrientation: orientation
+              ~ ifShrinkWrap: [           ^ (actual dimensionForOrientation: orientation) min: (constraints dimensionForOrientation: orientation) ]
+                ifFlexible:   [           ^ (constraints dimensionForOrientation: orientation)                                                    ]
+                ifRigid:      [ :extent | ^ extent                                                                                                ]
+        );
+
+        protected FitMorph: morph ToConstraints: constraints Actual: actual => (
+            morph resize: (morphic W: (CalcFitMorph: morph ToConstraints: constraints Actual: actual Orientation: (morphic orientation Horizontal))
+                                   H: (CalcFitMorph: morph ToConstraints: constraints Actual: actual Orientation: (morphic orientation Vertical))
+        );
+
+        calculateMinSizeForMorph: morph Orientation: orientation => (
+            morph baseMinSizeForOrientation: orientation
+        );
+
+        layoutMorph: morph Constraints: constraints => (
+            FitMorph: morph ToConstraints: constraints Actual: (morph minSize)
+        );
     };
 
-    own FlexLayouter = {
+    own Default = {
         static with inherited _ = std Clonable;
         with inherited LayouterTrait = $ LayouterTrait;
 
+        "No implementation"
+    };
+
+    "TODO: Throw this one away"
+    own Flex = {
+        static with inherited _ = std Clonable;
+        with inherited layouterTrait = $ LayouterTrait;
+
         orientation;
 
-        protected W: w H: h => "TODO: Make dimensions" self;
+        protected W: w H: h => morphic W: w H: h;
         protected TransformedW: w H: h => (
             orientation ifHorizontal: [ W: w H: h ] ifVertical: [ W: h H: w ]
         );
         protected Transformed: dimensions => (
             TransformedW: (dimensions width) H: (dimensions height)
         );
-        protected Layout: node => node layoutForOrientation: orientation;
-        protected OppositeLayout: node => node layoutForOrientation: (orientation opposite);
-        protected PreferredSize: node => node preferredSizeForOrientation: orientation;
-        protected OppositePreferredSize: node => node preferredSizeForOrientation: (orientation opposite);
+        protected Layout: morph => morph layoutForOrientation: orientation;
+        protected Extent: morph => morph extentForOrientation: orientation;
+        protected OppositeLayout: morph => morph layoutForOrientation: (orientation opposite);
+        protected PreferredSize: morph => morph preferredSizeForOrientation: orientation;
+        protected OppositePreferredSize: morph => morph preferredSizeForOrientation: (orientation opposite);
 
-        layoutNode: node Dimensions: constraints => (
+        protected calculateMinSizeForMorphMainAxis: morph => (
+            | minSize <- 0 |
+            morph childrenDo: [ :child |
+                minSize <- minSize + (child minSizeForOrientation: orientation).
+            ].
+          ^ minSize
+        );
+
+        protected calculateMinSizeForMorphCrossAxis: morph => (
+            | minSize <- 0 |
+            morph childrenDo: [ :child |
+                minSize <- minSize max: (child minSizeForOrientation: (orientation opposite)).
+            ].
+          ^ minSize
+        );
+
+        calculateMinSizeForMorph: morph Orientation: morphOrientation => (
+            (morphOrientation == orientation)
+              ~ if: [ calculateMinSizeForMorphMainAxis:  morph ]
+              else: [ calculateMinSizeForMorphCrossAxis: morph ]
+        );
+
+        layoutMorph: morph Constraints: constraints => (
             |
                 rigidCount <- 0,
                 flexCount  <- 0,
                 offset     <- 0,
                 cross      <- 0
             |
-            node childrenDo: [ :child |
+            morph childrenDo: [ :child |
                 (Layout: child) isFlexible
-                  ~ if: [ flexCount <- flexCount + 1 ]
+                  ~ if: [ flexCount <- flexCount + 1.
+                          cross     <- cross max: (OppositePreferredSize: child) ]
                   else: [ rigidCount <- rigidCount + 1.
-                          "Since we're not flexible, we can just use the preferred size."
-                          "ALSO, WE CAN LAYOUT THE CHILDREN HERE!"
-                          offset <- offset + (PreferredSize: child). ].
-                
-                "TODO: Calculate 'cross', the cross size of the layout."
-                (OppositeLayout: child) isFlexible not
-                  ~ if: [ cross <- cross max: (OppositePreferredSize: child) ].
+                          | childDimensions <- child layoutInplaceIfChanged |
+                          offset <- offset + (childDimensions dimensionForOrientation: orientation).
+                          cross  <- cross max: (childDimensions dimensionForOrientation: (orientation opposite)).
+                        ].
             ].
-
-            "Snap the cross size to the constraints."
-            cross <- cross min: (constraints dimensionForOrientation: (orientation opposite)).
 
             |
                 remainingSpace <- (constraints dimensionForOrientation: orientation) - offset,
-                flexSize       <- remainingSpace / flexCount,
+                flexSize       <- (flexCount isZero) if: [ 0 ] else: [ remainingSpace / flexCount ],
                 flexDimensions <- (TransformedW: flexSize H: cross)  "We only calculate it once, for efficiency."
                 position       <- 0
             |
-            node childrenDo: [ :child |
+            morph childrenDo: [ :child |
                 "TODO: Set the new bounds of the child."
-                (Layout: child) isFlexible
-                  ~ if: [ child layoutDimensionsIfNeeded: flexDimensions                        ]
-                  else: [ child layoutDimensionsIfNeeded: (Transformed: (PreferredSize: child)) ]. "No need for this!"
                 child moveTo: (TransformedW: position H: 0).
-            ]
+                (Layout: child) isFlexible
+                  ~ if: [ child layoutDimensionsIfNeeded: flexDimensions ].
+                position <- position + child extentForOrientation: orientation.
+            ].
+
+            FitMorph: morph ToConstraints: constraints Actual: (TransformedW: position H: cross).
         );
 
         writeOn: w => w << 'a flex layouter';

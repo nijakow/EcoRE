@@ -5,11 +5,15 @@
         static with inherited _ = std Singleton;
 
         with inherited trait = {
+            static with inherited _ = std Trait;
+
             ifShrinkWrap: shrinkwrap ifFlexible: flexible ifRigid: rigid => shrinkwrap value;
 
             isShrinkWrap => true;
             isFlexible => false;
             isRigid => false;
+
+            writeOn: w => w << 'ShrinkWrap';
         };
     };
 
@@ -17,23 +21,40 @@
         static with inherited _ = std Singleton;
 
         with inherited trait = {
+            static with inherited _ = std Trait;
+
             ifShrinkWrap: shrinkwrap ifFlexible: flexible ifRigid: rigid => flexible value;
 
             isShrinkWrap => false;
             isFlexible => true;
             isRigid => false;
+
+            writeOn: w => w << 'Flexible';
         };
     };
 
     own Rigid = {
-        static with inherited _ = std Singleton;
+        static with inherited _ = std Clonable;
+
+        extent;
 
         with inherited trait = {
-            ifShrinkWrap: shrinkwrap ifFlexible: flexible ifRigid: rigid => rigid value;
+            static with inherited _ = std Trait;
+
+            initWithExtent: _extent => (
+                extent <- _extent.
+              ^ self
+            );
+
+            ifShrinkWrap: shrinkwrap ifFlexible: flexible ifRigid: rigid => rigid value(extent);
 
             isShrinkWrap => false;
             isFlexible => false;
             isRigid => true;
+
+            writeOn: w => w << 'Rigid(' << extent << ')';
         };
     };
+
+    Rigid: extent => Rigid clone initWithExtent: extent;
 }

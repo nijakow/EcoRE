@@ -4,7 +4,7 @@
         protected morphic = $ morphic;
 
         offset, dimensions,
-        xLayout, yLayout;
+        xLayout, yLayout, layouter,
         parent, children;
 
         with inherited trait = {
@@ -15,6 +15,7 @@
                 dimensions      <- (morphic W: 0 H: 0).
                 xLayout         <- (morphic layouts Flexible).
                 yLayout         <- (morphic layouts Flexible).
+                layouter        <- (morphic layouters Default).
                 parent          <- No.
                 children        <- config new.
               ^ self
@@ -105,15 +106,17 @@
                 dimensions dimensionForOrientation: orientation
             );
 
-            moveTo: point => (
+            move: point => (
                 offset <- point.
               ^ self
             );
 
-            resizeTo: point => (
+            resize: point => (
                 dimensions <- point.
               ^ self
             );
+
+            move: _offset resize: _dimensions => move: _offset ~ resize: _dimensions;
 
 
             "
@@ -143,13 +146,30 @@
             "
                 Layouting
             "
+            baseMinSizeForOrientation: orientation => 0;
+
+            minSizeForOrientation: orientation => (
+                layouter calculateMinSizeForMorph: self Orientation: orientation
+            );
+
+            minSize => morphic X: (minSizeForOrientation: morphic orientations Horizontal)
+                               Y: (minSizeForOrientation: morphic orientations Vertical);
+
+            preferredSizeForOrientation: orientation => (
+                layoutForOrientation: orientation
+                  ~ ifFlexible:   [ 'Tried to access preferred size of flexible layout!' throw ]
+                    ifRigid:      [ extentForOrientation: orientation                          ]
+                    ifShrinkWrap: [ minSizeForOrientation: orientation                         ]
+            );
+
             layoutChildrenWithConstraints: constraints => (
                 childrenWithBoundsDo: [ :c :b |
                     c layoutWithConstraintsIfChanged: constraints.
                 ].
             );
-            layoutWithConstraints: constraints => self;
+            layoutWithConstraints: constraints => layouter layoutMorph: self Constraints: constraints;
             layoutWithConstraintsIfChanged: constraints => layoutWithConstraints: constraints;
+            layoutInplaceIfChanged => layoutWithConstraintsIfChanged: dimensions;
 
             "
                 Rendering
