@@ -1,0 +1,82 @@
+{
+    static with inherited _ = std Module;
+
+    own FullConstraints = {
+        static with inherited _ = std Clonable;
+
+        min, max;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            _initWithMin: _min Max: _max => (
+                min <- _min.
+                max <- _max.
+              ^ self
+            );
+
+            init => _initWithMin: No Max: No;
+            initWithMin: _min => _initWithMin: (Yes: _min) Max: No;
+            initWithMax: _max => _initWithMin: No Max: (Yes: _max);
+            initWithMin: _min Max: _max => _initWithMin: (Yes: _min) Max: (Yes: _max);
+
+            writeOn: w => w << 'FullConstraints(' << min << ',' << max << ')';
+        }
+    };
+
+    own constraints = {
+        static with inherited _ = std Module;
+
+        own None = {
+            static with inherited _ = std Singleton;
+
+            writeOn: w => w << 'None';
+        };
+
+        own Rigid = {
+            static with inherited _ = std Clonable;
+
+            extent;
+
+            with inherited trait = {
+                static with inherited _ = std Trait;
+
+                initWithExtent: _extent => (
+                    extent <- _extent.
+                  ^ self
+                );
+
+                writeOn: w => w << 'Rigid(' << extent << ')';
+            }
+        };
+
+        Rigid: extent => Rigid clone initWithExtent: extent;
+    };
+
+    own Constraints = {
+        static with inherited _ = std Clonable;
+
+        width, height;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithWidth: _width Height: _height => (
+                width  <- _width.
+                height <- _height.
+              ^ self
+            );
+
+            writeOn: w => w << 'Constraints(' << width << ',' << height << ')';
+        }
+    };
+
+    ConstraintsW: width => Constraints clone initWithWidth: (constraints Rigid: width) Height: (constraints None);
+    ConstraintsH: height => Constraints clone initWithWidth: (constraints None) Height: (constraints Rigid: height);
+    ConstraintsW: width H: height => Constraints clone initWithWidth: (constraints Rigid: width)
+                                                              Height: (constraints Rigid: height);
+
+    FullConstraintsMin: min => FullConstraints clone initWithMin: min;
+    FullConstraintsMax: max => FullConstraints clone initWithMax: max;
+    FullConstraintsMin: min Max: max => FullConstraints clone initWithMin: min Max: max;
+}
