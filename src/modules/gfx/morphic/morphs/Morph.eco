@@ -205,11 +205,6 @@
 
             layoutChanged => self;
 
-            layoutChildrenWithConstraints: constraints => (
-                childrenWithBoundsDo: [ :c :b |
-                    c layoutWithConstraints: constraints.
-                ].
-            );
             forceLayoutWithConstraints: constraints => layouter layoutMorph: self Constraints: constraints;
             layoutWithConstraints: constraints => forceLayoutWithConstraints: constraints;
             layoutInplaceIfChanged => layoutWithConstraints: dimensions;
@@ -219,15 +214,13 @@
             "
             renderChildrenOn: renderer => (
                 childrenDo: [ :c |
-                    renderer pushBounds: c bounds.
+                    renderer pushOffset: c globalOffset.
                     renderer accept: c.
-                    renderer popBounds.
+                    renderer popOffset.
                 ].
             );
             renderOn: renderer => (
-              isRenderDirty <- false.
-              isChildRenderDirty <- false.
-              renderChildrenOn: renderer;
+                renderChildrenOn: renderer;
             );
 
             writeOn: w => w << 'a morph';

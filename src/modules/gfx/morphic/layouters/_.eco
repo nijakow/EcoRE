@@ -44,7 +44,7 @@
         );
 
         layoutMorph: morph Constraints: constraints => (
-            
+            morph childrenDo: [ :c | c layoutInplaceIfChanged ].
         );
     };
 

@@ -1,50 +1,31 @@
 
     {
         static with inherited _ = std Clonable;
-        private module = $;
+        private morphic = $;
 
-        protected boundsstack,
-        protected clipstack,
+        protected offsets,
         protected sdlRenderer;
 
         with inherited trait = {
             initWithSDLRenderer: _sdl_renderer X: _x Y: _y W: _w H: _h => (
                 sdlRenderer <- _sdl_renderer.
-                boundsstack <- std util newStack.
-                boundsstack push: ((module Rectangle) newX: _x Y: _y W: _w H: _h).
-                clipstack <- std util newStack.
-                clipstack push: ((module Rectangle) newX: _x Y: _y W: _w H: _h).
+                offsets     <- std util newStack.
+                offsets push: (morphic Origin).
               ^ self
             );
 
-            bounds => boundsstack top;
-            pushBounds: b => boundsstack push: (b offsetByX: xOff Y: yOff);
-            popBounds => boundsstack pop;
-            withPushedBounds: b Do: block => (
-                pushBounds: b.
+            offset => offsets top;
+            pushOffset: point => offsets push: point;
+            popOffset => boundsstack pop;
+            withPushedOffset: offset Do: block => (
+                pushOffset: offset.
                 block value.
-                popBounds.
+                popOffset.
               ^ self
             );
 
-            clips => clipstack top;
-            pushClips: c => (
-              clipstack push: (c offsetByX: xOff Y: yOff).
-              sdlRenderer clip: clips.
-            );
-            popClips => (
-              clipstack pop.
-              sdlRenderer clip: clips.
-            );
-            withPushedClips: c Do: block => (
-                pushClips: c.
-                block value.
-                popClips.
-              ^ self
-            );
-
-            xOff => bounds x;
-            yOff => bounds y;
+            xOff => offset x;
+            yOff => offset y;
 
             clear => sdlRenderer clear;
             present => sdlRenderer present;

@@ -37,8 +37,7 @@
             );
 
             render => (
-                "renderer accept: self."
-                maybeRenderOn: renderer.
+                renderOn: renderer.
                 renderer present.
             );
 
