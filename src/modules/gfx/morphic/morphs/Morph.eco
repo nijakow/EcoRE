@@ -257,7 +257,7 @@
             dispatchEvent: block At: point => (
                 childrenReverseDo: [ :c |
                     c containsPoint: point
-                      ~ if: [ (c dispatchEvent: block At: (point - offset)) -> [ ^ true ] ]
+                      ~ if: [ (c dispatchEvent: block At: (point - c offset)) -> [ ^ true ] ]
                 ].
                 block value(self, point) -> [ ^ true ].
               ^ false
@@ -267,7 +267,7 @@
                 block value(self).
                 childrenDo: [ :c |
                     c containsPoint: point
-                      ~ if: [ c xRayAt: (point - offset) Do: block ]
+                      ~ if: [ c xRayAt: (point - c offset) Do: block ]
                 ].
               ^ self
             );

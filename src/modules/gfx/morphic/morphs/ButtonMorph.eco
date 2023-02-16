@@ -14,7 +14,7 @@
 
             action: act => action <- Yes: act;
 
-            handleClickAtX: x Y: y HandMorph: hand => (
+            handleClickAt: point HandMorph: hand => (
                 action yes: [ :a | a value(self) ].
               ^ true
             );

@@ -15,7 +15,7 @@
                 $(FrameMorph) renderOn: renderer.
             );
 
-            "handleClickAtX: x Y: y HandMorph: hand => ( hand grab: self. ^ true );"
+            handleClickAt: point HandMorph: hand => ( hand grab: self. ^ true );
 
             writeOn: w => w << 'a draggable morph';
         };
