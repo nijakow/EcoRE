@@ -5,15 +5,18 @@
 
         width, height,
         protected offsets,
+        protected clips,
         protected sdlRenderer;
 
         with inherited trait = {
             initWithSDLRenderer: _sdl_renderer X: _x Y: _y W: _w H: _h => (
                 sdlRenderer <- _sdl_renderer.
-                offsets     <- std util newStack.
                 width       <- _w.
                 height      <- _h.
-                offsets push: (morphic Origin).
+                offsets     <- std util newStack.
+                offsets push: (morphic X: _x Y: _y).
+                clips       <- std util newStack.
+                clips push: (morphic X: _x Y: _y W: width H: height).
               ^ self
             );
 
@@ -24,6 +27,17 @@
                 pushOffset: offset.
                 block value.
                 popOffset.
+              ^ self
+            );
+
+            clip => clips top;
+            withClipW: w H: h Do: block => (
+                | rect <- morphic X: xOff Y: yOff W: w H: h |
+                clips push: rect.
+                sdlRenderer clipX: rect x Y: rect y W: rect w H: rect h.
+                block value.
+                clips pop.
+                sdlRenderer clipX: clip x Y: clip y W: clip w H: clip h.
               ^ self
             );
 

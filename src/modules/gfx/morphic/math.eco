@@ -115,6 +115,7 @@
 
     X: x Y: y => Point2D NewX: x Y: y;
     W: w H: h => X: w Y: h;
+    X: x Y: y W: w H: h => Rectangle newX: x Y: y W: w H: h;
 
     own Origin = self X: 0 Y: 0;  "A constant, for optimization purposes."
 }

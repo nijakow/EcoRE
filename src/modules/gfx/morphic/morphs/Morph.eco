@@ -137,6 +137,8 @@
               ^ self
             );
 
+            bounds => morphic X: (offset x) Y: (offset y) W: (dimensions x) H: (dimensions y);
+
             moveTo: point => (
                 offset <- point.
                 invalidateGlobalOffsetCache.

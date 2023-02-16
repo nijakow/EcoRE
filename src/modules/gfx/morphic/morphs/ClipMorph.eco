@@ -1,0 +1,20 @@
+
+{
+    static with inherited _ = std Clonable;
+    with inherited own FrameMorph = $ FrameMorph;
+
+    with inherited trait = {
+        init => (
+            $(FrameMorph) init.
+          ^ self
+        );
+
+        renderOn: renderer => (
+            renderer withClipW: (dimensions width) H: (dimensions height) Do: [
+                $(FrameMorph) renderOn: renderer.
+            ];
+        );
+
+        writeOn: w => w << 'a clip morph';
+    };
+}
