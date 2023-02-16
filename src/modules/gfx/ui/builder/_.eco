@@ -67,6 +67,13 @@
 
     Label: text => (morphic morphs LabelMorph) new ~ text: text;
 
+    TextField: text => (
+        | lines <- VBox |
+        text splitOnChar: $'newline'
+          ~ do: [ :line | lines add: (Label: line) ].
+      ^ ShrinkWrap(lines)
+    );
+
     Button(caption, action) => (
       ^ ShrinkWrap(Stacked(
             (morphic morphs ButtonMorph) new ~ action: action,

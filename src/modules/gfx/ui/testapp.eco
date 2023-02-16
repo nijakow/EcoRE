@@ -44,6 +44,7 @@
     build => (
         ui Window(200, 200,
             ui VBox(
+                ui TextField: 'Ecosphere\nis\nawesome!',
                 ui Button(ui Center(ui Label: 'Outliner'),
                           Action: { value(sender) => (sender world yes) open: (MirrorBuilder OutlinerWindowForObject: lobby) })
                     ~ xLayout: ui layouts Flexible
