@@ -19,7 +19,7 @@
                 (char newline == c) -> [ break value. ].
                 sw char<< c.
             ] repeatWithBreak.
-          ^ sw commit
+          ^ sw build
         );
 
         nextInt => std text parsing number ParseIntFromStream: in;

@@ -87,7 +87,7 @@
 
             in forward.
 
-          ^ sb commit
+          ^ sb build
         );
 
         nextToken => (
@@ -132,7 +132,7 @@
                 sb char<< (in next).
             ].
 
-            sb <- sb commit.
+            sb <- sb build.
 
             (sb equals: '')            if: [ ^ newTokenWithType: TokenType EOF        ].
             (sb equals: 'self')        if: [ ^ newTokenWithType: TokenType SELF       ].

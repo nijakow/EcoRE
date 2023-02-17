@@ -37,7 +37,7 @@
     SlurpFile: file => WithOpenFileForReading: file Do: [ :in |
         | sw <- StringWriter new |
         in do: [ :c | sw << c ].
-      ^ sw commit
+      ^ sw build
     ];
 
     ParseFile: file => (SlurpFile: file) parse;

@@ -14,7 +14,7 @@
 
         char<< c => builder append: c.
 
-        commit => build;  "TODO: Deprecate this!"
+        commit => self;
         close => self;
 
         build => builder asString;
