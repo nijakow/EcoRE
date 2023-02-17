@@ -24,9 +24,10 @@
                 [
                     (running not) -> [ ^ self ].
                     handler tick.
-                    (event poll != 0) -> [
+                    [ :break |
+                        (event poll == 0) -> [ break value ].
                         handler handleEvent: event.
-                    ].
+                    ] repeatWithBreak.
                     "TODO: Sleep for a while to avoid eating up CPU resources"
                 ] repeat.
             );
