@@ -43,7 +43,7 @@
 
         OutlinerPaneForObject: object => OutlinerPaneForMirror: (std reflect Mirror: object);
 
-        OutlinerWindowForObject: object => builder Window(300, 400, builder Scrollable(OutlinerPaneForObject: object));
+        OutlinerWindowForObject: object => builder Window(400, 400, builder Scrollable(OutlinerPaneForObject: object));
 
         DisassemblyWindowFor: code => (
             |
