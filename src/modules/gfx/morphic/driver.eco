@@ -70,7 +70,7 @@
 
                     Switch: button
                       ~ case: 1 do: [ morph handMorph leftClick   ]
-                      ~ case: 2 do: [ morph handMorph middleClick ]
+                      ~ case: 2 do: [ morph fullRender            ]
                       ~ case: 3 do: [ morph handMorph rightClick  ]
                     ~ default: [
                         (std io out << 'Unknown mouse key!') newline commit.

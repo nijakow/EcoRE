@@ -55,7 +55,7 @@
 
             ((optimizer ast Printer) clone initWithWriter: writer) print: rewritten ast.
 
-            builder Window(500, 500,
+            builder Window(750, 750,
                 builder Scrollable(
                     builder TextField: (writer build)
                 )

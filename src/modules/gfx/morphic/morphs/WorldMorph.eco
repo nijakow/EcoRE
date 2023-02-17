@@ -42,6 +42,12 @@
                 renderer present.
             );
 
+            fullRender => (
+                renderer clear.
+                renderOn: renderer.
+                renderer present.
+            );
+
             handleDropMorph: morph At: point => (
                 | gb <- globalOffset, mgb <- morph globalOffset |
                 (tryAdd: morph) -> [

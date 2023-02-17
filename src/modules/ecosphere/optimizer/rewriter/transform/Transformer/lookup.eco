@@ -6,6 +6,7 @@
             (name == #'value')  -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'value' In: (std reflect proxies Block))) ].
             (name == #'repeat') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'repeat' In: (std reflect proxies Block))) ].
             (name == #'while:') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'while:' In: (std reflect proxies Block))) ].
+            (name == #'until:') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'until:' In: (std reflect proxies Block))) ].
           ^ No
         );
 
