@@ -17,6 +17,7 @@
 
             destroy => sdl DestroySurface(texptr);
 
+            createSoftwareRenderer => (wrapper Renderer) clone init: (sdl CreateSoftwareRenderer(surptr));
             asTextureWithRenderer: renderer => (wrapper Texture) clone init: (sdl CreateTextureFromSurface(renderer handle, surptr));
 
             writeOn: w => w << 'an sdl surface';

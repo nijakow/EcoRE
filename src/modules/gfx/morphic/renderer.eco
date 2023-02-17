@@ -6,10 +6,15 @@
         width, height,
         protected offsets,
         protected clips,
-        protected sdlRenderer;
+        protected sdlRenderer,
+        protected sdl,
+        protected surface,
+        protected surfaceRenderer,
+        protected surfaceTexture;
 
         with inherited trait = {
-            initWithSDLRenderer: _sdl_renderer X: _x Y: _y W: _w H: _h => (
+            initWithSDL: _sdl Renderer: _sdl_renderer X: _x Y: _y W: _w H: _h => (
+                sdl         <- _sdl.
                 sdlRenderer <- _sdl_renderer.
                 width       <- _w.
                 height      <- _h.
@@ -17,6 +22,13 @@
                 offsets push: (morphic X: _x Y: _y).
                 clips       <- std util newStack.
                 clips push: (morphic X: _x Y: _y W: width H: height).
+
+                surface         <- (sdl Surface clone) init: (sdl sdl CreateSimpleRGBSurface(_w, _h)).
+                surfaceRenderer <- surface createSoftwareRenderer.
+                surfaceTexture  <- surface asTextureWithRenderer: sdlRenderer.
+
+                (std io out << surfaceTexture << surfaceTexture width) newline commit.
+
               ^ self
             );
 
@@ -34,32 +46,42 @@
             withClipW: w H: h Do: block => (
                 | rect <- morphic X: xOff Y: yOff W: w H: h |
                 clips push: rect.
-                sdlRenderer clipX: rect x Y: rect y W: rect w H: rect h.
+                surfaceRenderer clipX: rect x Y: rect y W: rect w H: rect h.
                 block value.
                 clips pop.
-                sdlRenderer clipX: clip x Y: clip y W: clip w H: clip h.
+                surfaceRenderer clipX: clip x Y: clip y W: clip w H: clip h.
               ^ self
             );
 
             xOff => offset x;
             yOff => offset y;
 
-            clear => sdlRenderer clear;
-            present => sdlRenderer present;
+            clear => surfaceRenderer clear;
+            present => (
+                surfaceRenderer setR: 0 G: 0 B: 0 A: 0.
+                surfaceRenderer clear.
+                surfaceRenderer setR: 199 G: 0 B: 0.
+                surfaceRenderer clear.
+                surfaceRenderer present.
+                sdlRenderer setR: 0 G: 0 B: 0 A: 0.
+                sdlRenderer clear.
+                sdlRenderer drawTexture: surfaceTexture X: 0 Y: 0 W: width H: height.
+                sdlRenderer present.
+            );
 
-            setR: r G: g B: b => sdlRenderer setR: r G: g B: b;
-            setColor: color => sdlRenderer setColor: color;
+            setR: r G: g B: b => surfaceRenderer setR: r G: g B: b;
+            setColor: color => surfaceRenderer setColor: color;
 
-            drawPointX: x Y: y => sdlRenderer drawPointX: xOff + x Y: yOff + y;
-            drawLineX: x1 Y: y1 X: x2 Y: y2 => sdlRenderer drawLineX: xOff + x1 Y: yOff + y1 X: xOff + x2 Y: yOff + y2;
-            drawRectX: x Y: y W: w H: h => sdlRenderer drawRectX: xOff + x Y: yOff + y W: w H: h;
+            drawPointX: x Y: y => surfaceRenderer drawPointX: xOff + x Y: yOff + y;
+            drawLineX: x1 Y: y1 X: x2 Y: y2 => surfaceRenderer drawLineX: xOff + x1 Y: yOff + y1 X: xOff + x2 Y: yOff + y2;
+            drawRectX: x Y: y W: w H: h => surfaceRenderer drawRectX: xOff + x Y: yOff + y W: w H: h;
             drawRect: rect => drawRectX: rect x Y: rect y W: rect w H: rect h;
-            fillRectX: x Y: y W: w H: h => sdlRenderer fillRectX: xOff + x Y: yOff + y W: w H: h;
+            fillRectX: x Y: y W: w H: h => surfaceRenderer fillRectX: xOff + x Y: yOff + y W: w H: h;
             fillRect: rect => fillRectX: rect x Y: rect y W: rect w H: rect h;
-            drawTexture: tex X: x Y: y W: w H: h => sdlRenderer drawTexture: tex X: xOff + x Y: yOff + y W: w H: h;
+            drawTexture: tex X: x Y: y W: w H: h => surfaceRenderer drawTexture: tex X: xOff + x Y: yOff + y W: w H: h;
             drawTexture: tex W: w H: h => drawTexture: tex X: 0 Y: 0 W: w H: h;
 
-            makeTextTexture: text => sdlRenderer makeTextTexture: text;
+            makeTextTexture: text => surfaceRenderer makeTextTexture: text;
 
             accept: morph => morph renderOn: self;
 

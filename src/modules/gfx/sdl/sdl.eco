@@ -28,6 +28,7 @@
     protected SDL_SetRenderTarget;
     protected SDL_GetRenderTarget;
     protected SDL_CreateRGBSurfaceWithFormat;
+    protected SDL_CreateSoftwareRenderer;
     protected SDL_CreateTexture;
     protected SDL_CreateTextureFromSurface;
     protected SDL_DestroyTexture;
@@ -145,6 +146,7 @@
             SDL_SetRenderTarget <- (lib function: #'SDL_SetRenderTarget' type: ((ffi types int) function(ffi types pointer, ffi types pointer))) yes.
             SDL_GetRenderTarget <- (lib function: #'SDL_GetRenderTarget' type: ((ffi types pointer) function(ffi types pointer))) yes.
             SDL_CreateRGBSurfaceWithFormat <- (lib function: #'SDL_CreateRGBSurfaceWithFormat' type: ((ffi types pointer) function(ffi types uint32, ffi types int, ffi types int, ffi types int, ffi types uint32))) yes.
+            SDL_CreateSoftwareRenderer <- (lib function: #'SDL_CreateSoftwareRenderer' type: ((ffi types pointer) function(ffi types pointer))) yes.
             SDL_CreateTexture <- (lib function: #'SDL_CreateTexture' type: ((ffi types pointer) function(ffi types pointer, ffi types uint32, ffi types int, ffi types int, ffi types int))) yes.
             SDL_CreateTextureFromSurface <- (lib function: #'SDL_CreateTextureFromSurface' type: ((ffi types pointer) function(ffi types pointer, ffi types pointer))) yes.
             SDL_DestroyTexture <- (lib function: #'SDL_DestroyTexture' type: ((ffi types void) function(ffi types pointer))) yes.
@@ -188,6 +190,8 @@
         SetRenderTarget(renderer, texture) => SDL_SetRenderTarget value(renderer, texture);
         GetRenderTarget(renderer) => SDL_GetRenderTarget value(renderer);
         CreateRGBSurfaceWithFormat(width, height, depth, format) => SDL_CreateRGBSurfaceWithFormat value(0, width, height, depth, format);
+        CreateSimpleRGBSurface(width, height) => CreateRGBSurfaceWithFormat(width, height, 32, SDL_PIXELFORMAT_RGBA8888);
+        CreateSoftwareRenderer(surface) => SDL_CreateSoftwareRenderer value(surface);
         CreateTexture(renderer, pixelformat, access, width, height) => SDL_CreateTexture value(renderer, pixelformat, access, width, height);
         CreateTextureFromSurface(renderer, surface) => SDL_CreateTextureFromSurface value(renderer, surface);
         DestroyTexture(texture) => SDL_DestroyTexture value(texture);

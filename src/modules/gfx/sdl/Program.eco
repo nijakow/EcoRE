@@ -9,6 +9,7 @@
 
         with inherited trait = {
             sdl => wrapper sdl;
+            sdlModule => wrapper;
 
             initWithWindow: _window Handler: _handler => (
                 window  <- _window.
