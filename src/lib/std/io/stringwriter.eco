@@ -14,8 +14,10 @@
 
         char<< c => builder append: c.
 
-        commit => builder asString;
+        commit => build;  "TODO: Deprecate this!"
         close => self;
+
+        build => builder asString;
 
         writeOn: w => w << 'a string writer';
     };

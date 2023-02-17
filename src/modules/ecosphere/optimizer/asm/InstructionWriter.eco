@@ -1,20 +1,20 @@
 {
     static with inherited _ = std Module;
 
-    PrintInstructions: instructions Indent: indent => (
+    PrintInstructions: instructions Indent: indent On: w => (
         | expr <- instructions |
         [ :break |
-            1 to: indent do: [ std io out << '    ' ].
-            (std io out << expr) newline commit.
-            expr withSubCode: [ :c | PrintInstructions: c instructions Indent: indent + 1 ].
+            1 to: indent do: [ w << '    ' ].
+            (w << expr) newline commit.
+            expr withSubCode: [ :c | PrintInstructions: c instructions Indent: indent + 1 On: w ].
             expr next yes: [ :v | expr <- v ] no: [ break value ].
         ] repeatWithBreak.
       ^ self
     );
-    PrintInstructions: instructions => PrintInstructions: instructions Indent: 0;
+    PrintInstructions: instructions On: w => PrintInstructions: instructions Indent: 0 On: w;
 
-    PrintDisassembledFunction: f => (
-        PrintInstructions: f instructions.
+    PrintDisassembledFunction: f On: w => (
+        PrintInstructions: f instructions On: w.
       ^ self
     );
 }

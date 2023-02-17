@@ -2,9 +2,12 @@
     static with inherited _ = std Clonable;
     with inherited own MorphicApp = $ MorphicApp;
 
+
     MirrorBuilder = {
         static with inherited _ = std Module;
         builder <- $ ui.
+
+        optimizer <- (here / '..' / '..' / 'ecosphere' / 'optimizer' / '_.eco') import;
 
         SlotOutliner: slotMirror => (
             builder ShrinkWrap(
@@ -16,9 +19,15 @@
                     builder Label: (slotMirror isInherited if: 'i' else: ' '),
                     builder SpacerW: 10 H: 1,
                     builder Button(builder Label: (slotMirror name asString),
-                                builder StateAction(std util newArray(self, slotMirror), {
-                                    value(sender) => (sender world yes) open: ((state at: 0) OutlinerWindowForObject: ((state at: 1) slotValue))
-                                })
+                                   builder StateAction(std util newArray(self, slotMirror), {
+                                       value(sender) => (sender world yes) open: ((state at: 0) OutlinerWindowForObject: ((state at: 1) slotValue))
+                                   })
+                    ),
+                    builder Spacer,
+                    builder Button(builder Label: '!!!',
+                                   builder StateAction(std util newArray(self, slotMirror), {
+                                      value(sender) => (sender world yes) open: ((state at: 0) DisassemblyWindowFor: ((state at: 1) slotValue))
+                                   })
                     )
                 )
             )
@@ -34,7 +43,24 @@
 
         OutlinerPaneForObject: object => OutlinerPaneForMirror: (std reflect Mirror: object);
 
-        OutlinerWindowForObject: object => builder Window(200, 100, builder Scrollable(OutlinerPaneForObject: object));
+        OutlinerWindowForObject: object => builder Window(300, 400, builder Scrollable(OutlinerPaneForObject: object));
+
+        DisassemblyWindowFor: code => (
+            |
+                disassembled <- optimizer Disassemble: code,
+                writer       <- (std io StringWriter) new
+            |
+
+            disassembled dumpOn: writer.
+
+            (std io out << code << '  ' << disassembled) newline commit.
+
+            builder Window(500, 500,
+                builder Scrollable(
+                    builder TextField: (writer build)
+                )
+            )
+        );
     };
 
     reset => (
