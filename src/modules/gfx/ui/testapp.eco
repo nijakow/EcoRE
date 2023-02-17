@@ -29,7 +29,7 @@
                                       value(sender) => (sender world yes) open: ((state at: 0) DisassemblyWindowFor: ((state at: 1) slotValue))
                                    })
                     )
-                )
+                ) ~ xLayout: builder layouts Flexible
             )
         );
 
@@ -47,13 +47,13 @@
 
         DisassemblyWindowFor: code => (
             |
+                writer       <- (std io StringWriter) new,
                 disassembled <- optimizer Disassemble: code,
-                writer       <- (std io StringWriter) new
+                ast          <- optimizer BuildAST: disassembled,
+                rewritten    <- optimizer RewriteAST: ast
             |
 
-            disassembled dumpOn: writer.
-
-            (std io out << code << '  ' << disassembled) newline commit.
+            ((optimizer ast Printer) clone initWithWriter: writer) print: rewritten ast.
 
             builder Window(500, 500,
                 builder Scrollable(
