@@ -13,14 +13,16 @@
         protected program,
         protected renderer,
         protected morph,
+        protected tickCount,
         protected app;
 
         with inherited trait = {
             init: _app => (
-                app    <- _app.
-                mouseX <- 0.
-                mouseY <- 0.
-                morph  <- morphic morphs WorldMorph new.
+                app       <- _app.
+                mouseX    <- 0.
+                mouseY    <- 0.
+                morph     <- morphic morphs WorldMorph new.
+                tickCount <- 0.
               ^ self
             );
 
@@ -48,7 +50,13 @@
                 ].
                 "morph dumpOn: std io out."
                 morph maybeUpdate.
-                morph render.
+                (tickCount > 250) if: [
+                    morph fullRender.
+                    tickCount <- 0.
+                ] else: [
+                    morph render.
+                    tickCount <- tickCount + 1.
+                ].
                 1 to: 1000 do: [ :i | i * i ]. "just to slow down rendering"
             );
 
@@ -70,7 +78,7 @@
 
                     Switch: button
                       ~ case: 1 do: [ morph handMorph leftClick   ]
-                      ~ case: 2 do: [ morph fullRender            ]
+                      ~ case: 2 do: [ morph handMorph middleClick ]
                       ~ case: 3 do: [ morph handMorph rightClick  ]
                     ~ default: [
                         (std io out << 'Unknown mouse key!') newline commit.
