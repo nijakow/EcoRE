@@ -190,7 +190,7 @@
         SetRenderTarget(renderer, texture) => SDL_SetRenderTarget value(renderer, texture);
         GetRenderTarget(renderer) => SDL_GetRenderTarget value(renderer);
         CreateRGBSurfaceWithFormat(width, height, depth, format) => SDL_CreateRGBSurfaceWithFormat value(0, width, height, depth, format);
-        CreateSimpleRGBSurface(width, height) => CreateRGBSurfaceWithFormat(width, height, 32, SDL_PIXELFORMAT_RGBA8888);
+        CreateSimpleRGBSurface(width, height) => CreateRGBSurfaceWithFormat(width, height, 32, SDL_PIXELFORMAT_UNKNOWN);
         CreateSoftwareRenderer(surface) => SDL_CreateSoftwareRenderer value(surface);
         CreateTexture(renderer, pixelformat, access, width, height) => SDL_CreateTexture value(renderer, pixelformat, access, width, height);
         CreateTextureFromSurface(renderer, surface) => SDL_CreateTextureFromSurface value(renderer, surface);

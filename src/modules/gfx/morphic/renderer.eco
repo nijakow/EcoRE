@@ -25,9 +25,8 @@
 
                 surface         <- (sdl Surface clone) init: (sdl sdl CreateSimpleRGBSurface(_w, _h)).
                 surfaceRenderer <- surface createSoftwareRenderer.
+                "This crashes..."
                 surfaceTexture  <- surface asTextureWithRenderer: sdlRenderer.
-
-                (std io out << surfaceTexture << surfaceTexture width) newline commit.
 
               ^ self
             );
