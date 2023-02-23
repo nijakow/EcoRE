@@ -21,15 +21,16 @@
                 clips       <- std util newStack.
                 clips push: (morphic X: _x Y: _y W: width H: height).
 
-                texture <- (sdl Texture) clone new: (sdl sdl CreateTexture(
-                    sdlRenderer handle,
-                    sdl sdl SDL_PIXELFORMAT_RGBA8888,
-                    sdl sdl SDL_TEXTUREACCESS_TARGET,
-                    width,
-                    height
-                )).
+                | tex <- sdl sdl CreateTexture(
+                      sdlRenderer handle,
+                      sdl sdl SDL_PIXELFORMAT_UNKNOWN,
+                      sdl sdl SDL_TEXTUREACCESS_TARGET,
+                      width,
+                      height
+                  )
+                |
 
-                (std io out << ((texture handle castTo: (ffi types int)) address fetch)) newline commit.
+                texture <- (sdl Texture) clone new: (tex).
 
                 sdl sdl SetRenderTarget(sdlRenderer handle, texture handle).
 
