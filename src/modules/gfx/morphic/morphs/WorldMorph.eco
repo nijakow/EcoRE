@@ -37,14 +37,15 @@
             );"
 
             render => (
-                renderer setR: 200 G: 200 B: 200.
+                "renderer setR: 200 G: 200 B: 200.
                 renderer clear.
-                renderOn: renderer.
-                "maybeRenderChildrenOn: renderer."
+                renderOn: renderer."
+                maybeRenderChildrenOn: renderer.
                 renderer present.
             );
 
             fullRender => (
+                renderer setR: 128 G: 128 B: 128.
                 renderer clear.
                 renderOn: renderer.
                 renderer present.
