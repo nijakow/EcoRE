@@ -19,4 +19,13 @@
     throw         => #'ecosphere.ecore.flow.throw'(self);
 
     writeOn: writer => writer << 'an object';
+
+
+    isBlock       => false;
+    isCode        => false;
+    isInt         => false;
+    isChar        => false;
+    isKey         => false;
+    isString      => false;
+    isArray       => false;
 }
