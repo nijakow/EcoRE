@@ -3,9 +3,25 @@
 #include <ecore/base/extra.h>
 #include <ecore/objects/base/type/type.h>
 #include <ecore/objects/base/type/slot.h>
+#include <ecore/objects/base/molecule/molecule.h>
 #include <ecore/objects/misc/array/array.h>
 #include <ecore/objects/vm/interface/interface.h>
 #include <ecore/vm/vm.h>
+
+
+bool Eco_VM_Builtin_IsMolecule(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    any = Eco_Fiber_Pop(fiber);
+    if (Eco_Any_IsPointer(any) && Eco_Molecule_IsMolecule(Eco_Any_AsPointer(any)))
+        Eco_Fiber_Push(fiber, Eco_Any_FromInteger(1));
+    else
+        Eco_Fiber_Push(fiber, Eco_Any_FromInteger(0));
+    return true;
+}
 
 bool Eco_VM_Builtin_GetSlotValue(struct Eco_Fiber* fiber, unsigned int args)
 {

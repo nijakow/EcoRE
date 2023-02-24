@@ -13,4 +13,6 @@
 
     IsBlock:  obj => obj isBlock;
     IsCode:   obj => obj isCode;
+
+    IsMolecule: obj => #'ecosphere.ecore.reflect.is_molecule'(obj);
 }

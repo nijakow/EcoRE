@@ -125,6 +125,11 @@ struct Eco_Molecule* Eco_Molecule_Clone(struct Eco_CloneState* state,
 }
 
 
+bool Eco_Molecule_IsMolecule(struct Eco_Object* object)
+{
+    return object->type->typecore == &Eco_Molecule_TYPECORE;
+}
+
 
 void Eco_Molecule_Init()
 {
