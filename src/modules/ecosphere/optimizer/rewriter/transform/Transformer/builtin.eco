@@ -8,7 +8,7 @@
         );
 
         RewriteBuiltin: ast Args: args => (
-          ^ (builder Builtin: (ast message) Args: (args map: [ :e | (pullAnswer: arg) wrapIn: context ]) Varargs: (ast varargs))
+          ^ (builder Builtin: (ast message) Args: (args map: [ :e | (pullAnswer: e) wrapIn: context ]) Varargs: (ast varargs))
         );
 
         transformBuiltin: ast => (
