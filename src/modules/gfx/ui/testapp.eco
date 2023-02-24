@@ -56,11 +56,21 @@
             )
         );
 
+        PresentationWindowFor: object => (
+            | writer <- (std io StringWriter) new |
+            writer << object.
+            builder Window(400, 400,
+                builder Scrollable(
+                    builder TextField: (writer build)
+                )
+            )
+        );
+
         WindowFor: object => (
             begin
               ~ if: [ std reflect primitives IsCode:     object ] then: [ ^ DisassemblyWindowFor:    object ]
               ~ if: [ std reflect primitives IsMolecule: object ] then: [ ^ OutlinerWindowForObject: object ]
-            ~ default: [ ^ OutlinerWindowForObject: object ]  "TODO: add a better default"
+            ~ default: [ ^ PresentationWindowFor: object ]
         );
     };
 
