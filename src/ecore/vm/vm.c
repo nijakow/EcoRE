@@ -91,7 +91,7 @@ struct Eco_Fiber* Eco_VM_SpawnThunk(struct Eco_VM* vm, struct Eco_Code* code)
 {
     struct Eco_Fiber*  fiber;
 
-    fiber = Eco_Fiber_New(vm, 65536);
+    fiber = Eco_Fiber_New(vm, 1024 * 1024 * 4 /* 4MB of stack */);
 
     Eco_Fiber_EnterThunk(fiber, &vm->constants.lobby, code);
     Eco_Fiber_SetRunning(fiber);

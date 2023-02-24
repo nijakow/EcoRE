@@ -41,6 +41,9 @@
     vbx => [ :i, :j, ... | foo(i, j, ...) ] value(222, 333, 443 + 1, 555, 665 + 1);
     vcx => [ :i, :j, ... | [ :k, :l, ... | foo(l, k, ...) ] value(j, i, ...) ] value(111, 222 + 1, 333, 444 + 1);
 
+    until => [ true ] until: [ (std io out << 'Hi!') newline commit ];
+
+
     TestMethod: m => (
         (std io out << 'Now processing method: ' << m) newline commit.
         |
@@ -59,7 +62,7 @@
     );
 
     Main => (
-        #( #'f', #'g', #'h', #'i', #'j', #'k', #'mega', #'giga', #'iter', #'regs', #'va', #'vax', #'vbx', #'vcx' )
+        #( #'f', #'g', #'h', #'i', #'j', #'k', #'mega', #'giga', #'iter', #'regs', #'va', #'vax', #'vbx', #'vcx', #'until' )
             do: [ :m | TestMethod: m ].
     );
 } Main.
