@@ -49,16 +49,15 @@
                 ([ morph handMorph offset x != mouseX ] or: [ morph handMorph offset y != mouseY ]) -> [
                     morph handMorph moveToX: mouseX Y: mouseY.
                 ].
-                "morph dumpOn: std io out."
+
                 morph maybeUpdate.
-                (tickCount > 250) if: [
+                (tickCount > 50) if: [
                     morph fullRender.
                     tickCount <- 0.
                 ] else: [
                     morph render.
                     tickCount <- tickCount + 1.
                 ].
-                1 to: 1000 do: [ :i | i * i ]. "just to slow down rendering"
             );
 
             findMorphAtX: x Y: y => (

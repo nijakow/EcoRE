@@ -8,6 +8,7 @@
     protected SDL_Quit,
     protected SDL_GetError,
     protected SDL_PollEvent,
+    protected SDL_Delay,
     protected SDL_CreateWindow,
     protected SDL_DestroyWindow,
     protected SDL_ShowWindow,
@@ -127,6 +128,7 @@
             SDL_Quit <- (lib function: #'SDL_Quit' type: ((ffi types void) function)) yes.
             SDL_GetError <- (lib function: #'SDL_GetError' type: ((ffi types string) function)) yes.
             SDL_PollEvent <- (lib function: #'SDL_PollEvent' type: ((ffi types int) function(SDL_Event pointer))) yes.
+            SDL_Delay <- (lib function: #'SDL_Delay' type: ((ffi types void) function(ffi types uint32))) yes.
             SDL_CreateWindow <- (lib function: #'SDL_CreateWindow' type: ((ffi types pointer) function(ffi types string, ffi types int, ffi types int, ffi types int, ffi types int, ffi types uint32))) yes.
             SDL_DestroyWindow <- (lib function: #'SDL_DestroyWindow' type: ((ffi types void) function(ffi types pointer))) yes.
             SDL_ShowWindow <- (lib function: #'SDL_ShowWindow' type: ((ffi types void) function(ffi types pointer))) yes.
@@ -172,6 +174,7 @@
         Quit => SDL_Quit value();
         GetError => SDL_GetError value();
         PollEvent(event_ptr) => SDL_PollEvent value(event_ptr);
+        Delay(ms) => SDL_Delay value(ms);
         CreateWindow(name, x, y, w, h, flags) => SDL_CreateWindow value(name, x, y, w, h, flags);
         DestroyWindow(window) => SDL_DestroyWindow value(window);
         ShowWindow(window) => SDL_ShowWindow value(window);
