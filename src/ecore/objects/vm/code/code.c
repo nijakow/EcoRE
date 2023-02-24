@@ -106,3 +106,8 @@ unsigned int Eco_Code_ArgCount(struct Eco_Code* code) {
 unsigned int Eco_Code_RegisterCount(struct Eco_Code* code) {
     return code->register_count;
 }
+
+bool Eco_Code_IsCode(struct Eco_Object* object)
+{
+    return object->type->typecore == &Eco_Code_TYPECORE;
+}
