@@ -16,6 +16,11 @@
     types = {
         static with inherited _ = #<:std/Module>;
 
+        Unknown = {
+            static with inherited _ = #<:std/Enum>;
+            with inherited trait = #<:std/os/OsTypeTrait>;
+        };
+
         Linux = {
             static with inherited _ = #<:std/Enum>;
             with inherited trait = #<:std/os/OsTypeTrait>;
@@ -23,6 +28,15 @@
             isLinux => true;
 
             writeOn: w => w << 'Linux';
+        };
+
+        FreeBSD = {
+            static with inherited _ = #<:std/Enum>;
+            with inherited trait = #<:std/os/OsTypeTrait>;
+
+            isLinux => true;
+
+            writeOn: w => w << 'FreeBSD';
         };
 
         MacOS = {
@@ -33,6 +47,21 @@
 
             writeOn: w => w << 'MacOS';
         };
+
+        Windows = {
+            static with inherited _ = #<:std/Enum>;
+            with inherited trait = #<:std/os/OsTypeTrait>;
+
+            writeOn: w => w << 'Windows';
+        };
+
+        Current => (
+            Switch: #'ecosphere.ecore.init.os_version_id'()
+              ~ case: 1 do: [ ^ Linux   ]
+              ~ case: 2 do: [ ^ FreeBSD ]
+              ~ case: 3 do: [ ^ MacOS   ]
+            ~ default: [ ^ Unknown ]
+        );
     };
 
     env = {
