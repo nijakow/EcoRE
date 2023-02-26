@@ -1,8 +1,39 @@
 
+#=std/os/OsTypeTrait: {
+    static with inherited _ = #<:std/Trait>;
+
+    isLinux   => false;
+    isMacOS   => false;
+
+    writeOn: w => w << 'an unknown OS type';
+};
+
 #=std/os: {
     static with inherited _ = #<:std/Module>;
     
     files = #<:std/os/files>;
+
+    types = {
+        static with inherited _ = #<:std/Module>;
+
+        Linux = {
+            static with inherited _ = #<:std/Enum>;
+            with inherited trait = #<:std/os/OsTypeTrait>;
+
+            isLinux => true;
+
+            writeOn: w => w << 'Linux';
+        };
+
+        MacOS = {
+            static with inherited _ = #<:std/Enum>;
+            with inherited trait = #<:std/os/OsTypeTrait>;
+
+            isMacOS => true;
+
+            writeOn: w => w << 'MacOS';
+        };
+    };
 
     env = {
         static with inherited _ = #<:std/Module>;
