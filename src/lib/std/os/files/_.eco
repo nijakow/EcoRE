@@ -14,6 +14,17 @@
       ^ path
     );
 
+    Find: name In: path => (
+        (path name equals: name) if: [ ^ Yes: path ].
+
+        (path children) do: [ :child |
+            (Find: name In: child)
+              ~ ifYes: [ :v | ^ v ]
+        ].
+
+      ^ No
+    );
+
     own SharedPathTrait = #=std/os/files/SharedPathTrait: {
         exists => #'ecosphere.ecore.io.file_exists'(path);
         isDirectory => #'ecosphere.ecore.io.file_is_directory'(path);
@@ -25,7 +36,14 @@
                                         Path: path + '/' + name
                                       Parent: self.
         );
-        children => (((module ListFiles: path) iterator map: [ :file | self / file ]) into: (std util newVector)) asArray;
+        children => (
+            | c <- std util newVector |
+            (module ListFiles: path) do: [ :file |
+                ([file equals: '.'] or: [file equals: '..'])
+                    unless: [ c add: (self / file) ].
+            ].
+          ^ c asArray
+        );
         openForReading => io OpenFileForReading: path;
         import => importIn: lobby;
         importIn: obj => io Import: path Path: parent In: obj;

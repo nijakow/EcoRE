@@ -119,7 +119,8 @@ bool Eco_VM_Builtin_ListFiles(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     any  = Eco_Fiber_Pop(fiber);
     path = Eco_Any_AsPointer(any);
-    Eco_LibC_ListFiles(path->bytes, entries, 256);
+    if (!Eco_LibC_ListFiles(path->bytes, entries, 256))
+        entries[0] = NULL;
     count = 0;
     while (entries[count] != NULL)
         count++;

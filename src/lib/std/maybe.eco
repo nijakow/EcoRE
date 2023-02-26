@@ -17,6 +17,9 @@
             isYes => true;
             isNo  => false;
 
+            ifYes: block => block value(self);
+            ifNo:  block => self;
+
             ?? v => yes;
 
             writeOn: writer => writer << 'Yes: ' << yes;
@@ -37,6 +40,9 @@
 
             isYes => false;
             isNo  => true;
+
+            ifYes: block => self;
+            ifNo:  block => block value(self);
 
             ?? v => v;
 
