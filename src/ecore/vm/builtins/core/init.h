@@ -4,6 +4,7 @@
 #include <ecore/vm/builtins/builtin.h>
 
 bool Eco_VM_Builtin_GetVersionString(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_GetOsVersionId(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetEnv(struct Eco_Fiber*, unsigned int);
 
 bool Eco_VM_Builtin_SetLobby(struct Eco_Fiber*, unsigned int);

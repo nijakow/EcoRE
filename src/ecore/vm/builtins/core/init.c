@@ -37,6 +37,17 @@ bool Eco_VM_Builtin_GetVersionString(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_GetOsVersionId(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
+        return false;
+    any = Eco_Any_FromInteger(ECO_CONFIG_TARGET_OS);
+    Eco_Fiber_Push(fiber, any);
+    return true;
+}
+
 bool Eco_VM_Builtin_GetEnv(struct Eco_Fiber* fiber, unsigned int args)
 {
     struct Eco_String*  var;

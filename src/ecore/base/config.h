@@ -9,25 +9,31 @@
 #  define ECO_VERSION_STRING ECO_NUMERIC_VERSION_STRING
 #endif
 
+#define ECO_CONFIG_OS_TYPE_UNKNOWN 0
+#define ECO_CONFIG_OS_TYPE_LINUX   1
+#define ECO_CONFIG_OS_TYPE_FREEBSD 2
+#define ECO_CONFIG_OS_TYPE_APPLE   3
+#define ECO_CONFIG_OS_TYPE_WINDOWS 4
+
 #ifdef __linux__
-#  define ECO_CONFIG_TARGET_OS LINUX
+#  define ECO_CONFIG_TARGET_OS ECO_CONFIG_OS_TYPE_LINUX
 #  define ECO_CONFIG_TARGET_LINUX
 #  define ECO_CONFIG_UNIXLIKE
 #else
 # ifdef __FreeBSD__
-#   define ECO_CONFIG_TARGET_OS FREEBSD
+#   define ECO_CONFIG_TARGET_OS ECO_CONFIG_OS_TYPE_FREEBSD
 #   define ECO_CONFIG_UNIXLIKE
 # else
 #  ifdef __APPLE__
-#    define ECO_CONFIG_TARGET_OS APPLE
+#    define ECO_CONFIG_TARGET_OS ECO_CONFIG_OS_TYPE_APPLE
 #    define ECO_CONFIG_UNIXLIKE
 #  else
 #    ifdef _WIN32
-#      define ECO_CONFIG_TARGET_OS WINDOWS
+#      define ECO_CONFIG_TARGET_OS ECO_CONFIG_OS_TYPE_WINDOWS
 #      define ECO_CONFIG_WINDOWS
 #    else
 #      warning "Target OS could not be determined!"
-#      define ECO_CONFIG_TARGET_OS UNKNOWN
+#      define ECO_CONFIG_TARGET_OS ECO_CONFIG_OS_TYPE_UNKNOWN
 #    endif
 #  endif
 # endif

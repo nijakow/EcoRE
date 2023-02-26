@@ -182,6 +182,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.os.getenv", Eco_VM_Builtin_GetEnv);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.version_string", Eco_VM_Builtin_GetVersionString);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.os_version_id", Eco_VM_Builtin_GetOsVersionId);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_lobby", Eco_VM_Builtin_SetLobby);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_true", Eco_VM_Builtin_SetTrue);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_false", Eco_VM_Builtin_SetFalse);
