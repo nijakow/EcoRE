@@ -3,10 +3,13 @@
     static with inherited _ = #<:std/Module>;
     
     proxies = #<:std/reflect/proxies>;
+    primitives = #<:std/reflect/primitives>;
 
     Mirror = #<:std/reflect/Mirror>;
     Mirror: object => #<:std/reflect/Mirror> clone init: object;
+
     TypeOf: object => #'ecosphere.ecore.reflect.get_type'(object);
+    
     PrivateInterfaceFor: object => (TypeOf: object) privateInterface;
     PublicInterfaceFor: object => (TypeOf: object) publicInterface;
     AllInterfaces => #'ecosphere.ecore.object.interface.get_all_interfaces'();

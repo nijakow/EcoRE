@@ -123,6 +123,8 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.implements_interface", Eco_VM_Builtin_InterfaceImplementsInterface);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.get_all_interfaces", Eco_VM_Builtin_InterfaceGetAllInterfaces);
 
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.is_molecule", Eco_VM_Builtin_IsMolecule);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.is_code", Eco_VM_Builtin_IsCode);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.slot_value", Eco_VM_Builtin_GetSlotValue);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.slot_flags", Eco_VM_Builtin_GetSlotFlags);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.type_get_private_interface", Eco_VM_Builtin_GetInterface);

@@ -25,6 +25,8 @@ void Eco_Molecule_UnlinkFromTypeList(struct Eco_Molecule*);
 void Eco_Molecule_LinkIntoTypeList(struct Eco_Molecule*, struct Eco_Type*);
 void Eco_Molecule_SwitchType(struct Eco_Molecule*, struct Eco_Type*);
 
+bool Eco_Molecule_IsMolecule(struct Eco_Object*);
+
 void Eco_Molecule_Init();
 void Eco_Molecule_Terminate();
 

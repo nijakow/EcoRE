@@ -1,6 +1,8 @@
 
 #=std/reflect/proxies/Code: {
     static with inherited parent = #<:std/Clonable>;
+
+    isCode => true;
     
     bytecodes => #'ecosphere.ecore.object.code.bytecodes'(self);
     constants => #'ecosphere.ecore.object.code.constants'(self);

@@ -20,13 +20,7 @@
                     builder SpacerW: 10 H: 1,
                     builder Button(builder Label: (slotMirror name asString),
                                    builder StateAction(std util newArray(self, slotMirror), {
-                                       value(sender) => (sender world yes) open: ((state at: 0) OutlinerWindowForObject: ((state at: 1) slotValue))
-                                   })
-                    ),
-                    builder Spacer,
-                    builder Button(builder Label: '!!!',
-                                   builder StateAction(std util newArray(self, slotMirror), {
-                                      value(sender) => (sender world yes) open: ((state at: 0) DisassemblyWindowFor: ((state at: 1) slotValue))
+                                       value(sender) => (sender world yes) open: ((state at: 0) WindowFor: ((state at: 1) slotValue))
                                    })
                     )
                 ) ~ xLayout: builder layouts Flexible
@@ -60,6 +54,23 @@
                     builder TextField: (writer build)
                 )
             )
+        );
+
+        PresentationWindowFor: object => (
+            | writer <- (std io StringWriter) new |
+            writer << object.
+            builder Window(400, 400,
+                builder Scrollable(
+                    builder TextField: (writer build)
+                )
+            )
+        );
+
+        WindowFor: object => (
+            begin
+              ~ if: [ std reflect primitives IsCode:     object ] then: [ ^ DisassemblyWindowFor:    object ]
+              ~ if: [ std reflect primitives IsMolecule: object ] then: [ ^ OutlinerWindowForObject: object ]
+            ~ default: [ ^ PresentationWindowFor: object ]
         );
     };
 

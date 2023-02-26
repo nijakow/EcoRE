@@ -1,0 +1,20 @@
+
+#=std/reflect/primitives: {
+    static with inherited _ = #<:std/Module>;
+
+    "TODO: These trampolines are unsafe -> use builtins instead."
+
+    IsInt:   obj => obj isInt;
+    IsFloat: obj => obj isFloat;
+    IsChar:  obj => obj isChar;
+
+    IsKey:    obj => obj isKey;
+    IsString: obj => obj isString;
+
+    IsArray:  obj => obj isArray;
+
+    IsBlock:  obj => obj isBlock;
+    IsCode:   obj => #'ecosphere.ecore.reflect.is_code'(obj) != 0;
+
+    IsMolecule: obj => #'ecosphere.ecore.reflect.is_molecule'(obj) != 0;
+}

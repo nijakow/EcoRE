@@ -29,7 +29,9 @@
                         (event poll == 0) -> [ break value ].
                         handler handleEvent: event.
                     ] repeatWithBreak.
-                    "TODO: Sleep for a while to avoid eating up CPU resources"
+                    
+                    "Sleep for a while to avoid eating up CPU resources"
+                    sdl Delay(10).
                 ] repeat.
             );
 
