@@ -2,8 +2,8 @@
 #=std/os/OsTypeTrait: {
     static with inherited _ = #<:std/Trait>;
 
-    isLinux   => false;
-    isMacOS   => false;
+    ifLinux: block => self;
+    ifMacOS: block => self;
 
     writeOn: w => w << 'an unknown OS type';
 };
@@ -25,7 +25,7 @@
             static with inherited _ = #<:std/Enum>;
             with inherited trait = #<:std/os/OsTypeTrait>;
 
-            isLinux => true;
+            ifLinux: block => ( block value(self). ^ self );
 
             writeOn: w => w << 'Linux';
         };
@@ -34,8 +34,6 @@
             static with inherited _ = #<:std/Enum>;
             with inherited trait = #<:std/os/OsTypeTrait>;
 
-            isLinux => true;
-
             writeOn: w => w << 'FreeBSD';
         };
 
@@ -43,7 +41,7 @@
             static with inherited _ = #<:std/Enum>;
             with inherited trait = #<:std/os/OsTypeTrait>;
 
-            isMacOS => true;
+            ifMacOS: block => ( block value(self). ^ self );
 
             writeOn: w => w << 'MacOS';
         };
