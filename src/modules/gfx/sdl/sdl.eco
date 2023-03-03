@@ -170,7 +170,7 @@
             TTF_RenderText_Solid <- (libttf function: #'TTF_RenderText_Solid' type: (ffi types pointer) function(ffi types pointer, ffi types string, SDL_Color)) yes.
 
             InitEverything.
-            DefaultFont <- OpenFont(DefaultFontPath, 12).
+            DefaultFont <- OpenFont(DefaultFontPath, 14).
           ^ self
         );
 
