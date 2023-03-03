@@ -8,7 +8,7 @@
 
         init => (
             $(Morph) initWithOneChild.
-            layouter: (morphic layouters Stack).  "TODO: Write a layouter for this."
+            layouter: (morphic layouters Stack).
           ^ self
         );
 

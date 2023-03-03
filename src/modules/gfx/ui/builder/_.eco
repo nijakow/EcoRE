@@ -46,9 +46,13 @@
       ^ box
     );
 
-    Framed(element) => (
-      ^ (morphic morphs FrameMorph) new
+    Margin(margin, element) => (
+      ^ (morphic morphs MarginMorph) clone initWithMargin: margin
           ~ add: element
+    );
+
+    Framed(element) => (
+      ^ Margin(10, element)
     );
 
     Clipped(element) => (
@@ -84,10 +88,11 @@
     Window(w, h, content) => (
       | window <- (morphic morphs DraggableMorph) new |
       window
-          ~ add: VBox(
+          ~ add: Margin(10, VBox(
                     HBox(Spacer, Button(Label: 'X', StateAction(window, { value => unlink }))) ~ yLayout: layouts ShrinkWrap,
                     content
                   )
+            )
           ~ rigidWidth: w
           ~ rigidHeight: h
     );

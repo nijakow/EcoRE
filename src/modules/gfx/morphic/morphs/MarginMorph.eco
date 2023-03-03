@@ -1,0 +1,15 @@
+
+    {
+        static with inherited _ = std Clonable;
+        with inherited own Morph = $ Morph;
+
+        with inherited trait = {
+            initWithMargin: margin => (
+                $(Morph) initWithOneChild.
+                layouter: (morphic layouters Margin: margin).
+              ^ self
+            );
+
+            writeOn: w => w << 'a margin morph';
+        };
+    }

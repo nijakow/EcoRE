@@ -21,6 +21,7 @@
         own Morph = (here / 'morphs' / 'Morph.eco') importIn: self;
         own FrameMorph = (here / 'morphs' / 'FrameMorph.eco') importIn: self;
         own StackMorph = (here / 'morphs' / 'StackMorph.eco') importIn: self;
+        own MarginMorph = (here / 'morphs' / 'MarginMorph.eco') importIn: self;
         own BoxMorph = (here / 'morphs' / 'BoxMorph.eco') importIn: self;
         own HBoxMorph = (here / 'morphs' / 'HBoxMorph.eco') importIn: self;
         own VBoxMorph = (here / 'morphs' / 'VBoxMorph.eco') importIn: self;

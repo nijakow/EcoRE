@@ -102,6 +102,7 @@
 
             offsetBy: p => module morphic Point2D NewX: (x + p) Y: (y + p);
             offsetBy: p Do: block => block value(offsetBy: p);
+            offsetByX: xoff Y: yoff => module morphic Point2D NewX: (x + xoff) Y: (y + yoff);
 
             dimensionForOrientation: orientation => (
                 orientation

@@ -207,4 +207,39 @@
 
         writeOn: w => w << 'a stack layouter';
     };
+
+    own Margin = {
+        static with inherited _ = std Clonable;
+        with inherited layouterTrait = $ LayouterTrait;
+
+        margin <- 0;
+
+        margin: m => margin <- m;
+
+        layoutMorph: morph Constraints: constraints => (
+            | shrunkConstraints <- ShrinkConstraints: constraints ForMorph: morph |
+
+            |
+                minWidth  <- 0,
+                minHeight <- 0
+            |
+
+            |
+                offsetPoint      <- (morphic Origin) offsetByX: margin Y: margin,
+                childConstraints <- morphic W: ((shrunkConstraints width  - (margin * 2)) max: 0)
+                                            H: ((shrunkConstraints height - (margin * 2)) max: 0)
+            |
+
+            morph childrenDo: [ :child |
+                child moveTo: offsetPoint.
+                child layoutWithConstraints: childConstraints.
+            ].
+
+            morph resizeTo: shrunkConstraints.
+        );
+
+        writeOn: w => w << 'a margin layouter';
+    };
+
+    Margin: m => Margin clone margin: m;
 }
