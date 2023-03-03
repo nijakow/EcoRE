@@ -109,7 +109,7 @@
         InitMac => Setup: '/opt/homebrew/Cellar/sdl2/2.26.3/lib/libSDL2-2.0.0.dylib'
                      And: '/opt/homebrew/Cellar/sdl2_ttf/2.20.2/lib/libSDL2_ttf-2.0.0.dylib';
         Init => (
-            std os types Current
+            std os type
               ~ ifLinux: [ ^ InitLinux ]
               ~ ifMacOS: [ ^ InitMac   ].
             'SDL2 not supported on this platform' throw.

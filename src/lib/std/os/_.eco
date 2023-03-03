@@ -52,15 +52,15 @@
 
             writeOn: w => w << 'Windows';
         };
-
-        Current => (
-            Switch: #'ecosphere.ecore.init.os_version_id'()
-              ~ case: 1 do: [ ^ Linux   ]
-              ~ case: 2 do: [ ^ FreeBSD ]
-              ~ case: 3 do: [ ^ MacOS   ]
-            ~ default: [ ^ Unknown ]
-        );
     };
+
+    type => (
+        Switch: #'ecosphere.ecore.init.os_version_id'()
+            ~ case: 1 do: [ ^ types Linux   ]
+            ~ case: 2 do: [ ^ types FreeBSD ]
+            ~ case: 3 do: [ ^ types MacOS   ]
+        ~ default: [ ^ types Unknown ]
+    );
 
     env = {
         static with inherited _ = #<:std/Module>;
