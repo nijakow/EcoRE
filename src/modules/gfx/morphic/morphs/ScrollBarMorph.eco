@@ -1,0 +1,37 @@
+
+{
+    static with inherited _ = std Clonable;
+    with inherited own Morph = $ Morph;
+
+    position <- 0.0;
+
+    with inherited trait = {
+        init => (
+            $(Morph) initWithNoChildren.
+            rigidWidth: 10.
+          ^ self
+        );
+
+        position: p => (
+            position <- p;
+            renderDirty.
+          ^ self
+        );
+
+        renderImplOn: renderer => (
+            renderer setR: 0 G: 0 B: 0.
+            renderer fillRectX: 0 Y: 0 W: width H: height.
+            renderer setR: 0 G: 200 B: 0.
+            renderer drawRectX: 0 Y: 0 W: width H: height.
+            renderer fillRectX: 0 Y: (((height - 10) * position) asInt) W: width H: 10.
+            $(Morph) renderImplOn: renderer.
+        );
+
+        handleClickAt: point HandMorph: hand => (
+            position: (point y asFloat / height).
+          ^ true
+        );
+
+        writeOn: w => w << 'a scroll morph';
+    };
+}

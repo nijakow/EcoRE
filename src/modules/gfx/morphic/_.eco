@@ -32,6 +32,7 @@
         own WorldMorph = (here / 'morphs' / 'WorldMorph.eco') importIn: self;
         own ButtonMorph = (here / 'morphs' / 'ButtonMorph.eco') importIn: self;
         own ClipMorph = (here / 'morphs' / 'ClipMorph.eco') importIn: self;
+        own ScrollBarMorph = (here / 'morphs' / 'ScrollBarMorph.eco') importIn: self;
     };
 
     driver = (here / 'driver.eco') importIn: self;

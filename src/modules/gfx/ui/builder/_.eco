@@ -67,7 +67,9 @@
       ^ VBox( Spacer, HBox(Spacer, element, Spacer) ~ yLayout: layouts ShrinkWrap, Spacer )
     );
 
-    Scrollable(element) => Clipped(element);
+    Scrollable(element) => (
+      ^ HBox(Clipped(element), (morphic morphs ScrollBarMorph) new)
+    );
 
     Label: text => (morphic morphs LabelMorph) new ~ text: text;
 
