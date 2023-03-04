@@ -38,7 +38,7 @@
 
         protected getOrMakeTexture: renderer => (
             texture no: [
-                text yes: [ :t | texture <- Yes: (renderer makeTextTexture: t). reshapeToFit. layoutChanged. ]
+                text yes: [ :t | texture <- Yes: (renderer makeTextTexture: t text). reshapeToFit. layoutChanged. ]
             ].
           ^ texture
         );
@@ -51,6 +51,10 @@
         );
 
         handleGrabAt: point HandMorph: hand => ( hand grab: self. true );
+        handleClickAt: point HandMorph: hand => (
+            (std io out << 'Clicked a label at ' << point) newline commit.
+          ^ true
+        );
 
         "TODO"
     };

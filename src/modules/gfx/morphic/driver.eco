@@ -89,6 +89,8 @@
         };
     };
 
+    Text: text => sdl Text: text;
+
     RunWithWidth: w Height: h App: app => (
         sdl Init.
         |

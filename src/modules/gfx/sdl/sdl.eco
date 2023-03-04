@@ -40,7 +40,8 @@
     protected TTF_Init,
     protected TTF_OpenFont,
     protected TTF_CloseFont,
-    protected TTF_RenderText_Solid;
+    protected TTF_RenderText_Solid,
+    protected TTF_SizeUTF8;
 
     SDL_Scancode,
     SDL_Keycode,
@@ -169,6 +170,8 @@
             "We're using a trick to define TTF_RenderText_Solid since using an SDL_Color struct isn't possible with libffi right now"
             TTF_RenderText_Solid <- (libttf function: #'TTF_RenderText_Solid' type: (ffi types pointer) function(ffi types pointer, ffi types string, SDL_Color)) yes.
 
+            TTF_SizeUTF8 <- (libttf function: #'TTF_SizeUTF8' type: (ffi types int) function(ffi types pointer, ffi types string, ffi types int pointer, ffi types int pointer)) yes.
+
             InitEverything.
             DefaultFont <- OpenFont(DefaultFontPath, 14).
           ^ self
@@ -218,6 +221,17 @@
             color at: 2 put: b.
             color at: 3 put: a.
             TTF_RenderText_Solid value(font, text, color)
+        );
+        SizeUTF8(font, text, w, h) => TTF_SizeUTF8 value(font, text, w, h);
+        SizeUTF8_W(font, text) => (
+            | w <- ffi types int alloc |
+            SizeUTF8(font, text, w, ffi null).
+          ^ w at: 0
+        );
+        SizeUTF8_H(font, text) => (
+            | h <- ffi types int alloc |
+            SizeUTF8(font, text, ffi null, h).
+          ^ h at: 0
         );
 
         "TODO..."

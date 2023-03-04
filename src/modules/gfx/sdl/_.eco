@@ -30,4 +30,8 @@
     own Program = (here / 'Program.eco') importIn: self;
 
     own Color = (here / 'Color.eco') importIn: self;
+
+    own Text = (here / 'Text.eco') importIn: self;
+
+    Text: text => (Text clone) initWithText: text Font: sdl DefaultFont;
 }

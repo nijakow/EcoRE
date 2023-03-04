@@ -1,0 +1,31 @@
+{
+    static with inherited _ = std Clonable;
+    protected sdl = $ sdl;
+
+    text, font;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+
+        initWithText: _text Font: _font => (
+            text <- _text;
+            font <- _font;
+          ^ self
+        );
+
+        characterAtOffset: offset => (
+            |
+                str   <- (std io StringWriter) new,
+                index <- 0
+            |
+            text do: [ :c |
+                str << c.
+                sdl SizeUTF8_W(font, str build) <= offset if: [ ^ index ].
+                index <- index + 1.
+            ].
+          ^ index
+        );
+
+        writeOn: w => w << 'an sdl text object';
+    };
+}

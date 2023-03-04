@@ -79,7 +79,7 @@
       ^ HBox(Clipped(content), bar)
     );
 
-    Label: text => (morphic morphs LabelMorph) new ~ text: text;
+    Label: text => (morphic morphs LabelMorph) new ~ text: (morphic Text: text);
 
     TextField: text => (
         | lines <- VBox |
