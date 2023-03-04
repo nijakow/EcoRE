@@ -1,0 +1,22 @@
+
+{
+    static with inherited _ = std Clonable;
+    with inherited own Morph = $ Morph;
+
+    with inherited trait = {
+        init => (
+            $(Morph) initWithOneChild.
+            shrinkWrapWidth.
+            shrinkWrapHeight.
+            layouter: (morphic layouters FreeOffsetX: 0 Y: 0).
+          ^ self
+        );
+
+        scrollY: yPerc => (
+            layouter: (morphic layouters FreeOffsetX: 0 Y: ((yPerc * minHeight) asInt)).
+          ^ self
+        );
+
+        writeOn: w => w << 'a scroll content morph';
+    };
+}

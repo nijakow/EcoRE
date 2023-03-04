@@ -4,6 +4,7 @@
     with inherited own Morph = $ Morph;
 
     position <- 0.0;
+    notifyTo <- No;
 
     with inherited trait = {
         init => (
@@ -15,6 +16,12 @@
         position: p => (
             position <- p;
             renderDirty.
+            notifyTo yes: [ :n | n scrollY: p ].
+          ^ self
+        );
+
+        notifyTo: n => (
+            notifyTo <- Yes: n.
           ^ self
         );
 

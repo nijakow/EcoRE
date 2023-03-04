@@ -251,6 +251,10 @@
             );
             layoutInPlace => layoutWithConstraints: dimensions;
 
+            layoutWithoutConstraints => (
+                layoutWithConstraints: (morphic X: (minWidth) Y: (minHeight))
+            );
+
 
             "
                 Rendering

@@ -192,11 +192,6 @@
         layoutMorph: morph Constraints: constraints => (
             | shrunkConstraints <- ShrinkConstraints: constraints ForMorph: morph |
 
-            |
-                minWidth  <- 0,
-                minHeight <- 0
-            |
-
             morph childrenDo: [ :child |
                 child moveTo: (morphic Origin).
                 child layoutWithConstraints: shrunkConstraints.
@@ -220,12 +215,7 @@
             | shrunkConstraints <- ShrinkConstraints: constraints ForMorph: morph |
 
             |
-                minWidth  <- 0,
-                minHeight <- 0
-            |
-
-            |
-                offsetPoint      <- (morphic Origin) offsetByX: margin Y: margin,
+                offsetPoint      <- morphic X: margin Y: margin,
                 childConstraints <- morphic W: ((shrunkConstraints width  - (margin * 2)) max: 0)
                                             H: ((shrunkConstraints height - (margin * 2)) max: 0)
             |
@@ -242,4 +232,35 @@
     };
 
     Margin: m => Margin clone margin: m;
+
+
+    own FreeOffset = {
+        static with inherited _ = std Clonable;
+        with inherited layouterTrait = $ LayouterTrait;
+
+        x, y;
+
+        x: xv => x <- xv;
+        y: yv => y <- yv;
+        x: xv y: yv => x: xv ~ y: yv;
+
+        layoutMorph: morph Constraints: constraints => (
+            | shrunkConstraints <- ShrinkConstraints: constraints ForMorph: morph |
+
+            |
+                offsetPoint <- morphic X: x Y: y,
+            |
+
+            morph childrenDo: [ :child |
+                child moveTo: offsetPoint.
+                child layoutWithoutConstraints.
+            ].
+
+            morph resizeTo: shrunkConstraints.
+        );
+
+        writeOn: w => w << 'a free offset layouter(' << x << ', ' << y << ')';
+    };
+
+    FreeOffsetX: x Y: y => FreeOffset clone x: x y: y;
 }
