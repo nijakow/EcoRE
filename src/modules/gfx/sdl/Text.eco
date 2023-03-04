@@ -13,14 +13,14 @@
           ^ self
         );
 
-        characterAtOffset: offset => (
+        characterIndexAtX: offset => (
             |
                 str   <- (std io StringWriter) new,
                 index <- 0
             |
             text do: [ :c |
                 str << c.
-                sdl SizeUTF8_W(font, str build) <= offset if: [ ^ index ].
+                (sdl SizeUTF8_W(font, str build) >= offset) if: [ ^ index ].
                 index <- index + 1.
             ].
           ^ index

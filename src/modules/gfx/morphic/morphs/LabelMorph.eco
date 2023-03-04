@@ -53,6 +53,9 @@
         handleGrabAt: point HandMorph: hand => ( hand grab: self. true );
         handleClickAt: point HandMorph: hand => (
             (std io out << 'Clicked a label at ' << point) newline commit.
+            text yes: [ :t |
+                (std io out << 'Text index: ' << (t characterIndexAtX: point x)) newline commit.
+            ].
           ^ true
         );
 

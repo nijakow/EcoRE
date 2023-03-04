@@ -225,13 +225,13 @@
         SizeUTF8(font, text, w, h) => TTF_SizeUTF8 value(font, text, w, h);
         SizeUTF8_W(font, text) => (
             | w <- ffi types int alloc |
-            SizeUTF8(font, text, w, ffi null).
-          ^ w at: 0
+            SizeUTF8(font, text, w address, ffi null).
+          ^ w unwrap
         );
         SizeUTF8_H(font, text) => (
             | h <- ffi types int alloc |
-            SizeUTF8(font, text, ffi null, h).
-          ^ h at: 0
+            SizeUTF8(font, text, ffi null, h address).
+          ^ h unwrap
         );
 
         "TODO..."
