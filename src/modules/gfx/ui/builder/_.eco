@@ -68,7 +68,15 @@
     );
 
     Scrollable(element) => (
-      ^ HBox(Clipped(element), (morphic morphs ScrollBarMorph) new)
+        |
+            bar     <- (morphic morphs ScrollBarMorph) new,
+            content <- (morphic morphs ScrollContentMorph) new
+        |
+
+        content add: element.
+        bar notifyTo: content.
+
+      ^ HBox(Clipped(content), bar)
     );
 
     Label: text => (morphic morphs LabelMorph) new ~ text: text;

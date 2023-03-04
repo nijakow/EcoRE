@@ -13,7 +13,8 @@
         );
 
         scrollY: yPerc => (
-            layouter: (morphic layouters FreeOffsetX: 0 Y: ((yPerc * minHeight) asInt)).
+            layouter: (morphic layouters FreeOffsetX: 0 Y: (((yPerc * minHeight) asInt) negate)).
+            layoutChanged.
           ^ self
         );
 
