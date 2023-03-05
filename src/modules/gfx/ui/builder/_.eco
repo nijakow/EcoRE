@@ -98,11 +98,19 @@
     Window(w, h, content) => (
       | window <- (morphic morphs DraggableMorph) new |
       window
-          ~ add: Margin(10, VBox(
-                    HBox(Spacer, Button(Label: 'X', StateAction(window, { value => unlink }))) ~ yLayout: layouts ShrinkWrap,
-                    content
-                  )
-            )
+          ~ add: VBox(
+                    Margin(10, VBox(
+                          HBox(Spacer, Button(Label: 'X', $[ :(window) :sender | window unlink ] bind(window))) ~ yLayout: layouts ShrinkWrap,
+                          content
+                        )
+                    ),
+                    HBox(Spacer,
+                        ShrinkWrap(Button(Label: ' ^ ', $[ :(window) :sender | window rigidHeight: (window height - 25). window layoutChanged. ] bind(window))),
+                        ShrinkWrap(Button(Label: ' V ', $[ :(window) :sender | window rigidHeight: (window height + 25). window layoutChanged. ] bind(window))),
+                        ShrinkWrap(Button(Label: ' < ', $[ :(window) :sender | window rigidWidth: (window width - 25). window layoutChanged. ] bind(window))),
+                        ShrinkWrap(Button(Label: ' > ', $[ :(window) :sender | window rigidWidth: (window width + 25). window layoutChanged. ] bind(window)))
+                    ) ~ yLayout: layouts ShrinkWrap
+          )
           ~ rigidWidth: w
           ~ rigidHeight: h
     );
