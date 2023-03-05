@@ -90,6 +90,9 @@ struct Eco_Key* Eco_Key_Gensym()
 
     memcpy(&(key->name), name, namelen + 1);
 
+    key->next = NULL;
+    key->prev = NULL;
+
     return key;
 }
 
