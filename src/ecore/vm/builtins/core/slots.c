@@ -31,6 +31,8 @@ bool Eco_VM_Builtin_AddValueSlot(struct Eco_Fiber* fiber, unsigned int args)
     index  = Eco_Fiber_Pop(fiber);
     object = Eco_Fiber_Pop(fiber);
 
+    Eco_BasicSlotInfo_Create(&info);
+
     // TODO: More flags
     info.key                =  (struct Eco_Key*) Eco_Any_AsPointer(key);
     info.flags.is_inherited =  (Eco_Any_AsInteger(flags) & 0x01) == 0;
@@ -75,6 +77,8 @@ bool Eco_VM_Builtin_AddCodeSlot(struct Eco_Fiber* fiber, unsigned int args)
     flags  = Eco_Fiber_Pop(fiber);
     index  = Eco_Fiber_Pop(fiber);
     object = Eco_Fiber_Pop(fiber);
+
+    Eco_BasicSlotInfo_Create(&info);
 
     // TODO: More flags
     info.key                =  (struct Eco_Key*) Eco_Any_AsPointer(key);

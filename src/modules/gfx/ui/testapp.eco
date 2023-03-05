@@ -86,6 +86,11 @@
                           $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder OutlinerWindowForObject: lobby) ]
                                 bind(MirrorBuilder))
                     ~ xLayout: ui layouts Flexible
+                    ~ yLayout: ui layouts Flexible,
+                ui Button(ui Center(ui Label: 'Outliner for a closure'),
+                          $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder OutlinerWindowForObject: $[ :(a, b, c) :x :y :z | ^ (a + x) * (b + y) * (c + z) ]) ]
+                                bind(MirrorBuilder))
+                    ~ xLayout: ui layouts Flexible
                     ~ yLayout: ui layouts Flexible
             )
         )
