@@ -88,7 +88,7 @@
   newASTCompoundWithInstructions: instructions => (ast ASTCompound new) initWithExprs: instructions;
 
   newASTBlockWithArgs: args Varargs: varargs Body: body => (ast ASTBlock new) initWithArgs: args Varargs: varargs Body: body;
-  newASTClosureBlockWithArgs: args Varargs: varargs Body: body => (ast ASTClosureBlock new) initWithArgs: args Varargs: varargs Body: body;
+  newASTClosureBlockWithClosedArgs: closedargs Args: args Varargs: varargs Body: body => (ast ASTClosureBlock new) initWithClosedArgs: closedargs Args: args Varargs: varargs Body: body;
 
   newASTReturnWithValue: value => (ast ASTReturn new) initWithValue: value;
 

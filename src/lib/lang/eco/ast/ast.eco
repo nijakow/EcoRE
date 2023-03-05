@@ -354,19 +354,21 @@
         static with inherited parent = #<:std/Clonable>;
         with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
 
-        args, varargs, body;
+        closedargs, args, varargs, body;
 
-        initWithArgs: _args Varargs: _varargs Body: _body => (
-            args    <- _args.
-            varargs <- _varargs.
-            body    <- _body.
+        initWithClosedArgs: _closedargs Args: _args Varargs: _varargs Body: _body => (
+            closedargs <- _closedargs.
+            args       <- _args.
+            varargs    <- _varargs.
+            body       <- _body.
           ^ self
         );
+        getClosedArgs => closedargs asArray;
         getArgs => args asArray;
         hasVarargs => varargs;
         getBody => body;
         acceptVisitor: visitor => visitor visitClosureBlock: self;
-        writeOn: writer => writer << 'ASTClosureBlock(' << args << ', ' << varargs << ', ' << body << ')';
+        writeOn: writer => writer << 'ASTClosureBlock(' << closedargs << ', ' << args << ', ' << varargs << ', ' << body << ')';
     };
 
     ASTReturn = {

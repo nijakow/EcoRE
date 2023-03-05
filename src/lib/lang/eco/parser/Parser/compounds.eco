@@ -39,8 +39,9 @@
 
     parseClosureBlock => (
       |
-          parameters <- std util newVector,
-          varargs    <- false,
+          closedparameters <- std util newVector,
+          parameters       <- std util newVector,
+          varargs          <- false,
           the_type,
           key
       |
@@ -54,14 +55,16 @@
           if: [ (check: TokenType ELLIPSIS) isYes ] then: [
               varargs <- true.
               expect: TokenType BAR.
-            ^ newASTClosureBlockWithArgs: (parameters)
-                                 Varargs: (varargs)
-                                    Body: (parseCompoundWithTerminator: TokenType RBRACK)
+            ^ newASTClosureBlockWithClosedArgs: (closedparameters)
+                                          Args: (parameters)
+                                       Varargs: (varargs)
+                                          Body: (parseCompoundWithTerminator: TokenType RBRACK)
           ] ~
           default: [
-            ^ newASTClosureBlockWithArgs: (parameters)
-                                 Varargs: (varargs)
-                                    Body: (parseCompoundWithTerminator: TokenType RBRACK)
+            ^ newASTClosureBlockWithClosedArgs: (closedparameters)
+                                          Args: (parameters)
+                                       Varargs: (varargs)
+                                          Body: (parseCompoundWithTerminator: TokenType RBRACK)
           ]
       ] repeat.
     );
