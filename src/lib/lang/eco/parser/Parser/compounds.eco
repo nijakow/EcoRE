@@ -48,7 +48,15 @@
       [
         begin
           if: [ (check: TokenType COLON) isYes ] then: [
-            parameters append: parseArgdef.
+            ((check: TokenType LPAREN) isYes) if: [
+                "closed parameters"
+                parseArgdefsWithoutEllipsis do: [ :argdef |
+                    closedparameters append: argdef.
+                ].
+            ] else: [
+                "normal parameter"
+                parameters append: parseArgdef.
+            ].
             check: TokenType SEPARATOR.
             check: TokenType BAR.
           ] ~

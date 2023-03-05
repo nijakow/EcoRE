@@ -8,6 +8,22 @@
       ^ newASTType: type AndName: name
     );
 
+    parseArgdefsWithoutEllipsis => (
+        | defs <- std util newVector |
+        [ (check: TokenType RPAREN) isYes ] until: [
+            defs append: parseArgdef.
+            (check: TokenType RPAREN) yes: [ ^ defs ].
+            expect: TokenType SEPARATOR
+        ].
+      ^ defs
+    );
+
+    parseOptionalArgdefsWithoutEllipsis => (
+        (check: TokenType LPAREN)
+          ~ yes: [ parseArgdefsWithoutEllipsis ]
+             no: [ std util newVector          ]
+    );
+
     parseArgdefs => (
         | defs <- std util newVector |
         [ (check: TokenType RPAREN) isYes ] until: [
