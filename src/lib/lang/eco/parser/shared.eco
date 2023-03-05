@@ -18,6 +18,7 @@
         RCURLY = #'rcurly',
         HASHLPAREN = #'hashlparen',
         PERCLBRACK = #'perclbrack',
+        DOLLARBRACK = #'dollarbrack',
         DOLLAR = #'dollar',
         RESEND = #'resend',
         SEPARATOR = #'separator',

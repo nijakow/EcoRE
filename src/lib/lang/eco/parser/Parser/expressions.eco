@@ -19,15 +19,16 @@
     );
 
     parseSimpleExpressionWithFollowups: followups => (
-        (check: TokenType SELF)       yes: [ ^ newASTSelf     ].
-        (check: TokenType MY)         yes: [ ^ newASTMy       ].
-        (check: TokenType LPAREN)     yes: [ ^ parseCompound  ].
-        (check: TokenType LBRACK)     yes: [ ^ parseBlock     ].
-        (check: TokenType LCURLY)     yes: [ ^ parseMolecule  ].
-        (check: TokenType HASHLPAREN) yes: [ ^ parseArray     ].
-        (check: TokenType PERCLBRACK) yes: [ ^ parseInterface ].
-        (check: TokenType DOLLAR)     yes: [ ^ newASTHostRef  ].
-        (check: TokenType RESEND)     yes: [ ^ parseResend    ].
+        (check: TokenType SELF)        yes: [ ^ newASTSelf        ].
+        (check: TokenType MY)          yes: [ ^ newASTMy          ].
+        (check: TokenType LPAREN)      yes: [ ^ parseCompound     ].
+        (check: TokenType LBRACK)      yes: [ ^ parseBlock        ].
+        (check: TokenType DOLLARBRACK) yes: [ ^ parseClosureBlock ].
+        (check: TokenType LCURLY)      yes: [ ^ parseMolecule     ].
+        (check: TokenType HASHLPAREN)  yes: [ ^ parseArray        ].
+        (check: TokenType PERCLBRACK)  yes: [ ^ parseInterface    ].
+        (check: TokenType DOLLAR)      yes: [ ^ newASTHostRef     ].
+        (check: TokenType RESEND)      yes: [ ^ parseResend       ].
 
         (check: TokenType KEY) yes: [ :kw |
             (check: TokenType LPAREN) yes: [

@@ -36,4 +36,33 @@
             ]
         ] repeat.
     );
+
+    parseClosureBlock => (
+      |
+          parameters <- std util newVector,
+          varargs    <- false,
+          the_type,
+          key
+      |
+      [
+        begin
+          if: [ (check: TokenType COLON) isYes ] then: [
+            parameters append: parseArgdef.
+            check: TokenType SEPARATOR.
+            check: TokenType BAR.
+          ] ~
+          if: [ (check: TokenType ELLIPSIS) isYes ] then: [
+              varargs <- true.
+              expect: TokenType BAR.
+            ^ newASTClosureBlockWithArgs: (parameters)
+                                 Varargs: (varargs)
+                                    Body: (parseCompoundWithTerminator: TokenType RBRACK)
+          ] ~
+          default: [
+            ^ newASTClosureBlockWithArgs: (parameters)
+                                 Varargs: (varargs)
+                                    Body: (parseCompoundWithTerminator: TokenType RBRACK)
+          ]
+      ] repeat.
+    );
 }
