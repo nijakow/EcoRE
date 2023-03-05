@@ -219,7 +219,11 @@
             driver <- (lang eco compiler CompilationDriver) new
                         ~ subject: ast getBody
         |
-        environment yes: [ :e | driver environment: e ].
+        environment yes: [ :e | driver environment: e ]. "TODO: Is this needed?"
+        ast getArgs do: [ :arg |
+            driver addParameter: arg getName "TODO: Also compile and add the type"
+        ].
+        ast hasVarargs if: [ driver enableVarargs ].
 
         #'ecosphere.ecore.reflect.add_value_slot'(m, -1, 0b10010, any, #'_', std Clonable).
         #'ecosphere.ecore.reflect.add_value_slot'(m, -1, 0b00010, any, #'_', {
@@ -229,12 +233,13 @@
 
             writeOn: w => w << 'a proper block closure';
         }).
-        ast getArgs do: [ :arg |
+
+        ast getClosedArgs do: [ :arg |
             #'ecosphere.ecore.reflect.add_value_slot'(m, -1, 0b00000, any, arg getName, m)
         ].
 
         | mappedNames <- std util newMap |
-        ast getArgs do: [ :arg |
+        ast getClosedArgs do: [ :arg |
             mappedNames at: arg getName put: (sys builtins object key Gensym).
         ].
 
@@ -242,7 +247,7 @@
             astBuilder <- #<:lang/eco/ast/ASTConstruction>,
             initSource <- astBuilder newASTCompoundWithInstructions: (
                             (astBuilder newASTCompoundWithInstructions: (
-                    ast getArgs map: [ :arg |
+                    ast getClosedArgs map: [ :arg |
                         (astBuilder newASTAssignmentWithLHS: (astBuilder newASTSendWithSubject: (astBuilder newASTSelf) Message: (arg getName) Args: (std util newArray()) HasVarargs: false)
                                                         RHS: (astBuilder newASTSendWithSubject: (astBuilder newASTImplicit) Message: ((mappedNames at: arg getName) yes) Args: (std util newArray()) HasVarargs: false))
                     ].
@@ -253,7 +258,7 @@
             initDriver <- (lang eco compiler CompilationDriver) new
                             ~ subject: initSource
         |
-        ast getArgs do: [ :arg |
+        ast getClosedArgs do: [ :arg |
             initDriver addParameter: ((mappedNames at: arg getName) yes)  "TODO: Type?"
         ].
 
