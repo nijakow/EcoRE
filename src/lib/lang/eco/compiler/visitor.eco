@@ -237,7 +237,7 @@
                             (astBuilder newASTCompoundWithInstructions: (
                     ast getArgs map: [ :arg |
                         (astBuilder newASTAssignmentWithLHS: (astBuilder newASTSendWithSubject: (astBuilder newASTSelf) Message: (arg getName) Args: (std util newArray()) HasVarargs: false)
-                                                        RHS: (astBuilder newASTSendWithSubject: (astBuilder newASTSelf) Message: (mappedNames at: arg getName) Args: (std util newArray()) HasVarargs: false))
+                                                        RHS: (astBuilder newASTSendWithSubject: (astBuilder newASTImplicit) Message: ((mappedNames at: arg getName) yes) Args: (std util newArray()) HasVarargs: false))
                     ].
                 )) & (
                     astBuilder newASTReturnWithValue: (astBuilder newASTSelf)
@@ -247,7 +247,7 @@
                             ~ subject: initSource
         |
         ast getArgs do: [ :arg |
-            initDriver addParameter: (mappedNames at: arg getName)  "TODO: Type?"
+            initDriver addParameter: ((mappedNames at: arg getName) yes)  "TODO: Type?"
         ].
 
         #'ecosphere.ecore.reflect.add_code_slot'(m, -1, 0b00001, any, #'init', initDriver commit).
