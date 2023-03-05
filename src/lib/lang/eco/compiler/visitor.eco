@@ -222,6 +222,13 @@
         environment yes: [ :e | driver environment: e ].
 
         #'ecosphere.ecore.reflect.add_value_slot'(m, -1, 0b10010, any, #'_', std Clonable).
+        #'ecosphere.ecore.reflect.add_value_slot'(m, -1, 0b00010, any, #'_', {
+            static with inherited _ = #<:std/Trait>;
+
+            bind(...) => clone init(...);
+
+            writeOn: w => w << 'a proper block closure';
+        }).
         ast getArgs do: [ :arg |
             #'ecosphere.ecore.reflect.add_value_slot'(m, -1, 0b00000, any, arg getName, m)
         ].
