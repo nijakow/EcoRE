@@ -110,6 +110,10 @@
         compiler popBlockScope
     );
 
+    visitClosureBlock: ast => (
+        visitBlock: ast
+    );
+
     visitBuiltin: ast => (
         | args <- ast getArgs |
         args do: [ :arg | arg acceptVisitor: self. compiler push ].

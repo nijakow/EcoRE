@@ -350,6 +350,25 @@
         writeOn: writer => writer << 'ASTBlock(' << args << ', ' << varargs << ', ' << body << ')';
     };
 
+    ASTClosureBlock = {
+        static with inherited parent = #<:std/Clonable>;
+        with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
+
+        args, varargs, body;
+
+        initWithArgs: _args Varargs: _varargs Body: _body => (
+            args    <- _args.
+            varargs <- _varargs.
+            body    <- _body.
+          ^ self
+        );
+        getArgs => args asArray;
+        hasVarargs => varargs;
+        getBody => body;
+        acceptVisitor: visitor => visitor visitClosureBlock: self;
+        writeOn: writer => writer << 'ASTClosureBlock(' << args << ', ' << varargs << ', ' << body << ')';
+    };
+
     ASTReturn = {
         static with inherited parent = #<:std/Clonable>;
         with inherited ast_shared = #<:lang/eco/ast/AST_SharedBehavior>;
