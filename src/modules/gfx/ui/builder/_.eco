@@ -95,12 +95,20 @@
         ))
     );
 
+    Minimized(window) => (
+        | mini <- Window(100, 100, Button(Label: 'Unminimize', $[ :(minimized) :sender | (sender world yes) open: minimized ] bind(window))) |
+      ^ mini
+    );
+
     Window(w, h, content) => (
       | window <- (morphic morphs DraggableMorph) new |
       window
           ~ add: VBox(
                     Margin(10, VBox(
-                          HBox(Spacer, Button(Label: 'X', $[ :(window) :sender | window unlink ] bind(window))) ~ yLayout: layouts ShrinkWrap,
+                          HBox(Spacer,
+                                  Button(Label: ' _ ', $[ :(builder, window) :sender | (window world yes) open: (builder Minimized(window)). window unlink. ] bind(self, window)),
+                                  Button(Label: ' X ', $[ :(window) :sender | window unlink ] bind(window))
+                          ) ~ yLayout: layouts ShrinkWrap,
                           content
                         )
                     ),
