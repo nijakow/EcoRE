@@ -219,7 +219,6 @@
             driver <- (lang eco compiler CompilationDriver) new
                         ~ subject: ast getBody
         |
-        environment yes: [ :e | driver environment: e ]. "TODO: Is this needed?"
         ast getArgs do: [ :arg |
             driver addParameter: arg getName "TODO: Also compile and add the type"
         ].

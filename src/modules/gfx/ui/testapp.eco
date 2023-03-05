@@ -19,9 +19,9 @@
                     builder Label: (slotMirror isInherited if: 'i' else: ' '),
                     builder SpacerW: 10 H: 1,
                     builder Button(builder Label: (slotMirror name asString),
-                                   builder StateAction(std util newArray(self, slotMirror), {
-                                       value(sender) => (sender world yes) open: ((state at: 0) WindowFor: ((state at: 1) slotValue))
-                                   })
+                                   $[ :(builder, mirror) :sender |
+                                        (sender world yes) open: (builder WindowFor: (mirror slotValue))
+                                   ] bind(self, slotMirror)
                     )
                 ) ~ xLayout: builder layouts Flexible
             )
@@ -83,10 +83,10 @@
             ui VBox(
                 ui TextField: 'Ecosphere\nis\nawesome!',
                 ui Button(ui Center(ui Label: 'Outliner'),
-                          Action: { value(sender) => (sender world yes) open: (MirrorBuilder OutlinerWindowForObject: lobby) })
+                          $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder OutlinerWindowForObject: lobby) ]
+                                bind(MirrorBuilder))
                     ~ xLayout: ui layouts Flexible
-                    ~ yLayout: ui layouts Flexible,
-                ui Button(ui Label: 'Another!', Action: { value(sender) => (state new) openInWorld: (sender world yes) }),
+                    ~ yLayout: ui layouts Flexible
             )
         )
     );
