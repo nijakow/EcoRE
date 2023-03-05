@@ -34,6 +34,7 @@
             static with inherited _ = #<:std/Module>;
 
             AsString(k) => #'ecosphere.ecore.key.as_string'(k);
+            Gensym => #'ecosphere.ecore.object.key.gensym'();
         };
 
         string = {

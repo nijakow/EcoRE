@@ -75,6 +75,24 @@ struct Eco_Key* Eco_Key_Find(const char* name)
     return Eco_Key_New(name);
 }
 
+struct Eco_Key* Eco_Key_Gensym()
+{
+    const char*      name = "<gensym>";
+
+    unsigned int     namelen;
+    struct Eco_Key*  key;
+
+    namelen                = strlen(name);
+    key                    = Eco_Object_New(Eco_Key_TYPE, sizeof(struct Eco_Key) + (namelen + 1) * sizeof(char));
+
+    key->econnect_callback = NULL;
+    key->builtin           = Eco_VM_Builtin_Trap;
+
+    memcpy(&(key->name), name, namelen + 1);
+
+    return key;
+}
+
 void Eco_Key_Mark(struct Eco_GC_State* state, struct Eco_Key* key)
 {
     Eco_Object_Mark(state, &(key->_));
