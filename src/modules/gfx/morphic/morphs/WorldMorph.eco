@@ -28,7 +28,7 @@
 
             maybeUpdate => (
                 isLayoutDirty if: [
-                    (std io out << 'updating layout') newline commit.
+                    "(std io out << 'updating layout') newline commit."
                     forceLayoutInPlace
                 ].
             );
@@ -46,7 +46,7 @@
                     renderOn: renderer.
                     maybeRenderChildrenOn: renderer.
                     renderer present."
-                    (std io out << 'rendering') newline commit.
+                    "(std io out << 'rendering') newline commit."
                     fullRender
                 ].
             );
