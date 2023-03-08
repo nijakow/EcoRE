@@ -44,6 +44,11 @@
             ].
           ^ c asArray
         );
+        extension => (
+            | tokens <- name splitOnChar: $'.' |
+            (tokens size > 1) if: [ ^ tokens at: (tokens size - 1) ].
+          ^ ''
+        );
         openForReading => io OpenFileForReading: path;
         import => importIn: lobby;
         importIn: obj => io Import: path Path: parent In: obj;

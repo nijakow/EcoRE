@@ -105,5 +105,13 @@
       ^ parser parseExpression
     );
     iterator => ((std text utf8 UTF8Iterator) clone) init: ((#<:std/reflect/proxies/String/Iterator> clone) init: self);
+    asArray => (
+        |
+            array <- std util newArray: size,
+            i     <- 0
+        |
+        do: [ :c | array at: i put: c. i <- i + 1 ].
+      ^ array
+    );
     writeOn: writer => do: [ :c | writer << c ];
 }

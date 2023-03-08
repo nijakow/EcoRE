@@ -66,6 +66,34 @@
             )
         );
 
+        PathOutlinerRow: childpath Name: name => (
+            builder ShrinkWrap(
+                builder HBox(
+                    builder Button(builder Label: (name),
+                                   $[ :(builder, path) :sender |
+                                        (sender world yes) open: (builder OutlinerWindowForPath: path)
+                                   ] bind(self, childpath)
+                    )
+                ) ~ xLayout: builder layouts Flexible
+            )
+        );
+        PathOutlinerRow: childpath => PathOutlinerRow: childpath Name: (childpath name);
+        OutlinerPaneForPath: path => (
+            | slots <- builder make VBoxMorph |
+            slots add: (PathOutlinerRow: (path / '..') Name: '..').
+            path children do: [ :subpath |
+                slots add: (PathOutlinerRow: subpath)
+            ].
+          ^ slots
+        );
+        OutlinerWindowForPath: path => (
+            ((path extension) equals: 'eco') if: [
+                ^ WindowFor: (path import)
+            ] else: [
+                ^ builder Window(400, 400, builder Scrollable(OutlinerPaneForPath: path))
+            ]
+        );
+
         WindowFor: object => (
             begin
               ~ if: [ std reflect primitives IsCode:     object ] then: [ ^ DisassemblyWindowFor:    object ]
@@ -79,16 +107,16 @@
     );
 
     build => (
-        ui Window(200, 200,
+        ui Window(320, 200,
             ui VBox(
-                ui TextField: 'Ecosphere\nis\nawesome!',
+                ui Center(ui TextField: 'Look at me as I can fly!\n    - Chrom, "Regret & Testify"'),
                 ui Button(ui Center(ui Label: 'Outliner'),
                           $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder OutlinerWindowForObject: lobby) ]
                                 bind(MirrorBuilder))
                     ~ xLayout: ui layouts Flexible
                     ~ yLayout: ui layouts Flexible,
-                ui Button(ui Center(ui Label: 'Outliner for a closure'),
-                          $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder OutlinerWindowForObject: $[ :(a, b, c) :x :y :z | ^ (a + x) * (b + y) * (c + z) ]) ]
+                ui Button(ui Center(ui Label: 'Files'),
+                          $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder OutlinerWindowForPath: (std os files here)) ]
                                 bind(MirrorBuilder))
                     ~ xLayout: ui layouts Flexible
                     ~ yLayout: ui layouts Flexible
