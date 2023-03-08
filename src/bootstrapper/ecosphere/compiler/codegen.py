@@ -154,10 +154,13 @@ class CodeGenerator:
 
     def _drop_last_value(self):
         self._transfer_last_value(None)
+
+    def _get_self(self):
+        return self._scope.get_storage_manager().get_self_with_depth(self._scope.get_depth())
     
     def _transfer_value(self, src, dst):
         if src is None:
-            src = self._scope.get_storage_manager().get_self()
+            src = self._get_self()
         if dst is None:
             if src.is_stack():
                 self._writer.write_drop()
@@ -215,7 +218,7 @@ class CodeGenerator:
 
     def load_self(self):
         self._drop_last_value()
-        self._set_last_value(self._scope.get_storage_manager().get_self())
+        self._set_last_value(self._get_self())
 
     def load_constant_cb(self):
         constant = self._scope.get_storage_manager().get_constant()

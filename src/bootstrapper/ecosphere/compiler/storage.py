@@ -97,6 +97,9 @@ class StorageManager:
 
     def get_self(self):
         return StorageManager._SELF
+    
+    def get_self_with_depth(self, depth):
+        return Arg(0, depth)
 
     def get_register(self, i):
         return self._registers[i]  # TODO: Allocate it if it does not exist
