@@ -36,6 +36,12 @@
 
     returns: v => ( value. ^ v );
 
+    "
+        TODO: Since the inliner in the optimizer will optimize these loops away,
+              returning 'self' might not be the best idea, since this would enforce
+              the optimizer to keep the loop object around. Maybe we should
+              return a special object?
+    "
     while: b   => ( (self value) unless: [ ^ self ]. b value. #'ecosphere.ecore.flow.reset'() );
     until: b   => ( (self value) if: [ ^ self ]. b value. #'ecosphere.ecore.flow.reset'() );
 

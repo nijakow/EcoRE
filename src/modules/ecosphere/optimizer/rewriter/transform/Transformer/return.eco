@@ -4,7 +4,7 @@
 
         transformReturn: ast => (
             | returnValue <- ((transform: ast returnValue) wrapIn: context) |
-            ((context lexical: ast depth) exitLabel)
+            ((context lexical: ast depth) exitLabel)  "TODO: Shouldn't we take the exit label from the parent?"
                 yes: [ :label | ^ Answer: (builder Jump: label Value: returnValue)         ]
                  no: [          ^ Answer: (builder Return: returnValue Depth: (ast depth)) ]
         );
