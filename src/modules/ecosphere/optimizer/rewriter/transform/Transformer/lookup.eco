@@ -15,9 +15,18 @@
           ^ No
         );
 
+        LookupIntMethod: name => (
+            (name == #'for:do:') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'for:do:' In: (std reflect proxies Int ranged_loops))) ].
+            (name == #'to:do:') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'to:do:' In: (std reflect proxies Int ranged_loops))) ].
+          ^ No
+        );
+
         LookupMethod: name InAST: ast => (
-            ((ast type) == (astTypes Block))
-                  if: [ ^ LookupBlockMethod: name ]
-                else: [ ^ No                      ]
+            ((ast type) == (astTypes Block)) if: [ ^ LookupBlockMethod: name ].
+            ((ast type) == (astTypes Constant)) if: [
+                std reflect primitives IsInt: (ast constant)
+                    ~ if: [ ^ LookupIntMethod: name ]
+            ].
+          ^ No
         );
     }
