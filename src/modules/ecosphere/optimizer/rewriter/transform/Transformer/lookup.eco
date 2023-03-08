@@ -7,6 +7,11 @@
             (name == #'repeat') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'repeat' In: (std reflect proxies Block))) ].
             (name == #'while:') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'while:' In: (std reflect proxies Block))) ].
             (name == #'until:') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'until:' In: (std reflect proxies Block))) ].
+
+            (name == #'repeatWithExitValue') -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'repeatWithExitValue' In: (std reflect proxies Block))) ].
+            (name == #'repeatWithBreak')     -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'repeatWithBreak' In: (std reflect proxies Block))) ].
+            (name == #'repeatWithContinue')  -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'repeatWithContinue' In: (std reflect proxies Block))) ].
+            (name == #'withRestart')         -> [ ^ Yes: (optimizer BuildAST: (optimizer Disassemble: #'withRestart' In: (std reflect proxies Block))) ].
           ^ No
         );
 

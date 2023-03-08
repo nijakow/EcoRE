@@ -16,13 +16,11 @@
     exitValue  => self value([ :v | ^ v ]);
 
     repeatWithExitValue => (
-        | breaker <- [ :v | ^ v ] |
-        [ self value(breaker) ] repeat.
+        [ self value([ :v | ^ v ]) ] repeat.
     );
 
     repeatWithBreak => (
-        | breaker <- [ ^ self ] |
-        [ self value(breaker) ] repeat.
+        [ self value([ ^ #<:std/reflect/proxies/Block/BlockSentinel> ]) ] repeat.
     );
 
     repeatWithContinue => (
