@@ -230,6 +230,7 @@
                 renderDirty.
                 recursiveLayoutChanged.
             );
+            isLayoutDirty => cachedLayoutingConstraints isNo;
 
             protected layoutDirtyForConstraints: constraints => (
                 cachedLayoutingConstraints

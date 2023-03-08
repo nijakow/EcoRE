@@ -27,7 +27,10 @@
             world => Yes: self;
 
             maybeUpdate => (
-                forceLayoutInPlace.
+                isLayoutDirty if: [
+                    (std io out << 'updating layout') newline commit.
+                    forceLayoutInPlace
+                ].
             );
 
             "renderImplOn: renderer => (
@@ -37,11 +40,15 @@
             );"
 
             render => (
-                "renderer setR: 200 G: 200 B: 200.
-                renderer clear.
-                renderOn: renderer."
-                maybeRenderChildrenOn: renderer.
-                renderer present.
+                isRenderDirty if: [
+                    "renderer setR: 200 G: 200 B: 200.
+                    renderer clear.
+                    renderOn: renderer.
+                    maybeRenderChildrenOn: renderer.
+                    renderer present."
+                    (std io out << 'rendering') newline commit.
+                    fullRender
+                ].
             );
 
             fullRender => (

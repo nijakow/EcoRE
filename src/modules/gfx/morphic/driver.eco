@@ -48,16 +48,18 @@
             tick => (
                 ([ morph handMorph offset x != mouseX ] or: [ morph handMorph offset y != mouseY ]) -> [
                     morph handMorph moveToX: mouseX Y: mouseY.
+                    morph renderDirty. "Force a full render"
                 ].
 
                 morph maybeUpdate.
-                (tickCount > 50) if: [
+                morph render.
+                "(tickCount > 50) if: [
                     morph fullRender.
                     tickCount <- 0.
                 ] else: [
                     morph render.
                     tickCount <- tickCount + 1.
-                ].
+                ]."
             );
 
             findMorphAtX: x Y: y => (
