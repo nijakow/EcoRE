@@ -44,8 +44,8 @@
         );
 
         renderImplOn: renderer => (
-            renderer setR: 50 G: 0 B: 0.
-            renderer drawRectX: 0 Y: 0 W: width H: height.
+            "renderer setR: 50 G: 0 B: 0.
+            renderer drawRectX: 0 Y: 0 W: width H: height."
             (getOrMakeTexture: renderer) yes: [ :t | renderer drawTexture: t W: width H: height ].
             $(Morph) renderImplOn: renderer.
         );

@@ -10,12 +10,6 @@
               ^ self
             );
 
-            renderImplOn: renderer => (
-                renderer setR: 40 G: 0 B: 0.
-                renderer drawRectX: 0 Y: 0 W: width H: height.
-                $(Morph) renderImplOn: renderer.
-            );
-
             writeOn: w => w << 'a stack morph';
         };
     }

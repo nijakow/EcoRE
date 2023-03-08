@@ -39,12 +39,6 @@
                      no: [      world yes: [ :w | (w grabAt: gb HandMorph: self) ] ]
             );
 
-            renderImplOn: renderer => (
-                $(Morph) renderImplOn: renderer.
-                "renderer setR: 200 G: 0 B: 0.
-                renderer fillRectX: 0 Y: 0 W: 1 H: 1."
-            );
-
             dispatchEvent: block AtX: evtX Y: evtY => false; "Avoid dispatching to children"
 
             writeOn: w => w << 'a hand morph';

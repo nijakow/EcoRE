@@ -52,7 +52,8 @@
     );
 
     Framed(element) => (
-      ^ Margin(10, element)
+      ^ (morphic morphs FrameMorph) new
+          ~ add: element
     );
 
     Clipped(element) => (
@@ -91,6 +92,7 @@
     Button(caption, action) => (
       ^ ShrinkWrap(Stacked(
             (morphic morphs ButtonMorph) new ~ action: action,
+            (morphic morphs FrameMorph) new,
             caption
         ))
     );
@@ -106,10 +108,10 @@
           ~ add: VBox(
                     Margin(10, VBox(
                           HBox(Spacer,
-                                  Button(Label: ' _ ', $[ :(builder, window) :sender | (window world yes) open: (builder Minimized(window)). window unlink. ] bind(self, window)),
-                                  Button(Label: ' X ', $[ :(window) :sender | window unlink ] bind(window))
+                               Button(Label: ' _ ', $[ :(builder, window) :sender | (window world yes) open: (builder Minimized(window)). window unlink. ] bind(self, window)),
+                               Button(Label: ' X ', $[ :(window) :sender | window unlink ] bind(window))
                           ) ~ yLayout: layouts ShrinkWrap,
-                          content
+                          Framed(content)
                         )
                     ),
                     HBox(Spacer,

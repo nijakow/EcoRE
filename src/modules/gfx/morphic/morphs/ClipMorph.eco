@@ -1,17 +1,18 @@
 
 {
     static with inherited _ = std Clonable;
-    with inherited own FrameMorph = $ FrameMorph;
+    with inherited own Morph = $ Morph;
 
     with inherited trait = {
         init => (
-            $(FrameMorph) init.
+            $(Morph) initWithOneChild.
+            layouter: (morphic layouters Stack).
           ^ self
         );
 
         renderImplOn: renderer => (
             renderer withClipW: (dimensions width) H: (dimensions height) Do: [
-                $(FrameMorph) renderImplOn: renderer.
+                $(Morph) renderImplOn: renderer.
             ];
         );
 
