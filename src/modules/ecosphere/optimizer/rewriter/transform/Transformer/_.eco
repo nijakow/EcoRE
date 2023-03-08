@@ -61,7 +61,7 @@
           ~ case: astTypes Jump       do: [ ^ transformJump:       ast              ]
           ~ case: astTypes Compound   do: [ ^ transformCompound:   ast              ]
           ~ case: astTypes Assignment do: [ ^ transformAssignment: ast              ]
-          ~ case: astTypes Block      do: [ ^ transformBlock:      ast Force: force ]
+          ~ case: astTypes Block      do: [ ^ transformBlock:      ast Force: true  ]  "Must always be true, otherwise blocks get inlined into the wrong scope."
           ~ case: astTypes Scope      do: [ ^ transformScope:      ast              ]
           "TODO: Slot Assignments, ..."
         ~ default: [ ^ Answer: ast ]
