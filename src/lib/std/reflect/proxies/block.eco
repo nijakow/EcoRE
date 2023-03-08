@@ -1,4 +1,9 @@
 
+#=std/reflect/proxies/Block/BlockSentinel: {
+    static with inherited _ = #<:std/Singleton>;
+    writeOn: w => w << 'the block sentinel';
+},
+
 #=std/reflect/proxies/Block: {
     static with inherited parent = #<:std/Clonable>;
     
@@ -7,7 +12,7 @@
     value: v   => value(v);
     repeat     => ( self value. #'ecosphere.ecore.flow.reset'() );
 
-    withBreak  => self value([ ^ self ]);
+    withBreak  => self value([ ^ #<:std/reflect/proxies/Block/BlockSentinel> ]);
     exitValue  => self value([ :v | ^ v ]);
 
     repeatWithExitValue => (
@@ -37,16 +42,17 @@
     returns: v => ( value. ^ v );
 
     "
-        TODO: Since the inliner in the optimizer will optimize these loops away,
+        NOTE: Since the inliner in the optimizer will optimize these loops away,
               returning 'self' might not be the best idea, since this would enforce
-              the optimizer to keep the loop object around. Maybe we should
-              return a special object?
+              the optimizer to keep the loop object around.
+
+              Therefore, we return the block sentinel object.
     "
-    while: b   => ( (self value) unless: [ ^ self ]. b value. #'ecosphere.ecore.flow.reset'() );
-    until: b   => ( (self value) if: [ ^ self ]. b value. #'ecosphere.ecore.flow.reset'() );
+    while: b   => ( (self value) unless: [ ^ #<:std/reflect/proxies/Block/BlockSentinel> ]. b value. #'ecosphere.ecore.flow.reset'() );
+    until: b   => ( (self value) if: [ ^ #<:std/reflect/proxies/Block/BlockSentinel> ]. b value. #'ecosphere.ecore.flow.reset'() );
 
     catch: b   => ( [ #'ecosphere.ecore.flow.set_exception_handler'(b). self value ] value );
-    ok: yblock => [ yblock value(self value) ] catch: [ :e | self ];
+    ok: yblock => [ yblock value(self value) ] catch: [ :e | #<:std/reflect/proxies/Block/BlockSentinel> ];
     error: nblock => self catch: nblock;
     ok: yblock error: nblock => [ yblock value(self value) ] catch: nblock;
     error: nblock ok: yblock => [ yblock value(self value) ] catch: nblock;

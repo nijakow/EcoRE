@@ -43,6 +43,16 @@
 
     until => [ true ] until: [ (std io out << 'Hi!') newline commit ];
 
+    parseArgdefsWithoutEllipsis => (
+        | defs <- std util newVector |
+        [ (check: TokenType RPAREN) isYes ] until: [
+            defs append: parseArgdef.
+            (check: TokenType RPAREN) yes: [ ^ defs ].
+            expect: TokenType SEPARATOR
+        ].
+      ^ defs
+    );
+
 
     TestMethod: m => (
         (std io out << 'Now processing method: ' << m) newline commit.
@@ -62,7 +72,8 @@
     );
 
     Main => (
-        #( #'f', #'g', #'h', #'i', #'j', #'k', #'mega', #'giga', #'iter', #'regs', #'va', #'vax', #'vbx', #'vcx', #'until' )
+        #( #'f', #'g', #'h', #'i', #'j', #'k', #'mega', #'giga', #'iter', #'regs', #'va', #'vax', #'vbx', #'vcx', #'until',
+           #'parseArgdefsWithoutEllipsis' )
             do: [ :m | TestMethod: m ].
     );
 } Main.
