@@ -238,8 +238,6 @@
             );
 
             forceLayoutWithConstraints: constraints => (
-                self parent isYes
-                  ~ if: [ (std io out << 'Relayouting ' << self << ' at ' << offset) newline commit ].
                 layouter layoutMorph: self Constraints: constraints.
                 cachedLayoutingConstraints <- Yes: constraints.
             );
