@@ -1,0 +1,94 @@
+{
+    static with inherited _ = std Module;
+
+    keycodes = {
+        static with inherited _ = std Module;
+
+        letter_a = { static with inherited _ = std Enum };
+        letter_b = { static with inherited _ = std Enum };
+        letter_c = { static with inherited _ = std Enum };
+        letter_d = { static with inherited _ = std Enum };
+        letter_e = { static with inherited _ = std Enum };
+        letter_f = { static with inherited _ = std Enum };
+        letter_g = { static with inherited _ = std Enum };
+        letter_h = { static with inherited _ = std Enum };
+        letter_i = { static with inherited _ = std Enum };
+        letter_j = { static with inherited _ = std Enum };
+        letter_k = { static with inherited _ = std Enum };
+        letter_l = { static with inherited _ = std Enum };
+        letter_m = { static with inherited _ = std Enum };
+        letter_n = { static with inherited _ = std Enum };
+        letter_o = { static with inherited _ = std Enum };
+        letter_p = { static with inherited _ = std Enum };
+        letter_q = { static with inherited _ = std Enum };
+        letter_r = { static with inherited _ = std Enum };
+        letter_s = { static with inherited _ = std Enum };
+        letter_t = { static with inherited _ = std Enum };
+        letter_u = { static with inherited _ = std Enum };
+        letter_v = { static with inherited _ = std Enum };
+        letter_w = { static with inherited _ = std Enum };
+        letter_x = { static with inherited _ = std Enum };
+        letter_y = { static with inherited _ = std Enum };
+        letter_z = { static with inherited _ = std Enum };
+
+        letter_A = { static with inherited _ = std Enum };
+        letter_B = { static with inherited _ = std Enum };
+        letter_C = { static with inherited _ = std Enum };
+        letter_D = { static with inherited _ = std Enum };
+        letter_E = { static with inherited _ = std Enum };
+        letter_F = { static with inherited _ = std Enum };
+        letter_G = { static with inherited _ = std Enum };
+        letter_H = { static with inherited _ = std Enum };
+        letter_I = { static with inherited _ = std Enum };
+        letter_J = { static with inherited _ = std Enum };
+        letter_K = { static with inherited _ = std Enum };
+        letter_L = { static with inherited _ = std Enum };
+        letter_M = { static with inherited _ = std Enum };
+        letter_N = { static with inherited _ = std Enum };
+        letter_O = { static with inherited _ = std Enum };
+        letter_P = { static with inherited _ = std Enum };
+        letter_Q = { static with inherited _ = std Enum };
+        letter_R = { static with inherited _ = std Enum };
+        letter_S = { static with inherited _ = std Enum };
+        letter_T = { static with inherited _ = std Enum };
+        letter_U = { static with inherited _ = std Enum };
+        letter_V = { static with inherited _ = std Enum };
+        letter_W = { static with inherited _ = std Enum };
+        letter_X = { static with inherited _ = std Enum };
+        letter_Y = { static with inherited _ = std Enum };
+        letter_Z = { static with inherited _ = std Enum };
+
+        digit_0 = { static with inherited _ = std Enum };
+        digit_1 = { static with inherited _ = std Enum };
+        digit_2 = { static with inherited _ = std Enum };
+        digit_3 = { static with inherited _ = std Enum };
+        digit_4 = { static with inherited _ = std Enum };
+        digit_5 = { static with inherited _ = std Enum };
+        digit_6 = { static with inherited _ = std Enum };
+        digit_7 = { static with inherited _ = std Enum };
+        digit_8 = { static with inherited _ = std Enum };
+        digit_9 = { static with inherited _ = std Enum };
+
+        symbol_semicolon = { static with inherited _ = std Enum };
+        symbol_equal = { static with inherited _ = std Enum };
+        symbol_comma = { static with inherited _ = std Enum };
+        symbol_minus = { static with inherited _ = std Enum };
+        symbol_period = { static with inherited _ = std Enum };
+        symbol_slash = { static with inherited _ = std Enum };
+        symbol_tilde = { static with inherited _ = std Enum };
+        symbol_backslash = { static with inherited _ = std Enum };
+        symbol_left_parenthesis = { static with inherited _ = std Enum };
+        symbol_right_parenthesis = { static with inherited _ = std Enum };
+        symbol_left_bracket = { static with inherited _ = std Enum };
+        symbol_right_bracket = { static with inherited _ = std Enum };
+        symbol_left_brace = { static with inherited _ = std Enum };
+        symbol_right_brace = { static with inherited _ = std Enum };
+        symbol_quote = { static with inherited _ = std Enum };
+
+        special_enter = { static with inherited _ = std Enum };
+        special_escape = { static with inherited _ = std Enum };
+        special_backspace = { static with inherited _ = std Enum };
+        special_tab = { static with inherited _ = std Enum };
+        special_space = { static with inherited _ = std Enum };
+    }
+}
