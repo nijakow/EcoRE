@@ -39,6 +39,7 @@
                 );
 
                 protected invalidateTexture => (
+                    texture yes: [ :t | t destroy ].
                     texture <- No.
                   ^ self
                 );
