@@ -253,7 +253,8 @@
 
             morph childrenDo: [ :child |
                 child moveTo: offsetPoint.
-                child layoutWithoutConstraints.
+                child layoutWithHintedConstraints: (morphic X: ((shrunkConstraints x) + (x negate))
+                                                            Y: ((shrunkConstraints y) + (y negate))).
             ].
 
             morph resizeTo: shrunkConstraints.

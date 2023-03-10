@@ -253,6 +253,11 @@
             layoutWithoutConstraints => (
                 layoutWithConstraints: (morphic X: (minWidth) Y: (minHeight))
             );
+            layoutWithHintedConstraints: hint => (
+                (std io out << 'Layouting ' << self << ' with hint ' << hint << ' and layout ' << xLayout << ' / ' << yLayout) newline commit.
+                layoutWithConstraints: (morphic X: ((hint x) max: (minWidth))
+                                                Y: ((hint y) max: (minHeight)))
+            );
 
 
             "
