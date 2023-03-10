@@ -31,12 +31,15 @@
 
             leftClick   => click;
             middleClick => click;
-
             rightClick  => (
                 | gb <- globalOffset |
                 grabbedMorph
                   ~ yes: [ :m | world yes: [ :w | (w dropMorph: m At: globalOffset) -> [ grabbedMorph <- No ] ] ]
                      no: [      world yes: [ :w | (w grabAt: gb HandMorph: self) ] ]
+            );
+
+            handleKey: key => (
+                world yes: [ :w | w key: key At: globalOffset HandMorph: self ]
             );
 
             dispatchEvent: block AtX: evtX Y: evtY => false; "Avoid dispatching to children"

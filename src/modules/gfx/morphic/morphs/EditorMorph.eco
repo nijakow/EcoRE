@@ -152,9 +152,8 @@
             $(Morph) renderImplOn: renderer.
         );
 
-        handleGrabAt: point HandMorph: hand => (
-            caret <- pixelToCaret(point).
-            deleteCharAtX: (caret x) Y: (caret y).
+        handleKey: key At: point HandMorph: hand => (
+            key ifBackspace: [ deleteCharAtX: (caret x) Y: (caret y) ].
           ^ true
         );
         handleClickAt: point HandMorph: hand => (

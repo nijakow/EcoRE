@@ -19,7 +19,13 @@
               ^ self
             );
 
-            pushKey: key => (std io out << 'Key pressed!' << key) newline commit;
+            pushKey: key => (
+                (key == wrapper input keys keycodes special_escape)
+                    if: [ running <- false ]
+                  else: [
+                    handler handleKey: key.
+                  ]
+            );
 
             run => (
                 | event <- wrapper NewEvent |
