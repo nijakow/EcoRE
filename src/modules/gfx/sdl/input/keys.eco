@@ -84,16 +84,33 @@
         digit_8 = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '8'; };
         digit_9 = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '9'; };
 
-        symbol_semicolon         = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: ';'; };
-        symbol_equal             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '='; };
-        symbol_comma             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: ','; };
-        symbol_minus             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '-'; };
-        symbol_period            = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '.'; };
-        symbol_slash             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '/'; };
-        symbol_tilde             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '~'; };
-        symbol_backslash         = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '\\'; };
+        symbol_exclamation       = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '!'; };
+        symbol_at                = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '@'; };
+        symbol_hash              = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '#'; };
+        symbol_dollar            = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '$'; };
+        symbol_percent           = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '%'; };
+        symbol_caret             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '^'; };
+        symbol_ampersand         = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '&'; };
+        symbol_asterisk          = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '*'; };
         symbol_left_parenthesis  = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '('; };
         symbol_right_parenthesis = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: ')'; };
+
+        symbol_semicolon         = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: ';'; };
+        symbol_colon             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: ':'; };
+        symbol_equal             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '='; };
+        symbol_plus              = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '+'; };
+        symbol_minus             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '-'; };
+        symbol_underscore        = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '_'; };
+        symbol_comma             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: ','; };
+        symbol_period            = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '.'; };
+        symbol_less_than         = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '<'; };
+        symbol_greater_than      = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '>'; };
+        symbol_slash             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '/'; };
+        symbol_question          = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '?'; };
+        symbol_tilde             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '~'; };
+        symbol_backquote         = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '`'; };
+        symbol_backslash         = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '\\'; };
+        symbol_pipe              = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '|'; };
         symbol_left_bracket      = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '['; };
         symbol_right_bracket     = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: ']'; };
         symbol_left_brace        = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '{'; };
@@ -480,26 +497,37 @@
           ~ case: sdlscans SDL_SCANCODE_X      do: [ isShift if: [ ^ keycodes letter_X ] else: [ ^ keycodes letter_x ]          ]
           ~ case: sdlscans SDL_SCANCODE_Y      do: [ isShift if: [ ^ keycodes letter_Y ] else: [ ^ keycodes letter_y ]          ]
           ~ case: sdlscans SDL_SCANCODE_Z      do: [ isShift if: [ ^ keycodes letter_Z ] else: [ ^ keycodes letter_z ]          ]
-          ~ case: sdlscans SDL_SCANCODE_0      do: [ ^ keycodes digit_0           ]
-          ~ case: sdlscans SDL_SCANCODE_1      do: [ ^ keycodes digit_1           ]
-          ~ case: sdlscans SDL_SCANCODE_2      do: [ ^ keycodes digit_2           ]
-          ~ case: sdlscans SDL_SCANCODE_3      do: [ ^ keycodes digit_3           ]
-          ~ case: sdlscans SDL_SCANCODE_4      do: [ ^ keycodes digit_4           ]
-          ~ case: sdlscans SDL_SCANCODE_5      do: [ ^ keycodes digit_5           ]
-          ~ case: sdlscans SDL_SCANCODE_6      do: [ ^ keycodes digit_6           ]
-          ~ case: sdlscans SDL_SCANCODE_7      do: [ ^ keycodes digit_7           ]
-          ~ case: sdlscans SDL_SCANCODE_8      do: [ ^ keycodes digit_8           ]
-          ~ case: sdlscans SDL_SCANCODE_9      do: [ ^ keycodes digit_9           ]
-          ~ case: sdlscans SDL_SCANCODE_KP_0      do: [ ^ keycodes digit_0           ]
-          ~ case: sdlscans SDL_SCANCODE_KP_1      do: [ ^ keycodes digit_1           ]
-          ~ case: sdlscans SDL_SCANCODE_KP_2      do: [ ^ keycodes digit_2           ]
-          ~ case: sdlscans SDL_SCANCODE_KP_3      do: [ ^ keycodes digit_3           ]
-          ~ case: sdlscans SDL_SCANCODE_KP_4      do: [ ^ keycodes digit_4           ]
-          ~ case: sdlscans SDL_SCANCODE_KP_5      do: [ ^ keycodes digit_5           ]
-          ~ case: sdlscans SDL_SCANCODE_KP_6      do: [ ^ keycodes digit_6           ]
-          ~ case: sdlscans SDL_SCANCODE_KP_7      do: [ ^ keycodes digit_7           ]
-          ~ case: sdlscans SDL_SCANCODE_KP_8      do: [ ^ keycodes digit_8           ]
-          ~ case: sdlscans SDL_SCANCODE_KP_9      do: [ ^ keycodes digit_9           ]
+          ~ case: sdlscans SDL_SCANCODE_1      do: [ isShift if: [ ^ keycodes symbol_exclamation       ] else: [ ^ keycodes digit_1 ] ]
+          ~ case: sdlscans SDL_SCANCODE_2      do: [ isShift if: [ ^ keycodes symbol_at                ] else: [ ^ keycodes digit_2 ] ]
+          ~ case: sdlscans SDL_SCANCODE_3      do: [ isShift if: [ ^ keycodes symbol_hash              ] else: [ ^ keycodes digit_3 ] ]
+          ~ case: sdlscans SDL_SCANCODE_4      do: [ isShift if: [ ^ keycodes symbol_dollar            ] else: [ ^ keycodes digit_4 ] ]
+          ~ case: sdlscans SDL_SCANCODE_5      do: [ isShift if: [ ^ keycodes symbol_percent           ] else: [ ^ keycodes digit_5 ] ]
+          ~ case: sdlscans SDL_SCANCODE_6      do: [ isShift if: [ ^ keycodes symbol_caret             ] else: [ ^ keycodes digit_6 ] ]
+          ~ case: sdlscans SDL_SCANCODE_7      do: [ isShift if: [ ^ keycodes symbol_ampersand         ] else: [ ^ keycodes digit_7 ] ]
+          ~ case: sdlscans SDL_SCANCODE_8      do: [ isShift if: [ ^ keycodes symbol_asterisk          ] else: [ ^ keycodes digit_8 ] ]
+          ~ case: sdlscans SDL_SCANCODE_9      do: [ isShift if: [ ^ keycodes symbol_left_parenthesis  ] else: [ ^ keycodes digit_9 ] ]
+          ~ case: sdlscans SDL_SCANCODE_0      do: [ isShift if: [ ^ keycodes symbol_right_parenthesis ] else: [ ^ keycodes digit_0 ] ]
+          ~ case: sdlscans SDL_SCANCODE_KP_0   do: [ ^ keycodes digit_0 ]
+          ~ case: sdlscans SDL_SCANCODE_KP_1   do: [ ^ keycodes digit_1 ]
+          ~ case: sdlscans SDL_SCANCODE_KP_2   do: [ ^ keycodes digit_2 ]
+          ~ case: sdlscans SDL_SCANCODE_KP_3   do: [ ^ keycodes digit_3 ]
+          ~ case: sdlscans SDL_SCANCODE_KP_4   do: [ ^ keycodes digit_4 ]
+          ~ case: sdlscans SDL_SCANCODE_KP_5   do: [ ^ keycodes digit_5 ]
+          ~ case: sdlscans SDL_SCANCODE_KP_6   do: [ ^ keycodes digit_6 ]
+          ~ case: sdlscans SDL_SCANCODE_KP_7   do: [ ^ keycodes digit_7 ]
+          ~ case: sdlscans SDL_SCANCODE_KP_8   do: [ ^ keycodes digit_8 ]
+          ~ case: sdlscans SDL_SCANCODE_KP_9   do: [ ^ keycodes digit_9 ]
+          ~ case: sdlscans SDL_SCANCODE_MINUS        do: [ isShift if: [ ^ keycodes symbol_underscore ] else: [ ^ keycodes symbol_minus ] ]
+          ~ case: sdlscans SDL_SCANCODE_EQUALS       do: [ isShift if: [ ^ keycodes symbol_plus         ] else: [ ^ keycodes symbol_equal ] ]
+          ~ case: sdlscans SDL_SCANCODE_LEFTBRACKET  do: [ isShift if: [ ^ keycodes symbol_left_brace   ] else: [ ^ keycodes symbol_left_bracket  ]   ]
+          ~ case: sdlscans SDL_SCANCODE_RIGHTBRACKET do: [ isShift if: [ ^ keycodes symbol_right_brace  ] else: [ ^ keycodes symbol_right_bracket ]   ]
+          ~ case: sdlscans SDL_SCANCODE_SEMICOLON    do: [ isShift if: [ ^ keycodes symbol_colon        ] else: [ ^ keycodes symbol_semicolon     ]   ]
+          ~ case: sdlscans SDL_SCANCODE_APOSTROPHE   do: [ isShift if: [ ^ keycodes symbol_double_quote ] else: [ ^ keycodes symbol_single_quote  ]   ]
+          ~ case: sdlscans SDL_SCANCODE_GRAVE        do: [ isShift if: [ ^ keycodes symbol_tilde        ] else: [ ^ keycodes symbol_backquote    ]   ]
+          ~ case: sdlscans SDL_SCANCODE_COMMA        do: [ isShift if: [ ^ keycodes symbol_less_than    ] else: [ ^ keycodes symbol_comma         ]   ]
+          ~ case: sdlscans SDL_SCANCODE_PERIOD       do: [ isShift if: [ ^ keycodes symbol_greater_than ] else: [ ^ keycodes symbol_period        ]   ]
+          ~ case: sdlscans SDL_SCANCODE_SLASH        do: [ isShift if: [ ^ keycodes symbol_question     ] else: [ ^ keycodes symbol_slash         ]   ]
+          ~ case: sdlscans SDL_SCANCODE_BACKSLASH    do: [ isShift if: [ ^ keycodes symbol_pipe         ] else: [ ^ keycodes symbol_backslash     ]   ]
         ~ default: [ ^ keycodes special_unknown ]
     );
 }
