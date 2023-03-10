@@ -31,7 +31,7 @@
             whichKey => (
                 |
                     keys <- wrapper input keys,
-                    id   <- ((event at: 1) at: 7) at: 1
+                    id   <- ((event at: 1) at: 7) at: 0
                 |
                 (std io out << id) newline commit.
               ^ keys Translate: id
