@@ -31,10 +31,11 @@
             whichKey => (
                 |
                     keys <- wrapper input keys,
-                    id   <- ((event at: 1) at: 7) at: 0
+                    id   <- ((event at: 1) at: 7) at: 0,
+                    mods <- ((event at: 1) at: 7) at: 2
                 |
-                (std io out << id) newline commit.
-              ^ keys Translate: id
+                (std io out << id << ' ' << mods) newline commit.
+              ^ keys Translate: id Modifiers: mods
             );
 
             acceptEventVisitor: visitor => (

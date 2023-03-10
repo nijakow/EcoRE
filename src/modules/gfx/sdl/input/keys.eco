@@ -437,7 +437,13 @@
     SDL_NUM_SCANCODES = 512
     };
 
-    Translate: sdlscan => (
+    Translate: sdlscan Modifiers: mods => (
+        |
+            isLeftShift  <- (mods bitAnd: 1) != 0,
+            isRightShift <- (mods bitAnd: 2) != 0,
+            isShift      <- [ isLeftShift ] or: [ isRightShift ],
+        |
+        (std io out << 'isShift: ' << isShift) newline commit.
         Switch: sdlscan
           ~ case: sdlscans SDL_SCANCODE_ESCAPE    do: [ ^ keycodes special_escape    ]
           ~ case: sdlscans SDL_SCANCODE_BACKSPACE do: [ ^ keycodes special_backspace ]
@@ -448,32 +454,32 @@
           ~ case: sdlscans SDL_SCANCODE_RIGHT     do: [ ^ keycodes special_right     ]
           ~ case: sdlscans SDL_SCANCODE_UP        do: [ ^ keycodes special_up        ]
           ~ case: sdlscans SDL_SCANCODE_DOWN      do: [ ^ keycodes special_down      ]
-          ~ case: sdlscans SDL_SCANCODE_A      do: [ ^ keycodes letter_a          ]
-          ~ case: sdlscans SDL_SCANCODE_B      do: [ ^ keycodes letter_b          ]
-          ~ case: sdlscans SDL_SCANCODE_C      do: [ ^ keycodes letter_c          ]
-          ~ case: sdlscans SDL_SCANCODE_D      do: [ ^ keycodes letter_d          ]
-          ~ case: sdlscans SDL_SCANCODE_E      do: [ ^ keycodes letter_e          ]
-          ~ case: sdlscans SDL_SCANCODE_F      do: [ ^ keycodes letter_f          ]
-          ~ case: sdlscans SDL_SCANCODE_G      do: [ ^ keycodes letter_g          ]
-          ~ case: sdlscans SDL_SCANCODE_H      do: [ ^ keycodes letter_h          ]
-          ~ case: sdlscans SDL_SCANCODE_I      do: [ ^ keycodes letter_i          ]
-          ~ case: sdlscans SDL_SCANCODE_J      do: [ ^ keycodes letter_j          ]
-          ~ case: sdlscans SDL_SCANCODE_K      do: [ ^ keycodes letter_k          ]
-          ~ case: sdlscans SDL_SCANCODE_L      do: [ ^ keycodes letter_l          ]
-          ~ case: sdlscans SDL_SCANCODE_M      do: [ ^ keycodes letter_m          ]
-          ~ case: sdlscans SDL_SCANCODE_N      do: [ ^ keycodes letter_n          ]
-          ~ case: sdlscans SDL_SCANCODE_O      do: [ ^ keycodes letter_o          ]
-          ~ case: sdlscans SDL_SCANCODE_P      do: [ ^ keycodes letter_p          ]
-          ~ case: sdlscans SDL_SCANCODE_Q      do: [ ^ keycodes letter_q          ]
-          ~ case: sdlscans SDL_SCANCODE_R      do: [ ^ keycodes letter_r          ]
-          ~ case: sdlscans SDL_SCANCODE_S      do: [ ^ keycodes letter_s          ]
-          ~ case: sdlscans SDL_SCANCODE_T      do: [ ^ keycodes letter_t          ]
-          ~ case: sdlscans SDL_SCANCODE_U      do: [ ^ keycodes letter_u          ]
-          ~ case: sdlscans SDL_SCANCODE_V      do: [ ^ keycodes letter_v          ]
-          ~ case: sdlscans SDL_SCANCODE_W      do: [ ^ keycodes letter_w          ]
-          ~ case: sdlscans SDL_SCANCODE_X      do: [ ^ keycodes letter_x          ]
-          ~ case: sdlscans SDL_SCANCODE_Y      do: [ ^ keycodes letter_y          ]
-          ~ case: sdlscans SDL_SCANCODE_Z      do: [ ^ keycodes letter_z          ]
+          ~ case: sdlscans SDL_SCANCODE_A      do: [ isShift if: [ ^ keycodes letter_A ] else: [ ^ keycodes letter_a ]          ]
+          ~ case: sdlscans SDL_SCANCODE_B      do: [ isShift if: [ ^ keycodes letter_B ] else: [ ^ keycodes letter_b ]          ]
+          ~ case: sdlscans SDL_SCANCODE_C      do: [ isShift if: [ ^ keycodes letter_C ] else: [ ^ keycodes letter_c ]          ]
+          ~ case: sdlscans SDL_SCANCODE_D      do: [ isShift if: [ ^ keycodes letter_D ] else: [ ^ keycodes letter_d ]          ]
+          ~ case: sdlscans SDL_SCANCODE_E      do: [ isShift if: [ ^ keycodes letter_E ] else: [ ^ keycodes letter_e ]          ]
+          ~ case: sdlscans SDL_SCANCODE_F      do: [ isShift if: [ ^ keycodes letter_F ] else: [ ^ keycodes letter_f ]          ]
+          ~ case: sdlscans SDL_SCANCODE_G      do: [ isShift if: [ ^ keycodes letter_G ] else: [ ^ keycodes letter_g ]          ]
+          ~ case: sdlscans SDL_SCANCODE_H      do: [ isShift if: [ ^ keycodes letter_H ] else: [ ^ keycodes letter_h ]          ]
+          ~ case: sdlscans SDL_SCANCODE_I      do: [ isShift if: [ ^ keycodes letter_I ] else: [ ^ keycodes letter_i ]          ]
+          ~ case: sdlscans SDL_SCANCODE_J      do: [ isShift if: [ ^ keycodes letter_J ] else: [ ^ keycodes letter_j ]          ]
+          ~ case: sdlscans SDL_SCANCODE_K      do: [ isShift if: [ ^ keycodes letter_K ] else: [ ^ keycodes letter_k ]          ]
+          ~ case: sdlscans SDL_SCANCODE_L      do: [ isShift if: [ ^ keycodes letter_L ] else: [ ^ keycodes letter_l ]          ]
+          ~ case: sdlscans SDL_SCANCODE_M      do: [ isShift if: [ ^ keycodes letter_M ] else: [ ^ keycodes letter_m ]          ]
+          ~ case: sdlscans SDL_SCANCODE_N      do: [ isShift if: [ ^ keycodes letter_N ] else: [ ^ keycodes letter_n ]          ]
+          ~ case: sdlscans SDL_SCANCODE_O      do: [ isShift if: [ ^ keycodes letter_O ] else: [ ^ keycodes letter_o ]          ]
+          ~ case: sdlscans SDL_SCANCODE_P      do: [ isShift if: [ ^ keycodes letter_P ] else: [ ^ keycodes letter_p ]          ]
+          ~ case: sdlscans SDL_SCANCODE_Q      do: [ isShift if: [ ^ keycodes letter_Q ] else: [ ^ keycodes letter_q ]          ]
+          ~ case: sdlscans SDL_SCANCODE_R      do: [ isShift if: [ ^ keycodes letter_R ] else: [ ^ keycodes letter_r ]          ]
+          ~ case: sdlscans SDL_SCANCODE_S      do: [ isShift if: [ ^ keycodes letter_S ] else: [ ^ keycodes letter_s ]          ]
+          ~ case: sdlscans SDL_SCANCODE_T      do: [ isShift if: [ ^ keycodes letter_T ] else: [ ^ keycodes letter_t ]          ]
+          ~ case: sdlscans SDL_SCANCODE_U      do: [ isShift if: [ ^ keycodes letter_U ] else: [ ^ keycodes letter_u ]          ]
+          ~ case: sdlscans SDL_SCANCODE_V      do: [ isShift if: [ ^ keycodes letter_V ] else: [ ^ keycodes letter_v ]          ]
+          ~ case: sdlscans SDL_SCANCODE_W      do: [ isShift if: [ ^ keycodes letter_W ] else: [ ^ keycodes letter_w ]          ]
+          ~ case: sdlscans SDL_SCANCODE_X      do: [ isShift if: [ ^ keycodes letter_X ] else: [ ^ keycodes letter_x ]          ]
+          ~ case: sdlscans SDL_SCANCODE_Y      do: [ isShift if: [ ^ keycodes letter_Y ] else: [ ^ keycodes letter_y ]          ]
+          ~ case: sdlscans SDL_SCANCODE_Z      do: [ isShift if: [ ^ keycodes letter_Z ] else: [ ^ keycodes letter_z ]          ]
           ~ case: sdlscans SDL_SCANCODE_0      do: [ ^ keycodes digit_0           ]
           ~ case: sdlscans SDL_SCANCODE_1      do: [ ^ keycodes digit_1           ]
           ~ case: sdlscans SDL_SCANCODE_2      do: [ ^ keycodes digit_2           ]
