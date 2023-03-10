@@ -26,7 +26,8 @@
                 width  => textobj width;
                 height => textobj height;
 
-                caretX: x => textobj pointAtCharacterIndex: x;
+                caretX: x      => textobj pointAtCharacterIndex: x;
+                charAtPoint: x => textobj characterIndexAtX: x;
 
                 protected getOrMakeTexture: renderer => (
                     texture no: [
@@ -58,7 +59,7 @@
 
         baseMinHeight => (
             | h <- 0 |
-            lines do: [ :l | h <- h max: l height ].
+            lines do: [ :l | h <- h + l height ].
           ^ h
         );
 
@@ -75,27 +76,55 @@
           ^ self
         );
 
-        renderImplOn: renderer => (
+        protected caretToPixel(caret) => (
             |
-                caretX <- (lines at: (caret y)) caretX: caretX,
+                caretX <- (lines at: (caret y)) caretX: (caret x),
                 caretY <- 0,
                 y      <- 0
             |
             lines do: [ :l |
-                y < (caret y) if: [ caretY <- caretY + l height ].
+                (y < caret y) if: [ caretY <- caretY + l height ].
+                y <- y + 1.
+            ].
+          ^ morphic X: caretX Y: caretY
+        );
+
+        protected pixelToCaret(pixel) => (
+            |
+                x  <- 0,
+                y  <- 0,
+                dy <- 0,
+                dc <- 0
+            |
+            lines do: [ :l |
+                (dy < pixel y) if: [ y <- dc ].
+                dy <- dy + l height.
+                dc <- dc + 1
+            ].
+
+            x <- (lines at: y) charAtPoint: pixel x.
+          ^ morphic X: x Y: y
+        );
+
+        renderImplOn: renderer => (
+            | y <- 0 |
+            lines do: [ :l |
                 l renderOn: renderer X: 0 Y: y.
                 y <- y + l height.
             ].
 
+            | pixelCaret <- caretToPixel(caret) |
+            
             renderer setR: 255 G: 0 B: 0.
-            renderer drawLineX: caretX Y: caretY X: caretX Y: caretY + (lines at: (caret y)) height.
+            renderer drawLineX: (pixelCaret x) Y: (pixelCaret y) X: (pixelCaret x) Y: (pixelCaret y) + (lines at: (caret y)) height.
 
             $(Morph) renderImplOn: renderer.
         );
 
         handleGrabAt: point HandMorph: hand => ( hand grab: self. true );
         handleClickAt: point HandMorph: hand => (
-            (std io out << 'Clicked an editor at ' << point) newline commit.
+            caret <- pixelToCaret(point).
+            renderDirty.
           ^ true
         );
 
