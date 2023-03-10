@@ -41,7 +41,7 @@
             builder Window(400, 400,
                 builder VBox(
                     builder Scrollable(OutlinerPaneForObject: object),
-                    ObjectShellFor: object ~ rigidHeight: 150
+                    ObjectShellFor: object ~ rigidHeight: 50
                 )
             )
         );
@@ -69,7 +69,7 @@
             builder Window(400, 400,
                 builder VBox(
                     builder Scrollable(builder TextField: (writer build)),
-                    ObjectShellFor: object ~ rigidHeight: 150
+                    ObjectShellFor: object ~ rigidHeight: 50
                 )
             )
         );
