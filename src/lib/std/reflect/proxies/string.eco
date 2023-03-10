@@ -77,10 +77,11 @@
             token  <- std util newVector
         |
         do: [ :c |
-            (c == char) if: [ (token isEmpty) unless: [ tokens append: (token asString). token clear ] ]
+            (c == char) if: [ tokens append: (token asString). token clear ]
                       else: [ token append: c ]
         ].
         (token isEmpty) unless: [ tokens append: (token asString). token clear ].
+        (tokens isEmpty) if: [ tokens append: '' ].
       ^ tokens asArray
     );
     substringFrom: start To: end => (

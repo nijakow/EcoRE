@@ -63,7 +63,14 @@
         parent => self;
         name => '/';
         path => '/';
-        / name => (module Path) clone initWithName: name Path: '/' + name Parent: self;
+        / name => (
+            (name equals: '') -> [ ^ self ].
+            (name equals: '.') -> [ ^ self ].
+            (name equals: '..') -> [ ^ self ].
+          ^ (module Path) clone initWithName: name
+                                        Path: '/' + name
+                                      Parent: self;
+        );
     };
 
     own Path = {
