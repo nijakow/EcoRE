@@ -51,7 +51,7 @@
 
             builder Window(500, 400,
                 builder Scrollable(
-                    builder TextField: (writer build)
+                    builder Editor: (writer build)  "We use an editor here - just for testing."
                 )
             )
         );
