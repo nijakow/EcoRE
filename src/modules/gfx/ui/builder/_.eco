@@ -119,6 +119,8 @@
                                Button(Label: ' X ', $[ :(window) :sender | window unlink ] bind(window))
                           ) ~ yLayout: layouts ShrinkWrap,
                           Framed(content)
+                            ~ xLayout: layouts Flexible
+                            ~ yLayout: layouts Flexible
                         )
                     ),
                     HBox(Spacer,
