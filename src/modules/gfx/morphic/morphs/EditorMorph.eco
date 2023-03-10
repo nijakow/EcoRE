@@ -3,6 +3,7 @@
     static with inherited _ = std Clonable;
     with inherited own Morph = $ Morph;
 
+    protected caret,
     protected lines;
 
     with inherited trait = {
@@ -25,6 +26,8 @@
                 width  => textobj width;
                 height => textobj height;
 
+                caretX: x => textobj pointAtCharacterIndex: x;
+
                 protected getOrMakeTexture: renderer => (
                     texture no: [
                         texture <- Yes: (renderer makeTextTexture: textobj text).
@@ -42,6 +45,7 @@
 
         init => (
             $(Morph) init.
+            caret <- morphic X: 0 Y: 0.
             lines <- std util newVector.
           ^ self
         );
@@ -72,11 +76,20 @@
         );
 
         renderImplOn: renderer => (
-            | y <- 0 |
+            |
+                caretX <- (lines at: (caret y)) caretX: caretX,
+                caretY <- 0,
+                y      <- 0
+            |
             lines do: [ :l |
+                y < (caret y) if: [ caretY <- caretY + l height ].
                 l renderOn: renderer X: 0 Y: y.
                 y <- y + l height.
             ].
+
+            renderer setR: 255 G: 0 B: 0.
+            renderer drawLineX: caretX Y: caretY X: caretX Y: caretY + (lines at: (caret y)) height.
+
             $(Morph) renderImplOn: renderer.
         );
 

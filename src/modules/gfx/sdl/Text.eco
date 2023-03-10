@@ -28,6 +28,11 @@
           ^ index
         );
 
+        pointAtCharacterIndex: index => (
+            | str <- text substringTo: index |
+          ^ sdl SizeUTF8_W(font, str)
+        );
+
         writeOn: w => w << 'an sdl text object';
     };
 }
