@@ -263,6 +263,14 @@
           ^ true
         );
 
+        fullText => (
+            |
+                text <- (std io StringWriter) new
+            |
+            lines do: [ :l | text << l text << '\n' ].
+          ^ text build
+        );
+
         writeOn: w => w << 'a text editor';
     };
 }

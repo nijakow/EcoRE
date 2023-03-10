@@ -109,8 +109,8 @@
     buildEditorWindow => (
         ui Window(320, 320,
             ui Editor: 'Hello, world!\n\nThis is a simple editor.\n\nYou can edit this text.\n\nHave fun!'
-                ~ xLayout: ui layouts Flexible
-                ~ yLayout: ui layouts Flexible
+                OnAccept: $[ :text | (std io out << 'Editor accepted: ' << text) newline commit ]
+                OnCancel: $[ :text | (std io out << 'Editor canceled: ' << text) newline commit ]
         )
     );
 

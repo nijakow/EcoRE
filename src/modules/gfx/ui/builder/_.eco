@@ -28,6 +28,11 @@
                 ~ yLayout: layouts ShrinkWrap
     );
 
+    Flexible(element) => (
+        element ~ xLayout: layouts Flexible
+                ~ yLayout: layouts Flexible
+    );
+
     VBox(...) => (
         | box <- (morphic morphs VBoxMorph) new |
         std util newArray(...) do: [ :e | box add: e ].
@@ -94,6 +99,22 @@
         text splitOnChar: $'newline'
           ~ do: [ :line | editor append: line ].
       ^ editor
+    );
+
+    Editor: text OnAccept: onaccept OnCancel: oncancel => (
+        | editor <- Editor: text |
+      ^ VBox(
+          Scrollable(Flexible(editor)),
+          HBox(
+              Button(Label: 'Accept', $[ :(editor, onaccept) :sender | onaccept value(editor fullText) ] bind(editor, onaccept))
+                ~ xLayout: layouts Flexible
+                ~ yLayout: layouts ShrinkWrap,
+              Button(Label: 'Cancel', $[ :(editor, oncancel) :sender | oncancel value(editor fullText) ] bind(editor, oncancel))
+                ~ xLayout: layouts Flexible
+                ~ yLayout: layouts ShrinkWrap
+          ) ~ xLayout: layouts Flexible
+            ~ yLayout: layouts ShrinkWrap
+      )
     );
 
     Button(caption, action) => (
