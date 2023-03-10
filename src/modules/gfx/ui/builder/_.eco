@@ -89,6 +89,13 @@
       ^ ShrinkWrap(lines)
     );
 
+    Editor: text => (
+        | editor <- (morphic morphs EditorMorph) new |
+        text splitOnChar: $'newline'
+          ~ do: [ :line | editor append: line ].
+      ^ editor
+    );
+
     Button(caption, action) => (
       ^ ShrinkWrap(Stacked(
             (morphic morphs ButtonMorph) new ~ action: action,

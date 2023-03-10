@@ -34,7 +34,7 @@
         own ClipMorph = (here / 'morphs' / 'ClipMorph.eco') importIn: self;
         own ScrollBarMorph = (here / 'morphs' / 'ScrollBarMorph.eco') importIn: self;
         own ScrollContentMorph = (here / 'morphs' / 'ScrollContentMorph.eco') importIn: self;
-        own EditMorph = (here / 'morphs' / 'EditMorph.eco') importIn: self;
+        own EditorMorph = (here / 'morphs' / 'EditorMorph.eco') importIn: self;
     };
 
     driver = (here / 'driver.eco') importIn: self;

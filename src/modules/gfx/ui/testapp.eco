@@ -106,8 +106,14 @@
       ^ self
     );
 
+    buildEditorWindow => (
+        ui Window(320, 320,
+            ui Editor: 'Hello, world!\n\nThis is a simple editor.\n\nYou can edit this text.\n\nHave fun!'
+        )
+    );
+
     build => (
-        ui Window(320, 200,
+        ui Window(320, 400,
             ui VBox(
                 ui Center(ui TextField: 'Look at me as I can fly!\n    - Chrom, "Regret & Testify"'),
                 ui Button(ui Center(ui Label: 'Outliner'),
@@ -118,6 +124,11 @@
                 ui Button(ui Center(ui Label: 'Files'),
                           $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder OutlinerWindowForPath: (std os files here)) ]
                                 bind(MirrorBuilder))
+                    ~ xLayout: ui layouts Flexible
+                    ~ yLayout: ui layouts Flexible,
+                ui Button(ui Center(ui Label: 'Editor'),
+                          $[ :(testapp) :sender | (sender world yes) open: (testapp buildEditorWindow) ]
+                                bind(self))
                     ~ xLayout: ui layouts Flexible
                     ~ yLayout: ui layouts Flexible
             )

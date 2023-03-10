@@ -6,6 +6,8 @@
     protected lines;
 
     with inherited trait = {
+        static with inherited _ = std Trait;
+
         protected own Line = {
             static with inherited _ = std Clonable;
 
@@ -15,13 +17,13 @@
                 static with inherited _ = std Trait;
 
                 initWithTextObj: _textobj => (
-                    textobj <- _text.
+                    textobj <- _textobj.
                     texture <- No.
                   ^ self
                 );
 
-                pixelWidth  => textobj width;
-                pixelHeight => textobj height;
+                width  => textobj width;
+                height => textobj height;
 
                 protected getOrMakeTexture: renderer => (
                     texture no: [
@@ -46,13 +48,13 @@
 
         baseMinWidth => (
             | w <- 0 |
-            lines do: [ :l | w <- w max: l pixelWidth ].
+            lines do: [ :l | w <- w max: l width ].
           ^ w
         );
 
         baseMinHeight => (
             | h <- 0 |
-            lines do: [ :l | h <- h + l pixelHeight ].
+            lines do: [ :l | h <- h max: l height ].
           ^ h
         );
 
@@ -62,13 +64,18 @@
           ^ self
         );
 
+        append: text => (
+            lines add: (Line clone initWithTextObj: (morphic Text: text)).
+            reshapeToFit.
+            layoutChanged.
+          ^ self
+        );
+
         renderImplOn: renderer => (
-            "renderer setR: 50 G: 0 B: 0.
-            renderer drawRectX: 0 Y: 0 W: width H: height."
             | y <- 0 |
             lines do: [ :l |
                 l renderOn: renderer X: 0 Y: y.
-                y <- y + l pixelHeight.
+                y <- y + l height.
             ].
             $(Morph) renderImplOn: renderer.
         );
@@ -79,6 +86,6 @@
           ^ true
         );
 
-        "TODO"
+        writeOn: w => w << 'a text editor';
     };
 }
