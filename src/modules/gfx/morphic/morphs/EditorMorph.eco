@@ -72,15 +72,8 @@
           ^ h
         );
 
-        protected reshapeToFit => (
-            rigidWidth: baseMinWidth.
-            rigidHeight: baseMinHeight.
-          ^ self
-        );
-
         append: text => (
             lines add: (Line clone initWithTextObj: (morphic Text: text)).
-            reshapeToFit.
             layoutChanged.
           ^ self
         );
@@ -89,34 +82,66 @@
             | line <- (lines at: y) |
             line unlink.
             lines at: y put: (Line clone initWithTextObj: (morphic Text: text)).
-            reshapeToFit.
             layoutChanged.
             renderDirty.
           ^ self
         );
         protected insertLineAfter: y With: text => (
             lines insert: (Line clone initWithTextObj: (morphic Text: text)) at: (y + 1).
-            reshapeToFit.
+            layoutChanged.
+            renderDirty.
+          ^ self
+        );
+        protected removeLine: y => (
+            (lines at: y) unlink.
+            lines erase: y.
             layoutChanged.
             renderDirty.
           ^ self
         );
 
+        protected joinLines: y1 And: y2 => (
+            "TODO: Check for negative numbers, y1 < y2 and out of bounds."
+            replaceLine: y1 With: ((lines at: y1) text + (lines at: y2) text).
+            removeLine: y2.
+          ^ self
+        );
+
         deleteCharAtX: x Y: y => (
-            |
-                text    <- (lines at: y) text,
-                newtext <- (std io StringWriter) new
-            |
-            text forEach: [ :i :c |
-                (i != (x - 1)) if: [ newtext << c ].
+            (x == 0) if: [
+                (y > 0) if: [
+                    joinLines: (y - 1) And: y.
+                ].
+            ] else: [
+              |
+                  text    <- (lines at: y) text,
+                  newtext <- (std io StringWriter) new
+              |
+              text forEach: [ :i :c |
+                  (i != (x - 1)) if: [ newtext << c ].
+              ].
+              replaceLine: y With: newtext build.
             ].
-            replaceLine: y With: newtext build.
           ^ self
         );
 
         deleteChar => (
+            |
+                nextX <- ((caret x) - 1),
+                nextY <- (caret y)
+            |
+
+            ((caret x) == 0) if: [
+                ((caret y) != 0) if: [
+                    nextX <- ((lines at: ((caret y) - 1)) text size).
+                    nextY <- ((caret y) - 1).
+                ]
+            ].
+
             deleteCharAtX: (caret x) Y: (caret y).
-            moveCaretToX: ((caret x) - 1) Y: (caret y).
+
+            moveCaretToX: nextX Y: nextY.
+            
           ^ self
         );
 
