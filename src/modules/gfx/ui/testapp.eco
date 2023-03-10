@@ -109,6 +109,8 @@
     buildEditorWindow => (
         ui Window(320, 320,
             ui Editor: 'Hello, world!\n\nThis is a simple editor.\n\nYou can edit this text.\n\nHave fun!'
+                ~ xLayout: ui layouts Flexible
+                ~ yLayout: ui layouts Flexible
         )
     );
 
