@@ -2,14 +2,16 @@
     static with inherited _ = std Clonable;
     protected sdl = $ sdl;
 
-    text, font;
+    text, font, width, height;
 
     with inherited trait = {
         static with inherited _ = std Trait;
 
         initWithText: _text Font: _font => (
-            text <- _text;
-            font <- _font;
+            text   <- _text;
+            font   <- _font;
+            width  <- sdl SizeUTF8_W(font, text);
+            height <- sdl SizeUTF8_H(font, text);
           ^ self
         );
 

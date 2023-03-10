@@ -1,0 +1,84 @@
+
+{
+    static with inherited _ = std Clonable;
+    with inherited own Morph = $ Morph;
+
+    protected lines;
+
+    with inherited trait = {
+        protected own Line = {
+            static with inherited _ = std Clonable;
+
+            textobj, texture;
+
+            static with inherited trait = {
+                static with inherited _ = std Trait;
+
+                initWithTextObj: _textobj => (
+                    textobj <- _text.
+                    texture <- No.
+                  ^ self
+                );
+
+                pixelWidth  => textobj width;
+                pixelHeight => textobj height;
+
+                protected getOrMakeTexture: renderer => (
+                    texture no: [
+                        texture <- Yes: (renderer makeTextTexture: textobj text).
+                    ].
+                  ^ texture
+                );
+
+                renderOn: renderer X: x Y: y => (
+                    (getOrMakeTexture: renderer) yes: [ :t | renderer drawTexture: t X: x Y: y W: width H: height ].
+                );
+
+                writeOn: w => w << 'a text editor line';
+            };
+        };
+
+        init => (
+            $(Morph) init.
+            lines <- std util newVector.
+          ^ self
+        );
+
+        baseMinWidth => (
+            | w <- 0 |
+            lines do: [ :l | w <- w max: l pixelWidth ].
+          ^ w
+        );
+
+        baseMinHeight => (
+            | h <- 0 |
+            lines do: [ :l | h <- h + l pixelHeight ].
+          ^ h
+        );
+
+        protected reshapeToFit => (
+            rigidWidth: baseMinWidth.
+            rigidHeight: baseMinHeight.
+          ^ self
+        );
+
+        renderImplOn: renderer => (
+            "renderer setR: 50 G: 0 B: 0.
+            renderer drawRectX: 0 Y: 0 W: width H: height."
+            | y <- 0 |
+            lines do: [ :l |
+                l renderOn: renderer X: 0 Y: y.
+                y <- y + l pixelHeight.
+            ].
+            $(Morph) renderImplOn: renderer.
+        );
+
+        handleGrabAt: point HandMorph: hand => ( hand grab: self. true );
+        handleClickAt: point HandMorph: hand => (
+            (std io out << 'Clicked an editor at ' << point) newline commit.
+          ^ true
+        );
+
+        "TODO"
+    };
+}
