@@ -20,6 +20,12 @@
           ^ self
         );
 
+        onUnlink => (
+            texture yes: [ :t | t destroy ].
+            texture <- No.
+          ^ $(Morph) onUnlink.
+        );
+
         baseMinWidth => (
             texture yes: [ :t | t width               ]
                      no: [      $(Morph) baseMinWidth ]

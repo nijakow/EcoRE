@@ -67,13 +67,18 @@
               ^ self
             );
 
-            noParent  => (
-                parent       <- No.
+            onUnlink => (
+              ^ self
+            );
+
+            noParent => (
+                parent <- No.
                 invalidateGlobalOffsetCache.
+                allChildrenDo: [ :c | c onUnlink ].
               ^ self
             );
             parent: p => (
-                parent       <- Yes: p;
+                parent <- Yes: p;
                 invalidateGlobalOffsetCache.
               ^ self
             );

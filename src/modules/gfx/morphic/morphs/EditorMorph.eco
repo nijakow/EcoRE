@@ -61,6 +61,11 @@
           ^ self
         );
 
+        onUnlink => (
+            lines do: [ :l | l unlink ].
+          ^ $(Morph) onUnlink.
+        );
+
         baseMinWidth => (
             | w <- 0 |
             lines do: [ :l | w <- w max: l width ].
