@@ -1,0 +1,5 @@
+{
+    static with inherited _ = std Module;
+
+    own keys = (here / 'keys.eco') importIn: self;
+}

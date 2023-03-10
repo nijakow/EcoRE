@@ -1,7 +1,7 @@
 {
     static with inherited _ = std Module;
 
-    keycodes = {
+    own keycodes = {
         static with inherited _ = std Module;
 
         letter_a = { static with inherited _ = std Enum };
@@ -86,9 +86,24 @@
         symbol_quote = { static with inherited _ = std Enum };
 
         special_enter = { static with inherited _ = std Enum };
-        special_escape = { static with inherited _ = std Enum };
-        special_backspace = { static with inherited _ = std Enum };
+        special_escape = { static with inherited _ = std Enum; writeOn: w => w << 'ESC'; };
+        special_backspace = { static with inherited _ = std Enum; writeOn: w => w << 'BS'; };
         special_tab = { static with inherited _ = std Enum };
         special_space = { static with inherited _ = std Enum };
-    }
+
+        special_unknown = { static with inherited _ = std Enum };
+    },
+
+    own sdlkeys = {
+        static with inherited _ = std Module;
+
+        SDLK_ESCAPE = 27,
+        SDLK_BACKSPACE = 8,
+    };
+
+    Translate: sdlkey => (
+        Switch: sdlkey
+          ~ case: sdlkeys SDLK_ESCAPE do: [ ^ keycodes special_escape ]
+        ~ default: [ ^ keycodes special_unknown ]
+    );
 }

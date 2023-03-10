@@ -19,6 +19,8 @@
               ^ self
             );
 
+            pushKey: key => (std io out << 'Key pressed!' << key) newline commit;
+
             run => (
                 | event <- wrapper NewEvent |
                 running <- true.
@@ -27,7 +29,10 @@
                     handler tick.
                     [ :break |
                         (event poll == 0) -> [ break value ].
-                        handler handleEvent: event.
+
+                        begin
+                          ~ if: [ event isKeyDown ] then: [ pushKey: event whichKey ]
+                        ~ default: [ handler handleEvent: event ].
                     ] repeatWithBreak.
                     
                     "Sleep for a while to avoid eating up CPU resources"

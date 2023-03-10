@@ -16,7 +16,7 @@
 
     NewEvent => (Event clone) init: sdl SDL_Event alloc;
 
-    own keys = (here / 'keys' / '_.eco') importIn: self;
+    own input = (here / 'input' / '_.eco') importIn: self;
 
     own Window = (here / 'Window.eco') importIn: self;
 

@@ -28,6 +28,13 @@
 
             isKeyDown => (type == sdl SDL_EventTypes KEYDOWN);
             isKeyUp => (type == sdl SDL_EventTypes KEYUP);
+            whichKey => (
+                |
+                    keys <- wrapper input keys,
+                    id   <- (event at: 3) at: 4
+                |
+              ^ keys Translate: id
+            );
 
             acceptEventVisitor: visitor => (
                 begin
