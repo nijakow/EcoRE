@@ -9,6 +9,10 @@
 
             ifEscape:    block => self;
             ifBackspace: block => self;
+            ifLeft:      block => self;
+            ifRight:     block => self;
+            ifUp:        block => self;
+            ifDown:      block => self;
 
             keyText => No;
 
@@ -102,6 +106,11 @@
         special_tab       = { static with inherited _ = std Enum; with inherited trait = $ trait; };
         special_space     = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: ' '; };
 
+        special_left  = { static with inherited _ = std Enum; with inherited trait = $ trait; ifLeft:  block => ( block value. ^ self ); };
+        special_right = { static with inherited _ = std Enum; with inherited trait = $ trait; ifRight: block => ( block value. ^ self ); };
+        special_up    = { static with inherited _ = std Enum; with inherited trait = $ trait; ifUp:    block => ( block value. ^ self ); };
+        special_down  = { static with inherited _ = std Enum; with inherited trait = $ trait; ifDown:  block => ( block value. ^ self ); };
+
         special_unknown   = { static with inherited _ = std Enum; with inherited trait = $ trait; };
     },
 
@@ -113,6 +122,11 @@
         SDLK_TAB = 9,
         SDLK_RETURN = 13,
         SDLK_SPACE = 32,
+
+        SDLK_LEFT  = 1073741904,
+        SDLK_RIGHT = 1073741903,
+        SDLK_UP    = 1073741906,
+        SDLK_DOWN  = 1073741905,
 
         SDLK_A = 97,
         SDLK_B = 98,
@@ -160,6 +174,10 @@
           ~ case: sdlkeys SDLK_TAB       do: [ ^ keycodes special_tab       ]
           ~ case: sdlkeys SDLK_RETURN    do: [ ^ keycodes special_enter     ]
           ~ case: sdlkeys SDLK_SPACE     do: [ ^ keycodes special_space     ]
+          ~ case: sdlkeys SDLK_LEFT      do: [ ^ keycodes special_left      ]
+          ~ case: sdlkeys SDLK_RIGHT     do: [ ^ keycodes special_right     ]
+          ~ case: sdlkeys SDLK_UP        do: [ ^ keycodes special_up        ]
+          ~ case: sdlkeys SDLK_DOWN      do: [ ^ keycodes special_down      ]
           ~ case: sdlkeys SDLK_A         do: [ ^ keycodes letter_a          ]
           ~ case: sdlkeys SDLK_B         do: [ ^ keycodes letter_b          ]
           ~ case: sdlkeys SDLK_C         do: [ ^ keycodes letter_c          ]

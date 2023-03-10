@@ -136,9 +136,10 @@
         );
 
         protected readjustCaret => (
+            "TODO, FIXME: If the line list is completely empty, this will fail."
             |
-                x <- (((caret x) min: ((lines at: (caret y)) text size)) max: 0),
-                y <- (((caret y) min: (lines size - 1)) max: 0)
+                y <- (((caret y) min: (lines size - 1)) max: 0),
+                x <- (((caret x) min: ((lines at: (y)) text size)) max: 0)
             |
             caret <- morphic X: x Y: y.
           ^ self
@@ -197,7 +198,13 @@
         );
 
         handleKey: key At: point HandMorph: hand => (
+            key ifLeft:  [ moveCaretToX: ((caret x) - 1) Y: (caret y). ^ true ].
+            key ifRight: [ moveCaretToX: ((caret x) + 1) Y: (caret y). ^ true ].
+            key ifUp:    [ moveCaretToX: (caret x) Y: ((caret y) - 1). ^ true ].
+            key ifDown:  [ moveCaretToX: (caret x) Y: ((caret y) + 1). ^ true ].
+
             key ifBackspace: [ deleteChar. ^ true ].
+
             key keyText yes: [ :text |
                 insertText: text.
             ].
