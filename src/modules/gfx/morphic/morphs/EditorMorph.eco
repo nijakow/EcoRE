@@ -23,6 +23,8 @@
                   ^ self
                 );
 
+                text => textobj text;
+
                 width  => textobj width;
                 height => textobj height;
 
@@ -35,6 +37,13 @@
                     ].
                   ^ texture
                 );
+
+                protected invalidateTexture => (
+                    texture <- No.
+                  ^ self
+                );
+
+                unlink => invalidateTexture;
 
                 renderOn: renderer X: x Y: y => (
                     (getOrMakeTexture: renderer) yes: [ :t | renderer drawTexture: t X: x Y: y W: width H: height ].
@@ -73,6 +82,28 @@
             lines add: (Line clone initWithTextObj: (morphic Text: text)).
             reshapeToFit.
             layoutChanged.
+          ^ self
+        );
+
+        protected replaceLine: y With: text => (
+            | line <- (lines at: y) |
+            line unlink.
+            lines at: y put: (Line clone initWithTextObj: (morphic Text: text)).
+            reshapeToFit.
+            layoutChanged.
+            renderDirty.
+          ^ self
+        );
+
+        deleteCharAtX: x Y: y => (
+            |
+                text    <- (lines at: y) text,
+                newtext <- (std io StringWriter) new
+            |
+            text forEach: [ :i :c |
+                (i != (x - 1)) if: [ newtext << c ].
+            ].
+            replaceLine: y With: newtext build.
           ^ self
         );
 
@@ -121,7 +152,11 @@
             $(Morph) renderImplOn: renderer.
         );
 
-        handleGrabAt: point HandMorph: hand => ( hand grab: self. true );
+        handleGrabAt: point HandMorph: hand => (
+            caret <- pixelToCaret(point).
+            deleteCharAtX: (caret x) Y: (caret y).
+          ^ true
+        );
         handleClickAt: point HandMorph: hand => (
             caret <- pixelToCaret(point).
             renderDirty.
