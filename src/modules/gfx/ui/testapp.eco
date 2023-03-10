@@ -37,7 +37,14 @@
 
         OutlinerPaneForObject: object => OutlinerPaneForMirror: (std reflect Mirror: object);
 
-        OutlinerWindowForObject: object => builder Window(400, 400, builder Scrollable(OutlinerPaneForObject: object));
+        OutlinerWindowForObject: object => (
+            builder Window(400, 400,
+                builder VBox(
+                    builder Scrollable(OutlinerPaneForObject: object),
+                    ObjectShellFor: object ~ rigidHeight: 150
+                )
+            )
+        );
 
         DisassemblyWindowFor: code => (
             |
@@ -60,8 +67,9 @@
             | writer <- (std io StringWriter) new |
             writer << object.
             builder Window(400, 400,
-                builder Scrollable(
-                    builder TextField: (writer build)
+                builder VBox(
+                    builder Scrollable(builder TextField: (writer build)),
+                    ObjectShellFor: object ~ rigidHeight: 150
                 )
             )
         );
@@ -101,15 +109,16 @@
             ~ default: [ ^ PresentationWindowFor: object ]
         );
 
-        RunStringAndShowResult: source World: world => (
+        RunStringAndShowResult: source World: world Environment: environment => (
             |
                 tok    <- ((lang eco tokenizer Tokenizer) clone) init: (source iterator),
                 parser <- ((lang eco parser Parser) clone) init: tok
             |
             parser exprDo: [ :expr |
-                world open: (WindowFor: (expr evaluateInEnv: lobby))
+                world open: (WindowFor: (expr evaluateInEnv: environment))
             ]
         );
+        RunStringAndShowResult: source World: world => RunStringAndShowResult: source World: world Environment: lobby;
 
         ShellWindow => (
             builder Window(500, 350,
@@ -117,6 +126,12 @@
                     OnAccept: $[ :(us) :editor | us RunStringAndShowResult: (editor fullText) World: (editor world yes) ] bind(self)
                     OnCancel: $[ :editor | "Do nothing" ]
             )
+        );
+
+        ObjectShellFor: object => (
+            builder Editor: '"Enter your instructions here"\n\n'
+                OnAccept: $[ :(us, object) :editor | us RunStringAndShowResult: (editor fullText) World: (editor world yes) Environment: object ] bind(self, object)
+                OnCancel: $[ :editor | "Do nothing" ]
         );
     };
 
