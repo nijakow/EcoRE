@@ -51,7 +51,7 @@
 
             builder Window(500, 400,
                 builder Scrollable(
-                    builder Editor: (writer build)  "We use an editor here - just for testing."
+                    builder TextField: (writer build)
                 )
             )
         );
@@ -100,22 +100,32 @@
               ~ if: [ std reflect primitives IsMolecule: object ] then: [ ^ OutlinerWindowForObject: object ]
             ~ default: [ ^ PresentationWindowFor: object ]
         );
+
+        RunStringAndShowResult: source World: world => (
+            |
+                tok    <- ((lang eco tokenizer Tokenizer) clone) init: (source iterator),
+                parser <- ((lang eco parser Parser) clone) init: tok
+            |
+            parser exprDo: [ :expr |
+                world open: (WindowFor: (expr evaluateInEnv: lobby))
+            ]
+        );
+
+        ShellWindow => (
+            builder Window(500, 350,
+                builder Editor: '"Enter your code here"\n\n'
+                    OnAccept: $[ :(us) :editor | us RunStringAndShowResult: (editor fullText) World: (editor world yes) ] bind(self)
+                    OnCancel: $[ :editor | "Do nothing" ]
+            )
+        );
     };
 
     reset => (
       ^ self
     );
 
-    buildEditorWindow => (
-        ui Window(320, 320,
-            ui Editor: 'Hello, world!\n\nThis is a simple editor.\n\nYou can edit this text.\n\nHave fun!'
-                OnAccept: $[ :text | (std io out << 'Editor accepted: ' << text) newline commit ]
-                OnCancel: $[ :text | (std io out << 'Editor canceled: ' << text) newline commit ]
-        )
-    );
-
     build => (
-        ui Window(320, 400,
+        ui Window(280, 200,
             ui VBox(
                 ui Center(ui TextField: 'Look at me as I can fly!\n    - Chrom, "Regret & Testify"'),
                 ui Button(ui Center(ui Label: 'Outliner'),
@@ -128,9 +138,9 @@
                                 bind(MirrorBuilder))
                     ~ xLayout: ui layouts Flexible
                     ~ yLayout: ui layouts Flexible,
-                ui Button(ui Center(ui Label: 'Editor'),
-                          $[ :(testapp) :sender | (sender world yes) open: (testapp buildEditorWindow) ]
-                                bind(self))
+                ui Button(ui Center(ui Label: 'Shell'),
+                          $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder ShellWindow) ]
+                                bind(MirrorBuilder))
                     ~ xLayout: ui layouts Flexible
                     ~ yLayout: ui layouts Flexible
             )

@@ -106,10 +106,10 @@
       ^ VBox(
           Scrollable(Flexible(editor)),
           HBox(
-              Button(Label: 'Accept', $[ :(editor, onaccept) :sender | onaccept value(editor fullText) ] bind(editor, onaccept))
+              Button(Label: 'Accept', $[ :(editor, onaccept) :sender | onaccept value(editor) ] bind(editor, onaccept))
                 ~ xLayout: layouts Flexible
                 ~ yLayout: layouts ShrinkWrap,
-              Button(Label: 'Cancel', $[ :(editor, oncancel) :sender | oncancel value(editor fullText) ] bind(editor, oncancel))
+              Button(Label: 'Cancel', $[ :(editor, oncancel) :sender | oncancel value(editor) ] bind(editor, oncancel))
                 ~ xLayout: layouts Flexible
                 ~ yLayout: layouts ShrinkWrap
           ) ~ xLayout: layouts Flexible
