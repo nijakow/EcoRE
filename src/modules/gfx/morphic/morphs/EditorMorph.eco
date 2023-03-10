@@ -94,6 +94,13 @@
             renderDirty.
           ^ self
         );
+        protected insertLineAfter: y With: text => (
+            lines insert: (Line clone initWithTextObj: (morphic Text: text)) at: (y + 1).
+            reshapeToFit.
+            layoutChanged.
+            renderDirty.
+          ^ self
+        );
 
         deleteCharAtX: x Y: y => (
             |
@@ -132,6 +139,21 @@
         insertText: text => (
             insertText: text AtX: (caret x) Y: (caret y).
             moveCaretToX: ((caret x) + text size) Y: (caret y).
+          ^ self
+        );
+
+        insertNewlineAtX: x Y: y => (
+            |
+                first  <- (lines at: y) text substringTo: x,
+                second <- (lines at: y) text substringFrom: x
+            |
+            replaceLine: y With: first.
+            insertLineAfter: y With: second.
+          ^ self
+        );
+        insertNewline => (
+            insertNewlineAtX: (caret x) Y: (caret y).
+            moveCaretToX: 0 Y: ((caret y) + 1).
           ^ self
         );
 
@@ -203,7 +225,8 @@
             key ifUp:    [ moveCaretToX: (caret x) Y: ((caret y) - 1). ^ true ].
             key ifDown:  [ moveCaretToX: (caret x) Y: ((caret y) + 1). ^ true ].
 
-            key ifBackspace: [ deleteChar. ^ true ].
+            key ifBackspace: [ deleteChar.    ^ true ].
+            key ifEnter:     [ insertNewline. ^ true ].
 
             key keyText yes: [ :text |
                 insertText: text.

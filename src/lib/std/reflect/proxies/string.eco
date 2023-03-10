@@ -83,18 +83,23 @@
         (token isEmpty) unless: [ tokens append: (token asString). token clear ].
       ^ tokens asArray
     );
-    substringTo: index => (
+    substringFrom: start To: end => (
         |
             vec <- std util newVector,
             i   <- 0
         |
         do: [ :c |
-            (i >= index) if: [ ^ vec asString ].
-            vec append: c.
+            (i >= start) if: [
+                (i >= end) if: [ ^ vec asString ].
+                vec append: c
+            ].
             i <- i + 1
         ].
       ^ vec asString
     );
+    substringFrom: start Length: length => substringFrom: start To: (start + length);
+    substringTo: index => substringFrom: 0 To: index;
+    substringFrom: index => substringFrom: index To: size;
     * count => (
         | vec <- std util newVector |
         count times: [

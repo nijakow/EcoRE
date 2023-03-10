@@ -39,6 +39,14 @@
     add: element => append: element;
     remove: e => (find: e) yes: [ :i | ^ Yes: (erase: i) ] no: [ ^ No ];
 
+    insert: element at: index => (
+        resizeToAtLeast: (size + 1).
+        0 for: (size - index) do: [ :i | at: (size - i) put: (at: (size - i - 1)) ].
+        size <- size + 1.
+        at: index put: element.
+      ^ self
+    );
+
     erase: index => (
         | elem <- at: index |
         index to: (size - 2) do: [ :i | at: i put: (at: i + 1) ].
