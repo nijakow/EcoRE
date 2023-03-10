@@ -40,7 +40,7 @@
             );"
 
             render => (
-                isRenderDirty if: [
+                ([ isRenderDirty ] or: [ isChildRenderDirty ]) if: [
                     "renderer setR: 200 G: 200 B: 200.
                     renderer clear.
                     renderOn: renderer.
