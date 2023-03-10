@@ -10,95 +10,97 @@
             ifEscape:    block => self;
             ifBackspace: block => self;
 
+            keyText => No;
+
             writeOn: w => w << 'a key';
         };
 
-        letter_a = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_b = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_c = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_d = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_e = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_f = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_g = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_h = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_i = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_j = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_k = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_l = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_m = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_n = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_o = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_p = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_q = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_r = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_s = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_t = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_u = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_v = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_w = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_x = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_y = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_z = { static with inherited _ = std Enum; with inherited trait = $ trait; };
+        letter_a = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'a'; };
+        letter_b = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'b'; };
+        letter_c = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'c'; };
+        letter_d = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'd'; };
+        letter_e = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'e'; };
+        letter_f = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'f'; };
+        letter_g = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'g'; };
+        letter_h = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'h'; };
+        letter_i = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'i'; };
+        letter_j = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'j'; };
+        letter_k = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'k'; };
+        letter_l = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'l'; };
+        letter_m = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'm'; };
+        letter_n = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'n'; };
+        letter_o = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'o'; };
+        letter_p = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'p'; };
+        letter_q = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'q'; };
+        letter_r = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'r'; };
+        letter_s = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 's'; };
+        letter_t = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 't'; };
+        letter_u = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'u'; };
+        letter_v = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'v'; };
+        letter_w = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'w'; };
+        letter_x = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'x'; };
+        letter_y = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'y'; };
+        letter_z = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'z'; };
 
-        letter_A = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_B = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_C = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_D = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_E = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_F = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_G = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_H = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_I = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_J = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_K = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_L = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_M = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_N = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_O = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_P = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_Q = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_R = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_S = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_T = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_U = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_V = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_W = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_X = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_Y = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        letter_Z = { static with inherited _ = std Enum; with inherited trait = $ trait; };
+        letter_A = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'A'; };
+        letter_B = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'B'; };
+        letter_C = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'C'; };
+        letter_D = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'D'; };
+        letter_E = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'E'; };
+        letter_F = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'F'; };
+        letter_G = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'G'; };
+        letter_H = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'H'; };
+        letter_I = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'I'; };
+        letter_J = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'J'; };
+        letter_K = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'K'; };
+        letter_L = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'L'; };
+        letter_M = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'M'; };
+        letter_N = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'N'; };
+        letter_O = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'O'; };
+        letter_P = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'P'; };
+        letter_Q = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'Q'; };
+        letter_R = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'R'; };
+        letter_S = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'S'; };
+        letter_T = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'T'; };
+        letter_U = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'U'; };
+        letter_V = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'V'; };
+        letter_W = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'W'; };
+        letter_X = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'X'; };
+        letter_Y = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'Y'; };
+        letter_Z = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: 'Z'; };
 
-        digit_0 = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        digit_1 = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        digit_2 = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        digit_3 = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        digit_4 = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        digit_5 = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        digit_6 = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        digit_7 = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        digit_8 = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        digit_9 = { static with inherited _ = std Enum; with inherited trait = $ trait; };
+        digit_0 = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '0'; };
+        digit_1 = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '1'; };
+        digit_2 = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '2'; };
+        digit_3 = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '3'; };
+        digit_4 = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '4'; };
+        digit_5 = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '5'; };
+        digit_6 = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '6'; };
+        digit_7 = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '7'; };
+        digit_8 = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '8'; };
+        digit_9 = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '9'; };
 
-        symbol_semicolon         = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        symbol_equal             = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        symbol_comma             = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        symbol_minus             = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        symbol_period            = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        symbol_slash             = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        symbol_tilde             = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        symbol_backslash         = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        symbol_left_parenthesis  = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        symbol_right_parenthesis = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        symbol_left_bracket      = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        symbol_right_bracket     = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        symbol_left_brace        = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        symbol_right_brace       = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        symbol_quote             = { static with inherited _ = std Enum; with inherited trait = $ trait; };
+        symbol_semicolon         = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: ';'; };
+        symbol_equal             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '='; };
+        symbol_comma             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: ','; };
+        symbol_minus             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '-'; };
+        symbol_period            = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '.'; };
+        symbol_slash             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '/'; };
+        symbol_tilde             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '~'; };
+        symbol_backslash         = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '\\'; };
+        symbol_left_parenthesis  = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '('; };
+        symbol_right_parenthesis = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: ')'; };
+        symbol_left_bracket      = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '['; };
+        symbol_right_bracket     = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: ']'; };
+        symbol_left_brace        = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '{'; };
+        symbol_right_brace       = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '}'; };
+        symbol_quote             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '\''; };
 
         special_enter     = { static with inherited _ = std Enum; with inherited trait = $ trait; };
         special_escape    = { static with inherited _ = std Enum; with inherited trait = $ trait; ifEscape:    block => ( block value. ^ self ); };
         special_backspace = { static with inherited _ = std Enum; with inherited trait = $ trait; ifBackspace: block => ( block value. ^ self ); };
         special_tab       = { static with inherited _ = std Enum; with inherited trait = $ trait; };
-        special_space     = { static with inherited _ = std Enum; with inherited trait = $ trait; };
+        special_space     = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: ' '; };
 
         special_unknown   = { static with inherited _ = std Enum; with inherited trait = $ trait; };
     },
@@ -111,6 +113,44 @@
         SDLK_TAB = 9,
         SDLK_RETURN = 13,
         SDLK_SPACE = 32,
+
+        SDLK_A = 97,
+        SDLK_B = 98,
+        SDLK_C = 99,
+        SDLK_D = 100,
+        SDLK_E = 101,
+        SDLK_F = 102,
+        SDLK_G = 103,
+        SDLK_H = 104,
+        SDLK_I = 105,
+        SDLK_J = 106,
+        SDLK_K = 107,
+        SDLK_L = 108,
+        SDLK_M = 109,
+        SDLK_N = 110,
+        SDLK_O = 111,
+        SDLK_P = 112,
+        SDLK_Q = 113,
+        SDLK_R = 114,
+        SDLK_S = 115,
+        SDLK_T = 116,
+        SDLK_U = 117,
+        SDLK_V = 118,
+        SDLK_W = 119,
+        SDLK_X = 120,
+        SDLK_Y = 121,
+        SDLK_Z = 122,
+
+        SDLK_0 = 48,
+        SDLK_1 = 49,
+        SDLK_2 = 50,
+        SDLK_3 = 51,
+        SDLK_4 = 52,
+        SDLK_5 = 53,
+        SDLK_6 = 54,
+        SDLK_7 = 55,
+        SDLK_8 = 56,
+        SDLK_9 = 57,
     };
 
     Translate: sdlkey => (
@@ -120,6 +160,42 @@
           ~ case: sdlkeys SDLK_TAB       do: [ ^ keycodes special_tab       ]
           ~ case: sdlkeys SDLK_RETURN    do: [ ^ keycodes special_enter     ]
           ~ case: sdlkeys SDLK_SPACE     do: [ ^ keycodes special_space     ]
+          ~ case: sdlkeys SDLK_A         do: [ ^ keycodes letter_a          ]
+          ~ case: sdlkeys SDLK_B         do: [ ^ keycodes letter_b          ]
+          ~ case: sdlkeys SDLK_C         do: [ ^ keycodes letter_c          ]
+          ~ case: sdlkeys SDLK_D         do: [ ^ keycodes letter_d          ]
+          ~ case: sdlkeys SDLK_E         do: [ ^ keycodes letter_e          ]
+          ~ case: sdlkeys SDLK_F         do: [ ^ keycodes letter_f          ]
+          ~ case: sdlkeys SDLK_G         do: [ ^ keycodes letter_g          ]
+          ~ case: sdlkeys SDLK_H         do: [ ^ keycodes letter_h          ]
+          ~ case: sdlkeys SDLK_I         do: [ ^ keycodes letter_i          ]
+          ~ case: sdlkeys SDLK_J         do: [ ^ keycodes letter_j          ]
+          ~ case: sdlkeys SDLK_K         do: [ ^ keycodes letter_k          ]
+          ~ case: sdlkeys SDLK_L         do: [ ^ keycodes letter_l          ]
+          ~ case: sdlkeys SDLK_M         do: [ ^ keycodes letter_m          ]
+          ~ case: sdlkeys SDLK_N         do: [ ^ keycodes letter_n          ]
+          ~ case: sdlkeys SDLK_O         do: [ ^ keycodes letter_o          ]
+          ~ case: sdlkeys SDLK_P         do: [ ^ keycodes letter_p          ]
+          ~ case: sdlkeys SDLK_Q         do: [ ^ keycodes letter_q          ]
+          ~ case: sdlkeys SDLK_R         do: [ ^ keycodes letter_r          ]
+          ~ case: sdlkeys SDLK_S         do: [ ^ keycodes letter_s          ]
+          ~ case: sdlkeys SDLK_T         do: [ ^ keycodes letter_t          ]
+          ~ case: sdlkeys SDLK_U         do: [ ^ keycodes letter_u          ]
+          ~ case: sdlkeys SDLK_V         do: [ ^ keycodes letter_v          ]
+          ~ case: sdlkeys SDLK_W         do: [ ^ keycodes letter_w          ]
+          ~ case: sdlkeys SDLK_X         do: [ ^ keycodes letter_x          ]
+          ~ case: sdlkeys SDLK_Y         do: [ ^ keycodes letter_y          ]
+          ~ case: sdlkeys SDLK_Z         do: [ ^ keycodes letter_z          ]
+          ~ case: sdlkeys SDLK_0         do: [ ^ keycodes digit_0           ]
+          ~ case: sdlkeys SDLK_1         do: [ ^ keycodes digit_1           ]
+          ~ case: sdlkeys SDLK_2         do: [ ^ keycodes digit_2           ]
+          ~ case: sdlkeys SDLK_3         do: [ ^ keycodes digit_3           ]
+          ~ case: sdlkeys SDLK_4         do: [ ^ keycodes digit_4           ]
+          ~ case: sdlkeys SDLK_5         do: [ ^ keycodes digit_5           ]
+          ~ case: sdlkeys SDLK_6         do: [ ^ keycodes digit_6           ]
+          ~ case: sdlkeys SDLK_7         do: [ ^ keycodes digit_7           ]
+          ~ case: sdlkeys SDLK_8         do: [ ^ keycodes digit_8           ]
+          ~ case: sdlkeys SDLK_9         do: [ ^ keycodes digit_9           ]
         ~ default: [ ^ keycodes special_unknown ]
     );
 }

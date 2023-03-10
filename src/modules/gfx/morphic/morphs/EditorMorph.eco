@@ -107,6 +107,50 @@
           ^ self
         );
 
+        deleteChar => (
+            deleteCharAtX: (caret x) Y: (caret y).
+            moveCaretToX: ((caret x) - 1) Y: (caret y).
+          ^ self
+        );
+
+        insertText: text AtX: x Y: y => (
+            |
+                oldtext <- (lines at: y) text,
+                newtext <- (std io StringWriter) new
+            |
+            (x < oldtext size) if: [
+                oldtext forEach: [ :i :c |
+                    (i == x) if: [ newtext << text ].
+                    newtext << c.
+                ].
+            ] else: [
+                newtext << oldtext << text.
+            ].
+            replaceLine: y With: newtext build.
+          ^ self
+        );
+        insertText: text => (
+            insertText: text AtX: (caret x) Y: (caret y).
+            moveCaretToX: ((caret x) + text size) Y: (caret y).
+          ^ self
+        );
+
+        protected readjustCaret => (
+            |
+                x <- (((caret x) min: ((lines at: (caret y)) text size)) max: 0),
+                y <- (((caret y) min: (lines size - 1)) max: 0)
+            |
+            caret <- morphic X: x Y: y.
+          ^ self
+        );
+        moveCaretToX: x Y: y => (
+            caret <- morphic X: x Y: y.
+            readjustCaret.
+            renderDirty.
+          ^ self
+        );
+        moveCaretTo: point => moveCaretToX: (point x) Y: (point y);
+
         protected caretToPixel(caret) => (
             |
                 caretX <- (lines at: (caret y)) caretX: (caret x),
@@ -153,12 +197,14 @@
         );
 
         handleKey: key At: point HandMorph: hand => (
-            key ifBackspace: [ deleteCharAtX: (caret x) Y: (caret y) ].
+            key ifBackspace: [ deleteChar. ^ true ].
+            key keyText yes: [ :text |
+                insertText: text.
+            ].
           ^ true
         );
         handleClickAt: point HandMorph: hand => (
-            caret <- pixelToCaret(point).
-            renderDirty.
+            moveCaretTo: (pixelToCaret(point)).
           ^ true
         );
 
