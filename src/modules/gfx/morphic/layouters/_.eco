@@ -112,8 +112,7 @@
 
             |
                 flexCount  <- 0,
-                offset     <- 0,
-                cross      <- 0
+                offset     <- 0
             |
             morph childrenDo: [ :child |
                 "
@@ -127,8 +126,7 @@
                     loop is finished.
                 "
                 (Layout: child) isFlexible
-                  ~ if: [ flexCount <- flexCount + 1.
-                          cross     <- cross max: (OppositePreferredSize: child Constraints: shrunkConstraints) ]
+                  ~ if: [ flexCount <- flexCount + 1 ]
                   else: [
                           "
                               Since we know the size of the child along the main axis,
@@ -140,14 +138,13 @@
                               Note that we don't move the child, since we don't know the size of the flexible children yet.
                           "
                           |
-                              childConstraints <- TransformedW: (child minSizeForOrientation: orientation)
+                              childConstraints <- TransformedW: (child preferredSizeForOrientation: orientation Constraint: (shrunkConstraints dimensionForOrientation: orientation))
                                                              H: (shrunkConstraints dimensionForOrientation: (orientation opposite)),
                               childDimensions  <- child layoutWithConstraints: childConstraints
                           |
 
                           "We add the preferred size of the child to the main axis."
                           offset <- offset + (childConstraints dimensionForOrientation: orientation).
-                          cross  <- cross max: (childConstraints dimensionForOrientation: (orientation opposite)).
                         ].
             ].
 
@@ -155,7 +152,6 @@
             |
                 remainingSpace <- (shrunkConstraints dimensionForOrientation: orientation) - offset,
                 flexSize       <- (flexCount isZero) if: [ 0 ] else: [ remainingSpace / flexCount ],
-                flexDimensions <- (TransformedW: flexSize H: cross),  "We only calculate it once, for efficiency."
                 position       <- 0
             |
 
@@ -164,9 +160,11 @@
                 "Move the child to the correct position."
                 child moveTo: (TransformedW: position H: 0).
 
+                | childConstraints <- TransformedW: flexSize H: (child preferredSizeForOrientation: (orientation opposite) Constraint: (shrunkConstraints dimensionForOrientation: (orientation opposite))) |
+
                 "Now that we know the size distribution we can also layout the flexible children."
                 (Layout: child) isFlexible
-                  ~ if: [ child layoutWithConstraints: flexDimensions ].
+                  ~ if: [ child layoutWithConstraints: childConstraints ].
                 
                 "As before, we increment the position along the main axis."
                 position <- position + (child extentForOrientation: orientation).
