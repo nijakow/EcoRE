@@ -115,7 +115,8 @@
         symbol_right_bracket     = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: ']'; };
         symbol_left_brace        = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '{'; };
         symbol_right_brace       = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '}'; };
-        symbol_quote             = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '\''; };
+        symbol_single_quote      = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '\''; };
+        symbol_double_quote      = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: '"'; };
 
         special_enter     = { static with inherited _ = std Enum; with inherited trait = $ trait; };
         special_escape    = { static with inherited _ = std Enum; with inherited trait = $ trait; ifEscape:    block => ( block value. ^ self ); };
@@ -517,17 +518,17 @@
           ~ case: sdlscans SDL_SCANCODE_KP_7   do: [ ^ keycodes digit_7 ]
           ~ case: sdlscans SDL_SCANCODE_KP_8   do: [ ^ keycodes digit_8 ]
           ~ case: sdlscans SDL_SCANCODE_KP_9   do: [ ^ keycodes digit_9 ]
-          ~ case: sdlscans SDL_SCANCODE_MINUS        do: [ isShift if: [ ^ keycodes symbol_underscore ] else: [ ^ keycodes symbol_minus ] ]
-          ~ case: sdlscans SDL_SCANCODE_EQUALS       do: [ isShift if: [ ^ keycodes symbol_plus         ] else: [ ^ keycodes symbol_equal ] ]
-          ~ case: sdlscans SDL_SCANCODE_LEFTBRACKET  do: [ isShift if: [ ^ keycodes symbol_left_brace   ] else: [ ^ keycodes symbol_left_bracket  ]   ]
-          ~ case: sdlscans SDL_SCANCODE_RIGHTBRACKET do: [ isShift if: [ ^ keycodes symbol_right_brace  ] else: [ ^ keycodes symbol_right_bracket ]   ]
-          ~ case: sdlscans SDL_SCANCODE_SEMICOLON    do: [ isShift if: [ ^ keycodes symbol_colon        ] else: [ ^ keycodes symbol_semicolon     ]   ]
-          ~ case: sdlscans SDL_SCANCODE_APOSTROPHE   do: [ isShift if: [ ^ keycodes symbol_double_quote ] else: [ ^ keycodes symbol_single_quote  ]   ]
-          ~ case: sdlscans SDL_SCANCODE_GRAVE        do: [ isShift if: [ ^ keycodes symbol_tilde        ] else: [ ^ keycodes symbol_backquote    ]   ]
-          ~ case: sdlscans SDL_SCANCODE_COMMA        do: [ isShift if: [ ^ keycodes symbol_less_than    ] else: [ ^ keycodes symbol_comma         ]   ]
-          ~ case: sdlscans SDL_SCANCODE_PERIOD       do: [ isShift if: [ ^ keycodes symbol_greater_than ] else: [ ^ keycodes symbol_period        ]   ]
-          ~ case: sdlscans SDL_SCANCODE_SLASH        do: [ isShift if: [ ^ keycodes symbol_question     ] else: [ ^ keycodes symbol_slash         ]   ]
-          ~ case: sdlscans SDL_SCANCODE_BACKSLASH    do: [ isShift if: [ ^ keycodes symbol_pipe         ] else: [ ^ keycodes symbol_backslash     ]   ]
+          ~ case: sdlscans SDL_SCANCODE_MINUS        do: [ isShift if: [ ^ keycodes symbol_underscore   ] else: [ ^ keycodes symbol_minus         ] ]
+          ~ case: sdlscans SDL_SCANCODE_EQUALS       do: [ isShift if: [ ^ keycodes symbol_plus         ] else: [ ^ keycodes symbol_equal         ] ]
+          ~ case: sdlscans SDL_SCANCODE_LEFTBRACKET  do: [ isShift if: [ ^ keycodes symbol_left_brace   ] else: [ ^ keycodes symbol_left_bracket  ] ]
+          ~ case: sdlscans SDL_SCANCODE_RIGHTBRACKET do: [ isShift if: [ ^ keycodes symbol_right_brace  ] else: [ ^ keycodes symbol_right_bracket ] ]
+          ~ case: sdlscans SDL_SCANCODE_SEMICOLON    do: [ isShift if: [ ^ keycodes symbol_colon        ] else: [ ^ keycodes symbol_semicolon     ] ]
+          ~ case: sdlscans SDL_SCANCODE_APOSTROPHE   do: [ isShift if: [ ^ keycodes symbol_double_quote ] else: [ ^ keycodes symbol_single_quote  ] ]
+          ~ case: sdlscans SDL_SCANCODE_GRAVE        do: [ isShift if: [ ^ keycodes symbol_tilde        ] else: [ ^ keycodes symbol_backquote     ] ]
+          ~ case: sdlscans SDL_SCANCODE_COMMA        do: [ isShift if: [ ^ keycodes symbol_less_than    ] else: [ ^ keycodes symbol_comma         ] ]
+          ~ case: sdlscans SDL_SCANCODE_PERIOD       do: [ isShift if: [ ^ keycodes symbol_greater_than ] else: [ ^ keycodes symbol_period        ] ]
+          ~ case: sdlscans SDL_SCANCODE_SLASH        do: [ isShift if: [ ^ keycodes symbol_question     ] else: [ ^ keycodes symbol_slash         ] ]
+          ~ case: sdlscans SDL_SCANCODE_BACKSLASH    do: [ isShift if: [ ^ keycodes symbol_pipe         ] else: [ ^ keycodes symbol_backslash     ] ]
         ~ default: [ ^ keycodes special_unknown ]
     );
 }
