@@ -6,8 +6,6 @@
     with inherited trait = {
         init => (
             $(Morph) initWithOneChild.
-            shrinkWrapWidth.
-            shrinkWrapHeight.
             layouter: (morphic layouters FreeOffsetX: 0 Y: 0).
           ^ self
         );

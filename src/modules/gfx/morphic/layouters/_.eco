@@ -139,7 +139,7 @@
                           "
                           |
                               childConstraints <- TransformedW: (child preferredSizeForOrientation: orientation Constraint: (shrunkConstraints dimensionForOrientation: orientation))
-                                                             H: (shrunkConstraints dimensionForOrientation: (orientation opposite)),
+                                                             H: (child preferredSizeForOrientation: orientation opposite Constraint: (shrunkConstraints dimensionForOrientation: orientation opposite)),
                               childDimensions  <- child layoutWithConstraints: childConstraints
                           |
 
