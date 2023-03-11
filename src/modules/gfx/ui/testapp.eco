@@ -115,7 +115,7 @@
                 parser <- ((lang eco parser Parser) clone) init: tok
             |
             parser exprDo: [ :expr |
-                world open: (WindowFor: (expr evaluateInEnv: environment))
+                world open: (WindowFor: (expr evaluateInEnv: environment Host: environment))
             ]
         );
         RunStringAndShowResult: source World: world => RunStringAndShowResult: source World: world Environment: lobby;
@@ -124,14 +124,14 @@
             builder Window(500, 350,
                 builder Editor: '"Enter your code here"\n\n'
                     OnAccept: $[ :(us) :editor | us RunStringAndShowResult: (editor fullText) World: (editor world yes) ] bind(self)
-                    OnCancel: $[ :editor | "Do nothing" ]
+                    OnCancel: $[ :editor | editor clear ]
             )
         );
 
         ObjectShellFor: object => (
             builder Editor: '"Enter your instructions here"\n\n'
                 OnAccept: $[ :(us, object) :editor | us RunStringAndShowResult: (editor fullText) World: (editor world yes) Environment: object ] bind(self, object)
-                OnCancel: $[ :editor | "Do nothing" ]
+                OnCancel: $[ :editor | editor clear ]
         );
     };
 

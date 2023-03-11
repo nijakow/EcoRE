@@ -280,6 +280,13 @@
           ^ text build
         );
 
+        clear => (
+            [ lines size > 1 ] while: [ removeLine: 0 ].
+            replaceLine: 0 With: ''.
+            moveCaretToX: 0 Y: 0.
+          ^ self
+        );
+
         writeOn: w => w << 'a text editor';
     };
 }
