@@ -256,8 +256,11 @@
             key ifUp:    [ moveCaretToX: (caret x) Y: ((caret y) - 1). ^ true ].
             key ifDown:  [ moveCaretToX: (caret x) Y: ((caret y) + 1). ^ true ].
 
-            key ifBackspace: [ deleteChar.    ^ true ].
-            key ifEnter:     [ insertNewline. ^ true ].
+            key ifBackspace: [ deleteChar.                   ^ true ].
+            key ifEnter:     [ insertNewline.                ^ true ].
+            key ifHome:      [ moveCaretToX: 0 Y: (caret y). ^ true ].
+            key ifEnd:       [ moveCaretToX: ((lines at: (caret y)) text size) Y: (caret y). ^ true ].
+            key ifTab:       [ insertText: ' ' * (4 - ((caret x) mod: 4)).                   ^ true ].
 
             key keyText yes: [ :text |
                 insertText: text.

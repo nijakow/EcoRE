@@ -10,10 +10,15 @@
             ifEscape:    block => self;
             ifBackspace: block => self;
             ifEnter:     block => self;
+            ifTab:       block => self;
             ifLeft:      block => self;
             ifRight:     block => self;
             ifUp:        block => self;
             ifDown:      block => self;
+            ifPageUp:    block => self;
+            ifPageDown:  block => self;
+            ifHome:      block => self;
+            ifEnd:       block => self;
 
             keyText => No;
 
@@ -122,7 +127,7 @@
         special_enter     = { static with inherited _ = std Enum; with inherited trait = $ trait; ifEnter:     block => ( block value. ^ self ); };
         special_escape    = { static with inherited _ = std Enum; with inherited trait = $ trait; ifEscape:    block => ( block value. ^ self ); };
         special_backspace = { static with inherited _ = std Enum; with inherited trait = $ trait; ifBackspace: block => ( block value. ^ self ); };
-        special_tab       = { static with inherited _ = std Enum; with inherited trait = $ trait; };
+        special_tab       = { static with inherited _ = std Enum; with inherited trait = $ trait; ifTab:       block => ( block value. ^ self ); keyText => Yes: '\t'; };
         special_space     = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: ' '; };
 
         special_left  = { static with inherited _ = std Enum; with inherited trait = $ trait; ifLeft:  block => ( block value. ^ self ); };
@@ -130,7 +135,13 @@
         special_up    = { static with inherited _ = std Enum; with inherited trait = $ trait; ifUp:    block => ( block value. ^ self ); };
         special_down  = { static with inherited _ = std Enum; with inherited trait = $ trait; ifDown:  block => ( block value. ^ self ); };
 
-        special_unknown   = { static with inherited _ = std Enum; with inherited trait = $ trait; };
+        special_pageup   = { static with inherited _ = std Enum; with inherited trait = $ trait; ifPageUp:   block => ( block value. ^ self ); };
+        special_pagedown = { static with inherited _ = std Enum; with inherited trait = $ trait; ifPageDown: block => ( block value. ^ self ); };
+
+        special_home = { static with inherited _ = std Enum; with inherited trait = $ trait; ifHome: block => ( block value. ^ self ); };
+        special_end  = { static with inherited _ = std Enum; with inherited trait = $ trait; ifEnd:  block => ( block value. ^ self ); };
+
+        special_unknown = { static with inherited _ = std Enum; with inherited trait = $ trait; };
     },
 
     own sdlkeys = {
@@ -473,6 +484,10 @@
           ~ case: sdlscans SDL_SCANCODE_RIGHT     do: [ ^ keycodes special_right     ]
           ~ case: sdlscans SDL_SCANCODE_UP        do: [ ^ keycodes special_up        ]
           ~ case: sdlscans SDL_SCANCODE_DOWN      do: [ ^ keycodes special_down      ]
+          ~ case: sdlscans SDL_SCANCODE_PAGEUP    do: [ ^ keycodes special_pageup    ]
+          ~ case: sdlscans SDL_SCANCODE_PAGEDOWN  do: [ ^ keycodes special_pagedown  ]
+          ~ case: sdlscans SDL_SCANCODE_HOME      do: [ ^ keycodes special_home      ]
+          ~ case: sdlscans SDL_SCANCODE_END       do: [ ^ keycodes special_end       ]
           ~ case: sdlscans SDL_SCANCODE_A      do: [ isShift if: [ ^ keycodes letter_A ] else: [ ^ keycodes letter_a ]          ]
           ~ case: sdlscans SDL_SCANCODE_B      do: [ isShift if: [ ^ keycodes letter_B ] else: [ ^ keycodes letter_b ]          ]
           ~ case: sdlscans SDL_SCANCODE_C      do: [ isShift if: [ ^ keycodes letter_C ] else: [ ^ keycodes letter_c ]          ]

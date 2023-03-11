@@ -69,6 +69,7 @@
                 | n <- in next |
                 begin
                     if: [ n == #\\\       ] then: [ ^ n          ] ~
+                    if: [ n == #\t        ] then: [ ^ #\\t       ] ~
                     if: [ n == #\n        ] then: [ ^ #\\n       ] ~
                     if: [ n == #\'        ] then: [ ^ #\'        ] ~
                     if: [ n == #\"        ] then: [ ^ #\"        ] ~
