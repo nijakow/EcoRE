@@ -109,13 +109,34 @@
             ~ default: [ ^ PresentationWindowFor: object ]
         );
 
+        ErrorWindow: error => (
+            builder Window(360, 200,
+                builder TextField: error
+            )
+        );
+
         RunStringAndShowResult: source World: world Environment: environment => (
-            |
-                tok    <- ((lang eco tokenizer Tokenizer) clone) init: (source iterator),
-                parser <- ((lang eco parser Parser) clone) init: tok
-            |
-            parser exprDo: [ :expr |
-                world open: (WindowFor: (expr evaluateInEnv: environment Host: environment))
+            [
+                |
+                    tok    <- ((lang eco tokenizer Tokenizer) clone) init: (source iterator),
+                    parser <- ((lang eco parser Parser) clone) init: tok
+                |
+                parser exprDo: [ :expr |
+                    [
+                        | result <- expr evaluateInEnv: environment |
+                        world open: (WindowFor: result)
+                    ] catch: [ :e |
+                        | sw <- (std io StringWriter) new |
+                        (sw << 'Error while evaluating expression!') newline newline.
+                        sw << e.
+                        world open: (ErrorWindow: (sw build))
+                    ]
+                ]
+            ] catch: [ :e |
+                | sw <- (std io StringWriter) new |
+                (sw << 'Syntax error while parsing expression:') newline newline.
+                sw << e.
+                world open: (ErrorWindow: (sw build))
             ]
         );
         RunStringAndShowResult: source World: world => RunStringAndShowResult: source World: world Environment: lobby;
