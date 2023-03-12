@@ -41,6 +41,8 @@
     protected TTF_OpenFont,
     protected TTF_CloseFont,
     protected TTF_RenderText_Solid,
+    protected TTF_RenderUTF8_Shaded,
+    protected TTF_RenderUTF8_Blended,
     protected TTF_SizeUTF8;
 
     SDL_Scancode,
@@ -169,6 +171,8 @@
 
             "We're using a trick to define TTF_RenderText_Solid since using an SDL_Color struct isn't possible with libffi right now"
             TTF_RenderText_Solid <- (libttf function: #'TTF_RenderText_Solid' type: (ffi types pointer) function(ffi types pointer, ffi types string, SDL_Color)) yes.
+            TTF_RenderUTF8_Shaded <- (libttf function: #'TTF_RenderUTF8_Shaded' type: (ffi types pointer) function(ffi types pointer, ffi types string, SDL_Color)) yes.
+            TTF_RenderUTF8_Blended <- (libttf function: #'TTF_RenderUTF8_Blended' type: (ffi types pointer) function(ffi types pointer, ffi types string, SDL_Color)) yes.
 
             TTF_SizeUTF8 <- (libttf function: #'TTF_SizeUTF8' type: (ffi types int) function(ffi types pointer, ffi types string, ffi types int pointer, ffi types int pointer)) yes.
 
@@ -221,6 +225,22 @@
             color at: 2 put: b.
             color at: 3 put: a.
             TTF_RenderText_Solid value(font, text, color)
+        );
+        RenderUTF8_Shaded(font, text, r, g, b, a) => (
+            | color <- SDL_Color alloc |
+            color at: 0 put: r.
+            color at: 1 put: g.
+            color at: 2 put: b.
+            color at: 3 put: a.
+            TTF_RenderUTF8_Shaded value(font, text, color)
+        );
+        RenderUTF8_Blended(font, text, r, g, b, a) => (
+            | color <- SDL_Color alloc |
+            color at: 0 put: r.
+            color at: 1 put: g.
+            color at: 2 put: b.
+            color at: 3 put: a.
+            TTF_RenderUTF8_Blended value(font, text, color)
         );
         SizeUTF8(font, text, w, h) => TTF_SizeUTF8 value(font, text, w, h);
         SizeUTF8_W(font, text) => (
