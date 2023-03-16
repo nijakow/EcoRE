@@ -5,6 +5,7 @@
 
         offset, dimensions,
         xLayout, yLayout, layouter,
+        representation,
         parent, children;
 
         protected cachedGlobalOffset,
@@ -21,6 +22,7 @@
                 xLayout            <- (morphic layouts Flexible).
                 yLayout            <- (morphic layouts Flexible).
                 layouter           <- (morphic layouters Default).
+                representation     <- (morphic representations Default).
                 parent             <- No.
                 children           <- config new.
 
