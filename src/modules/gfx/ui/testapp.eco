@@ -123,7 +123,7 @@
                 |
                 parser exprDo: [ :expr |
                     [
-                        | result <- expr evaluateInEnv: environment |
+                        | result <- expr basicEvaluateInEnv: environment |
                         world open: (WindowFor: result)
                     ] catch: [ :e |
                         | sw <- (std io StringWriter) new |

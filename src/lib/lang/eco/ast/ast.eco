@@ -9,6 +9,13 @@
     AST_SharedBehavior = #=lang/eco/ast/AST_SharedBehavior: {
         acceptVisitor: visitor => visitor visitUnknown: self;
         writeOn: writer => writer << 'AST';
+        basicCompileInEnv: env => (
+            | driver <- (lang eco compiler CompilationDriver) new
+                          ~ subject: self
+                          ~ environment: env
+            |
+          ^ driver commit
+        );
         compileInEnv: env => compileInEnv: env Host: lobby;
         compileInEnv: env Host: host => compileInEnv: env Host: host NextHost: host;
         compileInEnv: env Host: host NextHost: nexthost => (
@@ -20,6 +27,7 @@
             |
           ^ driver commit
         );
+        basicEvaluateInEnv: env => (basicCompileInEnv: env) execute(env);
         evaluateInEnv: env => (compileInEnv: env) execute(env);
         evaluateInEnv: env Host: host => (compileInEnv: env Host: host) execute(env);
         evaluateInEnv: env Host: host NextHost: nexthost => (compileInEnv: env Host: host NextHost: nexthost) execute(env);
