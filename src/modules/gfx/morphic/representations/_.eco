@@ -1,0 +1,20 @@
+{
+    static with inherited _ = std Module;
+
+    own PresentationTrait = {
+        static with inherited _ = std Trait;
+
+        present: morph on: renderer => (
+            "TODO"
+        );
+
+        writeOn: w => w << 'a presentation trait';
+    };
+
+    own Default = {
+        static with inherited _ = std Clonable;
+        with inherited PresentationTrait = $ PresentationTrait;
+
+        "No implementation"
+    };
+}

@@ -11,6 +11,7 @@
 
     own layouts = (here / 'layouts.eco') importIn: self;
     own layouters = (here / 'layouters' / '_.eco') importIn: self;
+    own representations = (here / 'representations' / '_.eco') importIn: self;
 
     own children = (here / 'children.eco') importIn: self;
 
