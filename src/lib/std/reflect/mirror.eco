@@ -20,15 +20,17 @@
             #'ecosphere.ecore.reflect.get_type_slot_info'(typeInstance, -1, -1)
         );
 
-        slotNameForSlot: i => (
-            #'ecosphere.ecore.reflect.get_type_slot_info'(typeInstance, i, -2)
-        );
-
         slotNames => (
             | array <- std util newArray: slotCount |
             0 for: slotCount do: [ :i | array at: i put: (slotNameForSlot: i) ].
             ^ array
         );
+
+        slotNameForSlot: i => (
+            #'ecosphere.ecore.reflect.get_type_slot_info'(typeInstance, i, -2)
+        );
+
+        slotIndexForName: name => slotNames find: name;
 
         slot: name => (
           ^ (#<:std/reflect/Slot> clone) initWithReflectee: reflectee Name: name Mirror: self;
