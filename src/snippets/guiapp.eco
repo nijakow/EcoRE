@@ -1,0 +1,220 @@
+
+{
+    static with inherited _ = std Module;
+
+    own Launchpad = {
+        ui, audio;
+
+        initWithUI: _ui Audio: _audio => (
+            ui    <- _ui.
+            audio <- _audio.
+          ^ self
+        );
+    };
+
+    LaunchpadWithUI: ui Audio: audio => Launchpad clone initWithUI: ui Audio: audio;
+
+    SomeGUIApp: launchpad => (
+        {
+            static with inherited _ = std Module;
+
+            launchpad;
+
+            protected ui => launchpad ui;
+
+            initWithLaunchpad: _launchpad => (
+                launchpad <- _launchpad.
+              ^ self
+            );
+
+            own MainWidget = {
+                static with inherited _      = std Clonable;
+                       with inherited Widget = $ ui Widget;
+                
+                protected ui => $ ui;
+                
+                build(context) => (
+                    ui Container(
+                        ui Column(
+                            ui Label('Hello, world!'),
+                            ui Button('Hello, world!', $[ std io out << 'Clicked!' ]),
+                            ui Button('Hello, world!', $[ std io out << 'Clicked!' ]),
+                        )
+                    )
+                );
+
+                presentOn: stream => stream graphical<< self;
+
+                writeOn: stream => stream << 'MainWidget';
+            };
+        } clone initWithLaunchpad: launchpad
+    );
+}
+
+
+
+Circle = {
+    static with inherited _ = std Clonable;
+
+    x, y, radius;
+
+    presentOn: stream => (
+        stream isText
+          ~ if: [ writeOn: stream ]
+          else: [
+            stream withRoomForGraphics: radius Do: [ :substream |
+                substream drawCircleX: x Y: y R: radius.
+            ]
+          ]
+    );
+
+    writeOn: w => w << 'Circle(' << x << ', ' << y << ', ' << radius << ')';
+}
+
+
+
+
+
+
+
+
+{
+    static with inherited _ = std Module;
+
+    own Point = {
+        static with inherited _ = std Clonable;
+
+        x, y;
+
+        presentOn: stream => (
+            stream isText
+              ~ if: [ writeOn: stream ]
+              else: [
+                stream withRoomForGraphics: 1 Do: [ :substream |
+                    substream drawPointX: x Y: y.
+                ]
+              ]
+        );
+
+        writeOn: w => w << 'Point(' << x << ', ' << y << ')';
+    };
+
+    own Rectangle = {
+        static with inherited _ = std Clonable;
+
+        x, y, width, height;
+
+        presentOn: stream => (
+            stream isText
+              ~ if: [ writeOn: stream ]
+              else: [
+                stream withRoomForGraphics: width Do: [ :substream |
+                    substream drawRectangleX: x Y: y W: width H: height.
+                ]
+              ]
+        );
+
+        writeOn: w => w << 'Rectangle(' << x << ', ' << y << ', ' << width << ', ' << height << ')';
+    };
+}
+
+
+
+
+{
+    Main => (
+        | stream <- ... |
+
+        stream << 'Hello, world!'.
+
+        stream << CircleX: 0 Y: 0 R: 10.
+    )
+}
+
+
+
+
+
+{
+    static with inherited _ = std Module;
+
+    own ID = {
+        static with inherited _ = std Clonable;
+
+        value;
+
+        presentOn: stream => (
+            stream << 'ID(' << value << ')';
+        );
+    };
+
+    own UserAccount = {
+        static with inherited _ = std Clonable;
+
+        name, id, document;
+
+        presentOn: stream => (
+            stream << 'UserAccount(' << (name) << ', ' << (ui Button('Text', $[ ... ]) ] << ', ' << document << ')';
+        );
+    }
+}
+
+
+
+
+"
+
+                   |
+                   V
+
+        ----- ,  ------ ,  -----
+    ---------------------------------
+
+"
+
+
+
+
+
+
+
+
+{
+    static with inherited _ = std Clonable;
+
+    action;
+
+    initWithAction: _action => (
+        action <- _action.
+      ^ self
+    );
+
+    presentOn: stream => (
+        stream << (
+            ShrinkWrap(Stacked(
+                (morphic morphs ButtonMorph) new ~ action: action,
+                (morphic morphs FrameMorph) new,
+                caption
+            ))
+        )
+    );
+}
+
+
+{
+    static with inherited _ = std Clonable;
+
+    backgroundColor,
+    foregroundColor,
+    borderColor;
+
+    presentOn: stream => (
+        stream << (
+            ShrinkWrap(Column(
+                EditableField: backgroundColor OnModify: $[ :newValue | backgroundColor <- newValue ],
+                EditableField: foregroundColor OnModify: $[ :newValue | foregroundColor <- newValue ],
+                EditableField: borderColor OnModify: $[ :newValue | borderColor <- newValue ]
+            ))
+        )
+    );
+}
