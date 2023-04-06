@@ -14,6 +14,8 @@
         );
 
         position: p => (
+            (p < 0.0) if: [ p <- 0.0 ].
+            (p > 1.0) if: [ p <- 1.0 ].
             position <- p;
             renderDirty.
             notifyTo yes: [ :n | n scrollY: p ].
@@ -37,6 +39,12 @@
         handleClickAt: point HandMorph: hand => (
             position: (point y asFloat / height).
           ^ true
+        );
+
+        handleKey: key At: point HandMorph: hand => (
+            key ifScrollUp:   [ position: position - 0.1. ^ true ].
+            key ifScrollDown: [ position: position + 0.1. ^ true ].
+          ^ false
         );
 
         writeOn: w => w << 'a scroll morph';

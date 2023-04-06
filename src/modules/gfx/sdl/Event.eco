@@ -26,6 +26,10 @@
             mouseButtonX => mouseMotionX;
             mouseButtonY => mouseMotionY;
 
+            isMouseWheel => (type == sdl SDL_EventTypes MOUSEWHEEL);
+            mouseWheelX => (event at: 4) at: 4;
+            mouseWheelY => (event at: 4) at: 5;
+
             isKeyDown => (type == sdl SDL_EventTypes KEYDOWN);
             isKeyUp => (type == sdl SDL_EventTypes KEYUP);
             whichKey => (

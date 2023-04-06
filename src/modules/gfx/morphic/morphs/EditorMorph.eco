@@ -264,8 +264,10 @@
 
             key keyText yes: [ :text |
                 insertText: text.
+              ^ true
             ].
-          ^ true
+
+          ^ false
         );
         handleClickAt: point HandMorph: hand => (
             moveCaretTo: (pixelToCaret(point)).

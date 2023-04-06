@@ -51,6 +51,7 @@
     SDL_KeyboardEvent,
     SDL_MouseMotionEvent,
     SDL_MouseButtonEvent,
+    SDL_MouseWheelEvent,
     SDL_Event,
     SDL_Rect,
     SDL_Color;
@@ -100,7 +101,8 @@
         KEYUP = 769,
         MOUSEMOTION = 1024,
         MOUSEBUTTONDOWN = 1025,
-        MOUSEBUTTONUP = 1026
+        MOUSEBUTTONUP = 1026,
+        MOUSEWHEEL = 1027,
     };
 
     DefaultFont;
@@ -131,7 +133,8 @@
             SDL_KeyboardEvent <- ffi struct(ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8, SDL_Keysym).
             SDL_MouseMotionEvent <- ffi struct(ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint32, ffi types sint32, ffi types sint32, ffi types sint32, ffi types sint32).
             SDL_MouseButtonEvent <- ffi struct(ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8, ffi types sint32, ffi types sint32).
-            SDL_Event <- ffi union(ffi types uint32, SDL_KeyboardEvent, SDL_MouseMotionEvent, SDL_MouseButtonEvent, (ffi types char) array: 56).
+            SDL_MouseWheelEvent <- ffi struct(ffi types uint32, ffi types uint32, ffi types uint32, ffi types uint32, ffi types sint32, ffi types sint32, ffi types uint32, ffi types float, ffi types float).
+            SDL_Event <- ffi union(ffi types uint32, SDL_KeyboardEvent, SDL_MouseMotionEvent, SDL_MouseButtonEvent, SDL_MouseWheelEvent, (ffi types char) array: 56).
             SDL_Init <- (lib function: #'SDL_Init' type: ((ffi types int) function(ffi types uint32))) yes.
             SDL_Quit <- (lib function: #'SDL_Quit' type: ((ffi types void) function)) yes.
             SDL_GetError <- (lib function: #'SDL_GetError' type: ((ffi types string) function)) yes.

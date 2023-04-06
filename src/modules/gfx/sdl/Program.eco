@@ -27,6 +27,13 @@
                   ]
             );
 
+            mouseWheel: event => (
+                | wheel <- event mouseWheelY |
+                (wheel < 0)
+                  ~ if: [ handler handleKey: (wrapper input keys keycodes special_scroll_down) ]
+                  else: [ handler handleKey: (wrapper input keys keycodes special_scroll_up)   ]
+            );
+
             run => (
                 | event <- wrapper NewEvent |
                 running <- true.
@@ -37,7 +44,8 @@
                         (event poll == 0) -> [ break value ].
 
                         begin
-                          ~ if: [ event isKeyDown ] then: [ pushKey: event whichKey ]
+                          ~ if: [ event isKeyDown    ] then: [ pushKey: event whichKey ]
+                          ~ if: [ event isMouseWheel ] then: [ mouseWheel: event       ]
                         ~ default: [ handler handleEvent: event ].
                     ] repeatWithBreak.
                     

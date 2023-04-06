@@ -20,6 +20,9 @@
             ifHome:      block => self;
             ifEnd:       block => self;
 
+            ifScrollUp:   block => self;
+            ifScrollDown: block => self;
+
             keyText => No;
 
             writeOn: w => w << 'a key';
@@ -137,6 +140,9 @@
 
         special_pageup   = { static with inherited _ = std Enum; with inherited trait = $ trait; ifPageUp:   block => ( block value. ^ self ); };
         special_pagedown = { static with inherited _ = std Enum; with inherited trait = $ trait; ifPageDown: block => ( block value. ^ self ); };
+
+        special_scroll_up   = { static with inherited _ = std Enum; with inherited trait = $ trait; ifScrollUp:   block => ( block value. ^ self ); };
+        special_scroll_down = { static with inherited _ = std Enum; with inherited trait = $ trait; ifScrollDown: block => ( block value. ^ self ); };
 
         special_home = { static with inherited _ = std Enum; with inherited trait = $ trait; ifHome: block => ( block value. ^ self ); };
         special_end  = { static with inherited _ = std Enum; with inherited trait = $ trait; ifEnd:  block => ( block value. ^ self ); };
