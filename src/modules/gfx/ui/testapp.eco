@@ -102,7 +102,12 @@
         );
         OutlinerWindowForPath: path => (
             ((path extension) equals: 'eco') if: [
-                ^ WindowFor: (path import)
+                ^ [ WindowFor: (path import) ] catch: [ :e |
+                    | sw <- (std io StringWriter) new |
+                    (sw << 'Syntax error while parsing expression:') newline newline.
+                    sw << e.
+                    ErrorWindow: (sw build)
+                ]
             ] else: [
                 ^ builder Window(400, 400, builder Scrollable(OutlinerPaneForPath: path))
             ]
