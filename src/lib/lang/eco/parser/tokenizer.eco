@@ -85,9 +85,9 @@
         );
 
         parseChar => (
-            | c <- in forceNextChar |
+            | c <- forceNextChar |
             (c == #\\\) if: [
-                | n <- in forceNextChar |
+                | n <- forceNextChar |
                 begin
                     if: [ n == #\\\       ] then: [ ^ n          ] ~
                     if: [ n == #\t        ] then: [ ^ #\\t       ] ~
