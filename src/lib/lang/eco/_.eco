@@ -77,7 +77,7 @@
             }
         },
 
-        CreateParserForStream: stream => (
+        CreateParserForSourceStream: stream => (
             |
                 tok    <- (#<:lang/eco> tokenizer Tokenizer) new: stream,
                 parser <- (#<:lang/eco> parser Parser) new: tok
@@ -86,6 +86,7 @@
           ^ parser
         );
 
-        CreateParserForString: string => CreateParserForStream: ((sources streams CharacterIteratorStream) new: string iterator);
+        CreateParserForCharIterator: iterator => CreateParserForSourceStream: ((sources streams CharacterIteratorStream) new: iterator);
+        CreateParserForString: string => CreateParserForCharIterator: string iterator;
     }
 }

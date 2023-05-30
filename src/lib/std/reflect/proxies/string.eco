@@ -117,8 +117,7 @@
     asKey => #'ecosphere.ecore.object.string.as_key'(self);
     parse => (
         |
-            tok    <- ((lang eco tokenizer Tokenizer) clone) init: iterator,
-            parser <- ((lang eco parser Parser) clone) init: tok
+            parser <- (lang eco controller) CreateParserForCharIterator: iterator
         |
       ^ parser parseExpression
     );

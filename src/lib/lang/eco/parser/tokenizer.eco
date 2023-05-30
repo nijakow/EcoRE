@@ -33,6 +33,19 @@
           ^ self
         );
 
+        protected next => in next;
+        protected current => in current;
+        protected forward => in forward;
+
+        protected forceChar: c => (
+            c ifChar: [ :ch | ^ ch ].
+          ^ 'Expected character!' throw
+        );
+
+        protected forceNextChar => forceChar: next;
+        protected forceCurrentChar => forceChar: current;
+
+
         unread: token => pushbacks push: token;
 
         IsSpace(c) => (
@@ -46,10 +59,18 @@
         IsSpecial(c) => [ '()[]{}.,;|^' contains: c ] or: [ IsSpace(c) ];
 
         skipWhitespace => (
-            [ [ in has ] and: [ IsSpace(in current) ] ] while: [ in forward ]
+            [ [ in has ] and: [ IsSpace(forceCurrentChar) ] ] while: [ forward ]
         );
 
-        peeks: str => in peek: str;
+        peeks: str => (
+             in withReset: [ :reset |
+                str do: [ :element |
+                    ([ in has not ] or: [ (forceCurrentChar == element) not ]) -> [ reset value. ^ false ].
+                    in forward.
+                ]
+            ].
+          ^ true
+        );
 
         newTokenWithType: type Payload: pl => (#<:lang/eco/tokenizer> Token) new tokenizer: self type: type payload: pl;
         newTokenWithType: type => newTokenWithType: type Payload: false;
@@ -64,9 +85,9 @@
         );
 
         parseChar => (
-            | c <- in next |
+            | c <- in forceNextChar |
             (c == #\\\) if: [
-                | n <- in next |
+                | n <- in forceNextChar |
                 begin
                     if: [ n == #\\\       ] then: [ ^ n          ] ~
                     if: [ n == #\t        ] then: [ ^ #\\t       ] ~
@@ -82,7 +103,7 @@
         parseString: terminator => (
             | sb <- (std io StringWriter) new |
 
-            [ in current == terminator ] until: [
+            [ forceCurrentChar == terminator ] until: [
                 sb char<< parseChar
             ].
 
@@ -125,13 +146,13 @@
             (peeks: '$')   if: [ ^ newTokenWithType: TokenType DOLLAR        ].
             (peeks: '"')   if: [ parseString: #\". ^ nextToken ].
 
-            (std text parsing number ParseNumberFromStream: in)
+            (std text parsing number ParseNumberFromStream: (in map: [ :c | forceChar: c ]))
                 yes: [ :n | ^ newTokenWithType: TokenType NUMBER Payload: n ].
             
             | sb <- (std io StringWriter) new |
 
-            [ [ in has ] and: [ IsSpecial(in current) not ] ] while: [
-                sb char<< (in next).
+            [ [ in has ] and: [ IsSpecial(forceCurrentChar) not ] ] while: [
+                sb char<< (forceNextChar).
             ].
 
             sb <- sb build.
