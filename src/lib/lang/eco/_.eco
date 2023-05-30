@@ -8,4 +8,84 @@
     parser = #<:lang/eco/parser>;
     ast = #<:lang/eco/ast>;
     compiler = #<:lang/eco/compiler>;
+
+    controller = {
+        static with inherited _ = #<:std/Module>;
+
+        sources = {
+            static with inherited _ = #<:std/Module>;
+
+            streams = {
+                static with inherited _ = #<:std/Module>;
+
+                own StreamObjectTrait = #=lang/eco/controller/streams/StreamObjectTrait: {
+                    static with inherited _ = #<:std/Trait>;
+
+                    ifChar: block => self;
+
+                    writeOn: w => w << 'a stream object';
+                },
+
+                own CharStreamObject = #=lang/eco/controller/streams/CharStreamObject: {
+                    static with inherited _ = #<:std/Clonable>;
+
+                    protected char;
+
+                    with inherited trait = {
+                        static with inherited _ = #<:std/Trait>;
+                        with inherited StreamObjectTrait = #<:lang/eco/controller/streams/StreamObjectTrait>;
+
+                        init: _char => (
+                            char <- _char.
+                          ^ self
+                        );
+
+                        ifChar: block => ( block value: char. ^ self );
+
+                        writeOn: w => w << 'a char stream object';
+                    }
+                },
+
+                own SourceStreamTrait = #=lang/eco/controller/streams/SourceStreamTrait: {
+                    static with inherited _ = #<:std/Trait>;
+
+                    writeOn: w => w << 'a source stream';
+                },
+
+                own CharacterIteratorStream = {
+                    static with inherited _ = #<:std/Clonable>;
+
+                    protected iterator;
+
+                    with inherited trait = {
+                        static with inherited _ = #<:std/Trait>;
+                        with inherited SourceStreamTrait = #<:lang/eco/controller/streams/SourceStreamTrait>;
+                        with inherited IteratorTrait = #<:std/util/iterators/IteratorTrait>;
+
+                        init: _iterator => (
+                            iterator <- _iterator map: { value(e) => (#<:lang/eco/controller/streams/CharStreamObject> new: e) }.
+                          ^ self
+                        );
+
+                        has => iterator has;
+                        current => iterator current;
+                        forward => iterator forward;
+
+                        withReset: block => iterator withReset: block;
+                    }
+                }
+            }
+        },
+
+        CreateParserForStream: stream => (
+            |
+                tok    <- (#<:lang/eco> tokenizer Tokenizer) new: stream,
+                parser <- (#<:lang/eco> parser Parser) new: tok
+            |
+
+          ^ parser
+        );
+
+        CreateParserForString: string => CreateParserForStream: ((sources streams CharacterIteratorStream) new: string iterator);
+    }
 }
