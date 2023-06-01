@@ -60,7 +60,17 @@
         IsSpecial(c) => [ '()[]{}.,;|^' contains: c ] or: [ IsSpace(c) ];
 
         skipWhitespace => (
-            [ [ in has ] and: [ IsSpace(forceCurrentChar) ] ] while: [ forward ]
+            [ :restart |
+                ((in has) not) if: [ ^ self ].
+                (in current)
+                  ~ ifChar: [ :c |
+                        (IsSpace(c)) if: [
+                            in forward.
+                            restart value.
+                        ].
+                  ].
+            ] withRestart.
+          ^ self
         );
 
         peeks: str => (
