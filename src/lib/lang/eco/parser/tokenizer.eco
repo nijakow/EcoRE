@@ -104,11 +104,7 @@
         parseString: terminator => (
             | sb <- (std io StringWriter) new |
 
-            [ forceCurrentChar == terminator ] until: [
-                sb char<< parseChar
-            ].
-
-            in forward.
+            untilChar: terminator Do: [ :c | sb char<< c ].
 
           ^ sb build
         );
@@ -121,6 +117,20 @@
                         (IsSpecial(c)) if: [ ^ self ].
                         in forward.
                         block value: c.
+                        continue value.
+                  ].
+            ] repeatWithContinue.
+          ^ self
+        );
+
+        protected untilChar: c Do: block => (
+            [ :continue |
+                ((in has) not) if: [ ^ self ].
+                (in current)
+                  ~ ifChar: [ :ch |
+                        in forward.
+                        (ch == c) if: [ ^ self ].
+                        block value: ch.
                         continue value.
                   ].
             ] repeatWithContinue.
