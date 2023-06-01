@@ -169,6 +169,7 @@
             skipWhitespace.
 
             (in hasNext) unless: [ ^ newTokenWithType: TokenType EOF ].
+            (in current) ifReference: [ :r | in forward. ^ newTokenWithType: TokenType REFERENCE Payload: r ].
             (peeks: '...') if: [ ^ newTokenWithType: TokenType ELLIPSIS    ].
             (peeks: '<-')  if: [ ^ newTokenWithType: TokenType ASSIGNMENT  ].
             (peeks: '=>')  if: [ ^ newTokenWithType: TokenType RARROW      ].
@@ -220,6 +221,7 @@
             (sb equals: '@deprecated') if: [ ^ newTokenWithType: TokenType DEPRECATED ].
             (sb equals: '=')           if: [ ^ newTokenWithType: TokenType ASSIGNMENT ].
             (sb equals: '~')           if: [ ^ newTokenWithType: TokenType TILDE      ].
+
           ^ newTokenWithType: (TokenType IDENTIFIER) Payload: (sb asKey)
         );
     }

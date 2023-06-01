@@ -5,6 +5,7 @@
         static with inherited _ = #<:std/Module>;
         
         EOF = #'eof',
+        REFERENCE = #'reference',
         IDENTIFIER = #'ident',
         STRING = #'string',
         KEY = #'key',
