@@ -104,7 +104,7 @@
         parseString: terminator => (
             | sb <- (std io StringWriter) new |
 
-            untilChar: terminator Do: [ :c | sb char<< c ].
+            untilChar: terminator Do: [ sb char<< parseChar ].
 
           ^ sb build
         );
@@ -128,13 +128,12 @@
                 ((in has) not) if: [ ^ self ].
                 (in current)
                   ~ ifChar: [ :ch |
-                        in forward.
-                        (ch == c) if: [ ^ self ].
-                        block value: ch.
+                        (ch == c) if: [ in forward. ^ self ].
+                        block value.
                         continue value.
                   ].
-            ] repeatWithContinue.
-          ^ self
+                ^ self
+            ] withRestart.
         );
 
         nextToken => (
