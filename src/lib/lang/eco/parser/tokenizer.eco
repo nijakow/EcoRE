@@ -46,6 +46,41 @@
         protected forceNextChar => forceChar: next;
         protected forceCurrentChar => forceChar: current;
 
+        protected tryChar: c => (
+            c ifChar: [ :ch | ^ Yes: ch ].
+          ^ No
+        );
+
+        protected tryNextChar => tryChar: next;
+        protected tryCurrentChar => tryChar: current;
+
+        protected doWhileNotSpecialChar: block => (
+            [ :continue |
+                ((in has) not) if: [ ^ self ].
+                (in current)
+                  ~ ifChar: [ :c |
+                        (IsSpecial(c)) if: [ ^ self ].
+                        in forward.
+                        block value: c.
+                        continue value.
+                  ].
+            ] repeatWithContinue.
+          ^ self
+        );
+
+        protected untilChar: c Do: block => (
+            [ :continue |
+                ((in has) not) if: [ ^ self ].
+                (in current)
+                  ~ ifChar: [ :ch |
+                        (ch == c) if: [ in forward. ^ self ].
+                        block value.
+                        continue value.
+                  ].
+                ^ self
+            ] withRestart.
+        );
+
 
         unread: token => pushbacks push: token;
 
@@ -128,33 +163,6 @@
           ^ sb build
         );
 
-        protected doWhileNotSpecialChar: block => (
-            [ :continue |
-                ((in has) not) if: [ ^ self ].
-                (in current)
-                  ~ ifChar: [ :c |
-                        (IsSpecial(c)) if: [ ^ self ].
-                        in forward.
-                        block value: c.
-                        continue value.
-                  ].
-            ] repeatWithContinue.
-          ^ self
-        );
-
-        protected untilChar: c Do: block => (
-            [ :continue |
-                ((in has) not) if: [ ^ self ].
-                (in current)
-                  ~ ifChar: [ :ch |
-                        (ch == c) if: [ in forward. ^ self ].
-                        block value.
-                        continue value.
-                  ].
-                ^ self
-            ] withRestart.
-        );
-
         nextToken => (
             (pushbacks isEmpty) unless: [ ^ pushbacks pop ].
 
@@ -189,7 +197,7 @@
             (peeks: '$')   if: [ ^ newTokenWithType: TokenType DOLLAR        ].
             (peeks: '"')   if: [ parseString: #\". ^ nextToken ].
 
-            (std text parsing number ParseNumberFromStream: (in map: [ :c | forceChar: c ]))
+            (std text parsing number ParseNumberFromStream: (in termmap: [ :c | tryChar: c ]))
                 yes: [ :n | ^ newTokenWithType: TokenType NUMBER Payload: n ].
             
             | sb <- (std io StringWriter) new |

@@ -11,6 +11,7 @@
         );
         do: block => [ hasNext ] while: [ block value(next) ];
         map: func => (#<:std/util/iterators/MappingIterator> clone) initWithIterator: self Function: func;
+        termmap: func => (#<:std/util/iterators/TerminationMappingIterator> clone) initWithIterator: self Function: func;
         into: acceptor => acceptor from: self;
         check: elem => ([ has ] and: [ current == elem ]) -> [ forward. true ];
         peek: sequence => (
@@ -86,6 +87,43 @@
             withReset: block => it withReset: block;
 
             writeOn: w => w << 'a mapping iterator';
+        };
+    };
+
+    TerminationMappingIterator = #=std/util/iterators/TerminationMappingIterator: {
+        static with inherited _ = #<:std/Clonable>;
+
+        protected it,
+        protected func;
+
+        with inherited trait = {
+            with inherited iteratorTrait = #<:std/util/iterators/BiIteratorTrait>;
+
+            initWithIterator: _it Function: _func => (
+                it   <- _it.
+                func <- _func.
+              ^ self
+            );
+
+            forward => it forward;
+            backward => it backward;
+
+            has => (
+                it withReset: [ :r |
+                    (it has) if: [ ^ true ].
+                    | v <- (func value(it current)) isYes |
+                    r value.
+                  ^ v
+                ]
+            );
+
+            hasPrevious => it hasPrevious;
+
+            current => (func value(it current)) yes;
+
+            withReset: block => it withReset: block;
+
+            writeOn: w => w << 'a termination mapping iterator';
         };
     };
 
