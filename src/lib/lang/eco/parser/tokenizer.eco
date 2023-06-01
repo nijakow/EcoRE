@@ -65,8 +65,10 @@
 
         peeks: str => (
              in withReset: [ :reset |
+                | halt <- [ reset value. ^ false ] |
                 str do: [ :element |
-                    ([ in has not ] or: [ (forceCurrentChar == element) not ]) -> [ reset value. ^ false ].
+                    ((in has) not) if: halt.
+                    ((forceCurrentChar == element) not) if: halt.
                     in forward.
                 ]
             ].
