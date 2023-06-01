@@ -33,6 +33,7 @@
           ^ self
         );
 
+        protected has => in has;
         protected next => in next;
         protected current => in current;
         protected forward => in forward;
@@ -112,6 +113,20 @@
           ^ sb build
         );
 
+        protected doWhileNotSpecialChar: block => (
+            [ :continue |
+                ((in has) not) if: [ ^ self ].
+                (in current)
+                  ~ ifChar: [ :c |
+                        (IsSpecial(c)) if: [ ^ self ].
+                        in forward.
+                        block value: c.
+                        continue value.
+                  ].
+            ] repeatWithContinue.
+          ^ self
+        );
+
         nextToken => (
             (pushbacks isEmpty) unless: [ ^ pushbacks pop ].
 
@@ -151,9 +166,7 @@
             
             | sb <- (std io StringWriter) new |
 
-            [ [ in has ] and: [ IsSpecial(forceCurrentChar) not ] ] while: [
-                sb char<< (forceNextChar).
-            ].
+            doWhileNotSpecialChar: [ :c | sb char<< c ].
 
             sb <- sb build.
 
