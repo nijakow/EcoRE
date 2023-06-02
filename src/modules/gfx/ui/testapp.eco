@@ -129,8 +129,7 @@
         RunStringAndShowResult: source World: world Environment: environment => (
             [
                 |
-                    tok    <- ((lang eco tokenizer Tokenizer) clone) init: (source iterator),
-                    parser <- ((lang eco parser Parser) clone) init: tok
+                    parser <- (lang eco controller) CreateParserForString: source
                 |
                 parser exprDo: [ :expr |
                     [
