@@ -181,7 +181,7 @@
                     ~ xLayout: ui layouts Flexible
                     ~ yLayout: ui layouts Flexible,
                 ui Button(ui Center(ui Label: 'Files'),
-                          $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder OutlinerWindowForPath: (std os files here)) ]
+                          $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder OutlinerWindowForPath: (std os files here / '..' / '..' / '..')) ]
                                 bind(MirrorBuilder))
                     ~ xLayout: ui layouts Flexible
                     ~ yLayout: ui layouts Flexible,
