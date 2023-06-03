@@ -21,7 +21,7 @@ struct Eco_FFILib
     struct Eco_FFILib_Entry*  entries;
 };
 
-struct Eco_FFILib* Eco_FFILib_New();
+struct Eco_FFILib* Eco_FFILib_New(const char*);
 void Eco_FFILib_Mark(struct Eco_GC_State*, struct Eco_FFILib*);
 void Eco_FFILib_Del(struct Eco_FFILib*);
 
