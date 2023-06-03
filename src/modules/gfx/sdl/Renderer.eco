@@ -74,7 +74,7 @@
             );
 
             makeTextSurface: text => (
-                (wrapper Surface) clone init: (sdl RenderUTF8_Blended(sdl DefaultFont, text, 128, 128, 128, 255))
+                (wrapper Surface) clone init: (sdl RenderUTF8_Blended(sdl DefaultFont, text, 250, 250, 250, 255))
             );
 
             makeTextTexture: text => (makeTextSurface: text) asTextureWithRenderer: self;

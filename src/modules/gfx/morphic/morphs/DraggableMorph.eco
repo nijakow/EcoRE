@@ -10,7 +10,7 @@
             );
 
             renderImplOn: renderer => (
-                renderer setR: 32 G: 32 B: 32.
+                renderer setR: 36 G: 28 B: 140.
                 renderer fillRectX: 0 Y: 0 W: width H: height.
                 $(FrameMorph) renderImplOn: renderer.
             );
