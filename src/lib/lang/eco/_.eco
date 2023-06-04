@@ -47,6 +47,26 @@
                     }
                 },
 
+                own ReferenceStreamObject = #=lang/eco/controller/streams/ReferenceStreamObject: {
+                    static with inherited _ = #<:std/Clonable>;
+
+                    protected reference;
+
+                    with inherited trait = {
+                        static with inherited _ = #<:std/Trait>;
+                        with inherited StreamObjectTrait = #<:lang/eco/controller/streams/StreamObjectTrait>;
+
+                        init: _reference => (
+                            reference <- _reference.
+                          ^ self
+                        );
+
+                        ifReference: block => ( block value: reference. ^ self );
+
+                        writeOn: w => w << 'a reference stream object';
+                    }
+                },
+
                 own SourceStreamTrait = #=lang/eco/controller/streams/SourceStreamTrait: {
                     static with inherited _ = #<:std/Trait>;
 
