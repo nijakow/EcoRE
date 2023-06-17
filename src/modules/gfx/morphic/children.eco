@@ -9,6 +9,7 @@
 
         add: child => false;
         remove: child => false;
+        replace: child with: replacement => false;
     },
     
     One = {
@@ -27,6 +28,11 @@
         add: _child => child yes: [ ^ false ] no: [ child <- Yes: _child. ^ true ];
         remove: _child => (
             child yes: [ :c | (c == _child) -> [ child <- No. ^ true ] ].
+          ^ false
+        );
+
+        replace: _child with: replacement => (
+            child yes: [ :c | (c == _child) -> [ child <- Yes: replacement. ^ true ] ].
           ^ false
         );
     },
@@ -53,6 +59,12 @@
             children remove: child
               ~ yes: [ ^ true  ]
                  no: [ ^ false ]
+        );
+
+        replace: child with: replacement => (
+            children find: child
+              ~ yes: [ :i | children at: i put: replacement. ^ true  ]
+                 no: [                                       ^ false ]
         );
     }
 }

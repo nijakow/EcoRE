@@ -73,6 +73,11 @@
               ^ self
             );
 
+            replaceWith: morph => (
+                parent yes: [ :p | p replace: self with: morph ].
+              ^ self
+            );
+
             noParent => (
                 parent <- No.
                 invalidateGlobalOffsetCache.
@@ -117,6 +122,12 @@
 
             remove => (
                 parent yes: [ :p | p remove: self ].
+              ^ self
+            );
+
+            replace: child with: replacement => (
+                (children replace: child with: replacement)
+                  ~ if: [ child noParent. replacement parent: self. layoutChanged. ].
               ^ self
             );
 
