@@ -1,0 +1,20 @@
+{
+    static with inherited _ = std Module;
+
+    protected lib;
+
+    InitLinux => Setup: (std os files here / '..' / 'eve' / 'libeve.so') path;
+    InitMac   => Setup: (std os files here / '..' / 'eve' / 'libeve.dylib') path;
+    
+    Init => (
+        std os type
+            ~ ifLinux: [ ^ InitLinux ]
+            ~ ifMacOS: [ ^ InitMac   ].
+        'EVE is not supported on this platform' throw.
+    );
+
+    Setup: libpath => (
+        lib <- (ffi DLOpen: libpath) yes.
+      ^ self
+    );
+}
