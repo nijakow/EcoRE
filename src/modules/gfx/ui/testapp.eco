@@ -9,7 +9,7 @@
 
         optimizer <- (here / '..' / '..' / 'ecosphere' / 'optimizer' / '_.eco') import;
 
-        SlotOutliner: slotMirror => (
+        SlotOutliner: slotMirror Rebuilder: rebuilder => (
             builder HBox(
                 builder Label: (slotMirror isProtected if: 'p' else: ' '),
                 builder Label: (slotMirror isStatic if: 's' else: ' '),
@@ -24,19 +24,24 @@
                 ),
                 builder Spacer ~ rigidHeight: 1,
                 builder Button(builder Label: 'ø',
-                                $[ :(builder, mirror) :sender |
+                                $[ :(mirror, rebuilder) :sender |
                                     (std io out << 'Deleting ' << mirror << '...') newline commit.
-                                    mirror delete
-                                ] bind(self, slotMirror)
+                                    mirror delete.
+                                    rebuilder value.
+                                ] bind(slotMirror, rebuilder)
                 )
             ) ~ xLayout: builder layouts Flexible
               ~ yLayout: builder layouts ShrinkWrap
         );
 
         OutlinerPaneForMirror: mirror => (
-            | slots <- builder make VBoxMorph |
+            |
+                slots     <- builder make VBoxMorph,
+                rebuilder <- $[ :(builder, mirror, slots) | slots replaceWith: (builder OutlinerPaneForMirror: mirror) ] bind(self, mirror, slots)
+            |
+
             mirror slotNames do: [ :slotName |
-                slots add: (SlotOutliner: (mirror slot: slotName))
+                slots add: (SlotOutliner: (mirror slot: slotName) Rebuilder: rebuilder)
             ].
           ^ slots
         );
@@ -80,23 +85,23 @@
             )
         );
 
-        PathOutlinerRow: childpath Name: name => (
+        PathOutlinerRow: childpath Name: name Parent: parent => (
             builder ShrinkWrap(
                 builder HBox(
                     builder Button(builder Label: (name),
-                                   $[ :(builder, path) :sender |
-                                        (sender world yes) open: (builder OutlinerWindowForPath: path)
-                                   ] bind(self, childpath)
+                                   $[ :(builder, parent, path) :sender |
+                                        parent replaceWith: (builder OutlinerPaneForPath: path)
+                                   ] bind(self, parent, childpath)
                     )
                 ) ~ xLayout: builder layouts Flexible
             )
         );
-        PathOutlinerRow: childpath => PathOutlinerRow: childpath Name: (childpath name);
+        PathOutlinerRow: childpath Parent: parent => PathOutlinerRow: childpath Name: (childpath name) Parent: parent;
         OutlinerPaneForPath: path => (
             | slots <- builder make VBoxMorph |
-            slots add: (PathOutlinerRow: (path / '..') Name: '..').
+            slots add: (PathOutlinerRow: (path / '..') Name: '..' Parent: slots).
             path children do: [ :subpath |
-                slots add: (PathOutlinerRow: subpath)
+                slots add: (PathOutlinerRow: subpath Parent: slots)
             ].
           ^ slots
         );
