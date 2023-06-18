@@ -4,5 +4,14 @@
     "
     static with inherited _ = std Module;
 
-    own Document = (here / 'Document.eco') importIn: self;
+    own Document = (here / 'Document' / '_.eco') importIn: self;
+
+    Test => (
+        | d <- Document new |
+
+        d addText: '(2 + '.
+        d addReference: 2.
+        d addText: ') * 3.'.
+      ^ d
+    );
 }

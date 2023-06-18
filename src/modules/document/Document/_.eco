@@ -7,6 +7,7 @@
         static with inherited _ = std Trait;
 
         init => (
+            nodes <- std util newVector.
           ^ self
         );
 
@@ -21,7 +22,12 @@
             own DocumentStream = (here / 'DocumentStream.eco') importIn: self;
         };
 
-        documentStream => "TODO";
+        documentStream => (mod DocumentStream) new: (self nodes iterator);
+
+        addNode: n => ( nodes add: n. ^ self );
+
+        addText: t => addNode: (mod nodes Text: t);
+        addReference: r => addNode: (mod nodes Reference: r);
     };
 
     writeOn: w => w << 'a document';

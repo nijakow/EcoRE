@@ -15,7 +15,6 @@
             iterator <- _iterator.
             currentValue <- No.
             currentCharIterator <- No.
-            iterator walk.
             forward.
           ^ self
         );
@@ -25,6 +24,20 @@
 
         has => currentValue isYes;
         current => currentValue yes;
+
+        protected handleNode: node => (
+            node
+                ~ ifText: [ :text |
+                    currentCharIterator <- Yes: ((text content) iterator).
+                    forward.
+                  ^ self
+                ]
+                ~ ifReference: [ :ref |
+                    currentValue <- Yes: (ref: (ref content)).
+                  ^ self
+                ].
+            forward.
+        );
 
         forward => (
             currentCharIterator
@@ -37,21 +50,8 @@
                     (iterator hasNext) if: [
                         currentCharIterator <- No.
                         | node <- iterator current |
-                        iterator walk.
-                        "TODO: Change this"
-                        node contentType yes: [ :ct |
-                            Switch: ct
-                            ~ case: (document tree mutable builder Content type StyledText) do: [
-                                currentCharIterator <- Yes: ((node content) yes) text iterator.
-                                forward.
-                            ]
-                            ~ case: (document tree mutable builder Content type Reference) do: [
-                                currentValue <- Yes: (ref: (node content) yes target).
-                            ]
-                            ~ default: [
-                                forward
-                            ]
-                        ]
+                        iterator forward.
+                        handleNode: node.
                     ] else: [
                         currentValue <- No
                     ]

@@ -15,10 +15,10 @@
         static with inherited _ = std Clonable;
         with inherited NodeTrait = $ NodeTrait;
 
-        text;
+        content;
 
-        initWithText: _text => (
-            text <- _text;
+        initWithContent: _content => (
+            content <- _content;
             ^ self
         );
 
@@ -29,16 +29,16 @@
         static with inherited _ = std Clonable;
         with inherited NodeTrait = $ NodeTrait;
 
-        reference;
+        content;
 
-        initWithReference: _reference => (
-            reference <- _reference;
+        initWithContent: _content => (
+            content <- _content;
             ^ self
         );
 
         ifReference: block => block value(self);
     };
 
-    Text: text => TextNode clone initWithText: text;
-    Reference: reference => ReferenceNode clone initWithReference: reference;
+    Text: text => TextNode clone initWithContent: text;
+    Reference: reference => ReferenceNode clone initWithContent: reference;
 }
