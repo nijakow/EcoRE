@@ -90,6 +90,7 @@ void Eve_FrameStack_PopFrame(struct Eve_FrameStack* stack, struct Eve_Frame* fra
 struct Eve_RenderState {
     struct SDL_Window*     window;
     struct SDL_Renderer*   renderer;
+    struct SDL_Texture*    texture;
 
     TTF_Font*              font;
 
@@ -98,16 +99,18 @@ struct Eve_RenderState {
     struct Eve_Color       color;
 };
 
-void Eve_RenderState_Create(struct Eve_RenderState* self, struct SDL_Window* window, struct SDL_Renderer* renderer, TTF_Font* font) {
+void Eve_RenderState_Create(struct Eve_RenderState* self, struct SDL_Window* window, struct SDL_Renderer* window_renderer, TTF_Font* font) {
     Eve_Int  window_width;
     Eve_Int  window_height;
 
     self->window   = window;
-    self->renderer = renderer;
+    self->renderer = window_renderer;
 
     self->font     = font;
 
     SDL_GetWindowSize(window, &window_width, &window_height);
+
+    self->texture  = SDL_CreateTexture(window_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_width, window_height);
 
     Eve_FrameStack_Create(&self->frame_stack);
     self->frame.color = Eve_Color_FromRGB(0, 0, 0);
@@ -115,6 +118,8 @@ void Eve_RenderState_Create(struct Eve_RenderState* self, struct SDL_Window* win
     self->frame.y     = 0;
     self->frame.xmax  = window_width;
     self->frame.ymax  = window_height;
+
+    SDL_SetRenderTarget(self->renderer, self->texture);
 }
 
 void Eve_RenderState_Destroy(struct Eve_RenderState* self) {
@@ -130,6 +135,8 @@ void Eve_RenderState_Reset(struct Eve_RenderState* self) {
     Eve_Int  window_width;
     Eve_Int  window_height;
 
+    SDL_RenderClear(self->renderer);
+
     SDL_GetWindowSize(self->window, &window_width, &window_height);
 
     Eve_FrameStack_Reset(&self->frame_stack);
@@ -138,6 +145,8 @@ void Eve_RenderState_Reset(struct Eve_RenderState* self) {
     self->frame.y     = 0;
     self->frame.xmax  = window_width;
     self->frame.ymax  = window_height;
+
+    SDL_SetRenderTarget(self->renderer, self->texture);
 }
 
 void Eve_RenderState_PushFrame(struct Eve_RenderState* self) {
@@ -209,6 +218,14 @@ void Eve_RenderState_DrawText(struct Eve_RenderState* self, const char* text) {
     SDL_RenderCopy(self->renderer, texture, NULL, &dstrect);
     SDL_DestroyTexture(texture);
     SDL_FreeSurface(surface);
+}
+
+void Eve_RenderState_Render(struct Eve_RenderState* self) {
+    SDL_RenderPresent(self->renderer);
+    SDL_SetRenderTarget(self->renderer, NULL);
+    SDL_RenderCopy(self->renderer, self->texture, NULL, NULL);
+    SDL_RenderPresent(self->renderer);
+    SDL_SetRenderTarget(self->renderer, self->texture);
 }
 
 void Eve_RenderState_PollEvent(struct Eve_RenderState* self) {
@@ -300,6 +317,10 @@ void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
 
 void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y) {
     Eve_RenderState_DrawText(&EVE_DEFAULT_RENDER_STATE, text);
+}
+
+void Eve_Render() {
+    Eve_RenderState_Render(&EVE_DEFAULT_RENDER_STATE);
 }
 
 void Eve_PollEvent() {

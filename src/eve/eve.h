@@ -29,6 +29,8 @@ void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
 
 void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y);
 
+void Eve_Render();
+
 
 void Eve_PollEvent();
 
