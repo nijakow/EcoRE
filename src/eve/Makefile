@@ -1,0 +1,34 @@
+# Compiler and linker options
+CC := gcc
+CFLAGS := -Wall -Werror -fPIC -MMD
+LDFLAGS := -shared
+
+# Source files and object files
+SRC := $(wildcard *.c)
+OBJ := $(SRC:.c=.o)
+DEP := $(SRC:.c=.d)
+
+# Target shared library names
+TARGET_LINUX := libeve.so
+TARGET_MAC := libeve.dylib
+
+# Targets
+all: linux macos
+
+linux: $(TARGET_LINUX)
+
+macos: $(TARGET_MAC)
+
+$(TARGET_LINUX): $(OBJ)
+	$(CC) $(LDFLAGS) -o $@ $^
+
+$(TARGET_MAC): $(OBJ)
+	$(CC) $(LDFLAGS) -dynamiclib -o $@ $^
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
+
+-include $(DEP)
+
+clean:
+	rm -f $(OBJ) $(DEP) $(TARGET_LINUX) $(TARGET_MAC)
