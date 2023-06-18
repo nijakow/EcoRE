@@ -211,6 +211,52 @@ void Eve_RenderState_DrawText(struct Eve_RenderState* self, const char* text) {
     SDL_FreeSurface(surface);
 }
 
+void Eve_RenderState_PollEvent(struct Eve_RenderState* self) {
+    SDL_Event  event;
+
+    SDL_PollEvent(&event);
+
+    switch (event.type) {
+        case SDL_QUIT:
+            break;
+        case SDL_KEYDOWN:
+            break;
+        case SDL_KEYUP:
+            break;
+        case SDL_MOUSEMOTION:
+            break;
+        case SDL_MOUSEBUTTONDOWN:
+            break;
+        case SDL_MOUSEBUTTONUP:
+            break;
+    }
+}
+
+bool Eve_RenderState_IsEventQuit(struct Eve_RenderState* self) {
+    return false;
+}
+
+bool Eve_RenderState_IsEventKeyDown(struct Eve_RenderState* self) {
+    return false;
+}
+
+bool Eve_RenderState_IsEventKeyUp(struct Eve_RenderState* self) {
+    return false;
+}
+
+bool Eve_RenderState_IsEventMouseMotion(struct Eve_RenderState* self) {
+    return false;
+}
+
+bool Eve_RenderState_IsEventMouseButtonDown(struct Eve_RenderState* self) {
+    return false;
+}
+
+bool Eve_RenderState_IsEventMouseButtonUp(struct Eve_RenderState* self) {
+    return false;
+}
+
+
 
 
 struct Eve_RenderState EVE_DEFAULT_RENDER_STATE;
@@ -256,6 +302,33 @@ void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y) {
     Eve_RenderState_DrawText(&EVE_DEFAULT_RENDER_STATE, text);
 }
 
+void Eve_PollEvent() {
+    Eve_RenderState_PollEvent(&EVE_DEFAULT_RENDER_STATE);
+}
+
+bool Eve_IsEventQuit() {
+    return Eve_RenderState_IsEventQuit(&EVE_DEFAULT_RENDER_STATE);
+}
+
+bool Eve_IsEventKeyDown() {
+    return Eve_RenderState_IsEventKeyDown(&EVE_DEFAULT_RENDER_STATE);
+}
+
+bool Eve_IsEventKeyUp() {
+    return Eve_RenderState_IsEventKeyUp(&EVE_DEFAULT_RENDER_STATE);
+}
+
+bool Eve_IsEventMouseMotion() {
+    return Eve_RenderState_IsEventMouseMotion(&EVE_DEFAULT_RENDER_STATE);
+}
+
+bool Eve_IsEventMouseButtonDown() {
+    return Eve_RenderState_IsEventMouseButtonDown(&EVE_DEFAULT_RENDER_STATE);
+}
+
+bool Eve_IsEventMouseButtonUp() {
+    return Eve_RenderState_IsEventMouseButtonUp(&EVE_DEFAULT_RENDER_STATE);
+}
 
 
 

@@ -1,6 +1,7 @@
 #ifndef EVE_H
 #define EVE_H
 
+#include <stdbool.h>
 #include <stdint.h>
 
 #include <SDL2/SDL.h>
@@ -27,5 +28,15 @@ void Eve_DrawRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
 void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
 
 void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y);
+
+
+void Eve_PollEvent();
+
+bool Eve_IsEventQuit();
+bool Eve_IsEventKeyDown();
+bool Eve_IsEventKeyUp();
+bool Eve_IsEventMouseMotion();
+bool Eve_IsEventMouseButtonDown();
+bool Eve_IsEventMouseButtonUp();
 
 #endif /* EVE_H */
