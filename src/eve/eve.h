@@ -7,18 +7,23 @@
 #include <SDL2/SDL_ttf.h>
 
 typedef uint8_t u8;
-typedef uint32_t u32;
 
-typedef u32 Eve_Int;
+typedef int32_t Eve_Int;
+typedef uint32_t Eve_UInt;
 
 void Eve_PushFrame();
 void Eve_PopFrame();
 
-void Eve_SetColorRGBA(u8 r, u8 g, u8 b, u8 a);
+void Eve_TranslateI2(Eve_Int x, Eve_Int y);
 
-void Eve_DrawRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
-void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y);
+void Eve_SetColorRGBA(u8 r, u8 g, u8 b, u8 a);
+void Eve_SetColorRGB(u8 r, u8 g, u8 b);
 
 void Eve_Clip(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
+
+void Eve_DrawRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
+void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
+
+void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y);
 
 #endif /* EVE_H */
