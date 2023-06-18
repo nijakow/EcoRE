@@ -98,14 +98,14 @@ struct Eve_RenderState {
     struct Eve_Color       color;
 };
 
-void Eve_RenderState_Create(struct Eve_RenderState* self, struct SDL_Window* window, struct SDL_Renderer* renderer, const char* font_path, Eve_Int font_size) {
+void Eve_RenderState_Create(struct Eve_RenderState* self, struct SDL_Window* window, struct SDL_Renderer* renderer, TTF_Font* font) {
     Eve_Int  window_width;
     Eve_Int  window_height;
 
     self->window   = window;
     self->renderer = renderer;
 
-    self->font     = TTF_OpenFont(font_path, font_size);
+    self->font     = font;
 
     SDL_GetWindowSize(window, &window_width, &window_height);
 
@@ -115,6 +115,15 @@ void Eve_RenderState_Create(struct Eve_RenderState* self, struct SDL_Window* win
     self->frame.y     = 0;
     self->frame.xmax  = window_width;
     self->frame.ymax  = window_height;
+}
+
+void Eve_RenderState_Destroy(struct Eve_RenderState* self) {
+    Eve_FrameStack_Destroy(&self->frame_stack);
+
+    TTF_CloseFont(self->font);
+
+    SDL_DestroyRenderer(self->renderer);
+    SDL_DestroyWindow(self->window);
 }
 
 void Eve_RenderState_Reset(struct Eve_RenderState* self) {
@@ -166,6 +175,10 @@ void Eve_RenderState_Clip(struct Eve_RenderState* self) {
     
     rect = Eve_RenderState_GetCurrentRect(self);
     SDL_RenderSetClipRect(self->renderer, &rect);
+}
+
+void Eve_RenderState_DrawLine(struct Eve_RenderState* self, Eve_Int x1, Eve_Int y1, Eve_Int x2, Eve_Int y2) {
+    SDL_RenderDrawLine(self->renderer, x1, y1, x2, y2);
 }
 
 void Eve_RenderState_DrawRect(struct Eve_RenderState* self) {
@@ -227,6 +240,10 @@ void Eve_Clip(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
     Eve_RenderState_Clip(&EVE_DEFAULT_RENDER_STATE);
 }
 
+void Eve_DrawLine(Eve_Int x1, Eve_Int y1, Eve_Int x2, Eve_Int y2) {
+    Eve_RenderState_DrawLine(&EVE_DEFAULT_RENDER_STATE, x1, y1, x2, y2);
+}
+
 void Eve_DrawRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
     Eve_RenderState_DrawRect(&EVE_DEFAULT_RENDER_STATE);
 }
@@ -236,11 +253,30 @@ void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
 }
 
 void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y) {
-    // Implementation for drawing text using SDL_ttf
+    Eve_RenderState_DrawText(&EVE_DEFAULT_RENDER_STATE, text);
 }
 
+
+
+
 void Eve_Init() {
+    struct SDL_Window*    window;
+    struct SDL_Renderer*  renderer;
+    TTF_Font*             font;
+
+    SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
+
+    window   = SDL_CreateWindow("Eve", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    font = TTF_OpenFont("DejaVuSansMono.ttf", 13);
+
+    Eve_RenderState_Create(&EVE_DEFAULT_RENDER_STATE, window, renderer, font);
 }
 
 void Eve_Terminate() {
+    Eve_RenderState_Destroy(&EVE_DEFAULT_RENDER_STATE);
+    TTF_Quit();
+    SDL_Quit();
 }
