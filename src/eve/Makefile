@@ -2,6 +2,7 @@
 CC := gcc
 CFLAGS := -Wall -Werror -fPIC -MMD
 LDFLAGS := -shared
+LIBS := -lSDL2 -lSDL2_ttf
 
 # Source files and object files
 SRC := $(wildcard *.c)
@@ -20,10 +21,10 @@ linux: $(TARGET_LINUX)
 macos: $(TARGET_MAC)
 
 $(TARGET_LINUX): $(OBJ)
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 $(TARGET_MAC): $(OBJ)
-	$(CC) $(LDFLAGS) -dynamiclib -o $@ $^
+	$(CC) $(LDFLAGS) -dynamiclib -o $@ $^ $(LIBS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $<
