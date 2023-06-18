@@ -1,0 +1,8 @@
+{
+    "
+        Document Module
+    "
+    static with inherited _ = std Module;
+
+    
+}
