@@ -1,0 +1,15 @@
+{
+    static with inherited _ = std Clonable;
+
+    protected elements;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+
+        init => (
+            ^ self
+        );
+    };
+
+    writeOn: w => w << 'a document';
+}

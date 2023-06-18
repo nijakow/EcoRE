@@ -4,5 +4,5 @@
     "
     static with inherited _ = std Module;
 
-    
+    own Document = (here / 'Document.eco') importIn: self;
 }
