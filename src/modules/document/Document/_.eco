@@ -10,8 +10,18 @@
           ^ self
         );
 
+        protected mod = {
+            "
+                module title Module
+            "
+            static with inherited _ = std Module;
+        
+            own nodes = (here / 'nodes.eco') importIn: self;
+            
+            own DocumentStream = (here / 'DocumentStream.eco') importIn: self;
+        };
 
-        protected nodes = (here / 'nodes.eco') importIn: self;
+        documentStream => "TODO";
     };
 
     writeOn: w => w << 'a document';

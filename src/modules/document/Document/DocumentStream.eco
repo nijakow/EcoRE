@@ -1,0 +1,91 @@
+{
+    static with inherited _ = std Clonable;
+    protected document = $;
+
+    protected iterator,
+    protected currentValue,
+    protected currentCharIterator;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+        with inherited SourceStreamTrait = ((lang eco) controller sources streams) SourceStreamTrait;
+        with inherited IteratorTrait = std util iterators IteratorTrait;
+
+        init: _iterator => (
+            iterator <- _iterator.
+            currentValue <- No.
+            currentCharIterator <- No.
+            iterator walk.
+            forward.
+          ^ self
+        );
+
+        protected char: c => ((lang eco) controller sources streams) CharStreamObject new: c;
+        protected ref: r => ((lang eco) controller sources streams) ReferenceStreamObject new: r;
+
+        has => currentValue isYes;
+        current => currentValue yes;
+
+        forward => (
+            currentCharIterator
+                ~ yes: [ :ci |
+                    (ci hasNext)
+                    ~ if: [ currentValue <- Yes: (char: (ci next)) ]
+                    else: [ currentCharIterator <- No. forward     ]
+                ]
+                no: [
+                    (iterator hasNext) if: [
+                        currentCharIterator <- No.
+                        | node <- iterator current |
+                        iterator walk.
+                        "TODO: Change this"
+                        node contentType yes: [ :ct |
+                            Switch: ct
+                            ~ case: (document tree mutable builder Content type StyledText) do: [
+                                currentCharIterator <- Yes: ((node content) yes) text iterator.
+                                forward.
+                            ]
+                            ~ case: (document tree mutable builder Content type Reference) do: [
+                                currentValue <- Yes: (ref: (node content) yes target).
+                            ]
+                            ~ default: [
+                                forward
+                            ]
+                        ]
+                    ] else: [
+                        currentValue <- No
+                    ]
+                ].
+        );
+
+        withReset: block => (
+            |
+                resetCurrentValue <- currentValue
+            |
+            currentCharIterator
+              ~ yes: [ :charIterator |
+                    iterator withReset: [ :iteratorReset |
+                        charIterator withReset: [ :charIteratorReset |
+                            ^ block value: [
+                                currentValue <- resetCurrentValue.
+                                charIteratorReset value.
+                                currentCharIterator <- Yes: charIterator.
+                                iteratorReset value.
+                            ]
+                        ]
+                    ]
+                ]
+                no: [
+                    iterator withReset: [ :reset |
+                        ^ block value: [
+                            currentValue        <- resetCurrentValue.
+                            currentCharIterator <- No.
+                            reset value.
+                        ]
+                    ]
+                ]
+        );
+
+        writeOn: w => w << 'a document stream';
+    }
+}
