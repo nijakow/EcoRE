@@ -1,0 +1,44 @@
+{
+    "
+        Nodes Module
+    "
+    static with inherited _ = std Module;
+
+    own NodeTrait = {
+        static with inherited _ = std Trait;
+
+        ifText: block => self;
+        ifReference: block => self;
+    };
+
+    own TextNode = {
+        static with inherited _ = std Clonable;
+        with inherited NodeTrait = $ NodeTrait;
+
+        text;
+
+        initWithText: _text => (
+            text <- _text;
+            ^ self
+        );
+
+        ifText: block => block value(self);
+    };
+
+    own ReferenceNode = {
+        static with inherited _ = std Clonable;
+        with inherited NodeTrait = $ NodeTrait;
+
+        reference;
+
+        initWithReference: _reference => (
+            reference <- _reference;
+            ^ self
+        );
+
+        ifReference: block => block value(self);
+    };
+
+    Text: text => TextNode clone initWithText: text;
+    Reference: reference => ReferenceNode clone initWithReference: reference;
+}

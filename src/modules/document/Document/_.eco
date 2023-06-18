@@ -1,14 +1,17 @@
 {
     static with inherited _ = std Clonable;
 
-    protected elements;
+    protected nodes;
 
     with inherited trait = {
         static with inherited _ = std Trait;
 
         init => (
-            ^ self
+          ^ self
         );
+
+
+        protected nodes = (here / 'nodes.eco') importIn: self;
     };
 
     writeOn: w => w << 'a document';
