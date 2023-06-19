@@ -41,4 +41,8 @@ bool Eve_IsEventMouseMotion();
 bool Eve_IsEventMouseButtonDown();
 bool Eve_IsEventMouseButtonUp();
 
+
+void Eve_Init();
+void Eve_Terminate();
+
 #endif /* EVE_H */

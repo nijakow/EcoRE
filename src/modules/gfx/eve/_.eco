@@ -3,6 +3,20 @@
 
     protected lib;
 
+    protected Eve_Init,
+    protected Eve_Terminate,
+    protected Eve_PushFrame,
+    protected Eve_PopFrame,
+    protected Eve_TranslateI2,
+    protected Eve_SetColorRGBA,
+    protected Eve_SetColorRGB,
+    protected Eve_Clip,
+    protected Eve_DrawLine,
+    protected Eve_DrawRect,
+    protected Eve_FillRect,
+    protected Eve_DrawText,
+    protected Eve_Render;
+
     InitLinux => Setup: (std os files here / '..' / 'eve' / 'libeve.so') path;
     InitMac   => Setup: (std os files here / '..' / 'eve' / 'libeve.dylib') path;
     
@@ -15,6 +29,22 @@
 
     Setup: libpath => (
         lib <- (ffi DLOpen: libpath) yes.
+        Eve_Init <- (lib function: #'Eve_Init' type: ((ffi types void) function())) yes.
+        Eve_Terminate <- (lib function: #'Eve_Terminate' type: ((ffi types void) function())) yes.
+        Eve_PushFrame <- (lib function: #'Eve_PushFrame' type: ((ffi types void) function())) yes.
+        Eve_PopFrame <- (lib function: #'Eve_PopFrame' type: ((ffi types void) function())) yes.
+        Eve_TranslateI2 <- (lib function: #'Eve_TranslateI2' type: ((ffi types void) function(ffi types int, ffi types int))) yes.
+        Eve_SetColorRGBA <- (lib function: #'Eve_SetColorRGBA' type: ((ffi types void) function(ffi types uint8, ffi types uint8, ffi types uint8, ffi types uint8))) yes.
+        Eve_SetColorRGB <- (lib function: #'Eve_SetColorRGB' type: ((ffi types void) function(ffi types uint8, ffi types uint8, ffi types uint8))) yes.
+        Eve_Clip <- (lib function: #'Eve_Clip' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
+        Eve_DrawLine <- (lib function: #'Eve_DrawLine' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
+        Eve_DrawRect <- (lib function: #'Eve_DrawRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
+        Eve_FillRect <- (lib function: #'Eve_FillRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
+        Eve_DrawText <- (lib function: #'Eve_DrawText' type: ((ffi types void) function(ffi types string, ffi types int, ffi types int))) yes.
+        Eve_Render <- (lib function: #'Eve_Render' type: ((ffi types void) function())) yes.
       ^ self
     );
+
+    InitEve => Eve_Init value();
+    TerminateEve => Eve_Terminate value();
 }
