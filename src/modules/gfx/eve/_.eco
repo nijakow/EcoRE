@@ -15,7 +15,14 @@
     protected Eve_DrawRect,
     protected Eve_FillRect,
     protected Eve_DrawText,
-    protected Eve_Render;
+    protected Eve_Render,
+    protected Eve_PollEvent,
+    protected Eve_IsEventQuit,
+    protected Eve_IsEventKeyDown,
+    protected Eve_IsEventKeyUp,
+    protected Eve_IsEventMouseMotion,
+    protected Eve_IsEventMouseButtonDown,
+    protected Eve_IsEventMouseButtonUp;
 
     InitLinux => Setup: (std os files here / '..' / 'eve' / 'libeve.so') path;
     InitMac   => Setup: (std os files here / '..' / 'eve' / 'libeve.dylib') path;
@@ -42,6 +49,13 @@
         Eve_FillRect <- (lib function: #'Eve_FillRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
         Eve_DrawText <- (lib function: #'Eve_DrawText' type: ((ffi types void) function(ffi types string, ffi types int, ffi types int))) yes.
         Eve_Render <- (lib function: #'Eve_Render' type: ((ffi types void) function())) yes.
+        Eve_PollEvent <- (lib function: #'Eve_PollEvent' type: ((ffi types void) function())) yes.
+        Eve_IsEventQuit <- (lib function: #'Eve_IsEventQuit' type: ((ffi types bool) function())) yes.
+        Eve_IsEventKeyDown <- (lib function: #'Eve_IsEventKeyDown' type: ((ffi types bool) function())) yes.
+        Eve_IsEventKeyUp <- (lib function: #'Eve_IsEventKeyUp' type: ((ffi types bool) function())) yes.
+        Eve_IsEventMouseMotion <- (lib function: #'Eve_IsEventMouseMotion' type: ((ffi types bool) function())) yes.
+        Eve_IsEventMouseButtonDown <- (lib function: #'Eve_IsEventMouseButtonDown' type: ((ffi types bool) function())) yes.
+        Eve_IsEventMouseButtonUp <- (lib function: #'Eve_IsEventMouseButtonUp' type: ((ffi types bool) function())) yes.
       ^ self
     );
 
