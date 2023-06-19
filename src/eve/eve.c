@@ -94,6 +94,8 @@ struct Eve_RenderState {
 
     TTF_Font*              font;
 
+    SDL_Event              event;
+
     struct Eve_FrameStack  frame_stack;
     struct Eve_Frame       frame;
     struct Eve_Color       color;
@@ -229,48 +231,43 @@ void Eve_RenderState_Render(struct Eve_RenderState* self) {
 }
 
 void Eve_RenderState_PollEvent(struct Eve_RenderState* self) {
-    SDL_Event  event;
-
-    SDL_PollEvent(&event);
-
-    switch (event.type) {
-        case SDL_QUIT:
-            break;
-        case SDL_KEYDOWN:
-            break;
-        case SDL_KEYUP:
-            break;
-        case SDL_MOUSEMOTION:
-            break;
-        case SDL_MOUSEBUTTONDOWN:
-            break;
-        case SDL_MOUSEBUTTONUP:
-            break;
-    }
+    SDL_PollEvent(&self->event);
 }
 
 bool Eve_RenderState_IsEventQuit(struct Eve_RenderState* self) {
-    return false;
+    return self->event.type == SDL_QUIT;
 }
 
 bool Eve_RenderState_IsEventKeyDown(struct Eve_RenderState* self) {
-    return false;
+    return self->event.type == SDL_KEYDOWN;
 }
 
 bool Eve_RenderState_IsEventKeyUp(struct Eve_RenderState* self) {
-    return false;
+    return self->event.type == SDL_KEYUP;
 }
 
 bool Eve_RenderState_IsEventMouseMotion(struct Eve_RenderState* self) {
-    return false;
+    return self->event.type == SDL_MOUSEMOTION;
 }
 
 bool Eve_RenderState_IsEventMouseButtonDown(struct Eve_RenderState* self) {
-    return false;
+    return self->event.type == SDL_MOUSEBUTTONDOWN;
 }
 
 bool Eve_RenderState_IsEventMouseButtonUp(struct Eve_RenderState* self) {
-    return false;
+    return self->event.type == SDL_MOUSEBUTTONUP;
+}
+
+bool Eve_RenderState_IsEventMouseWheel(struct Eve_RenderState* self) {
+    return self->event.type == SDL_MOUSEWHEEL;
+}
+
+Eve_UInt Eve_RenderState_GetEventMouseX(struct Eve_RenderState* self) {
+    return self->event.motion.x;
+}
+
+Eve_UInt Eve_RenderState_GetEventMouseY(struct Eve_RenderState* self) {
+    return self->event.motion.y;
 }
 
 
@@ -349,6 +346,14 @@ bool Eve_IsEventMouseButtonDown() {
 
 bool Eve_IsEventMouseButtonUp() {
     return Eve_RenderState_IsEventMouseButtonUp(&EVE_DEFAULT_RENDER_STATE);
+}
+
+Eve_UInt Eve_GetEventMouseX() {
+    return Eve_RenderState_GetEventMouseX(&EVE_DEFAULT_RENDER_STATE);
+}
+
+Eve_UInt Eve_GetEventMouseY() {
+    return Eve_RenderState_GetEventMouseY(&EVE_DEFAULT_RENDER_STATE);
 }
 
 

@@ -41,6 +41,8 @@ bool Eve_IsEventMouseMotion();
 bool Eve_IsEventMouseButtonDown();
 bool Eve_IsEventMouseButtonUp();
 
+Eve_UInt Eve_GetEventMouseX();
+Eve_UInt Eve_GetEventMouseY();
 
 void Eve_Init();
 void Eve_Terminate();
