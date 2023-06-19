@@ -24,7 +24,8 @@
     protected Eve_IsEventMouseButtonDown,
     protected Eve_IsEventMouseButtonUp,
     protected Eve_GetEventMouseX,
-    protected Eve_GetEventMouseY;
+    protected Eve_GetEventMouseY,
+    protected Eve_GetEventKeySym;
 
     InitLinux => Setup: (std os files here / '..' / 'eve' / 'libeve.so') path;
     InitMac   => Setup: (std os files here / '..' / 'eve' / 'libeve.dylib') path;
@@ -60,6 +61,7 @@
         Eve_IsEventMouseButtonUp <- (lib function: #'Eve_IsEventMouseButtonUp' type: ((ffi types bool) function())) yes.
         Eve_GetEventMouseX <- (lib function: #'Eve_GetEventMouseX' type: ((ffi types uint) function())) yes.
         Eve_GetEventMouseY <- (lib function: #'Eve_GetEventMouseY' type: ((ffi types uint) function())) yes.
+        Eve_GetEventKeySym <- (lib function: #'Eve_GetEventKeySym' type: ((ffi types uint) function())) yes.
       ^ self
     );
 

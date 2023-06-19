@@ -270,6 +270,10 @@ Eve_UInt Eve_RenderState_GetEventMouseY(struct Eve_RenderState* self) {
     return self->event.motion.y;
 }
 
+Eve_UInt Eve_RenderState_GetEventKeySym(struct Eve_RenderState* self) {
+    return self->event.key.keysym.sym;
+}
+
 
 
 
@@ -356,6 +360,9 @@ Eve_UInt Eve_GetEventMouseY() {
     return Eve_RenderState_GetEventMouseY(&EVE_DEFAULT_RENDER_STATE);
 }
 
+Eve_UInt Eve_GetEventKeySym() {
+    return Eve_RenderState_GetEventKeySym(&EVE_DEFAULT_RENDER_STATE);
+}
 
 
 void Eve_Init() {
