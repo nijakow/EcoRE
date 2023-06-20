@@ -67,4 +67,37 @@
 
     InitEve => Eve_Init value();
     TerminateEve => Eve_Terminate value();
+
+    PushFrame => Eve_PushFrame value();
+    PopFrame => Eve_PopFrame value();
+
+    TranslateI2(x, y) => Eve_TranslateI2 value(x, y);
+
+    SetColorRGBA(r, g, b, a) => Eve_SetColorRGBA value(r, g, b, a);
+    SetColorRGB(r, g, b) => Eve_SetColorRGB value(r, g, b);
+
+    Clip(x, y, w, h) => Eve_Clip value(x, y, w, h);
+
+    DrawLine(x1, y1, x2, y2) => Eve_DrawLine value(x1, y1, x2, y2);
+
+    DrawRect(x, y, w, h) => Eve_DrawRect value(x, y, w, h);
+    FillRect(x, y, w, h) => Eve_FillRect value(x, y, w, h);
+
+    DrawText(text, x, y) => Eve_DrawText value(text, x, y);
+
+    Render => Eve_Render value();
+
+    PollEvent => Eve_PollEvent value();
+
+    IsEventQuit => Eve_IsEventQuit value();
+    IsEventKeyDown => Eve_IsEventKeyDown value();
+    IsEventKeyUp => Eve_IsEventKeyUp value();
+    IsEventMouseMotion => Eve_IsEventMouseMotion value();
+    IsEventMouseButtonDown => Eve_IsEventMouseButtonDown value();
+    IsEventMouseButtonUp => Eve_IsEventMouseButtonUp value();
+
+    GetEventMouseX => Eve_GetEventMouseX value();
+    GetEventMouseY => Eve_GetEventMouseY value();
+
+    GetEventKeySym => Eve_GetEventKeySym value();
 }
