@@ -109,5 +109,24 @@
     GetEventKeySym => Eve_GetEventKeySym value();
 
 
-    Text: text => 'TODO: Eve text' throw;
+    protected own Text = {
+        static with inherited _ = std Clonable;
+
+        text, width, height;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithText: _text => (
+                text   <- _text.
+                width  <- 20.
+                height <- 100.
+              ^ self
+            );
+
+            writeOn: w => w << 'a text element from EVE';
+        };
+    };
+
+    Text: text => Text clone initWithText: text;
 }
