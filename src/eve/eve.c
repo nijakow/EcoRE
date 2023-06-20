@@ -151,6 +151,14 @@ void Eve_RenderState_Reset(struct Eve_RenderState* self) {
     SDL_SetRenderTarget(self->renderer, self->texture);
 }
 
+Eve_UInt Eve_RenderState_CurrentWidth(struct Eve_RenderState* self) {
+    return self->frame.xmax - self->frame.x;
+}
+
+Eve_UInt Eve_RenderState_CurrentHeight(struct Eve_RenderState* self) {
+    return self->frame.ymax - self->frame.y;
+}
+
 void Eve_RenderState_PushFrame(struct Eve_RenderState* self) {
     Eve_FrameStack_PushFrame(&self->frame_stack, &self->frame);
 }
@@ -279,6 +287,13 @@ Eve_UInt Eve_RenderState_GetEventKeySym(struct Eve_RenderState* self) {
 
 struct Eve_RenderState EVE_DEFAULT_RENDER_STATE;
 
+Eve_UInt Eve_CurrentWidth() {
+    return Eve_RenderState_CurrentWidth(&EVE_DEFAULT_RENDER_STATE);
+}
+
+Eve_UInt Eve_CurrentHeight() {
+    return Eve_RenderState_CurrentHeight(&EVE_DEFAULT_RENDER_STATE);
+}
 
 void Eve_PushFrame() {
     Eve_RenderState_PushFrame(&EVE_DEFAULT_RENDER_STATE);

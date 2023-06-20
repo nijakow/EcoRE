@@ -14,35 +14,18 @@
         protected renderer,
         protected morph,
         protected tickCount,
-        protected app;
+        protected app,
+        protected eve;
 
         with inherited trait = {
-            init: _app => (
+            initWithApp: _app Eve: _eve => (
                 app       <- _app.
+                eve       <- _eve.
                 mouseX    <- 0.
                 mouseY    <- 0.
                 morph     <- morphic morphs WorldMorph new.
                 tickCount <- 0.
               ^ self
-            );
-
-            setProgram: p => (
-                program  <- p.
-                renderer <- morphic Renderer clone
-                              initWithSDL: program sdlModule
-                                 Renderer: program window renderer
-                                        X: 0
-                                        Y: 0
-                                        W: program window width
-                                        H: program window height.
-                morph reshapeX: renderer xOff
-                             Y: renderer yOff
-                             W: renderer width
-                             H: renderer height.
-                morph renderer: renderer.
-
-                morph layoutInPlace.
-                app openInWorld: morph.
             );
 
             tick => (
@@ -83,14 +66,27 @@
                 ].
                 event isKeyDown -> [ ^ program stop ].
             );
+
+            launch => (
+                renderer <- (morphic Renderer) clone initWithEve: eve.
+
+                morph <- app build.
+
+                morph reshapeX: renderer xOff
+                            Y: renderer yOff
+                            W: renderer width
+                            H: renderer height.
+                morph renderer: renderer.
+
+                morph layoutInPlace.
+                app openInWorld: morph.
+            );
         };
     };
 
     RunWithWidth: w Height: h App: app => (
-        sdl Init.
-        |
-            program <- sdl Program clone initWithWindow: win Handler: (MorphicHandler new: app)
-        |
-        program run.
+        eve Init.
+        eve InitEve.
+        (MorphicHandler clone initWithApp: app Eve: eve) launch.
     );
 }

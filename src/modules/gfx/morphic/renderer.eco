@@ -23,6 +23,8 @@
               ^ self
             );
 
+            initWithEve: _eve => initWithEve: _eve X: 0 Y: 0 W: (_eve CurrentWidth) H: (_eve CurrentHeight);
+
             offset => offsets top;
             pushOffset: point => offsets push: point;
             popOffset => offsets pop;
