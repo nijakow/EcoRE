@@ -107,4 +107,7 @@
     GetEventMouseY => Eve_GetEventMouseY value();
 
     GetEventKeySym => Eve_GetEventKeySym value();
+
+
+    Text: text => 'TODO: Eve text' throw;
 }

@@ -3,37 +3,30 @@
     static with inherited _ = std Clonable;
     with inherited own Morph = $ Morph;
 
-    protected text,
-    protected texture;
+    protected text;
 
     with inherited trait = {
         init => (
             $(Morph) init.
-            text     <- No.
-            texture  <- No.
+            text <- No.
           ^ self
         );
 
         text: txt => (
-            text    <- Yes: txt.
-            texture <- No.
+            text <- Yes: txt.
+            reshapeToFit.
+            layoutChanged.
           ^ self
         );
 
-        onUnlink => (
-            texture yes: [ :t | t destroy ].
-            texture <- No.
-          ^ $(Morph) onUnlink.
-        );
-
         baseMinWidth => (
-            texture yes: [ :t | t width               ]
-                     no: [      $(Morph) baseMinWidth ]
+            text yes: [ :t | t width               ]
+                  no: [      $(Morph) baseMinWidth ]
         );
 
         baseMinHeight => (
-            texture yes: [ :t | t height               ]
-                     no: [      $(Morph) baseMinHeight ]
+            text yes: [ :t | t height               ]
+                  no: [      $(Morph) baseMinHeight ]
         );
 
         protected reshapeToFit => (
@@ -42,15 +35,8 @@
           ^ self
         );
 
-        protected getOrMakeTexture: renderer => (
-            texture no: [
-                text yes: [ :t | texture <- Yes: (renderer makeTextTexture: t text). reshapeToFit. layoutChanged. ]
-            ].
-          ^ texture
-        );
-
         renderImplOn: renderer => (
-            (getOrMakeTexture: renderer) yes: [ :t | renderer drawTexture: t W: width H: height ].
+            renderer drawText: t W: width H: height.
             $(Morph) renderImplOn: renderer.
         );
     };
