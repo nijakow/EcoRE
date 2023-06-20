@@ -50,6 +50,11 @@ Eve_UInt Eve_GetEventMouseY();
 
 Eve_UInt Eve_GetEventKeySym();
 
+
+Eve_UInt Eve_GetTextWidth(const char* text);
+Eve_UInt Eve_GetTextHeight(const char* text);
+
+
 void Eve_Init(const char* default_font_path, Eve_UInt default_font_size);
 void Eve_Terminate();
 

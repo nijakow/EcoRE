@@ -29,7 +29,9 @@
     protected Eve_IsEventMouseButtonUp,
     protected Eve_GetEventMouseX,
     protected Eve_GetEventMouseY,
-    protected Eve_GetEventKeySym;
+    protected Eve_GetEventKeySym,
+    protected Eve_GetTextWidth,
+    protected Eve_GetTextHeight;
 
     InitLinux => Setup: (std os files here / '..' / 'eve' / 'libeve.so') path;
     InitMac   => Setup: (std os files here / '..' / 'eve' / 'libeve.dylib') path;
@@ -69,6 +71,8 @@
         Eve_GetEventMouseX <- (lib function: #'Eve_GetEventMouseX' type: ((ffi types uint) function())) yes.
         Eve_GetEventMouseY <- (lib function: #'Eve_GetEventMouseY' type: ((ffi types uint) function())) yes.
         Eve_GetEventKeySym <- (lib function: #'Eve_GetEventKeySym' type: ((ffi types uint) function())) yes.
+        Eve_GetTextWidth <- (lib function: #'Eve_GetTextWidth' type: ((ffi types uint) function(ffi types string))) yes.
+        Eve_GetTextHeight <- (lib function: #'Eve_GetTextHeight' type: ((ffi types uint) function(ffi types string))) yes.
       ^ self
     );
 
@@ -112,6 +116,9 @@
 
     GetEventKeySym => Eve_GetEventKeySym value();
 
+    GetTextWidth(text) => Eve_GetTextWidth value(text);
+    GetTextHeight(text) => Eve_GetTextHeight value(text);
+
 
     protected own Text = {
         static with inherited _ = std Clonable;
@@ -121,10 +128,10 @@
         with inherited trait = {
             static with inherited _ = std Trait;
 
-            initWithText: _text => (
+            initWithText: _text Width: _width Height: _height => (
                 text   <- _text.
-                width  <- 20.
-                height <- 100.
+                width  <- _width.
+                height <- _height.
               ^ self
             );
 
@@ -132,5 +139,7 @@
         };
     };
 
-    Text: text => Text clone initWithText: text;
+    Text: text => Text clone initWithText: text
+                                    Width: (GetTextWidth(text))
+                                   Height: (GetTextHeight(text));
 }

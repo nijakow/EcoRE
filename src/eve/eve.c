@@ -407,6 +407,25 @@ Eve_UInt Eve_GetEventKeySym() {
 }
 
 
+Eve_UInt Eve_GetTextWidth(const char* text) {
+    int w;
+    int h;
+
+    TTF_SizeText(EVE_DEFAULT_RENDER_STATE.font, text, &w, &h);
+
+    return w;
+}
+
+Eve_UInt Eve_GetTextHeight(const char* text) {
+    int w;
+    int h;
+
+    TTF_SizeText(EVE_DEFAULT_RENDER_STATE.font, text, &w, &h);
+
+    return h;
+}
+
+
 void Eve_Init(const char* default_font_path, Eve_UInt default_font_size) {
     struct SDL_Window*    window;
     struct SDL_Renderer*  renderer;
