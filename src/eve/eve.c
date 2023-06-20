@@ -230,6 +230,10 @@ void Eve_RenderState_DrawText(struct Eve_RenderState* self, const char* text) {
     SDL_FreeSurface(surface);
 }
 
+void Eve_RenderState_Clear(struct Eve_RenderState* self) {
+    SDL_RenderClear(self->renderer);
+}
+
 void Eve_RenderState_Render(struct Eve_RenderState* self) {
     SDL_RenderPresent(self->renderer);
     SDL_SetRenderTarget(self->renderer, NULL);
@@ -333,6 +337,10 @@ void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
 
 void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y) {
     Eve_RenderState_DrawText(&EVE_DEFAULT_RENDER_STATE, text);
+}
+
+void Eve_Clear() {
+    Eve_RenderState_Clear(&EVE_DEFAULT_RENDER_STATE);
 }
 
 void Eve_Render() {

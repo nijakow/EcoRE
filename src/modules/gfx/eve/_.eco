@@ -18,6 +18,7 @@
     protected Eve_DrawRect,
     protected Eve_FillRect,
     protected Eve_DrawText,
+    protected Eve_Clear,
     protected Eve_Render,
     protected Eve_PollEvent,
     protected Eve_IsEventQuit,
@@ -56,6 +57,7 @@
         Eve_DrawRect <- (lib function: #'Eve_DrawRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
         Eve_FillRect <- (lib function: #'Eve_FillRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
         Eve_DrawText <- (lib function: #'Eve_DrawText' type: ((ffi types void) function(ffi types string, ffi types int, ffi types int))) yes.
+        Eve_Clear <- (lib function: #'Eve_Clear' type: ((ffi types void) function())) yes.
         Eve_Render <- (lib function: #'Eve_Render' type: ((ffi types void) function())) yes.
         Eve_PollEvent <- (lib function: #'Eve_PollEvent' type: ((ffi types void) function())) yes.
         Eve_IsEventQuit <- (lib function: #'Eve_IsEventQuit' type: ((ffi types bool) function())) yes.
@@ -93,6 +95,7 @@
 
     DrawText(text, x, y) => Eve_DrawText value(text, x, y);
 
+    Clear => Eve_Clear value();
     Render => Eve_Render value();
 
     PollEvent => Eve_PollEvent value();

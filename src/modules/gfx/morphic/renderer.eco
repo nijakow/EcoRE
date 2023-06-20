@@ -49,10 +49,8 @@
             xOff => offset x;
             yOff => offset y;
 
-            clear => "TODO";
-            present => (
-                eve Render.
-            );
+            clear => eve Clear;
+            present => eve Render;
 
             setR: r G: g B: b => eve SetColorRGB(r, g, b);
             setColor: color => (
