@@ -31,6 +31,17 @@ struct Eve_Color Eve_Color_ToRGB(struct Eve_Color color, u8* r, u8* g, u8* b) {
     return color;
 }
 
+SDL_Color Eve_Color_ToSDL(struct Eve_Color color) {
+    u8 r, g, b, a;
+    Eve_Color_ToRGBA(color, &r, &g, &b, &a);
+    SDL_Color sdl_color;
+    sdl_color.r = r;
+    sdl_color.g = g;
+    sdl_color.b = b;
+    sdl_color.a = a;
+    return sdl_color;
+}
+
 
 
 struct Eve_Rect {
@@ -214,20 +225,28 @@ void Eve_RenderState_FillRect(struct Eve_RenderState* self) {
     SDL_RenderFillRect(self->renderer, &rect);
 }
 
-void Eve_RenderState_DrawText(struct Eve_RenderState* self, const char* text) {
-    struct SDL_Rect rect;
-    SDL_Surface*    surface;
-    SDL_Texture*    texture;
-    SDL_Color       color;
-    SDL_Rect        dstrect;
+void Eve_RenderState_DrawText(struct Eve_RenderState* self, const char* text, Eve_Int x, Eve_Int y) {
+    SDL_Surface* surface;
+    SDL_Texture* texture;
+    SDL_Rect     rect;
+    SDL_Color    color;
+    int          w, h;
 
-    rect = Eve_RenderState_GetCurrentRect(self);
+    color = Eve_Color_ToSDL(self->frame.color);
+
     surface = TTF_RenderText_Solid(self->font, text, color);
     texture = SDL_CreateTextureFromSurface(self->renderer, surface);
-    dstrect = rect;
-    SDL_RenderCopy(self->renderer, texture, NULL, &dstrect);
-    SDL_DestroyTexture(texture);
     SDL_FreeSurface(surface);
+
+    SDL_QueryTexture(texture, NULL, NULL, &w, &h);
+
+    rect.x = x;
+    rect.y = y;
+    rect.w = w;
+    rect.h = h;
+
+    SDL_RenderCopy(self->renderer, texture, NULL, &rect);
+    SDL_DestroyTexture(texture);
 }
 
 void Eve_RenderState_Clear(struct Eve_RenderState* self) {
@@ -336,7 +355,7 @@ void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
 }
 
 void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y) {
-    Eve_RenderState_DrawText(&EVE_DEFAULT_RENDER_STATE, text);
+    Eve_RenderState_DrawText(&EVE_DEFAULT_RENDER_STATE, text, x, y);
 }
 
 void Eve_Clear() {
