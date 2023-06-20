@@ -380,7 +380,7 @@ Eve_UInt Eve_GetEventKeySym() {
 }
 
 
-void Eve_Init() {
+void Eve_Init(const char* default_font_path, Eve_UInt default_font_size) {
     struct SDL_Window*    window;
     struct SDL_Renderer*  renderer;
     TTF_Font*             font;
@@ -388,10 +388,10 @@ void Eve_Init() {
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
 
-    window   = SDL_CreateWindow("Eve", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
+    window   = SDL_CreateWindow("Eve", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_SHOWN);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
-    font = TTF_OpenFont("DejaVuSansMono.ttf", 13);
+    font = TTF_OpenFont(default_font_path, default_font_size);
 
     Eve_RenderState_Create(&EVE_DEFAULT_RENDER_STATE, window, renderer, font);
 }

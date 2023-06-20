@@ -49,7 +49,7 @@ Eve_UInt Eve_GetEventMouseY();
 
 Eve_UInt Eve_GetEventKeySym();
 
-void Eve_Init();
+void Eve_Init(const char* default_font_path, Eve_UInt default_font_size);
 void Eve_Terminate();
 
 #endif /* EVE_H */

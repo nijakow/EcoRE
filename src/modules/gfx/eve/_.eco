@@ -1,7 +1,8 @@
 {
     static with inherited _ = std Module;
 
-    protected lib;
+    protected lib,
+    protected DefaultFontPath <- (here / 'resources' / 'DejaVuSansMono.ttf') path;
 
     protected Eve_Init,
     protected Eve_Terminate,
@@ -41,7 +42,7 @@
 
     Setup: libpath => (
         lib <- (ffi DLOpen: libpath) yes.
-        Eve_Init <- (lib function: #'Eve_Init' type: ((ffi types void) function())) yes.
+        Eve_Init <- (lib function: #'Eve_Init' type: ((ffi types void) function(ffi types string, ffi types uint))) yes.
         Eve_Terminate <- (lib function: #'Eve_Terminate' type: ((ffi types void) function())) yes.
         Eve_CurrentWidth <- (lib function: #'Eve_CurrentWidth' type: ((ffi types uint) function())) yes.
         Eve_CurrentHeight <- (lib function: #'Eve_CurrentHeight' type: ((ffi types uint) function())) yes.
@@ -69,7 +70,7 @@
       ^ self
     );
 
-    InitEve => Eve_Init value();
+    InitEve => Eve_Init value(DefaultFontPath, 13);
     TerminateEve => Eve_Terminate value();
 
     CurrentWidth => Eve_CurrentWidth value();
