@@ -7,32 +7,18 @@
         protected offsets,
         protected clips,
         protected sdlRenderer,
-        protected sdl,
+        protected eve,
         protected texture;
 
         with inherited trait = {
-            initWithSDL: _sdl Renderer: _sdl_renderer X: _x Y: _y W: _w H: _h => (
-                sdl         <- _sdl.
-                sdlRenderer <- _sdl_renderer.
+            initWithEve: _eve X: _x Y: _y W: _w H: _h => (
+                eve         <- _eve.
                 width       <- _w.
                 height      <- _h.
                 offsets     <- std util newStack.
                 offsets push: (morphic X: _x Y: _y).
                 clips       <- std util newStack.
                 clips push: (morphic X: _x Y: _y W: width H: height).
-
-                | tex <- sdl sdl CreateTexture(
-                      sdlRenderer handle,
-                      sdl sdl SDL_PIXELFORMAT_UNKNOWN,
-                      sdl sdl SDL_TEXTUREACCESS_TARGET,
-                      width,
-                      height
-                  )
-                |
-
-                texture <- (sdl Texture) clone new: (tex).
-
-                sdl sdl SetRenderTarget(sdlRenderer handle, texture handle).
 
               ^ self
             );
@@ -51,7 +37,7 @@
             withClipW: w H: h Do: block => (
                 | rect <- morphic X: xOff Y: yOff W: w H: h |
                 clips push: rect.
-                sdlRenderer clipX: rect x Y: rect y W: rect w H: rect h.
+                eve Clip(xOff, yOff, w, h).
                 block value.
                 clips pop.
                 sdlRenderer clipX: clip x Y: clip y W: clip w H: clip h.
@@ -61,27 +47,25 @@
             xOff => offset x;
             yOff => offset y;
 
-            clear => sdlRenderer clear;
+            clear => "TODO";
             present => (
-                sdl sdl SetRenderTarget(sdlRenderer handle, ffi null).
-                sdlRenderer drawTexture: texture X: 0 Y: 0 W: width H: height.
-                sdl sdl SetRenderTarget(sdlRenderer handle, texture handle).
-                sdlRenderer present.
+                eve Render.
             );
 
-            setR: r G: g B: b => sdlRenderer setR: r G: g B: b;
-            setColor: color => sdlRenderer setColor: color;
+            setR: r G: g B: b => eve SetRGB(r, g, b);
+            setColor: color => (
+                setR: color r
+                   G: color g
+                   B: color b
+            );
 
-            drawPointX: x Y: y => sdlRenderer drawPointX: xOff + x Y: yOff + y;
-            drawLineX: x1 Y: y1 X: x2 Y: y2 => sdlRenderer drawLineX: xOff + x1 Y: yOff + y1 X: xOff + x2 Y: yOff + y2;
-            drawRectX: x Y: y W: w H: h => sdlRenderer drawRectX: xOff + x Y: yOff + y W: w H: h;
+            drawPointX: x Y: y => eve DrawPoint(xOff + x, yOff + y);
+            drawLineX: x1 Y: y1 X: x2 Y: y2 => eve DrawLine(xOff + x1, yOff + y1, xOff + x2, yOff + y2);
+            drawRectX: x Y: y W: w H: h => eve DrawRect(xOff + x, yOff + y, w, h);
             drawRect: rect => drawRectX: rect x Y: rect y W: rect w H: rect h;
-            fillRectX: x Y: y W: w H: h => sdlRenderer fillRectX: xOff + x Y: yOff + y W: w H: h;
+            fillRectX: x Y: y W: w H: h => eve FillRect(xOff + x, yOff + y, w, h);
             fillRect: rect => fillRectX: rect x Y: rect y W: rect w H: rect h;
-            drawTexture: tex X: x Y: y W: w H: h => sdlRenderer drawTexture: tex X: xOff + x Y: yOff + y W: w H: h;
-            drawTexture: tex W: w H: h => drawTexture: tex X: 0 Y: 0 W: w H: h;
-
-            makeTextTexture: text => sdlRenderer makeTextTexture: text;
+            drawText: text X: x Y: y => eve DrawText(text, xOff + x, yOff + y);
 
             accept: morph => morph renderOn: self;
 
