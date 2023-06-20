@@ -72,9 +72,9 @@
 
                 (std io out << 'Renderer is working') newline commit.
 
-                morph <- app build.
+                morph <- morphic morphs WorldMorph new.
 
-                (std io out << 'Morph is built') newline commit.
+                (std io out << 'Morph is built' << morph) newline commit.
 
                 morph reshapeX: renderer xOff
                             Y: renderer yOff
@@ -91,6 +91,10 @@
                 app openInWorld: morph.
 
                 (std io out << 'Morph is opened') newline commit.
+
+                1 to: 100 do: [
+                    tick.
+                ].
             );
         };
     };
