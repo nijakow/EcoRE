@@ -48,13 +48,13 @@
 
             handleKey: key => morph handMorph handleKey: key;
 
-            handleEvent: event => (
-                event isMouseMotionEvent -> [
-                    mouseX <- event mouseMotionX.
-                    mouseY <- event mouseMotionY.
+            handleEvent => (
+                eve IsEventMouseMotion -> [
+                    mouseX <- eve GetEventMouseX.
+                    mouseY <- eve GetEventMouseY.
                 ].
-                event isMouseButtonDown -> [
-                    | button <- event whichMouseButton |
+                eve IsEventMouseButtonDown -> [
+                    | button <- eve GetEventMouseButtonID |
 
                     Switch: button
                       ~ case: 1 do: [ morph handMorph leftClick   ]
@@ -92,9 +92,24 @@
 
                 (std io out << 'Morph is opened') newline commit.
 
-                1 to: 100 do: [
+                | running <- true |
+                [
+                    (running not) -> [ ^ self ].
                     tick.
-                ].
+                    [ :break |
+                        (std io out << 'Polling event') newline commit.
+                        (eve PollEvent == 0) -> [ break value ].
+                        (std io out << 'Event polled') newline commit.
+
+                        begin
+                          ~ if: [ eve IsEventKeyDown    ] then: [ pushKey: eve GetEventKeySym ]
+                          "~ if: [ event IsEventMouseWheel ] then: [ mouseWheel: event       ]"
+                        ~ default: [ handleEvent ].
+                    ] repeatWithBreak.
+                    
+                    "Sleep for a while to avoid eating up CPU resources"
+                    "sdl Delay(10)."
+                ] repeat.
             );
         };
     };

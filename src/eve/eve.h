@@ -36,7 +36,7 @@ void Eve_Clear();
 void Eve_Render();
 
 
-void Eve_PollEvent();
+bool Eve_PollEvent();
 
 bool Eve_IsEventQuit();
 bool Eve_IsEventKeyDown();
@@ -47,6 +47,8 @@ bool Eve_IsEventMouseButtonUp();
 
 Eve_UInt Eve_GetEventMouseX();
 Eve_UInt Eve_GetEventMouseY();
+
+Eve_UInt Eve_GetEventMouseButtonID();
 
 Eve_UInt Eve_GetEventKeySym();
 

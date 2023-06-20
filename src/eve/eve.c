@@ -267,8 +267,8 @@ void Eve_RenderState_Render(struct Eve_RenderState* self) {
     SDL_SetRenderTarget(self->renderer, self->texture);
 }
 
-void Eve_RenderState_PollEvent(struct Eve_RenderState* self) {
-    SDL_PollEvent(&self->event);
+bool Eve_RenderState_PollEvent(struct Eve_RenderState* self) {
+    return SDL_PollEvent(&self->event) != 0;
 }
 
 bool Eve_RenderState_IsEventQuit(struct Eve_RenderState* self) {
@@ -305,6 +305,10 @@ Eve_UInt Eve_RenderState_GetEventMouseX(struct Eve_RenderState* self) {
 
 Eve_UInt Eve_RenderState_GetEventMouseY(struct Eve_RenderState* self) {
     return self->event.motion.y;
+}
+
+Eve_UInt Eve_RenderState_GetEventMouseButtonID(struct Eve_RenderState* self) {
+    return self->event.button.button;
 }
 
 Eve_UInt Eve_RenderState_GetEventKeySym(struct Eve_RenderState* self) {
@@ -372,8 +376,8 @@ void Eve_Render() {
     Eve_RenderState_Render(&EVE_DEFAULT_RENDER_STATE);
 }
 
-void Eve_PollEvent() {
-    Eve_RenderState_PollEvent(&EVE_DEFAULT_RENDER_STATE);
+bool Eve_PollEvent() {
+    return Eve_RenderState_PollEvent(&EVE_DEFAULT_RENDER_STATE);
 }
 
 bool Eve_IsEventQuit() {
@@ -406,6 +410,10 @@ Eve_UInt Eve_GetEventMouseX() {
 
 Eve_UInt Eve_GetEventMouseY() {
     return Eve_RenderState_GetEventMouseY(&EVE_DEFAULT_RENDER_STATE);
+}
+
+Eve_UInt Eve_GetEventMouseButtonID() {
+    return Eve_RenderState_GetEventMouseButtonID(&EVE_DEFAULT_RENDER_STATE);
 }
 
 Eve_UInt Eve_GetEventKeySym() {

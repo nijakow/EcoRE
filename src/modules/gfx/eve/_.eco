@@ -29,6 +29,7 @@
     protected Eve_IsEventMouseButtonUp,
     protected Eve_GetEventMouseX,
     protected Eve_GetEventMouseY,
+    protected Eve_GetEventMouseButtonID,
     protected Eve_GetEventKeySym,
     protected Eve_GetTextWidth,
     protected Eve_GetTextHeight;
@@ -61,7 +62,7 @@
         Eve_DrawText <- (lib function: #'Eve_DrawText' type: ((ffi types void) function(ffi types string, ffi types int, ffi types int))) yes.
         Eve_Clear <- (lib function: #'Eve_Clear' type: ((ffi types void) function())) yes.
         Eve_Render <- (lib function: #'Eve_Render' type: ((ffi types void) function())) yes.
-        Eve_PollEvent <- (lib function: #'Eve_PollEvent' type: ((ffi types void) function())) yes.
+        Eve_PollEvent <- (lib function: #'Eve_PollEvent' type: ((ffi types bool) function())) yes.
         Eve_IsEventQuit <- (lib function: #'Eve_IsEventQuit' type: ((ffi types bool) function())) yes.
         Eve_IsEventKeyDown <- (lib function: #'Eve_IsEventKeyDown' type: ((ffi types bool) function())) yes.
         Eve_IsEventKeyUp <- (lib function: #'Eve_IsEventKeyUp' type: ((ffi types bool) function())) yes.
@@ -70,6 +71,7 @@
         Eve_IsEventMouseButtonUp <- (lib function: #'Eve_IsEventMouseButtonUp' type: ((ffi types bool) function())) yes.
         Eve_GetEventMouseX <- (lib function: #'Eve_GetEventMouseX' type: ((ffi types uint) function())) yes.
         Eve_GetEventMouseY <- (lib function: #'Eve_GetEventMouseY' type: ((ffi types uint) function())) yes.
+        Eve_GetEventMouseButtonID <- (lib function: #'Eve_GetEventMouseButtonID' type: ((ffi types uint) function())) yes.
         Eve_GetEventKeySym <- (lib function: #'Eve_GetEventKeySym' type: ((ffi types uint) function())) yes.
         Eve_GetTextWidth <- (lib function: #'Eve_GetTextWidth' type: ((ffi types uint) function(ffi types string))) yes.
         Eve_GetTextHeight <- (lib function: #'Eve_GetTextHeight' type: ((ffi types uint) function(ffi types string))) yes.
@@ -114,10 +116,15 @@
     GetEventMouseX => Eve_GetEventMouseX value();
     GetEventMouseY => Eve_GetEventMouseY value();
 
+    GetEventMouseButtonID => Eve_GetEventMouseButtonID value();
+
     GetEventKeySym => Eve_GetEventKeySym value();
 
     GetTextWidth(text) => Eve_GetTextWidth value(text);
     GetTextHeight(text) => Eve_GetTextHeight value(text);
+
+
+    input = (here / 'input' / '_.eco') importIn: self.
 
 
     protected own Text = {
