@@ -211,17 +211,23 @@ void Eve_RenderState_DrawLine(struct Eve_RenderState* self, Eve_Int x1, Eve_Int 
     SDL_RenderDrawLine(self->renderer, x1, y1, x2, y2);
 }
 
-void Eve_RenderState_DrawRect(struct Eve_RenderState* self) {
+void Eve_RenderState_DrawRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y, Eve_UInt w, Eve_UInt h) {
     struct SDL_Rect rect;
     
-    rect = Eve_RenderState_GetCurrentRect(self);
+    rect.x = x;
+    rect.y = y;
+    rect.w = w;
+    rect.h = h;
     SDL_RenderDrawRect(self->renderer, &rect);
 }
 
-void Eve_RenderState_FillRect(struct Eve_RenderState* self) {
+void Eve_RenderState_FillRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y, Eve_UInt w, Eve_UInt h) {
     struct SDL_Rect rect;
     
-    rect = Eve_RenderState_GetCurrentRect(self);
+    rect.x = x;
+    rect.y = y;
+    rect.w = w;
+    rect.h = h;
     SDL_RenderFillRect(self->renderer, &rect);
 }
 
@@ -347,11 +353,11 @@ void Eve_DrawLine(Eve_Int x1, Eve_Int y1, Eve_Int x2, Eve_Int y2) {
 }
 
 void Eve_DrawRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
-    Eve_RenderState_DrawRect(&EVE_DEFAULT_RENDER_STATE);
+    Eve_RenderState_DrawRect(&EVE_DEFAULT_RENDER_STATE, x, y, w, h);
 }
 
 void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
-    Eve_RenderState_FillRect(&EVE_DEFAULT_RENDER_STATE);
+    Eve_RenderState_FillRect(&EVE_DEFAULT_RENDER_STATE, x, y, w, h);
 }
 
 void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y) {

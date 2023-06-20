@@ -76,7 +76,7 @@
       ^ self
     );
 
-    InitEve => Eve_Init value(DefaultFontPath, 13);
+    InitEve => Eve_Init value(DefaultFontPath, 14);
     TerminateEve => Eve_Terminate value();
 
     CurrentWidth => Eve_CurrentWidth value();
