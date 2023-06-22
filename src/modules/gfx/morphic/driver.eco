@@ -46,7 +46,10 @@
               ^ v
             );
 
-            handleKey: key => morph handMorph handleKey: key;
+            handleKey: key => (
+                (std io out << key) newline commit.
+                morph handMorph handleKey: key.
+            );
 
             handleEvent => (
                 eve IsEventMouseMotion -> [
@@ -99,7 +102,7 @@
                         (eve PollEvent == 0) -> [ break value ].
 
                         begin
-                          ~ if: [ eve IsEventKeyDown ] then: [ pushKey: eve GetEventKeySym ]
+                          ~ if: [ eve IsEventKeyDown ] then: [ handleKey: eve GetEventKey ]
                           "~ if: [ event IsEventMouseWheel ] then: [ mouseWheel: event       ]"
                         ~ default: [ handleEvent ].
                     ] repeatWithBreak.

@@ -315,6 +315,14 @@ Eve_UInt Eve_RenderState_GetEventKeySym(struct Eve_RenderState* self) {
     return self->event.key.keysym.sym;
 }
 
+Eve_UInt Eve_RenderState_GetEventKeyScancode(struct Eve_RenderState* self) {
+    return self->event.key.keysym.scancode;
+}
+
+Eve_UInt Eve_RenderState_GetEventKeyMod(struct Eve_RenderState* self) {
+    return self->event.key.keysym.mod;
+}
+
 
 
 
@@ -418,6 +426,14 @@ Eve_UInt Eve_GetEventMouseButtonID() {
 
 Eve_UInt Eve_GetEventKeySym() {
     return Eve_RenderState_GetEventKeySym(&EVE_DEFAULT_RENDER_STATE);
+}
+
+Eve_UInt Eve_GetEventKeyScancode() {
+    return Eve_RenderState_GetEventKeyScancode(&EVE_DEFAULT_RENDER_STATE);
+}
+
+Eve_UInt Eve_GetEventKeyMod() {
+    return Eve_RenderState_GetEventKeyMod(&EVE_DEFAULT_RENDER_STATE);
 }
 
 

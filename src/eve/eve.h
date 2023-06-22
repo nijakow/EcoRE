@@ -51,6 +51,8 @@ Eve_UInt Eve_GetEventMouseY();
 Eve_UInt Eve_GetEventMouseButtonID();
 
 Eve_UInt Eve_GetEventKeySym();
+Eve_UInt Eve_GetEventKeyScancode();
+Eve_UInt Eve_GetEventKeyMod();
 
 
 Eve_UInt Eve_GetTextWidth(const char* text);

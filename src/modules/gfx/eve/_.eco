@@ -1,6 +1,8 @@
 {
     static with inherited _ = std Module;
 
+    input = (here / 'input' / '_.eco') importIn: self.
+
     protected lib,
     protected DefaultFontPath <- (here / 'resources' / 'DejaVuSansMono.ttf') path;
 
@@ -31,6 +33,8 @@
     protected Eve_GetEventMouseY,
     protected Eve_GetEventMouseButtonID,
     protected Eve_GetEventKeySym,
+    protected Eve_GetEventKeyScancode,
+    protected Eve_GetEventKeyMod,
     protected Eve_GetTextWidth,
     protected Eve_GetTextHeight;
 
@@ -73,6 +77,8 @@
         Eve_GetEventMouseY <- (lib function: #'Eve_GetEventMouseY' type: ((ffi types uint) function())) yes.
         Eve_GetEventMouseButtonID <- (lib function: #'Eve_GetEventMouseButtonID' type: ((ffi types uint) function())) yes.
         Eve_GetEventKeySym <- (lib function: #'Eve_GetEventKeySym' type: ((ffi types uint) function())) yes.
+        Eve_GetEventKeyScancode <- (lib function: #'Eve_GetEventKeyScancode' type: ((ffi types uint) function())) yes.
+        Eve_GetEventKeyMod <- (lib function: #'Eve_GetEventKeyMod' type: ((ffi types uint) function())) yes.
         Eve_GetTextWidth <- (lib function: #'Eve_GetTextWidth' type: ((ffi types uint) function(ffi types string))) yes.
         Eve_GetTextHeight <- (lib function: #'Eve_GetTextHeight' type: ((ffi types uint) function(ffi types string))) yes.
       ^ self
@@ -118,13 +124,12 @@
 
     GetEventMouseButtonID => Eve_GetEventMouseButtonID value();
 
-    GetEventKeySym => Eve_GetEventKeySym value();
+    GetEventKeyScancode => Eve_GetEventKeyScancode value();
+    GetEventKeyMod      => Eve_GetEventKeyMod value();
+    GetEventKey         => (input keys) Translate: GetEventKeyScancode Modifiers: GetEventKeyMod;
 
     GetTextWidth(text) => Eve_GetTextWidth value(text);
     GetTextHeight(text) => Eve_GetTextHeight value(text);
-
-
-    input = (here / 'input' / '_.eco') importIn: self.
 
 
     protected own Text = {
