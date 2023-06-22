@@ -130,23 +130,43 @@
     protected own Text = {
         static with inherited _ = std Clonable;
 
+        protected eve,
         text, width, height;
 
         with inherited trait = {
             static with inherited _ = std Trait;
 
-            initWithText: _text Width: _width Height: _height => (
+            initWithEve: _eve Text: _text Width: _width Height: _height => (
+                eve    <- _eve.
                 text   <- _text.
                 width  <- _width.
                 height <- _height.
               ^ self
             );
 
+            pointAtCharacterIndex: index => (
+                eve GetTextWidth(text substringTo: index)
+            );
+
+            characterIndexAtX: offset => (
+                |
+                    str   <- (std io StringWriter) new,
+                    index <- 0
+                |
+                text do: [ :c |
+                    str << c.
+                    (sdl GetTextWidth(str build) >= offset) if: [ ^ index ].
+                    index <- index + 1.
+                ].
+              ^ index
+            );
+
             writeOn: w => w << 'a text element from EVE';
         };
     };
 
-    Text: text => Text clone initWithText: text
-                                    Width: (GetTextWidth(text))
-                                   Height: (GetTextHeight(text));
+    Text: text => Text clone initWithEve: self
+                                    Text: text
+                                   Width: (GetTextWidth(text))
+                                  Height: (GetTextHeight(text));
 }

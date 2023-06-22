@@ -12,14 +12,13 @@
         protected own Line = {
             static with inherited _ = std Clonable;
 
-            textobj, texture;
+            textobj;
 
             static with inherited trait = {
                 static with inherited _ = std Trait;
 
                 initWithTextObj: _textobj => (
                     textobj <- _textobj.
-                    texture <- No.
                   ^ self
                 );
 
@@ -31,23 +30,8 @@
                 caretX: x      => textobj pointAtCharacterIndex: x;
                 charAtPoint: x => textobj characterIndexAtX: x;
 
-                protected getOrMakeTexture: renderer => (
-                    texture no: [
-                        texture <- Yes: (renderer makeTextTexture: textobj text).
-                    ].
-                  ^ texture
-                );
-
-                protected invalidateTexture => (
-                    texture yes: [ :t | t destroy ].
-                    texture <- No.
-                  ^ self
-                );
-
-                unlink => invalidateTexture;
-
                 renderOn: renderer X: x Y: y => (
-                    (getOrMakeTexture: renderer) yes: [ :t | renderer drawTexture: t X: x Y: y W: width H: height ].
+                    renderer drawText: textobj X: x Y: y.
                 );
 
                 writeOn: w => w << 'a text editor line';
@@ -59,11 +43,6 @@
             caret <- morphic X: 0 Y: 0.
             lines <- std util newVector.
           ^ self
-        );
-
-        onUnlink => (
-            lines do: [ :l | l unlink ].
-          ^ $(Morph) onUnlink.
         );
 
         baseMinWidth => (
@@ -86,7 +65,6 @@
 
         protected replaceLine: y With: text => (
             | line <- (lines at: y) |
-            line unlink.
             lines at: y put: (Line clone initWithTextObj: (morphic Text: text)).
             layoutChanged.
             renderDirty.
@@ -99,7 +77,6 @@
           ^ self
         );
         protected removeLine: y => (
-            (lines at: y) unlink.
             lines erase: y.
             layoutChanged.
             renderDirty.
