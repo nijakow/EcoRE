@@ -42,7 +42,7 @@
                 eve Clip(xOff, yOff, w, h).
                 block value.
                 clips pop.
-                sdlRenderer clipX: clip x Y: clip y W: clip w H: clip h.
+                eve Clip(clip x, clip y, clip w, clip h).
               ^ self
             );
 
