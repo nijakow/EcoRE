@@ -64,7 +64,6 @@
                         (std io out << 'Unknown mouse key!') newline commit.
                       ].
                 ].
-                event isKeyDown -> [ ^ program stop ].
             );
 
             launch => (
@@ -77,9 +76,9 @@
                 (std io out << 'Morph is built' << morph) newline commit.
 
                 morph reshapeX: renderer xOff
-                            Y: renderer yOff
-                            W: renderer width
-                            H: renderer height.
+                             Y: renderer yOff
+                             W: renderer width
+                             H: renderer height.
                 morph renderer: renderer.
 
                 (std io out << 'Morph is reshaped') newline commit.
@@ -97,12 +96,10 @@
                     (running not) -> [ ^ self ].
                     tick.
                     [ :break |
-                        (std io out << 'Polling event') newline commit.
                         (eve PollEvent == 0) -> [ break value ].
-                        (std io out << 'Event polled') newline commit.
 
                         begin
-                          ~ if: [ eve IsEventKeyDown    ] then: [ pushKey: eve GetEventKeySym ]
+                          ~ if: [ eve IsEventKeyDown ] then: [ pushKey: eve GetEventKeySym ]
                           "~ if: [ event IsEventMouseWheel ] then: [ mouseWheel: event       ]"
                         ~ default: [ handleEvent ].
                     ] repeatWithBreak.

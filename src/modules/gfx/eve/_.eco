@@ -106,12 +106,12 @@
 
     PollEvent => Eve_PollEvent value();
 
-    IsEventQuit => Eve_IsEventQuit value();
-    IsEventKeyDown => Eve_IsEventKeyDown value();
-    IsEventKeyUp => Eve_IsEventKeyUp value();
-    IsEventMouseMotion => Eve_IsEventMouseMotion value();
-    IsEventMouseButtonDown => Eve_IsEventMouseButtonDown value();
-    IsEventMouseButtonUp => Eve_IsEventMouseButtonUp value();
+    IsEventQuit => Eve_IsEventQuit value() != 0;
+    IsEventKeyDown => Eve_IsEventKeyDown value() != 0;
+    IsEventKeyUp => Eve_IsEventKeyUp value() != 0;
+    IsEventMouseMotion => Eve_IsEventMouseMotion value() != 0;
+    IsEventMouseButtonDown => Eve_IsEventMouseButtonDown value() != 0;
+    IsEventMouseButtonUp => Eve_IsEventMouseButtonUp value() != 0;
 
     GetEventMouseX => Eve_GetEventMouseX value();
     GetEventMouseY => Eve_GetEventMouseY value();
