@@ -59,6 +59,9 @@ Eve_UInt Eve_GetTextWidth(const char* text);
 Eve_UInt Eve_GetTextHeight(const char* text);
 
 
+void Eve_Delay(Eve_UInt ms);
+
+
 void Eve_Init(const char* default_font_path, Eve_UInt default_font_size);
 void Eve_Terminate();
 

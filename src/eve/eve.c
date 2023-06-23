@@ -456,6 +456,11 @@ Eve_UInt Eve_GetTextHeight(const char* text) {
 }
 
 
+void Eve_Delay(Eve_UInt ms) {
+    SDL_Delay(ms);
+}
+
+
 void Eve_Init(const char* default_font_path, Eve_UInt default_font_size) {
     struct SDL_Window*    window;
     struct SDL_Renderer*  renderer;

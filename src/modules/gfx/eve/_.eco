@@ -36,7 +36,8 @@
     protected Eve_GetEventKeyScancode,
     protected Eve_GetEventKeyMod,
     protected Eve_GetTextWidth,
-    protected Eve_GetTextHeight;
+    protected Eve_GetTextHeight,
+    protected Eve_Delay;
 
     InitLinux => Setup: (std os files here / '..' / 'eve' / 'libeve.so') path;
     InitMac   => Setup: (std os files here / '..' / 'eve' / 'libeve.dylib') path;
@@ -81,6 +82,7 @@
         Eve_GetEventKeyMod <- (lib function: #'Eve_GetEventKeyMod' type: ((ffi types uint) function())) yes.
         Eve_GetTextWidth <- (lib function: #'Eve_GetTextWidth' type: ((ffi types uint) function(ffi types string))) yes.
         Eve_GetTextHeight <- (lib function: #'Eve_GetTextHeight' type: ((ffi types uint) function(ffi types string))) yes.
+        Eve_Delay <- (lib function: #'Eve_Delay' type: ((ffi types void) function(ffi types uint))) yes.
       ^ self
     );
 
@@ -130,6 +132,8 @@
 
     GetTextWidth(text) => Eve_GetTextWidth value(text);
     GetTextHeight(text) => Eve_GetTextHeight value(text);
+
+    Delay(ms) => Eve_Delay value(ms);
 
 
     protected own Text = {

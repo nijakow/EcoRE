@@ -36,7 +36,7 @@
         );
 
         renderImplOn: renderer => (
-            text yes: [ :t | renderer drawText: t X: 0 Y: 0 ].
+            text yes: [ :t | renderer setR: 128 G: 128 B: 192. renderer drawText: t X: 0 Y: 0 ].
             $(Morph) renderImplOn: renderer.
         );
     };

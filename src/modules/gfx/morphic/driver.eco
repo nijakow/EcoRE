@@ -47,7 +47,6 @@
             );
 
             handleKey: key => (
-                (std io out << key) newline commit.
                 morph handMorph handleKey: key.
             );
 
@@ -72,11 +71,7 @@
             launch => (
                 renderer <- (morphic Renderer) clone initWithEve: eve.
 
-                (std io out << 'Renderer is working') newline commit.
-
                 morph <- morphic morphs WorldMorph new.
-
-                (std io out << 'Morph is built' << morph) newline commit.
 
                 morph reshapeX: renderer xOff
                              Y: renderer yOff
@@ -84,31 +79,25 @@
                              H: renderer height.
                 morph renderer: renderer.
 
-                (std io out << 'Morph is reshaped') newline commit.
-
                 morph layoutInPlace.
 
-                (std io out << 'Morph is layouted') newline commit.
-
                 app openInWorld: morph.
-
-                (std io out << 'Morph is opened') newline commit.
 
                 | running <- true |
                 [
                     (running not) -> [ ^ self ].
+                    
                     tick.
+
                     [ :break |
                         (eve PollEvent == 0) -> [ break value ].
 
                         begin
                           ~ if: [ eve IsEventKeyDown ] then: [ | k <- eve GetEventKey | k ifEscape: [ ^ self ]. handleKey: k ]
-                          "~ if: [ event IsEventMouseWheel ] then: [ mouseWheel: event       ]"
                         ~ default: [ handleEvent ].
                     ] repeatWithBreak.
-                    
-                    "Sleep for a while to avoid eating up CPU resources"
-                    "sdl Delay(10)."
+
+                    eve Delay(2).
                 ] repeat.
             );
         };
@@ -117,11 +106,8 @@
     Text: text => eve Text: text;
 
     RunWithWidth: w Height: h App: app => (
-        (std io out << 'Starting') newline commit.
         eve Init.
-        (std io out << 'Eve is initialized') newline commit.
         eve InitEve.
-        (std io out << 'Eve is initialized') newline commit.
         (MorphicHandler clone initWithApp: app Eve: eve) launch.
     );
 }
