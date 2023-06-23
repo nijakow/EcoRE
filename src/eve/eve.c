@@ -240,7 +240,7 @@ void Eve_RenderState_DrawText(struct Eve_RenderState* self, const char* text, Ev
 
     color = Eve_Color_ToSDL(self->frame.color);
 
-    surface = TTF_RenderText_Solid(self->font, text, color);
+    surface = TTF_RenderUTF8_Solid(self->font, text, color);
     texture = SDL_CreateTextureFromSurface(self->renderer, surface);
     SDL_FreeSurface(surface);
 
@@ -441,7 +441,7 @@ Eve_UInt Eve_GetTextWidth(const char* text) {
     int w;
     int h;
 
-    TTF_SizeText(EVE_DEFAULT_RENDER_STATE.font, text, &w, &h);
+    TTF_SizeUTF8(EVE_DEFAULT_RENDER_STATE.font, text, &w, &h);
 
     return w;
 }
@@ -450,7 +450,7 @@ Eve_UInt Eve_GetTextHeight(const char* text) {
     int w;
     int h;
 
-    TTF_SizeText(EVE_DEFAULT_RENDER_STATE.font, text, &w, &h);
+    TTF_SizeUTF8(EVE_DEFAULT_RENDER_STATE.font, text, &w, &h);
 
     return h;
 }
