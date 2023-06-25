@@ -18,11 +18,9 @@
             static with inherited _ = std Module;
         
             own nodes = (here / 'nodes.eco') importIn: self;
-            
-            own DocumentStream = (here / 'DocumentStream.eco') importIn: self;
         };
 
-        documentStream => (mod DocumentStream) new: (self nodes iterator);
+        "documentStream => (mod DocumentStream) new: (self nodes iterator);"
 
         addNode: n => ( nodes add: n. ^ self );
 

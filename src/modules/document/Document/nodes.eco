@@ -4,41 +4,132 @@
     "
     static with inherited _ = std Module;
 
-    own NodeTrait = {
+    own SnipTrait = {
+        static with inherited _ = std Trait;
+
+        protected module = $;
+
+        protected indexOutOfBoundsError => 'Index out of bounds.' throw;
+
+        "
+            at: index => ...;
+            size => ...;
+            splitAt: index => ...;
+        "
+    };
+
+    own StringSnip = {
+        static with inherited _ = std Clonable;
+        with inherited SnipTrait = $ SnipTrait;
+
+        content;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithContent: _content => (
+                content <- _content;
+              ^ self
+            );
+
+            at: index => module CharacterItem: (content at: index);
+            size => content size;
+
+            splitAt: index => (
+                (module StringSnip: (content substringTo: index))
+              & (module StringSnip: (content substringFrom: index))
+            );
+        };
+    };
+
+    StringSnip: string => StringSnip clone initWithContent: string;
+
+
+    own CompoundSnip = {
+        static with inherited _ = std Clonable;
+        with inherited SnipTrait = $ SnipTrait;
+
+        snips;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithSnips: _snips => (
+                snips <- _snips;
+                ^ self
+            );
+
+            at: index => (
+                | i <- 0 |
+                snips do: [ :snip |
+                    | size <- snip size |
+                    (index < (i + size)) if: [ ^ snip at: (index - i) ];
+                    i <- (i + size)
+                ].
+                indexOutOfBoundsError
+            );
+
+            size => (
+                | size <- 0 |
+                snips do: [ :snip | size <- (size + snip size) ];
+              ^ size
+            );
+        };
+    };
+
+    CompoundSnip: snips => CompoundSnip clone initWithSnips: snips;
+    CompoundSnip(...) => CompoundSnip: (std util newArray(...));
+
+
+    own ItemTrait = {
         static with inherited _ = std Trait;
 
         ifText: block => self;
         ifReference: block => self;
     };
 
-    own TextNode = {
+    own CharacterItem = {
         static with inherited _ = std Clonable;
-        with inherited NodeTrait = $ NodeTrait;
+        with inherited ItemTrait = $ ItemTrait;
 
         content;
 
-        initWithContent: _content => (
-            content <- _content;
-            ^ self
-        );
+        with inherited trait = {
+            static with inherited _ = std Trait;
 
-        ifText: block => block value(self);
+            initWithContent: _content => (
+                content <- _content;
+                ^ self
+            );
+
+            ifCharacter: block => block value(self);
+        };
     };
 
-    own ReferenceNode = {
+    CharacterItem: character => CharacterItem clone initWithContent: character;
+
+
+    own ReferenceItem = {
         static with inherited _ = std Clonable;
-        with inherited NodeTrait = $ NodeTrait;
+        with inherited ItemTrait = $ ItemTrait;
 
         content;
 
-        initWithContent: _content => (
-            content <- _content;
-            ^ self
-        );
+        with inherited trait = {
+            static with inherited _ = std Trait;
 
-        ifReference: block => block value(self);
+            initWithContent: _content => (
+                content <- _content;
+                ^ self
+            );
+
+            ifReference: block => block value(self);
+        };
     };
 
-    Text: text => TextNode clone initWithContent: text;
-    Reference: reference => ReferenceNode clone initWithContent: reference;
+    ReferenceItem: reference => ReferenceItem clone initWithContent: reference;
+
+
+    Text: text => StringItem clone initWithContent: text;
+    Reference: reference => ReferenceItem clone initWithContent: reference;
 }
