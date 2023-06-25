@@ -43,8 +43,34 @@
                 indexOutOfBoundsError
             );
             size => 1;
+
+            tryJoinWith: other => (
+                other ifItemSnip: [ :otherItemSnip |
+                    | otherItem <- otherItemSnip item |
+                    otherItem ifCharacter: [ :otherCharacter |
+                        item ifCharacter: [ :character |
+                            | sw <- (std util StringWriter) new |
+                            sw << character.
+                            sw << otherCharacter.
+                          ^ Yes: (module StringSnip: (sw build))
+                        ].
+                    ].
+                ].
+                other ifStringSnip: [ :otherStringSnip |
+                    item ifCharacter: [ :character |
+                        | sw <- (std util StringWriter) new |
+                        sw << character.
+                        sw << otherStringSnip content.
+                      ^ Yes: (module StringSnip: (sw build))
+                    ].
+                ].
+              ^ No
+            );
         };
     };
+
+    ItemSnip: item => ItemSnip clone initWithItem: item;
+
 
     own StringSnip = {
         static with inherited _ = std Clonable;
@@ -68,6 +94,22 @@
             splitAt: index => (
                 (module StringSnip: (content substringTo: index))
               & (module StringSnip: (content substringFrom: index))
+            );
+
+            tryJoinWith: other => (
+                other ifItemSnip: [ :otherItemSnip |
+                    | item <- otherItemSnip item |
+                    item ifCharacter: [ :character |
+                        | sw <- (std util StringWriter) new |
+                        sw << content.
+                        sw << character.
+                      ^ Yes: (module StringSnip: (sw build))
+                    ].
+                ].
+                other ifStringSnip: [ :otherStringSnip |
+                  ^ Yes: (module StringSnip: (content + otherStringSnip content))
+                ].
+                No
             );
         };
     };
