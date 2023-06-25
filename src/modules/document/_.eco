@@ -6,6 +6,8 @@
 
     own Document = (here / 'Document' / '_.eco') importIn: self;
 
+    own editing = (here / 'editing' / '_.eco') importIn: self;
+
     Test => (
         | d <- Document new |
 

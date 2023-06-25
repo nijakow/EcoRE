@@ -1,0 +1,18 @@
+{
+    static with inherited _ = std Module;
+
+    own DocumentEditor = {
+        static with inherited _ = std Clonable;
+
+        protected document;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithDocument: _document => (
+                document <- _document.
+              ^ self
+            );
+        }
+    };
+}
