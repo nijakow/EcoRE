@@ -19,6 +19,12 @@
         size => 0;
         splitAt: index => indexOutOfBoundsError;
 
+        insertSnip: snip at: index => (
+            (index == 0) if: [ ^ module CompoundSnip(snip, self) ].
+            (index == self size) if: [ ^ module CompoundSnip(self, snip) ].
+            indexOutOfBoundsError
+        );
+
         tryJoinWith: other => No;
     };
 
@@ -39,7 +45,7 @@
             ifItemSnip: block => block value(self);
 
             at: index => (
-                (index == 0) if: [ ^ item ].
+                (index == 0) if: [ ^ self ].
                 indexOutOfBoundsError
             );
             size => 1;
@@ -96,6 +102,17 @@
               & (module StringSnip: (content substringFrom: index))
             );
 
+            insertSnip: snip at: index => (
+                ([index > 0] and: [index < self size]) if: [
+                    ^ module CompoundSnip(
+                        (module StringSnip: (content substringTo: index)),
+                        snip,
+                        (module StringSnip: (content substringFrom: index))
+                    )
+                ].
+              ^ $(SnipTrait) insertSnip: snip at: index
+            );
+
             tryJoinWith: other => (
                 other ifItemSnip: [ :otherItemSnip |
                     | item <- otherItemSnip item |
@@ -147,6 +164,25 @@
                 | size <- 0 |
                 snips do: [ :snip | size <- (size + snip size) ];
               ^ size
+            );
+
+            insertSnip: snip at: index => (
+                |
+                    i <- 0,
+                    newSnips <- std util newVector,
+                    done <- false
+                |
+                snips do: [ :oldSnip |
+                    | size <- oldSnip size |
+                    ([done not] and: [index < (i + size)]) if: [
+                        newSnips add: (oldSnip insertSnip: snip at: (index - i)).
+                        done <- true
+                    ] else: [
+                        newSnips add: oldSnip
+                    ].
+                    i <- (i + size)
+                ].
+              ^ module CompoundSnip: newSnips
             );
         };
     };
