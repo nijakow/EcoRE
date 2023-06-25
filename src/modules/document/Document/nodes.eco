@@ -11,11 +11,39 @@
 
         protected indexOutOfBoundsError => 'Index out of bounds.' throw;
 
-        "
-            at: index => ...;
-            size => ...;
-            splitAt: index => ...;
-        "
+        ifItemSnip: block => self;
+        ifStringSnip: block => self;
+        ifCompoundSnip: block => self;
+
+        at: index => indexOutOfBoundsError;
+        size => 0;
+        splitAt: index => indexOutOfBoundsError;
+
+        tryJoinWith: other => No;
+    };
+
+    own ItemSnip = {
+        static with inherited _ = std Clonable;
+        with inherited SnipTrait = $ SnipTrait;
+
+        item;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithItem: _item => (
+                item <- _item;
+              ^ self
+            );
+
+            ifItemSnip: block => block value(self);
+
+            at: index => (
+                (index == 0) if: [ ^ item ].
+                indexOutOfBoundsError
+            );
+            size => 1;
+        };
     };
 
     own StringSnip = {
@@ -31,6 +59,8 @@
                 content <- _content;
               ^ self
             );
+
+            ifStringSnip: block => block value(self);
 
             at: index => module CharacterItem: (content at: index);
             size => content size;
@@ -56,8 +86,10 @@
 
             initWithSnips: _snips => (
                 snips <- _snips;
-                ^ self
+              ^ self
             );
+
+            ifCompoundSnip: block => block value(self);
 
             at: index => (
                 | i <- 0 |
@@ -84,7 +116,7 @@
     own ItemTrait = {
         static with inherited _ = std Trait;
 
-        ifText: block => self;
+        ifCharacter: block => self;
         ifReference: block => self;
     };
 
@@ -99,7 +131,7 @@
 
             initWithContent: _content => (
                 content <- _content;
-                ^ self
+              ^ self
             );
 
             ifCharacter: block => block value(self);
@@ -120,7 +152,7 @@
 
             initWithContent: _content => (
                 content <- _content;
-                ^ self
+              ^ self
             );
 
             ifReference: block => block value(self);
