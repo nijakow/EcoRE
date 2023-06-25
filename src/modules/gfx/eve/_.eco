@@ -164,7 +164,7 @@
                 |
                 text do: [ :c |
                     str << c.
-                    (sdl GetTextWidth(str build) >= offset) if: [ ^ index ].
+                    (eve GetTextWidth(str build) >= offset) if: [ ^ index ].
                     index <- index + 1.
                 ].
               ^ index

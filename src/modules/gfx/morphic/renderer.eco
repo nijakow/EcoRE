@@ -6,7 +6,6 @@
         width, height,
         protected offsets,
         protected clips,
-        protected sdlRenderer,
         protected eve,
         protected texture;
 
