@@ -240,7 +240,7 @@ void Eve_RenderState_DrawText(struct Eve_RenderState* self, const char* text, Ev
 
     color = Eve_Color_ToSDL(self->frame.color);
 
-    surface = TTF_RenderUTF8_Solid(self->font, text, color);
+    surface = TTF_RenderUTF8_Blended(self->font, text, color);
     texture = SDL_CreateTextureFromSurface(self->renderer, surface);
     SDL_FreeSurface(surface);
 
