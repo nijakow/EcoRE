@@ -26,6 +26,10 @@
             indexOutOfBoundsError
         );
 
+        appendSnip: snip => insertSnip: snip at: size;
+
+        removeSnipAt: index => indexOutOfBoundsError;
+
         tryJoinWith: other => No;
 
         compress => self;
@@ -186,6 +190,12 @@
                     i <- (i + size)
                 ].
               ^ module CompoundSnip: newSnips
+            );
+
+            removeSnipAt: index => (
+                "TODO: Range check"
+                erase: index.
+              ^ self
             );
 
             tryJoinWith: other => (

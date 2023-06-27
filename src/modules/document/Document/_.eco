@@ -1,13 +1,13 @@
 {
     static with inherited _ = std Clonable;
 
-    protected nodes;
+    protected root;
 
     with inherited trait = {
         static with inherited _ = std Trait;
 
         init => (
-            nodes <- std util newVector.
+            root <- nodes CompoundSnip().
           ^ self
         );
 
@@ -20,12 +20,9 @@
             own nodes = (here / 'nodes.eco') importIn: self;
         };
 
-        "documentStream => (mod DocumentStream) new: (self nodes iterator);"
-
-        addNode: n => ( nodes add: n. ^ self );
-
-        addText: t => addNode: (mod nodes Text: t);
-        addReference: r => addNode: (mod nodes Reference: r);
+        addSnip: snip => root appendSnip: snip;
+        addText: t => addSnip: (mod nodes StringSnip: t);
+        addReference: r => addSnip: (mod nodes ItemSnip: (mod nodes ReferenceItem: r));
     };
 
     writeOn: w => w << 'a document';
