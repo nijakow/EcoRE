@@ -90,7 +90,11 @@
                 builder HBox(
                     builder Button(builder Label: (name),
                                    $[ :(builder, parent, path) :sender |
-                                        parent replaceWith: (builder OutlinerPaneForPath: path)
+                                        ((path extension) equals: 'eco') if: [
+                                            (sender world yes) open: (builder OutlinerWindowForPath: path)
+                                        ] else: [
+                                            parent replaceWith: (builder OutlinerPaneForPath: path)
+                                        ]
                                    ] bind(self, parent, childpath)
                     )
                 ) ~ xLayout: builder layouts Flexible

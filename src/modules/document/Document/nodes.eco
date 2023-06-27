@@ -21,8 +21,8 @@
         splitAt: index => indexOutOfBoundsError;
 
         insertSnip: snip at: index => (
-            (index == 0) if: [ ^ module CompoundSnip(snip, self) ].
-            (index == self size) if: [ ^ module CompoundSnip(self, snip) ].
+            (index == 0) if: [ ^ module MakeCompoundSnip(snip, self) ].
+            (index == self size) if: [ ^ module MakeCompoundSnip(self, snip) ].
             indexOutOfBoundsError
         );
 
@@ -52,7 +52,7 @@
             ifItemSnip: block => block value(self);
 
             at: index => (
-                (index == 0) if: [ ^ self ].
+                (index == 0) if: [ ^ item ].
                 indexOutOfBoundsError
             );
             size => 1;
@@ -111,7 +111,7 @@
 
             insertSnip: snip at: index => (
                 ([index > 0] and: [index < self size]) if: [
-                    ^ module CompoundSnip(
+                    ^ module MakeCompoundSnip(
                         (module StringSnip: (content substringTo: index)),
                         snip,
                         (module StringSnip: (content substringFrom: index))
@@ -189,6 +189,7 @@
                     ].
                     i <- (i + size)
                 ].
+                (done not) if: [ newSnips add: snip ].
               ^ module CompoundSnip: newSnips
             );
 
@@ -250,7 +251,7 @@
     };
 
     CompoundSnip: snips => CompoundSnip clone initWithSnips: snips;
-    CompoundSnip(...) => CompoundSnip: (std util newArray(...));
+    MakeCompoundSnip(...) => CompoundSnip: (std util newArray(...));
 
 
     own ItemTrait = {
