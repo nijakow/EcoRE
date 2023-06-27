@@ -71,6 +71,8 @@
     with inherited conversions = #<:std/util/StandardListConversions>;
     with inherited access = #<:std/util/StandardListAccess>;
     with inherited search = #<:std/util/StandardListSearch>;
+
+    iterator => (std util iterators IndexIterator) new: self;
 };
 
 #=std/util/traits: {

@@ -20,6 +20,8 @@
             own nodes = (here / 'nodes.eco') importIn: self;
         };
 
+        documentStream => root iterator;
+
         addSnip: snip => root <- (root appendSnip: snip);
         addText: t => addSnip: (mod nodes StringSnip: t);
         addReference: r => addSnip: (mod nodes ItemSnip: (mod nodes ReferenceItem: r));
