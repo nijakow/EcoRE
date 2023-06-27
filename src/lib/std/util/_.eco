@@ -64,11 +64,28 @@
     );
 },
 
+#=std/util/SizedIndexable: {
+    static with inherited _ = #<:std/Trait>;
+
+    with inherited iterations = #<:std/util/StandardListIterations>;
+    with inherited conversions = #<:std/util/StandardListConversions>;
+    with inherited access = #<:std/util/StandardListAccess>;
+    with inherited search = #<:std/util/StandardListSearch>;
+};
+
+#=std/util/traits: {
+    static with inherited _ = #<:std/Module>;
+
+    SizedIndexable = #<:std/util/SizedIndexable>;
+};
+
 #=std/util: {
     static with inherited _ = #<:std/Module>;
     
     iterators = #<:std/util/iterators>;
     comparators = #<:std/util/comparators>;
+
+    traits = #<:std/util/traits>;
 
     newArray(...) => #'ecosphere.ecore.object.array.array'(...);
     newArray: size => #'ecosphere.ecore.object.array.new'(size);

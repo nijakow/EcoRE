@@ -6,6 +6,7 @@
 
     own SnipTrait = {
         static with inherited _ = std Trait;
+        with inherited SizedIndexable = std util traits SizedIndexable;
 
         protected module = $;
 
