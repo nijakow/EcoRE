@@ -193,9 +193,24 @@
             );
 
             removeSnipAt: index => (
-                "TODO: Range check"
-                erase: index.
-              ^ self
+                |
+                    i <- 0,
+                    newSnips <- std util newVector,
+                    done <- false
+                |
+                snips do: [ :oldSnip |
+                    | size <- oldSnip size |
+                    ([done not] and: [index < (i + size)]) if: [
+                        (oldSnip size > 1) if: [
+                            newSnips add: (oldSnip removeSnipAt: (index - i)).
+                        ].
+                        done <- true
+                    ] else: [
+                        newSnips add: oldSnip
+                    ].
+                    i <- (i + size)
+                ].
+              ^ module CompoundSnip: newSnips
             );
 
             tryJoinWith: other => (
