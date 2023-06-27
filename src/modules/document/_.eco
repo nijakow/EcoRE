@@ -13,7 +13,9 @@
 
         d addText: '(2 + '.
         d addReference: 2.
-        d addText: ') * 3.'.
+        d addText: ') * '.
+        d addCharacter: $'3'.
+        d addCharacter: $'.'.
       ^ d
     );
 }

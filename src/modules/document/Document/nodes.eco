@@ -62,17 +62,17 @@
                     | otherItem <- otherItemSnip item |
                     otherItem ifCharacter: [ :otherCharacter |
                         item ifCharacter: [ :character |
-                            | sw <- (std util StringWriter) new |
-                            sw << character.
-                            sw << otherCharacter.
+                            | sw <- (std io StringWriter) new |
+                            sw << character content.
+                            sw << otherCharacter content.
                           ^ Yes: (module StringSnip: (sw build))
                         ].
                     ].
                 ].
                 other ifStringSnip: [ :otherStringSnip |
                     item ifCharacter: [ :character |
-                        | sw <- (std util StringWriter) new |
-                        sw << character.
+                        | sw <- (std io StringWriter) new |
+                        sw << character content.
                         sw << otherStringSnip content.
                       ^ Yes: (module StringSnip: (sw build))
                     ].
@@ -124,9 +124,9 @@
                 other ifItemSnip: [ :otherItemSnip |
                     | item <- otherItemSnip item |
                     item ifCharacter: [ :character |
-                        | sw <- (std util StringWriter) new |
+                        | sw <- (std io StringWriter) new |
                         sw << content.
-                        sw << character.
+                        sw << character content.
                       ^ Yes: (module StringSnip: (sw build))
                     ].
                 ].
