@@ -26,6 +26,8 @@
         );
 
         tryJoinWith: other => No;
+
+        compress => self;
     };
 
     own ItemSnip = {
@@ -126,7 +128,7 @@
                 other ifStringSnip: [ :otherStringSnip |
                   ^ Yes: (module StringSnip: (content + otherStringSnip content))
                 ].
-                No
+              ^ No
             );
         };
     };
@@ -182,6 +184,40 @@
                     ].
                     i <- (i + size)
                 ].
+              ^ module CompoundSnip: newSnips
+            );
+
+            tryJoinWith: other => (
+                other ifCompoundSnip: [ :otherCompoundSnip |
+                    | newSnips <- std util newVector |
+                    snips into: newSnips.
+                    otherCompoundSnip snips into: newSnips.
+                  ^ Yes: (module CompoundSnip: newSnips)
+                ].
+              ^ No
+            );
+
+            compress => (
+                (snips size == 0) if: [ ^ self ].
+                (snips size == 1) if: [ ^ (snips at: 0) compress ].
+
+                |
+                    newSnips <- std util newVector,
+                    current  <- No
+                |
+
+                snips do: [ :snip |
+                    current yes: [ :c |
+                        | r <- c tryJoinWith: snip |
+                        r yes: [ :joined | current <- r ]
+                           no: [ newSnips add: c. current <- Yes: snip ]
+                    ] no: [
+                        current <- Yes: snip.
+                    ]
+                ].
+
+                current yes: [ :c | newSnips add: c ].
+
               ^ module CompoundSnip: newSnips
             );
         };
