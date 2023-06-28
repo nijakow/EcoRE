@@ -1,0 +1,40 @@
+{
+    static with inherited _ = std Clonable;
+
+    protected mod = $;
+
+    protected document,
+    protected offset;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+
+        initWithDocument: _document => (
+            document <- _document.
+            offset   <- 0.
+          ^ self
+        );
+
+        protected root => document root;
+        protected root: value => document root: value;
+
+        currentItem => document root at: offset;
+
+        moveTo: pos => (
+            offset <- (pos min: root size) max: 0.
+          ^ self
+        );
+
+        moveBy: delta => moveTo: offset + delta;
+
+
+        insertSnip: snip => (
+            root: (root insertSnip: snip at: offset).
+            moveBy: snip size.
+        );
+
+        insertText: t => insertSnip: (mod nodes StringSnip: t);
+        insertCharacter: c => insertSnip: (mod nodes ItemSnip: (mod nodes CharacterItem: c));
+        insertReference: r => insertSnip: (mod nodes ItemSnip: (mod nodes ReferenceItem: r));
+    };
+}

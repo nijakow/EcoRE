@@ -9,13 +9,17 @@
     own editing = (here / 'editing' / '_.eco') importIn: self;
 
     Test => (
-        | d <- Document new |
+        |
+            d <- Document new,
+            c <- d newCaret
+        |
 
-        d addText: '(2 + '.
-        d addReference: 2.
-        d addText: ') * '.
-        d addCharacter: $'3'.
-        d addCharacter: $'.'.
+        c insertText: '(2 + '.
+        c insertReference: 2.
+        c insertText: ') * '.
+        c insertCharacter: $'3'.
+        c insertCharacter: $'.'.
+        
       ^ d
     );
 }
