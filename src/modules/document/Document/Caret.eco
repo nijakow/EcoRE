@@ -31,10 +31,17 @@
         insertSnip: snip => (
             root: (root insertSnip: snip at: offset).
             moveBy: snip size.
+          ^ self
         );
 
         insertText: t => insertSnip: (mod nodes StringSnip: t);
         insertCharacter: c => insertSnip: (mod nodes ItemSnip: (mod nodes CharacterItem: c));
         insertReference: r => insertSnip: (mod nodes ItemSnip: (mod nodes ReferenceItem: r));
+
+        backspace => (
+            moveBy: -1.
+            root: (root removeSnipAt: offset).
+          ^ self
+        );
     };
 }
