@@ -25,12 +25,13 @@
           ^ self
         );
 
-        moveBy: delta => moveTo: offset + delta;
+        forward: delta => moveTo: offset + delta;
+        backward: delta => moveTo: offset - delta;
 
 
         insertSnip: snip => (
             root: (root insertSnip: snip at: offset).
-            moveBy: snip size.
+            forward: snip size.
           ^ self
         );
 
@@ -39,9 +40,42 @@
         insertReference: r => insertSnip: (mod nodes ItemSnip: (mod nodes ReferenceItem: r));
 
         backspace => (
-            moveBy: -1.
+            backward: 1.
             root: (root removeSnipAt: offset).
           ^ self
+        );
+
+        line => (
+            | ln <- 0, c <- 0 |
+
+            (document documentStream)
+                do: [ :item |
+                    (c >= offset) if: [ ^ ln ].
+                    item ifCharacter: [ :c |
+                        (c content == $'newline') if: [
+                            ln <- ln + 1.
+                        ]
+                    ].
+                ].
+
+            ^ ln
+        );
+
+        column => (
+            | col <- 0, c <- 0 |
+
+            (document documentStream)
+                do: [ :item |
+                    (c >= offset) if: [ ^ col ].
+                    col <- col + 1.
+                    item ifCharacter: [ :c |
+                        (c content == $'newline') if: [
+                            col <- 0.
+                        ]
+                    ].
+                ].
+            
+            ^ col
         );
     };
 }

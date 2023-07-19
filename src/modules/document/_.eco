@@ -14,12 +14,12 @@
             c <- d newCaret
         |
 
-        c insertText: '(2 + '.
+        c insertText: '(2 +\n'.
         c insertReference: 2.
         c insertText: ') * '.
         c insertCharacter: $'3'.
         c insertCharacter: $'.'.
-        
+
       ^ d
     );
 }

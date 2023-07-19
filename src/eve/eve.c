@@ -200,10 +200,16 @@ struct SDL_Rect Eve_RenderState_GetCurrentRect(struct Eve_RenderState* self) {
     return rect;
 }
 
-void Eve_RenderState_Clip(struct Eve_RenderState* self) {
+void Eve_RenderState_Clip(struct Eve_RenderState* self, Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
     struct SDL_Rect rect;
 
     rect = Eve_RenderState_GetCurrentRect(self);
+
+    rect.x += x;
+    rect.y += y;
+    rect.w  = w;
+    rect.h  = h;
+
     SDL_RenderSetClipRect(self->renderer, &rect);
 }
 
@@ -358,7 +364,7 @@ void Eve_SetColorRGB(u8 r, u8 g, u8 b) {
 }
 
 void Eve_Clip(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
-    Eve_RenderState_Clip(&EVE_DEFAULT_RENDER_STATE);
+    Eve_RenderState_Clip(&EVE_DEFAULT_RENDER_STATE, x, y, w, h);
 }
 
 void Eve_DrawLine(Eve_Int x1, Eve_Int y1, Eve_Int x2, Eve_Int y2) {
