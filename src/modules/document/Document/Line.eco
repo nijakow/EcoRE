@@ -1,0 +1,22 @@
+{
+    static with inherited _ = std Clonable;
+
+    protected document,
+    protected start,
+    protected end;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+
+        initWithDocument: _document
+                   Start: _start
+                     End: _end => (
+            document <- _document.
+            start    <- _start.
+            end      <- _end.
+          ^ self
+        );
+
+        writeOn: w => w << 'a document line from ' << start << ' to ' << end;
+    }
+}

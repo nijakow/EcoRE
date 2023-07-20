@@ -21,12 +21,34 @@
         
             own nodes = (here / 'nodes.eco') importIn: self;
             own Caret = (here / 'Caret.eco') importIn: self;
+            own Line  = (here / 'Line.eco') importIn: self;
         };
 
         iterator => root iterator;
         documentStream => self iterator;
 
         newCaret => (mod Caret) new initWithDocument: self;
+
+        lines => (
+            |
+                offset    <- 0,
+                lastStart <- 0,
+                lines     <- std util newVector
+            |
+
+            iterator do: [ :item |
+                [ :break |
+                    item ifNewline: [
+                        lines add: ((mod Line) new initWithDocument: self Start: lastStart End: offset).
+                        lastStart <- offset + 1.
+                        break value.
+                    ].
+                ] withBreak.
+                offset <- offset + 1.
+            ].
+
+            lines add: ((mod Line) new initWithDocument: self Start: lastStart End: offset).
+        );
     };
 
     writeOn: w => w << 'a document';
