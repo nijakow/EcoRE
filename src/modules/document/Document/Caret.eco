@@ -34,7 +34,7 @@
           ^ self
         );
 
-        insertText: t => insertSnip: (mod nodes StringSnip: t);
+        insertText: t => t do: [ :c | insertCharacter: c ];
         insertCharacter: c => insertSnip: (mod nodes ItemSnip: (mod nodes CharacterItem: c));
         insertReference: r => insertSnip: (mod nodes ItemSnip: (mod nodes ReferenceItem: r));
 

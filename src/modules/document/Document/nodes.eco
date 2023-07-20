@@ -58,8 +58,10 @@
             size => 1;
 
             tryJoinWith: other => (
+                ifNewline: [ ^ No ].
                 other ifItemSnip: [ :otherItemSnip |
                     | otherItem <- otherItemSnip item |
+                    item ifNewline: [ ^ No ].
                     otherItem ifCharacter: [ :otherCharacter |
                         item ifCharacter: [ :character |
                             | sw <- (std io StringWriter) new |
@@ -123,6 +125,7 @@
             tryJoinWith: other => (
                 other ifItemSnip: [ :otherItemSnip |
                     | item <- otherItemSnip item |
+                    item ifNewline: [ ^ No ].
                     item ifCharacter: [ :character |
                         | sw <- (std io StringWriter) new |
                         sw << content.
@@ -259,6 +262,7 @@
 
         ifCharacter: block => self;
         ifReference: block => self;
+        ifNewline: block => self;
     };
 
     own CharacterItem = {
@@ -276,6 +280,7 @@
             );
 
             ifCharacter: block => block value(self);
+            ifNewline: block => (content == $'newline') if: [ block value(self) ] else: [ self ];
         };
     };
 

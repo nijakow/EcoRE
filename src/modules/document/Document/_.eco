@@ -23,7 +23,8 @@
             own Caret = (here / 'Caret.eco') importIn: self;
         };
 
-        documentStream => root iterator;
+        iterator => root iterator;
+        documentStream => self iterator;
 
         newCaret => (mod Caret) new initWithDocument: self;
     };
