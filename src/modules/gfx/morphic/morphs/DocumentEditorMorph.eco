@@ -1,0 +1,22 @@
+{
+    static with inherited _ = std Clonable;
+    with inherited own Morph = $ Morph;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+
+        init => (
+            $(Morph) init.
+          ^ self
+        );
+
+        renderImplOn: renderer => (
+            renderer setR: 26 G: 138 B: 86.
+            renderer fillRectX: 0 Y: 0 W: width H: height.
+
+            $(Morph) renderImplOn: renderer.
+        );
+
+        writeOn: w => w << 'a document editor';
+    };
+}

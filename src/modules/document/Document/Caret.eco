@@ -3,8 +3,7 @@
 
     protected mod = $;
 
-    protected document,
-    protected offset;
+    document, offset;
 
     with inherited trait = {
         static with inherited _ = std Trait;

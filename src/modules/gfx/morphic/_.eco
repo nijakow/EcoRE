@@ -36,6 +36,7 @@
         own ScrollBarMorph = (here / 'morphs' / 'ScrollBarMorph.eco') importIn: self;
         own ScrollContentMorph = (here / 'morphs' / 'ScrollContentMorph.eco') importIn: self;
         own EditorMorph = (here / 'morphs' / 'EditorMorph.eco') importIn: self;
+        own DocumentEditorMorph = (here / 'morphs' / 'DocumentEditorMorph.eco') importIn: self;
     };
 
     driver = (here / 'driver.eco') importIn: self;

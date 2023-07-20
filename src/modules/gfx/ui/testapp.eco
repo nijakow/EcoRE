@@ -197,6 +197,11 @@
                           $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder ShellWindow) ]
                                 bind(MirrorBuilder))
                     ~ xLayout: ui layouts Flexible
+                    ~ yLayout: ui layouts Flexible,
+                ui Button(ui Center(ui Label: 'Document Editor'),
+                            $[ :(ui) :sender | (sender world yes) open: (ui Window(400, 400, ui DocumentEditor)) ]
+                                bind(ui))
+                    ~ xLayout: ui layouts Flexible
                     ~ yLayout: ui layouts Flexible
             )
         )
