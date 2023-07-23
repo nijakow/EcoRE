@@ -56,7 +56,9 @@
                         dy <- renderer charHeight: (c content). 
                     ].
                     item ifReference: [ :r |
-                        renderer drawRectX: (xOff + 4) Y: (yOff + 4) W: 8 H: 8.
+                        renderer setR: 255 G: 128 B: 128.
+                        renderer fillRectX: (xOff + 4) Y: (yOff + 4) W: 8 H: 8.
+                        renderer setR: 128 G: 128 B: 192.
                         dx <- 16.
                         dy <- 16.
                     ].
