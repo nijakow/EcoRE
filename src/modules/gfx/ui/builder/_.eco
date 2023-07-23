@@ -117,8 +117,8 @@
       )
     );
 
-    DocumentEditor => (
-      ^ (morphic morphs DocumentEditorMorph) new
+    DocumentEditor: document => (
+      ^ (morphic morphs DocumentEditorMorph) clone initWithDocument: document
     );
 
     Button(caption, action) => (

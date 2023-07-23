@@ -2,17 +2,40 @@
     static with inherited _ = std Clonable;
     with inherited own Morph = $ Morph;
 
+    protected caret,
+    protected lineCache;
+
     with inherited trait = {
         static with inherited _ = std Trait;
 
-        init => (
+        initWithDocument: _document => (
             $(Morph) init.
+            caret     <- _document newCaret.
+            lineCache <- std util newVector.
+            refreshLineCache.
+            lineCache do: [ :line |
+                (std io out << line) newline commit.
+                line do: [ :item |
+                    (std io out << '  - ' << item) newline commit.
+                ].
+            ].
+          ^ self
+        );
+
+        document => caret document;
+
+        refreshLineCache => (
+            lineCache clear.
+            (document lines) into: lineCache.
           ^ self
         );
 
         renderImplOn: renderer => (
             renderer setR: 26 G: 138 B: 86.
             renderer fillRectX: 0 Y: 0 W: width H: height.
+
+            | yOff <- 0 |
+            "TODO..."
 
             $(Morph) renderImplOn: renderer.
         );

@@ -33,6 +33,8 @@
         tryJoinWith: other => No;
 
         compress => self;
+
+        writeOn: w => w << 'a snip';
     };
 
     own ItemSnip = {
@@ -81,6 +83,8 @@
                 ].
               ^ No
             );
+
+            writeOn: w => w << 'an item snip(' << item << ')';
         };
     };
 
@@ -138,6 +142,8 @@
                 ].
               ^ No
             );
+
+            writeOn: w => w << 'a string snip(' << content << ')';
         };
     };
 
@@ -250,6 +256,12 @@
 
               ^ module CompoundSnip: newSnips
             );
+
+            writeOn: w => (
+                w << 'a compound snip('.
+                snips do: [ :snip | w << snip << ', ' ].
+                w << ')'
+            );
         };
     };
 
@@ -263,6 +275,8 @@
         ifCharacter: block => self;
         ifReference: block => self;
         ifNewline: block => self;
+
+        writeOn: w => w << 'an item';
     };
 
     own CharacterItem = {
@@ -281,6 +295,8 @@
 
             ifCharacter: block => block value(self);
             ifNewline: block => (content == $'newline') if: [ block value(self) ] else: [ self ];
+        
+            writeOn: w => w << 'a character item(' << content << ')';
         };
     };
 
@@ -302,6 +318,8 @@
             );
 
             ifReference: block => block value(self);
+
+            writeOn: w => w << 'a reference item(' << content << ')';
         };
     };
 

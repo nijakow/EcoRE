@@ -2,6 +2,7 @@
     static with inherited _ = std Clonable;
     with inherited own MorphicApp = $ MorphicApp;
 
+    own document = (here / '..' / '..' / 'document' / '_.eco') import;
 
     MirrorBuilder = {
         static with inherited _ = std Module;
@@ -199,8 +200,8 @@
                     ~ xLayout: ui layouts Flexible
                     ~ yLayout: ui layouts Flexible,
                 ui Button(ui Center(ui Label: 'Document Editor'),
-                            $[ :(ui) :sender | (sender world yes) open: (ui Window(400, 400, ui DocumentEditor)) ]
-                                bind(ui))
+                            $[ :(ui, doc) :sender | (sender world yes) open: (ui Window(400, 400, ui DocumentEditor: doc Test)) ]
+                                bind(ui, document))
                     ~ xLayout: ui layouts Flexible
                     ~ yLayout: ui layouts Flexible
             )

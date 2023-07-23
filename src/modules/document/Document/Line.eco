@@ -17,6 +17,13 @@
           ^ self
         );
 
+        do: block => (
+            start to: end do: [ :i |
+                block value(document root at: i)
+            ].
+          ^ self
+        );
+
         writeOn: w => w << 'a document line from ' << start << ' to ' << end;
     }
 }
