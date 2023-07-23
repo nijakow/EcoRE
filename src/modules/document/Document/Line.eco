@@ -2,8 +2,7 @@
     static with inherited _ = std Clonable;
 
     protected document,
-    protected start,
-    protected end;
+    start, end;
 
     with inherited trait = {
         static with inherited _ = std Trait;

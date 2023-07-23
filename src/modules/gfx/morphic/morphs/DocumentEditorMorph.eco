@@ -24,32 +24,110 @@
           ^ self
         );
 
+        documentChanged => (
+            refreshLineCache.
+            layoutChanged.
+            renderDirty.
+          ^ self
+        );
+
         renderImplOn: renderer => (
             renderer setR: 128 G: 128 B: 192.
 
+            | cx <- caret x, cy <- caret y |
+
             |
+                x    <- 0,
+                y    <- 0,
                 xOff <- 0,
                 yOff <- 0
             |
             lineCache do: [ :line |
                 | m <- 0 |
+                x    <- 0.
                 xOff <- 0.
+
                 line do: [ :item |
+                    | dx <- 0, dy <- 0 |
+
                     item ifCharacter: [ :c |
                         renderer drawChar: (c content) X: xOff Y: yOff.
-                        xOff <- xOff + (renderer charWidth: (c content)).
-                        m <- m max: (renderer charHeight: (c content)). 
+                        dx <- renderer charWidth: (c content).
+                        dy <- renderer charHeight: (c content). 
                     ].
                     item ifReference: [ :r |
-                        renderer drawRectX: (xOff + 2) Y: (yOff + 2) W: 8 H: 8.
-                        xOff <- xOff + 10.
-                        m <- m max: 10.
+                        renderer drawRectX: (xOff + 4) Y: (yOff + 4) W: 8 H: 8.
+                        dx <- 16.
+                        dy <- 16.
                     ].
+
+                    "Draw the caret"
+                    ([x == cx] and: [y == cy]) if: [
+                        renderer setR: 255 G: 0 B: 0.
+                        renderer drawRectX: xOff Y: yOff W: dx H: dy.
+                        renderer setR: 128 G: 128 B: 192.
+                    ].
+
+                    xOff <- xOff + dx.
+                    m    <- m max: dy.
+
+                    x <- x + 1.
                 ].
+                y    <- y + 1.
                 yOff <- yOff + m.
             ].
 
             $(Morph) renderImplOn: renderer.
+        );
+
+        protected moveCaretToX: x Y: y => (
+            ([y < 0] or: [y >= lineCache size])
+                if: [ ^ self ].
+            
+            | line <- lineCache at: y |
+            caret moveTo: ((line start + (x max: 0)) min: (line end + 1)).
+
+            renderDirty.
+
+          ^ self
+        );
+
+        protected insertText: text => (
+            caret insertText: text.
+            documentChanged.
+          ^ self
+        );
+
+        protected insertNewline => (
+            insertText: '\n'.
+            documentChanged.
+          ^ self
+        );
+
+        protected backspace => (
+            caret backspace.
+            documentChanged.
+          ^ self
+        );
+
+        handleKey: key At: point HandMorph: hand => (
+            key ifLeft:  [ moveCaretToX: ((caret x) - 1) Y: (caret y). ^ true ].
+            key ifRight: [ moveCaretToX: ((caret x) + 1) Y: (caret y). ^ true ].
+            key ifUp:    [ moveCaretToX: (caret x) Y: ((caret y) - 1). ^ true ].
+            key ifDown:  [ moveCaretToX: (caret x) Y: ((caret y) + 1). ^ true ].
+
+            key ifBackspace: [ backspace.                    ^ true ].
+            key ifEnter:     [ insertNewline.                ^ true ].
+            key ifHome:      [ moveCaretToX: 0 Y: (caret y). ^ true ].
+            "key ifEnd:       [ moveCaretToX: ((lines at: (caret y)) text size) Y: (caret y). ^ true ]."
+            key ifTab:       [ insertText: ' ' * (4 - ((caret x) mod: 4)).                   ^ true ].
+
+            key keyText yes: [ :text |
+                insertText: text.
+              ^ true
+            ].
+
+          ^ false
         );
 
         writeOn: w => w << 'a document editor';
