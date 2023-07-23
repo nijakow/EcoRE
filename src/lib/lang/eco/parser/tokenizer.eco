@@ -195,7 +195,6 @@
             (peeks: '#<')  if: [ ^ newTokenWithType: TokenType PROXY  Payload: (parseString: #\>) ].
             (peeks: '#\\') if: [ ^ newTokenWithType: TokenType CHARACTER  Payload: parseChar      ].
             (peeks: '$\'') if: [ ^ newTokenWithType: TokenType CHARACTER  Payload: (StringToChar: (parseString: #\')) ].
-            (peeks: '$')   if: [ ^ newTokenWithType: TokenType DOLLAR        ].
             (peeks: '"')   if: [ parseString: #\". ^ nextToken ].
 
             (std text parsing number ParseNumberFromStream: (in termmap: [ :c | tryChar: c ]))
@@ -208,6 +207,7 @@
             sb <- sb build.
 
             (sb equals: '')            if: [ ^ newTokenWithType: TokenType EOF        ].
+            (sb equals: '$')           if: [ ^ newTokenWithType: TokenType DOLLAR     ].
             (sb equals: 'self')        if: [ ^ newTokenWithType: TokenType SELF       ].
             (sb equals: 'my')          if: [ ^ newTokenWithType: TokenType MY         ].
             (sb equals: 'as')          if: [ ^ newTokenWithType: TokenType AS         ].
