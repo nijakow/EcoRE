@@ -267,6 +267,12 @@
           ^ self
         );
 
+        protected insertReference: object => (
+            caret insertReference: object.
+            documentChanged.
+          ^ self
+        );
+
         protected backspace => (
             caret backspace.
             documentChanged.
@@ -281,7 +287,8 @@
 
             key ifBackspace: [ backspace.                    ^ true ].
             key ifEnter:     [ insertNewline.                ^ true ].
-            key ifHome:      [ moveCaretToX: 0 Y: (caret y). ^ true ].
+            "key ifHome:      [ moveCaretToX: 0 Y: (caret y). ^ true ]."
+            key ifHome:      [ insertReference: 42. ^ true ].
             "key ifEnd:       [ moveCaretToX: ((lines at: (caret y)) text size) Y: (caret y). ^ true ]."
             key ifTab:       [ insertText: ' ' * (4 - ((caret x) mod: 4)).                   ^ true ].
 
