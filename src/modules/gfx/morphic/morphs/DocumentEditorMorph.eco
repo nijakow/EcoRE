@@ -3,15 +3,161 @@
     with inherited own Morph = $ Morph;
 
     protected caret,
-    protected lineCache;
+    protected lineCache,
+    protected program;
 
     with inherited trait = {
         static with inherited _ = std Trait;
+
+        own mod = {
+            static with inherited _ = std Module;
+
+            own ElementTrait = {
+                static with inherited _ = std Trait;
+
+                render: renderer => self;
+            };
+
+            own ChangeColorElement = {
+                static with inherited _ = std Clonable;
+                with inherited ElementTrait = $ ElementTrait;
+
+                protected r,
+                protected g,
+                protected b;
+
+                with inherited trait = {
+                    static with inherited _ = std Trait;
+
+                    initR: _r G: _g B: _b => (
+                        r <- _r.
+                        g <- _g.
+                        b <- _b.
+                      ^ self
+                    );
+
+                    render: renderer => (
+                        renderer setR: r G: g B: b.
+                      ^ self
+                    );
+                };
+            };
+
+            own CharacterElement = {
+                static with inherited _ = std Clonable;
+                with inherited ElementTrait = $ ElementTrait;
+
+                protected xpos,
+                protected ypos,
+                protected content;
+
+                with inherited trait = {
+                    static with inherited _ = std Trait;
+
+                    initWithX: _xpos Y: _ypos Content: _content => (
+                        xpos    <- _xpos.
+                        ypos    <- _ypos.
+                        content <- _content.
+                      ^ self
+                    );
+
+                    render: renderer => (
+                        renderer drawChar: content X: xpos Y: ypos.
+                      ^ self
+                    );
+                };
+            };
+
+            own ReferenceElement = {
+                static with inherited _ = std Clonable;
+                with inherited ElementTrait = $ ElementTrait;
+
+                protected xpos,
+                protected ypos,
+                protected w,
+                protected h;
+
+                with inherited trait = {
+                    static with inherited _ = std Trait;
+
+                    initWithX: _xpos Y: _ypos W: _w H: _h => (
+                        xpos <- _xpos.
+                        ypos <- _ypos.
+                        w    <- _w.
+                        h    <- _h.
+                      ^ self
+                    );
+
+                    render: renderer => (
+                        renderer setR: 255 G: 128 B: 128.
+                        renderer fillRectX: xpos Y: ypos W: w H: h.
+                        renderer setR: 128 G: 128 B: 192.
+                      ^ self
+                    );
+                };
+            };
+
+            own CursorElement = {
+                static with inherited _ = std Clonable;
+                with inherited ElementTrait = $ ElementTrait;
+
+                protected xpos,
+                protected ypos,
+                protected w,
+                protected h;
+
+                with inherited trait = {
+                    static with inherited _ = std Trait;
+
+                    initWithX: _xpos Y: _ypos W: _w H: _h => (
+                        xpos <- _xpos.
+                        ypos <- _ypos.
+                        w    <- _w.
+                        h    <- _h.
+                      ^ self
+                    );
+
+                    render: renderer => (
+                        renderer setR: 255 G: 0 B: 0.
+                        renderer drawRectX: xpos Y: ypos W: w H: h.
+                        renderer setR: 128 G: 128 B: 192.
+                      ^ self
+                    );
+                };
+            };
+
+            own DocumentProgram = {
+                static with inherited _ = std Clonable;
+
+                protected elements;
+
+                with inherited trait = {
+                    static with inherited _ = std Trait;
+
+                    init => (
+                        elements <- std util newVector.
+                      ^ self
+                    );
+
+                    addElement: element => (
+                        elements add: element.
+                      ^ self
+                    );
+
+                    render: renderer => (
+                        elements do: [ :element |
+                            element render: renderer
+                        ]
+                    );
+                };
+            };
+        };
 
         initWithDocument: _document => (
             $(Morph) init.
             caret     <- _document newCaret.
             lineCache <- std util newVector.
+            program   <- No.
             refreshLineCache.
           ^ self
         );
@@ -25,14 +171,17 @@
         );
 
         documentChanged => (
+            program <- No.
             refreshLineCache.
             layoutChanged.
             renderDirty.
           ^ self
         );
 
-        renderImplOn: renderer => (
-            renderer setR: 128 G: 128 B: 192.
+        protected buildProgram(renderer) => (
+            | prog <- (mod DocumentProgram) new |
+
+            prog addElement: ((mod ChangeColorElement) clone initR: 128 G: 128 B: 192).
 
             | cx <- caret x, cy <- caret y |
 
@@ -51,23 +200,19 @@
                     | dx <- 0, dy <- 0 |
 
                     item ifCharacter: [ :c |
-                        renderer drawChar: (c content) X: xOff Y: yOff.
+                        prog addElement: ((mod CharacterElement) clone initWithX: xOff Y: yOff Content: (c content)).
                         dx <- renderer charWidth: (c content).
                         dy <- renderer charHeight: (c content). 
                     ].
                     item ifReference: [ :r |
-                        renderer setR: 255 G: 128 B: 128.
-                        renderer fillRectX: (xOff + 4) Y: (yOff + 4) W: 8 H: 8.
-                        renderer setR: 128 G: 128 B: 192.
+                        prog addElement: ((mod ReferenceElement) clone initWithX: (xOff + 4) Y: (yOff + 4) W: 8 H: 8).
                         dx <- 16.
                         dy <- 16.
                     ].
 
                     "Draw the caret"
                     ([x == cx] and: [y == cy]) if: [
-                        renderer setR: 255 G: 0 B: 0.
-                        renderer drawRectX: xOff Y: yOff W: dx H: dy.
-                        renderer setR: 128 G: 128 B: 192.
+                        prog addElement: ((mod CursorElement) clone initWithX: xOff Y: yOff W: dx H: dy).
                     ].
 
                     xOff <- xOff + dx.
@@ -78,15 +223,21 @@
 
                 "Draw the if it is at the end of the line"
                 ([x == cx] and: [y == cy]) if: [
-                    renderer setR: 255 G: 0 B: 0.
-                    renderer drawLineX: xOff Y: yOff X: xOff Y: (yOff + m).
-                    renderer setR: 128 G: 128 B: 192.
+                    prog addElement: ((mod CursorElement) clone initWithX: xOff Y: yOff W: 1 H: m).
                 ].
 
                 y    <- y + 1.
                 yOff <- yOff + m.
             ].
 
+            program <- Yes: prog.
+
+          ^ self
+        );
+
+        renderImplOn: renderer => (
+            program no: [ buildProgram(renderer) ].
+            (program yes) render: renderer.
             $(Morph) renderImplOn: renderer.
         );
 
@@ -96,6 +247,8 @@
             
             | line <- lineCache at: y |
             caret moveTo: ((line start + (x max: 0)) min: (line end)).
+
+            program <- No.
 
             renderDirty.
 
