@@ -73,6 +73,14 @@
 
                     x <- x + 1.
                 ].
+
+                "Draw the if it is at the end of the line"
+                ([x == cx] and: [y == cy]) if: [
+                    renderer setR: 255 G: 0 B: 0.
+                    renderer drawLineX: xOff Y: yOff X: xOff Y: (yOff + m).
+                    renderer setR: 128 G: 128 B: 192.
+                ].
+
                 y    <- y + 1.
                 yOff <- yOff + m.
             ].
