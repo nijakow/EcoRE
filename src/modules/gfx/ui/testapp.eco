@@ -6,7 +6,7 @@
 
     MirrorBuilder = {
         static with inherited _ = std Module;
-        builder <- $ ui.
+        builder <- $ ui builder.
         optimizer <- $package ecosphere optimizer;
 
         SlotOutliner: slotMirror Rebuilder: rebuilder => (
@@ -180,6 +180,8 @@
     );
 
     build => (
+        | ui <- self ui builder |
+
         ui Window(280, 275,
             ui VBox(
                 ui Center(ui TextField: 'Look at me as I can fly!\n    - Chrom, "Regret & Testify"'),

@@ -1,9 +1,8 @@
 {
     static with inherited _ = std Clonable;
-    protected wrapper = $;
-
+    
     with inherited trait = {
-        ui => wrapper ui;
+        ui = $package;
 
         init => ( reset. ^ self );
 

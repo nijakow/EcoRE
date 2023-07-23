@@ -1,7 +1,6 @@
 {
     static with inherited _ = std Module;
-    morphic = $;
-    eve = (here / '..' / 'eve' / '_.eco') importIn: self;
+    with morphic = $;
 
     own MorphicHandler = {
         static with inherited _ = std Module;

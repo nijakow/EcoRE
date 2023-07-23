@@ -9,5 +9,7 @@
 
     App = (here / 'testapp.eco') importIn: self;
 
-    Main => morphic RunWithWidth: 1400 Height: 800 App: App new;
+    Main => (
+        morphic RunWithWidth: 1400 Height: 800 App: App new;
+    );
 }
