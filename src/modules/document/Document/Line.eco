@@ -17,7 +17,7 @@
         );
 
         do: block => (
-            start to: end do: [ :i |
+            start to: (end - 1) do: [ :i |
                 block value(document root at: i)
             ].
           ^ self

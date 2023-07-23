@@ -43,7 +43,7 @@
                 yOff <- 0
             |
             lineCache do: [ :line |
-                | m <- 0 |
+                | m <- renderer charHeight: ($'newline') |
                 x    <- 0.
                 xOff <- 0.
 
@@ -93,7 +93,7 @@
                 if: [ ^ self ].
             
             | line <- lineCache at: y |
-            caret moveTo: ((line start + (x max: 0)) min: (line end + 1)).
+            caret moveTo: ((line start + (x max: 0)) min: (line end)).
 
             renderDirty.
 

@@ -20,8 +20,7 @@
         currentItem => document root at: offset;
 
         moveTo: pos => (
-            "offset <- (pos min: root size) max: 0."
-            offset <- pos.
+            offset <- (pos min: root size) max: 0.
           ^ self
         );
 
@@ -62,8 +61,10 @@
         insertReference: r => insertSnip: (mod nodes ItemSnip: (mod nodes ReferenceItem: r));
 
         backspace => (
-            backward: 1.
-            root: (root removeSnipAt: offset).
+            (offset > 0) if: [
+                backward: 1.
+                root: (root removeSnipAt: offset).
+            ].
           ^ self
         );
 

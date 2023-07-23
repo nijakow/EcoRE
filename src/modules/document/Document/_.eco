@@ -39,7 +39,7 @@
             iterator do: [ :item |
                 [ :break |
                     item ifNewline: [
-                        lines add: ((mod Line) new initWithDocument: self Start: lastStart End: ((offset - 1) max: lastStart)).
+                        lines add: ((mod Line) new initWithDocument: self Start: lastStart End: (offset max: lastStart)).
                         lastStart <- offset + 1.
                         break value.
                     ].
@@ -47,7 +47,7 @@
                 offset <- offset + 1.
             ].
 
-            lines add: ((mod Line) new initWithDocument: self Start: lastStart End: ((offset - 1) max: lastStart)).
+            lines add: ((mod Line) new initWithDocument: self Start: lastStart End: (offset max: lastStart)).
         );
     };
 
