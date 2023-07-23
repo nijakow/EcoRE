@@ -51,11 +51,14 @@
           static with inherited _ = #<:std/Clonable>;
           with lobby = #<:lobby>;
 
-          here;
-          init: _here => here <- _here;
+          here, $package;
+          init: _here pack: _pack => (
+            here <- _here.
+            $package <- _pack.
+          );
         }
       |
-      EvaluateFile: file InEnv: (env clone init: path) Host: host
+      EvaluateFile: file InEnv: (env clone init: path pack: host) Host: host
     );
     Import: file => Import: file Path: (std os files here) In: lobby;
 }
