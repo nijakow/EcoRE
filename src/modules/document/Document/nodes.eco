@@ -154,13 +154,16 @@
         static with inherited _ = std Clonable;
         with inherited SnipTrait = $ SnipTrait;
 
-        snips;
+        snips, size;
 
         with inherited trait = {
             static with inherited _ = std Trait;
 
             initWithSnips: _snips => (
-                snips <- _snips;
+                snips <- _snips.
+                | csize <- 0 |
+                snips do: [ :snip | csize <- (csize + snip size) ].
+                size <- csize.
               ^ self
             );
 
@@ -174,12 +177,6 @@
                     i <- (i + size)
                 ].
                 indexOutOfBoundsError
-            );
-
-            size => (
-                | size <- 0 |
-                snips do: [ :snip | size <- (size + snip size) ];
-              ^ size
             );
 
             insertSnip: snip at: index => (
