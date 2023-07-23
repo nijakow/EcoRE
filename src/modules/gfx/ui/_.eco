@@ -1,11 +1,9 @@
 
 {
     static with inherited _ = std Module;
-    morphic = (here / '..' / 'morphic' / '_.eco') import;
+    with $battery = $;
 
-    ui => self;
-
-    with builder = (here / 'builder' / '_.eco') importIn: self;
+    builder = (here / 'builder' / '_.eco') importIn: self;
 
     MorphicApp = (here / 'morphicapp.eco') importIn: self;
 

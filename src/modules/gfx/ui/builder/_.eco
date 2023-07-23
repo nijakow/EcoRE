@@ -1,26 +1,24 @@
 
 {
     static with inherited _ = std Module;
-    protected wrapper = $;
-
-    morphic => wrapper morphic;
+    with $battery = $;
 
     make = {
         static with inherited _ = std Trait;
-        with builder = $;
+        static with $battery = $;
 
-        VBoxMorph => (builder morphic morphs VBoxMorph) new;
+        VBoxMorph => (morphic morphs VBoxMorph) new;
     };
 
     with actions = (here / 'actions.eco') importIn: self;
 
     layouts = {
       static with inherited _ = std Module;
-      protected wrapper = $;
+      static with $battery = $;
 
-      Flexible   => wrapper morphic layouts Flexible;
-      ShrinkWrap => wrapper morphic layouts ShrinkWrap;
-      Rigid      => wrapper morphic layouts Rigid;
+      Flexible   => morphic layouts Flexible;
+      ShrinkWrap => morphic layouts ShrinkWrap;
+      Rigid      => morphic layouts Rigid;
     };
 
     ShrinkWrap(element) => (

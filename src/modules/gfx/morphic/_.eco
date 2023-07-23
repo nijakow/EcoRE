@@ -1,7 +1,6 @@
 {
     static with inherited _ = std Module;
-
-    morphic = self;
+    with $battery = $;
 
     own Renderer = (here / 'renderer.eco') importIn: self;
 

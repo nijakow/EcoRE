@@ -7,8 +7,7 @@
     MirrorBuilder = {
         static with inherited _ = std Module;
         builder <- $ ui.
-
-        optimizer <- (here / '..' / '..' / 'ecosphere' / 'optimizer' / '_.eco') import;
+        optimizer <- $package ecosphere optimizer;
 
         SlotOutliner: slotMirror Rebuilder: rebuilder => (
             builder HBox(

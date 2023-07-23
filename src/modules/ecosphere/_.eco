@@ -1,4 +1,6 @@
 
 {
     static with inherited _ = std Module;
+
+    own optimizer = (here / 'optimizer' / '_.eco') importIn: self;
 }
