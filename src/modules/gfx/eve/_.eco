@@ -20,6 +20,7 @@
     protected Eve_DrawRect,
     protected Eve_FillRect,
     protected Eve_DrawText,
+    protected Eve_DrawChar,
     protected Eve_Clear,
     protected Eve_Render,
     protected Eve_PollEvent,
@@ -37,6 +38,8 @@
     protected Eve_GetEventKeyMod,
     protected Eve_GetTextWidth,
     protected Eve_GetTextHeight,
+    protected Eve_GetCharWidth,
+    protected Eve_GetCharHeight,
     protected Eve_Delay;
 
     InitLinux => Setup: (std os files here / '..' / 'eve' / 'libeve.so') path;
@@ -65,6 +68,7 @@
         Eve_DrawRect <- (lib function: #'Eve_DrawRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
         Eve_FillRect <- (lib function: #'Eve_FillRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
         Eve_DrawText <- (lib function: #'Eve_DrawText' type: ((ffi types void) function(ffi types string, ffi types int, ffi types int))) yes.
+        Eve_DrawChar <- (lib function: #'Eve_DrawChar' type: ((ffi types void) function(ffi types uint, ffi types int, ffi types int))) yes.
         Eve_Clear <- (lib function: #'Eve_Clear' type: ((ffi types void) function())) yes.
         Eve_Render <- (lib function: #'Eve_Render' type: ((ffi types void) function())) yes.
         Eve_PollEvent <- (lib function: #'Eve_PollEvent' type: ((ffi types bool) function())) yes.
@@ -82,6 +86,8 @@
         Eve_GetEventKeyMod <- (lib function: #'Eve_GetEventKeyMod' type: ((ffi types uint) function())) yes.
         Eve_GetTextWidth <- (lib function: #'Eve_GetTextWidth' type: ((ffi types uint) function(ffi types string))) yes.
         Eve_GetTextHeight <- (lib function: #'Eve_GetTextHeight' type: ((ffi types uint) function(ffi types string))) yes.
+        Eve_GetCharWidth <- (lib function: #'Eve_GetCharWidth' type: ((ffi types uint) function(ffi types uint))) yes.
+        Eve_GetCharHeight <- (lib function: #'Eve_GetCharHeight' type: ((ffi types uint) function(ffi types uint))) yes.
         Eve_Delay <- (lib function: #'Eve_Delay' type: ((ffi types void) function(ffi types uint))) yes.
       ^ self
     );
@@ -108,6 +114,7 @@
     FillRect(x, y, w, h) => Eve_FillRect value(x, y, w, h);
 
     DrawText(text, x, y) => Eve_DrawText value(text, x, y);
+    DrawChar(char, x, y) => Eve_DrawChar value(char asInt, x, y);
 
     Clear => Eve_Clear value();
     Render => Eve_Render value();
@@ -132,6 +139,9 @@
 
     GetTextWidth(text) => Eve_GetTextWidth value(text);
     GetTextHeight(text) => Eve_GetTextHeight value(text);
+
+    GetCharWidth(char) => Eve_GetCharWidth value(char asInt);
+    GetCharHeight(char) => Eve_GetCharHeight value(char asInt);
 
     Delay(ms) => Eve_Delay value(ms);
 

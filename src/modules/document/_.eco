@@ -14,9 +14,9 @@
             c <- d newCaret
         |
 
-        c insertText: '(2 +\n'.
+        c insertText: '(2 + '.
         c insertReference: 2.
-        c insertText: ') * '.
+        c insertText: ')\n   * '.
         c insertCharacter: $'3'.
         c insertCharacter: $'.'.
 

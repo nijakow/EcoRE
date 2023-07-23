@@ -13,12 +13,6 @@
             caret     <- _document newCaret.
             lineCache <- std util newVector.
             refreshLineCache.
-            lineCache do: [ :line |
-                (std io out << line) newline commit.
-                line do: [ :item |
-                    (std io out << '  - ' << item) newline commit.
-                ].
-            ].
           ^ self
         );
 
@@ -31,11 +25,29 @@
         );
 
         renderImplOn: renderer => (
-            renderer setR: 26 G: 138 B: 86.
-            renderer fillRectX: 0 Y: 0 W: width H: height.
+            renderer setR: 128 G: 128 B: 192.
 
-            | yOff <- 0 |
-            "TODO..."
+            |
+                xOff <- 0,
+                yOff <- 0
+            |
+            lineCache do: [ :line |
+                | m <- 0 |
+                xOff <- 0.
+                line do: [ :item |
+                    item ifCharacter: [ :c |
+                        renderer drawChar: (c content) X: xOff Y: yOff.
+                        xOff <- xOff + (renderer charWidth: (c content)).
+                        m <- m max: (renderer charHeight: (c content)). 
+                    ].
+                    item ifReference: [ :r |
+                        renderer drawRectX: (xOff + 2) Y: (yOff + 2) W: 8 H: 8.
+                        xOff <- xOff + 10.
+                        m <- m max: 10.
+                    ].
+                ].
+                yOff <- yOff + m.
+            ].
 
             $(Morph) renderImplOn: renderer.
         );

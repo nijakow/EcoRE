@@ -383,6 +383,15 @@ void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y) {
     Eve_RenderState_DrawText(&EVE_DEFAULT_RENDER_STATE, text, x, y);
 }
 
+void Eve_DrawChar(Eve_UInt c, Eve_Int x, Eve_Int y) {
+    char buffer[2];
+
+    buffer[0] = c;
+    buffer[1] = '\0';
+
+    Eve_DrawText(buffer, x, y);
+}
+
 void Eve_Clear() {
     Eve_RenderState_Clear(&EVE_DEFAULT_RENDER_STATE);
 }
@@ -460,6 +469,24 @@ Eve_UInt Eve_GetTextHeight(const char* text) {
     TTF_SizeUTF8(EVE_DEFAULT_RENDER_STATE.font, text, &w, &h);
 
     return h;
+}
+
+Eve_UInt Eve_GetCharWidth(Eve_UInt c) {
+    char buffer[2];
+
+    buffer[0] = c;
+    buffer[1] = '\0';
+
+    return Eve_GetTextWidth(buffer);
+}
+
+Eve_UInt Eve_GetCharHeight(Eve_UInt c) {
+    char buffer[2];
+
+    buffer[0] = c;
+    buffer[1] = '\0';
+
+    return Eve_GetTextHeight(buffer);
 }
 
 

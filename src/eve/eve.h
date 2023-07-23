@@ -31,6 +31,7 @@ void Eve_DrawRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
 void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
 
 void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y);
+void Eve_DrawChar(Eve_UInt c, Eve_Int x, Eve_Int y);
 
 void Eve_Clear();
 void Eve_Render();
@@ -58,6 +59,8 @@ Eve_UInt Eve_GetEventKeyMod();
 Eve_UInt Eve_GetTextWidth(const char* text);
 Eve_UInt Eve_GetTextHeight(const char* text);
 
+Eve_UInt Eve_GetCharWidth(Eve_UInt c);
+Eve_UInt Eve_GetCharHeight(Eve_UInt c);
 
 void Eve_Delay(Eve_UInt ms);
 
