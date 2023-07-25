@@ -88,7 +88,7 @@
         PathOutlinerRow: childpath Name: name Parent: parent => (
             builder ShrinkWrap(
                 builder HBox(
-                    builder Button(builder Label: (name),
+                    builder Button(builder Margin(3, builder Label: (name)),
                                    $[ :(builder, parent, path) :sender |
                                         ((path extension) equals: 'eco') if: [
                                             (sender world yes) open: (builder OutlinerWindowForPath: path)

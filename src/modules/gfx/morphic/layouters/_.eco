@@ -209,6 +209,14 @@
 
         margin: m => margin <- m;
 
+        protected baseCalculateMinSizeForMorph: morph Orientation: orientation => (
+            | min <- 0 |
+            morph childrenDo: [ :c |
+                min <- min max: (c minSizeForOrientation: orientation)
+            ].
+          ^ (min max: (morph baseMinSizeForOrientation: orientation)) + (margin * 2)
+        );
+
         layoutMorph: morph Constraints: constraints => (
             | shrunkConstraints <- ShrinkConstraints: constraints ForMorph: morph |
 
