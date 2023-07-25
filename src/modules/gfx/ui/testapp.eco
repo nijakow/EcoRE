@@ -11,21 +11,24 @@
 
         SlotOutliner: slotMirror Rebuilder: rebuilder => (
             builder HBox(
-                builder Label: (slotMirror isProtected if: 'p' else: ' '),
-                builder Label: (slotMirror isStatic if: 's' else: ' '),
-                builder Label: (slotMirror isFinal if: 'f' else: ' '),
-                builder Label: (slotMirror isWith if: 'w' else: ' '),
-                builder Label: (slotMirror isInherited if: 'i' else: ' '),
-                builder SpacerW: 10 H: 1,
-                builder Button(builder Label: (slotMirror name asString),
+                builder Framed(
+                    builder Margin(3,
+                        builder HBox(
+                            builder Label: (slotMirror isProtected if: 'p' else: ' '),
+                            builder Label: (slotMirror isStatic if: 's' else: ' '),
+                            builder Label: (slotMirror isFinal if: 'f' else: ' '),
+                            builder Label: (slotMirror isWith if: 'w' else: ' '),
+                            builder Label: (slotMirror isInherited if: 'i' else: ' '),
+                        ) ~ xLayout: builder layouts ShrinkWrap,
+                    ) ~ xLayout: builder layouts ShrinkWrap,
+                ) ~ xLayout: builder layouts ShrinkWrap,
+                builder Button(builder Margin(3, builder Label: (slotMirror name asString)),
                                 $[ :(builder, mirror) :sender |
                                     (sender world yes) open: (builder WindowFor: (mirror slotValue))
                                 ] bind(self, slotMirror)
-                ),
-                builder Spacer ~ rigidHeight: 1,
-                builder Button(builder Label: 'ø',
+                ) ~ xLayout: builder layouts Flexible,
+                builder Button(builder Margin(3, builder Label: 'ø'),
                                 $[ :(mirror, rebuilder) :sender |
-                                    (std io out << 'Deleting ' << mirror << '...') newline commit.
                                     mirror delete.
                                     rebuilder value.
                                 ] bind(slotMirror, rebuilder)
