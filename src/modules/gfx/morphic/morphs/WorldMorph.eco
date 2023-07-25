@@ -52,7 +52,7 @@
             );
 
             fullRender => (
-                renderer setR: 128 G: 128 B: 128.
+                renderer setR: 00 G: 42 B: 47.
                 renderer clear.
                 renderOn: renderer.
                 renderer present.

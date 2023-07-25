@@ -31,7 +31,7 @@
                 charAtPoint: x => textobj characterIndexAtX: x;
 
                 renderOn: renderer X: x Y: y => (
-                    renderer setR: 128 G: 128 B: 192.
+                    renderer setR: 0 G: 182 B: 203.
                     renderer drawText: textobj X: x Y: y.
                 );
 

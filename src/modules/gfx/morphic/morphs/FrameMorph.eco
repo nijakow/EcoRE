@@ -13,7 +13,7 @@
         );
 
         renderImplOn: renderer => (
-            renderer setR: 128 G: 128 B: 192.
+            renderer setR: 0 G: 120 B: 136.
             renderer drawRectX: 0 Y: 0 W: width H: height.
             $(Morph) renderImplOn: renderer.
         );
