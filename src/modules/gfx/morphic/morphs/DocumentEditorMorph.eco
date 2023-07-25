@@ -16,6 +16,8 @@
                 static with inherited _ = std Trait;
 
                 render: renderer => self;
+
+                ifPoint: p InBoundsDo: block => self;
             };
 
             own ChangeColorElement = {
@@ -49,21 +51,35 @@
 
                 protected xpos,
                 protected ypos,
-                protected content;
+                protected width,
+                protected height,
+                protected content,
+                offset;
 
                 with inherited trait = {
                     static with inherited _ = std Trait;
 
-                    initWithX: _xpos Y: _ypos Content: _content => (
+                    initWithContent: _content Offset: _offset X: _xpos Y: _ypos W: _width H: _height => (
+                        content <- _content.
                         xpos    <- _xpos.
                         ypos    <- _ypos.
-                        content <- _content.
+                        width   <- _width.
+                        height  <- _height.
+                        offset  <- _offset.
                       ^ self
                     );
 
                     render: renderer => (
                         renderer drawChar: content X: xpos Y: ypos.
                       ^ self
+                    );
+
+                    ifPoint: p InBoundsDo: block => (
+                        (p x < xpos) if: [ ^ self ].
+                        (p x > (xpos + width)) if: [ ^ self ].
+                        (p y < ypos) if: [ ^ self ].
+                        (p y > (ypos + height)) if: [ ^ self ].
+                      ^ block value(self)
                     );
                 };
             };
@@ -74,25 +90,35 @@
 
                 protected xpos,
                 protected ypos,
-                protected w,
-                protected h;
+                protected width,
+                protected height,
+                offset;
 
                 with inherited trait = {
                     static with inherited _ = std Trait;
 
-                    initWithX: _xpos Y: _ypos W: _w H: _h => (
-                        xpos <- _xpos.
-                        ypos <- _ypos.
-                        w    <- _w.
-                        h    <- _h.
+                    initWithOffset: _offset X: _xpos Y: _ypos W: _width H: _height => (
+                        xpos   <- _xpos.
+                        ypos   <- _ypos.
+                        width  <- _width.
+                        height <- _height.
+                        offset <- _offset.
                       ^ self
                     );
 
                     render: renderer => (
                         renderer setR: 255 G: 128 B: 128.
-                        renderer fillRectX: xpos Y: ypos W: w H: h.
+                        renderer fillRectX: (xpos + 4) Y: (ypos + 4) W: (width - 8) H: (height - 8).
                         renderer setR: 128 G: 128 B: 192.
                       ^ self
+                    );
+
+                    ifPoint: p InBoundsDo: block => (
+                        (p x < xpos) if: [ ^ self ].
+                        (p x > (xpos + width)) if: [ ^ self ].
+                        (p y < ypos) if: [ ^ self ].
+                        (p y > (ypos + height)) if: [ ^ self ].
+                      ^ block value(self)
                     );
                 };
             };
@@ -149,6 +175,13 @@
                             element render: renderer
                         ]
                     );
+
+                    findElementAtPoint: point => (
+                        elements do: [ :element |
+                            element ifPoint: point InBoundsDo: [ :e | ^ Yes: e ]
+                        ].
+                      ^ No
+                    );
                 };
             };
         };
@@ -186,10 +219,11 @@
             | cx <- caret x, cy <- caret y |
 
             |
-                x    <- 0,
-                y    <- 0,
-                xOff <- 0,
-                yOff <- 0
+                offset <- 0, 
+                x      <- 0,
+                y      <- 0,
+                xOff   <- 0,
+                yOff   <- 0
             |
             lineCache do: [ :line |
                 | m <- renderer charHeight: ($'newline') |
@@ -200,12 +234,16 @@
                     | dx <- 0, dy <- 0 |
 
                     item ifCharacter: [ :c |
-                        prog addElement: ((mod CharacterElement) clone initWithX: xOff Y: yOff Content: (c content)).
-                        dx <- renderer charWidth: (c content).
-                        dy <- renderer charHeight: (c content). 
+                        |
+                            cw <- renderer charWidth: (c content),
+                            ch <- renderer charHeight: (c content)
+                        |
+                        prog addElement: ((mod CharacterElement) clone initWithContent: (c content) Offset: offset X: xOff Y: yOff W: cw H: ch).
+                        dx <- cw.
+                        dy <- ch. 
                     ].
                     item ifReference: [ :r |
-                        prog addElement: ((mod ReferenceElement) clone initWithX: (xOff + 4) Y: (yOff + 4) W: 8 H: 8).
+                        prog addElement: ((mod ReferenceElement) clone initWithOffset: offset X: xOff Y: yOff W: 16 H: 16).
                         dx <- 16.
                         dy <- 16.
                     ].
@@ -218,7 +256,8 @@
                     xOff <- xOff + dx.
                     m    <- m max: dy.
 
-                    x <- x + 1.
+                    x      <- x      + 1.
+                    offset <- offset + 1.
                 ].
 
                 "Draw the if it is at the end of the line"
@@ -226,8 +265,10 @@
                     prog addElement: ((mod CursorElement) clone initWithX: xOff Y: yOff W: 1 H: m).
                 ].
 
-                y    <- y + 1.
-                yOff <- yOff + m.
+                yOff   <- yOff + m.
+
+                y      <- y      + 1.
+                offset <- offset + 1.  "A line usually ends with a newline -- this is a little assumption-based hack"
             ].
 
             program <- Yes: prog.
@@ -241,17 +282,18 @@
             $(Morph) renderImplOn: renderer.
         );
 
+        protected moveCaretTo: offset => (
+            caret moveTo: offset.
+            program <- No.
+            renderDirty.
+          ^ self
+        );
+
         protected moveCaretToX: x Y: y => (
             ([y < 0] or: [y >= lineCache size])
                 if: [ ^ self ].
-            
             | line <- lineCache at: y |
-            caret moveTo: ((line start + (x max: 0)) min: (line end)).
-
-            program <- No.
-
-            renderDirty.
-
+            moveCaretTo: ((line start + (x max: 0)) min: (line end)).
           ^ self
         );
 
@@ -298,6 +340,18 @@
             ].
 
           ^ false
+        );
+
+        protected moveCursorToPixel: pixel => (
+            program yes: [ :prog |
+                (prog findElementAtPoint: pixel)
+                    yes: [ :element | moveCaretTo: (element offset) ]
+            ].
+        );
+
+        handleClickAt: point HandMorph: hand => (
+            moveCursorToPixel: point.
+          ^ true
         );
 
         writeOn: w => w << 'a document editor';
