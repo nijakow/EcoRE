@@ -20,6 +20,8 @@
         size => 0;
         splitAt: index => indexOutOfBoundsError;
 
+        isAtomicSnip => true;
+
         insertSnip: snip at: index => (
             (index == 0) if: [ ^ module MakeCompoundSnip(snip, self) ].
             (index == self size) if: [ ^ module MakeCompoundSnip(self, snip) ].
@@ -60,7 +62,7 @@
             size => 1;
 
             tryJoinWith: other => (
-                ifNewline: [ ^ No ].
+                item ifNewline: [ ^ No ].
                 other ifItemSnip: [ :otherItemSnip |
                     | otherItem <- otherItemSnip item |
                     item ifNewline: [ ^ No ].
@@ -169,6 +171,8 @@
 
             ifCompoundSnip: block => block value(self);
 
+            isAtomicSnip => false;
+
             at: index => (
                 | i <- 0 |
                 snips do: [ :snip |
@@ -188,10 +192,12 @@
                 snips do: [ :oldSnip |
                     | size <- oldSnip size |
                     ([done not] and: [index < (i + size)]) if: [
-                        newSnips add: (oldSnip insertSnip: snip at: (index - i)).
-                        done <- true
+                        ([oldSnip isAtomicSnip] and: [[oldSnip size == 1] and: [index == i]])
+                              if: [ newSnips add: snip. newSnips add: oldSnip.                ]
+                            else: [ newSnips add: (oldSnip insertSnip: snip at: (index - i)). ].
+                        done <- true.
                     ] else: [
-                        newSnips add: oldSnip
+                        newSnips add: oldSnip.
                     ].
                     i <- (i + size)
                 ].
@@ -264,6 +270,26 @@
 
     CompoundSnip: snips => CompoundSnip clone initWithSnips: snips;
     MakeCompoundSnip(...) => CompoundSnip: (std util newArray(...));
+    MakeOptimizedCompoundSnipFromArray(snips) => (
+        (snips size == 1) if: [ ^ snips at: 0 ].
+        (snips size > 8) if: [
+            |
+                snips1 <- std util newVector,
+                snips2 <- std util newVector
+            |
+            snips do: [ :snip |
+                (snips1 size < (snips size / 2))
+                      if: [ snips1 add: snip ]
+                    else: [ snips2 add: snip ].
+            ].
+            ^ CompoundSnip: std util newArray(
+                    MakeOptimizedCompoundSnip(snips1 asArray),
+                    MakeOptimizedCompoundSnip(snips2 asArray)
+                )
+        ].
+      ^ CompoundSnip: snips
+    );
+    MakeOptimizedCompoundSnip(...) => MakeOptimizedCompoundSnipFromArray(std util newArray(...));
 
 
     own ItemTrait = {
