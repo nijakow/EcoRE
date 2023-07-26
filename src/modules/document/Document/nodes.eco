@@ -202,7 +202,7 @@
                     i <- (i + size)
                 ].
                 (done not) if: [ newSnips add: snip ].
-              ^ module CompoundSnip: newSnips
+              ^ module MakeOptimizedCompoundSnipFromArray(newSnips)
             );
 
             removeSnipAt: index => (
@@ -282,10 +282,10 @@
                       if: [ snips1 add: snip ]
                     else: [ snips2 add: snip ].
             ].
-            ^ CompoundSnip: std util newArray(
-                    MakeOptimizedCompoundSnip(snips1 asArray),
-                    MakeOptimizedCompoundSnip(snips2 asArray)
-                )
+          ^ CompoundSnip: std util newArray(
+                MakeOptimizedCompoundSnipFromArray(snips1 asArray),
+                MakeOptimizedCompoundSnipFromArray(snips2 asArray)
+            )
         ].
       ^ CompoundSnip: snips
     );

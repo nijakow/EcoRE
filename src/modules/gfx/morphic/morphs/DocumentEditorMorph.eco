@@ -212,8 +212,6 @@
         );
 
         protected buildProgram(renderer) => (
-            (std io out << document root) newline commit.
-
             | prog <- (mod DocumentProgram) new |
 
             prog addElement: ((mod ChangeColorElement) clone initR: 0 G: 182 B: 203).
