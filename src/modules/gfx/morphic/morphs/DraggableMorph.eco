@@ -9,12 +9,6 @@
               ^ self
             );
 
-            renderImplOn: renderer => (
-                renderer setR: 00 G: 42 B: 47.
-                renderer fillRectX: 0 Y: 0 W: width H: height.
-                $(FrameMorph) renderImplOn: renderer.
-            );
-
             handleClickAt: point HandMorph: hand => ( hand grab: self. ^ true );
 
             writeOn: w => w << 'a draggable morph';

@@ -67,6 +67,8 @@
     Spacer => (morphic morphs Morph) new;
     SpacerW: w H: h => Spacer ~ rigidWidth: w ~ rigidHeight: h;
 
+    ColorMorph(r, g, b) => (morphic morphs ColorMorph) new ~ r: r g: g b: b;
+
     Center(element) => (
       ^ VBox( Spacer, HBox(Spacer, element, Spacer) ~ yLayout: layouts ShrinkWrap, Spacer )
     );
@@ -164,20 +166,37 @@
     Window(w, h, content) => (
       | window <- (morphic morphs DraggableMorph) new |
       window
-          ~ add: VBox(
+          ~ add: Stacked(
+                VBox(
                     HBox(Spacer,
-                          Button(Margin(3, Label: ' _ '), $[ :(builder, window) :sender | (window world yes) open: (builder Minimized(window)). window unlink. ] bind(self, window)),
-                          Button(Margin(3, Label: ' X '), $[ :(window) :sender | window unlink ] bind(window))
+                        Stacked(
+                            HBox(
+                                Button(Margin(3, Label: ' _ '), $[ :(builder, window) :sender | (window world yes) open: (builder Minimized(window)). window unlink. ] bind(self, window)),
+                                Button(Margin(3, Label: ' X '), $[ :(window) :sender | window unlink ] bind(window))
+                            ) ~ xLayout: layouts ShrinkWrap
+                              ~ yLayout: layouts ShrinkWrap,
+                            ColorMorph(0, 42, 47)
+                        ) ~ xLayout: layouts ShrinkWrap
+                          ~ yLayout: layouts ShrinkWrap,
                     ) ~ yLayout: layouts ShrinkWrap,
-                    Margin(10, Framed(content))
+                    Margin(10, Stacked(content, ColorMorph(0, 42, 47)))
                       ~ xLayout: layouts Flexible
                       ~ yLayout: layouts Flexible,
                     HBox(Spacer,
-                        ShrinkWrap(Button(Label: ' ^ ', $[ :(window) :sender | window rigidHeight: (window height - 25). window layoutChanged. ] bind(window))),
-                        ShrinkWrap(Button(Label: ' V ', $[ :(window) :sender | window rigidHeight: (window height + 25). window layoutChanged. ] bind(window))),
-                        ShrinkWrap(Button(Label: ' < ', $[ :(window) :sender | window rigidWidth: (window width - 25). window layoutChanged. ] bind(window))),
-                        ShrinkWrap(Button(Label: ' > ', $[ :(window) :sender | window rigidWidth: (window width + 25). window layoutChanged. ] bind(window)))
-                    ) ~ yLayout: layouts ShrinkWrap
+                        Stacked(
+                            HBox(
+                                ShrinkWrap(Button(Label: ' ^ ', $[ :(window) :sender | window rigidHeight: (window height - 25). window layoutChanged. ] bind(window))),
+                                ShrinkWrap(Button(Label: ' V ', $[ :(window) :sender | window rigidHeight: (window height + 25). window layoutChanged. ] bind(window))),
+                                ShrinkWrap(Button(Label: ' < ', $[ :(window) :sender | window rigidWidth: (window width - 25). window layoutChanged. ] bind(window))),
+                                ShrinkWrap(Button(Label: ' > ', $[ :(window) :sender | window rigidWidth: (window width + 25). window layoutChanged. ] bind(window)))
+                            ) ~ xLayout: layouts ShrinkWrap
+                              ~ yLayout: layouts ShrinkWrap,
+                            ColorMorph(0, 42, 47)
+                        ) ~ xLayout: layouts ShrinkWrap
+                          ~ yLayout: layouts ShrinkWrap,
+                    ) ~ yLayout: layouts ShrinkWrap,
+                ),
+                ColorMorph(0, 120, 136),
           )
           ~ rigidWidth: w
           ~ rigidHeight: h
