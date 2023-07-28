@@ -118,12 +118,12 @@
     DocumentEditor: doc OnAccept: onaccept OnCancel: oncancel => (
         | editor <- DocumentEditor: doc |
       ^ VBox(
-          Scrollable(Flexible(editor)),
+          Scrollable(Flexible(Margin(5, editor))),
           HBox(
-              Button(Margin(3, Label: 'Accept'), $[ :(editor, onaccept) :sender | onaccept value(editor) ] bind(editor, onaccept))
+              Button(Margin(3, HBox(Spacer, Label: 'Accept', Spacer)), $[ :(editor, onaccept) :sender | onaccept value(editor) ] bind(editor, onaccept))
                 ~ xLayout: layouts Flexible
                 ~ yLayout: layouts ShrinkWrap,
-              Button(Margin(3, Label: 'Cancel'), $[ :(editor, oncancel) :sender | oncancel value(editor) ] bind(editor, oncancel))
+              Button(Margin(3, HBox(Spacer, Label: 'Cancel', Spacer)), $[ :(editor, oncancel) :sender | oncancel value(editor) ] bind(editor, oncancel))
                 ~ xLayout: layouts Flexible
                 ~ yLayout: layouts ShrinkWrap
           ) ~ xLayout: layouts Flexible
