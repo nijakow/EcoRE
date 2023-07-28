@@ -132,6 +132,15 @@
       ^ mini
     );
 
+    WithRebuilderDo: aBlock => (
+        |
+            container <- VBox(),
+            rebuilder <- $[ :(builder, container, aBlock) | container replaceWith: (builder WithRebuilderDo: aBlock) ] bind(self, container, aBlock)
+        |
+        container add: (aBlock value(rebuilder)).
+      ^ container
+    );
+
     Window(w, h, content) => (
       | window <- (morphic morphs DraggableMorph) new |
       window

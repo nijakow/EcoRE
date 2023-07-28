@@ -51,38 +51,29 @@
 
         OutlinerPaneForObject: object => OutlinerPaneForMirror: (std reflect Mirror: object);
 
-        OutlinerWindowContentForObject: object => (
-            |
-                vbox <- builder make VBoxMorph,
-                rebuilder <- $[ :(builder, object, vbox) | vbox replaceWith: (builder OutlinerWindowContentForObject: object) ] bind(self, object, vbox)
-            |
-            vbox add: (
-                builder Stacked(
-                    builder VBox(
-                        builder Spacer,
-                        builder HBox(
-                            builder Spacer,
-                            builder Button(builder Margin(5, builder Label: '+'),
-                                            $[ :(object, rebuilder) :sender |
-                                                #'ecosphere.ecore.reflect.add_value_slot'(object, -1, 0, any, #'newSlot', 42).
-                                                rebuilder value.
-                                            ] bind(object, rebuilder)
-                            ),
-                            builder SpacerW: 10 H: 1
-                        ) ~ yLayout: builder layouts ShrinkWrap,
-                    ),
-                    builder Scrollable(OutlinerPaneForObject: object),
-                )
-            ).
-            vbox add: (
-                ObjectShellFor: object ~ rigidHeight: 100
-            ).
-          ^ vbox
-        );
-
         OutlinerWindowForObject: object => (
             builder Window(400, 400,
-                OutlinerWindowContentForObject: object
+                builder WithRebuilderDo: $[ :(us, builder, object) :rebuilder |
+                    builder VBox(
+                        builder Stacked(
+                            builder VBox(
+                                builder Spacer,
+                                builder HBox(
+                                    builder Spacer,
+                                    builder Button(builder Margin(5, builder Label: '+'),
+                                                    $[ :(object, rebuilder) :sender |
+                                                        #'ecosphere.ecore.reflect.add_value_slot'(object, -1, 1, any, #'newSlot', 42).
+                                                        rebuilder value.
+                                                    ] bind(object, rebuilder)
+                                    ),
+                                    builder SpacerW: 10 H: 1
+                                ) ~ yLayout: builder layouts ShrinkWrap,
+                            ),
+                            builder Scrollable(us OutlinerPaneForObject: object),
+                        ),
+                        us ObjectShellFor: object ~ rigidHeight: 100
+                    )
+                ] bind(self, builder, object)
             )
         );
 
