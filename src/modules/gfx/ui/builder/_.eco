@@ -104,10 +104,10 @@
       ^ VBox(
           Scrollable(Flexible(editor)),
           HBox(
-              Button(Label: 'Accept', $[ :(editor, onaccept) :sender | onaccept value(editor) ] bind(editor, onaccept))
+              Button(Margin(3, Label: 'Accept'), $[ :(editor, onaccept) :sender | onaccept value(editor) ] bind(editor, onaccept))
                 ~ xLayout: layouts Flexible
                 ~ yLayout: layouts ShrinkWrap,
-              Button(Label: 'Cancel', $[ :(editor, oncancel) :sender | oncancel value(editor) ] bind(editor, oncancel))
+              Button(Margin(3, Label: 'Cancel'), $[ :(editor, oncancel) :sender | oncancel value(editor) ] bind(editor, oncancel))
                 ~ xLayout: layouts Flexible
                 ~ yLayout: layouts ShrinkWrap
           ) ~ xLayout: layouts Flexible
@@ -120,10 +120,10 @@
       ^ VBox(
           Scrollable(Flexible(editor)),
           HBox(
-              Button(Label: 'Accept', $[ :(editor, onaccept) :sender | onaccept value(editor) ] bind(editor, onaccept))
+              Button(Margin(3, Label: 'Accept'), $[ :(editor, onaccept) :sender | onaccept value(editor) ] bind(editor, onaccept))
                 ~ xLayout: layouts Flexible
                 ~ yLayout: layouts ShrinkWrap,
-              Button(Label: 'Cancel', $[ :(editor, oncancel) :sender | oncancel value(editor) ] bind(editor, oncancel))
+              Button(Margin(3, Label: 'Cancel'), $[ :(editor, oncancel) :sender | oncancel value(editor) ] bind(editor, oncancel))
                 ~ xLayout: layouts Flexible
                 ~ yLayout: layouts ShrinkWrap
           ) ~ xLayout: layouts Flexible
@@ -144,8 +144,12 @@
     );
 
     Minimized(window) => (
-        | mini <- Window(100, 100, Button(Label: 'Unminimize', $[ :(minimized) :sender | (sender world yes) open: minimized ] bind(window))) |
-      ^ mini
+        Window(200, 100,
+            Button(Center(Label: 'Unminimize'),
+                    $[ :(minimized) :sender | (sender world yes) open: minimized ] bind(window)
+            ) ~ xLayout: layouts Flexible
+              ~ yLayout: layouts Flexible
+        )
     );
 
     WithRebuilderDo: aBlock => (
@@ -162,8 +166,8 @@
       window
           ~ add: VBox(
                     HBox(Spacer,
-                          Button(Label: ' _ ', $[ :(builder, window) :sender | (window world yes) open: (builder Minimized(window)). window unlink. ] bind(self, window)),
-                          Button(Label: ' X ', $[ :(window) :sender | window unlink ] bind(window))
+                          Button(Margin(3, Label: ' _ '), $[ :(builder, window) :sender | (window world yes) open: (builder Minimized(window)). window unlink. ] bind(self, window)),
+                          Button(Margin(3, Label: ' X '), $[ :(window) :sender | window unlink ] bind(window))
                     ) ~ yLayout: layouts ShrinkWrap,
                     Margin(10, Framed(content))
                       ~ xLayout: layouts Flexible
