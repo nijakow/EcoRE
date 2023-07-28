@@ -28,25 +28,12 @@
 
             maybeUpdate => (
                 isLayoutDirty if: [
-                    "(std io out << 'updating layout') newline commit."
                     forceLayoutInPlace
                 ].
             );
 
-            "renderImplOn: renderer => (
-                renderer setR: 200 G: 200 B: 200.
-                renderer fillRectX: 0 Y: 0 W: width H: height.
-                $(Morph) renderImplOn: renderer.
-            );"
-
             render => (
                 ([ isRenderDirty ] or: [ isChildRenderDirty ]) if: [
-                    "renderer setR: 200 G: 200 B: 200.
-                    renderer clear.
-                    renderOn: renderer.
-                    maybeRenderChildrenOn: renderer.
-                    renderer present."
-                    "(std io out << 'rendering') newline commit."
                     fullRender
                 ].
             );

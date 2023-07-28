@@ -6,8 +6,7 @@
         static with inherited _ = std Module;
         private morphic = $ morphic;
 
-        protected mouseX,
-        protected mouseY;
+        protected mouseMoved;
 
         protected program,
         protected renderer,
@@ -18,12 +17,11 @@
 
         with inherited trait = {
             initWithApp: _app Eve: _eve => (
-                app       <- _app.
-                eve       <- _eve.
-                mouseX    <- 0.
-                mouseY    <- 0.
-                morph     <- morphic morphs WorldMorph new.
-                tickCount <- 0.
+                app        <- _app.
+                eve        <- _eve.
+                mouseMoved <- true.
+                morph      <- morphic morphs WorldMorph new.
+                tickCount  <- 0.
               ^ self
             );
 
@@ -46,11 +44,8 @@
 
             handleEvent => (
                 eve IsEventMouseMotion -> [
-                    mouseX <- eve GetEventMouseX.
-                    mouseY <- eve GetEventMouseY.
-
-                    morph handMorph moveToX: mouseX Y: mouseY.
-                    morph handMorph moved.
+                    morph handMorph moveToX: (eve GetEventMouseX) Y: (eve GetEventMouseY).
+                    mouseMoved <- true.
                     morph renderDirty. "Force a full render"
                 ].
                 eve IsEventMouseButtonDown -> [
@@ -94,6 +89,11 @@
                           ~ if: [ eve IsEventKeyDown ] then: [ | k <- eve GetEventKey | k ifEscape: [ ^ self ]. handleKey: k ]
                         ~ default: [ handleEvent ].
                     ] repeatWithBreak.
+
+                    mouseMoved if: [
+                        morph handMorph moved.
+                        mouseMoved <- false.
+                    ].
 
                     eve Delay(8).
                 ] repeat.

@@ -304,7 +304,7 @@
             renderOn: renderer => (
                 renderImplOn: renderer.
                 isRenderDirty    <- false.
-                childRenderDirty <- false.
+                isChildRenderDirty <- false.
             );
             
             maybeRenderChildrenOn: renderer => (
@@ -321,7 +321,7 @@
                 isRenderDirty
                   ~ if: [ renderOn: renderer ].
                 maybeRenderChildrenOn: renderer.
-                childRenderDirty <- false.
+                isChildRenderDirty <- false.
             );
 
 
