@@ -259,4 +259,8 @@
             )
         )
     );
+
+    Main => (
+        morphic RunWithWidth: 1400 Height: 800 App: (self new); "TODO: 'self new' is probably not the best solution -> Revise that"
+    );
 }
