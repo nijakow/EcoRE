@@ -45,7 +45,7 @@
     EvaluateFile: file InEnv: env Host: host => (ParseFile: file) evaluateInEnv: env Host: host;
 
     Import: file Path: path In: host => (
-      (out << 'Importing: ' << file << '...') newline commit.
+      (out << 'Importing: ' << file << ' ...') newline commit.
       |
         env <- {
           static with inherited _ = #<:std/Clonable>;

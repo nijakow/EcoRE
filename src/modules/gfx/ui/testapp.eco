@@ -2,7 +2,7 @@
     static with inherited _ = std Clonable;
     with inherited own MorphicApp = $ MorphicApp;
 
-    own document = (here / '..' / '..' / 'document' / '_.eco') import;
+    own document = $package document;
 
     MirrorBuilder = {
         static with inherited _ = std Module;
