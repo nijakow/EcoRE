@@ -110,7 +110,7 @@
 
             has => (
                 it withReset: [ :r |
-                    (it has) if: [ ^ true ].
+                    ((it has) not) if: [ ^ false ].
                     | v <- (func value(it current)) isYes |
                     r value.
                   ^ v
