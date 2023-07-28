@@ -5,7 +5,7 @@
 
         protected grabbedMorph;
         
-        clipboard, lastMorph;
+        clipboard, lastMorphs, lastMorphs2;
 
         with inherited trait = {
             init => (
@@ -13,29 +13,41 @@
                 rigidWidth: 1.
                 rigidHeight: 1.
                 grabbedMorph <- No.
-                clipboard <- No.
-                lastMorph <- No.
+                clipboard    <- No.
+                lastMorphs   <- std util newVector.
+                lastMorphs2  <- std util newVector.
               ^ self
             );
 
             copyToClipboard: obj => clipboard <- Yes: obj;
             clearClipboard => clipboard <- No;
 
-            lastMorph: obj => lastMorph <- Yes: obj;
-            noLastMorph => lastMorph <- No;
-
             moved => (
                 world yes: [ :world |
                     world xRayAt: globalOffset ReverseDo: [ :m |
                         (m != self) if: [
-                            lastMorph yes: [ :lm | (lm != m) if: [ lm handleHandExit: self. lastMorph: m. m handleHandEnter: self. ] ]
-                                      no: [ lastMorph: m. m handleHandEnter: self. ].
+                            lastMorphs2 add: m.
                         ].
-                      ^ self
                     ].
-                    lastMorph yes: [ :lm | lm handleHandExit: self ].
-                    noLastMorph.
                 ].
+
+                lastMorphs do: [ :oldMorph |
+                    (lastMorphs2 find: oldMorph)
+                        no: [ oldMorph handleHandExit: self ].
+                ].
+
+                lastMorphs2 do: [ :newMorph |
+                    (lastMorphs find: newMorph)
+                        no: [ newMorph handleHandEnter: self ].
+                ].
+
+                ( "Swap the morph lists"
+                    | m <- lastMorphs2 |
+                    lastMorphs2 <- lastMorphs.
+                    lastMorphs  <- m.
+                    lastMorphs2 clear.
+                ).
+
               ^ self
             );
 
