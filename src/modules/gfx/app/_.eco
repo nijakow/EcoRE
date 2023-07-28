@@ -1,7 +1,7 @@
 {
     static with inherited _ = std Clonable;
 
-    with ui = $package;
+    with gfx = $package;
 
     MirrorBuilder = {
         static with inherited _ = std Module;

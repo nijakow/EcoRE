@@ -5,4 +5,9 @@
     own eve     = (here / 'eve' / '_.eco') importIn: self;
     own morphic = (here / 'morphic' / '_.eco') importIn: self;
     own ui      = (here / 'ui' / '_.eco') importIn: self;
+    own app     = (here / 'app' / '_.eco') importIn: self;
+
+    Main => (
+        morphic RunWithWidth: 1400 Height: 800 App: (app new); "TODO: 'app new' is probably not the best solution"
+    );
 }

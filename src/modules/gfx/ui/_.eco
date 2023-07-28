@@ -4,10 +4,4 @@
     with $battery = $;
 
     builder = (here / 'builder' / '_.eco') importIn: self;
-
-    App = (here / 'App.eco') importIn: self;
-
-    Main => (
-        morphic RunWithWidth: 1400 Height: 800 App: App new;
-    );
 }
