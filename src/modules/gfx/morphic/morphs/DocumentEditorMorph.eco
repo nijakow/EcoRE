@@ -155,16 +155,18 @@
             own DocumentProgram = {
                 static with inherited _ = std Clonable;
 
-                protected elements;
+                protected elements,
+                protected lineOffsets;
+
+                minWidth <- 0,
+                minHeight <- 0;
 
                 with inherited trait = {
                     static with inherited _ = std Trait;
 
-                    minWidth <- 0,
-                    minHeight <- 0;
-
                     init => (
-                        elements <- std util newVector.
+                        elements    <- std util newVector.
+                        lineOffsets <- std util newVector.
                       ^ self
                     );
 
@@ -174,6 +176,22 @@
                     addElement: element => (
                         elements add: element.
                       ^ self
+                    );
+
+                    addLineOffset: offset => (
+                        lineOffsets add: offset.
+                      ^ self
+                    );
+
+                    findLineForYOffset: offset => (
+                        | line <- (lineOffsets size) - 1 |
+                        
+                        lineOffsets reverseDo: [ :lineOffset |
+                            (lineOffset <= offset) if: [ ^ line ].
+                            line <- line - 1.
+                        ].
+
+                      ^ 0
                     );
 
                     render: renderer => (
@@ -238,6 +256,8 @@
                 x    <- 0.
                 xOff <- 0.
 
+                prog addLineOffset: yOff.
+
                 line do: [ :item |
                     | dx <- 0, dy <- 0 |
 
@@ -266,8 +286,6 @@
 
                     x      <- x      + 1.
                     offset <- offset + 1.
-
-
                 ].
 
                 "Draw the if it is at the end of the line"
@@ -382,7 +400,9 @@
         protected moveCursorToPixel: pixel => (
             program yes: [ :prog |
                 (prog findElementAtPoint: pixel)
-                    yes: [ :element | moveCaretTo: (element offset) ]
+                    yes: [ :element | moveCaretTo: (element offset). ^ self ].
+                | lineNumber <- (prog findLineForYOffset: (pixel y)) |
+                moveCaretToX: 100000 Y: lineNumber. "TOOD: Properly go to end of line"
             ].
         );
 
