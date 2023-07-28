@@ -160,10 +160,16 @@
                 with inherited trait = {
                     static with inherited _ = std Trait;
 
+                    minWidth <- 0,
+                    minHeight <- 0;
+
                     init => (
                         elements <- std util newVector.
                       ^ self
                     );
+
+                    minWidth: mw => minWidth <- mw;
+                    minHeight: mh => minHeight <- mh;
 
                     addElement: element => (
                         elements add: element.
@@ -223,7 +229,9 @@
                 x      <- 0,
                 y      <- 0,
                 xOff   <- 0,
-                yOff   <- 0
+                yOff   <- 0,
+                minWidth  <- 0,
+                minHeight <- 0,
             |
             lineCache do: [ :line |
                 | m <- renderer charHeight: ($'newline') |
@@ -258,6 +266,8 @@
 
                     x      <- x      + 1.
                     offset <- offset + 1.
+
+
                 ].
 
                 "Draw the if it is at the end of the line"
@@ -269,11 +279,27 @@
 
                 y      <- y      + 1.
                 offset <- offset + 1.  "A line usually ends with a newline -- this is a little assumption-based hack"
+
+                minWidth  <- minWidth  max: xOff.
+                minHeight <- minHeight + m.
             ].
+
+            prog minWidth: minWidth.
+            prog minHeight: minHeight.
 
             program <- Yes: prog.
 
           ^ self
+        );
+
+        baseMinWidth => (
+            program yes: [ :prog | prog minWidth ]
+                     no: [         0             ]
+        );
+
+        baseMinHeight => (
+            program yes: [ :prog | prog minHeight ]
+                     no: [         0              ]
         );
 
         renderImplOn: renderer => (
