@@ -299,6 +299,8 @@
         ifReference: block => self;
         ifNewline: block => self;
 
+        ifChar: block => ifCharacter: [ :c | block value(c content) ];
+
         writeOn: w => w << 'an item';
     };
 

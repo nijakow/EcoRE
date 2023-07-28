@@ -22,4 +22,9 @@
 
       ^ d
     );
+
+    Test2 => (
+        | t <- Test, stream <- t documentStream |
+        stream current
+    );
 }

@@ -321,6 +321,12 @@
           ^ self
         );
 
+        clear => (
+            document clear.
+            documentChanged.
+          ^ self
+        );
+
         handleKey: key At: point HandMorph: hand => (
             key ifLeft:  [ moveCaretToX: ((caret x) - 1) Y: (caret y). ^ true ].
             key ifRight: [ moveCaretToX: ((caret x) + 1) Y: (caret y). ^ true ].

@@ -13,6 +13,8 @@
 
         root: r => root <- r;
 
+        clear => root: (mod nodes MakeCompoundSnip());
+
         protected mod = {
             "
                 module title Module
