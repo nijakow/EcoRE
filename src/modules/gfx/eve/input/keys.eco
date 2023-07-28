@@ -23,6 +23,9 @@
             ifScrollUp:   block => self;
             ifScrollDown: block => self;
 
+            ifCopy: block => self;
+            ifPaste: block => self;
+
             keyText => No;
 
             writeOn: w => w << 'a key';
@@ -146,6 +149,9 @@
 
         special_home = { static with inherited _ = std Enum; with inherited trait = $ trait; ifHome: block => ( block value. ^ self ); };
         special_end  = { static with inherited _ = std Enum; with inherited trait = $ trait; ifEnd:  block => ( block value. ^ self ); };
+
+        special_copy = { static with inherited _ = std Enum; with inherited trait = $ trait; ifCopy: block => ( block value. ^ self ); };
+        special_paste = { static with inherited _ = std Enum; with inherited trait = $ trait; ifPaste: block => ( block value. ^ self ); };
 
         special_unknown = { static with inherited _ = std Enum; with inherited trait = $ trait; };
     },
@@ -551,6 +557,8 @@
           ~ case: sdlscans SDL_SCANCODE_PERIOD       do: [ isShift if: [ ^ keycodes symbol_greater_than ] else: [ ^ keycodes symbol_period        ] ]
           ~ case: sdlscans SDL_SCANCODE_SLASH        do: [ isShift if: [ ^ keycodes symbol_question     ] else: [ ^ keycodes symbol_slash         ] ]
           ~ case: sdlscans SDL_SCANCODE_BACKSLASH    do: [ isShift if: [ ^ keycodes symbol_pipe         ] else: [ ^ keycodes symbol_backslash     ] ]
+          ~ case: sdlscans SDL_SCANCODE_F1           do: [ ^ keycodes special_copy ]
+          ~ case: sdlscans SDL_SCANCODE_F2           do: [ ^ keycodes special_paste ]
         ~ default: [ ^ keycodes special_unknown ]
     );
 }
