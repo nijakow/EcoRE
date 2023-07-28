@@ -216,7 +216,7 @@
 
         ShellWindow => (
             builder Window(500, 350,
-                builder DocumentEditor: (document FromString: '"Enter your code here"\n\n')
+                builder DocumentEditor: (document FromString: '"\n    A module.\n"\n\n{\n    static with inherited _ = std Module;\n\n    \n}\n')
                     OnAccept: $[ :(us) :editor | us RunDocumentAndShowResult: (editor document) World: (editor world yes) ] bind(self)
                     OnCancel: $[ :editor | editor clear ]
             )
