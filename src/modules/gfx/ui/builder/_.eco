@@ -10,8 +10,6 @@
         VBoxMorph => (morphic morphs VBoxMorph) new;
     };
 
-    with actions = (here / 'actions.eco') importIn: self;
-
     layouts = {
       static with inherited _ = std Module;
       static with $battery = $;
