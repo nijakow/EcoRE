@@ -95,7 +95,7 @@
                         ~ default: [ handleEvent ].
                     ] repeatWithBreak.
 
-                    eve Delay(2).
+                    eve Delay(8).
                 ] repeat.
             );
         };
