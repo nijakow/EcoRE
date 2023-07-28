@@ -169,7 +169,7 @@
             skipWhitespace.
 
             (in hasNext) unless: [ ^ newTokenWithType: TokenType EOF ].
-            (in current) ifReference: [ :r | in forward. ^ newTokenWithType: TokenType REFERENCE Payload: r ].
+            (in current) ifRef: [ :r | in forward. ^ newTokenWithType: TokenType REFERENCE Payload: r ].
             (peeks: '...') if: [ ^ newTokenWithType: TokenType ELLIPSIS    ].
             (peeks: '<-')  if: [ ^ newTokenWithType: TokenType ASSIGNMENT  ].
             (peeks: '=>')  if: [ ^ newTokenWithType: TokenType RARROW      ].

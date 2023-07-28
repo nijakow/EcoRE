@@ -362,9 +362,14 @@
             key ifBackspace: [ backspace.                    ^ true ].
             key ifEnter:     [ insertNewline.                ^ true ].
             key ifHome:      [ moveCaretToX: 0 Y: (caret y). ^ true ].
-            key ifPaste:      [ insertReference: 42. ^ true ].
             "key ifEnd:       [ moveCaretToX: ((lines at: (caret y)) text size) Y: (caret y). ^ true ]."
             key ifTab:       [ insertText: ' ' * (4 - ((caret x) mod: 4)).                   ^ true ].
+
+
+            key ifPaste: [
+                (hand clipboard) yes: [ :v | insertReference: v ].
+              ^ true
+            ].
 
             key keyText yes: [ :text |
                 insertText: text.

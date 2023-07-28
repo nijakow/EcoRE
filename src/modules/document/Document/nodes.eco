@@ -300,6 +300,7 @@
         ifNewline: block => self;
 
         ifChar: block => ifCharacter: [ :c | block value(c content) ];
+        ifRef: block => ifReference: [ :r | block value(r content) ];
 
         writeOn: w => w << 'an item';
     };

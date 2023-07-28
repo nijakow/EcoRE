@@ -4,6 +4,8 @@
         with inherited own Morph = $ Morph;
 
         protected grabbedMorph;
+        
+        clipboard;
 
         with inherited trait = {
             init => (
@@ -11,8 +13,12 @@
                 rigidWidth: 1.
                 rigidHeight: 1.
                 grabbedMorph <- No.
+                clipboard <- No.
               ^ self
             );
+
+            copyToClipboard: obj => clipboard <- Yes: obj;
+            clearClipboard => clipboard <- No;
 
             grab: morph => (
                 | p <- morph globalOffset - globalOffset |

@@ -61,6 +61,13 @@
                                 builder Spacer,
                                 builder HBox(
                                     builder Spacer,
+                                    builder Button(builder Margin(5, builder Label: 'C'),
+                                                    $[ :(object) :sender |
+                                                        sender world yes: [ :world |
+                                                            (world handMorph) copyToClipboard: object
+                                                        ]
+                                                    ] bind(object)
+                                    ),
                                     builder Button(builder Margin(5, builder Label: '+'),
                                                     $[ :(object, rebuilder) :sender |
                                                         #'ecosphere.ecore.reflect.add_value_slot'(object, -1, 1, any, #'newSlot', 42).

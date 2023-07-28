@@ -22,7 +22,7 @@
                     static with inherited _ = #<:std/Trait>;
 
                     ifChar: block => self;
-                    ifReference: block => self;
+                    ifRef: block => self;
 
                     writeOn: w => w << 'a stream object';
                 },
@@ -61,7 +61,7 @@
                           ^ self
                         );
 
-                        ifReference: block => ( block value: reference. ^ self );
+                        ifRef: block => ( block value: reference. ^ self );
 
                         writeOn: w => w << 'a reference stream object';
                     }
