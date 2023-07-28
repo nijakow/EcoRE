@@ -5,7 +5,7 @@
 
         protected grabbedMorph;
         
-        clipboard;
+        clipboard, lastMorph;
 
         with inherited trait = {
             init => (
@@ -14,11 +14,30 @@
                 rigidHeight: 1.
                 grabbedMorph <- No.
                 clipboard <- No.
+                lastMorph <- No.
               ^ self
             );
 
             copyToClipboard: obj => clipboard <- Yes: obj;
             clearClipboard => clipboard <- No;
+
+            lastMorph: obj => lastMorph <- Yes: obj;
+            noLastMorph => lastMorph <- No;
+
+            moved => (
+                world yes: [ :world |
+                    world xRayAt: globalOffset ReverseDo: [ :m |
+                        (m != self) if: [
+                            lastMorph yes: [ :lm | (lm != m) if: [ lm handleHandExit: self. lastMorph: m. m handleHandEnter: self. ] ]
+                                      no: [ lastMorph: m. m handleHandEnter: self. ].
+                        ].
+                      ^ self
+                    ].
+                    lastMorph yes: [ :lm | lm handleHandExit: self ].
+                    noLastMorph.
+                ].
+              ^ self
+            );
 
             grab: morph => (
                 | p <- morph globalOffset - globalOffset |

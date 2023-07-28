@@ -3,19 +3,52 @@
         static with inherited _ = std Clonable;
         with inherited own Morph = $ Morph;
 
-        protected action;
+        protected action,
+        protected highlighted;
 
         with inherited trait = {
             init => (
                 $(Morph) init.
-                action <- No.
+                action      <- No.
+                highlighted <- false.
               ^ self
+            );
+
+            renderImplOn: renderer => (
+                highlighted if: [
+                    renderer setR: 0 G: 120 B: 136.
+                    1 to: ((width + height) / 10) do: [ :i |
+                        i <- i * 10.
+
+                        |
+                            sx <- i min: width,
+                            sy <- (i - sx) max: 0,
+                            ex <- (i - height) max: 0,
+                            ey <- i min: height
+                        |
+
+                        renderer drawLineX: sx Y: sy X: ex Y: ey.
+                    ].
+                ].
+                $(Morph) renderImplOn: renderer.
             );
 
             action: act => action <- Yes: act;
 
             handleClickAt: point HandMorph: hand => (
                 action yes: [ :a | a value(self) ].
+              ^ true
+            );
+
+            handleHandEnter: hand => (
+                highlighted <- true.
+                renderDirty.
+              ^ true
+            );
+
+            handleHandExit: hand => (
+                highlighted <- false.
+                renderDirty.
               ^ true
             );
 

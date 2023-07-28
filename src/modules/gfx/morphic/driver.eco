@@ -28,11 +28,6 @@
             );
 
             tick => (
-                ([ morph handMorph offset x != mouseX ] or: [ morph handMorph offset y != mouseY ]) -> [
-                    morph handMorph moveToX: mouseX Y: mouseY.
-                    morph renderDirty. "Force a full render"
-                ].
-
                 morph maybeUpdate.
                 morph render.
             );
@@ -53,6 +48,10 @@
                 eve IsEventMouseMotion -> [
                     mouseX <- eve GetEventMouseX.
                     mouseY <- eve GetEventMouseY.
+
+                    morph handMorph moveToX: mouseX Y: mouseY.
+                    morph handMorph moved.
+                    morph renderDirty. "Force a full render"
                 ].
                 eve IsEventMouseButtonDown -> [
                     | button <- eve GetEventMouseButtonID |

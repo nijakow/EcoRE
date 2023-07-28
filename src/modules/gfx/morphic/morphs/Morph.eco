@@ -351,6 +351,15 @@
               ^ self
             );
 
+            xRayAt: point ReverseDo: block => (
+                childrenReverseDo: [ :c |
+                    c containsPoint: point
+                      ~ if: [ c xRayAt: (point - c offset) ReverseDo: block ]
+                ].
+                block value(self).
+              ^ self
+            );
+
             handleDropMorph: morph At: point => false;
             handleClickAt: point HandMorph: hand => false;
             handleGrabAt: point HandMorph: hand => false;
@@ -360,6 +369,9 @@
             clickAt: point HandMorph: hand => dispatchEvent: [ :e :point | e handleClickAt: point HandMorph: hand ] At: point;
             grabAt: point HandMorph: hand => dispatchEvent: [ :e :point | e handleGrabAt: point HandMorph: hand ] At: point;
             key: key At: point HandMorph: hand => dispatchEvent: [ :e :point | e handleKey: key At: point HandMorph: hand ] At: point;
+
+            handleHandEnter: hand => false;
+            handleHandExit: hand => false;
 
             dumpOn: w Indentation: i => (
                 0 to: i do: [ :j | w << '  ' ].
