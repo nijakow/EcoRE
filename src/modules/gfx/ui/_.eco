@@ -5,9 +5,7 @@
 
     builder = (here / 'builder' / '_.eco') importIn: self;
 
-    MorphicApp = (here / 'morphicapp.eco') importIn: self;
-
-    App = (here / 'testapp.eco') importIn: self;
+    App = (here / 'App.eco') importIn: self;
 
     Main => (
         morphic RunWithWidth: 1400 Height: 800 App: App new;

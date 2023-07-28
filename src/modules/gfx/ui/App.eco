@@ -1,8 +1,7 @@
 {
     static with inherited _ = std Clonable;
-    with inherited own MorphicApp = $ MorphicApp;
 
-    own document = $package document;
+    with ui = $package;
 
     MirrorBuilder = {
         static with inherited _ = std Module;
@@ -229,6 +228,8 @@
                 OnCancel: $[ :editor | editor clear ]
         );
     };
+
+    openInWorld: world => world open: build;
 
     reset => (
       ^ self
