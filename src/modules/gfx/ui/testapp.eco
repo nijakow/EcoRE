@@ -48,7 +48,7 @@
                 slots add: (SlotOutliner: (mirror slot: slotName) Rebuilder: rebuilder)
             ].
 
-          ^ builder Margin(5, slots)
+          ^ slots
         );
 
         OutlinerPaneForObject: object => OutlinerPaneForMirror: (std reflect Mirror: object);
@@ -78,7 +78,7 @@
                                     builder SpacerW: 10 H: 1
                                 ) ~ yLayout: builder layouts ShrinkWrap,
                             ),
-                            builder Scrollable(us OutlinerPaneForObject: object),
+                            builder Scrollable(builder Margin(10, us OutlinerPaneForObject: object)),
                         ),
                         us ObjectShellFor: object ~ rigidHeight: 100
                     )
