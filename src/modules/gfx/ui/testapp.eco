@@ -209,26 +209,15 @@
 
         ShellWindow => (
             builder Window(500, 350,
-                builder Editor: '"Enter your code here"\n\n'
-                    OnAccept: $[ :(us) :editor | us RunStringAndShowResult: (editor fullText) World: (editor world yes) ] bind(self)
-                    OnCancel: $[ :editor | editor clear ]
-            )
-        );
-
-        DocumentShellWindow => (
-            builder Window(500, 350,
-                builder DocumentEditor: ( | doc <- (document Document) new, caret <- doc newCaret |
-                                            caret insertText: '"Enter your code here"\n\n2 + 2\n'.
-                                            doc
-                                        )
+                builder DocumentEditor: (document FromString: '"Enter your code here"\n\n')
                     OnAccept: $[ :(us) :editor | us RunDocumentAndShowResult: (editor document) World: (editor world yes) ] bind(self)
                     OnCancel: $[ :editor | editor clear ]
             )
         );
 
         ObjectShellFor: object => (
-            builder Editor: '"Enter your instructions here"\n\n'
-                OnAccept: $[ :(us, object) :editor | us RunStringAndShowResult: (editor fullText) World: (editor world yes) Environment: object ] bind(self, object)
+            builder DocumentEditor: (document FromString: '"Enter your instructions here"\n\n')
+                OnAccept: $[ :(us, object) :editor | us RunDocumentAndShowResult: (editor document) World: (editor world yes) Environment: object ] bind(self, object)
                 OnCancel: $[ :editor | editor clear ]
         );
     };
@@ -255,11 +244,6 @@
                     ~ yLayout: ui layouts Flexible,
                 ui Button(ui Center(ui Label: 'Shell'),
                           $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder ShellWindow) ]
-                                bind(MirrorBuilder))
-                    ~ xLayout: ui layouts Flexible
-                    ~ yLayout: ui layouts Flexible,
-                ui Button(ui Center(ui Label: 'Document Editor'),
-                            $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder DocumentShellWindow) ]
                                 bind(MirrorBuilder))
                     ~ xLayout: ui layouts Flexible
                     ~ yLayout: ui layouts Flexible

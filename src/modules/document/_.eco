@@ -8,6 +8,12 @@
 
     own editing = (here / 'editing' / '_.eco') importIn: self;
 
+    FromString: str => (
+        | d <- Document new, c <- d newCaret |
+        c insertText: str.
+      ^ d
+    );
+
     Test => (
         |
             d <- Document new,
