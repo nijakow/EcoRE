@@ -161,16 +161,13 @@
       | window <- (morphic morphs DraggableMorph) new |
       window
           ~ add: VBox(
-                    Margin(10, VBox(
-                          HBox(Spacer,
-                               Button(Label: ' _ ', $[ :(builder, window) :sender | (window world yes) open: (builder Minimized(window)). window unlink. ] bind(self, window)),
-                               Button(Label: ' X ', $[ :(window) :sender | window unlink ] bind(window))
-                          ) ~ yLayout: layouts ShrinkWrap,
-                          Framed(content)
-                            ~ xLayout: layouts Flexible
-                            ~ yLayout: layouts Flexible
-                        )
-                    ),
+                    HBox(Spacer,
+                          Button(Label: ' _ ', $[ :(builder, window) :sender | (window world yes) open: (builder Minimized(window)). window unlink. ] bind(self, window)),
+                          Button(Label: ' X ', $[ :(window) :sender | window unlink ] bind(window))
+                    ) ~ yLayout: layouts ShrinkWrap,
+                    Margin(10, Framed(content))
+                      ~ xLayout: layouts Flexible
+                      ~ yLayout: layouts Flexible,
                     HBox(Spacer,
                         ShrinkWrap(Button(Label: ' ^ ', $[ :(window) :sender | window rigidHeight: (window height - 25). window layoutChanged. ] bind(window))),
                         ShrinkWrap(Button(Label: ' V ', $[ :(window) :sender | window rigidHeight: (window height + 25). window layoutChanged. ] bind(window))),
