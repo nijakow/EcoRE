@@ -71,26 +71,51 @@ uint32_t Eve_HashText(const char* text) {
 }
 
 struct Eve_TextCacheNode {
-    struct Eve_TextCacheNode*  next;
-    char*                      text;
-    struct Eve_Color           color;
-    SDL_Texture*               texture;
-    Eve_UInt                   width;
-    Eve_UInt                   height;
+    struct Eve_TextCacheNode*   next_global;
+    struct Eve_TextCacheNode*   next;
+    struct Eve_TextCacheNode**  prev;
+    char*                       text;
+    struct Eve_Color            color;
+    SDL_Texture*                texture;
+    Eve_UInt                    width;
+    Eve_UInt                    height;
 };
 
-void Eve_TextCacheNode_Create(struct Eve_TextCacheNode* self, const char* text, struct Eve_Color color, SDL_Texture* texture, Eve_UInt width, Eve_UInt height) {
-    self->next    = NULL;
-    self->text    = strdup(text);
-    self->color   = color;
-    self->texture = texture;
-    self->width   = width;
-    self->height  = height;
+void Eve_TextCacheNode_Unlink(struct Eve_TextCacheNode* self);
+
+void Eve_TextCacheNode_Create(struct Eve_TextCacheNode* self, struct Eve_TextCacheNode* next_global, const char* text, struct Eve_Color color, SDL_Texture* texture, Eve_UInt width, Eve_UInt height) {
+    self->next_global = next_global;
+    self->next        = NULL;
+    self->prev        = NULL;
+    self->text        = strdup(text);
+    self->color       = color;
+    self->texture     = texture;
+    self->width       = width;
+    self->height      = height;
 }
 
 void Eve_TextCacheNode_Destroy(struct Eve_TextCacheNode* self) {
+    Eve_TextCacheNode_Unlink(self);
     free(self->text);
     SDL_DestroyTexture(self->texture);
+}
+
+void Eve_TextCacheNode_Link(struct Eve_TextCacheNode* self, struct Eve_TextCacheNode** list) {
+    self->next = *list;
+    if (*list != NULL) {
+        (*list)->prev = &self->next;
+    }
+    *list = self;
+    self->prev = list;
+}
+
+void Eve_TextCacheNode_Unlink(struct Eve_TextCacheNode* self) {
+    if (self->next != NULL) {
+        self->next->prev = self->prev;
+    }
+    if (self->prev != NULL) {
+        *self->prev = self->next;
+    }
 }
 
 
@@ -119,6 +144,8 @@ void Eve_TextCacheBucket_Destroy(struct Eve_TextCacheBucket* self) {
 struct Eve_TextCache {
     struct Eve_TextCacheBucket buckets[256];
     unsigned int               bucket_count;
+
+    struct Eve_TextCacheNode*  all_nodes;
 };
 
 void Eve_TextCache_Create(struct Eve_TextCache* self) {
@@ -184,9 +211,10 @@ struct Eve_TextCacheNode* Eve_TextCache_FindOrCreate(struct Eve_TextCache* self,
     SDL_FreeSurface(surface);
 
     node = malloc(sizeof(struct Eve_TextCacheNode));
-    Eve_TextCacheNode_Create(node, text, color, texture, width, height);
-    node->next = bucket->head;
-    bucket->head = node;
+    Eve_TextCacheNode_Create(node, self->all_nodes, text, color, texture, width, height);
+    Eve_TextCacheNode_Link(node, &bucket->head);
+    bucket->head    = node;
+    self->all_nodes = node;
     return node;
 }
 
