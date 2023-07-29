@@ -72,6 +72,7 @@ uint32_t Eve_HashText(const char* text) {
 
 struct Eve_TextCacheNode {
     struct Eve_TextCacheNode*   next_global;
+    unsigned int                age_created;
     struct Eve_TextCacheNode*   next;
     struct Eve_TextCacheNode**  prev;
     char*                       text;
@@ -83,8 +84,10 @@ struct Eve_TextCacheNode {
 
 void Eve_TextCacheNode_Unlink(struct Eve_TextCacheNode* self);
 
-void Eve_TextCacheNode_Create(struct Eve_TextCacheNode* self, struct Eve_TextCacheNode* next_global, const char* text, struct Eve_Color color, SDL_Texture* texture, Eve_UInt width, Eve_UInt height) {
-    self->next_global = next_global;
+void Eve_TextCacheNode_Create(struct Eve_TextCacheNode* self, struct Eve_TextCacheNode** insert_at, unsigned int age_created, const char* text, struct Eve_Color color, SDL_Texture* texture, Eve_UInt width, Eve_UInt height) {
+    self->next_global = *insert_at;
+    *insert_at        = self;
+    self->age_created = age_created;
     self->next        = NULL;
     self->prev        = NULL;
     self->text        = strdup(text);
@@ -98,6 +101,11 @@ void Eve_TextCacheNode_Destroy(struct Eve_TextCacheNode* self) {
     Eve_TextCacheNode_Unlink(self);
     free(self->text);
     SDL_DestroyTexture(self->texture);
+}
+
+void Eve_TextCacheNode_Delete(struct Eve_TextCacheNode* self) {
+    Eve_TextCacheNode_Destroy(self);
+    free(self);
 }
 
 void Eve_TextCacheNode_Link(struct Eve_TextCacheNode* self, struct Eve_TextCacheNode** list) {
@@ -131,9 +139,10 @@ void Eve_TextCacheBucket_Destroy(struct Eve_TextCacheBucket* self) {
     struct Eve_TextCacheNode*  node;
     struct Eve_TextCacheNode*  next;
 
+    // FIXME, XXX: This might crash since the deletion function unlinks the node!
     for (node = self->head; node != NULL; node = next) {
         next = node->next;
-        Eve_TextCacheNode_Destroy(node);
+        Eve_TextCacheNode_Delete(node);
     }
 }
 
@@ -142,41 +151,28 @@ void Eve_TextCacheBucket_Destroy(struct Eve_TextCacheBucket* self) {
  * A hash map of text cache nodes.
  */
 struct Eve_TextCache {
-    struct Eve_TextCacheBucket buckets[256];
-    unsigned int               bucket_count;
+    struct Eve_TextCacheBucket  buckets[4096];
+    unsigned int                bucket_count;
 
-    struct Eve_TextCacheNode*  all_nodes;
+    struct Eve_TextCacheNode*   all_nodes;
+    struct Eve_TextCacheNode**  insert_at;
+    unsigned int                age;
 };
 
 void Eve_TextCache_Create(struct Eve_TextCache* self) {
-    self->bucket_count = 256;
+    self->bucket_count = 4096;
     for (unsigned int i = 0; i < self->bucket_count; i++) {
-        self->buckets[i].head = NULL;
+        Eve_TextCacheBucket_Create(&self->buckets[i]);
     }
+    self->all_nodes = NULL;
+    self->insert_at = &self->all_nodes;
+    self->age       = 0;
 }
 
 void Eve_TextCache_Destroy(struct Eve_TextCache* self) {
     for (unsigned int i = 0; i < self->bucket_count; i++) {
         Eve_TextCacheBucket_Destroy(&self->buckets[i]);
     }
-}
-
-struct Eve_TextCacheNode* Eve_TextCache_Find(struct Eve_TextCache* self, const char* text, struct Eve_Color color) {
-    struct Eve_TextCacheBucket*  bucket;
-    struct Eve_TextCacheNode*    node;
-    uint32_t                     hash;
-    
-    hash   = Eve_HashText(text);
-    bucket = &self->buckets[hash % self->bucket_count];
-    node   = bucket->head;
-
-    while (node != NULL) {
-        if (strcmp(node->text, text) == 0 && node->color.rgba == color.rgba) {
-            return node;
-        }
-        node = node->next;
-    }
-    return NULL;
 }
 
 struct Eve_TextCacheNode* Eve_TextCache_FindOrCreate(struct Eve_TextCache* self, const char* text, struct Eve_Color color, SDL_Renderer* renderer, TTF_Font* font) {
@@ -188,7 +184,6 @@ struct Eve_TextCacheNode* Eve_TextCache_FindOrCreate(struct Eve_TextCache* self,
     SDL_Color                    sdl_color;
     int                          width;
     int                          height;
-    static int count = 0;
     
     hash   = Eve_HashText(text);
     bucket = &self->buckets[hash % self->bucket_count];
@@ -201,8 +196,6 @@ struct Eve_TextCacheNode* Eve_TextCache_FindOrCreate(struct Eve_TextCache* self,
         node = node->next;
     }
 
-    printf("Creating text cache node %d\n", count++);
-
     sdl_color = Eve_Color_ToSDL(color);
     surface   = TTF_RenderUTF8_Blended(font, text, sdl_color);
     texture   = SDL_CreateTextureFromSurface(renderer, surface);
@@ -211,11 +204,33 @@ struct Eve_TextCacheNode* Eve_TextCache_FindOrCreate(struct Eve_TextCache* self,
     SDL_FreeSurface(surface);
 
     node = malloc(sizeof(struct Eve_TextCacheNode));
-    Eve_TextCacheNode_Create(node, self->all_nodes, text, color, texture, width, height);
+    Eve_TextCacheNode_Create(node, self->insert_at, self->age, text, color, texture, width, height);
     Eve_TextCacheNode_Link(node, &bucket->head);
-    bucket->head    = node;
-    self->all_nodes = node;
+    self->insert_at = &node->next_global;
     return node;
+}
+
+void Eve_TextCache_Tick(struct Eve_TextCache* self) {
+    struct Eve_TextCacheNode*  next;
+
+    printf("--- Text cache age %d ---\n", self->age);
+    for (struct Eve_TextCacheNode* node = self->all_nodes; node != NULL; node = node->next_global) {
+        printf("Node '%s' age %d\n", node->text, self->age - node->age_created);
+    }
+
+    if (self->all_nodes != NULL) {
+        self->age++;
+
+        while (self->all_nodes != NULL && self->all_nodes->age_created + 1024 < self->age) {
+            next = self->all_nodes->next_global;
+            Eve_TextCacheNode_Delete(self->all_nodes);
+            self->all_nodes = next;
+        }
+
+        if (self->all_nodes == NULL) {
+            self->insert_at = &self->all_nodes;
+        }
+    }
 }
 
 
@@ -419,6 +434,7 @@ void Eve_RenderState_Clear(struct Eve_RenderState* self) {
 
 void Eve_RenderState_Render(struct Eve_RenderState* self) {
     SDL_RenderPresent(self->renderer);
+    Eve_TextCache_Tick(&self->text_cache);
 }
 
 bool Eve_RenderState_PollEvent(struct Eve_RenderState* self) {
