@@ -213,11 +213,6 @@ struct Eve_TextCacheNode* Eve_TextCache_FindOrCreate(struct Eve_TextCache* self,
 void Eve_TextCache_Tick(struct Eve_TextCache* self) {
     struct Eve_TextCacheNode*  next;
 
-    printf("--- Text cache age %d ---\n", self->age);
-    for (struct Eve_TextCacheNode* node = self->all_nodes; node != NULL; node = node->next_global) {
-        printf("Node '%s' age %d\n", node->text, self->age - node->age_created);
-    }
-
     if (self->all_nodes != NULL) {
         self->age++;
 
