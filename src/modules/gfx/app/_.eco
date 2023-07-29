@@ -56,8 +56,8 @@
 
         OutlinerWindowForObject: object => (
             builder Window(400, 400,
-                builder WithRebuilderDo: $[ :(us, builder, object) :rebuilder |
-                    builder VBox(
+                builder VBox(
+                    builder WithRebuilderDo: $[ :(us, builder, object) :rebuilder |
                         builder Stacked(
                             builder VBox(
                                 builder Spacer,
@@ -81,9 +81,9 @@
                             ),
                             builder Scrollable(builder Margin(10, us OutlinerPaneForObject: object)),
                         ),
-                        us ObjectShellFor: object ~ rigidHeight: 100
-                    )
-                ] bind(self, builder, object)
+                    ] bind(self, builder, object),
+                    ObjectShellFor: object ~ rigidHeight: 100
+                )
             )
         );
 
@@ -213,17 +213,22 @@
                         | result <- expr basicEvaluateInEnv: environment |
                         world open: (WindowFor: result)
                     ] catch: [ :e |
+                        (std io out << 'Caught error') newline commit.
                         | sw <- (std io StringWriter) new |
                         (sw << 'Error while evaluating expression!') newline newline.
                         sw << e.
-                        world open: (ErrorWindow: (sw build))
+                        (std io out << 'Printed error') newline commit.
+                        world open: (ErrorWindow: (sw build)).
+                        (std io out << 'Opened window') newline commit.
+                      ^ self
                     ]
                 ]
             ] catch: [ :e |
                 | sw <- (std io StringWriter) new |
                 (sw << 'Syntax error while parsing expression:') newline newline.
                 sw << e.
-                world open: (ErrorWindow: (sw build))
+                world open: (ErrorWindow: (sw build)).
+              ^ self
             ]
         );
         RunDocumentAndShowResult: source World: world => RunDocumentAndShowResult: source World: world Environment: lobby;

@@ -184,6 +184,10 @@ struct Eve_TextCacheNode* Eve_TextCache_FindOrCreate(struct Eve_TextCache* self,
     SDL_Color                    sdl_color;
     int                          width;
     int                          height;
+
+    if (text == NULL || text[0] == '\0') {
+        return NULL;
+    }
     
     hash   = Eve_HashText(text);
     bucket = &self->buckets[hash % self->bucket_count];
@@ -198,6 +202,11 @@ struct Eve_TextCacheNode* Eve_TextCache_FindOrCreate(struct Eve_TextCache* self,
 
     sdl_color = Eve_Color_ToSDL(color);
     surface   = TTF_RenderUTF8_Blended(font, text, sdl_color);
+    
+    if (surface == NULL) {
+        return NULL;
+    }
+
     texture   = SDL_CreateTextureFromSurface(renderer, surface);
     width     = surface->w;
     height    = surface->h;
