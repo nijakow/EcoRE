@@ -173,6 +173,36 @@
             )
         );
 
+        ArrayPaneFor: object => (
+            builder Scrollable(
+                builder Margin(10,
+                    ( | vbox <- builder VBox() |
+                        0 for: (object size) do: [ :slotIndex |
+                            vbox add: (
+                                builder HBox(
+                                    builder Button(
+                                        builder Center(
+                                            builder Label: (
+                                                | sw <- (std io StringWriter) new |
+                                                sw << slotIndex.
+                                                sw build
+                                            )
+                                        ),
+                                        $[ :(us, object, index) :sender |
+                                            (sender world yes) open: (us WindowFor: (object at: index))
+                                        ] bind(self, object, slotIndex)
+                                    ) ~ xLayout: builder layouts Flexible
+                                      ~ yLayout: builder layouts ShrinkWrap,
+                                ) ~ xLayout: builder layouts Flexible
+                                  ~ yLayout: builder layouts ShrinkWrap.
+                            )
+                        ].
+                        vbox
+                    )
+                )
+            )
+        );
+
         CodePaneFor: object => (
             |
                 writer       <- (std io StringWriter) new,
@@ -202,6 +232,7 @@
             begin
               ~ if: [ std reflect primitives IsMolecule:  object ] then: [ ^ MoleculePaneFor:  object ]
               ~ if: [ std reflect primitives IsInterface: object ] then: [ ^ InterfacePaneFor: object ]
+              ~ if: [ std reflect primitives IsArray:     object ] then: [ ^ ArrayPaneFor:     object ]
               ~ if: [ std reflect primitives IsCode:      object ] then: [ ^ CodePaneFor:      object ]
             ~ default: [ ^ PresentationPaneFor: object ]
         );
