@@ -113,6 +113,11 @@ void Eco_Interface_Del(struct Eco_Interface* interface)
     Eco_Object_Del(&(interface->_));
 }
 
+bool Eco_Interface_IsInterface(struct Eco_Object* object)
+{
+    return object->type->typecore == &Eco_Interface_TYPECORE;
+}
+
 struct Eco_Interface* Eco_Interface_GetDefaultInterface()
 {
     if (Eco_Interface_DEFAULT == NULL) {

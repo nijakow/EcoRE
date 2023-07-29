@@ -24,6 +24,20 @@ bool Eco_VM_Builtin_IsMolecule(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_IsInterface(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    any = Eco_Fiber_Pop(fiber);
+    if (Eco_Any_IsPointer(any) && Eco_Interface_IsInterface(Eco_Any_AsPointer(any)))
+        Eco_Fiber_Push(fiber, Eco_Any_FromInteger(1));
+    else
+        Eco_Fiber_Push(fiber, Eco_Any_FromInteger(0));
+    return true;
+}
+
 bool Eco_VM_Builtin_IsCode(struct Eco_Fiber* fiber, unsigned int args)
 {
     Eco_Any  any;

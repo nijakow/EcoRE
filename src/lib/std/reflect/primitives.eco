@@ -17,4 +17,5 @@
     IsCode:   obj => #'ecosphere.ecore.reflect.is_code'(obj) != 0;
 
     IsMolecule: obj => #'ecosphere.ecore.reflect.is_molecule'(obj) != 0;
+    IsInterface: obj => #'ecosphere.ecore.reflect.is_interface'(obj) != 0;
 }

@@ -131,6 +131,14 @@
             ] bind(self, builder, object)
         );
 
+        InterfacePaneFor: object => (
+            builder Scrollable(
+                builder Margin(10,
+                    builder Label: 'Interface!'
+                )
+            )
+        );
+
         CodePaneFor: object => (
             |
                 writer       <- (std io StringWriter) new,
@@ -158,8 +166,9 @@
 
         PaneFor: object => (
             begin
-              ~ if: [ std reflect primitives IsMolecule: object ] then: [ ^ MoleculePaneFor: object ]
-              ~ if: [ std reflect primitives IsCode:     object ] then: [ ^ CodePaneFor:     object ]
+              ~ if: [ std reflect primitives IsMolecule:  object ] then: [ ^ MoleculePaneFor:  object ]
+              ~ if: [ std reflect primitives IsInterface: object ] then: [ ^ InterfacePaneFor: object ]
+              ~ if: [ std reflect primitives IsCode:      object ] then: [ ^ CodePaneFor:      object ]
             ~ default: [ ^ PresentationPaneFor: object ]
         );
 
@@ -214,13 +223,10 @@
                         | result <- expr basicEvaluateInEnv: environment |
                         world open: (WindowFor: result)
                     ] catch: [ :e |
-                        (std io out << 'Caught error') newline commit.
                         | sw <- (std io StringWriter) new |
                         (sw << 'Error while evaluating expression!') newline newline.
                         sw << e.
-                        (std io out << 'Printed error') newline commit.
                         world open: (ErrorWindow: (sw build)).
-                        (std io out << 'Opened window') newline commit.
                       ^ self
                     ]
                 ]

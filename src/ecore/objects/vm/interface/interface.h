@@ -52,6 +52,8 @@ struct Eco_Interface* Eco_Interface_New(unsigned int, unsigned int);
 void Eco_Interface_Mark(struct Eco_GC_State*, struct Eco_Interface*);
 void Eco_Interface_Del(struct Eco_Interface*);
 
+bool Eco_Interface_IsInterface(struct Eco_Object* object);
+
 bool Eco_Interface_ImplementsMessage(struct Eco_Interface*, struct Eco_Key*);
 bool Eco_Interface_ImplementsInterface(struct Eco_Interface*, struct Eco_Interface*);
 
