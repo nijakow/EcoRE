@@ -54,67 +54,6 @@
 
         OutlinerPaneForObject: object => OutlinerPaneForMirror: (std reflect Mirror: object);
 
-        OutlinerWindowForObject: object => (
-            builder Window(400, 400,
-                builder VBox(
-                    builder WithRebuilderDo: $[ :(us, builder, object) :rebuilder |
-                        builder Stacked(
-                            builder VBox(
-                                builder Spacer,
-                                builder HBox(
-                                    builder Spacer,
-                                    builder Button(builder Margin(5, builder Label: 'C'),
-                                                    $[ :(object) :sender |
-                                                        sender world yes: [ :world |
-                                                            (world handMorph) copyToClipboard: object
-                                                        ]
-                                                    ] bind(object)
-                                    ),
-                                    builder Button(builder Margin(5, builder Label: '+'),
-                                                    $[ :(object, rebuilder) :sender |
-                                                        #'ecosphere.ecore.reflect.add_value_slot'(object, -1, 1, any, #'newSlot', 42).
-                                                        rebuilder value.
-                                                    ] bind(object, rebuilder)
-                                    ),
-                                    builder SpacerW: 10 H: 1
-                                ) ~ yLayout: builder layouts ShrinkWrap,
-                            ),
-                            builder Scrollable(builder Margin(10, us OutlinerPaneForObject: object)),
-                        ),
-                    ] bind(self, builder, object),
-                    ObjectShellFor: object ~ rigidHeight: 100
-                )
-            )
-        );
-
-        DisassemblyWindowFor: code => (
-            |
-                writer       <- (std io StringWriter) new,
-                disassembled <- optimizer Disassemble: code,
-                ast          <- optimizer BuildAST: disassembled,
-                rewritten    <- optimizer RewriteAST: ast
-            |
-
-            ((optimizer ast Printer) clone initWithWriter: writer) print: rewritten ast.
-
-            builder Window(500, 400,
-                builder Scrollable(
-                    builder TextField: (writer build)
-                )
-            )
-        );
-
-        PresentationWindowFor: object => (
-            | writer <- (std io StringWriter) new |
-            writer << object.
-            builder Window(400, 400,
-                builder VBox(
-                    builder Scrollable(builder TextField: (writer build)),
-                    ObjectShellFor: object ~ rigidHeight: 100
-                )
-            )
-        );
-
         LoadToolFromPath: path => (
             [
                 | morph <- (path importIn: $battery) build |
@@ -164,11 +103,73 @@
             ]
         );
 
-        WindowFor: object => (
+        MoleculePaneFor: object => (
+            builder WithRebuilderDo: $[ :(us, builder, object) :rebuilder |
+                builder Stacked(
+                    builder VBox(
+                        builder Spacer,
+                        builder HBox(
+                            builder Spacer,
+                            builder Button(builder Margin(5, builder Label: 'C'),
+                                            $[ :(object) :sender |
+                                                sender world yes: [ :world |
+                                                    (world handMorph) copyToClipboard: object
+                                                ]
+                                            ] bind(object)
+                            ),
+                            builder Button(builder Margin(5, builder Label: '+'),
+                                            $[ :(object, rebuilder) :sender |
+                                                #'ecosphere.ecore.reflect.add_value_slot'(object, -1, 1, any, #'newSlot', 42).
+                                                rebuilder value.
+                                            ] bind(object, rebuilder)
+                            ),
+                            builder SpacerW: 10 H: 1
+                        ) ~ yLayout: builder layouts ShrinkWrap,
+                    ),
+                    builder Scrollable(builder Margin(10, us OutlinerPaneForObject: object)),
+                ),
+            ] bind(self, builder, object)
+        );
+
+        CodePaneFor: object => (
+            |
+                writer       <- (std io StringWriter) new,
+                disassembled <- optimizer Disassemble: object,
+                ast          <- optimizer BuildAST: disassembled,
+                rewritten    <- optimizer RewriteAST: ast
+            |
+
+            ((optimizer ast Printer) clone initWithWriter: writer) print: rewritten ast.
+
+            builder Scrollable(
+                builder TextField: (writer build)
+            )
+        );
+
+        PresentationPaneFor: object => (
+            | writer <- (std io StringWriter) new |
+            
+            writer << object.
+
+            builder Scrollable(
+                builder TextField: (writer build)
+            )
+        );
+
+        PaneFor: object => (
             begin
-              ~ if: [ std reflect primitives IsCode:     object ] then: [ ^ DisassemblyWindowFor:    object ]
-              ~ if: [ std reflect primitives IsMolecule: object ] then: [ ^ OutlinerWindowForObject: object ]
-            ~ default: [ ^ PresentationWindowFor: object ]
+              ~ if: [ std reflect primitives IsMolecule: object ] then: [ ^ MoleculePaneFor: object ]
+              ~ if: [ std reflect primitives IsCode:     object ] then: [ ^ CodePaneFor:     object ]
+            ~ default: [ ^ PresentationPaneFor: object ]
+        );
+
+        WindowFor: object => (
+            builder Window(400, 400,
+                builder VBox(
+                    PaneFor: object,
+                    ObjectShellFor: object ~ rigidHeight: 100
+                )
+            )
         );
 
         ErrorWindow: error => (
@@ -262,7 +263,7 @@
                 ui Center(ui TextField: 'Look at me as I can fly!\n    - Chrom, "Regret & Testify"'),
                 ui VBox(
                     ui Button(ui Center(ui Label: 'Outliner'),
-                            $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder OutlinerWindowForObject: lobby) ]
+                            $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder WindowFor: lobby) ]
                                     bind(MirrorBuilder))
                         ~ xLayout: ui layouts Flexible
                         ~ yLayout: ui layouts Flexible,
