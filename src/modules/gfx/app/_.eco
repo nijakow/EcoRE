@@ -134,7 +134,41 @@
         InterfacePaneFor: object => (
             builder Scrollable(
                 builder Margin(10,
-                    builder Label: 'Interface!'
+                    ( | vbox <- builder VBox() |
+                        0 for: (object size) do: [ :slotIndex |
+                            vbox add: (
+                                | hbox <- builder HBox() |
+                                
+                                hbox add: (
+                                    builder Framed(
+                                        builder Margin(3, builder Label: ((object nameForSlotIndex: slotIndex) asString)),
+                                    ),
+                                ) ~ xLayout: builder layouts Flexible
+                                  ~ yLayout: builder layouts ShrinkWrap.
+                                0 for: (object argCountForSlotIndex: slotIndex) do: [ :argIndex |
+                                    hbox add: (
+                                        builder Button(
+                                            builder Margin(3, builder Label: 'arg'),
+                                            $[ :(us, type) :sender |
+                                                (sender world yes) open: (us WindowFor: type)
+                                            ] bind(self, object argTypeForSlotIndex: slotIndex Arg: argIndex)
+                                        ),
+                                    ) ~ xLayout: builder layouts Flexible
+                                      ~ yLayout: builder layouts ShrinkWrap.
+                                ].
+                                (object hasVarargsForSlotIndex: slotIndex) if: [
+                                    hbox add: (
+                                        builder Framed(
+                                            builder Margin(3, builder Label: '...'),
+                                        ) ~ xLayout: builder layouts ShrinkWrap,
+                                    ) ~ xLayout: builder layouts Flexible
+                                      ~ yLayout: builder layouts ShrinkWrap.
+                                ].
+                                hbox
+                            )
+                        ].
+                        vbox
+                    )
                 )
             )
         );
