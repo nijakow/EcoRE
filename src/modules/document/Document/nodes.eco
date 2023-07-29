@@ -271,6 +271,7 @@
     CompoundSnip: snips => CompoundSnip clone initWithSnips: snips;
     MakeCompoundSnip(...) => CompoundSnip: (std util newArray(...));
     MakeOptimizedCompoundSnipFromArray(snips) => (
+        (snips size == 0) if: [ ^ CompoundSnip: snips ].
         (snips size == 1) if: [ ^ snips at: 0 ].
         (snips size > 8) if: [
             |
