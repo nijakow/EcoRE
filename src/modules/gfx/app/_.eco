@@ -5,6 +5,8 @@
 
     MirrorBuilder = {
         static with inherited _ = std Module;
+        $battery = $;
+
         document <- $ document;
         builder <- $ ui builder.
         optimizer <- $package ecosphere optimizer;
@@ -113,16 +115,28 @@
             )
         );
 
+        LoadToolFromPath: path => (
+            [
+                | morph <- (path importIn: $battery) build |
+              ^ Yes: morph
+            ] catch: [ :e |
+                | sw <- (std io StringWriter) new |
+                (sw << 'Error while loading tool!') newline newline.
+                sw << e.
+                ErrorWindow: (sw build).
+              ^ No
+            ]
+        );
+
         PathOutlinerRow: childpath Name: name Parent: parent => (
             builder ShrinkWrap(
                 builder HBox(
                     builder Button(builder Margin(3, builder Label: (name)),
                                    $[ :(builder, parent, path) :sender |
-                                        ((path extension) equals: 'eco') if: [
-                                            (sender world yes) open: (builder OutlinerWindowForPath: path)
-                                        ] else: [
-                                            parent replaceWith: (builder OutlinerPaneForPath: path)
-                                        ]
+                                        begin
+                                          ~ if: [ (path extension) equals: 'eco' ] then: [ (sender world yes) open: (builder OutlinerWindowForPath: path) ]
+                                          ~ if: [ (path extension) equals: 'ego' ] then: [ (builder LoadToolFromPath: path) yes: [ :obj | (sender world yes) open: obj ] ]
+                                          ~ default: [ parent replaceWith: (builder OutlinerPaneForPath: path) ]
                                    ] bind(self, parent, childpath)
                     )
                 ) ~ xLayout: builder layouts Flexible

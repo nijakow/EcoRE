@@ -1,0 +1,8 @@
+{
+    static with inherited _ = std Module;
+    with $battery = $;
+
+    build => (
+        ui builder Window(300, 200, ui builder Center(ui builder Label: 'Hello, not really!'));
+    );
+}
