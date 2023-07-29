@@ -61,6 +61,136 @@ struct Eve_Rect Eve_Rect_FromXYWH(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
 }
 
 
+uint32_t Eve_HashText(const char* text) {
+    uint32_t hash = 0;
+    while (*text) {
+        hash = (hash << 7) + (hash << 1) + hash + *text;
+        text++;
+    }
+    return hash;
+}
+
+struct Eve_TextCacheNode {
+    struct Eve_TextCacheNode*  next;
+    char*                      text;
+    struct Eve_Color           color;
+    SDL_Texture*               texture;
+    Eve_UInt                   width;
+    Eve_UInt                   height;
+};
+
+void Eve_TextCacheNode_Create(struct Eve_TextCacheNode* self, const char* text, struct Eve_Color color, SDL_Texture* texture, Eve_UInt width, Eve_UInt height) {
+    self->next    = NULL;
+    self->text    = strdup(text);
+    self->color   = color;
+    self->texture = texture;
+    self->width   = width;
+    self->height  = height;
+}
+
+void Eve_TextCacheNode_Destroy(struct Eve_TextCacheNode* self) {
+    free(self->text);
+    SDL_DestroyTexture(self->texture);
+}
+
+
+struct Eve_TextCacheBucket {
+    struct Eve_TextCacheNode*  head;
+};
+
+void Eve_TextCacheBucket_Create(struct Eve_TextCacheBucket* self) {
+    self->head = NULL;
+}
+
+void Eve_TextCacheBucket_Destroy(struct Eve_TextCacheBucket* self) {
+    struct Eve_TextCacheNode*  node;
+    struct Eve_TextCacheNode*  next;
+
+    for (node = self->head; node != NULL; node = next) {
+        next = node->next;
+        Eve_TextCacheNode_Destroy(node);
+    }
+}
+
+
+/*
+ * A hash map of text cache nodes.
+ */
+struct Eve_TextCache {
+    struct Eve_TextCacheBucket buckets[256];
+    unsigned int               bucket_count;
+};
+
+void Eve_TextCache_Create(struct Eve_TextCache* self) {
+    self->bucket_count = 256;
+    for (unsigned int i = 0; i < self->bucket_count; i++) {
+        self->buckets[i].head = NULL;
+    }
+}
+
+void Eve_TextCache_Destroy(struct Eve_TextCache* self) {
+    for (unsigned int i = 0; i < self->bucket_count; i++) {
+        Eve_TextCacheBucket_Destroy(&self->buckets[i]);
+    }
+}
+
+struct Eve_TextCacheNode* Eve_TextCache_Find(struct Eve_TextCache* self, const char* text, struct Eve_Color color) {
+    struct Eve_TextCacheBucket*  bucket;
+    struct Eve_TextCacheNode*    node;
+    uint32_t                     hash;
+    
+    hash   = Eve_HashText(text);
+    bucket = &self->buckets[hash % self->bucket_count];
+    node   = bucket->head;
+
+    while (node != NULL) {
+        if (strcmp(node->text, text) == 0 && node->color.rgba == color.rgba) {
+            return node;
+        }
+        node = node->next;
+    }
+    return NULL;
+}
+
+struct Eve_TextCacheNode* Eve_TextCache_FindOrCreate(struct Eve_TextCache* self, const char* text, struct Eve_Color color, SDL_Renderer* renderer, TTF_Font* font) {
+    struct Eve_TextCacheBucket*  bucket;
+    struct Eve_TextCacheNode*    node;
+    uint32_t                     hash;
+    SDL_Surface*                 surface;
+    SDL_Texture*                 texture;
+    SDL_Color                    sdl_color;
+    int                          width;
+    int                          height;
+    static int count = 0;
+    
+    hash   = Eve_HashText(text);
+    bucket = &self->buckets[hash % self->bucket_count];
+    node   = bucket->head;
+
+    while (node != NULL) {
+        if (strcmp(node->text, text) == 0 && node->color.rgba == color.rgba) {
+            return node;
+        }
+        node = node->next;
+    }
+
+    printf("Creating text cache node %d\n", count++);
+
+    sdl_color = Eve_Color_ToSDL(color);
+    surface   = TTF_RenderUTF8_Blended(font, text, sdl_color);
+    texture   = SDL_CreateTextureFromSurface(renderer, surface);
+    width     = surface->w;
+    height    = surface->h;
+    SDL_FreeSurface(surface);
+
+    node = malloc(sizeof(struct Eve_TextCacheNode));
+    Eve_TextCacheNode_Create(node, text, color, texture, width, height);
+    node->next = bucket->head;
+    bucket->head = node;
+    return node;
+}
+
+
 struct Eve_Frame {
     struct Eve_Color color;
     Eve_Int          x;
@@ -110,6 +240,8 @@ struct Eve_RenderState {
     struct Eve_FrameStack  frame_stack;
     struct Eve_Frame       frame;
     struct Eve_Color       color;
+
+    struct Eve_TextCache   text_cache;
 };
 
 void Eve_RenderState_Create(struct Eve_RenderState* self, struct SDL_Window* window, struct SDL_Renderer* window_renderer, TTF_Font* font) {
@@ -132,10 +264,12 @@ void Eve_RenderState_Create(struct Eve_RenderState* self, struct SDL_Window* win
     self->frame.xmax  = window_width;
     self->frame.ymax  = window_height;
 
-    // SDL_SetRenderTarget(self->renderer, self->texture);
+    Eve_TextCache_Create(&self->text_cache);
 }
 
 void Eve_RenderState_Destroy(struct Eve_RenderState* self) {
+    Eve_TextCache_Destroy(&self->text_cache);
+
     Eve_FrameStack_Destroy(&self->frame_stack);
 
     TTF_CloseFont(self->font);
@@ -158,8 +292,6 @@ void Eve_RenderState_Reset(struct Eve_RenderState* self) {
     self->frame.y     = 0;
     self->frame.xmax  = window_width;
     self->frame.ymax  = window_height;
-
-    // SDL_SetRenderTarget(self->renderer, self->texture);
 }
 
 Eve_UInt Eve_RenderState_CurrentWidth(struct Eve_RenderState* self) {
@@ -238,27 +370,19 @@ void Eve_RenderState_FillRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y
 }
 
 void Eve_RenderState_DrawText(struct Eve_RenderState* self, const char* text, Eve_Int x, Eve_Int y) {
-    SDL_Surface* surface;
-    SDL_Texture* texture;
-    SDL_Rect     rect;
-    SDL_Color    color;
-    int          w, h;
+    struct Eve_TextCacheNode*  node;
+    SDL_Rect                   rect;
 
-    color = Eve_Color_ToSDL(self->frame.color);
+    node = Eve_TextCache_FindOrCreate(&self->text_cache, text, self->frame.color, self->renderer, self->font);
 
-    surface = TTF_RenderUTF8_Blended(self->font, text, color);
-    texture = SDL_CreateTextureFromSurface(self->renderer, surface);
-    SDL_FreeSurface(surface);
+    if (node != NULL) {
+        rect.x = x;
+        rect.y = y;
+        rect.w = node->width;
+        rect.h = node->height;
 
-    SDL_QueryTexture(texture, NULL, NULL, &w, &h);
-
-    rect.x = x;
-    rect.y = y;
-    rect.w = w;
-    rect.h = h;
-
-    SDL_RenderCopy(self->renderer, texture, NULL, &rect);
-    SDL_DestroyTexture(texture);
+        SDL_RenderCopy(self->renderer, node->texture, NULL, &rect);
+    }
 }
 
 void Eve_RenderState_Clear(struct Eve_RenderState* self) {
@@ -267,11 +391,6 @@ void Eve_RenderState_Clear(struct Eve_RenderState* self) {
 
 void Eve_RenderState_Render(struct Eve_RenderState* self) {
     SDL_RenderPresent(self->renderer);
-    // SDL_SetRenderTarget(self->renderer, NULL);
-
-    // SDL_RenderCopy(self->renderer, self->texture, NULL, NULL);
-    // SDL_RenderPresent(self->renderer);
-    // SDL_SetRenderTarget(self->renderer, self->texture);
 }
 
 bool Eve_RenderState_PollEvent(struct Eve_RenderState* self) {
