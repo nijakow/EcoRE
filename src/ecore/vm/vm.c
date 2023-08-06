@@ -19,7 +19,8 @@
 
 void Eco_VM_Create(struct Eco_VM* vm)
 {
-    vm->fibers = NULL;
+    vm->fibers           = NULL;
+    vm->fiber_id_counter = 0;
     
     vm->constants.lobby  = Eco_Any_Default();
     vm->constants.ctrue  = Eco_Any_Default();
@@ -135,4 +136,12 @@ bool Eco_VM_LoadImageFromFile(struct Eco_VM* vm, const char* file)
         Eco_Log_Error("Can't load file '%s'!\n", file);
         return false;
     }
+}
+
+Eco_Integer Eco_VM_NewFiberId(struct Eco_VM* vm)
+{
+    /*
+     * TODO: Implement overflow protection by reusing old fiber IDs.
+     */
+    return vm->fiber_id_counter++;
 }

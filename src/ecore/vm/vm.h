@@ -15,13 +15,14 @@ struct Eco_VM
     struct Eco_GC_State   gc_state;
 
     struct Eco_Fiber*     fibers;
+    Eco_Integer           fiber_id_counter;
 
     struct {
         Eco_Any  lobby;
         
         Eco_Any  ctrue;
         Eco_Any  cfalse;
-    }                     constants;
+    } constants;
 };
 
 
@@ -39,5 +40,7 @@ void Eco_VM_Run(struct Eco_VM*);
 struct Eco_Fiber* Eco_VM_SpawnThunk(struct Eco_VM*, struct Eco_Code*);
 bool Eco_VM_LoadImageFromFile(struct Eco_VM*, const char*);
 bool Eco_VM_LoadImage(struct Eco_VM*, char*, unsigned long);
+
+Eco_Integer Eco_VM_NewFiberId(struct Eco_VM*);
 
 #endif

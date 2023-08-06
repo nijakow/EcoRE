@@ -19,6 +19,8 @@ struct Eco_Fiber
     struct Eco_Fiber**      prev;
     struct Eco_Fiber*       next;
 
+    Eco_Integer             id;
+
     struct Eco_Scheduler*   scheduler;
     struct Eco_FiberQueue*  queue;
     struct Eco_Fiber**      queue_prev;

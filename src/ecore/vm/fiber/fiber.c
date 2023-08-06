@@ -21,6 +21,8 @@ struct Eco_Fiber* Eco_Fiber_New(struct Eco_VM* vm, unsigned int stack_size)
     fiber->next             =  vm->fibers;
     vm->fibers              =  fiber;
 
+    fiber->id               =  Eco_VM_NewFiberId(vm);
+
     fiber->scheduler        = &vm->scheduler;
     fiber->queue            =  NULL;
     fiber->queue_prev       =  NULL;
