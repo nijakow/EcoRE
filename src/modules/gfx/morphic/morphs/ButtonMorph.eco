@@ -24,15 +24,21 @@
 
             renderImplOn: renderer => (
                 highlighted if: [
+                    |
+                        minX <- 1,
+                        minY <- 1,
+                        maxX <- width - 2,
+                        maxY <- height - 2
+                    |
                     renderer setColor: highlightColor.
-                    1 to: ((width + height) / 10) do: [ :i |
-                        i <- i * 10.
+                    1 to: ((maxX + maxY) / 5) do: [ :i |
+                        i <- i * 5.
 
                         |
-                            sx <- i min: (width - 1),
+                            sx <- i min: maxX,
                             sy <- (i - sx) max: 0,
-                            ex <- (i - (height - 1)) max: 0,
-                            ey <- i min: (height - 1)
+                            ex <- (i - maxY) max: 0,
+                            ey <- i min: maxY
                         |
 
                         renderer drawLineX: sx Y: sy X: ex Y: ey.
