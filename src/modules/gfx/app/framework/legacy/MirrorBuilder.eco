@@ -105,13 +105,6 @@
                     builder Spacer,
                     builder HBox(
                         builder Spacer,
-                        builder Button(builder Margin(5, builder Label: 'C'),
-                                        $[ :(object) :sender |
-                                            sender world yes: [ :world |
-                                                (world handMorph) copyToClipboard: object
-                                            ]
-                                        ] bind(object)
-                        ),
                         builder Button(builder Margin(5, builder Label: '+'),
                                         $[ :(object, rebuilder) :sender |
                                             #'ecosphere.ecore.reflect.add_value_slot'(object, -1, 1, any, #'newSlot', 42).
@@ -236,6 +229,15 @@
         builder Window(400, 400,
             builder VBox(
                 PaneFor: object,
+                builder HBox(
+                    builder Button(builder Margin(5, builder Label: 'Copy to Clipboard'),
+                                $[ :(object) :sender |
+                                    sender world yes: [ :world |
+                                        (world handMorph) copyToClipboard: object
+                                    ]
+                                ] bind(object)
+                    ) ~ xLayout: builder layouts Flexible,
+                ) ~ yLayout: builder layouts ShrinkWrap,
                 ObjectShellFor: object ~ rigidHeight: 100
             )
         )
