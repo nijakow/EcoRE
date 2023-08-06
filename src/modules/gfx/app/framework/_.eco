@@ -1,5 +1,6 @@
 {
     static with inherited _ = std Module;
-    with $battery = $;
+    with app = $;
 
+    own legacy = (here / 'legacy' / '_.eco') importIn: (self app);
 }

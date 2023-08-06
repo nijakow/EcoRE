@@ -6,11 +6,14 @@
     openInWorld: world => world open: build;
 
     reset => (
-    ^ self
+        ^ self
     );
 
     build => (
-        | ui <- self ui builder |
+        |
+            ui <- self ui builder,
+            MirrorBuilder <- framework legacy MirrorBuilder
+        |
 
         ui Window(280, 275,
             ui VBox(

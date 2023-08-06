@@ -1,0 +1,6 @@
+{
+    static with inherited _ = std Module;
+    app = $;
+
+    own MirrorBuilder = (here / 'MirrorBuilder.eco') importIn: (self app);
+}
