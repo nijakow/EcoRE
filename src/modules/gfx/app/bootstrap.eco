@@ -1,0 +1,42 @@
+
+{
+    static with inherited _ = std Module;
+    with $battery = $;
+
+    openInWorld: world => world open: build;
+
+    reset => (
+    ^ self
+    );
+
+    build => (
+        | ui <- self ui builder |
+
+        ui Window(280, 275,
+            ui VBox(
+                ui Center(ui TextField: 'Look at me as I can fly!\n    - Chrom, "Regret & Testify"'),
+                ui VBox(
+                    ui Button(ui Center(ui Label: 'Outliner'),
+                            $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder WindowFor: lobby) ]
+                                    bind(MirrorBuilder))
+                        ~ xLayout: ui layouts Flexible
+                        ~ yLayout: ui layouts Flexible,
+                    ui Button(ui Center(ui Label: 'Files'),
+                            $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder OutlinerWindowForPath: (std os files here / '..' / '..' / '..')) ]
+                                    bind(MirrorBuilder))
+                        ~ xLayout: ui layouts Flexible
+                        ~ yLayout: ui layouts Flexible,
+                    ui Button(ui Center(ui Label: 'Shell'),
+                            $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder ShellWindow) ]
+                                    bind(MirrorBuilder))
+                        ~ xLayout: ui layouts Flexible
+                        ~ yLayout: ui layouts Flexible
+                )
+            )
+        )
+    );
+
+    Main => (
+        morphic RunWithWidth: 1400 Height: 800 App: self;
+    );
+}

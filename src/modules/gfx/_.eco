@@ -8,6 +8,6 @@
     own app     = (here / 'app' / '_.eco') importIn: self;
 
     Main => (
-        app Main.
+        app bootstrap Main.
     );
 }
