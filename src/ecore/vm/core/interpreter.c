@@ -9,18 +9,25 @@
 #include <ecore/objects/vm/code/closure.h>
 
 
-bool Eco_Fiber_EnterThunk(struct Eco_Fiber* fiber, Eco_Any* lobby, struct Eco_Code* code)
+bool Eco_Fiber_EnterCodeWithArgs(struct Eco_Fiber* fiber, struct Eco_Code* code, Eco_Any* args, unsigned int arg_count)
 {
     struct Eco_Frame*  frame;
+    unsigned int       current_arg;
 
-    Eco_Fiber_Push(fiber, *lobby);
-
-    frame              = Eco_Fiber_PushFrame(fiber, *lobby, 1, code->arg_count, code->register_count);
+    for (current_arg = 0; current_arg < arg_count; current_arg++)
+        Eco_Fiber_Push(fiber, args[current_arg]);
+    
+    frame = Eco_Fiber_PushFrame(fiber, args[0], arg_count, code->arg_count, code->register_count);
 
     frame->instruction = code->bytecodes;
     frame->code        = code;
 
     return true;
+}
+
+bool Eco_Fiber_EnterThunk(struct Eco_Fiber* fiber, Eco_Any* lobby, struct Eco_Code* code)
+{
+    return Eco_Fiber_EnterCodeWithArgs(fiber, code, lobby, 1);
 }
 
 bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,

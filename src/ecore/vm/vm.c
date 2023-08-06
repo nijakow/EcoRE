@@ -88,6 +88,18 @@ void Eco_VM_Run(struct Eco_VM* vm)
  *
  */
 
+struct Eco_Fiber* Eco_VM_SpawnCode(struct Eco_VM* vm, struct Eco_Code* code, Eco_Any* args, unsigned int arg_count)
+{
+    struct Eco_Fiber*  fiber;
+
+    fiber = Eco_Fiber_New(vm, 1024 * 1024 * 4 /* 4MB of stack */);
+
+    Eco_Fiber_EnterCodeWithArgs(fiber, code, args, arg_count);
+    Eco_Fiber_SetRunning(fiber);
+
+    return fiber;
+}
+
 struct Eco_Fiber* Eco_VM_SpawnThunk(struct Eco_VM* vm, struct Eco_Code* code)
 {
     struct Eco_Fiber*  fiber;
@@ -155,6 +167,6 @@ struct Eco_Fiber* Eco_VM_GetFiberById(struct Eco_VM* vm, Eco_Integer id)
         if (fiber->id == id)
             return fiber;
     }
-    
+
     return NULL;
 }

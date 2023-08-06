@@ -37,7 +37,9 @@ static inline struct Eco_Scheduler* Eco_VM_GetScheduler(struct Eco_VM* vm) {
 
 void Eco_VM_Run(struct Eco_VM*);
 
+struct Eco_Fiber* Eco_VM_SpawnCode(struct Eco_VM*, struct Eco_Code*, Eco_Any*, unsigned int);
 struct Eco_Fiber* Eco_VM_SpawnThunk(struct Eco_VM*, struct Eco_Code*);
+
 bool Eco_VM_LoadImageFromFile(struct Eco_VM*, const char*);
 bool Eco_VM_LoadImage(struct Eco_VM*, char*, unsigned long);
 
