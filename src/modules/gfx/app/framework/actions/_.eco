@@ -8,7 +8,8 @@
 
         Morph: morph => (
             (framework context DefaultWorld)
-                  open: morph
+                  open: morph.
+          ^ self
         );
 
         OutlinerForObject: object => (
