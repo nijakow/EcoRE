@@ -4,8 +4,7 @@
 
     own open = {
         static with inherited _ = std Module;
-        static actions = $;
-        static framework => actions framework;
+        static framework = $package;
 
         Morph: morph => (
             (framework context DefaultWorld)
@@ -13,18 +12,26 @@
         );
 
         OutlinerForObject: object => (
-            Morph: ((framework legacy MirrorBuilder) WindowFor: object)
+            (framework actions open) Morph: ((framework legacy MirrorBuilder) WindowFor: object)
         );
 
-        Shell => (
-            Morph: ((framework legacy MirrorBuilder) ShellWindow)
+        Path: path => (
+            (framework actions open) Morph: ((framework legacy MirrorBuilder) OutlinerWindowForPath: path)
         );
+
+        own tools = {
+            static with inherited _ = std Module;
+            static framework = $package;
+
+            Shell => (
+                (framework actions open) Morph: ((framework legacy MirrorBuilder) ShellWindow)
+            );
+        };
     };
 
     own eval = {
         static with inherited _ = std Module;
-        static actions = $;
-        static framework => actions framework;
+        static framework = $package;
 
         DocumentAndShowResult: document Environment: environment => (
             (framework legacy MirrorBuilder)

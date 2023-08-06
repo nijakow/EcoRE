@@ -14,8 +14,7 @@
 
     build => (
         |
-            ui <- self ui builder,
-            MirrorBuilder <- framework legacy MirrorBuilder
+            ui <- self ui builder
         |
 
         ui Window(280, 275,
@@ -23,18 +22,18 @@
                 ui Center(ui TextField: 'Look at me as I can fly!\n    - Chrom, "Regret & Testify"'),
                 ui VBox(
                     ui Button(ui Center(ui Label: 'Outliner'),
-                            $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder WindowFor: lobby) ]
-                                    bind(MirrorBuilder))
+                            $[ :(framework) :sender | (framework actions open) OutlinerForObject: lobby ]
+                                    bind(framework))
                         ~ xLayout: ui layouts Flexible
                         ~ yLayout: ui layouts Flexible,
                     ui Button(ui Center(ui Label: 'Files'),
-                            $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder OutlinerWindowForPath: (std os files here / '..' / '..' / '..')) ]
-                                    bind(MirrorBuilder))
+                            $[ :(framework) :sender | (framework actions open) Path: (std os files here / '..' / '..' / '..') ]
+                                    bind(framework))
                         ~ xLayout: ui layouts Flexible
                         ~ yLayout: ui layouts Flexible,
                     ui Button(ui Center(ui Label: 'Shell'),
-                            $[ :(MirrorBuilder) :sender | (sender world yes) open: (MirrorBuilder ShellWindow) ]
-                                    bind(MirrorBuilder))
+                            $[ :(framework) :sender | (framework actions open) tools Shell ]
+                                    bind(framework))
                         ~ xLayout: ui layouts Flexible
                         ~ yLayout: ui layouts Flexible
                 )
