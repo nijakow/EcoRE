@@ -43,4 +43,6 @@ bool Eco_VM_LoadImage(struct Eco_VM*, char*, unsigned long);
 
 Eco_Integer Eco_VM_NewFiberId(struct Eco_VM*);
 
+struct Eco_Fiber* Eco_VM_GetFiberById(struct Eco_VM*, Eco_Integer);
+
 #endif

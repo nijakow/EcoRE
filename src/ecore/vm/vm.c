@@ -145,3 +145,16 @@ Eco_Integer Eco_VM_NewFiberId(struct Eco_VM* vm)
      */
     return vm->fiber_id_counter++;
 }
+
+struct Eco_Fiber* Eco_VM_GetFiberById(struct Eco_VM* vm, Eco_Integer id)
+{
+    struct Eco_Fiber*  fiber;
+
+    for (fiber = vm->fibers; fiber != NULL; fiber = fiber->next)
+    {
+        if (fiber->id == id)
+            return fiber;
+    }
+    
+    return NULL;
+}
