@@ -7,6 +7,7 @@
 #include "core/clone.h"
 #include "core/code.h"
 #include "core/ffi.h"
+#include "core/fiber.h"
 #include "core/flow.h"
 #include "core/init.h"
 #include "core/io.h"
@@ -52,6 +53,8 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.flow.reset", Eco_VM_Builtin_Reset);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.flow.throw", Eco_VM_Builtin_Throw);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.flow.set_exception_handler", Eco_VM_Builtin_SetExceptionHandler);
+
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.fiber.start", Eco_VM_Builtin_StartFiber);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.code.new", Eco_VM_Builtin_Code_New);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.code.value", Eco_VM_Builtin_Code_Value);

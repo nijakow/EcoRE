@@ -55,6 +55,7 @@ vm/builtins/core/blob.c \
 vm/builtins/core/clone.c \
 vm/builtins/core/code.c \
 vm/builtins/core/ffi.c \
+vm/builtins/core/fiber.c \
 vm/builtins/core/flow.c \
 vm/builtins/core/init.c \
 vm/builtins/core/io.c \
