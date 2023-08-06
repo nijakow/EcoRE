@@ -1,0 +1,43 @@
+{
+    static with inherited _ = std Module;
+    framework = $;
+
+    own open = {
+        static with inherited _ = std Module;
+        static actions = $;
+        static framework => actions framework;
+
+        Morph: morph => (
+            (framework context DefaultWorld)
+                  open: morph
+        );
+
+        OutlinerForObject: object => (
+            Morph: ((framework legacy MirrorBuilder) WindowFor: object)
+        );
+
+        Shell => (
+            Morph: ((framework legacy MirrorBuilder) ShellWindow)
+        );
+    };
+
+    own eval = {
+        static with inherited _ = std Module;
+        static actions = $;
+        static framework => actions framework;
+
+        DocumentAndShowResult: document Environment: environment => (
+            (framework legacy MirrorBuilder)
+                  RunDocumentAndShowResult: document
+                                     World: (framework context DefaultWorld)
+                               Environment: environment
+        );
+
+        StringAndShowResult: string Environment: environment => (
+            (framework legacy MirrorBuilder)
+                  RunStringAndShowResult: string
+                                   World: (framework context DefaultWorld)
+                             Environment: environment
+        );
+    }
+}

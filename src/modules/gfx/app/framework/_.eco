@@ -3,4 +3,15 @@
     with app = $;
 
     own legacy = (here / 'legacy' / '_.eco') importIn: (self app);
+
+    own actions = (here / 'actions' / '_.eco') importIn: self;
+
+    own context = {
+        static with inherited _ = std Module;
+
+        world <- No.
+        world: w => world <- Yes: w;
+
+        DefaultWorld => world yes;
+    };
 }
