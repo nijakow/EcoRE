@@ -4,6 +4,6 @@
 
     Main => (
         (framework actions open) tools Shell.
-        (framework actions open) tools Shell.
+        (framework actions open) ui TextMessageBox: 'Hello, World!'.
     );
 }

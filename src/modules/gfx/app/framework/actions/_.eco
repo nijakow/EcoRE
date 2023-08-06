@@ -27,6 +27,15 @@
                 (framework actions open) Morph: ((framework legacy MirrorBuilder) ShellWindow)
             );
         };
+
+        own ui = {
+            static with inherited _ = std Module;
+            static framework = $package;
+
+            TextMessageBox: text => (
+                (framework actions open) Morph: ((framework legacy MirrorBuilder) TextMessageBox: text)
+            );
+        };
     };
 
     own eval = {

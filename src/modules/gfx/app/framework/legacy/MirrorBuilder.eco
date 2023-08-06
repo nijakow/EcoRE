@@ -247,6 +247,12 @@
         )
     );
 
+    TextMessageBox: message => (
+        builder Window(360, 200,
+            builder Center(builder TextField: message)
+        )
+    );
+
     RunStringAndShowResult: source World: world Environment: environment => (
         [
             |
