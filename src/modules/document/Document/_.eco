@@ -11,7 +11,7 @@
           ^ self
         );
 
-        root: r => root <- r;
+        root: r => root <- ((r isAtomicSnip) if: [ mod nodes MakeCompoundSnip(r) ] else: [ r ]);
 
         clear => root: (mod nodes MakeCompoundSnip());
 

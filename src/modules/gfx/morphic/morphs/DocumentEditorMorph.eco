@@ -227,9 +227,15 @@
           ^ self
         );
 
+        repositionCursor => (
+            caret reposition.
+          ^ self
+        );
+
         documentChanged => (
             program <- No.
             refreshLineCache.
+            repositionCursor.
             layoutChanged.
             renderDirty.
           ^ self

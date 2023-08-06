@@ -20,7 +20,13 @@
         currentItem => document root at: offset;
 
         moveTo: pos => (
-            offset <- (pos min: root size) max: 0.
+            offset <- (pos min: (root size)) max: 0.
+          ^ self
+        );
+
+        "Deprecated in the future, but useful for now."
+        reposition => (
+            offset <- (offset min: (root size)) max: 0.
           ^ self
         );
 
