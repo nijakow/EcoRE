@@ -304,7 +304,7 @@
             ^ self
         ]
     );
-    RunDocumentAndShowResult: source World: world => RunDocumentAndShowResult: source World: world Environment: lobby;
+    RunDocumentAndShowResult: source World: world => RunDocumentAndShowResult: source World: world Environment: $battery;
 
     ShellWindow => (
         builder Window(500, 350,
