@@ -4,19 +4,27 @@
         with inherited own Morph = $ Morph;
 
         protected action,
-        protected highlighted;
+        protected highlighted,
+        protected highlightColor;
 
         with inherited trait = {
             init => (
                 $(Morph) init.
-                action      <- No.
-                highlighted <- false.
+                action         <- No.
+                highlighted    <- false.
+                highlightColor <- morphic R: 0 G: 120 B: 136.
+              ^ self
+            );
+
+            highlightColor: color => (
+                highlightColor <- color.
+                renderDirty.
               ^ self
             );
 
             renderImplOn: renderer => (
                 highlighted if: [
-                    renderer setR: 0 G: 120 B: 136.
+                    renderer setColor: highlightColor.
                     1 to: ((width + height) / 10) do: [ :i |
                         i <- i * 10.
 

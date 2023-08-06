@@ -143,6 +143,14 @@
         ))
     );
 
+    ButtonWithColor(caption, color, action) => (
+      ^ ShrinkWrap(Stacked(
+            (morphic morphs ButtonMorph) new ~ highlightColor: color ~ action: action,
+            (morphic morphs FrameMorph) new,
+            caption
+        ))
+    );
+
     Minimized(window) => (
         Window(200, 100,
             Button(Center(Label: 'Unminimize'),
@@ -170,7 +178,7 @@
                         Stacked(
                             HBox(
                                 Button(Margin(3, Label: ' _ '), $[ :(builder, window) :sender | (window world yes) open: (builder Minimized(window)). window unlink. ] bind(self, window)),
-                                Button(Margin(3, Label: ' X '), $[ :(window) :sender | window unlink ] bind(window))
+                                ButtonWithColor(Margin(3, Label: ' X '), morphic R: 255 G: 0 B: 0, $[ :(window) :sender | window unlink ] bind(window))
                             ) ~ xLayout: layouts ShrinkWrap
                               ~ yLayout: layouts ShrinkWrap,
                             ColorMorph(0, 42, 47)

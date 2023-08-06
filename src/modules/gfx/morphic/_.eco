@@ -42,5 +42,28 @@
 
     Text: text => driver Text: text;
 
+    own Color = {
+        static with inherited _ = std Clonable;
+
+        r <- 0,
+        g <- 0,
+        b <- 0;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithR: _r G: _g B: _b => (
+                r <- _r.
+                g <- _g.
+                b <- _b.
+              ^ self
+            );
+
+            writeOn: w => w << 'Color(' << r << ', ' << g << ', ' << b << ')';
+        };
+    };
+
+    R: r G: g B: b => Color clone initWithR: r G: g B: b;
+
     RunWithWidth: w Height: h App: app => driver RunWithWidth: w Height: h App: app;
 }
