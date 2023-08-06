@@ -51,8 +51,8 @@
 
     LoadToolFromPath: path => (
         [
-            | morph <- (path importIn: $battery) build |
-            ^ Yes: morph
+            | tool <- (path importIn: $battery) |
+            ^ Yes: tool
         ] catch: [ :e |
             | sw <- (std io StringWriter) new |
             (sw << 'Error while loading tool!') newline newline.
@@ -69,7 +69,7 @@
                                 $[ :(builder, parent, path) :sender |
                                     begin
                                         ~ if: [ (path extension) equals: 'eco' ] then: [ (sender world yes) open: (builder OutlinerWindowForPath: path) ]
-                                        ~ if: [ (path extension) equals: 'ego' ] then: [ (builder LoadToolFromPath: path) yes: [ :obj | (sender world yes) open: obj ] ]
+                                        ~ if: [ (path extension) equals:  'ea' ] then: [ (builder LoadToolFromPath: path) yes: [ :tool | tool Main ] ]
                                         ~ default: [ parent replaceWith: (builder OutlinerPaneForPath: path) ]
                                 ] bind(self, parent, childpath)
                 )

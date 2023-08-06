@@ -1,0 +1,9 @@
+{
+    static with inherited _ = std Module;
+    with app = $;
+
+    Main => (
+        (framework actions open) tools Shell.
+        (framework actions open) tools Shell.
+    );
+}
