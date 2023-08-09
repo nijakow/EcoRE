@@ -60,6 +60,12 @@
               ^ self
             );
 
+            open: morph at: offset => (
+                add: morph.
+                morph reshapeX: (offset x) Y: (offset y) W: (morph minWidth) H: (morph minHeight).
+              ^ self
+            );
+
             writeOn: w => w << 'a world morph';
         };
     }

@@ -14,6 +14,7 @@
         world: w => world <- Yes: w;
 
         DefaultWorld => world yes;
+        DefaultHand => DefaultWorld handMorph;
     };
 
     writeOn: w => w << 'the framework';

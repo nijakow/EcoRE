@@ -12,6 +12,13 @@
           ^ self
         );
 
+        Morph: morph At: offset => (
+            (framework context DefaultWorld)
+                  open: morph
+                    at: offset.
+          ^ self
+        );
+
         OutlinerForObject: object => (
             (framework actions open) Morph: ((framework legacy MirrorBuilder) WindowFor: object)
         );
@@ -41,6 +48,10 @@
                 (framework actions open) Morph: (Build: block)
             );
 
+            BuildAndOpen: block At: offset => (
+                (framework actions open) Morph: (Build: block) At: offset
+            );
+
             BuildAndOpenContextMenu: block => (
                 BuildAndOpen: [ :ui |
                     | cmb <- (framework utility ContextMenuBuilder) new |
@@ -48,7 +59,7 @@
                     block value(cmb, ui).
                     
                     cmb buildUsingUiToolkit: ui
-                ]
+                ] At: ((framework context DefaultHand) globalOffset)
             );
 
             TextMessageBox: text => (
