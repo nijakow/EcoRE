@@ -82,13 +82,17 @@
                     
                     tick.
 
-                    [ :break |
-                        (eve PollEvent == 0) -> [ break value ].
+                    [
+                        [ :break |
+                            (eve PollEvent == 0) -> [ break value ].
 
-                        begin
-                          ~ if: [ eve IsEventKeyDown ] then: [ | k <- eve GetEventKey | k ifEscape: [ ^ self ]. handleKey: k ]
-                        ~ default: [ handleEvent ].
-                    ] repeatWithBreak.
+                            begin
+                            ~ if: [ eve IsEventKeyDown ] then: [ | k <- eve GetEventKey | k ifEscape: [ ^ self ]. handleKey: k ]
+                            ~ default: [ handleEvent ].
+                        ] repeatWithBreak.
+                    ] catch: [ :e |
+                        (std io out << 'Error caught in main loop: ' << e) newline commit.
+                    ].
 
                     mouseMoved if: [
                         morph handMorph moved.
