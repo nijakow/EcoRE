@@ -101,6 +101,7 @@
     newAlist       => newMap;
     newAlistWithComparator: comp => (#<:std/util> Map clone) initWithComparator: comp;
     newRangeFrom: start To: end => ((#<:std/util> Range) clone) initWithStart: start End: end;
+    newPair(a, b) => ((#<:std/util> MutablePair) clone) initWithFirst: a Second: b;
 
     WriteIterable: it On: writer => (
         writer << '#('.

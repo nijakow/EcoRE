@@ -1,0 +1,5 @@
+{
+    static with inherited _ = std Module;
+
+    own ContextMenuBuilder = (here / 'ContextMenuBuilder.eco') importIn: $;
+}

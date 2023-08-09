@@ -1,0 +1,41 @@
+
+{
+    static with inherited _ = std Clonable;
+    
+    protected items;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+
+        protected framework = $package;
+
+        init => (
+            items <- std util newVector.
+          ^ self
+        );
+
+        item: name does: action => (
+            items add: (std util newPair(name, action)).
+          ^ self
+        );
+
+        buildUsingUiToolkit: ui => (
+            "TODO: Use a container morph for this"
+            | vbox <- ui VBox() |
+            items do: [ :item |
+                vbox add: (
+                    "
+                        TODO: When selecting an action, the menu should close...
+                    "
+                    ui Button(ui Padding(5, ui Label: (item first)),
+                        $[ :(vbox, func) ... |
+                            vbox unlink.
+                            func value(...)
+                         ] bind(vbox, item second)
+                    )
+                )
+            ].
+          ^ vbox
+        );
+    };
+}
