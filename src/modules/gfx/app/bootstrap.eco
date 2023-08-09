@@ -3,18 +3,28 @@
     static with inherited _ = std Module;
     with $battery = $;
 
+    protected cachedHere <- here;
+
     openInWorld: world => (
         framework context world: world.
       ^ world open: build
     );
 
+    framework: fr => (
+        (fr context) world: (framework context DefaultWorld).
+        framework <- fr.
+    );
+
+    ReloadFramework => framework: ((cachedHere / 'framework' / '_.eco') importIn: ($battery));
+
     reset => (
-        ^ self
+      ^ self
     );
 
     build => (
         |
-            ui <- self ui builder
+            ui  <- self ui builder,
+            app <- $battery
         |
 
         ui Window(280, 300,
@@ -22,23 +32,23 @@
                 ui Center(ui TextField: 'Look at me as I can fly!\n    - Chrom, "Regret & Testify"'),
                 ui VBox(
                     ui Button(ui Center(ui Label: 'Outliner'),
-                            $[ :(framework) :sender | (framework actions open) OutlinerForObject: lobby ]
-                                    bind(framework))
+                            $[ :(app) :sender | (app framework actions open) OutlinerForObject: lobby ]
+                                    bind(app))
                         ~ xLayout: ui layouts Flexible
                         ~ yLayout: ui layouts Flexible,
                     ui Button(ui Center(ui Label: 'Files'),
-                            $[ :(framework) :sender | (framework actions open) Path: (std os files here / '..' / '..' / '..') ]
-                                    bind(framework))
+                            $[ :(app) :sender | (app framework actions open) Path: (std os files here / '..' / '..' / '..') ]
+                                    bind(app))
                         ~ xLayout: ui layouts Flexible
                         ~ yLayout: ui layouts Flexible,
                     ui Button(ui Center(ui Label: 'Apps'),
-                            $[ :(framework) :sender | (framework actions open) Path: (std os files here / '..' / 'apps') ]
-                                    bind(framework))
+                            $[ :(app) :sender | (app framework actions open) Path: (std os files here / '..' / 'apps') ]
+                                    bind(app))
                         ~ xLayout: ui layouts Flexible
                         ~ yLayout: ui layouts Flexible,
                     ui Button(ui Center(ui Label: 'Shell'),
-                            $[ :(framework) :sender | (framework actions open) tools Shell ]
-                                    bind(framework))
+                            $[ :(app) :sender | (app framework actions open) tools Shell ]
+                                    bind(app))
                         ~ xLayout: ui layouts Flexible
                         ~ yLayout: ui layouts Flexible
                 )

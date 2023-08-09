@@ -1,0 +1,13 @@
+{
+    static with inherited _ = std Module;
+    with app = $;
+
+    Main => (
+        (framework actions open ui) BuildAndOpenContextMenu: [ :cmb |
+            cmb item: 'Reload Framework'
+                does: $[ :(app) |
+                            app bootstrap ReloadFramework
+                       ] bind(app).
+        ].
+    );
+}
