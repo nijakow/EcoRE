@@ -3,13 +3,15 @@
     with app = $;
 
     Main => (
-        (framework actions open) tools Shell.
-        (framework actions open) ui TextMessageBox: 'Hello, World!'.
-
-        (framework actions open ui) BuildAndOpen: [ :ui |
-            ui Window(300, 200,
-                ui Center(ui Label: 'This is the main application window!')
-            )
+        (framework actions open ui) BuildAndOpenContextMenu: [ :cmb |
+            cmb item: 'Hello World'
+                does: $[ :(framework) |
+                            (framework actions open ui) TextMessageBox: 'Hello World back at you!'
+                       ] bind(framework).
+            cmb item: 'Hello World 2'
+                does: $[ :(framework) |
+                            (framework actions open ui) TextMessageBox: 'Hello World back at you (again)!'
+                       ] bind(framework).
         ].
     );
 }

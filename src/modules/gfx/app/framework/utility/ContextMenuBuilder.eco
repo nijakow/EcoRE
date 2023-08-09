@@ -20,22 +20,46 @@
         );
 
         buildUsingUiToolkit: ui => (
-            "TODO: Use a container morph for this"
-            | vbox <- ui VBox() |
+            |
+                draggable <- (ui morphic morphs DraggableMorph) new,
+                vbox      <- ui VBox(),
+                height    <- 0
+            |
+
             items do: [ :item |
                 vbox add: (
                     "
                         TODO: When selecting an action, the menu should close...
                     "
                     ui Button(ui Padding(5, ui Label: (item first)),
-                        $[ :(vbox, func) ... |
-                            vbox unlink.
+                        $[ :(morph, func) ... |
+                            morph unlink.
                             func value(...)
-                         ] bind(vbox, item second)
-                    )
-                )
+                         ] bind(draggable, item second)
+                    ) ~ xLayout: ui layouts Flexible
+                      ~ yLayout: ui layouts Flexible
+                ).
+
+                height <- height + 35.
             ].
-          ^ vbox
+
+            draggable add: (
+                ui Stacked(
+                    ui Padding(10,
+                        ui Stacked(
+                            vbox,
+                            ui BackgroundColorMorph
+                        ),
+                    ),
+                    ui BrightBackgroundColorMorph
+                )
+            ).
+
+            draggable
+                ~ rigidWidth: 250
+                ~ rigidHeight: height.
+
+          ^ draggable
         );
     };
 }

@@ -41,6 +41,16 @@
                 (framework actions open) Morph: (Build: block)
             );
 
+            BuildAndOpenContextMenu: block => (
+                BuildAndOpen: [ :ui |
+                    | cmb <- (framework utility ContextMenuBuilder) new |
+                    
+                    block value(cmb, ui).
+                    
+                    cmb buildUsingUiToolkit: ui
+                ]
+            );
+
             TextMessageBox: text => (
                 (framework actions open) Morph: ((framework legacy MirrorBuilder) TextMessageBox: text)
             );

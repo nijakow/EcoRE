@@ -171,6 +171,15 @@
       ^ container
     );
 
+    Draggable(content) => (
+        | morph <- (morphic morphs DraggableMorph) new |
+        morph add: content.
+      ^ morph
+    );
+
+    BrightBackgroundColorMorph => ColorMorph(0, 120, 136);
+    BackgroundColorMorph => ColorMorph(0, 42, 47);
+
     Window(w, h, content) => (
       | window <- (morphic morphs DraggableMorph) new |
       window
@@ -183,11 +192,11 @@
                                 ButtonWithColor(Margin(3, Label: ' X '), morphic R: 255 G: 0 B: 0, $[ :(window) :sender | window unlink ] bind(window))
                             ) ~ xLayout: layouts ShrinkWrap
                               ~ yLayout: layouts ShrinkWrap,
-                            ColorMorph(0, 42, 47)
+                            BackgroundColorMorph
                         ) ~ xLayout: layouts ShrinkWrap
                           ~ yLayout: layouts ShrinkWrap,
                     ) ~ yLayout: layouts ShrinkWrap,
-                    Margin(10, Stacked(content, ColorMorph(0, 42, 47)))
+                    Margin(10, Stacked(content, BackgroundColorMorph))
                       ~ xLayout: layouts Flexible
                       ~ yLayout: layouts Flexible,
                     HBox(Spacer,
@@ -204,7 +213,7 @@
                           ~ yLayout: layouts ShrinkWrap,
                     ) ~ yLayout: layouts ShrinkWrap,
                 ),
-                ColorMorph(0, 120, 136),
+                BrightBackgroundColorMorph,
           )
           ~ rigidWidth: w
           ~ rigidHeight: h
