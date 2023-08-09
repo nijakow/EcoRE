@@ -61,6 +61,18 @@
             ^ No
         ]
     );
+    OpenAppFromPath: path => (
+        (LoadToolFromPath: path) yes: [ :tool |
+            [
+                tool Main
+            ] catch: [ :e |
+                | sw <- (std io StringWriter) new |
+                (sw << 'Error while running application!') newline newline.
+                sw << e.
+                ErrorWindow: (sw build)
+            ]
+        ]
+    );
 
     PathOutlinerRow: childpath Name: name Parent: parent => (
         builder ShrinkWrap(
@@ -69,7 +81,7 @@
                                 $[ :(builder, parent, path) :sender |
                                     begin
                                         ~ if: [ (path extension) equals: 'eco' ] then: [ (sender world yes) open: (builder OutlinerWindowForPath: path) ]
-                                        ~ if: [ (path extension) equals:  'ea' ] then: [ (builder LoadToolFromPath: path) yes: [ :tool | tool Main ] ]
+                                        ~ if: [ (path extension) equals:  'ea' ] then: [ builder OpenAppFromPath: path ]
                                         ~ default: [ parent replaceWith: (builder OutlinerPaneForPath: path) ]
                                 ] bind(self, parent, childpath)
                 )

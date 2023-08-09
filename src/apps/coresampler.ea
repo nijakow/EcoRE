@@ -1,6 +1,17 @@
 
 {
     static with inherited _ = std Module;
+    with app = $;
 
-    Main => self;   "TODO"
+    BuildCS: ui => (
+        ui Window(380, 280,
+            ui Center(ui Label: 'Core Sampler')
+        )
+    );
+
+    Main => (
+        (framework actions open ui) BuildAndOpen: [ :ui |
+            BuildCS: ui.
+        ].
+    )
 }
