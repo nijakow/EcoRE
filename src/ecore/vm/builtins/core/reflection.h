@@ -7,6 +7,8 @@ bool Eco_VM_Builtin_IsMolecule(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_IsInterface(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_IsCode(struct Eco_Fiber*, unsigned int);
 
+bool Eco_VM_Builtin_GetProxy(struct Eco_Fiber*, unsigned int);
+
 bool Eco_VM_Builtin_GetSlotValue(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_GetSlotFlags(struct Eco_Fiber*, unsigned int);
 

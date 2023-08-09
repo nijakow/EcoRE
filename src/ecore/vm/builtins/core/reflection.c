@@ -52,6 +52,25 @@ bool Eco_VM_Builtin_IsCode(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_GetProxy(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any           any;
+    struct Eco_Type*  type;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    any  = Eco_Fiber_Pop(fiber);
+    type = Eco_Any_GetType(any);
+
+    if (type->proxy == NULL) {
+        Eco_Fiber_Push(fiber, any);
+    } else {
+        Eco_Fiber_Push(fiber, Eco_Any_FromPointer(type->proxy));
+    }
+
+    return true;
+}
+
 bool Eco_VM_Builtin_GetSlotValue(struct Eco_Fiber* fiber, unsigned int args)
 {
     struct Eco_Key*       name;

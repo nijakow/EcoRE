@@ -253,6 +253,13 @@
                                     ]
                                 ] bind(object)
                     ) ~ xLayout: builder layouts Flexible,
+                    builder Button(builder Margin(5, builder Label: 'Examine Proxy'),
+                                $[ :(us, object) :sender |
+                                    sender world yes: [ :world |
+                                        world open: (us WindowFor: (sys builtins reflect GetProxy(object)))
+                                    ]
+                                ] bind(self, object)
+                    ) ~ xLayout: builder layouts Flexible,
                 ) ~ yLayout: builder layouts ShrinkWrap,
                 builder Framed(ObjectShellFor: object) ~ rigidHeight: 100
             )

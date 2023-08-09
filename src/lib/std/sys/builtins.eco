@@ -88,6 +88,12 @@
             Constants(code) => #'ecosphere.ecore.object.code.constants'(code);
         };
     };
+
+    reflect = {
+        static with inherited _ = #<:std/Module>;
+
+        GetProxy(e) => #'ecosphere.ecore.reflect.get_proxy'(e);
+    };
     
     math = {
         static with inherited _ = #<:std/Module>;
