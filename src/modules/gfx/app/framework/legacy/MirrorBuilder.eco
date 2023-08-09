@@ -132,6 +132,8 @@
     );
 
     InterfacePaneFor: object => (
+        (object == any) if: [ ^ PresentationPaneFor: object ].
+        
         builder Scrollable(
             builder Margin(10,
                 ( | vbox <- builder VBox() |
