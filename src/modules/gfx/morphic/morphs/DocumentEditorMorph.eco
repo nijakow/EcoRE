@@ -412,7 +412,7 @@
             ].
         );
 
-        handleClickAt: point HandMorph: hand => (
+        handleClick: click At: point HandMorph: hand => (
             moveCursorToPixel: point.
           ^ true
         );

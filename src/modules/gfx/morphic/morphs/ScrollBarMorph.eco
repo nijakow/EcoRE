@@ -34,7 +34,7 @@
             $(Morph) renderImplOn: renderer.
         );
 
-        handleClickAt: point HandMorph: hand => (
+        handleClick: click At: point HandMorph: hand => (
             position: (point y asFloat / height).
           ^ true
         );

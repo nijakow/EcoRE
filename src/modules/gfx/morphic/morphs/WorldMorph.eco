@@ -52,7 +52,7 @@
                 ].
               ^ true
             );
-            handleClickAt: point HandMorph: hand => false;
+            handleClick: click At: point HandMorph: hand => false;
 
             open: morph => (
                 add: morph.

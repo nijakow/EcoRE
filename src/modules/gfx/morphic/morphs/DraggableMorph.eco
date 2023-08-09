@@ -9,7 +9,7 @@
               ^ self
             );
 
-            handleClickAt: point HandMorph: hand => ( hand grab: self. ^ true );
+            handleClick: click At: point HandMorph: hand => ( hand grab: self. ^ true );
 
             writeOn: w => w << 'a draggable morph';
         };

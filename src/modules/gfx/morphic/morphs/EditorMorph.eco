@@ -247,7 +247,7 @@
 
           ^ false
         );
-        handleClickAt: point HandMorph: hand => (
+        handleClick: click At: point HandMorph: hand => (
             moveCaretTo: (pixelToCaret(point)).
           ^ true
         );
