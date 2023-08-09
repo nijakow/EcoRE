@@ -59,19 +59,21 @@
               ^ self
             );
 
-            click => (
+            click: clickType => (
                 |
                     gb <- globalOffset,
-                    cl <- 0   "TODO, FIXME, XXX: Add a click object!"
                 |
                 grabbedMorph
                   ~ yes: [ :m | world yes: [ :w | (w dropMorph: m At: gb) -> [ grabbedMorph <- No ] ] ]
-                     no: [      world yes: [ :w | (w click: cl At: gb HandMorph: self) ] ]
+                     no: [      world yes: [ :w | (w click: clickType At: gb HandMorph: self) ] ]
             );
 
-            leftClick   => click;
-            middleClick => click;
-            rightClick  => (
+            leftClick   => click: ((morphic input click) Left);
+            middleClick => click: ((morphic input click) Middle);
+            rightClick  => click: ((morphic input click) Right);
+
+            click => leftClick;
+            grab => (
                 | gb <- globalOffset |
                 grabbedMorph
                   ~ yes: [ :m | world yes: [ :w | (w dropMorph: m At: globalOffset) -> [ grabbedMorph <- No ] ] ]

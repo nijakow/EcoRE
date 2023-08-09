@@ -1,0 +1,46 @@
+
+{
+    static with inherited _ = std Module;
+
+    own ClickTrait = {
+        static with inherited _ = std Trait;
+
+        isLeft => false;
+        isMiddle => false;
+        isRight => false;
+
+        ifLeft: block => self;
+        ifMiddle: block => self;
+        ifRight: block => self;
+    };
+
+    own Left = {
+        static with inherited _ = std Singleton;
+
+        with inherited trait = $ ClickTrait;
+
+        isLeft => true;
+
+        ifLeft: block => block value(self);
+    };
+
+    own Middle = {
+        static with inherited _ = std Singleton;
+
+        with inherited trait = $ ClickTrait;
+
+        isMiddle => true;
+
+        ifMiddle: block => block value(self);
+    };
+
+    own Right = {
+        static with inherited _ = std Singleton;
+
+        with inherited trait = $ ClickTrait;
+
+        isRight => true;
+
+        ifRight: block => block value(self);
+    };
+}

@@ -1,0 +1,6 @@
+
+{
+    static with inherited _ = std Module;
+
+    own click = (here / 'click.eco') importIn: self;
+}
