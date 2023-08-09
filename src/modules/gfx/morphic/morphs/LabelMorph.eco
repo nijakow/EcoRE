@@ -39,5 +39,7 @@
             text yes: [ :t | renderer setR: 0 G: 182 B: 203. renderer drawText: t X: 0 Y: 0 ].
             $(Morph) renderImplOn: renderer.
         );
+
+        writeOn: w => w << 'a label morph';
     };
 }

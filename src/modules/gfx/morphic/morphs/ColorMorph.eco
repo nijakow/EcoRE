@@ -27,6 +27,6 @@
                 $(Morph) renderImplOn: renderer.
             );
 
-            writeOn: w => w << 'a demo morph';
+            writeOn: w => w << 'a color morph';
         };
     }

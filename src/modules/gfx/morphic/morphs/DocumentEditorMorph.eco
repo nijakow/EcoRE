@@ -417,6 +417,6 @@
           ^ true
         );
 
-        writeOn: w => w << 'a document editor';
+        writeOn: w => w << 'a document editor morph';
     };
 }

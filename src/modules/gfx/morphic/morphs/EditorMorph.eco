@@ -267,6 +267,6 @@
           ^ self
         );
 
-        writeOn: w => w << 'a text editor';
+        writeOn: w => w << 'a text editor morph';
     };
 }

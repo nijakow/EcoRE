@@ -3,10 +3,108 @@
     static with inherited _ = std Module;
     with app = $;
 
+    own Kernel = {
+        static with inherited _ = std Clonable;
+
+        window    <- No,
+        rebuilder <- No;
+        
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            window: win => window <- Yes: win;
+            rebuilder: rb => rebuilder <- Yes: rb;
+
+            xRayDo: block => (
+                window yes: [ :win |
+                    | offset <- win globalOffset |
+
+                    (win world) yes: [ :world |
+                        |
+                            morphs <- std util newVector,
+                        |
+
+                        [ :break |
+                            world xRayAt: offset Do: [ :morph |
+                                "
+                                    Ignore morphs from the core sampler itself.
+                                "
+                                (morph == win) if: [ break value ].
+
+                                "
+                                    But collect all other morphs.
+                                "
+                                morphs add: morph.
+                            ].
+                        ] withBreak.
+
+                        morphs reverseDo: block.
+                    ].
+                ].
+
+              ^ self
+            );
+
+            update => (
+                rebuilder
+                    yes: [ :rb | rb value. ].
+            );
+
+            writeOn: w => w << 'a coresampler kernel';
+        };
+    };
+
+    Stringify: object => (
+        | sw <- (std io StringWriter) new |
+
+        sw << object.
+
+      ^ sw build
+    );
+
     BuildCS: ui => (
-        ui Window(380, 280,
-            ui Center(ui Label: 'Core Sampler')
-        )
+        |
+            kernel <- Kernel new,
+            win <-
+                ui Window(380, 400,
+                    ui VBox(
+                        ui HBox(
+                            ui Spacer
+                                ~ xLayout: ui layouts Flexible
+                                ~ yLayout: ui layouts ShrinkWrap,
+                            ui Margin(10, (ui Label: 'Core Sampler')),
+                            ui Spacer
+                                ~ xLayout: ui layouts Flexible
+                                ~ yLayout: ui layouts ShrinkWrap
+                        ) ~ yLayout: ui layouts ShrinkWrap,
+                        ui WithRebuilderDo: $[ :(us, ui, kernel) :rebuild |
+                            | vbox <- ui VBox() |
+
+                            kernel xRayDo: [ :morph |
+                                vbox add: (
+                                    ui Button(
+                                        ui Margin(5, ui Label: (us Stringify: morph)),
+                                        $[ :(morph) :sender, :hand | hand grab: morph ] bind(morph)
+                                    ) ~ yLayout: ui layouts ShrinkWrap
+                                )
+                            ].
+
+                            kernel rebuilder: rebuild.
+
+                            ui Scrollable(
+                                ui Margin(5, vbox)
+                            )
+                        ] bind(self, ui, kernel),
+                        ui Button(ui Margin(5, ui Label: 'Update'), $[ :(kernel) :sender | kernel update ] bind(kernel))
+                            ~ xLayout: ui layouts Flexible
+                            ~ yLayout: ui layouts ShrinkWrap
+                    )
+                )
+        |
+
+        kernel window: win.
+
+      ^ win
     );
 
     Main => (
