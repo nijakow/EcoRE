@@ -33,6 +33,14 @@
             static with inherited _ = std Module;
             static framework = $package;
 
+            Build: block => (
+                block value(framework ui builder)
+            );
+
+            BuildAndOpen: block => (
+                (framework actions open) Morph: (Build: block)
+            );
+
             TextMessageBox: text => (
                 (framework actions open) Morph: ((framework legacy MirrorBuilder) TextMessageBox: text)
             );
