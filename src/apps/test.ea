@@ -4,11 +4,11 @@
 
     Main => (
         (framework actions open ui) BuildAndOpenContextMenu: [ :cmb |
-            cmb item: 'Hello World'
+            cmb item: 'Option 1'
                 does: $[ :(framework) |
                             (framework actions open ui) TextMessageBox: 'Hello World back at you!'
                        ] bind(framework).
-            cmb item: 'Hello World 2'
+            cmb item: 'Option 2'
                 does: $[ :(framework) |
                             (framework actions open ui) TextMessageBox: 'Hello World back at you (again)!'
                        ] bind(framework).

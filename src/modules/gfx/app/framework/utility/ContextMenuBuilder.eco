@@ -23,7 +23,7 @@
             |
                 draggable <- (ui morphic morphs DraggableMorph) new,
                 vbox      <- ui VBox(),
-                height    <- 0
+                height    <- 20
             |
 
             items do: [ :item |
@@ -42,6 +42,16 @@
 
                 height <- height + 35.
             ].
+
+            vbox add: (
+                ui ButtonWithColor(ui SpacerW: 10 H: 10,
+                                   ui morphic R: 255 G: 136 B: 0,
+                    $[ :(morph) ... |
+                        morph unlink.
+                     ] bind(draggable)
+                ) ~ xLayout: ui layouts Flexible
+                  ~ yLayout: ui layouts ShrinkWrap
+            ).
 
             draggable add: (
                 ui Stacked(
