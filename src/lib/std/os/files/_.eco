@@ -7,6 +7,10 @@
     here => (std os env Lookup: 'PWD')
                 yes: [ :p | Path: p ]
                  no: [ ^ root ];
+    
+    home => (std os env Lookup: 'HOME')
+                yes: [ :p | Path: p ]
+                 no: [ ^ here ];
 
     Path: fullpath => (
         | path <- root |

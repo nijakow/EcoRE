@@ -4,7 +4,38 @@
 
     Main => (
         (framework actions open ui) BuildAndOpen: [ :ui |
-            ui UndecoratedWindow(ui Padding(5, ui Label: 'Hello, world!'))
+            ui UndecoratedWindow(
+                ui Padding(5,
+                    ui HBox(
+                        ui Padding(5,
+                            ui Button(
+                                ui Center(ui Label: 'S'),
+                                $[ :(framework) | (framework actions open) tools Shell ] bind(framework)
+                            ) ~ rigidWidth: 40
+                              ~ rigidHeight: 40
+                        ),
+                        ui Padding(5,
+                            ui Button(
+                                ui Center(ui Label: 'L'),
+                                $[ :(framework) | (framework actions open) OutlinerForObject: lobby ] bind(framework)
+                            ) ~ rigidWidth: 40
+                              ~ rigidHeight: 40
+                        ),
+                        ui Padding(5,
+                            ui Button(
+                                ui Center(ui Label: 'F'),
+                                $[ :(framework) | (framework actions open) tools FileBrowser ] bind(framework)
+                            ) ~ rigidWidth: 40
+                              ~ rigidHeight: 40
+                        ),
+                        ui Padding(5,
+                            ui Button(ui Center(ui Label: '...'), $[])
+                                ~ rigidWidth: 40
+                                ~ rigidHeight: 40
+                        ),
+                    )
+                )
+            )
         ].
     );
 }

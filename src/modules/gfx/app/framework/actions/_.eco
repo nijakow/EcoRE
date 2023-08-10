@@ -34,6 +34,10 @@
             Shell => (
                 (framework actions open) Morph: ((framework legacy MirrorBuilder) ShellWindow)
             );
+
+            FileBrowser => (
+                (framework actions open) Path: (std os files home)
+            );
         };
 
         own ui = {
