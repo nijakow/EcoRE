@@ -180,6 +180,21 @@
     BrightBackgroundColorMorph => ColorMorph(0, 120, 136);
     BackgroundColorMorph => ColorMorph(0, 42, 47);
 
+    UndecoratedWindow(content) => (
+        Draggable(
+            Stacked(
+                Padding(10,
+                    Stacked(
+                        content,
+                        BackgroundColorMorph
+                    ),
+                ),
+                BrightBackgroundColorMorph
+            )
+        ) ~ xLayout: layouts ShrinkWrap
+          ~ yLayout: layouts ShrinkWrap
+    );
+
     Window(w, h, content) => (
       | window <- (morphic morphs DraggableMorph) new |
       window

@@ -1,0 +1,10 @@
+{
+    static with inherited _ = std Module;
+    with app = $;
+
+    Main => (
+        (framework actions open ui) BuildAndOpen: [ :ui |
+            ui UndecoratedWindow(ui Padding(5, ui Label: 'Hello, world!'))
+        ].
+    );
+}
