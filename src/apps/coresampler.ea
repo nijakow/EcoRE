@@ -62,6 +62,23 @@
       ^ sw build
     );
 
+    MenuForMorph: morph Hand: hand => (
+        (framework actions open ui) BuildAndOpenContextMenu: [ :cmb |
+            cmb item: 'Inspect'
+                does: $[ :(framework, morph) |
+                            (framework actions open) OutlinerForObject: morph
+                       ] bind(framework, morph).
+            cmb item: 'Grab'
+                does: $[ :(hand, morph) |
+                            hand grab: morph
+                       ] bind(hand, morph).
+            cmb item: 'Close'
+                does: $[ :(morph) |
+                            morph unlink
+                       ] bind(morph).
+        ].
+    );
+
     BuildCS: ui => (
         |
             kernel <- Kernel new,
@@ -84,7 +101,7 @@
                                 vbox add: (
                                     ui Button(
                                         ui Margin(5, ui Label: (us Stringify: morph)),
-                                        $[ :(morph) :sender, :hand | hand grab: morph ] bind(morph)
+                                        $[ :(us, morph) :sender, :hand | us MenuForMorph: morph Hand: hand ] bind(us, morph)
                                     ) ~ yLayout: ui layouts ShrinkWrap
                                 )
                             ].
