@@ -1,0 +1,34 @@
+
+{
+    static with inherited _ = std Clonable;
+    with inherited own Morph = $ Morph;
+
+    targetMorph <- No;
+
+    with inherited trait = {
+        morphic => $(Morph) morphic;
+
+        init => (
+            $(Morph) initWithNoChildren.
+          ^ self
+        );
+
+        connectTo: morph => targetMorph <- (Yes: morph);
+        disconnect => targetMorph <- No;
+
+        renderImplOn: renderer => (
+            targetMorph yes: [ :tm |
+                |
+                    tx <- (tm globalOffset x) - (globalOffset x),
+                    ty <- (tm globalOffset y) - (globalOffset y)
+                |
+                renderer setR: 0 G: 120 B: 136.
+                "TODO: Maybe undo clipping here?"
+                renderer drawArrowX: (width / 2) Y: (height / 2) X: tx Y: ty.
+            ].
+            $(Morph) renderImplOn: renderer.
+        );
+
+        writeOn: w => w << 'a connection morph';
+    };
+}

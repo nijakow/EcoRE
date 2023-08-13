@@ -38,6 +38,7 @@
         own ScrollContentMorph = (here / 'morphs' / 'ScrollContentMorph.eco') importIn: self;
         own EditorMorph = (here / 'morphs' / 'EditorMorph.eco') importIn: self;
         own DocumentEditorMorph = (here / 'morphs' / 'DocumentEditorMorph.eco') importIn: self;
+        own ConnectionMorph = (here / 'morphs' / 'ConnectionMorph.eco') importIn: self;
     };
 
     driver = (here / 'driver.eco') importIn: self;

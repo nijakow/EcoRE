@@ -17,6 +17,7 @@
     protected Eve_SetColorRGB,
     protected Eve_Clip,
     protected Eve_DrawLine,
+    protected Eve_DrawArrow,
     protected Eve_DrawRect,
     protected Eve_FillRect,
     protected Eve_DrawText,
@@ -65,6 +66,7 @@
         Eve_SetColorRGB <- (lib function: #'Eve_SetColorRGB' type: ((ffi types void) function(ffi types uint8, ffi types uint8, ffi types uint8))) yes.
         Eve_Clip <- (lib function: #'Eve_Clip' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
         Eve_DrawLine <- (lib function: #'Eve_DrawLine' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
+        Eve_DrawArrow <- (lib function: #'Eve_DrawArrow' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
         Eve_DrawRect <- (lib function: #'Eve_DrawRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
         Eve_FillRect <- (lib function: #'Eve_FillRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
         Eve_DrawText <- (lib function: #'Eve_DrawText' type: ((ffi types void) function(ffi types string, ffi types int, ffi types int))) yes.
@@ -109,6 +111,7 @@
     Clip(x, y, w, h) => Eve_Clip value(x, y, w, h);
 
     DrawLine(x1, y1, x2, y2) => Eve_DrawLine value(x1, y1, x2, y2);
+    DrawArrow(x1, y1, x2, y2) => Eve_DrawArrow value(x1, y1, x2, y2);
 
     DrawRect(x, y, w, h) => Eve_DrawRect value(x, y, w, h);
     FillRect(x, y, w, h) => Eve_FillRect value(x, y, w, h);

@@ -3,15 +3,8 @@
     with app = $;
 
     Main => (
-        (framework actions open ui) BuildAndOpenContextMenu: [ :cmb |
-            cmb item: 'Option 1'
-                does: $[ :(framework) |
-                            (framework actions open ui) TextMessageBox: 'Hello World back at you!'
-                       ] bind(framework).
-            cmb item: 'Option 2'
-                does: $[ :(framework) |
-                            (framework actions open ui) TextMessageBox: 'Hello World back at you (again)!'
-                       ] bind(framework).
+        (framework actions open) ui BuildAndOpen: [ :ui |
+            ui UndecoratedWindow(ui Connection)
         ].
     );
 }

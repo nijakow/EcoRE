@@ -60,6 +60,7 @@
 
             drawPointX: x Y: y => eve DrawPoint(xOff + x, yOff + y);
             drawLineX: x1 Y: y1 X: x2 Y: y2 => eve DrawLine(xOff + x1, yOff + y1, xOff + x2, yOff + y2);
+            drawArrowX: x1 Y: y1 X: x2 Y: y2 => eve DrawArrow(xOff + x1, yOff + y1, xOff + x2, yOff + y2);
             drawRectX: x Y: y W: w H: h => eve DrawRect(xOff + x, yOff + y, w, h);
             drawRect: rect => drawRectX: rect x Y: rect y W: rect w H: rect h;
             fillRectX: x Y: y W: w H: h => eve FillRect(xOff + x, yOff + y, w, h);

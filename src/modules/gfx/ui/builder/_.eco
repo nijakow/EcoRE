@@ -171,6 +171,12 @@
       ^ container
     );
 
+    Connection => (
+        (morphic morphs ConnectionMorph) new
+          ~ rigidWidth: 25
+          ~ rigidHeight: 25
+    );
+
     Draggable(content) => (
         | morph <- (morphic morphs DraggableMorph) new |
         morph add: content.

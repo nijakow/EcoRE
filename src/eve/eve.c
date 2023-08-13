@@ -396,6 +396,17 @@ void Eve_RenderState_DrawLine(struct Eve_RenderState* self, Eve_Int x1, Eve_Int 
     SDL_RenderDrawLine(self->renderer, x1, y1, x2, y2);
 }
 
+void Eve_RenderState_DrawArrow(struct Eve_RenderState* self, Eve_Int x1, Eve_Int y1, Eve_Int x2, Eve_Int y2) {
+    float angle;
+
+    angle = atan2(y2 - y1, x2 - x1);
+    
+    SDL_RenderDrawLine(self->renderer, x1, y1, x2, y2);
+
+    SDL_RenderDrawLine(self->renderer, x2, y2, x2 - 10 * cos(angle - M_PI / 6), y2 - 10 * sin(angle - M_PI / 6));
+    SDL_RenderDrawLine(self->renderer, x2, y2, x2 - 10 * cos(angle + M_PI / 6), y2 - 10 * sin(angle + M_PI / 6));
+}
+
 void Eve_RenderState_DrawRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y, Eve_UInt w, Eve_UInt h) {
     struct SDL_Rect rect;
 
@@ -536,6 +547,10 @@ void Eve_Clip(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
 
 void Eve_DrawLine(Eve_Int x1, Eve_Int y1, Eve_Int x2, Eve_Int y2) {
     Eve_RenderState_DrawLine(&EVE_DEFAULT_RENDER_STATE, x1, y1, x2, y2);
+}
+
+void Eve_DrawArrow(Eve_Int x1, Eve_Int y1, Eve_Int x2, Eve_Int y2) {
+    Eve_RenderState_DrawArrow(&EVE_DEFAULT_RENDER_STATE, x1, y1, x2, y2);
 }
 
 void Eve_DrawRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
