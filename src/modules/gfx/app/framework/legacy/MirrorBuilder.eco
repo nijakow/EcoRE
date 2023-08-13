@@ -29,6 +29,21 @@
                                 mirror delete.
                                 rebuilder value.
                             ] bind(slotMirror, rebuilder)
+            ),
+            (
+                | connector <- builder Connection() |
+                builder Button(
+                    connector,
+                    $[ :(builder, mirror, connector) :sender |
+                        connector targetMorph
+                          ~ yes: [ :tm | connector disconnect ]
+                             no: [
+                            | win <- builder WindowFor: (mirror slotValue) |
+                            (sender world yes) open: win.
+                            connector connectTo: win.
+                        ].
+                    ] bind(self, slotMirror, connector)
+                )
             )
         ) ~ xLayout: builder layouts Flexible
             ~ yLayout: builder layouts ShrinkWrap
