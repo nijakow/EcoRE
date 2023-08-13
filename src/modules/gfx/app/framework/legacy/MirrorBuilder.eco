@@ -24,12 +24,12 @@
                                 (sender world yes) open: (builder WindowFor: (mirror slotValue))
                             ] bind(self, slotMirror)
             ) ~ xLayout: builder layouts Flexible,
-            builder Button(builder Margin(3, builder Label: 'ø'),
+            "builder Button(builder Margin(3, builder Label: 'ø'),
                             $[ :(mirror, rebuilder) :sender |
                                 mirror delete.
                                 rebuilder value.
                             ] bind(slotMirror, rebuilder)
-            ),
+            ),"
             (
                 | connector <- builder Connection() |
                 builder Button(

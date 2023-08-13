@@ -44,6 +44,12 @@
                 eve Clip(clip x, clip y, clip w, clip h).
               ^ self
             );
+            withClipDisabledDo: block => (
+                eve Clip(0, 0, width, height).
+                block value.
+                eve Clip(clip x, clip y, clip w, clip h).
+              ^ self
+            );
 
             xOff => offset x;
             yOff => offset y;

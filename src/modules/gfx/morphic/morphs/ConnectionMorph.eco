@@ -28,9 +28,10 @@
                     ax <- (cx < tx) if: [ tx ] else: [ (cx > (tx + tm width)) if: [ tx + tm width ] else: [ cx ] ],
                     ay <- (cy < ty) if: [ ty ] else: [ (cy > (ty + tm height)) if: [ ty + tm height ] else: [ cy ] ],
                 |
-                renderer setR: 0 G: 120 B: 136.
-                "TODO: Maybe undo clipping here?"
-                renderer drawArrowX: (width / 2) Y: (height / 2) X: (ax - x) Y: (ay - y).
+                renderer setR: 255 G: 136 B: 0.
+                renderer withClipDisabledDo: [
+                    renderer drawArrowX: (width / 2) Y: (height / 2) X: (ax - x) Y: (ay - y).
+                ].
             ].
             $(Morph) renderImplOn: renderer.
         );
