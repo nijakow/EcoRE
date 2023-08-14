@@ -8,7 +8,47 @@
     );
 
     InterfacePaneFor: object Ui: ui => (
-        PresentationPaneFor: object Ui: ui
+        (object == any) if: [ ^ PresentationPaneFor: object Ui: ui ].
+        
+        ui Scrollable(
+            ui Padding(10,
+                ( | vbox <- ui VBox() |
+                    0 for: (object size) do: [ :slotIndex |
+                        vbox add: (
+                            | hbox <- ui HBox() |
+                            
+                            hbox add: (
+                                ui Framed(
+                                    ui Padding(3, ui Label: ((object nameForSlotIndex: slotIndex) asString)),
+                                ),
+                            ) ~ xLayout: ui layouts Flexible
+                              ~ yLayout: ui layouts ShrinkWrap.
+                            0 for: (object argCountForSlotIndex: slotIndex) do: [ :argIndex |
+                                hbox add: (
+                                    ui Button(
+                                        ui Padding(3, ui Label: 'arg'),
+                                        $[ :(wisp, type) :sender |
+                                            (wisp actions open) Object: type
+                                        ] bind(wisp, object argTypeForSlotIndex: slotIndex Arg: argIndex)
+                                    ),
+                                ) ~ xLayout: ui layouts Flexible
+                                  ~ yLayout: ui layouts ShrinkWrap.
+                            ].
+                            (object hasVarargsForSlotIndex: slotIndex) if: [
+                                hbox add: (
+                                    ui Framed(
+                                        ui Padding(3, ui Label: '...'),
+                                    ) ~ xLayout: ui layouts ShrinkWrap,
+                                ) ~ xLayout: ui layouts Flexible
+                                  ~ yLayout: ui layouts ShrinkWrap.
+                            ].
+                            hbox
+                        )
+                    ].
+                    vbox
+                )
+            )
+        )
     );
 
     ArrayPaneFor: object Ui: ui => (
