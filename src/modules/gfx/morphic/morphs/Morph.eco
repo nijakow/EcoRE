@@ -1,7 +1,6 @@
 
     {
         static with inherited _ = std Clonable;
-        protected morphic = $ morphic;
 
         offset, dimensions,
         xLayout, yLayout, layouter,
@@ -15,6 +14,7 @@
 
         with inherited trait = {
             static with inherited _ = std Trait;
+            protected morphic = $package morphic;
 
             initWithChildConfig: config => (
                 offset             <- (morphic X: 0 Y: 0).

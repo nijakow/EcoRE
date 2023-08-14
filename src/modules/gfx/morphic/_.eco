@@ -2,7 +2,8 @@
     static with inherited _ = std Module;
     with $battery = $;
 
-    own Renderer = (here / 'renderer.eco') importIn: self;
+    own Renderer = (here / 'Renderer.eco') importIn: self;
+    own Listener = (here / 'Listener.eco') importIn: self;
 
     with own orientation = (here / 'orientation.eco') importIn: self;
 
