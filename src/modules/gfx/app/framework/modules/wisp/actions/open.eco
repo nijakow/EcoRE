@@ -9,6 +9,8 @@
         ].
     );
 
+    Object: object => OutlinerFor: object;
+
     ShellFor: object => (
         (framework actions open) ui BuildAndOpen: [ :ui |
             ui Window(500, 350,

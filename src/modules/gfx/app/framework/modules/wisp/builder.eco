@@ -12,7 +12,33 @@
     );
 
     ArrayPaneFor: object Ui: ui => (
-        PresentationPaneFor: object Ui: ui
+        ui Scrollable(
+            ui Padding(10,
+                ( | vbox <- ui VBox() |
+                    0 for: (object size) do: [ :slotIndex |
+                        vbox add: (
+                            ui HBox(
+                                ui Button(
+                                    ui Center(
+                                        ui Label: (
+                                            | sw <- (std io StringWriter) new |
+                                            sw << slotIndex.
+                                            sw build
+                                        )
+                                    ),
+                                    $[ :(wisp, object, index) :sender |
+                                        (wisp actions open) Object: (object at: index)
+                                    ] bind(wisp, object, slotIndex)
+                                ) ~ xLayout: ui layouts Flexible
+                                  ~ yLayout: ui layouts ShrinkWrap,
+                            ) ~ xLayout: ui layouts Flexible
+                              ~ yLayout: ui layouts ShrinkWrap.
+                        )
+                    ].
+                    vbox
+                )
+            )
+        )
     );
 
     CodePaneFor: object Ui: ui => (
@@ -63,7 +89,7 @@
                 ) ~ xLayout: ui layouts Flexible,
                 ui Button(ui Padding(5, ui Label: 'Proxy'),
                     $[ :(wisp, object) :sender |
-                        (wisp actions open) OutlinerFor: (sys builtins reflect GetProxy(object))
+                        (wisp actions open) Object: (sys builtins reflect GetProxy(object))
                     ] bind(wisp, object)
                 ) ~ xLayout: ui layouts Flexible,
                 ui Button(ui Padding(5, ui Label: 'Shell'),
