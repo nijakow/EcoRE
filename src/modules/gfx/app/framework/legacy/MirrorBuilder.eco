@@ -18,12 +18,14 @@
                         builder Label: (slotMirror isInherited if: 'i' else: ' '),
                     ) ~ xLayout: builder layouts ShrinkWrap,
                 ) ~ xLayout: builder layouts ShrinkWrap,
-            ) ~ xLayout: builder layouts ShrinkWrap,
+            ) ~ xLayout: builder layouts ShrinkWrap
+              ~ yLayout: builder layouts Flexible,
             builder Button(builder Margin(3, builder Label: (slotMirror name asString)),
                             $[ :(builder, mirror) :sender |
                                 (sender world yes) open: (builder WindowFor: (mirror slotValue))
                             ] bind(self, slotMirror)
-            ) ~ xLayout: builder layouts Flexible,
+            ) ~ xLayout: builder layouts Flexible
+              ~ yLayout: builder layouts Flexible,
             "builder Button(builder Margin(3, builder Label: 'ø'),
                             $[ :(mirror, rebuilder) :sender |
                                 mirror delete.
@@ -46,7 +48,7 @@
                 )
             )
         ) ~ xLayout: builder layouts Flexible
-            ~ yLayout: builder layouts ShrinkWrap
+          ~ yLayout: builder layouts ShrinkWrap
     );
 
     OutlinerPaneForMirror: mirror => (
