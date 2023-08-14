@@ -177,8 +177,9 @@
     );
 
     OutlinerPaneFor: object Ui: ui => (
-        ui VBox(
-            ui Framed(OutlinerContentPaneFor: object Ui: ui),
+        | vbox <- ui VBox() |
+        vbox add: (ui Framed(OutlinerContentPaneFor: object Ui: ui)).
+        vbox add: (
             ui HBox(
                 ui Button(ui Padding(5, ui Label: 'Copy'),
                     $[ :(wisp, object) :sender |
@@ -192,17 +193,28 @@
                     ] bind(wisp, object)
                 ) ~ xLayout: ui layouts Flexible,
                 ui Button(ui Padding(5, ui Label: 'Shell'),
-                    $[ :(wisp, object) :sender |
-                        (wisp actions open) ShellFor: object
-                    ] bind(wisp, object)
+                    $[ :(wisp, ui, vbox, object) :sender |
+                        vbox add: ((wisp builder) ObjectShellPaneFor: object Ui: ui).
+                    ] bind(wisp, ui, vbox, object)
                 ) ~ xLayout: ui layouts Flexible,
             ) ~ yLayout: ui layouts ShrinkWrap,
-        )
+        ).
+      ^ vbox
     );
 
     OutlinerWindowFor: object Ui: ui => (
         ui Window(400, 400,
             OutlinerPaneFor: object Ui: ui
         )
+    );
+
+    ObjectShellPaneFor: object Ui: ui => (
+        | vbox <- ui VBox() |
+        vbox add: (
+            ui DocumentEditor: (document FromString: '')
+                    OnAccept: $[ :(app, object) :editor | (app framework actions) eval DocumentAndShowResult: (editor document) Environment: object ] bind(app, object)
+                    OnCancel: $[ :(vbox) :editor | vbox unlink ] bind(vbox)
+        ).
+      ^ vbox
     );
 }
