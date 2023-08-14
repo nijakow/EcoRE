@@ -16,7 +16,18 @@
     );
 
     CodePaneFor: object Ui: ui => (
-        PresentationPaneFor: object Ui: ui
+        |
+            writer       <- (std io StringWriter) new,
+            disassembled <- (app ecosphere optimizer) Disassemble: object,
+            ast          <- (app ecosphere optimizer) BuildAST: disassembled,
+            rewritten    <- (app ecosphere optimizer) RewriteAST: ast
+        |
+
+        (((app ecosphere optimizer) ast Printer) clone initWithWriter: writer) print: rewritten ast.
+
+        ui Scrollable(
+            ui TextField: (writer build)
+        )
     );
 
 
