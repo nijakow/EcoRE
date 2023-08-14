@@ -89,5 +89,15 @@
                                    World: (framework context DefaultWorld)
                              Environment: environment
         );
-    }
+    };
+
+    own clipboard = {
+        static with inherited _ = std Module;
+        static framework = $package;
+
+        CopyObject: object => (
+            (framework context) DefaultHand
+                ~ copyToClipboard: object
+        );
+    };
 }

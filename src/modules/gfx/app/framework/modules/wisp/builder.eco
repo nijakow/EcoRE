@@ -183,6 +183,7 @@
                 ui Button(ui Padding(5, ui Label: 'Copy'),
                     $[ :(wisp, object) :sender |
                         "TODO: Copy to clipboard"
+                        ((wisp framework actions) clipboard) CopyObject: object
                      ] bind(wisp, object)
                 ) ~ xLayout: ui layouts Flexible,
                 ui Button(ui Padding(5, ui Label: 'Proxy'),
