@@ -5,6 +5,7 @@
         offset, dimensions,
         xLayout, yLayout, layouter,
         representation,
+        listener,
         parent, children;
 
         protected cachedGlobalOffset,
@@ -23,6 +24,7 @@
                 yLayout            <- (morphic layouts Flexible).
                 layouter           <- (morphic layouters Default).
                 representation     <- (morphic representations Default).
+                listener           <- No.
                 parent             <- No.
                 children           <- config new.
 
@@ -328,6 +330,12 @@
             "
                 Events
             "
+            listener: l => listener <- Yes <- l;
+            forceListener => (
+                listener no: [ listener: ((morphic Listener) new) ].
+              ^ listener yes
+            );
+
             containsPoint: point => (
                      [ [ point x >= offset x ] and: [ point x <= (offset x + dimensions x) ] ]
                 and: [ [ point y >= offset y ] and: [ point y <= (offset y + dimensions y) ] ]
