@@ -2,4 +2,5 @@
     static with inherited _ = std Module;
 
     own wisp = (here / 'wisp' / '_.eco') importIn: $;
+    own leap = (here / 'leap' / '_.eco') importIn: $;
 }

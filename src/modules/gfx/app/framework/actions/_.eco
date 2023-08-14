@@ -77,17 +77,17 @@
         static framework = $package;
 
         DocumentAndShowResult: document Environment: environment => (
-            (framework legacy MirrorBuilder)
-                  RunDocumentAndShowResult: document
-                                     World: (framework context DefaultWorld)
-                               Environment: environment
+            ((framework modules leap) actions)
+                  EvalDocument: document InEnvironment: environment
+                      OnSuccess: $[ :(framework) :val | (framework actions open) OutlinerForObject: val ] bind(framework)
+                      OnFailure: $[ :(framework) :err | (framework actions open) ui TextMessageBox: err ] bind(framework)
         );
 
         StringAndShowResult: string Environment: environment => (
-            (framework legacy MirrorBuilder)
-                  RunStringAndShowResult: string
-                                   World: (framework context DefaultWorld)
-                             Environment: environment
+            ((framework modules leap) actions)
+                  EvalString: string InEnvironment: environment
+                      OnSuccess: $[ :(framework) :val | (framework actions open) OutlinerForObject: val ] bind(framework)
+                      OnFailure: $[ :(framework) :err | (framework actions open) ui TextMessageBox: err ] bind(framework)
         );
     };
 

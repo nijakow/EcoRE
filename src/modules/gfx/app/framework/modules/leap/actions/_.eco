@@ -1,0 +1,59 @@
+{
+    static with inherited _ = std Module;
+
+    EvalDocument: document InEnvironment: environment OnSuccess: successBlock OnFailure: failureBlock => (
+        [
+            |
+                parser <- (lang eco controller) CreateParserForSourceStream: (document documentStream)
+            |
+
+            parser exprDo: [ :expr |
+                [
+                    | result <- expr basicEvaluateInEnv: environment |
+                    successBlock value(result).
+                  ^ self
+                ] catch: [ :e |
+                    | sw <- (std io StringWriter) new |
+                    (sw << 'Error while evaluating expression!') newline newline.
+                    sw << e.
+                    failureBlock value(sw build).
+                  ^ self
+                ]
+            ]
+        ] catch: [ :e |
+            | sw <- (std io StringWriter) new |
+            (sw << 'Syntax error while parsing expression:') newline newline.
+            sw << e.
+            failureBlock value(sw build).
+          ^ self
+        ]
+    );
+
+    EvalString: string InEnvironment: environment OnSuccess: successBlock OnFailure: failureBlock => (
+        [
+            |
+                parser <- (lang eco controller) CreateParserForString: string
+            |
+
+            parser exprDo: [ :expr |
+                [
+                    | result <- expr basicEvaluateInEnv: environment |
+                    successBlock value(result).
+                  ^ self
+                ] catch: [ :e |
+                    | sw <- (std io StringWriter) new |
+                    (sw << 'Error while evaluating expression!') newline newline.
+                    sw << e.
+                    failureBlock value(sw build).
+                  ^ self
+                ]
+            ]
+        ] catch: [ :e |
+            | sw <- (std io StringWriter) new |
+            (sw << 'Syntax error while parsing expression:') newline newline.
+            sw << e.
+            failureBlock value(sw build).
+          ^ self
+        ]
+    );
+}
