@@ -1,0 +1,5 @@
+{
+    static with inherited _ = std Module;
+
+    own open = (here / 'open.eco') importIn: $;
+}

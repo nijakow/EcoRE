@@ -1,0 +1,8 @@
+
+{
+    static with inherited _ = std Module;
+    with app = $;
+
+    own actions = (here / 'actions' / '_.eco') importIn: self;
+    own builder = (here / 'builder.eco') importIn: self;
+}

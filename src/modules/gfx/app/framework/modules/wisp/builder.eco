@@ -1,0 +1,72 @@
+
+{
+    static with inherited _ = std Module;
+    with wisp = $;
+
+    MoleculePaneFor: object Ui: ui => (
+        PresentationPaneFor: object Ui: ui
+    );
+
+    InterfacePaneFor: object Ui: ui => (
+        PresentationPaneFor: object Ui: ui
+    );
+
+    ArrayPaneFor: object Ui: ui => (
+        PresentationPaneFor: object Ui: ui
+    );
+
+    CodePaneFor: object Ui: ui => (
+        PresentationPaneFor: object Ui: ui
+    );
+
+
+    PresentationPaneFor: object Ui: ui => (
+        | writer <- (std io StringWriter) new |
+        
+        writer << object.
+
+        ui Scrollable(
+            ui Padding(5,
+                ui TextField: (writer build)
+            )
+        )
+    );
+
+    OutlinerContentPaneFor: object Ui: ui => (
+        begin
+            ~ if: [ std reflect primitives IsMolecule:  object ] then: [ ^ MoleculePaneFor:  object Ui: ui ]
+            ~ if: [ std reflect primitives IsInterface: object ] then: [ ^ InterfacePaneFor: object Ui: ui ]
+            ~ if: [ std reflect primitives IsArray:     object ] then: [ ^ ArrayPaneFor:     object Ui: ui ]
+            ~ if: [ std reflect primitives IsCode:      object ] then: [ ^ CodePaneFor:      object Ui: ui ]
+        ~ default: [ ^ PresentationPaneFor: object Ui: ui ]
+    );
+
+    OutlinerPaneFor: object Ui: ui => (
+        ui VBox(
+            ui Framed(OutlinerContentPaneFor: object Ui: ui),
+            ui HBox(
+                ui Button(ui Padding(5, ui Label: 'Copy'),
+                    $[ :(wisp, object) :sender |
+                        "TODO: Copy to clipboard"
+                     ] bind(wisp, object)
+                ) ~ xLayout: ui layouts Flexible,
+                ui Button(ui Padding(5, ui Label: 'Proxy'),
+                    $[ :(wisp, object) :sender |
+                        (wisp actions open) OutlinerFor: (sys builtins reflect GetProxy(object))
+                    ] bind(wisp, object)
+                ) ~ xLayout: ui layouts Flexible,
+                ui Button(ui Padding(5, ui Label: 'Shell'),
+                    $[ :(wisp, object) :sender |
+                        (wisp actions open) ShellFor: object
+                    ] bind(wisp, object)
+                ) ~ xLayout: ui layouts Flexible,
+            ) ~ yLayout: ui layouts ShrinkWrap,
+        )
+    );
+
+    OutlinerWindowFor: object Ui: ui => (
+        ui Window(400, 400,
+            OutlinerPaneFor: object Ui: ui
+        )
+    );
+}

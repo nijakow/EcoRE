@@ -1,0 +1,5 @@
+{
+    static with inherited _ = std Module;
+
+    own wisp = (here / 'wisp' / '_.eco') importIn: $;
+}

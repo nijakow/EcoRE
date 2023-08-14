@@ -5,7 +5,8 @@
     own legacy = (here / 'legacy' / '_.eco') importIn: (self app);
 
     own actions = (here / 'actions' / '_.eco') importIn: self;
-    own utility = (here / 'utility' / '_.eco') importIn: self;
+    own modules = (here / 'modules' / '_.eco') importIn: (self app);
+    own utility = (here / 'utility' / '_.eco') importIn: (self app);
 
     own context = {
         static with inherited _ = std Module;

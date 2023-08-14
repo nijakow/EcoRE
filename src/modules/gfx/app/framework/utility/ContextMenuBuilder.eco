@@ -7,8 +7,6 @@
     with inherited trait = {
         static with inherited _ = std Trait;
 
-        protected framework = $package;
-
         init => (
             items <- std util newVector.
           ^ self
