@@ -20,7 +20,7 @@
         );
 
         OutlinerForObject: object => (
-            (framework actions open) Morph: ((framework legacy MirrorBuilder) WindowFor: object)
+            ((framework modules wisp) actions open) Object: object
         );
 
         Path: path => (
@@ -32,7 +32,7 @@
             static framework = $package;
 
             Shell => (
-                (framework actions open) Morph: ((framework legacy MirrorBuilder) ShellWindow)
+                ((framework modules wisp) actions open) Shell
             );
 
             FileBrowser => (
