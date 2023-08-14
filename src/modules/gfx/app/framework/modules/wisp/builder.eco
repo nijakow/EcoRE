@@ -3,8 +3,66 @@
     static with inherited _ = std Module;
     with wisp = $;
 
+    MoleculeCorePaneForMirror: mirror Ui: ui Rebuilder: rebuilder => (
+        |
+            slots <- ui VBox()
+        |
+        
+        mirror slotNames do: [ :slotName |
+            |
+                slotMirror <- (mirror slot: slotName)
+            |
+            slots add: (
+                ui HBox(
+                    ui Framed(
+                        ui Padding(3,
+                            ui HBox(
+                                ui Label: (slotMirror isProtected if: 'p' else: ' '),
+                                ui Label: (slotMirror isStatic if: 's' else: ' '),
+                                ui Label: (slotMirror isFinal if: 'f' else: ' '),
+                                ui Label: (slotMirror isWith if: 'w' else: ' '),
+                                ui Label: (slotMirror isInherited if: 'i' else: ' '),
+                            ) ~ xLayout: ui layouts ShrinkWrap,
+                        ) ~ xLayout: ui layouts ShrinkWrap,
+                    ) ~ xLayout: ui layouts ShrinkWrap
+                      ~ yLayout: ui layouts Flexible,
+                    ui Button(ui Padding(3, ui Label: (slotMirror name asString)),
+                        $[ :(wisp, mirror) :sender |
+                            (wisp actions open) Object: (mirror slotValue)
+                        ] bind(wisp, slotMirror)
+                    ) ~ xLayout: ui layouts Flexible
+                      ~ yLayout: ui layouts Flexible,
+                    "TODO: Connector"
+                ) ~ xLayout: ui layouts Flexible
+                  ~ yLayout: ui layouts ShrinkWrap,
+            )
+        ].
+
+      ^ slots
+    );
+
+    MoleculeCorePaneForObject: molecule Ui: ui Rebuilder: rebuilder => MoleculeCorePaneForMirror: (std reflect Mirror: molecule) Ui: ui Rebuilder: rebuilder;
+
     MoleculePaneFor: object Ui: ui => (
-        PresentationPaneFor: object Ui: ui
+        ui WithRebuilderDo: $[ :(us, ui, object) :rebuilder |
+            ui Stacked(
+                ui VBox(
+                    ui Spacer,
+                    ui HBox(
+                        ui Spacer,
+                        ui Button(ui Padding(5, ui Label: '+'),
+                            $[ :(object, rebuilder) :sender |
+                                "TODO"
+                                #'ecosphere.ecore.reflect.add_value_slot'(object, -1, 1, any, #'newSlot', 42).
+                                rebuilder value.
+                            ] bind(object, rebuilder)
+                        ),
+                        ui SpacerW: 10 H: 1
+                    ) ~ yLayout: ui layouts ShrinkWrap,
+                ),
+                ui Scrollable(ui Padding(10, us MoleculeCorePaneForObject: object Ui: ui Rebuilder: rebuilder)),
+            ),
+        ] bind(self, ui, object)
     );
 
     InterfacePaneFor: object Ui: ui => (
