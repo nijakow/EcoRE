@@ -50,7 +50,7 @@
             action: act => action <- Yes: act;
 
             handleClick: click At: point HandMorph: hand => (
-                action yes: [ :a | a value(self, hand) ].
+                action yes: [ :a | a value(self, hand, click) ].
               ^ true
             );
 

@@ -27,11 +27,24 @@
                     ) ~ xLayout: ui layouts ShrinkWrap
                       ~ yLayout: ui layouts Flexible,
                     ui Button(ui Padding(3, ui Label: (slotMirror name asString)),
+                        $[ :(app, wisp, mirror) :sender :hand :click |
+                            click ifRight: [
+                                (app framework actions open) ui BuildAndOpenContextMenu: [ :cmb |
+                                    cmb item: 'Open' does: $[ :(wisp, mirror) :sender | (wisp actions open) Object: (mirror slotValue) ] bind(wisp, mirror).
+                                ].
+                              ^ self
+                            ].
+                            "If it wasn't the right button, open the slot value."
+                            (wisp actions open) Object: (mirror slotValue)
+                        ] bind(app, wisp, slotMirror)
+                    ) ~ xLayout: ui layouts Flexible
+                      ~ yLayout: ui layouts Flexible,
+                    ui Button(ui Spacer,
                         $[ :(wisp, mirror) :sender |
                             (wisp actions open) Object: (mirror slotValue)
                         ] bind(wisp, slotMirror)
-                    ) ~ xLayout: ui layouts Flexible
-                      ~ yLayout: ui layouts Flexible,
+                    ) ~ rigidWidth: 25
+                      ~ rigidHeight: 25,
                     "TODO: Connector"
                 ) ~ xLayout: ui layouts Flexible
                   ~ yLayout: ui layouts ShrinkWrap,
