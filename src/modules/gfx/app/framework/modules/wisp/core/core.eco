@@ -1,0 +1,21 @@
+
+"
+    This module is not yet integrated into the system.
+    
+    However, it can serve as the basis for associating fixed outliners with objects.
+"
+
+{
+    static with inherited _ = std Module;
+    protected wisp = $;
+
+    own objects = {
+        static with inherited _ = std Module;
+        protected wisp = $;
+
+        protected ObjectOutlinerAssociations <- std util newMap;  "TODO: Make this a weak map"
+
+        OutlinerMorphForObject: object => ObjectOutlinerAssociations at: object;
+        OutlinerMorphForObject: object Is: morph => ObjectOutlinerAssociations at: object put: morph;
+    };
+}
