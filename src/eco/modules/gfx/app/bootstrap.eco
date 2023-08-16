@@ -42,7 +42,7 @@
                         ~ xLayout: ui layouts Flexible
                         ~ yLayout: ui layouts Flexible,
                     ui Button(ui Center(ui Label: 'Apps'),
-                            $[ :(app) :sender | (app framework actions open) Path: (std os files here / '..' / 'apps') ]
+                            $[ :(app) :sender | (app framework actions open) Path: (std os files here / '..' / '..' / 'eco' / 'apps') ]
                                     bind(app))
                         ~ xLayout: ui layouts Flexible
                         ~ yLayout: ui layouts Flexible,
