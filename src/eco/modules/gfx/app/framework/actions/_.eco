@@ -67,7 +67,11 @@
             );
 
             TextMessageBox: text => (
-                (framework actions open) Morph: ((framework legacy MirrorBuilder) TextMessageBox: text)
+                BuildAndOpen: [ :ui |
+                    ui Window(360, 200,
+                        ui Center(ui TextField: text)
+                    )
+                ]
             );
         };
     };
