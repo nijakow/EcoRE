@@ -11,6 +11,12 @@
 
     Object: object => OutlinerFor: object;
 
+    Path: path => (
+        (framework actions open) ui BuildAndOpen: [ :ui |
+            builder PathWindowFor: path Ui: ui
+        ].
+    );
+
     ShellFor: object => (
         (framework actions open) ui BuildAndOpen: [ :ui |
             ui Window(500, 350,

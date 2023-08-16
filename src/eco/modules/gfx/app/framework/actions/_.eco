@@ -24,7 +24,7 @@
         );
 
         Path: path => (
-            (framework actions open) Morph: ((framework legacy MirrorBuilder) OutlinerWindowForPath: path)
+            ((framework modules wisp) actions open) Path: path
         );
 
         own tools = {
@@ -87,6 +87,20 @@
             ((framework modules eval) actions)
                   EvalString: string InEnvironment: environment
                       OnSuccess: $[ :(framework) :val | (framework actions open) OutlinerForObject: val ] bind(framework)
+                      OnFailure: $[ :(framework) :err | (framework actions open) ui TextMessageBox: err ] bind(framework)
+        );
+
+        FileAndShowResult: path Environment: environment => (
+            ((framework modules eval) actions)
+                  EvalFile: path InEnvironment: environment
+                      OnSuccess: $[ :(framework) :val | (framework actions open) OutlinerForObject: val ] bind(framework)
+                      OnFailure: $[ :(framework) :err | (framework actions open) ui TextMessageBox: err ] bind(framework)
+        );
+
+        FileAndRun: path Environment: environment => (
+            ((framework modules eval) actions)
+                  EvalFile: path InEnvironment: environment
+                      OnSuccess: $[ :(framework) :val | val Main ] bind(framework)
                       OnFailure: $[ :(framework) :err | (framework actions open) ui TextMessageBox: err ] bind(framework)
         );
     };

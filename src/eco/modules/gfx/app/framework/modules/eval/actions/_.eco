@@ -56,4 +56,17 @@
           ^ self
         ]
     );
+
+    EvalFile: path InEnvironment: environment OnSuccess: successBlock OnFailure: failureBlock => (
+        [
+            successBlock value(path importIn: environment).
+          ^ self
+        ] catch: [ :e |
+            | sw <- (std io StringWriter) new |
+            (sw << 'Error while evaluating expression!') newline newline.
+            sw << e.
+            failureBlock value(sw build).
+          ^ self
+        ]
+    );
 }
