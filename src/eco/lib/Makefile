@@ -104,7 +104,7 @@ master.eco
 
 
 $(NAME): $(SOURCES) Makefile
-	PYTHONPATH=../bootstrapper $(PYTHON) -m ecosphere.bootstrapper --binary --compressed $(NAME) $(SOURCES)
+	PYTHONPATH=../../base/bootstrapper $(PYTHON) -m ecosphere.bootstrapper --binary --compressed $(NAME) $(SOURCES)
 
 all: $(NAME)
 
