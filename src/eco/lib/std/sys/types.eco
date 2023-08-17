@@ -15,11 +15,11 @@
 
         protected castFailed => (types CastError) throw;
 
-        probe: element => true;
+        probe: object => true;
 
-        cast: element onSuccess: success onFailure: fail => (probe: element) if: [ success value(element) ] else: [ fail value ];
+        cast: object onSuccess: success onFailure: fail => (probe: object) if: [ success value(object) ] else: [ fail value ];
         
-        cast: element => cast: element onSuccess: [ :v | ^ v ] onFailure: [ castFailed ];
+        cast: object => cast: object onSuccess: [ :v | ^ v ] onFailure: [ castFailed ];
 
         + other => (#<:std/sys/Types> SumTypeOf: self And: other);
 
@@ -30,7 +30,7 @@
         static with inherited _ = #<:std/Singleton>;
         with inherited TypeTrait = #<:std/sys/types/TypeTrait>;
 
-        probe: element => false;
+        probe: object => false;
 
         writeOn: w => w << 'the empty type';
     };
@@ -39,7 +39,7 @@
         static with inherited _ = #<:std/Singleton>;
         with inherited TypeTrait = #<:std/sys/types/TypeTrait>;
 
-        probe: element => true;
+        probe: object => true;
 
         writeOn: w => w << 'the universal type';
     };
@@ -60,11 +60,11 @@
               ^ self
             );
 
-            probe: element => [ a probe: element ] or: [ b probe: element ];
+            probe: object => [ a probe: object ] or: [ b probe: object ];
             
-            cast: element onSuccess: success onFailure: fail => (
-                a cast: element onSuccess: [ :v | ^ success value(v) ] onFailure: [
-                    b cast: element onSuccess: [ :v | ^ success value(v) ] onFailure: [ fail value ]
+            cast: object onSuccess: success onFailure: fail => (
+                a cast: object onSuccess: [ :v | ^ success value(v) ] onFailure: [
+                    b cast: object onSuccess: [ :v | ^ success value(v) ] onFailure: [ fail value ]
                 ]
             );
 
@@ -89,7 +89,7 @@
               ^ self
             );
 
-            probe: element => (std reflect PublicInterfaceFor: element) implementsInterface: interface;
+            probe: object => (std reflect PublicInterfaceFor: object) implementsInterface: interface;
         
             writeOn: w => w << 'an interface type(' << interface << ')';
         };
