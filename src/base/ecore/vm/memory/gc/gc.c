@@ -53,6 +53,11 @@ void Eco_GC_Mark(struct Eco_GC_State* state)
     Eco_GC_MarkLoop(state);
 }
 
+void Eco_GC_MoveObjectToFinalizationManager(struct Eco_GC_State* state, struct Eco_Object* object)
+{
+    Eco_WeakObjectManager_AddObject(&state->vm->weak_objects, object);
+}
+
 void Eco_GC_SweepArena(struct Eco_GC_State* state, struct Eco_Arena* arena)
 {
     struct Eco_Object*  object;
@@ -68,6 +73,12 @@ void Eco_GC_SweepArena(struct Eco_GC_State* state, struct Eco_Arena* arena)
             object->bits.mark_queued = false;
             object->bits.mark_done   = false;
             ptr = &(object->next);
+        } else if (object->bits.wants_finalization) {
+            object->bits.mark_queued        = false;
+            object->bits.mark_done          = false;
+            object->bits.wants_finalization = false;
+            *ptr = object->next;
+            Eco_GC_MoveObjectToFinalizationManager(state, object);
         } else {
             *ptr = object->next;
             object->type->typecore->del(object);

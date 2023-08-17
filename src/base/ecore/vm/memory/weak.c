@@ -16,3 +16,11 @@ void Eco_WeakObjectManager_Destroy(struct Eco_WeakObjectManager* self)
         Eco_Log_Warning("Weak object manager was not cleared before destruction!\n");
     }
 }
+
+
+void Eco_WeakObjectManager_AddObject(struct Eco_WeakObjectManager* self, struct Eco_Object* object)
+{
+    Eco_Log_Debug("Adding object %p to weak object manager %p\n", object, self);
+    object->next  = self->objects;
+    self->objects = object;
+}
