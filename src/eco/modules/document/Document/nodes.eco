@@ -36,6 +36,8 @@
 
         compress => self;
 
+        nesting => 0;
+
         writeOn: w => w << 'a snip';
     };
 
@@ -156,16 +158,20 @@
         static with inherited _ = std Clonable;
         with inherited SnipTrait = $ SnipTrait;
 
-        snips, size;
+        snips, size, nesting;
 
         with inherited trait = {
             static with inherited _ = std Trait;
 
             initWithSnips: _snips => (
                 snips <- _snips.
-                | csize <- 0 |
-                snips do: [ :snip | csize <- (csize + snip size) ].
-                size <- csize.
+                | csize <- 0, cnesting <- 0 |
+                snips do: [ :snip |
+                    csize    <- (csize + snip size).
+                    cnesting <- (cnesting max: snip nesting)
+                ].
+                size    <- csize.
+                nesting <- (cnesting + 1).
               ^ self
             );
 
