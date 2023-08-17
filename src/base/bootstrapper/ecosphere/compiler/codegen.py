@@ -279,6 +279,7 @@ class CodeGenerator:
     
     def op_assign(self, key):
         self._writer.write_assign(key)
+        self._set_last_value_to_stack()
 
     def op_return(self, depth, the_type, visitor):
         if the_type is not None:
