@@ -3,4 +3,5 @@
     static with inherited _ = std Module;
 
     own finalization = (here / 'finalization' / '_.eco') importIn: $;
+    own concepts     = (here / 'concepts' / '_.eco') importIn: $;
 }

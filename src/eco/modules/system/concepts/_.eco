@@ -1,0 +1,8 @@
+
+{
+    static with inherited _ = std Module;
+
+    own Concept = (here / 'Concept.eco') importIn: self;
+
+    Concept: id => (Concept clone) initWithId: id;
+}
