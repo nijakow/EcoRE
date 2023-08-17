@@ -46,11 +46,23 @@
                                     bind(app))
                         ~ xLayout: ui layouts Flexible
                         ~ yLayout: ui layouts Flexible,
-                    ui Button(ui Center(ui Label: 'Shell'),
-                            $[ :(app) :sender | (app framework actions open) tools Shell ]
-                                    bind(app))
-                        ~ xLayout: ui layouts Flexible
-                        ~ yLayout: ui layouts Flexible
+                    ui Button(
+                        ui Center(ui Label: 'New'),
+                        $[ :(app) :sender |
+                                (app framework actions open) ui BuildAndOpenContextMenu: [ :cmb |
+                                    cmb item: 'Shell' does: $[ :(app) |
+                                        (app framework actions open) tools Shell.
+                                    ] bind(app).
+                                    cmb item: 'Module' does: $[ :(app) |
+                                        (app framework actions open) tools ShellWithText: '"\n    A module.\n"\n\n{\n    static with inherited _ = std Module;\n\n    \n}\n'.
+                                    ] bind(app).
+                                    cmb item: 'Clonable' does: $[ :(app) |
+                                        (app framework actions open) tools ShellWithText: '"\n    An object.\n"\n\n{\n    static with inherited _ = std Clonable;\n\n    \n\n    with inherited trait = {\n        static with inherited _ = std Trait;\n\n        \n    };\n}\n'.
+                                    ] bind(app).
+                                ].
+                        ] bind(app)
+                    ) ~ xLayout: ui layouts Flexible
+                      ~ yLayout: ui layouts Flexible,
                 )
             )
         )

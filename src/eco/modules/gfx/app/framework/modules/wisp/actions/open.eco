@@ -17,17 +17,16 @@
         ].
     );
 
-    ShellFor: object => (
+    ShellFor: object Text: text => (
         (framework actions open) ui BuildAndOpen: [ :ui |
             ui Window(500, 350,
-                ui DocumentEditor: (document FromString: '"\n    A module.\n"\n\n{\n    static with inherited _ = std Module;\n\n    \n}\n')
+                ui DocumentEditor: (document FromString: text)
                     OnAccept: $[ :(app, object) :editor | (app framework actions) eval DocumentAndShowResult: (editor document) Environment: object ] bind(app, object)
                     OnCancel: $[ :editor | editor clear ]
             )
         ]
     );
-
-    Shell => (
-        ShellFor: app
-    );
+    ShellFor: object => ShellFor: object Text: '';
+    ShellWithText: text => ShellFor: app Text: text;
+    Shell => ShellFor: app;
 }

@@ -31,6 +31,10 @@
             static with inherited _ = std Module;
             static framework = $package;
 
+            ShellWithText: text => (
+                ((framework modules wisp) actions open) ShellWithText: text
+            );
+            
             Shell => (
                 ((framework modules wisp) actions open) Shell
             );
