@@ -5,6 +5,9 @@
 
     document, offset;
 
+    protected cachedLine   <- No,
+    protected cachedColumn <- No;
+
     with inherited trait = {
         static with inherited _ = std Trait;
 
@@ -17,16 +20,23 @@
         protected root => document root;
         protected root: value => document root: value;
 
+        protected moved => (
+            cachedLine   <- No.
+            cachedColumn <- No.
+        );
+
         currentItem => document root at: offset;
 
         moveTo: pos => (
             offset <- (pos min: (root size)) max: 0.
+            moved.
           ^ self
         );
 
         "Deprecated in the future, but useful for now."
         reposition => (
             offset <- (offset min: (root size)) max: 0.
+            moved.
           ^ self
         );
 
@@ -75,28 +85,42 @@
         );
 
         line => (
+            cachedLine yes: [ :cached | ^ cached ].
+
             | ln <- 0, c <- 0 |
 
             (document documentStream)
                 do: [ :item |
-                    (c >= offset) if: [ ^ ln ].
+                    (c >= offset) if: [
+                        cachedLine <- Yes: ln.
+                      ^ ln
+                    ].
                     item ifNewline: [ ln <- ln + 1 ].
                     c <- c + 1.
                 ].
+            
+            cachedLine <- Yes: ln.
 
             ^ ln
         );
 
         column => (
+            cachedColumn yes: [ :cached | ^ cached ].
+
             | col <- 0, c <- 0 |
 
             (document documentStream)
                 do: [ :item |
-                    (c >= offset) if: [ ^ col ].
+                    (c >= offset) if: [
+                        cachedColumn <- Yes: col.
+                      ^ col
+                    ].
                     col <- col + 1.
                     item ifNewline: [ col <- 0 ].
                     c <- c + 1.
                 ].
+            
+            cachedColumn <- Yes: col.
             
             ^ col
         );
