@@ -16,6 +16,7 @@ struct Eco_ObjectBits
     unsigned int mark_queued : 1;
     unsigned int mark_done   : 1;
     unsigned int sticky      : 1;
+    unsigned int finalized   : 1;
 };
 
 struct Eco_Object

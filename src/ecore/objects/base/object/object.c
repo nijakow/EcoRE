@@ -51,6 +51,7 @@ void* Eco_Object_NewInArena(struct Eco_Type* type,
     object->bits.mark_queued  = false;
     object->bits.mark_done    = false;
     object->bits.sticky       = false;
+    object->bits.finalized    = true;  // For now, every object is finalized (i.e. no need to run a destructor)
 
     object->next              = arena->objects;
     arena->objects            = object;
