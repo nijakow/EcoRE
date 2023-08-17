@@ -12,5 +12,6 @@ void Eco_WeakObjectManager_Create(struct Eco_WeakObjectManager* self);
 void Eco_WeakObjectManager_Destroy(struct Eco_WeakObjectManager* self);
 
 void Eco_WeakObjectManager_AddObject(struct Eco_WeakObjectManager* self, struct Eco_Object* object);
+bool Eco_WeakObjectManager_RemoveObject(struct Eco_WeakObjectManager* self, struct Eco_Object** object);
 
 #endif

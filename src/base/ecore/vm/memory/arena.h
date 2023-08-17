@@ -17,4 +17,6 @@ struct Eco_Arena
 void Eco_Arena_Create(struct Eco_Arena*);
 void Eco_Arena_Destroy(struct Eco_Arena*);
 
+void Eco_Arena_AddObject(struct Eco_Arena*, struct Eco_Object*);
+
 #endif

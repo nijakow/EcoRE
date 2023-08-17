@@ -41,4 +41,7 @@ bool Eco_Object_IsBlessedBy(struct Eco_Object*, struct Eco_Object*);
 void Eco_Object_Init();
 void Eco_Object_Terminate();
 
+
+extern struct Eco_Arena Eco_OBJECTS;
+
 #endif

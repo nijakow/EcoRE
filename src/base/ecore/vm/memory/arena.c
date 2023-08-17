@@ -1,4 +1,5 @@
 #include <ecore/eco.h>
+#include <ecore/objects/base/object.h>
 #include <ecore/io/logging/log.h>
 
 #include "arena.h"
@@ -26,4 +27,11 @@ void Eco_Arena_Destroy(struct Eco_Arena* arena)
     if (arena->next != NULL)
         arena->next->prev = arena->prev;
     *(arena->prev)        = arena->next;
+}
+
+void Eco_Arena_AddObject(struct Eco_Arena* arena, struct Eco_Object* object)
+{
+    object->next   = arena->objects;
+    arena->objects = object;
+    arena->object_count++;
 }
