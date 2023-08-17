@@ -28,4 +28,6 @@
     isKey         => false;
     isString      => false;
     isArray       => false;
+
+    finalize => self;
 }

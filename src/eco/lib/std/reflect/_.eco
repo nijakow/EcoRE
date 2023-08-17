@@ -13,4 +13,6 @@
     PrivateInterfaceFor: object => (TypeOf: object) privateInterface;
     PublicInterfaceFor: object => (TypeOf: object) publicInterface;
     AllInterfaces => #'ecosphere.ecore.object.interface.get_all_interfaces'();
+
+    EnableFinalization: obj => #'ecosphere.ecore.enable_finalization'(obj);
 }

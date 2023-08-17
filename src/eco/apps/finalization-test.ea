@@ -3,12 +3,14 @@
     static with inherited _ = std Module;
     with app = $;
 
-    f: obj => #'ecosphere.ecore.enable_finalization'(obj);
-
     n => #'ecosphere.ecore.next_finalizable_or'(42);
 
     own Object = {
         static with inherited _ = std Clonable;
+
+        finalize => (
+            (std io out << 'Finalizing ' << self) newline commit.
+        );
 
         writeOn: w => w << 'a test dummy';
     };
@@ -18,16 +20,16 @@
             ui UndecoratedWindow(
                 ui VBox(
                     ui Button(
-                        ui Padding(5, ui Label: 'Create one!'),
-                        $[ :(app, us, obj) |
-                            us f: (obj clone)
-                        ] bind(app, self, Object)
+                        ui Padding(5, ui Label: 'Start finalizer!'),
+                        $[ :(app) |
+                            app system finalization StartFinalizationProcess.
+                        ] bind(app)
                     ) ~ xLayout: (ui layouts Flexible),
                     ui Button(
-                        ui Padding(5, ui Label: 'Test it!'),
-                        $[ :(app, us) |
-                            (app framework actions open) OutlinerForObject: (us n)
-                        ] bind(app, self)
+                        ui Padding(5, ui Label: 'Create one!'),
+                        $[ :(app, obj) |
+                            std reflect EnableFinalization: (obj clone)
+                        ] bind(app, Object)
                     ) ~ xLayout: (ui layouts Flexible)
                 )
             )

@@ -1,0 +1,22 @@
+
+{
+    static with inherited _ = std Module;
+
+    own FinalizationProcess = {
+        static with inherited _ = std Module;
+
+        Main => (
+            [
+                | obj <- #'ecosphere.ecore.next_finalizable_or'(0) |
+                (0 != obj) if: [
+                    obj finalize
+                ].
+            ] repeat
+        );
+    };
+
+    StartFinalizationProcess => (
+        #'ecosphere.ecore.fiber.start'((std reflect Mirror: FinalizationProcess) slot: #'Main' ~ slotValue, lobby).
+      ^ self
+    );
+}
