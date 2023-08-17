@@ -1,6 +1,12 @@
 #=std/sys/Error: {
     static with inherited _ = #<:std/Module>;
 
+    own ErrorTrait = #=std/sys/error/ErrorTrait: {
+        static with inherited _ = #<:std/Trait>;
+
+        writeOn: w => w << 'an error';
+    };
+
     own InternalBasicError = #=std/sys/error/InternalBasicError: {
         static with inherited _ = #<:std/Singleton>;
 
