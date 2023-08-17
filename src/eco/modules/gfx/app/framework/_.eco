@@ -1,8 +1,7 @@
+
 {
     static with inherited _ = std Module;
     with app = $;
-
-    own legacy = (here / 'legacy' / '_.eco') importIn: (self app);
 
     own actions = (here / 'actions' / '_.eco') importIn: self;
     own modules = (here / 'modules' / '_.eco') importIn: (self app);

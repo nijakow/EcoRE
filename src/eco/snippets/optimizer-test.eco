@@ -1,7 +1,7 @@
 {
     static with inherited _ = std Module;
 
-    optimizer <- (std os files here / '..' / 'modules' / 'ecosphere' / 'optimizer' / '_.eco') import Init;
+    optimizer <- (here / '..' / 'modules' / 'ecosphere' / 'optimizer' / '_.eco') import Init;
 
     f(x) => [ x * x ] value;
     g(x) => 42;

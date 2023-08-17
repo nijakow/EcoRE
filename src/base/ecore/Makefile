@@ -8,7 +8,7 @@ else
 endif
 
 EXECUTABLE = ./ecore.app
-BOOTSTRAP_ENVIRONMENT = ../lib
+BOOTSTRAP_ENVIRONMENT = ../../eco/lib
 BOOTSTRAP_MASTER      = $(BOOTSTRAP_ENVIRONMENT)/master.ebf
 
 ENABLE_LIBZ = yes
@@ -161,7 +161,7 @@ leakcheck: $(EXECUTABLE)
 
 .phony: clean
 clean:
-	- $(MAKE) -C ../lib/ clean
+	- $(MAKE) -C ../../eco/lib/ clean
 	- $(RM) $(EXECUTABLE) $(OBJECTS) $(DEPENDS)
 
 .phony: re

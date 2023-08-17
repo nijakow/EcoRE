@@ -230,4 +230,36 @@
         ).
       ^ vbox
     );
+
+
+    PathOutlinerRow: path Name: name Parent: parent Ui: ui => (
+        ui HBox(
+            ui Button(ui Padding(5, ui Label: name),
+                            $[ :(app, us, ui, parent, path) :sender |
+                                | framework <- app framework |
+                                begin
+                                    ~ if: [ (path extension) equals: 'eco' ] then: [ (framework actions eval) FileAndShowResult: path Environment: app ]
+                                    ~ if: [ (path extension) equals:  'ea' ] then: [ (framework actions eval) FileAndRun: path Environment: app ]
+                                    ~ default: [ parent replaceWith: (us PathPaneFor: path Ui: ui) ]
+                            ] bind(app, self, ui, parent, path)
+            ) ~ xLayout: ui layouts Flexible,
+        ) ~ yLayout: ui layouts ShrinkWrap
+    );
+
+    PathOutlinerRow: childpath Parent: parent Ui: ui => PathOutlinerRow: childpath Name: (childpath name) Parent: parent Ui: ui;
+
+    PathPaneFor: path Ui: ui => (
+        | slots <- ui VBox() |
+        slots add: (PathOutlinerRow: (path / '..') Name: '..' Parent: slots Ui: ui).
+        path children do: [ :subpath |
+            slots add: (PathOutlinerRow: subpath Parent: slots Ui: ui)
+        ].
+      ^ slots
+    );
+
+    PathWindowFor: path Ui: ui => (
+        ui Window(400, 400,
+            ui Scrollable(ui Padding(20, PathPaneFor: path Ui: ui))
+        )
+    );
 }
