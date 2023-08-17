@@ -4,5 +4,6 @@
 #include <ecore/vm/builtins/builtin.h>
 
 bool Eco_VM_Builtin_StartFiber(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_Yield(struct Eco_Fiber*, unsigned int);
 
 #endif

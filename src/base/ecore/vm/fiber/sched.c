@@ -67,6 +67,11 @@ void Eco_Fiber_Pause(struct Eco_Fiber* fiber)
     Eco_Fiber_SetStateToPaused(fiber);
 }
 
+void Eco_Fiber_Yield(struct Eco_Fiber* fiber)
+{
+    fiber->state = Eco_Fiber_State_YIELDING;
+}
+
 void Eco_Fiber_WaitOn(struct Eco_Fiber* fiber, struct Eco_FiberQueue* queue)
 {
     Eco_Fiber_MoveToQueue(fiber, queue);

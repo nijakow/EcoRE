@@ -48,6 +48,8 @@ void Eco_Scheduler_Run(struct Eco_Scheduler* scheduler)
 
         if (fiber->state == Eco_Fiber_State_RUNNING) {
             /* Do nothing */
+        } else if (fiber->state == Eco_Fiber_State_YIELDING) {
+            fiber->state = Eco_Fiber_State_RUNNING;
         } else if (Eco_Fiber_State_IsError(fiber->state)) {
             /* TODO: Catch error */
             Eco_Log_Error("Got a non-TERMINATED state: %d\n", fiber->state);

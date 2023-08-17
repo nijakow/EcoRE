@@ -6,6 +6,7 @@
 enum Eco_Fiber_State
 {
     Eco_Fiber_State_RUNNING,
+    Eco_Fiber_State_YIELDING,
     Eco_Fiber_State_PAUSED,         // Doing nothing
     Eco_Fiber_State_WAITING,        // Waiting for a notification by some event
     Eco_Fiber_State_TERMINATED,

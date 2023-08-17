@@ -7,10 +7,13 @@
 
         Main => (
             [
-                | obj <- #'ecosphere.ecore.next_finalizable_or'(0) |
-                (0 != obj) if: [
-                    obj finalize
-                ].
+                [ :break |
+                    | obj <- #'ecosphere.ecore.next_finalizable_or'(0) |
+                    (0 == obj)
+                        if: [ break value  ]
+                      else: [ obj finalize ].
+                ] repeatWithBreak.
+                #'ecosphere.ecore.fiber.yield'().
             ] repeat
         );
     };

@@ -18,6 +18,7 @@ void Eco_Fiber_MoveToQueue(struct Eco_Fiber*, struct Eco_FiberQueue*);
 void Eco_Fiber_SetRunning(struct Eco_Fiber*);
 void Eco_Fiber_SetPaused(struct Eco_Fiber*);    // Deprecated
 void Eco_Fiber_Pause(struct Eco_Fiber*);
+void Eco_Fiber_Yield(struct Eco_Fiber*);
 void Eco_Fiber_WaitOn(struct Eco_Fiber*, struct Eco_FiberQueue*);
 void Eco_Fiber_ReactivateWithValue(struct Eco_Fiber*, Eco_Any*);
 void Eco_Fiber_SetStateToRunning(struct Eco_Fiber* fiber);

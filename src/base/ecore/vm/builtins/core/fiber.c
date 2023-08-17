@@ -26,3 +26,12 @@ bool Eco_VM_Builtin_StartFiber(struct Eco_Fiber* fiber, unsigned int args)
 
     return true;
 }
+
+
+bool Eco_VM_Builtin_Yield(struct Eco_Fiber* fiber, unsigned int args)
+{
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
+        return false;
+    Eco_Fiber_Yield(fiber);
+    return true;
+}

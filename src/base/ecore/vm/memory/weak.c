@@ -1,6 +1,5 @@
 #include "weak.h"
 
-#include <ecore/io/logging/log.h>
 #include <ecore/vm/memory/arena.h>
 #include <ecore/vm/memory/gc/gc.h>
 
@@ -23,7 +22,6 @@ void Eco_WeakObjectManager_Destroy(struct Eco_WeakObjectManager* self)
 
 void Eco_WeakObjectManager_AddObject(struct Eco_WeakObjectManager* self, struct Eco_Object* object)
 {
-    Eco_Log_Debug("Adding object %p to weak object manager %p\n", object, self);
     object->next  = self->objects;
     self->objects = object;
 }
@@ -37,8 +35,6 @@ bool Eco_WeakObjectManager_RemoveObject(struct Eco_WeakObjectManager* self, stru
     
     head          = self->objects;
     self->objects = head->next;
-
-    Eco_Log_Debug("Removing object %p from weak object manager %p\n", head, self);
 
     /*
      * We add the object to the main arena so that it can be collected
