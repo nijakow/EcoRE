@@ -26,7 +26,7 @@
         writeOn: w => w << 'a type';
     };
 
-    own EmptyType = {
+    own EmptyType = #=std/sys/types/EmptyType: {
         static with inherited _ = #<:std/Singleton>;
         with inherited TypeTrait = #<:std/sys/types/TypeTrait>;
 
@@ -48,8 +48,8 @@
         static with inherited _ = #<:std/Clonable>;
         with inherited TypeTrait = #<:std/sys/types/TypeTrait>;
 
-        protected a,
-        protected b;
+        protected a <- #<:std/sys/types/EmptyType>,
+        protected b <- #<:std/sys/types/EmptyType>;
 
         with inherited trait = {
             static with inherited _ = #<:std/Trait>;
@@ -73,4 +73,27 @@
     };
 
     SumTypeOf: a And: b => (SumType clone) initWithA: a B: b;
+
+
+    own InterfaceType = {
+        static with inherited _ = #<:std/Clonable>;
+        with inherited TypeTrait = #<:std/sys/types/TypeTrait>;
+
+        protected interface <- %[];
+
+        with inherited trait = {
+            static with inherited _ = #<:std/Trait>;
+
+            initWithInterface: _interface => (
+                interface <- _interface.
+              ^ self
+            );
+
+            probe: element => (std reflect PublicInterfaceFor: element) implementsInterface: interface;
+        
+            writeOn: w => w << 'an interface type(' << interface << ')';
+        };
+    };
+
+    InterfaceTypeFor: interface => (InterfaceType clone) initWithInterface: interface;
 }
