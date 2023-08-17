@@ -4,4 +4,5 @@
 
     builtins = #<:std/sys/Builtins>;
     error = #<:std/sys/Error>;
+    types = #<:std/sys/Types>;
 }

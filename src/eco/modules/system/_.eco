@@ -4,5 +4,4 @@
 
     own finalization = (here / 'finalization' / '_.eco') importIn: $;
     own concepts     = (here / 'concepts' / '_.eco') importIn: $;
-    own types        = (here / 'types' / '_.eco') importIn: $;
 }
