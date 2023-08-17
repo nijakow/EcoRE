@@ -3,6 +3,7 @@
 
 #include <ecore/vm/scheduler.h>
 #include <ecore/vm/memory/gc/gc_state.h>
+#include <ecore/vm/memory/weak.h>
 
 
 struct Eco_GC_State;
@@ -11,11 +12,13 @@ struct Eco_Code;
 
 struct Eco_VM
 {
-    struct Eco_Scheduler  scheduler;
-    struct Eco_GC_State   gc_state;
+    struct Eco_Scheduler          scheduler;
 
-    struct Eco_Fiber*     fibers;
-    Eco_Integer           fiber_id_counter;
+    struct Eco_WeakObjectManager  weak_objects;
+    struct Eco_GC_State           gc_state;
+
+    struct Eco_Fiber*             fibers;
+    Eco_Integer                   fiber_id_counter;
 
     struct {
         Eco_Any  lobby;

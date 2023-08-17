@@ -27,6 +27,7 @@ void Eco_VM_Create(struct Eco_VM* vm)
     vm->constants.cfalse      = Eco_Any_Default();
     vm->constants.basic_error = Eco_Any_Default();
 
+    Eco_WeakObjectManager_Create(&vm->weak_objects);
     Eco_GC_State_Create(&vm->gc_state, vm);
     Eco_Scheduler_Create(&vm->scheduler);
 }
@@ -37,6 +38,7 @@ void Eco_VM_Destroy(struct Eco_VM* vm)
         Eco_Fiber_Delete(vm->fibers);
     Eco_Scheduler_Destroy(&vm->scheduler);
     Eco_GC_State_Destroy(&vm->gc_state);
+    Eco_WeakObjectManager_Destroy(&vm->weak_objects);
 }
 
 void Eco_VM_Mark(struct Eco_GC_State* state, struct Eco_VM* vm)
