@@ -3,6 +3,7 @@
 #include "stackops.h"
 
 #include <ecore/eco.h>
+#include <ecore/vm/vm.h>
 #include <ecore/vm/scheduler.h>
 
 
@@ -49,7 +50,7 @@ void Eco_Fiber_MoveToQueue(struct Eco_Fiber* fiber, struct Eco_FiberQueue* queue
 void Eco_Fiber_SetRunning(struct Eco_Fiber* fiber)
 {
     Eco_Fiber_MoveToQueue(fiber, &fiber->scheduler->fiber_queues.running);
-    Eco_Fiber_SetState(fiber, Eco_Fiber_State_RUNNING);
+    Eco_Fiber_SetStateToRunning(fiber);
 }
 
 /*
@@ -63,13 +64,13 @@ void Eco_Fiber_SetPaused(struct Eco_Fiber* fiber)
 void Eco_Fiber_Pause(struct Eco_Fiber* fiber)
 {
     Eco_Fiber_MoveToQueue(fiber, &fiber->scheduler->fiber_queues.paused);
-    Eco_Fiber_SetState(fiber, Eco_Fiber_State_PAUSED);
+    Eco_Fiber_SetStateToPaused(fiber);
 }
 
 void Eco_Fiber_WaitOn(struct Eco_Fiber* fiber, struct Eco_FiberQueue* queue)
 {
     Eco_Fiber_MoveToQueue(fiber, queue);
-    Eco_Fiber_SetState(fiber, Eco_Fiber_State_WAITING);
+    Eco_Fiber_SetStateToWaiting(fiber);
 }
 
 void Eco_Fiber_ReactivateWithValue(struct Eco_Fiber* fiber, Eco_Any* value)
@@ -84,6 +85,31 @@ void Eco_Fiber_ReactivateWithValue(struct Eco_Fiber* fiber, Eco_Any* value)
 void Eco_Fiber_SetState(struct Eco_Fiber* fiber, enum Eco_Fiber_State state)
 {
     fiber->state = state;
+}
+
+void Eco_Fiber_SetStateToRunning(struct Eco_Fiber* fiber)
+{
+    Eco_Fiber_SetState(fiber, Eco_Fiber_State_RUNNING);
+}
+
+void Eco_Fiber_SetStateToPaused(struct Eco_Fiber* fiber)
+{
+    Eco_Fiber_SetState(fiber, Eco_Fiber_State_PAUSED);
+}
+
+void Eco_Fiber_SetStateToWaiting(struct Eco_Fiber* fiber)
+{
+    Eco_Fiber_SetState(fiber, Eco_Fiber_State_WAITING);
+}
+
+void Eco_Fiber_SetStateToTerminated(struct Eco_Fiber* fiber)
+{
+    Eco_Fiber_SetState(fiber, Eco_Fiber_State_TERMINATED);
+}
+
+void Eco_Fiber_GenericInternalError(struct Eco_Fiber* fiber, enum Eco_Fiber_State state)
+{
+    Eco_Fiber_Throw(fiber, fiber->vm->constants.basic_error);
 }
 
 void Eco_Fiber_Throw(struct Eco_Fiber* fiber, Eco_Any value)

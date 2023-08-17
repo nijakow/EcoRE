@@ -20,7 +20,11 @@ void Eco_Fiber_SetPaused(struct Eco_Fiber*);    // Deprecated
 void Eco_Fiber_Pause(struct Eco_Fiber*);
 void Eco_Fiber_WaitOn(struct Eco_Fiber*, struct Eco_FiberQueue*);
 void Eco_Fiber_ReactivateWithValue(struct Eco_Fiber*, Eco_Any*);
-void Eco_Fiber_SetState(struct Eco_Fiber* fiber, enum Eco_Fiber_State state);   // Deprecated
+void Eco_Fiber_SetStateToRunning(struct Eco_Fiber* fiber);
+void Eco_Fiber_SetStateToPaused(struct Eco_Fiber* fiber);
+void Eco_Fiber_SetStateToWaiting(struct Eco_Fiber* fiber);
+void Eco_Fiber_SetStateToTerminated(struct Eco_Fiber* fiber);
+void Eco_Fiber_GenericInternalError(struct Eco_Fiber* fiber, enum Eco_Fiber_State state);
 void Eco_Fiber_Throw(struct Eco_Fiber*, Eco_Any);
 
 #endif

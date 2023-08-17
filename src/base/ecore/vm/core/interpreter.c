@@ -40,7 +40,7 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
     struct Eco_Frame*  frame;
 
     if ((arg_count < code->arg_count)) {
-        Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ARGERROR);
+        Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_ARGERROR);
         return false;
     } else if ((arg_count > code->arg_count) && !(code->has_varargs)) {
         while (arg_count > code->arg_count) {
@@ -204,7 +204,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             fiber->stack_pointer  = sp;
 
             if (!Eco_Key_CallBuiltin(key, fiber, args)) {
-                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_BUILTIN_TRAP);
+                Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_BUILTIN_TRAP);
                 goto error;
             }
             SLOW_DISPATCH();
@@ -222,7 +222,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             fiber->stack_pointer  = sp;
 
             if (!Eco_Key_CallBuiltin(key, fiber, args)) {
-                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_BUILTIN_TRAP);
+                Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_BUILTIN_TRAP);
                 goto error;
             }
             SLOW_DISPATCH();
@@ -247,7 +247,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                                          *Eco_Fiber_Nth(fiber, message.body.send.arg_count)),
                            false)) {
                 Eco_Log_Warning("Message send failed: %s\n", ((struct Eco_Key*) message.key)->name);
-                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
+                Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
                 goto error;
             }
             SLOW_DISPATCH();
@@ -277,7 +277,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                                          *Eco_Fiber_Nth(fiber, message.body.send.arg_count)),
                            false)) {
                 Eco_Log_Warning("Message send with varargs failed: %s\n", ((struct Eco_Key*) message.key)->name);
-                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
+                Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
                 goto error;
             }
             SLOW_DISPATCH();
@@ -299,7 +299,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                            true,
                            false)) {
                 Eco_Log_Warning("Message send failed: %s\n", ((struct Eco_Key*) message.key)->name);
-                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
+                Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
                 goto error;
             }
             SLOW_DISPATCH();
@@ -326,7 +326,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                            true,
                            false)) {
                 Eco_Log_Warning("Message send with varargs failed: %s\n", ((struct Eco_Key*) message.key)->name);
-                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
+                Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
                 goto error;
             }
             SLOW_DISPATCH();
@@ -350,7 +350,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                         || Eco_Any_Equals(Eco_Fiber_Top(fiber)->myself, *Eco_Fiber_Nth(fiber, 1)),
                            false)) {
                 Eco_Log_Warning("Assign failed: %s\n", ((struct Eco_Key*) message.key)->name);
-                Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ASSIGNFAILED);
+                Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_ASSIGNFAILED);
                 goto error;
             }
 
@@ -372,7 +372,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
 
             if (!Eco_Fiber_HasTop(fiber)) {
                 // Last frame was popped, we can now return
-                Eco_Fiber_SetState(fiber, Eco_Fiber_State_TERMINATED);  // TODO: Write a function for this
+                Eco_Fiber_SetStateToTerminated(fiber);
                 goto end;
             }
 
@@ -388,7 +388,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
             FAST_DISPATCH();
         }
         DEFAULT_TARGET() {
-            Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_NOOPCODE);
+            Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_NOOPCODE);
             goto error;
         }
     }

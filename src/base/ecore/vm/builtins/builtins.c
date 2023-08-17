@@ -24,7 +24,7 @@
 
 bool Eco_VM_Builtin_Trap(struct Eco_Fiber* fiber, unsigned int args)
 {
-    Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_BUILTIN_TRAP);
+    Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_BUILTIN_TRAP);
     return false;
 }
 

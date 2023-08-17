@@ -21,7 +21,7 @@ static inline bool Eco_VM_Builtin_Tool_ArgExpect(struct Eco_Fiber* fiber,
                                    unsigned int maxargs)
 {
     if (args < minargs || (args > maxargs)) {
-        Eco_Fiber_SetState(fiber, Eco_Fiber_State_ERROR_ARGERROR);
+        Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_ARGERROR);
         return false;
     } else {
         return true;
