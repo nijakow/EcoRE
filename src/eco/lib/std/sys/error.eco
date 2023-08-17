@@ -1,0 +1,9 @@
+#=std/sys/Error: {
+    static with inherited _ = #<:std/Module>;
+
+    own InternalBasicError = #=std/sys/error/InternalBasicError: {
+        static with inherited _ = #<:std/Singleton>;
+
+        writeOn: w => w << 'an internal error';
+    };
+}

@@ -10,6 +10,7 @@ bool Eco_VM_Builtin_GetEnv(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_SetLobby(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_SetTrue(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_SetFalse(struct Eco_Fiber*, unsigned int);
+bool Eco_VM_Builtin_SetBasicError(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_SetProxy(struct Eco_Fiber*, unsigned int);
 
 bool Eco_VM_Builtin_GetTypeType(struct Eco_Fiber*, unsigned int);

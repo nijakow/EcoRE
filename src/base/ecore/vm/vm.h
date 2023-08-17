@@ -22,6 +22,8 @@ struct Eco_VM
         
         Eco_Any  ctrue;
         Eco_Any  cfalse;
+
+        Eco_Any  basic_error;
     } constants;
 };
 

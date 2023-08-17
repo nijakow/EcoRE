@@ -22,9 +22,10 @@ void Eco_VM_Create(struct Eco_VM* vm)
     vm->fibers           = NULL;
     vm->fiber_id_counter = 0;
     
-    vm->constants.lobby  = Eco_Any_Default();
-    vm->constants.ctrue  = Eco_Any_Default();
-    vm->constants.cfalse = Eco_Any_Default();
+    vm->constants.lobby       = Eco_Any_Default();
+    vm->constants.ctrue       = Eco_Any_Default();
+    vm->constants.cfalse      = Eco_Any_Default();
+    vm->constants.basic_error = Eco_Any_Default();
 
     Eco_GC_State_Create(&vm->gc_state, vm);
     Eco_Scheduler_Create(&vm->scheduler);
@@ -48,6 +49,7 @@ void Eco_VM_Mark(struct Eco_GC_State* state, struct Eco_VM* vm)
     Eco_GC_State_MarkAny(state, vm->constants.lobby);
     Eco_GC_State_MarkAny(state, vm->constants.ctrue);
     Eco_GC_State_MarkAny(state, vm->constants.cfalse);
+    Eco_GC_State_MarkAny(state, vm->constants.basic_error);
 }
 
 void Eco_VM_FreeAll(struct Eco_VM* vm)

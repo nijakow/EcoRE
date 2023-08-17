@@ -194,6 +194,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_lobby", Eco_VM_Builtin_SetLobby);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_true", Eco_VM_Builtin_SetTrue);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_false", Eco_VM_Builtin_SetFalse);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_basic_error", Eco_VM_Builtin_SetBasicError);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.set_proxy", Eco_VM_Builtin_SetProxy);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.type_type", Eco_VM_Builtin_GetTypeType);

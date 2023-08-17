@@ -3,4 +3,5 @@
     static with inherited _ = #<:std/Module>;
 
     builtins = #<:std/sys/Builtins>;
+    error = #<:std/sys/Error>;
 }

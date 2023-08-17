@@ -94,6 +94,14 @@ bool Eco_VM_Builtin_SetFalse(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_SetBasicError(struct Eco_Fiber* fiber, unsigned int args)
+{
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+    Eco_Any_AssignAny(&fiber->vm->constants.basic_error, Eco_Fiber_Peek(fiber));
+    return true;
+}
+
 bool Eco_VM_Builtin_SetProxy(struct Eco_Fiber* fiber, unsigned int args)
 {
     Eco_Any  proxy;

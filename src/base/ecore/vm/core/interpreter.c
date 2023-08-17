@@ -3,6 +3,7 @@
 #include "frame.h"
 #include "send.h"
 
+#include <ecore/vm/vm.h>
 #include <ecore/vm/fiber/fiber.h>
 #include <ecore/vm/fiber/stackops.h>
 #include <ecore/objects/misc/key/key.h>
@@ -103,7 +104,7 @@ bool Eco_Fiber_Unwind(struct Eco_Fiber* fiber)
          * We push a dummy value for Self
          */
         Eco_Fiber_SetRunning(fiber);
-        value = Eco_Any_FromInteger(0);
+        value = fiber->vm->constants.basic_error;
         Eco_Fiber_Push(fiber, value);
         Eco_Fiber_Push(fiber, fiber->thrown);
         Eco_Fiber_EnterClosure(fiber, handler, 2);
