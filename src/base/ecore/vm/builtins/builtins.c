@@ -49,6 +49,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.is", Eco_VM_Builtin_Is);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.clone", Eco_VM_Builtin_Clone);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.enable_finalization", Eco_VM_Builtin_EnableFinalization);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.next_finalizable_or", Eco_VM_Builtin_NextFinalizableOr);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.flow.value", Eco_VM_Builtin_Value);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.flow.reset", Eco_VM_Builtin_Reset);

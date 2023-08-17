@@ -52,6 +52,8 @@ void Eco_VM_Mark(struct Eco_GC_State* state, struct Eco_VM* vm)
     Eco_GC_State_MarkAny(state, vm->constants.ctrue);
     Eco_GC_State_MarkAny(state, vm->constants.cfalse);
     Eco_GC_State_MarkAny(state, vm->constants.basic_error);
+
+    Eco_WeakObjectManager_Mark(state, &vm->weak_objects);
 }
 
 void Eco_VM_FreeAll(struct Eco_VM* vm)

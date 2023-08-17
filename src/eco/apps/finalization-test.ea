@@ -1,0 +1,36 @@
+
+{
+    static with inherited _ = std Module;
+    with app = $;
+
+    f: obj => #'ecosphere.ecore.enable_finalization'(obj);
+
+    n => #'ecosphere.ecore.next_finalizable_or'(42);
+
+    own Object = {
+        static with inherited _ = std Clonable;
+
+        writeOn: w => w << 'a test dummy';
+    };
+
+    Main => (
+        (framework actions open) ui BuildAndOpen: [ :ui |
+            ui UndecoratedWindow(
+                ui VBox(
+                    ui Button(
+                        ui Padding(5, ui Label: 'Create one!'),
+                        $[ :(app, us, obj) |
+                            us f: (obj clone)
+                        ] bind(app, self, Object)
+                    ) ~ xLayout: (ui layouts Flexible),
+                    ui Button(
+                        ui Padding(5, ui Label: 'Test it!'),
+                        $[ :(app, us) |
+                            (app framework actions open) OutlinerForObject: (us n)
+                        ] bind(app, self)
+                    ) ~ xLayout: (ui layouts Flexible)
+                )
+            )
+        ]
+    );
+}
