@@ -11,7 +11,7 @@
                     | obj <- #'ecosphere.ecore.next_finalizable_or'(0) |
                     (0 == obj)
                         if: [ break value  ]
-                      else: [ obj finalize ].
+                      else: [ [ obj finalize ] catch: [ :e | "Do nothing in case of an error" ] ].
                 ] repeatWithBreak.
                 #'ecosphere.ecore.fiber.yield'().
             ] repeat

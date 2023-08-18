@@ -5,15 +5,28 @@
 
     n => #'ecosphere.ecore.next_finalizable_or'(42);
 
+    counter <- 0;
+
     own Object = {
         static with inherited _ = std Clonable;
+
+        i <- 0;
+
+        initWithI: _i => (
+            i <- _i.
+          ^ self
+        );
 
         finalize => (
             (std io out << 'Finalizing ' << self) newline commit.
         );
 
-        writeOn: w => w << 'a test dummy';
+        writeOn: w => w << 'a test dummy #' << i;
     };
+    NewObject => (
+        counter <- counter + 1.
+      ^ (Object clone) initWithI: counter.
+    );
 
     Main => (
         (framework actions open) ui BuildAndOpen: [ :ui |
@@ -21,9 +34,9 @@
                 ui VBox(
                     ui Button(
                         ui Padding(5, ui Label: 'Create one!'),
-                        $[ :(app, obj) |
-                            std reflect EnableFinalization: (obj clone)
-                        ] bind(app, Object)
+                        $[ :(app, us) |
+                            std reflect EnableFinalization: (us NewObject)
+                        ] bind(app, self)
                     ) ~ xLayout: (ui layouts Flexible)
                 )
             )
