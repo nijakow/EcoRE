@@ -74,6 +74,7 @@ std/util/range.eco \
 std/util/set.eco \
 std/util/stack.eco \
 std/util/vectors.eco \
+std/util/weakset.eco \
 lang/_.eco \
 lang/eco/_.eco \
 lang/eco/ast/ast.eco \

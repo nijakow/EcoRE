@@ -99,6 +99,7 @@
     newStack       => (#<:std/util> Stack) new;
     newQueue       => (#<:std/util> Queue) new;
     newSet         => (#<:std/util> Set) new;
+    newWeakSet     => (#<:std/util> WeakSet) new;
     newMap         => (#<:std/util> Map) new;
     newAlist       => newMap;
     newAlistWithComparator: comp => (#<:std/util> Map clone) initWithComparator: comp;
@@ -114,20 +115,13 @@
     WeakBox: e => #'ecosphere.ecore.object.weakbox.new'() ~ set: e;
 
     Stack = #<:std/util/Stack>;
-
     Queue = #<:std/util/Queue>;
-
     Set = #<:std/util/Set>;
-
+    WeakSet = #<:std/util/WeakSet>;
     Vector = #<:std/util/Vector>;
-
     ByteVector = #<:std/util/ByteVector>;
-
     Collector = #<:std/util/Collector>;
-
     MutablePair = #<:std/util/MutablePair>;
-
     Map = #<:std/util/Map>;
-
     Range = #<:std/util/Range>;
 }

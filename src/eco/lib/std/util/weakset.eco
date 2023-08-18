@@ -1,0 +1,51 @@
+
+#=std/util/WeakSet: {
+    with inherited parent = #<:std/Clonable>;
+
+    private elements;
+
+    with inherited trait = {
+        with inherited parent = #<:std/util/StandardListConversions>;
+
+        init => (
+            elements <- std util newVector.
+          ^ self
+        );
+
+        from: sequence => ( sequence do: [ :e | add: e ]. ^ self).
+
+        forEach: block => (
+            | i <- 0 |
+            do: [ :e |
+                block value(i, e).
+                i <- i + 1.
+            ].
+          ^ self
+        );
+        do: block => (
+            elements do: [ :box |
+                ((box empty) not) if: [
+                    block value(box get).
+                ]
+            ].
+          ^ self
+        );
+
+        contains: e => (
+            do: [ :x | (e is: x) if: [ ^ true ] ].
+          ^ false
+        );
+
+        add: e => (
+            (contains: e) unless: [
+                elements do: [ :box |
+                    (box empty) if: [ box set: e. ^ self ].
+                ].
+                elements add: (std util WeakBox: e).
+            ].
+          ^ self
+        );
+        
+        writeOn: w => w << 'a weak set';
+    };
+}
