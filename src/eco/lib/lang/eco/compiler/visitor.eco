@@ -74,7 +74,7 @@
       ^ driver evaluate
     );
 
-    protected ErrorMessage: text OnAST: ast => ('CompileError: ' + text) throw;
+    protected ErrorMessage: text OnAST: ast => std sys error ThrowMessage: ('CompileError: ' + text);
 
     visitUnknown: ast => ErrorMessage: 'Visiting unknown AST' OnAST: ast;
 

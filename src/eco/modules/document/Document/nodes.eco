@@ -10,7 +10,7 @@
 
         protected module = $;
 
-        protected indexOutOfBoundsError => 'Index out of bounds.' throw;
+        protected indexOutOfBoundsError => std sys error ThrowMessage: 'Index out of bounds.';
 
         ifItemSnip: block => self;
         ifStringSnip: block => self;

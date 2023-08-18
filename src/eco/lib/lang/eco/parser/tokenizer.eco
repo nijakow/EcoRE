@@ -40,7 +40,7 @@
 
         protected forceChar: c => (
             c ifChar: [ :ch | ^ ch ].
-          ^ 'Expected character!' throw
+            std sys error ThrowMessage: 'Expected character!'.
         );
 
         protected forceNextChar => forceChar: next;
@@ -149,7 +149,7 @@
                     if: [ n == #\n        ] then: [ ^ #\\n       ] ~
                     if: [ n == #\'        ] then: [ ^ #\'        ] ~
                     if: [ n == #\"        ] then: [ ^ #\"        ] ~
-                default: [ 'Invalid escaped character!' throw ]
+                default: [ std sys error ThrowMessage: 'Invalid escaped character!' ]
             ] else: [
                 ^ c
             ].

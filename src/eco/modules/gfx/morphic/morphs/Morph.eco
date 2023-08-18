@@ -112,7 +112,7 @@
 
             add: child => (
                 (tryAdd: child)
-                    unless: [ 'Morph can not be added!' throw ].
+                    unless: [ std sys error ThrowMessage: 'Morph can not be added!' ].
               ^ self
             );
 

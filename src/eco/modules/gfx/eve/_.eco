@@ -50,7 +50,7 @@
         std os type
             ~ ifLinux: [ ^ InitLinux ]
             ~ ifMacOS: [ ^ InitMac   ].
-        'EVE is not supported on this platform' throw.
+        std sys error ThrowMessage: 'EVE is not supported on this platform'.
     );
 
     Setup: libpath => (

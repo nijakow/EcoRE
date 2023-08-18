@@ -2,7 +2,7 @@
 #=lang/eco/parser/Parser/Checks: {
     static with inherited _ = #<:std/Module>;
 
-    error: msg => "TODO" ('Compile error: ' + msg) throw;
+    error: msg => std sys error ThrowMessage: ('Compile error: ' + msg);
 
     check: type => check: type withProperty: [ :token | true ];
     check: type withProperty: block => (

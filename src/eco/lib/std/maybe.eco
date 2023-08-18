@@ -35,7 +35,7 @@
             no: block => block value;
             yes: yblock no: nblock => nblock value;
             no: nblock yes: yblock => nblock value;
-            yes => 'Expected a value, got No' throw;
+            yes => std sys error ThrowMessage: 'Expected a value, got No';
             or: other => other;
 
             isYes => false;

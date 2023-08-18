@@ -12,7 +12,7 @@
     Module: name =>
         (modules at: name)
             yes: [ :mod | ^ mod ]
-             no: [ "TODO: Load it!" 'Module not found!' throw ];
+             no: [ "TODO: Load it!" std sys error ThrowMessage: 'Module not found!' ];
 
     Load: path As: name => (
         | mod <- io Import: path |

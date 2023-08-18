@@ -8,7 +8,7 @@
         InlineAST: ast ArgDefs: argdefs Args: args Varargs: varargs NewContext: newContext => (
             ([args size > argdefs size] and: [varargs not]) if: [ (std io out << 'Note: Possible argument error while inlining!') newline commit ].
             (args size < argdefs size) if: [
-                'Argument error when inlining!' throw
+                std sys error ThrowMessage: 'Argument error when inlining!'
             ].
 
             newContext enableEntryAndExitLabels.

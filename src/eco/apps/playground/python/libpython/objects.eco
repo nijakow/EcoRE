@@ -189,7 +189,7 @@
         (ecoobj isInt)    if: [ ^ Object: (libpython funcs NewLongFromEcoInt: ecoobj) ].
         (ecoobj isString) if: [ ^ Object: (libpython funcs NewUnicodeFromEcoString: ecoobj) ].
         (ecoobj isArray)  if: [ ^ Tuple: ecoobj ].
-        'Can not convert Eco object to Python object!' throw.
+        std sys error ThrowMessage: 'Can not convert Eco object to Python object!'.
     );
 
 
