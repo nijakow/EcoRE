@@ -8,13 +8,15 @@
     PyModuleObject => PyObject;
     PyLongObject => PyObject;
     PyUnicodeObject => PyObject;
+    PyTupleObject => PyObject;
 
     Py_None <- No;
 
     PyType_Type    <- No,
     PyModule_Type  <- No,
     PyLong_Type    <- No,
-    PyUnicode_Type <- No;
+    PyUnicode_Type <- No,
+    PyTuple_Type   <- No;
 
     PyEco_Initialize <- No,
     PyEco_Finalize   <- No;
@@ -35,6 +37,11 @@
 
     PyUnicode_FromString       <- No,
     PyEco_PyUnicode_GrabString <- No;
+
+    PyTuple_New            <- No,
+    PyEco_PyTuple_GrabSize <- No,
+    PyTuple_GetItem        <- No,
+    PyTuple_SetItem        <- No;
 
     PyRun_SimpleString <- No;
 
@@ -62,6 +69,7 @@
         PyModule_Type  <- Symbol: #'PyModule_Type'.
         PyLong_Type    <- Symbol: #'PyLong_Type'.
         PyUnicode_Type <- Symbol: #'PyUnicode_Type'.
+        PyTuple_Type   <- Symbol: #'PyTuple_Type'.
 
         PyEco_IsNone <- Function: #'PyEco_IsNone' Type: ((ffi types bool) function(PyObject pointer)).
 
@@ -79,6 +87,11 @@
 
         PyUnicode_FromString <- Function: #'PyUnicode_FromString' Type: ((PyUnicodeObject pointer) function(ffi types string)).
         PyEco_PyUnicode_GrabString <- Function: #'PyEco_PyUnicode_GrabString' Type: ((ffi types string) function(PyUnicodeObject pointer)).
+
+        PyTuple_New  <- Function: #'PyTuple_New'  Type: ((PyTupleObject pointer) function(ffi types size)).
+        PyEco_PyTuple_GrabSize <- Function: #'PyEco_PyTuple_GrabSize' Type: ((ffi types int) function(PyTupleObject pointer)).
+        PyTuple_GetItem <- Function: #'PyTuple_GetItem' Type: ((PyObject pointer) function(PyTupleObject pointer, ffi types size)).
+        PyTuple_SetItem <- Function: #'PyTuple_SetItem' Type: ((ffi types int) function(PyTupleObject pointer, ffi types size, PyObject pointer)).
 
         PyRun_SimpleString <- Function: #'PyRun_SimpleString' Type: ((ffi types int) function(ffi types string)).
 

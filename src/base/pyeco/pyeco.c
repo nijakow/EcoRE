@@ -57,3 +57,8 @@ const char* PyEco_PyUnicode_GrabString(PyObject* unicode)
 {
     return PyUnicode_AsUTF8(unicode);
 }
+
+int PyEco_PyTuple_GrabSize(PyObject* tuple)
+{
+    return PyTuple_Size(tuple);
+}

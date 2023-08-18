@@ -122,10 +122,41 @@
         };
     };
 
+    own PyTuple = {
+        static with inherited _ = std Clonable;
+        with inherited own PyObject = $ PyObject;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            
+            initWithPtr: _ptr => (
+                $(PyObject) initWithPtr: _ptr.
+              ^ self
+            );
+
+            size => (libpython funcs TupleGrabSize: ptr);
+            at: index => (libpython objects Object: (libpython funcs Tuple: ptr At: index));
+            at: index put: value => (
+                libpython funcs Tuple: ptr At: index Put: (value ptr).
+              ^ self
+            );
+
+            writeOn: w => (
+                w << 'a PyTuple('.
+                0 for: size do: [ :i |
+                    (i > 0) if: [ w << ', ' ].
+                    w << (self at: i).
+                ].
+                w << ')'.
+            );
+        };
+    };
+
     Object: ptr => (
         (libpython funcs IsNone: ptr) if: [ ^ PyNone ].
         (libpython funcs IsLong: ptr) if: [ ^ (PyLong clone) initWithPtr: ptr ].
         (libpython funcs IsUnicode: ptr) if: [ ^ (PyUnicode clone) initWithPtr: ptr ].
+        (libpython funcs IsTuple: ptr) if: [ ^ (PyTuple clone) initWithPtr: ptr ].
         (libpython funcs IsType: ptr) if: [ ^ (PyType clone) initWithPtr: ptr ].
         (libpython funcs IsModule: ptr) if: [ ^ (PyModule clone) initWithPtr: ptr ].
       ^ (PyObject clone) initWithPtr: ptr

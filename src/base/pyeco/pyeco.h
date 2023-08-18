@@ -19,4 +19,6 @@ int PyEco_PyLong_GrabInt(PyObject* pyLong);
 
 const char* PyEco_PyUnicode_GrabString(PyObject* unicode);
 
+int PyEco_PyTuple_GrabSize(PyObject* tuple);
+
 #endif

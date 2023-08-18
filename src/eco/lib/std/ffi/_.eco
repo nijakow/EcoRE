@@ -45,6 +45,8 @@
         slong => GetTypeByIndex: 18;
         long  => slong;
 
+        size => ulong;
+
         longdouble => GetTypeByIndex: 19;
         
         pointer => void pointer;
