@@ -27,6 +27,15 @@ void Eco_GC_MarkRoots(struct Eco_GC_State* state)
         {
             if (object->bits.sticky) {
                 Eco_GC_State_MarkObject(state, object);
+            } else if (object->bits.wants_finalization) {
+                /*
+                 * If an object wants finalization, we need to mark its children
+                 * so that they don't get deleted before the object is finalized.
+                 * 
+                 * However, we don't want to mark the object itself, because that
+                 * would cause it to never be collected.
+                 */
+                Eco_GC_State_QueueObject(state, object);
             }
         }
     }
