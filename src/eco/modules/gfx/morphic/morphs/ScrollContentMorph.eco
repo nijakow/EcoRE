@@ -16,6 +16,17 @@
           ^ self
         );
 
+        scrollYByPixels: y => (
+            layouter: (morphic layouters FreeOffsetX: 0 Y: (((layouter y + y) min: 0) max: (minHeight negate))).
+            layoutChanged.
+          ^ self
+        );
+
+        handleScrollX: sx Y: sy At: point HandMorph: hand => (
+            scrollYByPixels: (sy * 15).
+          ^ true
+        );
+
         writeOn: w => w << 'a scroll content morph';
     };
 }

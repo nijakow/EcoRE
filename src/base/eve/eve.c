@@ -501,7 +501,7 @@ Eve_Int Eve_RenderState_GetEventMouseScrollX(struct Eve_RenderState* self) {
 }
 
 Eve_Int Eve_RenderState_GetEventMouseScrollY(struct Eve_RenderState* self) {
-    return -self->event.wheel.y;
+    return self->event.wheel.y;
 }
 
 Eve_UInt Eve_RenderState_GetEventKeySym(struct Eve_RenderState* self) {
