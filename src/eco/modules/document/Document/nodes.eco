@@ -39,8 +39,6 @@
 
         tryJoinWith: other => No;
 
-        compress => self;
-
         nesting => 0;
 
         dumpOn: w Indent: i => (
@@ -286,30 +284,6 @@
               ^ No
             );
 
-            compress => (
-                (snips size == 0) if: [ ^ self ].
-                (snips size == 1) if: [ ^ (snips at: 0) compress ].
-
-                |
-                    newSnips <- std util newVector,
-                    current  <- No
-                |
-
-                snips do: [ :snip |
-                    current yes: [ :c |
-                        | r <- c tryJoinWith: snip |
-                        r yes: [ :joined | current <- r ]
-                           no: [ newSnips add: c. current <- Yes: snip ]
-                    ] no: [
-                        current <- Yes: snip.
-                    ]
-                ].
-
-                current yes: [ :c | newSnips add: c ].
-
-              ^ module CompoundSnip: newSnips
-            );
-
             dumpOn: w Indent: i => (
                 (w << (' ' * i) << 'a compound snip(') newline.
                 snips do: [ :snip | snip dumpOn: w Indent: (i + 2) ].
@@ -327,27 +301,6 @@
 
     CompoundSnip: snips => CompoundSnip clone initWithSnips: snips;
     MakeCompoundSnip(...) => CompoundSnip: (std util newArray(...));
-    MakeOptimizedCompoundSnipFromArray(snips) => (
-        (snips size == 0) if: [ ^ CompoundSnip: snips ].
-        (snips size == 1) if: [ ^ snips at: 0 ].
-        (snips size > 8) if: [
-            |
-                snips1 <- std util newVector,
-                snips2 <- std util newVector
-            |
-            snips do: [ :snip |
-                (snips1 size < (snips size / 2))
-                      if: [ snips1 add: snip ]
-                    else: [ snips2 add: snip ].
-            ].
-          ^ CompoundSnip: std util newArray(
-                MakeOptimizedCompoundSnipFromArray(snips1 asArray),
-                MakeOptimizedCompoundSnipFromArray(snips2 asArray)
-            )
-        ].
-      ^ CompoundSnip: snips
-    );
-    MakeOptimizedCompoundSnip(...) => MakeOptimizedCompoundSnipFromArray(std util newArray(...));
 
 
     own ItemTrait = {
