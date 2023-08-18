@@ -1,0 +1,72 @@
+{
+    static with inherited _ = std Module;
+
+    lib <- No;
+
+    PyObject <- (ffi types void);
+    PyTypeObject <- (ffi types void);
+
+    PyModule_Type <- No;
+
+    PyEco_Initialize <- No,
+    PyEco_Finalize   <- No;
+
+    Py_IncRef <- No,
+    Py_DecRef <- No;
+
+    PyEco_TypeCheck <- No.
+
+    PyImport_ImportModule <- No,
+    PyModule_New <- No;
+
+    PyRun_SimpleString <- No;
+
+    protected Symbol: name => (
+        (self lib) yes: [ :lib |
+            ^ lib symbol: name
+        ].
+      ^ No
+    );
+
+    protected Function: name Type: type => (
+        (self lib) yes: [ :lib |
+            ^ lib function: name type: type
+        ].
+      ^ No
+    );
+
+    protected LoadFuncs => (
+        PyEco_Initialize <- Function: #'PyEco_Initialize' Type: ((ffi types void) function()).
+        PyEco_Finalize   <- Function: #'PyEco_Finalize' Type: ((ffi types void) function()).
+
+        PyModule_Type <- Symbol: #'PyModule_Type';
+
+        Py_IncRef <- Function: #'Py_IncRef' Type: ((ffi types void) function(PyObject pointer)).
+        Py_DecRef <- Function: #'Py_DecRef' Type: ((ffi types void) function(PyObject pointer)).
+
+        PyEco_TypeCheck <- Function: #'PyEco_TypeCheck' Type: ((ffi types int) function(PyObject pointer, PyTypeObject pointer)).
+
+        PyImport_ImportModule <- Function: #'PyImport_ImportModule' Type: ((PyObject pointer) function(ffi types string)).
+        PyModule_New <- Function: #'PyModule_New' Type: ((PyObject pointer) function(ffi types string)).
+
+        PyRun_SimpleString <- Function: #'PyRun_SimpleString' Type: ((ffi types int) function(ffi types string)).
+
+      ^ self
+    );
+
+    Setup: file => (
+        lib <- ffi DLOpen: file.
+        LoadFuncs.
+      ^ self
+    );
+
+    InitLinux => Setup: (std os files here / '..' / 'pyeco' / 'libpyeco.so') path;
+    InitMac => Setup: (std os files here / '..' / 'pyeco' / 'libpyeco.dylib') path;
+
+    Init => (
+        std os type
+            ~ ifLinux: [ ^ InitLinux ]
+            ~ ifMacOS: [ ^ InitMac   ].
+        'PyEco is not supported on this platform' throw.
+    );
+}
