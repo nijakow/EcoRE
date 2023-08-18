@@ -1,6 +1,5 @@
 #include "gc.h"
 
-
 #include "gc_state.h"
 
 #include <ecore/vm/vm.h>
@@ -8,6 +7,7 @@
 #include <ecore/vm/builtins/builtins.h>
 #include <ecore/objects/base/object.h>
 #include <ecore/objects/base/type.h>
+#include <ecore/objects/vm/weakbox/weakbox.h>
 
 
 extern struct Eco_Arena* Eco_ARENAS;
@@ -91,6 +91,9 @@ void Eco_GC_SweepArena(struct Eco_GC_State* state, struct Eco_Arena* arena)
             Eco_GC_MoveObjectToFinalizationManager(state, object);
         } else {
             *ptr = object->next;
+            if (object->bits.weakly_referenced) {
+                Eco_WeakBox_NotifyRelease(Eco_Any_FromPointer(object));
+            }
             object->type->typecore->del(object);
             arena->object_count--;
         }

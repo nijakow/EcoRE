@@ -103,10 +103,28 @@ void Eco_WeakBox_SetValue(struct Eco_WeakBox* weakbox, Eco_Any new_value)
 {
     struct Eco_Object*  object;
 
-    if (Eco_Any_IsPointer(new_value)) {
+    if (Eco_Any_IsPointer(new_value))
+    {
         object = Eco_Any_AsPointer(new_value);
         object->bits.weakly_referenced = true;
     }
 
     weakbox->value = new_value;
+}
+
+
+void Eco_WeakBox_NotifyRelease(Eco_Any value)
+{
+    struct Eco_WeakBox*  weakbox;
+
+    for (weakbox = Eco_WEAKBOXES; weakbox != NULL; weakbox = weakbox->next)
+    {
+        if (Eco_Any_Equals(weakbox->value, value))
+        {
+            /*
+             * Make the weakbox point to itself again
+             */
+            weakbox->value = Eco_Any_FromPointer(weakbox);
+        }
+    }
 }
