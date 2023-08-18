@@ -50,10 +50,6 @@
         std io out <- ((std io PortOutput) clone) init: ((std io FDByteWriter) clone initWithFileDescriptor: (((std io FileDescriptor) clone) init: 1)).
     );
 
-    InitModules => (
-        modules init.
-    );
-
     InitProcesses => (
         std sys finalization StartFinalizationProcess.
     );
@@ -68,7 +64,6 @@
     Init => (
         InitTypes.
         InitIO.
-        InitModules.
         InitProcesses.
 
         Quote.

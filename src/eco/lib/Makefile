@@ -13,7 +13,6 @@ std/trait.eco \
 std/globals.eco \
 std/maybe.eco \
 std/module.eco \
-std/modules.eco \
 std/singleton.eco \
 std/switch.eco \
 std/try.eco \
