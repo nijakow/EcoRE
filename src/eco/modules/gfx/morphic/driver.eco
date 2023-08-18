@@ -59,6 +59,13 @@
                         (std io out << 'Unknown mouse key!') newline commit.
                       ].
                 ].
+                eve IsEventMouseWheel -> [
+                    |
+                        scrollX <- eve GetEventMouseScrollX,
+                        scrollY <- eve GetEventMouseScrollY
+                    |
+                    morph handMorph scrollX: scrollX Y: scrollY.
+                ].
             );
 
             launch => (

@@ -80,6 +80,14 @@
                      no: [      world yes: [ :w | (w grabAt: gb HandMorph: self) ] ]
             );
 
+            scrollX: sx Y: sy => (
+                |
+                    gb <- globalOffset,
+                |
+                grabbedMorph
+                  ~ no: [ world yes: [ :w | (w scrollX: sx Y: sy At: gb HandMorph: self) ] ]
+            );
+
             handleKey: key => (
                 world yes: [ :w | w key: key At: globalOffset HandMorph: self ]
             );

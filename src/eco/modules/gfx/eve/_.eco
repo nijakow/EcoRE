@@ -136,11 +136,15 @@
     IsEventMouseMotion => Eve_IsEventMouseMotion value() != 0;
     IsEventMouseButtonDown => Eve_IsEventMouseButtonDown value() != 0;
     IsEventMouseButtonUp => Eve_IsEventMouseButtonUp value() != 0;
+    IsEventMouseWheel => Eve_IsEventMouseWheel value() != 0;
 
     GetEventMouseX => Eve_GetEventMouseX value();
     GetEventMouseY => Eve_GetEventMouseY value();
 
     GetEventMouseButtonID => Eve_GetEventMouseButtonID value();
+
+    GetEventMouseScrollX => Eve_GetEventMouseScrollX value();
+    GetEventMouseScrollY => Eve_GetEventMouseScrollY value();
 
     GetEventKeyScancode => Eve_GetEventKeyScancode value();
     GetEventKeyMod      => Eve_GetEventKeyMod value();

@@ -371,11 +371,13 @@
             handleDropMorph: morph At: point => false;
             handleClick: click At: point HandMorph: hand => false;
             handleGrabAt: point HandMorph: hand => false;
+            handleScrollX: sx Y: sy At: point HandMorph: hand => false;
             handleKey: key At: point HandMorph: hand => false;
 
             dropMorph: morph At: point => dispatchEvent: [ :e :point | e handleDropMorph: morph At: point ] At: point;
             click: click At: point HandMorph: hand => dispatchEvent: [ :e :point | e handleClick: click At: point HandMorph: hand ] At: point;
             grabAt: point HandMorph: hand => dispatchEvent: [ :e :point | e handleGrabAt: point HandMorph: hand ] At: point;
+            scrollX: sx Y: sy At: point HandMorph: hand => dispatchEvent: [ :e :point | e handleScrollX: sx Y: sy At: point HandMorph: hand ] At: point;
             key: key At: point HandMorph: hand => dispatchEvent: [ :e :point | e handleKey: key At: point HandMorph: hand ] At: point;
 
             handleHandEnter: hand => false;
