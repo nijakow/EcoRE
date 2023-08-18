@@ -15,6 +15,8 @@ bool PyEco_IsNone(PyObject* obj);
 bool PyEco_IsTrue(PyObject* obj);
 bool PyEco_IsFalse(PyObject* obj);
 
+int PyEco_PyLong_GrabInt(PyObject* pyLong);
+
 const char* PyEco_PyUnicode_GrabString(PyObject* unicode);
 
 #endif

@@ -48,6 +48,11 @@ bool PyEco_IsFalse(PyObject* obj)
 }
 
 
+int PyEco_PyLong_GrabInt(PyObject* pyLong)
+{
+    return (int) PyLong_AsLong(pyLong);
+}
+
 const char* PyEco_PyUnicode_GrabString(PyObject* unicode)
 {
     return PyUnicode_AsUTF8(unicode);

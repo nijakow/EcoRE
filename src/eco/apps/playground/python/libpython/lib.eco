@@ -29,8 +29,9 @@
     PyImport_ImportModule <- No,
     PyModule_New <- No;
 
-    PyLong_FromLong <- No,
-    PyLong_AsLong   <- No;
+    PyLong_FromLong      <- No,
+    PyLong_AsLong        <- No,
+    PyEco_PyLong_GrabInt <- No;
 
     PyUnicode_FromString       <- No,
     PyEco_PyUnicode_GrabString <- No;
@@ -72,8 +73,9 @@
         PyImport_ImportModule <- Function: #'PyImport_ImportModule' Type: ((PyModuleObject pointer) function(ffi types string)).
         PyModule_New <- Function: #'PyModule_New' Type: ((PyModuleObject pointer) function(ffi types string)).
 
-        PyLong_FromLong <- Function: #'PyLong_FromLong' Type: ((PyLongObject pointer) function(ffi types long)).
-        PyLong_AsLong   <- Function: #'PyLong_AsLong' Type: ((ffi types long) function(PyLongObject pointer)).
+        PyLong_FromLong      <- Function: #'PyLong_FromLong' Type: ((PyLongObject pointer) function(ffi types long)).
+        PyLong_AsLong        <- Function: #'PyLong_AsLong' Type: ((ffi types long) function(PyLongObject pointer)).
+        PyEco_PyLong_GrabInt <- Function: #'PyEco_PyLong_GrabInt' Type: ((ffi types int) function(PyLongObject pointer)).
 
         PyUnicode_FromString <- Function: #'PyUnicode_FromString' Type: ((PyUnicodeObject pointer) function(ffi types string)).
         PyEco_PyUnicode_GrabString <- Function: #'PyEco_PyUnicode_GrabString' Type: ((ffi types string) function(PyUnicodeObject pointer)).
