@@ -8,7 +8,8 @@
 
         Morph: morph => (
             (framework context DefaultWorld)
-                  open: morph.
+                  open: morph
+                    at: ((framework context DefaultHand globalOffset) offsetByX: -200 Y: -200).
           ^ self
         );
 
