@@ -21,6 +21,7 @@ extern struct Eco_Type*  Eco_Closure_TYPE;
 extern struct Eco_Type*  Eco_Key_TYPE;
 extern struct Eco_Type*  Eco_String_TYPE;
 extern struct Eco_Type*  Eco_Interface_TYPE;
+extern struct Eco_Type*  Eco_WeakBox_TYPE;
 extern struct Eco_Type*  Eco_FFIType_TYPE;
 extern struct Eco_Type*  Eco_FFIObject_TYPE;
 extern struct Eco_Type*  Eco_FFIFunc_TYPE;
@@ -241,6 +242,17 @@ bool Eco_VM_Builtin_GetDefaultInterface(struct Eco_Fiber* fiber, unsigned int ar
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_Interface_GetDefaultInterface());
+    Eco_Fiber_Push(fiber, value);
+    return true;
+}
+
+bool Eco_VM_Builtin_GetWeakBoxType(struct Eco_Fiber* fiber, unsigned int args)
+{
+    Eco_Any  value;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
+        return false;
+    value = Eco_Any_FromPointer(Eco_WeakBox_TYPE);
     Eco_Fiber_Push(fiber, value);
     return true;
 }

@@ -212,6 +212,7 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.string_type", Eco_VM_Builtin_GetStringType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.interface_type", Eco_VM_Builtin_GetInterfaceType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.any", Eco_VM_Builtin_GetDefaultInterface);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.weakbox_type", Eco_VM_Builtin_GetWeakBoxType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.ffitype_type", Eco_VM_Builtin_GetFFITypeType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.ffiobject_type", Eco_VM_Builtin_GetFFIObjectType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.ffifunc_type", Eco_VM_Builtin_GetFFIFuncType);
