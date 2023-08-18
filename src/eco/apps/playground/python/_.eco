@@ -2,5 +2,5 @@
 {
     static with inherited _ = std Module;
 
-    own libpython = (here / 'libpython.eco') importIn: self;
+    own libpython = (here / 'libpython' / '_.eco') importIn: self;
 }

@@ -1,0 +1,79 @@
+
+{
+    static with inherited _ = std Module;
+
+    own lib = {
+        static with inherited _ = std Module;
+
+        lib <- No;
+
+        PyObject <- (ffi types void);
+
+        PyModule_Type <- No;
+
+        Py_Initialize <- No,
+        Py_FinalizeEx <- No;
+
+        Py_IncRef <- No,
+        Py_DecRef <- No;
+
+        PyObject_TypeCheck <- No.
+
+        PyImport_ImportModule <- No;
+
+        PyRun_SimpleString <- No;
+
+        protected Symbol: name => (
+            (self lib) yes: [ :lib |
+                ^ lib symbol: name
+            ].
+          ^ No
+        );
+
+        protected Function: name Type: type => (
+            (self lib) yes: [ :lib |
+                ^ lib function: name type: type
+            ].
+          ^ No
+        );
+
+        protected LoadFuncs => (
+            Py_Initialize <- Function: #'Py_Initialize' Type: ((ffi types void) function()).
+            Py_FinalizeEx <- Function: #'Py_FinalizeEx' Type: ((ffi types int) function()).
+
+            PyModule_Type <- Symbol: #'PyModule_Type';
+
+            Py_IncRef <- Function: #'Py_IncRef' Type: ((ffi types void) function(PyObject pointer)).
+            Py_DecRef <- Function: #'Py_DecRef' Type: ((ffi types void) function(PyObject pointer)).
+
+            PyObject_TypeCheck <- Function: #'PyObject_TypeCheck' Type: ((ffi types int) function(PyObject pointer, PyObject pointer)).
+
+            PyImport_ImportModule <- Function: #'PyImport_ImportModule' Type: ((PyObject pointer) function(ffi types string)).
+
+            PyRun_SimpleString <- Function: #'PyRun_SimpleString' Type: ((ffi types int) function(ffi types string)).
+
+          ^ self
+        );
+
+        Init: file => (
+            lib <- ffi DLOpen: 'libpython3.11.so'.
+            LoadFuncs.
+          ^ self
+        );
+    };
+
+    own objects = (here / 'objects.eco') importIn: self;
+
+
+    IsModule: ptr => ((lib PyObject_TypeCheck yes) value(ptr, (lib PyModule_Type yes))) != 0;
+
+    ImportModule: name => objects Object: ((lib PyImport_ImportModule yes) value(name));
+
+    RunSimpleString: string => (lib PyRun_SimpleString yes) value(string);
+
+    Init => (
+        lib Init: 'libpython3.11.so'.
+        (lib Py_Initialize yes) value.
+      ^ self
+    );
+}

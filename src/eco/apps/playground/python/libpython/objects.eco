@@ -1,0 +1,39 @@
+
+{
+    static with inherited _ = std Module;
+
+    own PyObject = {
+        static with inherited _ = std Clonable;
+
+        protected ptr;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            protected libpython <- $package;
+
+            initWithPtr: _ptr => (
+                ptr <- _ptr.
+                std reflect EnableFinalization: self.
+              ^ self
+            );
+
+            incref => (
+                (libpython lib Py_IncRef yes) value(ptr).
+              ^ self
+            );
+
+            decref => (
+                (libpython lib Py_DecRef yes) value(ptr).
+              ^ self
+            );
+
+            isModule => libpython IsModule: ptr;
+
+            finalize => decref;
+
+            writeOn: w => w << 'a PyObject';
+        };
+    };
+
+    Object: ptr => (PyObject clone) initWithPtr: ptr;
+}
