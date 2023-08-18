@@ -40,9 +40,10 @@ void Eco_FFILib_Init()
 {
     Eco_TypeCore_Create(&Eco_FFILib_TYPECORE, "Eco_FFILib");
 
-    Eco_FFILib_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
-    Eco_FFILib_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_FFILib_Mark;
-    Eco_FFILib_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_FFILib_Del;
+    Eco_FFILib_TYPECORE.send          = (Eco_TypeCore_SendFunc) Eco_Object_Send;
+    Eco_FFILib_TYPECORE.mark_instance = (Eco_TypeCore_MarkFunc) Eco_FFILib_MarkInstance;
+    Eco_FFILib_TYPECORE.mark_children = (Eco_TypeCore_MarkFunc) Eco_FFILib_MarkChildren;
+    Eco_FFILib_TYPECORE.del           = (Eco_TypeCore_DelFunc) Eco_FFILib_Del;
 
     Eco_FFILib_TYPE          = Eco_Type_NewPrefab(&Eco_FFILib_TYPECORE);
 }
@@ -73,7 +74,7 @@ struct Eco_FFILib* Eco_FFILib_New(const char* path)
     return object;
 }
 
-void Eco_FFILib_Mark(struct Eco_GC_State* state, struct Eco_FFILib* object)
+void Eco_FFILib_MarkChildren(struct Eco_GC_State* state, struct Eco_FFILib* object)
 {
     struct Eco_FFILib_Entry*  entry;
 
@@ -95,7 +96,12 @@ void Eco_FFILib_Mark(struct Eco_GC_State* state, struct Eco_FFILib* object)
                 break;
         }
     }
-    Eco_Object_Mark(state, &object->_);
+    Eco_Object_MarkChildren(state, &object->_);
+}
+
+void Eco_FFILib_MarkInstance(struct Eco_GC_State* state, struct Eco_FFILib* object)
+{
+    Eco_Object_MarkInstance(state, &object->_);
 }
 
 void Eco_FFILib_Del(struct Eco_FFILib* object)

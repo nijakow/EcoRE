@@ -18,9 +18,10 @@ void Eco_Key_Init()
 {
     Eco_TypeCore_Create(&Eco_Key_TYPECORE, "Eco_Key");
 
-    Eco_Key_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
-    Eco_Key_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_Key_Mark;
-    Eco_Key_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_Key_Del;
+    Eco_Key_TYPECORE.send          = (Eco_TypeCore_SendFunc) Eco_Object_Send;
+    Eco_Key_TYPECORE.mark_instance = (Eco_TypeCore_MarkFunc) Eco_Key_MarkInstance;
+    Eco_Key_TYPECORE.mark_children = (Eco_TypeCore_MarkFunc) Eco_Key_MarkChildren;
+    Eco_Key_TYPECORE.del           = (Eco_TypeCore_DelFunc) Eco_Key_Del;
 
     Eco_Key_TYPE          = Eco_Type_NewPrefab(&Eco_Key_TYPECORE);
 }
@@ -96,9 +97,14 @@ struct Eco_Key* Eco_Key_Gensym()
     return key;
 }
 
-void Eco_Key_Mark(struct Eco_GC_State* state, struct Eco_Key* key)
+void Eco_Key_MarkChildren(struct Eco_GC_State* state, struct Eco_Key* key)
 {
-    Eco_Object_Mark(state, &(key->_));
+    Eco_Object_MarkChildren(state, &(key->_));
+}
+
+void Eco_Key_MarkInstance(struct Eco_GC_State* state, struct Eco_Key* key)
+{
+    Eco_Object_MarkInstance(state, &(key->_));
 }
 
 void Eco_Key_Del(struct Eco_Key*  key)

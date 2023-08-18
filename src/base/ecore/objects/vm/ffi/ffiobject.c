@@ -18,9 +18,10 @@ void Eco_FFIObject_Init()
 {
     Eco_TypeCore_Create(&Eco_FFIObject_TYPECORE, "Eco_FFIObject");
 
-    Eco_FFIObject_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
-    Eco_FFIObject_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_FFIObject_Mark;
-    Eco_FFIObject_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_FFIObject_Del;
+    Eco_FFIObject_TYPECORE.send          = (Eco_TypeCore_SendFunc) Eco_Object_Send;
+    Eco_FFIObject_TYPECORE.mark_instance = (Eco_TypeCore_MarkFunc) Eco_FFIObject_MarkInstance;
+    Eco_FFIObject_TYPECORE.mark_children = (Eco_TypeCore_MarkFunc) Eco_FFIObject_MarkChildren;
+    Eco_FFIObject_TYPECORE.del           = (Eco_TypeCore_DelFunc) Eco_FFIObject_Del;
 
     Eco_FFIObject_TYPE          = Eco_Type_NewPrefab(&Eco_FFIObject_TYPECORE);
 }
@@ -175,12 +176,17 @@ struct Eco_FFIObject* Eco_FFIObject_DLSym(void* base, char* symbol)
 #endif
 }
 
-void Eco_FFIObject_Mark(struct Eco_GC_State* state, struct Eco_FFIObject* object)
+void Eco_FFIObject_MarkChildren(struct Eco_GC_State* state, struct Eco_FFIObject* object)
 {
     if (object->ref != NULL)
         Eco_GC_State_MarkObject(state, object->ref);
     Eco_GC_State_MarkObject(state, object->type);
-    Eco_Object_Mark(state, &object->_);
+    Eco_Object_MarkChildren(state, &object->_);
+}
+
+void Eco_FFIObject_MarkInstance(struct Eco_GC_State* state, struct Eco_FFIObject* object)
+{
+    Eco_Object_MarkInstance(state, &object->_);
 }
 
 void Eco_FFIObject_Del(struct Eco_FFIObject* object)

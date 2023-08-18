@@ -22,7 +22,8 @@ struct Eco_FFILib
 };
 
 struct Eco_FFILib* Eco_FFILib_New(const char*);
-void Eco_FFILib_Mark(struct Eco_GC_State*, struct Eco_FFILib*);
+void Eco_FFILib_MarkChildren(struct Eco_GC_State*, struct Eco_FFILib*);
+void Eco_FFILib_MarkInstance(struct Eco_GC_State*, struct Eco_FFILib*);
 void Eco_FFILib_Del(struct Eco_FFILib*);
 
 bool Eco_FFILib_At(struct Eco_FFILib*, struct Eco_Key*, Eco_Any*);

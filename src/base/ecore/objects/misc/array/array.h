@@ -15,7 +15,8 @@ struct Eco_Array
 };
 
 struct Eco_Array* Eco_Array_New(unsigned int);
-void Eco_Array_Mark(struct Eco_GC_State*, struct Eco_Array*);
+void Eco_Array_MarkChildren(struct Eco_GC_State*, struct Eco_Array*);
+void Eco_Array_MarkInstance(struct Eco_GC_State*, struct Eco_Array*);
 struct Eco_Array* Eco_Array_Clone(struct Eco_CloneState*, struct Eco_Array*, bool);
 void Eco_Array_Del(struct Eco_Array*);
 

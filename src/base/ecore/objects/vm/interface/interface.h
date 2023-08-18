@@ -49,7 +49,8 @@ static inline unsigned int Eco_Interface_GetEntryCount(struct Eco_Interface* int
 struct Eco_Interface* Eco_Interface_GetDefaultInterface();
 
 struct Eco_Interface* Eco_Interface_New(unsigned int, unsigned int);
-void Eco_Interface_Mark(struct Eco_GC_State*, struct Eco_Interface*);
+void Eco_Interface_MarkChildren(struct Eco_GC_State*, struct Eco_Interface*);
+void Eco_Interface_MarkInstance(struct Eco_GC_State*, struct Eco_Interface*);
 void Eco_Interface_Del(struct Eco_Interface*);
 
 bool Eco_Interface_IsInterface(struct Eco_Object* object);

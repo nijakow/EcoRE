@@ -21,9 +21,10 @@ void Eco_Closure_Init()
 {
     Eco_TypeCore_Create(&Eco_Closure_TYPECORE, "Eco_Closure");
 
-    Eco_Closure_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
-    Eco_Closure_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_Closure_Mark;
-    Eco_Closure_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_Closure_Del;
+    Eco_Closure_TYPECORE.send          = (Eco_TypeCore_SendFunc) Eco_Object_Send;
+    Eco_Closure_TYPECORE.mark_instance = (Eco_TypeCore_MarkFunc) Eco_Closure_MarkInstance;
+    Eco_Closure_TYPECORE.mark_children = (Eco_TypeCore_MarkFunc) Eco_Closure_MarkChildren;
+    Eco_Closure_TYPECORE.del           = (Eco_TypeCore_DelFunc) Eco_Closure_Del;
 
     Eco_Closure_TYPE          = Eco_Type_NewPrefab(&Eco_Closure_TYPECORE);
 }
@@ -57,10 +58,15 @@ struct Eco_Closure* Eco_Closure_New(struct Eco_Code* code, struct Eco_Frame* lex
     return closure;
 }
 
-void Eco_Closure_Mark(struct Eco_GC_State* state, struct Eco_Closure* closure)
+void Eco_Closure_MarkChildren(struct Eco_GC_State* state, struct Eco_Closure* closure)
 {
     Eco_GC_State_MarkObject(state, closure->code);
-    Eco_Object_Mark(state, &(closure->_));
+    Eco_Object_MarkChildren(state, &(closure->_));
+}
+
+void Eco_Closure_MarkInstance(struct Eco_GC_State* state, struct Eco_Closure* closure)
+{
+    Eco_Object_MarkInstance(state, &(closure->_));
 }
 
 void Eco_Closure_Del(struct Eco_Closure* closure)

@@ -35,7 +35,7 @@ void Eco_GC_MarkRoots(struct Eco_GC_State* state)
                  * However, we don't want to mark the object itself, because that
                  * would cause it to never be collected.
                  */
-                Eco_GC_State_QueueObject(state, object);
+                object->type->typecore->mark_children(state, object);
             }
         }
     }
@@ -52,7 +52,8 @@ void Eco_GC_MarkLoop(struct Eco_GC_State* state)
         object = Eco_GC_State_NextObjectToMark(state);
 
         object->bits.mark_done = true;
-        object->type->typecore->mark(state, object);
+        object->type->typecore->mark_children(state, object);
+        object->type->typecore->mark_instance(state, object);
     }
 }
 

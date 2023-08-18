@@ -27,7 +27,8 @@ void Eco_FFIFunc_Init();
 void Eco_FFIFunc_Terminate();
 
 struct Eco_FFIFunc* Eco_FFIFunc_New(unsigned int, struct Eco_FFIType*, struct Eco_FFIType**);
-void Eco_FFIFunc_Mark(struct Eco_GC_State*, struct Eco_FFIFunc*);
+void Eco_FFIFunc_MarkChildren(struct Eco_GC_State*, struct Eco_FFIFunc*);
+void Eco_FFIFunc_MarkInstance(struct Eco_GC_State*, struct Eco_FFIFunc*);
 void Eco_FFIFunc_Del(struct Eco_FFIFunc*);
 
 unsigned int Eco_FFIFunc_GetArgumentCount(struct Eco_FFIFunc*);

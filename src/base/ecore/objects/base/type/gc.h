@@ -6,7 +6,8 @@
 struct Eco_GC_State;
 struct Eco_Molecule;
 
-void Eco_Type_Mark(struct Eco_GC_State*, struct Eco_Type*);
+void Eco_Type_MarkInstance(struct Eco_GC_State*, struct Eco_Type*);
+void Eco_Type_MarkChildren(struct Eco_GC_State*, struct Eco_Type*);
 void Eco_Type_MarkMolecule(struct Eco_GC_State*, struct Eco_Type*, struct Eco_Molecule*);
 
 #endif

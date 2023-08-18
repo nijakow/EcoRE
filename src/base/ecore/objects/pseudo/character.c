@@ -12,11 +12,12 @@ void Eco_Character_Init()
 {
     Eco_TypeCore_Create(&Eco_Character_TYPECORE, "Eco_Character");
 
-    Eco_Character_TYPECORE.send = NULL;
-    Eco_Character_TYPECORE.mark = NULL;
-    Eco_Character_TYPECORE.del  = NULL;
+    Eco_Character_TYPECORE.send          = NULL;
+    Eco_Character_TYPECORE.mark_instance = NULL;
+    Eco_Character_TYPECORE.mark_children = NULL;
+    Eco_Character_TYPECORE.del           = NULL;
 
-    Eco_Character_TYPE          = Eco_Type_NewPrefab(&Eco_Character_TYPECORE);
+    Eco_Character_TYPE                   = Eco_Type_NewPrefab(&Eco_Character_TYPECORE);
 }
 
 void Eco_Character_Terminate()

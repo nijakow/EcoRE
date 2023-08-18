@@ -17,7 +17,8 @@ struct Eco_String
 };
 
 struct Eco_String* Eco_String_New(const char*);
-void Eco_String_Mark(struct Eco_GC_State*, struct Eco_String*);
+void Eco_String_MarkChildren(struct Eco_GC_State*, struct Eco_String*);
+void Eco_String_MarkInstance(struct Eco_GC_State*, struct Eco_String*);
 void Eco_String_Del(struct Eco_String*);
 bool Eco_String_IsString(struct Eco_Object*);
 

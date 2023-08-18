@@ -19,9 +19,10 @@ void Eco_Interface_Init()
 {
     Eco_TypeCore_Create(&Eco_Interface_TYPECORE, "Eco_Interface");
 
-    Eco_Interface_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
-    Eco_Interface_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_Interface_Mark;
-    Eco_Interface_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_Interface_Del;
+    Eco_Interface_TYPECORE.send          = (Eco_TypeCore_SendFunc) Eco_Object_Send;
+    Eco_Interface_TYPECORE.mark_instance = (Eco_TypeCore_MarkFunc) Eco_Interface_MarkInstance;
+    Eco_Interface_TYPECORE.mark_children = (Eco_TypeCore_MarkFunc) Eco_Interface_MarkChildren;
+    Eco_Interface_TYPECORE.del           = (Eco_TypeCore_DelFunc) Eco_Interface_Del;
 
     Eco_Interface_TYPE          = Eco_Type_NewPrefab(&Eco_Interface_TYPECORE);
 }
@@ -74,7 +75,7 @@ struct Eco_Interface* Eco_Interface_New(unsigned int parent_count, unsigned int 
     return interface;
 }
 
-void Eco_Interface_Mark(struct Eco_GC_State* state, struct Eco_Interface* interface)
+void Eco_Interface_MarkChildren(struct Eco_GC_State* state, struct Eco_Interface* interface)
 {
     struct Eco_InterfaceEntry*  entry;
     unsigned int                i;
@@ -100,7 +101,12 @@ void Eco_Interface_Mark(struct Eco_GC_State* state, struct Eco_Interface* interf
         }
     }
 
-    Eco_Object_Mark(state, &(interface->_));
+    Eco_Object_MarkChildren(state, &(interface->_));
+}
+
+void Eco_Interface_MarkInstance(struct Eco_GC_State* state, struct Eco_Interface* interface)
+{
+    Eco_Object_MarkInstance(state, &(interface->_));
 }
 
 void Eco_Interface_Del(struct Eco_Interface* interface)

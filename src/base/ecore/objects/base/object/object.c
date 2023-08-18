@@ -19,10 +19,10 @@ void Eco_Object_Init()
 
     Eco_TypeCore_Create(&Eco_Object_TYPECORE, "Eco_Object");
     
-    Eco_Object_TYPECORE.send  = NULL;
-    Eco_Object_TYPECORE.mark  = Eco_Object_Mark;
-    Eco_Object_TYPECORE.clone = Eco_Object_NoClone;
-    Eco_Object_TYPECORE.del   = Eco_Object_Del;
+    Eco_Object_TYPECORE.send          = NULL;
+    Eco_Object_TYPECORE.mark_instance = Eco_Object_MarkInstance;
+    Eco_Object_TYPECORE.clone         = Eco_Object_NoClone;
+    Eco_Object_TYPECORE.del           = Eco_Object_Del;
 
     Eco_Object_TYPE           = Eco_Type_NewPrefab(&Eco_Object_TYPECORE);
 }

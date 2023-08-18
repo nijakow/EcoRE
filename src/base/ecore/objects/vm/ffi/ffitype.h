@@ -43,7 +43,8 @@ struct Eco_FFIType* Eco_FFIType_New(void*);
 struct Eco_FFIType* Eco_FFIType_NewStruct(struct Eco_FFIType**, struct Eco_Key**, unsigned int, bool);
 struct Eco_FFIType* Eco_FFIType_NewArray(struct Eco_FFIType*, unsigned int);
 struct Eco_FFIType* Eco_FFIType_PointerTo(struct Eco_FFIType*);
-void Eco_FFIType_Mark(struct Eco_GC_State*, struct Eco_FFIType*);
+void Eco_FFIType_MarkChildren(struct Eco_GC_State*, struct Eco_FFIType*);
+void Eco_FFIType_MarkInstance(struct Eco_GC_State*, struct Eco_FFIType*);
 void Eco_FFIType_Del(struct Eco_FFIType*);
 
 #ifdef ECO_CONFIG_USE_FFI

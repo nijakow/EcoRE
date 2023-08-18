@@ -29,7 +29,8 @@ void                  Eco_FFIObject_StoreWithOffset(struct Eco_FFIObject*, struc
 struct Eco_FFIObject* Eco_FFIObject_Access(struct Eco_FFIObject*, unsigned);
 struct Eco_FFIObject* Eco_FFIObject_DLOpen(char*);
 struct Eco_FFIObject* Eco_FFIObject_DLSym(void*, char*);
-void Eco_FFIObject_Mark(struct Eco_GC_State*, struct Eco_FFIObject*);
+void Eco_FFIObject_MarkChildren(struct Eco_GC_State*, struct Eco_FFIObject*);
+void Eco_FFIObject_MarkInstance(struct Eco_GC_State*, struct Eco_FFIObject*);
 void Eco_FFIObject_Del(struct Eco_FFIObject*);
 
 bool Eco_FFIObject_IsFFIObject(struct Eco_Object*);

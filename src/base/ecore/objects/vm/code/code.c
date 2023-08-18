@@ -20,9 +20,10 @@ void Eco_Code_Init()
 {
     Eco_TypeCore_Create(&Eco_Code_TYPECORE, "Eco_Code");
 
-    Eco_Code_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
-    Eco_Code_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_Code_Mark;
-    Eco_Code_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_Code_Del;
+    Eco_Code_TYPECORE.send          = (Eco_TypeCore_SendFunc) Eco_Object_Send;
+    Eco_Code_TYPECORE.mark_instance = (Eco_TypeCore_MarkFunc) Eco_Code_MarkInstance;
+    Eco_Code_TYPECORE.mark_children = (Eco_TypeCore_MarkFunc) Eco_Code_MarkChildren;
+    Eco_Code_TYPECORE.del           = (Eco_TypeCore_DelFunc) Eco_Code_Del;
 
     Eco_Code_TYPE          = Eco_Type_NewPrefab(&Eco_Code_TYPECORE);
 }
@@ -42,14 +43,19 @@ struct Eco_Code* Eco_Code_New()
     return Eco_Object_New(Eco_Code_TYPE, sizeof(struct Eco_Code));
 }
 
-void Eco_Code_Mark(struct Eco_GC_State* state, struct Eco_Code* code)
+void Eco_Code_MarkChildren(struct Eco_GC_State* state, struct Eco_Code* code)
 {
     unsigned int  i;
 
     for (i = 0; i < code->constant_count; i++)
         Eco_GC_State_MarkAny(state, code->constants[i]);
 
-    Eco_Object_Mark(state, &(code->_));
+    Eco_Object_MarkChildren(state, &(code->_));
+}
+
+void Eco_Code_MarkInstance(struct Eco_GC_State* state, struct Eco_Code* code)
+{
+    Eco_Object_MarkInstance(state, &(code->_));
 }
 
 void Eco_Code_Del(struct Eco_Code* code)

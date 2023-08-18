@@ -19,7 +19,8 @@ typedef void (*Eco_TypeCore_DelFunc)(struct Eco_Object*);
 struct Eco_TypeCore
 {
     Eco_TypeCore_SendFunc   send;    
-    Eco_TypeCore_MarkFunc   mark;
+    Eco_TypeCore_MarkFunc   mark_instance;
+    Eco_TypeCore_MarkFunc   mark_children;
     Eco_TypeCore_CloneFunc  clone;
     Eco_TypeCore_DelFunc    del;
 

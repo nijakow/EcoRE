@@ -4,7 +4,7 @@
 #include <ecore/vm/memory/gc/gc.h>
 
 
-void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
+void Eco_Type_MarkChildren(struct Eco_GC_State* state, struct Eco_Type* type)
 {
     unsigned int  i;
 
@@ -29,7 +29,12 @@ void Eco_Type_Mark(struct Eco_GC_State* state, struct Eco_Type* type)
         Eco_GC_State_MarkObject(state, type->interface);
     if (type->public_interface != NULL)
         Eco_GC_State_MarkObject(state, type->public_interface);
-    Eco_Object_Mark(state, &type->_);
+    Eco_Object_MarkChildren(state, &type->_);
+}
+
+void Eco_Type_MarkInstance(struct Eco_GC_State* state, struct Eco_Type* type)
+{
+    Eco_Object_MarkInstance(state, &type->_);
 }
 
 void Eco_Type_MarkMolecule(struct Eco_GC_State* state,

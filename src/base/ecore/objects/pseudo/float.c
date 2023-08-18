@@ -11,9 +11,10 @@ void Eco_Float_Init()
 {
     Eco_TypeCore_Create(&Eco_Float_TYPECORE, "Eco_Float");
 
-    Eco_Float_TYPECORE.send = NULL;
-    Eco_Float_TYPECORE.mark = NULL;
-    Eco_Float_TYPECORE.del  = NULL;
+    Eco_Float_TYPECORE.send          = NULL;
+    Eco_Float_TYPECORE.mark_instance = NULL;
+    Eco_Float_TYPECORE.mark_children = NULL;
+    Eco_Float_TYPECORE.del           = NULL;
 
     Eco_Float_TYPE        = Eco_Type_NewPrefab(&Eco_Float_TYPECORE);
 }

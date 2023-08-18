@@ -14,9 +14,10 @@ void Eco_FFIFunc_Init()
 {
     Eco_TypeCore_Create(&Eco_FFIFunc_TYPECORE, "Eco_FFIFunc");
 
-    Eco_FFIFunc_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
-    Eco_FFIFunc_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_FFIFunc_Mark;
-    Eco_FFIFunc_TYPECORE.del  = (Eco_TypeCore_DelFunc) Eco_FFIFunc_Del;
+    Eco_FFIFunc_TYPECORE.send          = (Eco_TypeCore_SendFunc) Eco_Object_Send;
+    Eco_FFIFunc_TYPECORE.mark_instance = (Eco_TypeCore_MarkFunc) Eco_FFIFunc_MarkInstance;
+    Eco_FFIFunc_TYPECORE.mark_children = (Eco_TypeCore_MarkFunc) Eco_FFIFunc_MarkChildren;
+    Eco_FFIFunc_TYPECORE.del           = (Eco_TypeCore_DelFunc) Eco_FFIFunc_Del;
 
     Eco_FFIFunc_TYPE          = Eco_Type_NewPrefab(&Eco_FFIFunc_TYPECORE);
 }
@@ -62,7 +63,7 @@ struct Eco_FFIFunc* Eco_FFIFunc_New(unsigned int args, struct Eco_FFIType* rtype
     return func;
 }
 
-void Eco_FFIFunc_Mark(struct Eco_GC_State* state, struct Eco_FFIFunc* func)
+void Eco_FFIFunc_MarkChildren(struct Eco_GC_State* state, struct Eco_FFIFunc* func)
 {
     unsigned int  index;
 
@@ -71,7 +72,12 @@ void Eco_FFIFunc_Mark(struct Eco_GC_State* state, struct Eco_FFIFunc* func)
         Eco_GC_State_MarkObject(state, func->arg_types[index]);
     Eco_GC_State_MarkObject(state, func->return_type);
 #endif
-    Eco_Object_Mark(state, &func->_);
+    Eco_Object_MarkChildren(state, &func->_);
+}
+
+void Eco_FFIFunc_MarkInstance(struct Eco_GC_State* state, struct Eco_FFIFunc* func)
+{
+    Eco_Object_MarkInstance(state, &func->_);
 }
 
 void Eco_FFIFunc_Del(struct Eco_FFIFunc* func)

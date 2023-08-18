@@ -24,10 +24,11 @@ void Eco_Blob_Init()
 {
     Eco_TypeCore_Create(&Eco_Blob_TYPECORE, "Eco_Blob");
 
-    Eco_Blob_TYPECORE.send  = (Eco_TypeCore_SendFunc)  Eco_Object_Send;
-    Eco_Blob_TYPECORE.mark  = (Eco_TypeCore_MarkFunc)  Eco_Blob_Mark;
-    Eco_Blob_TYPECORE.clone = (Eco_TypeCore_CloneFunc) Eco_Blob_Clone;
-    Eco_Blob_TYPECORE.del   = (Eco_TypeCore_DelFunc)   Eco_Blob_Del;
+    Eco_Blob_TYPECORE.send          = (Eco_TypeCore_SendFunc)  Eco_Object_Send;
+    Eco_Blob_TYPECORE.mark_instance = (Eco_TypeCore_MarkFunc)  Eco_Blob_MarkInstance;
+    Eco_Blob_TYPECORE.mark_children = (Eco_TypeCore_MarkFunc)  Eco_Blob_MarkChildren;
+    Eco_Blob_TYPECORE.clone         = (Eco_TypeCore_CloneFunc) Eco_Blob_Clone;
+    Eco_Blob_TYPECORE.del           = (Eco_TypeCore_DelFunc)   Eco_Blob_Del;
 
     Eco_Blob_TYPE           = Eco_Type_NewPrefab(&Eco_Blob_TYPECORE);
 }
@@ -84,9 +85,14 @@ struct Eco_Blob* Eco_Blob_NewExt(void* ptr, unsigned int element_size)
     return blob;
 }
 
-void Eco_Blob_Mark(struct Eco_GC_State* state, struct Eco_Blob* blob)
+void Eco_Blob_MarkChildren(struct Eco_GC_State* state, struct Eco_Blob* blob)
 {
-    Eco_Object_Mark(state, &blob->_);
+    Eco_Object_MarkChildren(state, &blob->_);
+}
+
+void Eco_Blob_MarkInstance(struct Eco_GC_State* state, struct Eco_Blob* blob)
+{
+    Eco_Object_MarkInstance(state, &blob->_);
 }
 
 struct Eco_Blob* Eco_Blob_Clone(struct Eco_CloneState* state,

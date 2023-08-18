@@ -19,9 +19,10 @@ void Eco_String_Init()
 {
     Eco_TypeCore_Create(&Eco_String_TYPECORE, "Eco_String");
 
-    Eco_String_TYPECORE.send = (Eco_TypeCore_SendFunc) Eco_Object_Send;
-    Eco_String_TYPECORE.mark = (Eco_TypeCore_MarkFunc) Eco_String_Mark;
-    Eco_String_TYPECORE.del  = (Eco_TypeCore_DelFunc)  Eco_String_Del;
+    Eco_String_TYPECORE.send          = (Eco_TypeCore_SendFunc) Eco_Object_Send;
+    Eco_String_TYPECORE.mark_instance = (Eco_TypeCore_MarkFunc) Eco_String_MarkInstance;
+    Eco_String_TYPECORE.mark_children = (Eco_TypeCore_MarkFunc) Eco_String_MarkChildren;
+    Eco_String_TYPECORE.del           = (Eco_TypeCore_DelFunc)  Eco_String_Del;
 
     Eco_String_TYPE          = Eco_Type_NewPrefab(&Eco_String_TYPECORE);
 }
@@ -57,9 +58,14 @@ struct Eco_String* Eco_String_New(const char* text)
 }
 
 
-void Eco_String_Mark(struct Eco_GC_State* state, struct Eco_String* string)
+void Eco_String_MarkChildren(struct Eco_GC_State* state, struct Eco_String* string)
 {
-    Eco_Object_Mark(state, &string->_);
+    Eco_Object_MarkChildren(state, &string->_);
+}
+
+void Eco_String_MarkInstance(struct Eco_GC_State* state, struct Eco_String* string)
+{
+    Eco_Object_MarkInstance(state, &string->_);
 }
 
 void Eco_String_Del(struct Eco_String* string)

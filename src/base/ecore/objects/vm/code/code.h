@@ -26,7 +26,8 @@ struct Eco_Code
 
 
 struct Eco_Code* Eco_Code_New();
-void Eco_Code_Mark(struct Eco_GC_State*, struct Eco_Code*);
+void Eco_Code_MarkChildren(struct Eco_GC_State*, struct Eco_Code*);
+void Eco_Code_MarkInstance(struct Eco_GC_State*, struct Eco_Code*);
 void Eco_Code_Del(struct Eco_Code*);
 
 struct Eco_Code* Eco_Code_ConstructFromEco(struct Eco_Blob*,
