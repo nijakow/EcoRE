@@ -3,16 +3,7 @@
 "
 
 #=lobby: {
-    meta = {
-        name    => 'Ecosphere Standard Library',
-        version => '0.1',
-        author  => 'nijakow'
-    };
-
-    with packages = {
-        with std = #<:std>;
-        lang = #<:lang>;
-    };
+    with std = #<:std>;
 
     writeOn: writer => writer << 'lobby';
 },
