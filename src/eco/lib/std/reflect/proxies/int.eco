@@ -84,5 +84,5 @@
     -    other => #'ecosphere.ecore.math.sub'(self, other);
     +    other => #'ecosphere.ecore.math.add'(self, other);
 
-    writeOn: writer => (std text writing NumberWriter) WriteInt: self To: writer;
+    writeOn: writer => (std util text writing NumberWriter) WriteInt: self To: writer;
 }

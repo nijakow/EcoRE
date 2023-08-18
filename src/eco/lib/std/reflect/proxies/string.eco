@@ -121,7 +121,7 @@
         |
       ^ parser parseExpression
     );
-    iterator => ((std text utf8 UTF8Iterator) clone) init: ((#<:std/reflect/proxies/String/Iterator> clone) init: self);
+    iterator => ((std util text utf8 UTF8Iterator) clone) init: ((#<:std/reflect/proxies/String/Iterator> clone) init: self);
     asArray => (
         |
             array <- std util newArray: size,

@@ -20,7 +20,7 @@
     Writer = #<:std/io/Writer>;
     StringWriter = #<:std/io/StringWriter>;
 
-    OpenFileForReading: path  => (std text utf8 UTF8Iterator) clone init: (((std io FDSegmentReader) clone initWithFileDescriptor: ((std io FileDescriptor) clone init: #'ecosphere.ecore.io.fd.open_file'(path, 1))) iterator);
+    OpenFileForReading: path  => (std util text utf8 UTF8Iterator) clone init: (((std io FDSegmentReader) clone initWithFileDescriptor: ((std io FileDescriptor) clone init: #'ecosphere.ecore.io.fd.open_file'(path, 1))) iterator);
     OpenFileForWriting: path  => PortOutput clone init: ((FDByteWriter clone) initWithFileDescriptor: (((FileDescriptor clone) init: #'ecosphere.ecore.io.fd.open_file'(path, 6))));
     OpenFile:           path  => OpenFileDescriptor: ((FileDescriptor clone) init: #'ecosphere.ecore.io.fd.open_file'(path, 7));
     OpenFile: path Mode: mode => OpenFile: path;  "TODO: Mode objects"

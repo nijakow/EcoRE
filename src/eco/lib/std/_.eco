@@ -24,6 +24,4 @@
     reflect = #<:std/reflect>;
     sys = #<:std/sys>;
     util = #<:std/util>;
-
-    text => util text;
 }

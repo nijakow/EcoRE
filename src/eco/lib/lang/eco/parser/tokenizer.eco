@@ -197,7 +197,7 @@
             (peeks: '$\'') if: [ ^ newTokenWithType: TokenType CHARACTER  Payload: (StringToChar: (parseString: #\')) ].
             (peeks: '"')   if: [ parseString: #\". ^ nextToken ].
 
-            (std text parsing number ParseNumberFromStream: (in termmap: [ :c | tryChar: c ]))
+            (std util text parsing number ParseNumberFromStream: (in termmap: [ :c | tryChar: c ]))
                 yes: [ :n | ^ newTokenWithType: TokenType NUMBER Payload: n ].
             
             | sb <- (std io StringWriter) new |
