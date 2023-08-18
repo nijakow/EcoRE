@@ -22,10 +22,15 @@
 
         isAtomicSnip => true;
 
-        insertSnip: snip at: index => (
-            (index == 0) if: [ ^ module MakeCompoundSnip(snip, self) ].
-            (index == self size) if: [ ^ module MakeCompoundSnip(self, snip) ].
+        internalInsertSnip: snip at: index => (
+            (index == 0) if: [ ^ std util newArray(module MakeCompoundSnip(snip, self)) ].
+            (index == self size) if: [ ^ std util newArray(module MakeCompoundSnip(self, snip)) ].
             indexOutOfBoundsError
+        );
+        insertSnip: snip at: index => (
+            | array <- internalInsertSnip: snip at: index |
+            (array size == 1) if: [ ^ array at: 0 ].
+          ^ module CompoundSnip: array
         );
 
         appendSnip: snip => insertSnip: snip at: size;
@@ -37,6 +42,12 @@
         compress => self;
 
         nesting => 0;
+
+        dumpOn: w Indent: i => (
+            (w << (' ' * i) << self) newline.
+          ^ w
+        );
+        dumpOn: w => dumpOn: w Indent: 0;
 
         writeOn: w => w << 'a snip';
     };
@@ -119,9 +130,9 @@
               & (module StringSnip: (content substringFrom: index))
             );
 
-            insertSnip: snip at: index => (
+            internalInsertSnip: snip at: index => (
                 ([index > 0] and: [index < self size]) if: [
-                    ^ module MakeCompoundSnip(
+                    ^ std util newArray(
                         (module StringSnip: (content substringTo: index)),
                         snip,
                         (module StringSnip: (content substringFrom: index))
@@ -189,7 +200,7 @@
                 indexOutOfBoundsError
             );
 
-            insertSnip: snip at: index => (
+            internalInsertSnip: snip at: index => (
                 |
                     i <- 0,
                     newSnips <- std util newVector,
@@ -198,17 +209,50 @@
                 snips do: [ :oldSnip |
                     | size <- oldSnip size |
                     ([done not] and: [index < (i + size)]) if: [
+                        | e, next <- No |
                         ([oldSnip isAtomicSnip] and: [[oldSnip size == 1] and: [index == i]])
-                              if: [ newSnips add: snip. newSnips add: oldSnip.                ]
-                            else: [ newSnips add: (oldSnip insertSnip: snip at: (index - i)). ].
+                              if: [ e <- std util newArray(snip). next <- Yes: oldSnip.      ]
+                            else: [ e <- (oldSnip internalInsertSnip: snip at: (index - i)). ].
+                        e into: newSnips.
+                        next yes: [ :n | newSnips add: n ].
                         done <- true.
                     ] else: [
                         newSnips add: oldSnip.
                     ].
                     i <- (i + size)
                 ].
-                (done not) if: [ newSnips add: snip ].
-              ^ module MakeOptimizedCompoundSnipFromArray(newSnips)
+                (done not) if: [
+                    [ :break |
+                        (newSnips size > 0) if: [
+                            (newSnips last) ifCompoundSnip: [ :cs |
+                                newSnips erase: (newSnips size - 1).
+                                (cs internalInsertSnip: snip at: (cs size)) into: newSnips.
+                                break value.
+                            ].
+                        ].
+                        newSnips add: snip.
+                    ] withBreak.
+                ].
+
+                (newSnips size >= 8) if: [
+                    |
+                        snips1 <- std util newVector,
+                        snips2 <- std util newVector
+                    |
+
+                    newSnips do: [ :snip |
+                        (snips1 size < (newSnips size / 2))
+                              if: [ snips1 add: snip ]
+                            else: [ snips2 add: snip ].
+                    ].
+
+                    ^ std util newArray(
+                        module CompoundSnip: (snips1 asArray),
+                        module CompoundSnip: (snips2 asArray)
+                    )
+                ].
+
+              ^ std util newArray(module CompoundSnip: (newSnips asArray))
             );
 
             removeSnipAt: index => (
@@ -264,6 +308,13 @@
                 current yes: [ :c | newSnips add: c ].
 
               ^ module CompoundSnip: newSnips
+            );
+
+            dumpOn: w Indent: i => (
+                (w << (' ' * i) << 'a compound snip(') newline.
+                snips do: [ :snip | snip dumpOn: w Indent: (i + 2) ].
+                (w << (' ' * i) << ')') newline.
+              ^ w
             );
 
             writeOn: w => (
