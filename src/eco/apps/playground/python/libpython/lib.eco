@@ -4,9 +4,13 @@
     lib <- No;
 
     PyObject <- (ffi types void);
-    PyTypeObject <- (ffi types void);
+    PyTypeObject => PyObject;
+    PyModuleObject => PyObject;
+    PyUnicodeObject => PyObject;
 
-    PyModule_Type <- No;
+    PyType_Type   <- No,
+    PyModule_Type <- No,
+    PyUnicode_Type <- No;
 
     PyEco_Initialize <- No,
     PyEco_Finalize   <- No;
@@ -18,6 +22,8 @@
 
     PyImport_ImportModule <- No,
     PyModule_New <- No;
+
+    PyUnicode_FromString <- No;
 
     PyRun_SimpleString <- No;
 
@@ -39,15 +45,19 @@
         PyEco_Initialize <- Function: #'PyEco_Initialize' Type: ((ffi types void) function()).
         PyEco_Finalize   <- Function: #'PyEco_Finalize' Type: ((ffi types void) function()).
 
-        PyModule_Type <- Symbol: #'PyModule_Type';
+        PyType_Type   <- Symbol: #'PyType_Type'.
+        PyModule_Type <- Symbol: #'PyModule_Type'.
+        PyUnicode_Type <- Symbol: #'PyUnicode_Type'.
 
         Py_IncRef <- Function: #'Py_IncRef' Type: ((ffi types void) function(PyObject pointer)).
         Py_DecRef <- Function: #'Py_DecRef' Type: ((ffi types void) function(PyObject pointer)).
 
         PyEco_TypeCheck <- Function: #'PyEco_TypeCheck' Type: ((ffi types int) function(PyObject pointer, PyTypeObject pointer)).
 
-        PyImport_ImportModule <- Function: #'PyImport_ImportModule' Type: ((PyObject pointer) function(ffi types string)).
-        PyModule_New <- Function: #'PyModule_New' Type: ((PyObject pointer) function(ffi types string)).
+        PyImport_ImportModule <- Function: #'PyImport_ImportModule' Type: ((PyModuleObject pointer) function(ffi types string)).
+        PyModule_New <- Function: #'PyModule_New' Type: ((PyModuleObject pointer) function(ffi types string)).
+
+        PyUnicode_FromString <- Function: #'PyUnicode_FromString' Type: ((PyUnicodeObject pointer) function(ffi types string)).
 
         PyRun_SimpleString <- Function: #'PyRun_SimpleString' Type: ((ffi types int) function(ffi types string)).
 

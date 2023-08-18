@@ -6,7 +6,7 @@
     own PyObject = {
         static with inherited _ = std Clonable;
 
-        protected ptr;
+        ptr;
 
         with inherited trait = {
             static with inherited _ = std Trait;
@@ -36,6 +36,24 @@
         };
     };
 
+    own PyType = {
+        static with inherited _ = std Clonable;
+        with inherited own PyObject = $ PyObject;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            
+            initWithPtr: _ptr => (
+                $(PyObject) initWithPtr: _ptr.
+              ^ self
+            );
+
+            typecheck: obj => (libpython funcs TypeCheck: (obj ptr) Against: ptr);
+
+            writeOn: w => w << 'a PyType';
+        };
+    };
+
     own PyModule = {
         static with inherited _ = std Clonable;
         with inherited own PyObject = $ PyObject;
@@ -52,8 +70,31 @@
         };
     };
 
+    own PyUnicode = {
+        static with inherited _ = std Clonable;
+        with inherited own PyObject = $ PyObject;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            
+            initWithPtr: _ptr => (
+                $(PyObject) initWithPtr: _ptr.
+              ^ self
+            );
+
+            writeOn: w => w << 'a PyUnicode';
+        };
+    };
+
     Object: ptr => (
+        (libpython funcs IsType: ptr) if: [ ^ (PyType clone) initWithPtr: ptr ].
         (libpython funcs IsModule: ptr) if: [ ^ (PyModule clone) initWithPtr: ptr ].
+        (libpython funcs IsUnicode: ptr) if: [ ^ (PyUnicode clone) initWithPtr: ptr ].
       ^ (PyObject clone) initWithPtr: ptr
+    );
+
+    From: ecoobj => (
+        (ecoobj isString) if: [ ^ Object: (libpython funcs NewUnicodeFromEcoString: ecoobj) ].
+        'Can not convert Eco object to Python object!' throw.
     );
 }
