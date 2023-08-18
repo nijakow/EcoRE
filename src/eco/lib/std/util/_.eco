@@ -111,6 +111,8 @@
         writer << ')'
     );
 
+    WeakBox: e => #'ecosphere.ecore.object.weakbox.new'() ~ set: e;
+
     Stack = #<:std/util/Stack>;
 
     Queue = #<:std/util/Queue>;
