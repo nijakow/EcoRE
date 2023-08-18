@@ -3,6 +3,9 @@
     static with inherited _ = std Module;
     with $battery = $;
 
+    protected morphic => gfx morphic;
+    protected ui      => gfx ui;
+
     protected cachedHere <- here;
 
     openInWorld: world => (

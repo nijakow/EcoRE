@@ -1,9 +1,9 @@
 {
     static with inherited _ = std Clonable;
+    with $battery = $package;
 
-    with gfx = $package;
+    ui => gfx ui;
 
     own framework = (here / 'framework' / '_.eco') importIn: self;
-
     own bootstrap = (here / 'bootstrap.eco') importIn: self;
 }
