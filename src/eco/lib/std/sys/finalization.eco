@@ -1,9 +1,9 @@
 
-{
-    static with inherited _ = std Module;
+#=std/sys/Finalization: {
+    static with inherited _ = #<:std/Module>;
 
     own FinalizationProcess = {
-        static with inherited _ = std Module;
+        static with inherited _ = #<:std/Module>;
 
         Main => (
             [

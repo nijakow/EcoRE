@@ -20,12 +20,6 @@
             ui UndecoratedWindow(
                 ui VBox(
                     ui Button(
-                        ui Padding(5, ui Label: 'Start finalizer!'),
-                        $[ :(app) |
-                            app system finalization StartFinalizationProcess.
-                        ] bind(app)
-                    ) ~ xLayout: (ui layouts Flexible),
-                    ui Button(
                         ui Padding(5, ui Label: 'Create one!'),
                         $[ :(app, obj) |
                             std reflect EnableFinalization: (obj clone)

@@ -54,6 +54,10 @@
         modules init.
     );
 
+    InitProcesses => (
+        std sys finalization StartFinalizationProcess.
+    );
+
     Quote => (
         io out newline.
         (io out << '      Grant me wings that I might fly') newline.
@@ -65,6 +69,7 @@
         InitTypes.
         InitIO.
         InitModules.
+        InitProcesses.
 
         Quote.
 

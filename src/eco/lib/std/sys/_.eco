@@ -2,7 +2,8 @@
 #=std/sys: {
     static with inherited _ = #<:std/Module>;
 
-    builtins = #<:std/sys/Builtins>;
-    error = #<:std/sys/Error>;
-    types = #<:std/sys/Types>;
+    builtins     = #<:std/sys/Builtins>;
+    error        = #<:std/sys/Error>;
+    finalization = #<:std/sys/Finalization>;
+    types        = #<:std/sys/Types>;
 }
