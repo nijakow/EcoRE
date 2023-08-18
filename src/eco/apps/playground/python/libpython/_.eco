@@ -6,6 +6,8 @@
     own objects = (here / 'objects.eco') importIn: self;
     own funcs   = (here / 'funcs.eco')   importIn: self;
 
+    From: ecoobj => objects From: ecoobj;
+
     Init => (
         lib Init.
         (lib PyEco_Initialize yes) value.

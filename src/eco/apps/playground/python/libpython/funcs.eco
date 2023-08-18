@@ -12,13 +12,17 @@
 
     IsType:    ptr => TypeCheck: ptr Against: (lib PyType_Type yes);
     IsModule:  ptr => TypeCheck: ptr Against: (lib PyModule_Type yes);
+    IsLong:    ptr => TypeCheck: ptr Against: (lib PyLong_Type yes);
     IsUnicode: ptr => TypeCheck: ptr Against: (lib PyUnicode_Type yes);
 
     ImportModule: name => objects Object: ((lib PyImport_ImportModule yes) value(name));
     NewModule: name => objects Object: ((lib PyModule_New yes) value(name));
 
+    NewLongFromEcoInt: int => (lib PyLong_FromLong yes) value(int);
+    LongGrabEcoInt: long => (lib PyLong_AsLong yes) value(long);
+
     NewUnicodeFromEcoString: string => (lib PyUnicode_FromString yes) value(string);
-    UnicodeGrabString: unicode => (lib PyEco_PyUnicode_GrabString yes) value(unicode);
+    UnicodeGrabEcoString: unicode => (lib PyEco_PyUnicode_GrabString yes) value(unicode);
 
     RunSimpleString: string => (lib PyRun_SimpleString yes) value(string);
 }
