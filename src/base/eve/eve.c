@@ -496,6 +496,14 @@ Eve_UInt Eve_RenderState_GetEventMouseButtonID(struct Eve_RenderState* self) {
     return self->event.button.button;
 }
 
+Eve_Int Eve_RenderState_GetEventMouseScrollX(struct Eve_RenderState* self) {
+    return self->event.wheel.x;
+}
+
+Eve_Int Eve_RenderState_GetEventMouseScrollY(struct Eve_RenderState* self) {
+    return self->event.wheel.y;
+}
+
 Eve_UInt Eve_RenderState_GetEventKeySym(struct Eve_RenderState* self) {
     return self->event.key.keysym.sym;
 }
@@ -610,6 +618,11 @@ bool Eve_IsEventMouseButtonUp() {
     return Eve_RenderState_IsEventMouseButtonUp(&EVE_DEFAULT_RENDER_STATE);
 }
 
+bool Eve_IsEventMouseWheel()
+{
+    return Eve_RenderState_IsEventMouseWheel(&EVE_DEFAULT_RENDER_STATE);
+}
+
 Eve_UInt Eve_GetEventMouseX() {
     return Eve_RenderState_GetEventMouseX(&EVE_DEFAULT_RENDER_STATE);
 }
@@ -620,6 +633,14 @@ Eve_UInt Eve_GetEventMouseY() {
 
 Eve_UInt Eve_GetEventMouseButtonID() {
     return Eve_RenderState_GetEventMouseButtonID(&EVE_DEFAULT_RENDER_STATE);
+}
+
+Eve_Int Eve_GetEventMouseScrollX() {
+    return Eve_RenderState_GetEventMouseScrollX(&EVE_DEFAULT_RENDER_STATE);
+}
+
+Eve_Int Eve_GetEventMouseScrollY() {
+    return Eve_RenderState_GetEventMouseScrollY(&EVE_DEFAULT_RENDER_STATE);
 }
 
 Eve_UInt Eve_GetEventKeySym() {

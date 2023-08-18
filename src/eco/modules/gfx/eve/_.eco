@@ -31,9 +31,12 @@
     protected Eve_IsEventMouseMotion,
     protected Eve_IsEventMouseButtonDown,
     protected Eve_IsEventMouseButtonUp,
+    protected Eve_IsEventMouseWheel,
     protected Eve_GetEventMouseX,
     protected Eve_GetEventMouseY,
     protected Eve_GetEventMouseButtonID,
+    protected Eve_GetEventMouseScrollX,
+    protected Eve_GetEventMouseScrollY,
     protected Eve_GetEventKeySym,
     protected Eve_GetEventKeyScancode,
     protected Eve_GetEventKeyMod,
@@ -80,9 +83,12 @@
         Eve_IsEventMouseMotion <- (lib function: #'Eve_IsEventMouseMotion' type: ((ffi types bool) function())) yes.
         Eve_IsEventMouseButtonDown <- (lib function: #'Eve_IsEventMouseButtonDown' type: ((ffi types bool) function())) yes.
         Eve_IsEventMouseButtonUp <- (lib function: #'Eve_IsEventMouseButtonUp' type: ((ffi types bool) function())) yes.
+        Eve_IsEventMouseWheel <- (lib function: #'Eve_IsEventMouseWheel' type: ((ffi types bool) function())) yes.
         Eve_GetEventMouseX <- (lib function: #'Eve_GetEventMouseX' type: ((ffi types uint) function())) yes.
         Eve_GetEventMouseY <- (lib function: #'Eve_GetEventMouseY' type: ((ffi types uint) function())) yes.
         Eve_GetEventMouseButtonID <- (lib function: #'Eve_GetEventMouseButtonID' type: ((ffi types uint) function())) yes.
+        Eve_GetEventMouseScrollX <- (lib function: #'Eve_GetEventMouseScrollX' type: ((ffi types int) function())) yes.
+        Eve_GetEventMouseScrollY <- (lib function: #'Eve_GetEventMouseScrollY' type: ((ffi types int) function())) yes.
         Eve_GetEventKeySym <- (lib function: #'Eve_GetEventKeySym' type: ((ffi types uint) function())) yes.
         Eve_GetEventKeyScancode <- (lib function: #'Eve_GetEventKeyScancode' type: ((ffi types uint) function())) yes.
         Eve_GetEventKeyMod <- (lib function: #'Eve_GetEventKeyMod' type: ((ffi types uint) function())) yes.

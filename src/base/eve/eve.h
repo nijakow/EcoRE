@@ -48,11 +48,15 @@ bool Eve_IsEventKeyUp();
 bool Eve_IsEventMouseMotion();
 bool Eve_IsEventMouseButtonDown();
 bool Eve_IsEventMouseButtonUp();
+bool Eve_IsEventMouseWheel();
 
 Eve_UInt Eve_GetEventMouseX();
 Eve_UInt Eve_GetEventMouseY();
 
 Eve_UInt Eve_GetEventMouseButtonID();
+
+Eve_Int Eve_GetEventMouseScrollX();
+Eve_Int Eve_GetEventMouseScrollY();
 
 Eve_UInt Eve_GetEventKeySym();
 Eve_UInt Eve_GetEventKeyScancode();
