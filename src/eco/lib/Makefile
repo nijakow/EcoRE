@@ -45,6 +45,7 @@ std/reflect/proxies/interface.eco \
 std/reflect/proxies/key.eco \
 std/reflect/proxies/string.eco \
 std/reflect/proxies/type.eco \
+std/reflect/proxies/weakbox.eco \
 std/reflect/proxies/ffi/ffifunc.eco \
 std/reflect/proxies/ffi/ffiobject.eco \
 std/reflect/proxies/ffi/ffitype.eco \

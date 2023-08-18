@@ -1,0 +1,6 @@
+
+#=std/reflect/proxies/WeakBox: {
+    static with inherited parent = #<:std/Clonable>;
+    
+    writeOn: w => w << 'a weak box';
+}
