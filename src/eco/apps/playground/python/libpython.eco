@@ -28,11 +28,11 @@
           ^ self
         );
 
-        Init: file => {
+        Init: file => (
             lib <- ffi DLOpen: 'libpython3.11.so'.
             LoadFuncs.
           ^ self
-        };
+        );
     };
 
     own objects = {
@@ -53,6 +53,7 @@
 
     Init => (
         lib Init: 'libpython3.11.so'.
+        (lib Py_Initialize yes) value.
       ^ self
     );
 }
