@@ -1,3 +1,4 @@
+
 {
     static with inherited _ = std Module;
     with $battery = $;
@@ -5,8 +6,4 @@
     own eve     = (here / 'eve' / '_.eco') importIn: self;
     own morphic = (here / 'morphic' / '_.eco') importIn: self;
     own ui      = (here / 'ui' / '_.eco') importIn: self;
-
-    Main => (
-        app bootstrap Main.
-    );
 }
