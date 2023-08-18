@@ -5,7 +5,6 @@
     own eve     = (here / 'eve' / '_.eco') importIn: self;
     own morphic = (here / 'morphic' / '_.eco') importIn: self;
     own ui      = (here / 'ui' / '_.eco') importIn: self;
-    own app     = (here / 'app' / '_.eco') importIn: $;
 
     Main => (
         app bootstrap Main.

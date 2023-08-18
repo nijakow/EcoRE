@@ -1,6 +1,7 @@
+
 {
     static with inherited _ = std Clonable;
-    with $battery = $package;
+    with $battery = $;
 
     ui => gfx ui;
 
