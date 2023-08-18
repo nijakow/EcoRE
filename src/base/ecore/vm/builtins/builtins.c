@@ -17,6 +17,7 @@
 #include "core/reflection.h"
 #include "core/slots.h"
 #include "core/string.h"
+#include "core/weak.h"
 
 #include <ecore/objects/misc/key/key.h>
 #include <ecore/io/logging/log.h>
@@ -129,6 +130,10 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.implements_message", Eco_VM_Builtin_InterfaceImplementsMessage);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.implements_interface", Eco_VM_Builtin_InterfaceImplementsInterface);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.get_all_interfaces", Eco_VM_Builtin_InterfaceGetAllInterfaces);
+
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.weakbox.new", Eco_VM_Builtin_WeakBoxNew);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.weakbox.get", Eco_VM_Builtin_WeakBoxGet);
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.weakbox.set", Eco_VM_Builtin_WeakBoxSet);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.is_molecule", Eco_VM_Builtin_IsMolecule);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.is_interface", Eco_VM_Builtin_IsInterface);

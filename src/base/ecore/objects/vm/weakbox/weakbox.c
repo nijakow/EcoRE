@@ -39,7 +39,7 @@ void Eco_WeakBox_Terminate()
 
 static struct Eco_WeakBox* Eco_WEAKBOXES = NULL;
 
-struct Eco_WeakBox* Eco_WeakBox_New(unsigned int parent_count, unsigned int entry_count)
+struct Eco_WeakBox* Eco_WeakBox_New()
 {
     struct Eco_WeakBox*  weakbox;
 

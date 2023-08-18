@@ -13,7 +13,7 @@ struct Eco_WeakBox
     Eco_Any               value;
 };
 
-struct Eco_WeakBox* Eco_WeakBox_New(unsigned int, unsigned int);
+struct Eco_WeakBox* Eco_WeakBox_New();
 void Eco_WeakBox_MarkChildren(struct Eco_GC_State*, struct Eco_WeakBox*);
 void Eco_WeakBox_MarkInstance(struct Eco_GC_State*, struct Eco_WeakBox*);
 void Eco_WeakBox_Del(struct Eco_WeakBox*);

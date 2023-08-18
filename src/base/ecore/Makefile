@@ -66,6 +66,7 @@ vm/builtins/core/math.c \
 vm/builtins/core/reflection.c \
 vm/builtins/core/slots.c \
 vm/builtins/core/string.c \
+vm/builtins/core/weak.c \
 vm/memory/memory.c \
 vm/memory/weak.c \
 vm/memory/arena.c \

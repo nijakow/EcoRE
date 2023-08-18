@@ -1,6 +1,17 @@
 
 #=std/reflect/proxies/WeakBox: {
     static with inherited parent = #<:std/Clonable>;
+
+    get => #'ecosphere.ecore.object.weakbox.get'(self);
+    set: v => #'ecosphere.ecore.object.weakbox.set'(self, v);
+
+    empty => (self == get);
     
-    writeOn: w => w << 'a weak box';
+    writeOn: w => (
+        (empty) if: [
+            w << 'an empty weak box'.
+        ] else: [
+            w << 'a weak box(' << get << ')'.
+        ]
+    );
 }
