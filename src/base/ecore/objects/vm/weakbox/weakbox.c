@@ -1,5 +1,6 @@
 #include "weakbox.h"
 
+#include <ecore/objects/base/object.h>
 #include <ecore/objects/base/type.h>
 
 #include <ecore/vm/memory/memory.h>
@@ -68,6 +69,9 @@ struct Eco_WeakBox* Eco_WeakBox_New(unsigned int parent_count, unsigned int entr
 
 void Eco_WeakBox_MarkChildren(struct Eco_GC_State* state, struct Eco_WeakBox* weakbox)
 {
+    /*
+     * NO NEED TO MARK THE VALUE - IT IS A WEAK REFERENCE!
+     */
     Eco_Object_MarkChildren(state, &(weakbox->_));
 }
 
@@ -87,4 +91,22 @@ void Eco_WeakBox_Del(struct Eco_WeakBox* weakbox)
 bool Eco_WeakBox_IsWeakBox(struct Eco_Object* object)
 {
     return object->type->typecore == &Eco_WeakBox_TYPECORE;
+}
+
+
+Eco_Any Eco_WeakBox_GetValue(struct Eco_WeakBox* weakbox)
+{
+    return weakbox->value;
+}
+
+void Eco_WeakBox_SetValue(struct Eco_WeakBox* weakbox, Eco_Any new_value)
+{
+    struct Eco_Object*  object;
+
+    if (Eco_Any_IsPointer(new_value)) {
+        object = Eco_Any_AsPointer(new_value);
+        object->bits.weakly_referenced = true;
+    }
+
+    weakbox->value = new_value;
 }

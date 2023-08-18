@@ -52,6 +52,7 @@ void* Eco_Object_NewInArena(struct Eco_Type* type,
     object->bits.mark_done           = false;
     object->bits.sticky              = false;
     object->bits.wants_finalization  = false;
+    object->bits.weakly_referenced   = false;
 
     object->next              = arena->objects;
     arena->objects            = object;

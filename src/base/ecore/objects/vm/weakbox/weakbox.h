@@ -20,6 +20,9 @@ void Eco_WeakBox_Del(struct Eco_WeakBox*);
 
 bool Eco_WeakBox_IsWeakBox(struct Eco_Object*);
 
+Eco_Any Eco_WeakBox_GetValue(struct Eco_WeakBox*);
+void Eco_WeakBox_SetValue(struct Eco_WeakBox*, Eco_Any);
+
 void Eco_WeakBox_Init();
 void Eco_WeakBox_Terminate();
 
