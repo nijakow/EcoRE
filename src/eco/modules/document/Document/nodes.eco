@@ -198,6 +198,13 @@
                 indexOutOfBoundsError
             );
 
+            from: start to: end do: block => (
+                start to: end do: [ :i |
+                    block value(at: i)
+                ].
+              ^ self
+            );
+
             internalInsertSnip: snip at: index => (
                 |
                     i <- 0,
