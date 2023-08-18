@@ -1,36 +1,59 @@
 
-IIndexable = %[
-    at: index,
-    size
-],
+{
+    static with inherited _ = std Module;
 
-IMutableIndexable = %[
-    with IIndexable,
-    at: index put: value
-],
+    IComparable = %[
+        [self] == [self] other,
+        [self] < [self] other,
+    ],
 
-ISequence = %[
-    forEach: block,
-    do: block
-],
+    INumber = %[
+        with IComparable;
 
-ISequenceAcceptor = %[
-    from: [ISequence] sequence
-],
+        [self] + [self] other,
+        [self] - [self] other,
+        [self] * [self] other,
+        [self] / [self] other,
+    ],
 
-IConvertibleSequence = %[
-    into: [ISequenceAcceptor] other
-],
+    IInt = %[
+        with INumber;
+    ],
 
-IIterator = %[
-    has,
-    hasNext,
+    IIndexable = %[
+        at: index,
+        [IInt] size
+    ],
 
-    current,
-    forward,
-    next,
+    IMutableIndexable = %[
+        with IIndexable;
 
-    withReset: block,
-    check: element,
-    peek: [ISequence] sequence
-]
+        at: index put: value,
+    ],
+
+    ISequence = %[
+        forEach: block,
+        do: block
+    ],
+
+    ISequenceAcceptor = %[
+        from: [ISequence] sequence
+    ],
+
+    IConvertibleSequence = %[
+        into: [ISequenceAcceptor] other
+    ],
+
+    IIterator = %[
+        has,
+        hasNext,
+
+        current,
+        forward,
+        next,
+
+        withReset: block,
+        check: element,
+        peek: [ISequence] sequence
+    ]
+}
