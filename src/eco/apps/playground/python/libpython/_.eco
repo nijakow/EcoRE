@@ -8,16 +8,17 @@
         lib <- No;
 
         PyObject <- (ffi types void);
+        PyTypeObject <- (ffi types void);
 
         PyModule_Type <- No;
 
-        Py_Initialize <- No,
-        Py_FinalizeEx <- No;
+        PyEco_Initialize <- No,
+        PyEco_Finalize   <- No;
 
         Py_IncRef <- No,
         Py_DecRef <- No;
 
-        PyObject_TypeCheck <- No.
+        PyEco_TypeCheck <- No.
 
         PyImport_ImportModule <- No;
 
@@ -38,15 +39,15 @@
         );
 
         protected LoadFuncs => (
-            Py_Initialize <- Function: #'Py_Initialize' Type: ((ffi types void) function()).
-            Py_FinalizeEx <- Function: #'Py_FinalizeEx' Type: ((ffi types int) function()).
+            PyEco_Initialize <- Function: #'PyEco_Initialize' Type: ((ffi types void) function()).
+            PyEco_Finalize   <- Function: #'PyEco_Finalize' Type: ((ffi types void) function()).
 
             PyModule_Type <- Symbol: #'PyModule_Type';
 
             Py_IncRef <- Function: #'Py_IncRef' Type: ((ffi types void) function(PyObject pointer)).
             Py_DecRef <- Function: #'Py_DecRef' Type: ((ffi types void) function(PyObject pointer)).
 
-            PyObject_TypeCheck <- Function: #'PyObject_TypeCheck' Type: ((ffi types int) function(PyObject pointer, PyObject pointer)).
+            PyEco_TypeCheck <- Function: #'PyEco_TypeCheck' Type: ((ffi types int) function(PyObject pointer, PyTypeObject pointer)).
 
             PyImport_ImportModule <- Function: #'PyImport_ImportModule' Type: ((PyObject pointer) function(ffi types string)).
 
@@ -55,10 +56,20 @@
           ^ self
         );
 
-        Init: file => (
-            lib <- ffi DLOpen: 'libpython3.11.so'.
+        Setup: file => (
+            lib <- ffi DLOpen: file.
             LoadFuncs.
           ^ self
+        );
+
+        InitLinux => Setup: (std os files here / '..' / 'pyeco' / 'libpyeco.so') path;
+        InitMac => Setup: (std os files here / '..' / 'pyeco' / 'libpyeco.dylib') path;
+    
+        Init => (
+            std os type
+                ~ ifLinux: [ ^ InitLinux ]
+                ~ ifMacOS: [ ^ InitMac   ].
+            'PyEco is not supported on this platform' throw.
         );
     };
 
@@ -72,8 +83,8 @@
     RunSimpleString: string => (lib PyRun_SimpleString yes) value(string);
 
     Init => (
-        lib Init: 'libpython3.11.so'.
-        (lib Py_Initialize yes) value.
+        lib Init.
+        (lib PyEco_Initialize yes) value.
       ^ self
     );
 }
