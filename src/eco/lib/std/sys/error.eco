@@ -9,7 +9,41 @@
 
     own InternalBasicError = #=std/sys/error/InternalBasicError: {
         static with inherited _ = #<:std/Singleton>;
+        with inherited ErrorTrait = #<:std/sys/error/ErrorTrait>;
 
         writeOn: w => w << 'an internal error';
     };
+
+    own UserError = #=std/sys/error/UserError: {
+        static with inherited _ = #<:std/Singleton>;
+
+        message <- No;
+
+        with inherited trait = {
+            static with inherited _ = #<:std/Trait>;
+            with inherited ErrorTrait = #<:std/sys/error/ErrorTrait>;
+
+            initWithMessage: _message => (
+                message <- Yes: _message.
+              ^ self;
+            );
+
+            writeOn: w => (
+                w << 'a user error'.
+                message yes: [ :msg |
+                    w << '(' << msg << ')'
+                ].
+            );
+        };
+    };
+
+    ThrowMessage: message => (
+        (UserError clone) initWithMessage: message
+            ~ throw
+    );
+
+    ThrowObject: object => (
+        (UserError clone) initWithMessage: object
+            ~ throw
+    );
 }
