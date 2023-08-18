@@ -23,7 +23,7 @@
         );
 
         handleScrollX: sx Y: sy At: point HandMorph: hand => (
-            scrollYByPixels: (sy * 15).
+            scrollYByPixels: (sy * 25).
           ^ true
         );
 
