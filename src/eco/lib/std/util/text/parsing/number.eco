@@ -1,5 +1,5 @@
 
-#=std/text/parsing/number: {
+#=std/util/text/parsing/number: {
     static with inherited parent = #<:std/Module>;
 
     protected own Base10Transformer = {

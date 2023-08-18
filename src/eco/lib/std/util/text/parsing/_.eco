@@ -1,0 +1,6 @@
+
+#=std/util/text/parsing: {
+    static with inherited _ = #<:std/Module>;
+    
+    number = #<:std/util/text/parsing/number>;
+}

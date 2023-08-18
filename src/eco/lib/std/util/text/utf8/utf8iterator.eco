@@ -1,5 +1,5 @@
 
-#=std/text/utf8/UTF8Iterator: {
+#=std/util/text/utf8/UTF8Iterator: {
     static with inherited parent = #<:std/Clonable>;
 
     protected iterator;

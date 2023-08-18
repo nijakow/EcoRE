@@ -1,0 +1,8 @@
+
+#=std/util/text: {
+    static with inherited _ = #<:std/Module>;
+    
+    parsing = #<:std/util/text/parsing>;
+    utf8 = #<:std/util/text/utf8>;
+    writing = #<:std/util/text/writing>;
+}

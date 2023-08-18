@@ -1,5 +1,5 @@
 
-#=std/text/writing/NumberWriter: {
+#=std/util/text/writing/NumberWriter: {
     static with inherited _ = #<:std/Module>;
     
     protected own Base10Transformer = {

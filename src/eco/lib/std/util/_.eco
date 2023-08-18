@@ -89,6 +89,8 @@
 
     traits = #<:std/util/traits>;
 
+    text = #<:std/util/text>;
+
     newArray(...) => #'ecosphere.ecore.object.array.array'(...);
     newArray: size => #'ecosphere.ecore.object.array.new'(size);
     newBlob:  size => #'ecosphere.ecore.object.blob.new'(size);

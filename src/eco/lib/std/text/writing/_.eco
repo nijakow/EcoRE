@@ -1,6 +1,0 @@
-
-#=std/text/writing: {
-    static with inherited _ = #<:std/Module>;
-    
-    NumberWriter = #<:std/text/writing/NumberWriter>;
-}
