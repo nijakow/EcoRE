@@ -39,6 +39,11 @@
           ^ true
         );
 
+        handleScrollX: sx Y: sy At: point HandMorph: hand => (
+            position: (position + (sy / 25.0)).
+          ^ true
+        );
+
         handleKey: key At: point HandMorph: hand => (
             key ifScrollUp:   [ position: position - 0.1. ^ true ].
             key ifScrollDown: [ position: position + 0.1. ^ true ].
