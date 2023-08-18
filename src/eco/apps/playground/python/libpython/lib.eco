@@ -8,12 +8,16 @@
     PyModuleObject => PyObject;
     PyUnicodeObject => PyObject;
 
-    PyType_Type   <- No,
-    PyModule_Type <- No,
+    Py_None <- No;
+
+    PyType_Type    <- No,
+    PyModule_Type  <- No,
     PyUnicode_Type <- No;
 
     PyEco_Initialize <- No,
     PyEco_Finalize   <- No;
+
+    PyEco_IsNone <- No;
 
     Py_IncRef <- No,
     Py_DecRef <- No;
@@ -23,7 +27,8 @@
     PyImport_ImportModule <- No,
     PyModule_New <- No;
 
-    PyUnicode_FromString <- No;
+    PyUnicode_FromString       <- No,
+    PyEco_PyUnicode_GrabString <- No;
 
     PyRun_SimpleString <- No;
 
@@ -45,19 +50,24 @@
         PyEco_Initialize <- Function: #'PyEco_Initialize' Type: ((ffi types void) function()).
         PyEco_Finalize   <- Function: #'PyEco_Finalize' Type: ((ffi types void) function()).
 
+        Py_None <- Yes: ((Function: #'PyEco_GetNone' Type: ((PyObject pointer) function())) yes value()).
+
         PyType_Type   <- Symbol: #'PyType_Type'.
         PyModule_Type <- Symbol: #'PyModule_Type'.
         PyUnicode_Type <- Symbol: #'PyUnicode_Type'.
 
+        PyEco_IsNone <- Function: #'PyEco_IsNone' Type: ((ffi types bool) function(PyObject pointer)).
+
         Py_IncRef <- Function: #'Py_IncRef' Type: ((ffi types void) function(PyObject pointer)).
         Py_DecRef <- Function: #'Py_DecRef' Type: ((ffi types void) function(PyObject pointer)).
 
-        PyEco_TypeCheck <- Function: #'PyEco_TypeCheck' Type: ((ffi types int) function(PyObject pointer, PyTypeObject pointer)).
+        PyEco_TypeCheck <- Function: #'PyEco_TypeCheck' Type: ((ffi types bool) function(PyObject pointer, PyTypeObject pointer)).
 
         PyImport_ImportModule <- Function: #'PyImport_ImportModule' Type: ((PyModuleObject pointer) function(ffi types string)).
         PyModule_New <- Function: #'PyModule_New' Type: ((PyModuleObject pointer) function(ffi types string)).
 
         PyUnicode_FromString <- Function: #'PyUnicode_FromString' Type: ((PyUnicodeObject pointer) function(ffi types string)).
+        PyEco_PyUnicode_GrabString <- Function: #'PyEco_PyUnicode_GrabString' Type: ((ffi types string) function(PyUnicodeObject pointer)).
 
         PyRun_SimpleString <- Function: #'PyRun_SimpleString' Type: ((ffi types int) function(ffi types string)).
 

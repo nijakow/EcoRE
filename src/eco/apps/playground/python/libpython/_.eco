@@ -9,6 +9,7 @@
     Init => (
         lib Init.
         (lib PyEco_Initialize yes) value.
+        objects Init.
       ^ self
     );
 }

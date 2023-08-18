@@ -24,3 +24,31 @@ bool PyEco_TypeCheck(PyObject* obj, PyTypeObject* type)
 
     return PyObject_TypeCheck(obj, type);
 }
+
+
+PyObject* PyEco_GetNone()
+{
+    return Py_None;
+}
+
+
+bool PyEco_IsNone(PyObject* obj)
+{
+    return obj == Py_None;
+}
+
+bool PyEco_IsTrue(PyObject* obj)
+{
+    return obj == Py_True;
+}
+
+bool PyEco_IsFalse(PyObject* obj)
+{
+    return obj == Py_False;
+}
+
+
+const char* PyEco_PyUnicode_GrabString(PyObject* unicode)
+{
+    return PyUnicode_AsUTF8(unicode);
+}
