@@ -1,16 +1,27 @@
 
-    {
-        static with inherited _ = std Clonable;
-        with inherited own FrameMorph = $ FrameMorph;
+{
+    static with inherited _ = std Clonable;
+    with inherited own FrameMorph = $ FrameMorph;
 
-        with inherited trait = {
-            init => (
-                $(FrameMorph) init.
-              ^ self
-            );
+    with inherited trait = {
+        init => (
+            $(FrameMorph) init.
+          ^ self
+        );
 
-            handleClick: click At: point HandMorph: hand => ( hand grab: self. ^ true );
+        handleClick: click At: point HandMorph: hand => ( hand grab: self. ^ true );
 
-            writeOn: w => w << 'a draggable morph';
-        };
-    }
+        handleScrollX: sx Y: sy At: point HandMorph: hand => (
+            (xLayout isRigid) if: [
+                rigidWidth: (width + (25 * sx)).
+            ].
+            (yLayout isRigid) if: [
+                rigidHeight: (height + (25 * sy)).
+            ].
+            layoutChanged.
+          ^ true
+        );
+
+        writeOn: w => w << 'a draggable morph';
+    };
+}

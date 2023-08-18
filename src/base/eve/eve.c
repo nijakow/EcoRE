@@ -497,11 +497,19 @@ Eve_UInt Eve_RenderState_GetEventMouseButtonID(struct Eve_RenderState* self) {
 }
 
 Eve_Int Eve_RenderState_GetEventMouseScrollX(struct Eve_RenderState* self) {
-    return self->event.wheel.x;
+    if (!(SDL_GetModState() & KMOD_LSHIFT)) {
+        return self->event.wheel.x;
+    } else {
+        return self->event.wheel.y;
+    }
 }
 
 Eve_Int Eve_RenderState_GetEventMouseScrollY(struct Eve_RenderState* self) {
-    return self->event.wheel.y;
+    if (!(SDL_GetModState() & KMOD_LSHIFT)) {
+        return self->event.wheel.y;
+    } else {
+        return self->event.wheel.x;
+    }
 }
 
 Eve_UInt Eve_RenderState_GetEventKeySym(struct Eve_RenderState* self) {
