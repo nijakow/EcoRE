@@ -62,3 +62,30 @@ int PyEco_PyTuple_GrabSize(PyObject* tuple)
 {
     return PyTuple_Size(tuple);
 }
+
+
+PyObject* PyEco_CallMethodTupleArgs(PyObject* obj, const char* method, PyObject* args)
+{
+    size_t     tuple_args;
+    size_t     i;
+    PyObject*  name;
+    PyObject*  result;
+
+    name = PyUnicode_FromString(method);
+
+    tuple_args = PyTuple_Size(args);
+
+    PyObject*  arglist[tuple_args + 1];
+
+    arglist[0] = obj;
+
+    for (i = 0; i < tuple_args; i++) {
+        arglist[i + 1] = PyTuple_GetItem(args, i);
+    }
+
+    result = PyObject_VectorcallMethod(name, arglist, tuple_args + 1, NULL);
+
+    Py_DECREF(name);
+
+    return result;
+}

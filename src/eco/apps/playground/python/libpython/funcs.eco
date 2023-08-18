@@ -33,6 +33,7 @@
     Object: object Attribute: name => (lib PyObject_GetAttrString yes) value(object, name);
     Object: object Attribute: name SetTo: value => (lib PyObject_SetAttrString yes) value(object, name, value);
     Object: object CallWithArgs: args => (lib PyObject_CallObject yes) value(object, args);
+    Object: object CallMethod: method WithArgs: args => (lib PyEco_CallMethodTupleArgs yes) value(object, method, args);
 
     RunSimpleString: string => (lib PyRun_SimpleString yes) value(string);
 }

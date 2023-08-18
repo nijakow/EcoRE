@@ -37,7 +37,12 @@
                 | argsTuple <- libpython objects Tuple: args |
               ^ (libpython objects) Object: ((libpython funcs) Object: ptr CallWithArgs: (argsTuple ptr)).
             );
-            call(args) => call: std util newArray(args);
+            call(...) => call: std util newArray(...);
+            callMethod: name Args: args => (
+                | argsTuple <- libpython objects Tuple: args |
+              ^ (libpython objects) Object: ((libpython funcs) Object: ptr CallMethod: name WithArgs: (argsTuple ptr)).
+            );
+            callMethod(name, ...) => callMethod: name Args: std util newArray(...);
 
             pull => self;
 
@@ -168,7 +173,7 @@
         array forEach: [ :i :each | tuple at: i put: each ].
       ^ tuple
     );
-    Tuple(args) => Tuple: std util newArray(args);
+    Tuple(...) => Tuple: std util newArray(...);
 
     Object: ptr => (
         (libpython funcs IsNone: ptr) if: [ ^ PyNone ].

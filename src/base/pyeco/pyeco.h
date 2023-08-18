@@ -21,4 +21,7 @@ const char* PyEco_PyUnicode_GrabString(PyObject* unicode);
 
 int PyEco_PyTuple_GrabSize(PyObject* tuple);
 
+
+PyObject* PyEco_CallMethodTupleArgs(PyObject* obj, const char* method, PyObject* args);
+
 #endif
