@@ -25,10 +25,14 @@
     NewUnicodeFromEcoString: string => (lib PyUnicode_FromString yes) value(string);
     UnicodeGrabEcoString: unicode => (lib PyEco_PyUnicode_GrabString yes) value(unicode);
 
-    NewTuple: size => objects Object: ((lib PyTuple_New yes) value(size));
+    NewTuple: size => (lib PyTuple_New yes) value(size);
     TupleGrabSize: tuple => (lib PyEco_PyTuple_GrabSize yes) value(tuple);
     Tuple: tuple At: index => (lib PyTuple_GetItem yes) value(tuple, index);
     Tuple: tuple At: index Put: value => (lib PyTuple_SetItem yes) value(tuple, index, value);
+
+    Object: object Attribute: name => (lib PyObject_GetAttrString yes) value(object, name);
+    Object: object Attribute: name SetTo: value => (lib PyObject_SetAttrString yes) value(object, name, value);
+    Object: object CallWithArgs: args => (lib PyObject_CallObject yes) value(object, args);
 
     RunSimpleString: string => (lib PyRun_SimpleString yes) value(string);
 }

@@ -28,6 +28,17 @@
               ^ self
             );
 
+            attribute: name => libpython objects Object: ((libpython funcs) Object: ptr Attribute: name);
+            attribute: name put: value => (
+                ((libpython funcs) Object: ptr Attribute: name Put: (value ptr)).
+              ^ self
+            );
+            call: args => (
+                | argsTuple <- libpython objects Tuple: args |
+              ^ (libpython objects) Object: ((libpython funcs) Object: ptr CallWithArgs: (argsTuple ptr)).
+            );
+            call(args) => call: std util newArray(args);
+
             pull => self;
 
             finalize => decref;
@@ -100,7 +111,7 @@
 
             pull => (libpython funcs LongGrabEcoInt: ptr);
 
-            writeOn: w => w << 'a PyLong';
+            writeOn: w => w << 'a PyLong(' << (self pull) << ')';
         };
     };
 
@@ -152,6 +163,13 @@
         };
     };
 
+    Tuple: array => (
+        | tuple <- (PyTuple clone) initWithPtr: (libpython funcs NewTuple: (array size)) |
+        array forEach: [ :i :each | tuple at: i put: each ].
+      ^ tuple
+    );
+    Tuple(args) => Tuple: std util newArray(args);
+
     Object: ptr => (
         (libpython funcs IsNone: ptr) if: [ ^ PyNone ].
         (libpython funcs IsLong: ptr) if: [ ^ (PyLong clone) initWithPtr: ptr ].
@@ -165,6 +183,7 @@
     From: ecoobj => (
         (ecoobj isInt)    if: [ ^ Object: (libpython funcs NewLongFromEcoInt: ecoobj) ].
         (ecoobj isString) if: [ ^ Object: (libpython funcs NewUnicodeFromEcoString: ecoobj) ].
+        (ecoobj isArray)  if: [ ^ Tuple: ecoobj ].
         'Can not convert Eco object to Python object!' throw.
     );
 

@@ -43,6 +43,10 @@
     PyTuple_GetItem        <- No,
     PyTuple_SetItem        <- No;
 
+    PyObject_GetAttrString <- No,
+    PyObject_SetAttrString <- No,
+    PyObject_CallObject    <- No;
+
     PyRun_SimpleString <- No;
 
     protected Symbol: name => (
@@ -92,6 +96,10 @@
         PyEco_PyTuple_GrabSize <- Function: #'PyEco_PyTuple_GrabSize' Type: ((ffi types int) function(PyTupleObject pointer)).
         PyTuple_GetItem <- Function: #'PyTuple_GetItem' Type: ((PyObject pointer) function(PyTupleObject pointer, ffi types size)).
         PyTuple_SetItem <- Function: #'PyTuple_SetItem' Type: ((ffi types int) function(PyTupleObject pointer, ffi types size, PyObject pointer)).
+
+        PyObject_GetAttrString <- Function: #'PyObject_GetAttrString' Type: ((PyObject pointer) function(PyObject pointer, ffi types string)).
+        PyObject_SetAttrString <- Function: #'PyObject_SetAttrString' Type: ((ffi types int) function(PyObject pointer, ffi types string, PyObject pointer)).
+        PyObject_CallObject    <- Function: #'PyObject_CallObject'    Type: ((PyObject pointer) function(PyObject pointer, PyTupleObject pointer)).
 
         PyRun_SimpleString <- Function: #'PyRun_SimpleString' Type: ((ffi types int) function(ffi types string)).
 
