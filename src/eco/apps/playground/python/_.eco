@@ -1,0 +1,6 @@
+
+{
+    static with inherited _ = std Module;
+
+    own libpython = (here / 'libpython.eco') importIn: self;
+}
