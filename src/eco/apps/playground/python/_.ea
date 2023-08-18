@@ -1,0 +1,15 @@
+
+{
+    static with inherited _ = std Module;
+    with app = $;
+
+    own libpython = (here / 'libpython' / '_.eco') importIn: self;
+
+    Main => (
+        libpython Init.
+
+        (framework actions open) OutlinerForObject: libpython.
+        
+      ^ self
+    );
+}

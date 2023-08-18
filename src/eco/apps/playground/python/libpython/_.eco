@@ -20,7 +20,8 @@
 
         PyEco_TypeCheck <- No.
 
-        PyImport_ImportModule <- No;
+        PyImport_ImportModule <- No,
+        PyModule_New <- No;
 
         PyRun_SimpleString <- No;
 
@@ -50,6 +51,7 @@
             PyEco_TypeCheck <- Function: #'PyEco_TypeCheck' Type: ((ffi types int) function(PyObject pointer, PyTypeObject pointer)).
 
             PyImport_ImportModule <- Function: #'PyImport_ImportModule' Type: ((PyObject pointer) function(ffi types string)).
+            PyModule_New <- Function: #'PyModule_New' Type: ((PyObject pointer) function(ffi types string)).
 
             PyRun_SimpleString <- Function: #'PyRun_SimpleString' Type: ((ffi types int) function(ffi types string)).
 
@@ -74,13 +76,7 @@
     };
 
     own objects = (here / 'objects.eco') importIn: self;
-
-
-    IsModule: ptr => ((lib PyObject_TypeCheck yes) value(ptr, (lib PyModule_Type yes))) != 0;
-
-    ImportModule: name => objects Object: ((lib PyImport_ImportModule yes) value(name));
-
-    RunSimpleString: string => (lib PyRun_SimpleString yes) value(string);
+    own funcs   = (here / 'funcs.eco')   importIn: self;
 
     Init => (
         lib Init.

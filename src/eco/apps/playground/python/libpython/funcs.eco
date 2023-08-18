@@ -1,0 +1,15 @@
+
+{
+    static with inherited _ = std Module;
+    protected with libpython <- $package;
+
+    IncRef: ptr => (lib Py_IncRef yes) value(ptr);
+    DecRef: ptr => (lib Py_DecRef yes) value(ptr);
+
+    IsModule: ptr => ((lib PyEco_TypeCheck yes) value(ptr, (lib PyModule_Type yes))) != 0;
+
+    ImportModule: name => objects Object: ((lib PyImport_ImportModule yes) value(name));
+    NewModule: name => objects Object: ((lib PyModule_New yes) value(name));
+
+    RunSimpleString: string => (lib PyRun_SimpleString yes) value(string);
+}

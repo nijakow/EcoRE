@@ -1,6 +1,7 @@
 
 {
     static with inherited _ = std Module;
+    protected libpython <- $package;
 
     own PyObject = {
         static with inherited _ = std Clonable;
@@ -18,7 +19,7 @@
             );
 
             incref => (
-                (libpython lib Py_IncRef yes) value(ptr).
+                libpython funcs IncRef: ptr.
               ^ self
             );
 
@@ -27,7 +28,7 @@
               ^ self
             );
 
-            isModule => libpython IsModule: ptr;
+            pull => self;
 
             finalize => decref;
 
@@ -35,5 +36,24 @@
         };
     };
 
-    Object: ptr => (PyObject clone) initWithPtr: ptr;
+    own PyModule = {
+        static with inherited _ = std Clonable;
+        with inherited own PyObject = $ PyObject;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            
+            initWithPtr: _ptr => (
+                $(PyObject) initWithPtr: _ptr.
+              ^ self
+            );
+
+            writeOn: w => w << 'a PyModule';
+        };
+    };
+
+    Object: ptr => (
+        (libpython funcs IsModule: ptr) if: [ ^ (PyModule clone) initWithPtr: ptr ].
+      ^ (PyObject clone) initWithPtr: ptr
+    );
 }
