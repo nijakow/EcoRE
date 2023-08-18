@@ -11,9 +11,7 @@
 
     with packages = {
         with std = #<:std>;
-        with interfaces = #<:interfaces>;
         lang = #<:lang>;
-        ecosphere = #<:ecosphere>;
     };
 
     writeOn: writer => writer << 'lobby';
