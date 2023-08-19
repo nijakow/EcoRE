@@ -27,12 +27,20 @@
 - Add support for building UI through drag&drop
 - Add support for creating slots in outliners
 
-## Miscellaneous
+## Language Infrastructure
  - Rework reflection, improve `Mirror`s
  - Type system
    - Introduce `Concept`s
    - `%[]` interfaces should be reworked
    - "EcoSense": Ask the system about refactoring info
+ - Compiler and Optimizer
+   - Implement a new, full and flexible AST
+   - Update the `Decompiler` to analyze `cast:` calls
+   - Implement AST rewriting for jump instructions and typechecks
+   - Wire "EcoSense" into the optimizer
+   - Set up a backend for code generation (should support live-patching)
+
+## Miscellaneous
  - `WeakSet`s, `WeakMap`s, `NotificationList`s
 
 ## Applications and Tools
