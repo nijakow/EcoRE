@@ -26,7 +26,6 @@
 
     build => (
         |
-            ui  <- self ui builder,
             app <- $battery
         |
 

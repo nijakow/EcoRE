@@ -50,7 +50,7 @@
             static framework = $package;
 
             Build: block => (
-                block value(framework ui builder)
+                block value(framework ui)
             );
 
             BuildAndOpen: block => (
