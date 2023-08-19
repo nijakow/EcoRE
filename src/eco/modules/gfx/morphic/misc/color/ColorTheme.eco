@@ -1,0 +1,11 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+        protected morphic = $;
+
+        writeOn: w => w << 'a morphic color theme';
+    };
+}

@@ -1,0 +1,7 @@
+
+{
+    static with inherited _ = std Module;
+
+    own Color      = (here / 'Color.eco')      importIn: $;
+    own ColorTheme = (here / 'ColorTheme.eco') importIn: $;
+}
