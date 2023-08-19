@@ -1,0 +1,41 @@
+# List of TODOs for Eco and EcoRE
+
+## System
+- `Fiber`s as first-class objects
+  - `synchronized: [ ... ]`
+- Files and streams
+  - Restructure `Path`
+  - `File` objects
+  - `Stream` objects
+  - Scheduler support for file descriptors, networking, ...
+
+## UI
+- Rework `ui builder`:
+  - Add a `WindowBuilder`, remove `Window(w, h, ...)` and others
+  - Rework resizing operations of windows
+- Add a color theme
+- Rework morphs (make them more modular)
+  - Implement `Listener` properly
+  - Refactor morph methods
+  - Add support for
+- Implement a presentation mechanism (similar to Lisp Machines)
+- Add object representations (as an addition to outliners, --> [presentations]())
+- Implement a mechanism for Drag&Drop
+  - `HandMorph grab: [Morph]` should be converted into `HandMorph grab: [Morph] meta: [Metadata]` or
+    maybe even `HandMorph grab: [DragDropInfo]`
+- Add support for dragging and dropping object instances around
+- Add support for building UI through drag&drop
+- Add support for creating slots in outliners
+
+## Miscellaneous
+ - Rework reflection, improve `Mirror`s
+ - Type system
+   - Introduce `Concept`s
+   - `%[]` interfaces should be reworked
+   - "EcoSense": Ask the system about refactoring info
+ - `WeakSet`s, `WeakMap`s, `NotificationList`s
+
+## Applications and Tools
+ - Better Core Sampler
+ - Debugger
+ - Frontend to "EcoSense"
