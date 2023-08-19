@@ -19,6 +19,7 @@
   - Implement `Listener` properly
   - Refactor morph methods
   - Add support for
+- Decouple `eve`, implement `fonts`
 - Implement a presentation mechanism (similar to Lisp Machines)
 - Add object representations (as an addition to outliners, --> [presentations]())
 - Implement a mechanism for Drag&Drop
