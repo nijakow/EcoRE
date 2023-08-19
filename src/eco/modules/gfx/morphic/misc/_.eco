@@ -1,6 +1,7 @@
 
 {
     static with inherited _ = std Module;
+    with morphic = $;
 
-    own color = (here / 'color' / '_.eco') importIn: $;
+    own color = (here / 'color' / '_.eco') importIn: self;
 }

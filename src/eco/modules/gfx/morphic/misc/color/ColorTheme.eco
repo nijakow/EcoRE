@@ -2,9 +2,13 @@
 {
     static with inherited _ = std Clonable;
 
+    "TODO"
+
     with inherited trait = {
         static with inherited _ = std Trait;
-        protected morphic = $;
+        protected morphic = $package morphic;
+
+        "TODO"
 
         writeOn: w => w << 'a morphic color theme';
     };
