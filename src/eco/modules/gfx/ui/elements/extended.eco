@@ -2,14 +2,17 @@
 {
     static with inherited _ = std Trait;
 
+    ui = $;
+    morphic => ui morphic;
+
     ShrinkWrap(element) => (
-        element ~ xLayout: layouts ShrinkWrap
-                ~ yLayout: layouts ShrinkWrap
+        element ~ xLayout: ui layouts ShrinkWrap
+                ~ yLayout: ui layouts ShrinkWrap
     );
 
     Flexible(element) => (
-        element ~ xLayout: layouts Flexible
-                ~ yLayout: layouts Flexible
+        element ~ xLayout: ui layouts Flexible
+                ~ yLayout: ui layouts Flexible
     );
 
     Spacer => (morphic morphs Morph) new;
@@ -18,7 +21,7 @@
     ColorMorph(r, g, b) => (morphic morphs ColorMorph) new ~ r: r g: g b: b;
 
     Center(element) => (
-      ^ VBox( Spacer, HBox(Spacer, element, Spacer) ~ yLayout: layouts ShrinkWrap, Spacer )
+      ^ ui VBox( Spacer, ui HBox(Spacer, element, Spacer) ~ yLayout: ui layouts ShrinkWrap, Spacer )
     );
 
     Scrollable(element) => (
@@ -30,13 +33,13 @@
         content add: element.
         bar notifyTo: content.
 
-      ^ HBox(Clipped(content), bar)
+      ^ ui HBox(ui Clipped(content), bar)
     );
 
     TextField: text => (
-        | lines <- VBox |
+        | lines <- ui VBox |
         text splitOnChar: $'newline'
-          ~ do: [ :line | lines add: (Label: line) ].
+          ~ do: [ :line | lines add: (ui Label: line) ].
       ^ ShrinkWrap(lines)
     );
 
@@ -49,33 +52,33 @@
 
     Editor: text OnAccept: onaccept OnCancel: oncancel => (
         | editor <- Editor: text |
-      ^ VBox(
+      ^ ui VBox(
           Scrollable(Flexible(editor)),
-          HBox(
-              Button(Margin(3, Label: 'Accept'), $[ :(editor, onaccept) :sender | onaccept value(editor) ] bind(editor, onaccept))
-                ~ xLayout: layouts Flexible
-                ~ yLayout: layouts ShrinkWrap,
-              Button(Margin(3, Label: 'Cancel'), $[ :(editor, oncancel) :sender | oncancel value(editor) ] bind(editor, oncancel))
-                ~ xLayout: layouts Flexible
-                ~ yLayout: layouts ShrinkWrap
-          ) ~ xLayout: layouts Flexible
-            ~ yLayout: layouts ShrinkWrap
+          ui HBox(
+              ui Button(ui Padding(3, ui Label: 'Accept'), $[ :(editor, onaccept) :sender | onaccept value(editor) ] bind(editor, onaccept))
+                ~ xLayout: ui layouts Flexible
+                ~ yLayout: ui layouts ShrinkWrap,
+              ui Button(ui Padding(3, ui Label: 'Cancel'), $[ :(editor, oncancel) :sender | oncancel value(editor) ] bind(editor, oncancel))
+                ~ xLayout: ui layouts Flexible
+                ~ yLayout: ui layouts ShrinkWrap
+          ) ~ xLayout: ui layouts Flexible
+            ~ yLayout: ui layouts ShrinkWrap
       )
     );
 
     DocumentEditor: doc OnAccept: onaccept OnCancel: oncancel => (
         | editor <- DocumentEditor: doc |
-      ^ VBox(
-          Scrollable(Flexible(Margin(5, editor))),
-          HBox(
-              Button(Margin(3, HBox(Spacer, Label: 'Accept', Spacer)), $[ :(editor, onaccept) :sender | onaccept value(editor) ] bind(editor, onaccept))
-                ~ xLayout: layouts Flexible
-                ~ yLayout: layouts ShrinkWrap,
-              Button(Margin(3, HBox(Spacer, Label: 'Cancel', Spacer)), $[ :(editor, oncancel) :sender | oncancel value(editor) ] bind(editor, oncancel))
-                ~ xLayout: layouts Flexible
-                ~ yLayout: layouts ShrinkWrap
-          ) ~ xLayout: layouts Flexible
-            ~ yLayout: layouts ShrinkWrap
+      ^ ui VBox(
+          Scrollable(Flexible(ui Padding(5, editor))),
+          ui HBox(
+              ui Button(ui Padding(3, ui HBox(Spacer, ui Label: 'Accept', Spacer)), $[ :(editor, onaccept) :sender | onaccept value(editor) ] bind(editor, onaccept))
+                ~ xLayout: ui layouts Flexible
+                ~ yLayout: ui layouts ShrinkWrap,
+              ui Button(ui Padding(3, ui HBox(Spacer, ui Label: 'Cancel', Spacer)), $[ :(editor, oncancel) :sender | oncancel value(editor) ] bind(editor, oncancel))
+                ~ xLayout: ui layouts Flexible
+                ~ yLayout: ui layouts ShrinkWrap
+          ) ~ xLayout: ui layouts Flexible
+            ~ yLayout: ui layouts ShrinkWrap
       )
     );
 
@@ -84,7 +87,7 @@
     );
 
     Button(caption, action) => (
-      ^ ShrinkWrap(Stacked(
+      ^ ShrinkWrap(ui Stacked(
             (morphic morphs ButtonMorph) new ~ action: action,
             (morphic morphs FrameMorph) new,
             caption
@@ -92,7 +95,7 @@
     );
 
     ButtonWithColor(caption, color, action) => (
-      ^ ShrinkWrap(Stacked(
+      ^ ShrinkWrap(ui Stacked(
             (morphic morphs ButtonMorph) new ~ highlightColor: color ~ action: action,
             (morphic morphs FrameMorph) new,
             caption
@@ -101,16 +104,16 @@
 
     Minimized(window) => (
         Window(200, 100,
-            Button(Center(Label: 'Unminimize'),
+            ui Button(Center(ui Label: 'Unminimize'),
                     $[ :(minimized) :sender | (sender world yes) open: minimized ] bind(window)
-            ) ~ xLayout: layouts Flexible
-              ~ yLayout: layouts Flexible
+            ) ~ xLayout: ui layouts Flexible
+              ~ yLayout: ui layouts Flexible
         )
     );
 
     WithRebuilderDo: aBlock => (
         |
-            container <- VBox(),
+            container <- ui VBox(),
             rebuilder <- $[ :(builder, container, aBlock) | container replaceWith: (builder WithRebuilderDo: aBlock) ] bind(self, container, aBlock)
         |
         container add: (aBlock value(rebuilder)).
@@ -134,51 +137,51 @@
 
     UndecoratedWindow(content) => (
         Draggable(
-            Stacked(
-                Padding(10,
-                    Stacked(
+            ui Stacked(
+                ui Padding(10,
+                    ui Stacked(
                         content,
                         BackgroundColorMorph
                     ),
                 ),
                 BrightBackgroundColorMorph
             )
-        ) ~ xLayout: layouts ShrinkWrap
-          ~ yLayout: layouts ShrinkWrap
+        ) ~ xLayout: ui layouts ShrinkWrap
+          ~ yLayout: ui layouts ShrinkWrap
     );
 
     Window(w, h, content) => (
       | window <- (morphic morphs DraggableMorph) new |
       window
-          ~ add: Stacked(
-                VBox(
-                    HBox(Spacer,
-                        Stacked(
-                            HBox(
-                                Button(Margin(3, Label: ' _ '), $[ :(builder, window) :sender | (window world yes) open: (builder Minimized(window)). window unlink. ] bind(self, window)),
-                                ButtonWithColor(Margin(3, Label: ' X '), morphic R: 255 G: 0 B: 0, $[ :(window) :sender | window unlink ] bind(window))
-                            ) ~ xLayout: layouts ShrinkWrap
-                              ~ yLayout: layouts ShrinkWrap,
+          ~ add: ui Stacked(
+                ui VBox(
+                    ui HBox(Spacer,
+                        ui Stacked(
+                            ui HBox(
+                                ui Button(ui Padding(3, ui Label: ' _ '), $[ :(builder, window) :sender | (window world yes) open: (builder Minimized(window)). window unlink. ] bind(self, window)),
+                                ButtonWithColor(ui Padding(3, ui Label: ' X '), morphic R: 255 G: 0 B: 0, $[ :(window) :sender | window unlink ] bind(window))
+                            ) ~ xLayout: ui layouts ShrinkWrap
+                              ~ yLayout: ui layouts ShrinkWrap,
                             BackgroundColorMorph
-                        ) ~ xLayout: layouts ShrinkWrap
-                          ~ yLayout: layouts ShrinkWrap,
-                    ) ~ yLayout: layouts ShrinkWrap,
-                    Margin(10, Stacked(content, BackgroundColorMorph))
-                      ~ xLayout: layouts Flexible
-                      ~ yLayout: layouts Flexible,
-                    HBox(Spacer,
-                        Stacked(
-                            HBox(
-                                ShrinkWrap(Button(Label: ' ^ ', $[ :(window) :sender | window rigidHeight: (window height - 25). window layoutChanged. ] bind(window))),
-                                ShrinkWrap(Button(Label: ' V ', $[ :(window) :sender | window rigidHeight: (window height + 25). window layoutChanged. ] bind(window))),
-                                ShrinkWrap(Button(Label: ' < ', $[ :(window) :sender | window rigidWidth: (window width - 25). window layoutChanged. ] bind(window))),
-                                ShrinkWrap(Button(Label: ' > ', $[ :(window) :sender | window rigidWidth: (window width + 25). window layoutChanged. ] bind(window)))
-                            ) ~ xLayout: layouts ShrinkWrap
-                              ~ yLayout: layouts ShrinkWrap,
+                        ) ~ xLayout: ui layouts ShrinkWrap
+                          ~ yLayout: ui layouts ShrinkWrap,
+                    ) ~ yLayout: ui layouts ShrinkWrap,
+                    ui Padding(10, ui Stacked(content, BackgroundColorMorph))
+                      ~ xLayout: ui layouts Flexible
+                      ~ yLayout: ui layouts Flexible,
+                    ui HBox(Spacer,
+                        ui Stacked(
+                            ui HBox(
+                                ShrinkWrap(Button(ui Label: ' ^ ', $[ :(window) :sender | window rigidHeight: (window height - 25). window layoutChanged. ] bind(window))),
+                                ShrinkWrap(Button(ui Label: ' V ', $[ :(window) :sender | window rigidHeight: (window height + 25). window layoutChanged. ] bind(window))),
+                                ShrinkWrap(Button(ui Label: ' < ', $[ :(window) :sender | window rigidWidth: (window width - 25). window layoutChanged. ] bind(window))),
+                                ShrinkWrap(Button(ui Label: ' > ', $[ :(window) :sender | window rigidWidth: (window width + 25). window layoutChanged. ] bind(window)))
+                            ) ~ xLayout: ui layouts ShrinkWrap
+                              ~ yLayout: ui layouts ShrinkWrap,
                             ColorMorph(0, 42, 47)
-                        ) ~ xLayout: layouts ShrinkWrap
-                          ~ yLayout: layouts ShrinkWrap,
-                    ) ~ yLayout: layouts ShrinkWrap,
+                        ) ~ xLayout: ui layouts ShrinkWrap
+                          ~ yLayout: ui layouts ShrinkWrap,
+                    ) ~ yLayout: ui layouts ShrinkWrap,
                 ),
                 BrightBackgroundColorMorph,
           )

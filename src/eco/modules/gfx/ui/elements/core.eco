@@ -1,6 +1,9 @@
 
 {
     static with inherited _ = std Trait;
+    
+    ui = $;
+    morphic => ui morphic;
 
     VBox(...) => (
         | box <- (morphic morphs VBoxMorph) new |
@@ -20,12 +23,10 @@
       ^ box
     );
 
-    Margin(margin, element) => (
+    Padding(margin, element) => (
       ^ (morphic morphs MarginMorph) clone initWithMargin: margin
           ~ add: element
     );
-
-    Padding(padding, element) => Margin(padding, element);
 
     Framed(element) => (
       ^ (morphic morphs FrameMorph) new

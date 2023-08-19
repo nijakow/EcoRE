@@ -89,7 +89,7 @@
                             ui Spacer
                                 ~ xLayout: ui layouts Flexible
                                 ~ yLayout: ui layouts ShrinkWrap,
-                            ui Margin(10, (ui Label: 'Core Sampler')),
+                            ui Padding(10, (ui Label: 'Core Sampler')),
                             ui Spacer
                                 ~ xLayout: ui layouts Flexible
                                 ~ yLayout: ui layouts ShrinkWrap
@@ -100,7 +100,7 @@
                             kernel xRayDo: [ :morph |
                                 vbox add: (
                                     ui Button(
-                                        ui Margin(5, ui Label: (us Stringify: morph)),
+                                        ui Padding(5, ui Label: (us Stringify: morph)),
                                         $[ :(us, morph) :sender, :hand | us MenuForMorph: morph Hand: hand ] bind(us, morph)
                                     ) ~ yLayout: ui layouts ShrinkWrap
                                 )
@@ -109,10 +109,10 @@
                             kernel rebuilder: rebuild.
 
                             ui Scrollable(
-                                ui Margin(5, vbox)
+                                ui Padding(5, vbox)
                             )
                         ] bind(self, ui, kernel),
-                        ui Button(ui Margin(5, ui Label: 'Update'), $[ :(kernel) :sender | kernel update ] bind(kernel))
+                        ui Button(ui Padding(5, ui Label: 'Update'), $[ :(kernel) :sender | kernel update ] bind(kernel))
                             ~ xLayout: ui layouts Flexible
                             ~ yLayout: ui layouts ShrinkWrap
                     )

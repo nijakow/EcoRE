@@ -1,8 +1,9 @@
 
 {
     static with inherited _ = std Module;
-    with $battery = $;
+    
+    morphic <- $ morphic;
 
-    with           own base     = (here / 'base'     / '_.eco') importIn: self;
-    with inherited own elements = (here / 'elements' / '_.eco') importIn: self;
+    with own base     = (here / 'base'     / '_.eco') importIn: self;
+    with own elements = (here / 'elements' / '_.eco') importIn: self;
 }
