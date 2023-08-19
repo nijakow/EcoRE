@@ -1,0 +1,41 @@
+
+{
+    static with inherited _ = std Trait;
+
+    VBox(...) => (
+        | box <- (morphic morphs VBoxMorph) new |
+        std util newArray(...) do: [ :e | box add: e ].
+      ^ box
+    );
+
+    HBox(...) => (
+        | box <- (morphic morphs HBoxMorph) new |
+        std util newArray(...) do: [ :e | box add: e ].
+      ^ box
+    );
+
+    Stacked(...) => (
+        | box <- (morphic morphs StackMorph) new |
+        std util newArray(...) reverseDo: [ :e | box add: e ].
+      ^ box
+    );
+
+    Margin(margin, element) => (
+      ^ (morphic morphs MarginMorph) clone initWithMargin: margin
+          ~ add: element
+    );
+
+    Padding(padding, element) => Margin(padding, element);
+
+    Framed(element) => (
+      ^ (morphic morphs FrameMorph) new
+          ~ add: element
+    );
+
+    Clipped(element) => (
+      ^ (morphic morphs ClipMorph) new
+          ~ add: element
+    );
+
+    Label: text => (morphic morphs LabelMorph) new ~ text: (morphic Text: text);
+}

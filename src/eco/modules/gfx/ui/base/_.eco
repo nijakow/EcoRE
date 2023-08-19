@@ -1,0 +1,7 @@
+
+{
+    static with inherited _ = std Module;
+    
+    own make    = (here / 'make.eco') importIn: $;
+    own layouts = (here / 'layouts.eco') importIn: $;
+}

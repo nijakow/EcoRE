@@ -1,0 +1,7 @@
+
+{
+    static with inherited _ = std Trait;
+    static with $battery = $;
+
+    VBoxMorph => (morphic morphs VBoxMorph) new;
+}

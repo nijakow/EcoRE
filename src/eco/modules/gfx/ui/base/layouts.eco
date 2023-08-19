@@ -1,0 +1,9 @@
+
+{
+    static with inherited _ = std Module;
+    static with $battery = $;
+
+    Flexible   => morphic layouts Flexible;
+    ShrinkWrap => morphic layouts ShrinkWrap;
+    Rigid      => morphic layouts Rigid;
+}

@@ -1,0 +1,7 @@
+
+{
+    static with inherited _ = std Trait;
+
+    with inherited own core     = (here / 'core.eco') importIn: $;
+    with inherited own extended = (here / 'extended.eco') importIn: $;
+}
