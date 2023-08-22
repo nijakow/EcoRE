@@ -47,7 +47,7 @@
     driver = (here / 'driver.eco') importIn: self;
 
     Text: text => driver Text: text;
-    R: r G: g B: b => (misc color Color) clone initWithR: r G: g B: b;
+    R: r G: g B: b => (misc color) R: r G: g B: b;
 
     RunWithWidth: w Height: h App: app => driver RunWithWidth: w Height: h App: app;
 }

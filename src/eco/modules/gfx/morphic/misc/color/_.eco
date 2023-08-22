@@ -4,5 +4,7 @@
     with $battery = $;
 
     own Color      = (here / 'Color.eco')      importIn: self;
+    R: r G: g B: b => (Color clone) initWithR: r G: g B: b;
+
     own ColorTheme = (here / 'ColorTheme.eco') importIn: self;
 }
