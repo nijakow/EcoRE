@@ -1,7 +1,6 @@
 
     {
         static with inherited _ = std Clonable;
-        private morphic = $;
 
         width, height,
         protected offsets,
@@ -9,8 +8,12 @@
         protected eve,
         protected texture;
 
+        theme;
+
         with inherited trait = {
-            initWithEve: _eve X: _x Y: _y W: _w H: _h => (
+            protected morphic = $package;
+
+            initWithEve: _eve X: _x Y: _y W: _w H: _h Theme: _theme => (
                 eve         <- _eve.
                 width       <- _w.
                 height      <- _h.
@@ -18,11 +21,12 @@
                 offsets push: (morphic X: _x Y: _y).
                 clips       <- std util newStack.
                 clips push: (morphic X: _x Y: _y W: width H: height).
+                theme       <- _theme.
 
               ^ self
             );
 
-            initWithEve: _eve => initWithEve: _eve X: 0 Y: 0 W: (_eve CurrentWidth) H: (_eve CurrentHeight);
+            initWithEve: _eve => initWithEve: _eve X: 0 Y: 0 W: (_eve CurrentWidth) H: (_eve CurrentHeight) Theme: ((morphic misc color ColorTheme) new);
 
             offset => offsets top;
             pushOffset: point => offsets push: point;

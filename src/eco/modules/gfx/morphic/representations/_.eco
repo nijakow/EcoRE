@@ -8,15 +8,37 @@
             "TODO"
         );
 
-        writeOn: w => w << 'a presentation trait';
+        writeOn: w => w << 'a presentation';
     };
 
     own Default = {
-        static with inherited _ = std Clonable;
+        static with inherited _ = std Singleton;
         with inherited PresentationTrait = $ PresentationTrait;
 
         present: morph on: renderer => morph renderImplOn: renderer;
 
-        "No implementation"
+        writeOn: w => w << 'the default presentation';
     };
+
+    own Custom = {
+        static with inherited _ = std Clonable;
+        with inherited PresentationTrait = $ PresentationTrait;
+
+        protected func <- $[];
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithFunc: _func => (
+                func <- _func.
+              ^ self
+            );
+
+            present: morph on: renderer => func value(morph, renderer);
+
+            writeOn: w => w << 'a custom presentation';
+        };
+    };
+
+    Custom: func => (Custom clone) initWithFunc: func;
 }

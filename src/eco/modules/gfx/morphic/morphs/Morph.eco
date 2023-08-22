@@ -309,6 +309,12 @@
                 isChildRenderDirty <- false.
             );
             presentOn: renderer => representation present: self on: renderer;
+
+            representation: r => (
+                representation <- r.
+                renderDirty.
+              ^ self
+            );
             
             maybeRenderChildrenOn: renderer => (
                 isChildRenderDirty

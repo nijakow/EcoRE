@@ -132,8 +132,22 @@
       ^ morph
     );
 
-    BrightBackgroundColorMorph => ColorMorph(0, 120, 136);
-    BackgroundColorMorph => ColorMorph(0, 42, 47);
+    BrightBackgroundColorMorph => (
+        (morphic morphs Morph) new
+          ~ representation: (morphic representations Custom: $[ :morph :renderer |
+              renderer setColor: (renderer theme brightBackgroundColor).
+              renderer fillRectX: 0 Y: 0 W: (morph width) H: (morph height).
+              morph renderImplOn: renderer.
+          ])
+    );
+    BackgroundColorMorph => (
+        (morphic morphs Morph) new
+          ~ representation: (morphic representations Custom: $[ :morph :renderer |
+              renderer setColor: (renderer theme backgroundColor).
+              renderer fillRectX: 0 Y: 0 W: (morph width) H: (morph height).
+              morph renderImplOn: renderer.
+          ])
+    );
 
     UndecoratedWindow(content) => (
         Draggable(
