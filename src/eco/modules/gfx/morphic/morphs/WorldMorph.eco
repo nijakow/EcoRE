@@ -39,7 +39,7 @@
             );
 
             fullRender => (
-                renderer setR: 00 G: 42 B: 47.
+                renderer setColor: (renderer theme desktopColor).
                 renderer clear.
                 renderOn: renderer.
                 renderer present.
