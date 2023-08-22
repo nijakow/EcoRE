@@ -8,7 +8,7 @@ static struct Eco_Page* Eco_Heap_AllocateNewPageToEden(struct Eco_Heap* self)
         page = self->free_page_list;
         Eco_Page_ListUnlink(page);
     } else {
-        page = Eco_Page_New();
+        page = Eco_Page_New(self);
         if (page == NULL)
             return NULL;
     }

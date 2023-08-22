@@ -167,8 +167,8 @@ static inline bool Eco_Page_HasSpaceFor(struct Eco_Page* self, Eco_Size_t size)
     return Eco_Page_GetFreeSpace(self) >= size;
 }
 
-
-struct Eco_Page* Eco_Page_New();
+struct Eco_Heap;
+struct Eco_Page* Eco_Page_New(struct Eco_Heap* heap);
 void             Eco_Page_Delete(struct Eco_Page*);
 
 void*            Eco_Page_Alloc(struct Eco_Page*, Eco_Size_t);
