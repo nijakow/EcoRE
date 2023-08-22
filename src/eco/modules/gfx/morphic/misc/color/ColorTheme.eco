@@ -4,6 +4,7 @@
 
     backgroundColor       <- $ R: 0 G: 42 B: 47,
     brightBackgroundColor <- $ R: 0 G: 120 B: 136,
+    paneColor             <- $ R: 0 G: 42 B: 47,
     lineColor             <- $ R: 0 G: 120 B: 136,
     textColor             <- $ R: 0 G: 182 B: 203;
 
@@ -14,6 +15,7 @@
         
         backgroundColor: bg => backgroundColor <- bg;
         brightBackgroundColor: bg => brightBackgroundColor <- bg;
+        paneColor: c => paneColor <- c;
         lineColor: c => lineColor <- c;
         textColor: c => textColor <- c;
 

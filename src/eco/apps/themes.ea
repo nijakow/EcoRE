@@ -7,19 +7,21 @@
         static with inherited _ = std Module;
         color <- ($ ui morphic) misc color;
         
-        Background: background Accent: accent Line: line Text: text => (
+        Background: background Accent: accent Pane: pane Line: line Text: text => (
             (color ColorTheme new)
               ~ backgroundColor: background
               ~ brightBackgroundColor: accent
+              ~ paneColor: pane
               ~ lineColor: line
               ~ textColor: text
         );
+        Background: background Accent: accent Line: line Text: text => Background: background Accent: accent Pane: background Line: line Text: text;
         Background: background Accent: accent Text: text => Background: background Accent: accent Line: accent Text: text;
         Background: background Accent: accent => Background: background Accent: accent Text: accent;
 
         Default      <- ((self color) ColorTheme) new;
         Futuristic   <- ((self color) ColorTheme) new;
-        BlackOnWhite <- self Background: ((self color) R: 255 G: 255 B: 255) Accent: ((self color) R: 0 G: 0 B: 0) Line: ((self color) R: 0 G: 0 B: 0) Text: ((self color) R: 0 G: 0 B: 0);
+        BlackOnWhite <- self Background: ((self color) R: 255 G: 255 B: 255) Accent: ((self color) R: 255 G: 255 B: 255) Line: ((self color) R: 0 G: 0 B: 0) Text: ((self color) R: 0 G: 0 B: 0);
         Orange       <- self Background: ((self color) R: 255 G: 255 B: 255) Accent: ((self color) R: 255 G: 128 B: 0) Text: ((self color) R: 64 G: 32 B: 0);
         Pumpkin      <- self Background: ((self color) R: 0 G: 0 B: 0) Accent: ((self color) R: 255 G: 128 B: 0) Text: ((self color) R: 255 G: 255 B: 0);
         Violet       <- self Background: ((self color) R: 16 G: 0 B: 43) Accent: ((self color) R: 157 G: 78 B: 221) Text: ((self color) R: 224 G: 170 B: 255);

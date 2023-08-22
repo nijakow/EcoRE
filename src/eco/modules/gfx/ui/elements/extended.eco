@@ -168,6 +168,14 @@
               morph renderImplOn: renderer.
           ])
     );
+    PaneColorMorph => (
+        (morphic morphs Morph) new
+          ~ representation: (morphic representations Custom: $[ :morph :renderer |
+              renderer setColor: (renderer theme paneColor).
+              renderer fillRectX: 0 Y: 0 W: (morph width) H: (morph height).
+              morph renderImplOn: renderer.
+          ])
+    );
 
     UndecoratedWindow(content) => (
         Draggable(
@@ -196,7 +204,7 @@
                                 ButtonWithColor(ui Padding(3, ui Label: ' X '), morphic R: 255 G: 0 B: 0, $[ :(window) :sender | window unlink ] bind(window))
                             ) ~ xLayout: ui layouts ShrinkWrap
                               ~ yLayout: ui layouts ShrinkWrap,
-                            BackgroundColorMorph
+                            PaneColorMorph
                         ) ~ xLayout: ui layouts ShrinkWrap
                           ~ yLayout: ui layouts ShrinkWrap,
                     ) ~ yLayout: ui layouts ShrinkWrap,
@@ -217,7 +225,7 @@
                           ~ yLayout: ui layouts ShrinkWrap,
                     ) ~ yLayout: ui layouts ShrinkWrap,
                 ),
-                BrightBackgroundColorMorph,
+                ui Framed(BrightBackgroundColorMorph),
           )
           ~ rigidWidth: w
           ~ rigidHeight: h
