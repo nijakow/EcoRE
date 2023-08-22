@@ -2,11 +2,11 @@
 {
     static with inherited _ = std Clonable;
 
-    backgroundColor       <- $ R: 0 G: 42 B: 47,
-    brightBackgroundColor <- $ R: 0 G: 120 B: 136,
-    paneColor             <- $ R: 0 G: 42 B: 47,
-    lineColor             <- $ R: 0 G: 120 B: 136,
-    textColor             <- $ R: 0 G: 182 B: 203;
+    backgroundColor  <- $ R: 0 G: 42 B: 47,
+    accentColor      <- $ R: 0 G: 120 B: 136,
+    paneColor        <- $ R: 0 G: 42 B: 47,
+    lineColor        <- $ R: 0 G: 120 B: 136,
+    textColor        <- $ R: 0 G: 182 B: 203;
 
     with inherited trait = {
         static with inherited _ = std Trait;
@@ -14,7 +14,7 @@
         desktopColor => backgroundColor;
         
         backgroundColor: bg => backgroundColor <- bg;
-        brightBackgroundColor: bg => brightBackgroundColor <- bg;
+        accentColor: bg => accentColor <- bg;
         paneColor: c => paneColor <- c;
         lineColor: c => lineColor <- c;
         textColor: c => textColor <- c;

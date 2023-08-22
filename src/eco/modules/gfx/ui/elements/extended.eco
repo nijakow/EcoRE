@@ -155,7 +155,7 @@
     BrightBackgroundColorMorph => (
         (morphic morphs Morph) new
           ~ representation: (morphic representations Custom: $[ :morph :renderer |
-              renderer setColor: (renderer theme brightBackgroundColor).
+              renderer setColor: (renderer theme accentColor).
               renderer fillRectX: 0 Y: 0 W: (morph width) H: (morph height).
               morph renderImplOn: renderer.
           ])

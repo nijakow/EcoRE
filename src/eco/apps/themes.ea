@@ -10,7 +10,7 @@
         Background: background Accent: accent Pane: pane Line: line Text: text => (
             (color ColorTheme new)
               ~ backgroundColor: background
-              ~ brightBackgroundColor: accent
+              ~ accentColor: accent
               ~ paneColor: pane
               ~ lineColor: line
               ~ textColor: text
@@ -39,7 +39,7 @@
                                                         ui Framed(
                                                             ui HBox(
                                                                 ui ColorMorph: (theme backgroundColor) ~ rigidWidth: 15 ~ rigidHeight: 15,
-                                                                ui ColorMorph: (theme brightBackgroundColor) ~ rigidWidth: 15 ~ rigidHeight: 15,
+                                                                ui ColorMorph: (theme accentColor) ~ rigidWidth: 15 ~ rigidHeight: 15,
                                                                 ui ColorMorph: (theme lineColor) ~ rigidWidth: 15 ~ rigidHeight: 15,
                                                                 ui ColorMorph: (theme textColor) ~ rigidWidth: 15 ~ rigidHeight: 15
                                                             )
