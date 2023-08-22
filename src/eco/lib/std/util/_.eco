@@ -105,6 +105,7 @@
     newAlistWithComparator: comp => (#<:std/util> Map clone) initWithComparator: comp;
     newRangeFrom: start To: end => ((#<:std/util> Range) clone) initWithStart: start End: end;
     newPair(a, b) => ((#<:std/util> MutablePair) clone) initWithFirst: a Second: b;
+    newBox => (#<:std/util> Box) new;
 
     WriteIterable: it On: writer => (
         writer << '#('.
@@ -113,6 +114,7 @@
     );
 
     WeakBox: e => #'ecosphere.ecore.object.weakbox.new'() ~ set: e;
+    Box: e => (#<:std/util> Box) new: e;
 
     Stack = #<:std/util/Stack>;
     Queue = #<:std/util/Queue>;
@@ -124,4 +126,5 @@
     MutablePair = #<:std/util/MutablePair>;
     Map = #<:std/util/Map>;
     Range = #<:std/util/Range>;
+    Box = #<:std/util/Box>;
 }

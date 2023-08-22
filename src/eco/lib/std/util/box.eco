@@ -1,0 +1,26 @@
+
+#=std/util/Box: {
+    static with inherited _ = #<:std/Clonable>;
+
+    get;
+
+    with inherited trait = {
+        
+        init: _content => (
+            get <- _content.
+          ^ self
+        );
+
+        set: v => get <- v;
+
+        empty => (self == get);
+    
+        writeOn: w => (
+            (empty) if: [
+                w << 'an empty box'.
+            ] else: [
+                w << 'a box(' << get << ')'.
+            ]
+        );
+    };
+}

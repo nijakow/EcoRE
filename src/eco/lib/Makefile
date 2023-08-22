@@ -66,6 +66,7 @@ std/util/_.eco \
 std/util/comparators/_.eco \
 std/util/iterators/segmented/_.eco \
 std/util/iterators/_.eco \
+std/util/box.eco \
 std/util/collector.eco \
 std/util/map.eco \
 std/util/mutablepair.eco \
