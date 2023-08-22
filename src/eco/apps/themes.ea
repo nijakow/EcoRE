@@ -31,17 +31,37 @@
         EnchantedForest <- self Background: ((self color) R: 0 G: 0 B: 0) Accent: ((self color) R: 0 G: 255 B: 0) Text: ((self color) R: 255 G: 255 B: 255);
     };
 
+    protected AddTheme: theme Named: name To: cmb => (
+        cmb ~ button: $[ :(name, theme) :ui | ui Padding(5,
+                                                    ui HBox(
+                                                        ui Label: name,
+                                                        ui Spacer,
+                                                        ui Framed(
+                                                            ui HBox(
+                                                                ui ColorMorph: (theme backgroundColor) ~ rigidWidth: 15 ~ rigidHeight: 15,
+                                                                ui ColorMorph: (theme brightBackgroundColor) ~ rigidWidth: 15 ~ rigidHeight: 15,
+                                                                ui ColorMorph: (theme lineColor) ~ rigidWidth: 15 ~ rigidHeight: 15,
+                                                                ui ColorMorph: (theme textColor) ~ rigidWidth: 15 ~ rigidHeight: 15
+                                                            )
+                                                        ) ~ xLayout: ui layouts ShrinkWrap
+                                                          ~ yLayout: ui layouts ShrinkWrap
+                                                    )
+                                                ) ] bind(name, theme)
+                does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, theme).
+      ^ self
+    );
+
     Main => (
         (framework actions open) ui BuildAndOpenContextMenu: [ :cmb |
-            cmb ~ item: 'Futuristic' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes Futuristic)
-                ~ item: 'Black on White' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes BlackOnWhite)
-                ~ item: 'Orange' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes Orange)
-                ~ item: 'Pumpkin' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes Pumpkin)
-                ~ item: 'Violet' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes Violet)
-                ~ item: 'Lavender' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes Lavender)
-                ~ item: 'Fireplace' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes Fireplace)
-                ~ item: 'Ocean Breeze' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes OceanBreeze)
-                ~ item: 'Enchanted Forest' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes EnchantedForest)
+            AddTheme: (themes Futuristic) Named: 'Futuristic' To: cmb.
+            AddTheme: (themes BlackOnWhite) Named: 'Black on White' To: cmb.
+            AddTheme: (themes Orange) Named: 'Orange' To: cmb.
+            AddTheme: (themes Pumpkin) Named: 'Pumpkin' To: cmb.
+            AddTheme: (themes Violet) Named: 'Violet' To: cmb.
+            AddTheme: (themes Lavender) Named: 'Lavender' To: cmb.
+            AddTheme: (themes Fireplace) Named: 'Fireplace' To: cmb.
+            AddTheme: (themes OceanBreeze) Named: 'Ocean Breeze' To: cmb.
+            AddTheme: (themes EnchantedForest) Named: 'Enchanted Forest' To: cmb.
         ] 
     );
 }
