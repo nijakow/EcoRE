@@ -15,6 +15,8 @@
         static with inherited _ = std Clonable;
         with inherited PresentationTrait = $ PresentationTrait;
 
+        present: morph on: renderer => morph renderImplOn: renderer;
+
         "No implementation"
     };
 }

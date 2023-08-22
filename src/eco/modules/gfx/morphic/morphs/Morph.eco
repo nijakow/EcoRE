@@ -304,10 +304,11 @@
                 renderChildrenOn: renderer.
             );
             renderOn: renderer => (
-                renderImplOn: renderer.
+                presentOn: renderer.
                 isRenderDirty    <- false.
                 isChildRenderDirty <- false.
             );
+            presentOn: renderer => representation present: self on: renderer;
             
             maybeRenderChildrenOn: renderer => (
                 isChildRenderDirty
