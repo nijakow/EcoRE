@@ -13,7 +13,12 @@
         );
 
         item: name does: action => (
-            items add: (std util newPair(name, action)).
+            items add: (std util newPair($[ :(name) :ui | ui Padding(5, ui Label: name) ] bind(name), action)).
+          ^ self
+        );
+
+        button: func does: action => (
+            items add: (std util newPair(func, action)).
           ^ self
         );
 
@@ -29,7 +34,7 @@
                     "
                         TODO: When selecting an action, the menu should close...
                     "
-                    ui Button(ui Padding(5, ui Label: (item first)),
+                    ui Button((item first) value(ui),
                         $[ :(morph, func) ... |
                             morph unlink.
                             func value(...)
