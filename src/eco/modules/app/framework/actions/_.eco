@@ -123,4 +123,15 @@
                 ~ copyToClipboard: object
         );
     };
+
+    own ui = {
+        static with inherited _ = std Module;
+        static framework = $package;
+
+        ChangeTheme: theme => (
+            (framework context) DefaultRenderer
+                ~ theme: theme.
+          ^ self
+        );
+    };
 }

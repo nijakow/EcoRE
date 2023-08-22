@@ -15,6 +15,7 @@
 
         DefaultWorld => world yes;
         DefaultHand => DefaultWorld handMorph;
+        DefaultRenderer => DefaultWorld renderer;
     };
 
     writeOn: w => w << 'the framework';

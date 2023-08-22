@@ -3,7 +3,7 @@
         static with inherited _ = std Clonable;
         with inherited own Morph = $ Morph;
 
-        protected renderer,
+        renderer,
         handMorph;
 
         with inherited trait = {
