@@ -7,21 +7,4 @@
     R: r G: g B: b => (Color clone) initWithR: r G: g B: b;
 
     own ColorTheme = (here / 'ColorTheme.eco') importIn: self;
-
-    own themes = {
-        static with inherited _ = std Module;
-        
-        protected color = $;
-        
-        Background: background Accent: accent Text: text => (
-            (color ColorTheme new)
-              ~ backgroundColor: background
-              ~ brightBackgroundColor: accent
-              ~ lineColor: accent
-              ~ textColor: text
-        );
-        Background: background Accent: accent => Background: background Accent: accent Text: accent;
-
-        BlackOnWhite <- self Background: ($ R: 192 G: 192 B: 192) Accent: ($ R: 0 G: 0 B: 0);
-    };
 }

@@ -212,7 +212,7 @@
                                 ShrinkWrap(Button(ui Label: ' > ', $[ :(window) :sender | window rigidWidth: (window width + 25). window layoutChanged. ] bind(window)))
                             ) ~ xLayout: ui layouts ShrinkWrap
                               ~ yLayout: ui layouts ShrinkWrap,
-                            ColorMorph(0, 42, 47)
+                            BackgroundColorMorph
                         ) ~ xLayout: ui layouts ShrinkWrap
                           ~ yLayout: ui layouts ShrinkWrap,
                     ) ~ yLayout: ui layouts ShrinkWrap,
