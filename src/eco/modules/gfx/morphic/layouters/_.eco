@@ -150,24 +150,23 @@
 
             "Here we calculate the size of all flexible children."
             |
-                remainingSpace <- (shrunkConstraints dimensionForOrientation: orientation) - offset,
-                flexSize       <- (flexCount isZero) if: [ 0 ] else: [ remainingSpace / flexCount ],
-                position       <- 0
+                remainingSpace  <- (shrunkConstraints dimensionForOrientation: orientation) - offset,
+                flexSizeAsFloat <- (flexCount isZero) if: [ 0.0 ] else: [ remainingSpace / (flexCount asFloat) ],
+                flexSize        <- flexSizeAsFloat asInt,
+                position        <- 0.0
             |
 
             "This is the main positioning loop. We position all children along the main axis."
             morph childrenDo: [ :child |
                 "Move the child to the correct position."
-                child moveTo: (TransformedW: position H: 0).
+                child moveTo: (TransformedW: (position asInt) H: 0).
 
                 | childConstraints <- TransformedW: flexSize H: (child preferredSizeForOrientation: (orientation opposite) Constraint: (shrunkConstraints dimensionForOrientation: (orientation opposite))) |
 
                 "Now that we know the size distribution we can also layout the flexible children."
                 (Layout: child) isFlexible
-                  ~ if: [ child layoutWithConstraints: childConstraints ].
-                
-                "As before, we increment the position along the main axis."
-                position <- position + (child extentForOrientation: orientation).
+                  ~ if: [ child layoutWithConstraints: childConstraints. position <- position + flexSizeAsFloat. ]
+                  else: [ position <- position + (child extentForOrientation: orientation). ].
             ].
 
             "
