@@ -19,6 +19,7 @@
     SpacerW: w H: h => Spacer ~ rigidWidth: w ~ rigidHeight: h;
 
     ColorMorph(r, g, b) => (morphic morphs ColorMorph) new ~ r: r g: g b: b;
+    ColorMorph: color => (morphic morphs ColorMorph) new ~ color: color;
 
     Center(element) => (
       ^ ui VBox( Spacer, ui HBox(Spacer, element, Spacer) ~ yLayout: ui layouts ShrinkWrap, Spacer )

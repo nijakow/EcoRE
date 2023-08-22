@@ -20,6 +20,7 @@
                 b <- _b.
               ^ self
             );
+            color: color => r: (color r) g: (color g) b: (color b);
 
             renderImplOn: renderer => (
                 renderer setR: r G: g B: b.

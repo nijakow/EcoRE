@@ -1,0 +1,27 @@
+
+{
+    static with inherited _ = std Module;
+    with app <- $;
+
+    colorButton(color, ui) => (
+        ui Button(
+            ui Padding(5, ui ColorMorph: color),
+            $[ :(framework, color) :sender :hand | (framework actions clipboard) CopyObject: color ] bind(framework, color)
+        ) ~ rigidWidth: 25
+          ~ rigidHeight: 25
+    );
+
+    R: r G: g B: b Ui: ui => (ui morphic) misc color R: r G: g B: b;
+
+    Main => (
+        (framework actions open) ui BuildAndOpen: [ :ui |
+            ui Window(250, 300,
+                ui VBox(
+                    ui HBox(colorButton(R: 0 G: 0 B: 0 Ui: ui, ui), colorButton(R: 255 G: 0 B: 0 Ui: ui, ui), colorButton(R: 0 G: 255 B: 0 Ui: ui, ui), colorButton(R: 0 G: 0 B: 255 Ui: ui, ui)) ~ rigidHeight: 25,
+                    ui HBox(colorButton(R: 255 G: 255 B: 0 Ui: ui, ui), colorButton(R: 255 G: 0 B: 255 Ui: ui, ui), colorButton(R: 0 G: 255 B: 255 Ui: ui, ui), colorButton(R: 255 G: 255 B: 255 Ui: ui, ui)) ~ rigidHeight: 25,
+                    ui HBox(colorButton(R: 128 G: 0 B: 0 Ui: ui, ui), colorButton(R: 0 G: 128 B: 0 Ui: ui, ui), colorButton(R: 0 G: 0 B: 128 Ui: ui, ui), colorButton(R: 128 G: 128 B: 128 Ui: ui, ui)) ~ rigidHeight: 25,
+                )
+            )
+        ]
+    );
+}
