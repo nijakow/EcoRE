@@ -85,6 +85,14 @@
         static with inherited _ = std Module;
         static framework = $package;
 
+        Document: document Environment: environment => (
+            ((framework modules eval) actions)
+                  EvalDocument: document InEnvironment: environment
+                      OnSuccess: $[ :val |  ]
+                      OnFailure: $[ :err |  ].
+          ^ self
+        );
+
         DocumentAndShowResult: document Environment: environment => (
             ((framework modules eval) actions)
                   EvalDocument: document InEnvironment: environment

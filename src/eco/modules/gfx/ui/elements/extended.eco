@@ -83,6 +83,25 @@
       )
     );
 
+    DocumentEditor: doc OnGetIt: onget OnDoIt: ondoit OnCancel: oncancel => (
+        | editor <- DocumentEditor: doc |
+      ^ ui VBox(
+          Scrollable(Flexible(ui Padding(5, editor))),
+          ui HBox(
+              ui Button(ui Padding(3, ui HBox(Spacer, ui Label: 'Get it', Spacer)), $[ :(editor, onget) :sender | onget value(editor) ] bind(editor, onget))
+                ~ xLayout: ui layouts Flexible
+                ~ yLayout: ui layouts ShrinkWrap,
+              ui Button(ui Padding(3, ui HBox(Spacer, ui Label: 'Do it', Spacer)), $[ :(editor, ondoit) :sender | ondoit value(editor) ] bind(editor, ondoit))
+                ~ xLayout: ui layouts Flexible
+                ~ yLayout: ui layouts ShrinkWrap,
+              ui Button(ui Padding(3, ui HBox(Spacer, ui Label: 'Cancel', Spacer)), $[ :(editor, oncancel) :sender | oncancel value(editor) ] bind(editor, oncancel))
+                ~ xLayout: ui layouts Flexible
+                ~ yLayout: ui layouts ShrinkWrap
+          ) ~ xLayout: ui layouts Flexible
+            ~ yLayout: ui layouts ShrinkWrap
+      )
+    );
+
     DocumentEditor: document => (
       ^ (morphic morphs DocumentEditorMorph) clone initWithDocument: document
     );

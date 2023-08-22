@@ -225,7 +225,8 @@
         | vbox <- ui VBox() |
         vbox add: (
             ui DocumentEditor: (document FromString: '')
-                    OnAccept: $[ :(app, object) :editor | (app framework actions) eval DocumentAndShowResult: (editor document) Environment: object ] bind(app, object)
+                    OnGetIt: $[ :(app, object) :editor | (app framework actions) eval DocumentAndShowResult: (editor document) Environment: object ] bind(app, object)
+                    OnDoIt: $[ :(app, object) :editor | (app framework actions) eval Document: (editor document) Environment: object ] bind(app, object)
                     OnCancel: $[ :(vbox) :editor | vbox unlink ] bind(vbox)
         ).
       ^ vbox
