@@ -12,14 +12,51 @@
     );
 
     R: r G: g B: b Ui: ui => (ui morphic) misc color R: r G: g B: b;
+    ColorR: r G: g B: b Ui: ui => colorButton(R: r G: g B: b Ui: ui, ui);
 
     Main => (
         (framework actions open) ui BuildAndOpen: [ :ui |
             ui Window(250, 300,
-                ui VBox(
-                    ui HBox(colorButton(R: 0 G: 0 B: 0 Ui: ui, ui), colorButton(R: 255 G: 0 B: 0 Ui: ui, ui), colorButton(R: 0 G: 255 B: 0 Ui: ui, ui), colorButton(R: 0 G: 0 B: 255 Ui: ui, ui)) ~ rigidHeight: 25,
-                    ui HBox(colorButton(R: 255 G: 255 B: 0 Ui: ui, ui), colorButton(R: 255 G: 0 B: 255 Ui: ui, ui), colorButton(R: 0 G: 255 B: 255 Ui: ui, ui), colorButton(R: 255 G: 255 B: 255 Ui: ui, ui)) ~ rigidHeight: 25,
-                    ui HBox(colorButton(R: 128 G: 0 B: 0 Ui: ui, ui), colorButton(R: 0 G: 128 B: 0 Ui: ui, ui), colorButton(R: 0 G: 0 B: 128 Ui: ui, ui), colorButton(R: 128 G: 128 B: 128 Ui: ui, ui)) ~ rigidHeight: 25,
+                ui Scrollable(
+                    ui VBox(
+                        "ui HBox(colorButton(R: 0 G: 0 B: 0 Ui: ui, ui), colorButton(R: 255 G: 0 B: 0 Ui: ui, ui), colorButton(R: 0 G: 255 B: 0 Ui: ui, ui), colorButton(R: 0 G: 0 B: 255 Ui: ui, ui)) ~ rigidHeight: 25,
+                        ui HBox(colorButton(R: 255 G: 255 B: 0 Ui: ui, ui), colorButton(R: 255 G: 0 B: 255 Ui: ui, ui), colorButton(R: 0 G: 255 B: 255 Ui: ui, ui), colorButton(R: 255 G: 255 B: 255 Ui: ui, ui)) ~ rigidHeight: 25,
+                        ui HBox(colorButton(R: 128 G: 0 B: 0 Ui: ui, ui), colorButton(R: 0 G: 128 B: 0 Ui: ui, ui), colorButton(R: 0 G: 0 B: 128 Ui: ui, ui), colorButton(R: 128 G: 128 B: 128 Ui: ui, ui)) ~ rigidHeight: 25,
+                        ui HBox(colorButton(R: 128 G: 128 B: 0 Ui: ui, ui), colorButton(R: 128 G: 0 B: 128 Ui: ui, ui), colorButton(R: 0 G: 128 B: 128 Ui: ui, ui), colorButton(R: 192 G: 192 B: 192 Ui: ui, ui)) ~ rigidHeight: 25,
+                        ui HBox(colorButton(R: 255 G: 0 B: 0 Ui: ui, ui), colorButton(R: 0 G: 255 B: 0 Ui: ui, ui), colorButton(R: 0 G: 0 B: 255 Ui: ui, ui), colorButton(R: 255 G: 255 B: 255 Ui: ui, ui)) ~ rigidHeight: 25,
+                        ui HBox(colorButton(R: 128 G: 0 B: 0 Ui: ui, ui), colorButton(R: 0 G: 128 B: 0 Ui: ui, ui), colorButton(R: 0 G: 0 B: 128 Ui: ui, ui), colorButton(R: 128 G: 128 B: 128 Ui: ui, ui)) ~ rigidHeight: 25,
+                        ui HBox(colorButton(R: 128 G: 128 B: 0 Ui: ui, ui), colorButton(R: 128 G: 0 B: 128 Ui: ui, ui), colorButton(R: 0 G: 128 B: 128 Ui: ui, ui), colorButton(R: 192 G: 192 B: 192 Ui: ui, ui)) ~ rigidHeight: 25,"
+                        ui HBox(
+                            ColorR: 255 G: 0 B: 0 Ui: ui,
+                            ColorR: 0 G: 255 B: 0 Ui: ui,
+                            ColorR: 0 G: 0 B: 255 Ui: ui,
+                            ColorR: 255 G: 255 B: 0 Ui: ui,
+                        ) ~ rigidHeight: 25,
+                        ui HBox(
+                            ColorR: 255 G: 0 B: 255 Ui: ui,
+                            ColorR: 0 G: 255 B: 255 Ui: ui,
+                            ColorR: 255 G: 165 B: 0 Ui: ui,
+                            ColorR: 128 G: 0 B: 128 Ui: ui,
+                        ) ~ rigidHeight: 25,
+                        ui HBox(
+                            ColorR: 255 G: 192 B: 203 Ui: ui,
+                            ColorR: 0 G: 128 B: 0 Ui: ui,
+                            ColorR: 0 G: 0 B: 128 Ui: ui,
+                            ColorR: 128 G: 128 B: 128 Ui: ui,
+                        ) ~ rigidHeight: 25,
+                        ui HBox(
+                            ColorR: 128 G: 0 B: 0 Ui: ui,
+                            ColorR: 0 G: 128 B: 128 Ui: ui,
+                            ColorR: 128 G: 128 B: 0 Ui: ui,
+                            ColorR: 210 G: 105 B: 30 Ui: ui,
+                        ) ~ rigidHeight: 25,
+                        ui HBox(
+                            ColorR: 0 G: 100 B: 0 Ui: ui,
+                            ColorR: 0 G: 0 B: 0 Ui: ui,
+                            ColorR: 255 G: 255 B: 255 Ui: ui,
+                            ColorR: 70 G: 130 B: 180 Ui: ui,
+                        ) ~ rigidHeight: 25,
+                    )
                 )
             )
         ]
