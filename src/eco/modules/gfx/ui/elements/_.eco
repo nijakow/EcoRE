@@ -4,4 +4,5 @@
 
     with own core     = (here / 'core.eco') importIn: $;
     with own extended = (here / 'extended.eco') importIn: $;
+    with window       = (here / 'window.eco') importIn: $;   
 }

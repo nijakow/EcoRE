@@ -1,0 +1,31 @@
+
+{
+    static with inherited _ = std Trait;
+
+    own WindowBuilder = {
+        static with inherited _ = std Clonable;
+
+        protected width   <- No,
+        protected height  <- No,
+        protected content <- No;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            
+            protected ui = $package;
+            protected morphic => ui morphic;
+
+            width:  w => width  <- Yes: w;
+            height: h => height <- Yes: h;
+            width: w height: h => width: w ~ height: h;
+
+            content: c => content <- Yes: c;
+
+            build => ui Window(width yes, height yes, content yes);
+
+            writeOn: w => w << 'a window builder';
+        };
+    };
+
+    Construct => WindowBuilder new;
+}
