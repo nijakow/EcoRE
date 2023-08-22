@@ -13,7 +13,7 @@
         );
 
         renderImplOn: renderer => (
-            renderer setR: 0 G: 120 B: 136.
+            renderer setColor: (renderer theme lineColor).
             renderer drawRectX: 0 Y: 0 W: width H: height.
             $(Morph) renderImplOn: renderer.
         );

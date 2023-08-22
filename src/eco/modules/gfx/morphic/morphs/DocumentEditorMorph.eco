@@ -38,6 +38,8 @@
                       ^ self
                     );
 
+                    initColor: color => initR: (color r) G: (color g) B: (color b);
+
                     render: renderer => (
                         renderer setR: r G: g B: b.
                       ^ self
@@ -109,7 +111,7 @@
                     render: renderer => (
                         renderer setR: 131 G: 240 B: 244.
                         renderer fillRectX: (xpos + 4) Y: (ypos + 4) W: (width - 8) H: (height - 8).
-                        renderer setR: 0 G: 182 B: 203.
+                        renderer setColor: (renderer theme textColor).
                       ^ self
                     );
 
@@ -146,7 +148,7 @@
                     render: renderer => (
                         renderer setR: 255 G: 0 B: 0.
                         renderer drawRectX: xpos Y: ypos W: w H: h.
-                        renderer setR: 0 G: 182 B: 203.
+                        renderer setColor: (renderer theme textColor).
                       ^ self
                     );
                 };
@@ -244,7 +246,7 @@
         protected buildProgram(renderer) => (
             | prog <- (mod DocumentProgram) new |
 
-            prog addElement: ((mod ChangeColorElement) clone initR: 0 G: 182 B: 203).
+            prog addElement: ((mod ChangeColorElement) clone initColor: (renderer theme textColor)).
 
             | cx <- caret x, cy <- caret y |
 
