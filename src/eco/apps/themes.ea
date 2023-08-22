@@ -17,13 +17,28 @@
         Background: background Accent: accent => Background: background Accent: accent Text: accent;
 
         Default      <- ((self color) ColorTheme) new;
-        BlackOnWhite <- self Background: ((self color) R: 192 G: 192 B: 192) Accent: ((self color) R: 128 G: 128 B: 128) Text: ((self color) R: 0 G: 0 B: 0);
+        Futuristic   <- ((self color) ColorTheme) new;
+        BlackOnWhite <- self Background: ((self color) R: 255 G: 255 B: 255) Accent: ((self color) R: 192 G: 192 B: 192) Text: ((self color) R: 0 G: 0 B: 0);
+        Orange       <- self Background: ((self color) R: 255 G: 255 B: 255) Accent: ((self color) R: 255 G: 128 B: 0) Text: ((self color) R: 64 G: 32 B: 0);
+        Pumpkin      <- self Background: ((self color) R: 0 G: 0 B: 0) Accent: ((self color) R: 255 G: 128 B: 0) Text: ((self color) R: 255 G: 255 B: 0);
+        Violet       <- self Background: ((self color) R: 255 G: 255 B: 255) Accent: ((self color) R: 128 G: 0 B: 255) Text: ((self color) R: 0 G: 0 B: 0);
+        Lavender     <- self Background: ((self color) R: 220 G: 208 B: 255) Accent: ((self color) R: 150 G: 123 B: 182) Text: ((self color) R: 45 G: 31 B: 59);
+        Fireplace    <- self Background: ((self color) R: 40 G: 40 B: 40) Accent: ((self color) R: 170 G: 47 B: 31) Text: ((self color) R: 255 G: 255 B: 240);
+        OceanBreeze  <- self Background: ((self color) R: 85 G: 155 B: 178) Accent: ((self color) R: 120 G: 185 B: 145) Text: ((self color) R: 209 G: 196 B: 163);
+        EnchantedForest <- self Background: ((self color) R: 0 G: 0 B: 0) Accent: ((self color) R: 0 G: 255 B: 0) Text: ((self color) R: 255 G: 255 B: 255);
     };
 
     Main => (
         (framework actions open) ui BuildAndOpenContextMenu: [ :cmb |
-            cmb ~ item: 'Default' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes Default)
+            cmb ~ item: 'Futuristic' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes Futuristic)
                 ~ item: 'Black on White' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes BlackOnWhite)
+                ~ item: 'Orange' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes Orange)
+                ~ item: 'Pumpkin' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes Pumpkin)
+                ~ item: 'Violet' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes Violet)
+                ~ item: 'Lavender' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes Lavender)
+                ~ item: 'Fireplace' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes Fireplace)
+                ~ item: 'Ocean Breeze' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes OceanBreeze)
+                ~ item: 'Enchanted Forest' does: $[ :(framework, theme) | (framework actions ui) ChangeColorTheme: theme ] bind(framework, themes EnchantedForest)
         ] 
     );
 }
