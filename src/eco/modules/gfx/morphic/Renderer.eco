@@ -79,6 +79,8 @@
             fillRect: rect => fillRectX: rect x Y: rect y W: rect w H: rect h;
             drawText: text X: x Y: y => eve DrawText(text text, xOff + x, yOff + y);
             drawChar: char X: x Y: y => eve DrawChar(char, xOff + x, yOff + y);
+            drawText: text X: x Y: y Font: font => drawText: text X: x Y: y;
+            drawChar: char X: x Y: y Font: font => drawChar: char X: x Y: y;
             charWidth: char => eve GetCharWidth(char);
             charHeight: char => eve GetCharHeight(char);
 

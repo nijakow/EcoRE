@@ -1,0 +1,31 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    char <- $' ',
+    x    <- 0,
+    y    <- 0,
+    font;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+
+        initWithChar: _char X: _x Y: _y Font: _font => (
+            char <- _char.
+            x    <- _x.
+            y    <- _y.
+            font <- _font.
+          ^ self
+        );
+
+        w => font widthOf: char;
+        h => font heightOf: char;
+
+        drawOn: renderer => (
+            renderer drawChar: char X: x Y: y Font: font.
+          ^ self
+        );
+
+        writeOn: w => w << 'a drawable character';
+    };
+}
