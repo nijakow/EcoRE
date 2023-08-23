@@ -34,6 +34,46 @@ void Eve_Font_Delete(struct Eve_Font* self)
     free(self);
 }
 
+Eve_UInt Eve_Font_GetTextWidth(struct Eve_Font* self, const char* text)
+{
+    int w;
+    int h;
+
+    TTF_SizeUTF8(self->font, text, &w, &h);
+
+    return w;
+}
+
+Eve_UInt Eve_Font_GetTextHeight(struct Eve_Font* self, const char* text)
+{
+    int w;
+    int h;
+
+    TTF_SizeUTF8(self->font, text, &w, &h);
+
+    return h;
+}
+
+
+Eve_UInt Eve_Font_GetCharWidth(struct Eve_Font* self, Eve_UInt c)
+{
+    char buffer[2];
+
+    buffer[0] = c;
+    buffer[1] = '\0';
+
+    return Eve_Font_GetTextWidth(self, buffer);
+}
+
+Eve_UInt Eve_Font_GetCharHeight(struct Eve_Font* self, Eve_UInt c)
+{
+    char buffer[2];
+
+    buffer[0] = c;
+    buffer[1] = '\0';
+
+    return Eve_Font_GetTextHeight(self, buffer);
+}
 
 
 struct Eve_Color {

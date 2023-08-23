@@ -27,6 +27,12 @@ void Eve_Font_Destroy(struct Eve_Font* self);
 struct Eve_Font*  Eve_Font_New(const char* path, Eve_UInt size);
 void              Eve_Font_Delete(struct Eve_Font* self);
 
+Eve_UInt Eve_Font_GetTextWidth(struct Eve_Font* self, const char* text);
+Eve_UInt Eve_Font_GetTextHeight(struct Eve_Font* self, const char* text);
+
+Eve_UInt Eve_Font_GetCharWidth(struct Eve_Font* self, Eve_UInt c);
+Eve_UInt Eve_Font_GetCharHeight(struct Eve_Font* self, Eve_UInt c);
+
 
 
 Eve_UInt Eve_CurrentWidth();
