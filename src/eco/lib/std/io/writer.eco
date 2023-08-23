@@ -1,11 +1,31 @@
 
 #=std/io/Writer: {
-    << object => (
-        ((std reflect PublicInterfaceFor: object) implementsMessage: #'writeOn:')
-              if: [ object writeOn: self ]
-            else: [ << 'an object'       ].
-      ^ self
-    );
+    static with inherited _ = #<:std/Clonable>;
 
-    newline => ( self << (char newline). ^ self );
+    port;
+
+    with inherited trait = {
+        static with inherited _ = #<:std/Trait>;
+
+        init: _port => (
+            port <- _port.
+          ^ self
+        );
+
+        byte<< b => port byte<< b;
+        char<< c => port char<< c;
+        commit   => port commit;
+        close    => port close;
+
+        << object => (
+            ((std reflect PublicInterfaceFor: object) implementsMessage: #'writeOn:')
+                  if: [ object writeOn: self ]
+                else: [ << 'an object'       ].
+          ^ self
+        );
+
+        newline => ( self << (char newline). ^ self );
+
+        writeOn: w => w << 'a writer';
+    };
 }

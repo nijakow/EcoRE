@@ -1,14 +1,14 @@
 
 #=std/io/PortIO: {
-    static with inherited parent = #<:std/Clonable>;
+    static with inherited _ = #<:std/Clonable>;
     
     in, out;
 
     with inherited trait = {
         init: port => (
             in  <- ((std io PortInput) clone) init: port;
-            out <- ((std io PortOutput) clone) init: port;
-            ^ self
+            out <- #<:std/io/Writer> new: (((std io PortOutput) clone) init: port);
+          ^ self
         );
 
         initWithInput: _in Output: _out => (

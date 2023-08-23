@@ -1,14 +1,16 @@
 
 #=std/io/StringWriter: {
-    static with inherited parent = #<:std/Clonable>;
+    static with inherited _ = #<:std/Clonable>;
+    with inherited own Writer = #<:std/io/Writer>;
 
     private builder;
 
     with inherited trait = {
-        with inherited parent = #<:std/io/Writer>;
+        static with inherited _ = #<:std/Trait>;
         
         init => (
             builder <- std util newVector.
+            Writer init: self.
           ^ self
         );
 

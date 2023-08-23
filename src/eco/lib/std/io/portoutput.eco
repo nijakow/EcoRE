@@ -5,8 +5,6 @@
     _port;
 
     with inherited trait = {
-        with inherited parent = #<:std/io/Writer>;
-        
         init: port => (
             _port <- port.
             ^ self

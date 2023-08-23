@@ -37,7 +37,7 @@
 
     InitIO => (
         std io in  <- (std util text utf8 UTF8Iterator) clone init: (((std io FDSegmentReader) clone initWithFileDescriptor: ((std io FileDescriptor) clone init: 0)) iterator).
-        std io out <- ((std io PortOutput) clone) init: ((std io FDByteWriter) clone initWithFileDescriptor: (((std io FileDescriptor) clone) init: 1)).
+        std io out <- #<std/io/Writer> new: (((std io PortOutput) clone) init: ((std io FDByteWriter) clone initWithFileDescriptor: (((std io FileDescriptor) clone) init: 1))).
     );
 
     InitProcesses => (
