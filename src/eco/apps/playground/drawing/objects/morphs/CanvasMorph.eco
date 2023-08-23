@@ -9,9 +9,15 @@
         static with inherited _ = std Trait;
         protected drawing <- $package;
         protected morphic => drawing app gfx morphic;
+        
+        canvas: c => (
+            canvas <- Yes: c.
+            renderDirty.
+          ^ self
+        );
 
         renderImplOn: renderer => (
-            canvas yes: [ :c | c renderOn: renderer ].
+            canvas yes: [ :c | c drawOn: renderer ].
             $(Morph) renderImplOn: renderer.
         );
 

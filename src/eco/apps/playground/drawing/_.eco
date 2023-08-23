@@ -11,6 +11,7 @@
                ~ width: 400 height: 400
                ~ content: (
                     (objects morphs CanvasMorph) new
+                        ~ canvas: (objects Test)
                  )
                ~ build
         ]

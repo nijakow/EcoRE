@@ -20,6 +20,8 @@
           ^ self
         );
 
+        setR: r G: g B: b => add: ((drawables ChangeColor) clone initWithR: r G: g B: b);
+        setColor: color => setR: (color r) G: (color g) B: (color b);
         drawPointX: x Y: y => "...";
         drawLineX: x1 Y: y1 X: x2 Y: y2 => add: ((drawables Line) clone initWithX: x1 Y: y1 X: x2 Y: y2);
         drawRectX: x Y: y W: w H: h => "...";

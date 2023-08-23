@@ -5,6 +5,8 @@
     own drawables = (here / 'drawables' / '_.eco') importIn: $;
     own morphs    = (here / 'morphs' / '_.eco') importIn: $;
 
+    own Color <- $ gfx morphic misc color Color;
+
     own Canvas = (here / 'Canvas.eco') importIn: $;
     own CanvasRenderer = (here / 'CanvasRenderer.eco') importIn: $;
 
@@ -14,6 +16,7 @@
             r <- CanvasRenderer new: c
         |
 
+        r setR: 255 G: 0 B: 0.
         r drawLineX: 0 Y: 0 X: 100 Y: 100.
 
       ^ c

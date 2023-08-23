@@ -12,5 +12,7 @@
         writeOn: w => w << 'a drawable object';
     };
 
-    own Line = (here / 'Line.eco') importIn: self;
+    own ChangeColor = (here / 'ChangeColor.eco') importIn: self;
+    own Character   = (here / 'Character.eco') importIn: self;
+    own Line        = (here / 'Line.eco') importIn: self;
 }
