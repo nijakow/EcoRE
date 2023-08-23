@@ -94,23 +94,28 @@
                 protected ypos,
                 protected width,
                 protected height,
+                protected object,
+                protected text,
                 offset;
 
                 with inherited trait = {
                     static with inherited _ = std Trait;
 
-                    initWithOffset: _offset X: _xpos Y: _ypos W: _width H: _height => (
+                    initWithOffset: _offset X: _xpos Y: _ypos W: _width H: _height Object: _object Text: _text => (
                         xpos   <- _xpos.
                         ypos   <- _ypos.
                         width  <- _width.
                         height <- _height.
                         offset <- _offset.
+                        object <- _object.
+                        text   <- _text.
                       ^ self
                     );
 
                     render: renderer => (
-                        renderer setR: 131 G: 240 B: 244.
-                        renderer fillRectX: (xpos + 4) Y: (ypos + 4) W: (width - 8) H: (height - 8).
+                        renderer drawString: text X: xpos Y: ypos.
+                        renderer setColor: (renderer theme lineColor).
+                        renderer drawRectX: (xpos) Y: (ypos) W: (width) H: (height).
                         renderer setColor: (renderer theme textColor).
                       ^ self
                     );
@@ -279,9 +284,17 @@
                         dy <- ch. 
                     ].
                     item ifReference: [ :r |
-                        prog addElement: ((mod ReferenceElement) clone initWithOffset: offset X: xOff Y: yOff W: 16 H: 16).
-                        dx <- 16.
-                        dy <- 16.
+                        | sw <- (std io StringWriter) new |
+                        sw << (r content).
+
+                        |
+                            text <- sw build,
+                            w    <- renderer textWidth: text,
+                            h    <- renderer textHeight: text
+                        |
+                        prog addElement: ((mod ReferenceElement) clone initWithOffset: offset X: xOff Y: yOff W: w H: h Object: (r content) Text: text).
+                        dx <- w.
+                        dy <- h.
                     ].
 
                     "Draw the caret"
