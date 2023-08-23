@@ -4,11 +4,14 @@
 
     port;
 
+    protected stack;
+
     with inherited trait = {
         static with inherited _ = #<:std/Trait>;
 
         init: _port => (
-            port <- _port.
+            port  <- _port.
+            stack <- std util newVector.
           ^ self
         );
 
@@ -18,9 +21,20 @@
         close    => port close;
 
         << object => (
-            ((std reflect PublicInterfaceFor: object) implementsMessage: #'writeOn:')
-                  if: [ object writeOn: self ]
-                else: [ << 'an object'       ].
+            (stack contains: object) if: [
+                  << '#<ref:?cyclic>'.
+                ^ self
+            ].
+
+            stack add: object.
+            [
+                ((std reflect PublicInterfaceFor: object) implementsMessage: #'writeOn:')
+                    if: [ object writeOn: self ]
+                    else: [ << 'an object'       ].
+            ] ensure: [
+                stack erase: (stack size - 1).
+            ].
+
           ^ self
         );
 

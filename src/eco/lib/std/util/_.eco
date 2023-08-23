@@ -76,6 +76,11 @@
         forEach: [ :i, :v | (v is: element) if: [ ^ Yes: i ] ].
         ^ No
     );
+
+    contains: element => (
+        forEach: [ :i, :v | (v is: element) if: [ ^ true ] ].
+      ^ false
+    );
 },
 
 #=std/util/SizedIndexable: {
