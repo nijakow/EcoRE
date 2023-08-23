@@ -2,7 +2,6 @@
 {
     static with inherited _ = std Module;
 
-    own ecosphere = (here / 'ecosphere' / '_.eco') importIn: self;
     own document  = (here / 'document' / '_.eco') importIn: self;
     own gfx       = (here / 'gfx' / '_.eco') importIn: self;
     own app       = (here / 'app' / '_.eco') importIn: self;
