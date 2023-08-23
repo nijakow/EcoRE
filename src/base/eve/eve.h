@@ -22,9 +22,11 @@ struct Eve_Font
 };
 
 void Eve_Font_Create(struct Eve_Font* self, const char* path, Eve_UInt size);
+void Eve_Font_CreateFromFont(struct Eve_Font* self, TTF_Font* font);
 void Eve_Font_Destroy(struct Eve_Font* self);
 
 struct Eve_Font*  Eve_Font_New(const char* path, Eve_UInt size);
+struct Eve_Font*  Eve_Font_NewFromFont(TTF_Font* font);
 void              Eve_Font_Delete(struct Eve_Font* self);
 
 Eve_UInt Eve_Font_GetTextWidth(struct Eve_Font* self, const char* text);
@@ -33,6 +35,7 @@ Eve_UInt Eve_Font_GetTextHeight(struct Eve_Font* self, const char* text);
 Eve_UInt Eve_Font_GetCharWidth(struct Eve_Font* self, Eve_UInt c);
 Eve_UInt Eve_Font_GetCharHeight(struct Eve_Font* self, Eve_UInt c);
 
+struct Eve_Font*  Eve_GetDefaultFont();
 
 
 Eve_UInt Eve_CurrentWidth();
@@ -54,8 +57,8 @@ void Eve_DrawArrow(Eve_Int x1, Eve_Int y1, Eve_Int x2, Eve_Int y2);
 void Eve_DrawRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
 void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
 
-void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y);
-void Eve_DrawChar(Eve_UInt c, Eve_Int x, Eve_Int y);
+void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y, struct Eve_Font* font);
+void Eve_DrawChar(Eve_UInt c, Eve_Int x, Eve_Int y, struct Eve_Font* font);
 
 void Eve_Clear();
 void Eve_Render();

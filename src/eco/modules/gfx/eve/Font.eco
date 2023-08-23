@@ -1,0 +1,35 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    ptr,
+    protected shouldClose;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+        protected eve <- $;
+
+        initWithFont: _ptr ShouldClose: _shouldClose => (
+            ptr         <- _ptr.
+            shouldClose <- _shouldClose.
+            std reflect EnableFinalization: self.
+          ^ self
+        );
+        init: _ptr => initWithFont: _ptr ShouldClose: true;
+
+        finalize => (
+            shouldClose if: [
+                eve Font_Delete(ptr).
+                shouldClose <- false.
+            ].
+        );
+
+        widthOfText: str => eve Font_GetTextWidth(ptr, str);
+        heightOfText: str => eve Font_GetTextHeight(ptr, str);
+
+        widthOfChar: c => eve Font_GetCharWidth(ptr, c);
+        heightOfChar: c => eve Font_GetCharHeight(ptr, c);
+
+        writeOn: w => w << 'a font';
+    };
+}

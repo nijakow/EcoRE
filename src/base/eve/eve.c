@@ -8,6 +8,11 @@ void Eve_Font_Create(struct Eve_Font* self, const char* path, Eve_UInt size)
     self->font = TTF_OpenFont(path, size);
 }
 
+void Eve_Font_CreateFromFont(struct Eve_Font* self, TTF_Font* font)
+{
+    self->font = font;
+}
+
 void Eve_Font_Destroy(struct Eve_Font* self)
 {
     TTF_CloseFont(self->font);
@@ -26,6 +31,20 @@ struct Eve_Font*  Eve_Font_New(const char* path, Eve_UInt size)
     }
 
     return font;
+}
+
+struct Eve_Font*  Eve_Font_NewFromFont(TTF_Font* font)
+{
+    struct Eve_Font*  eve_font;
+
+    eve_font = malloc(sizeof(struct Eve_Font));
+
+    if (eve_font != NULL)
+    {
+        Eve_Font_CreateFromFont(eve_font, font);
+    }
+
+    return eve_font;
 }
 
 void Eve_Font_Delete(struct Eve_Font* self)
@@ -355,7 +374,7 @@ struct Eve_RenderState {
     struct SDL_Renderer*   renderer;
     struct SDL_Texture*    texture;
 
-    TTF_Font*              font;
+    struct Eve_Font*       font;
 
     SDL_Event              event;
 
@@ -373,7 +392,7 @@ void Eve_RenderState_Create(struct Eve_RenderState* self, struct SDL_Window* win
     self->window   = window;
     self->renderer = window_renderer;
 
-    self->font     = font;
+    self->font     = Eve_Font_NewFromFont(font);
 
     SDL_GetWindowSize(window, &window_width, &window_height);
 
@@ -394,7 +413,7 @@ void Eve_RenderState_Destroy(struct Eve_RenderState* self) {
 
     Eve_FrameStack_Destroy(&self->frame_stack);
 
-    TTF_CloseFont(self->font);
+    Eve_Font_Delete(self->font);
 
     SDL_DestroyRenderer(self->renderer);
     SDL_DestroyWindow(self->window);
@@ -502,11 +521,11 @@ void Eve_RenderState_FillRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y
     SDL_RenderFillRect(self->renderer, &rect);
 }
 
-void Eve_RenderState_DrawText(struct Eve_RenderState* self, const char* text, Eve_Int x, Eve_Int y) {
+void Eve_RenderState_DrawText(struct Eve_RenderState* self, const char* text, Eve_Int x, Eve_Int y, struct Eve_Font* font) {
     struct Eve_TextCacheNode*  node;
     SDL_Rect                   rect;
 
-    node = Eve_TextCache_FindOrCreate(&self->text_cache, text, self->frame.color, self->renderer, self->font);
+    node = Eve_TextCache_FindOrCreate(&self->text_cache, text, self->frame.color, self->renderer, font->font);
 
     if (node != NULL) {
         rect.x = x;
@@ -604,6 +623,10 @@ Eve_UInt Eve_RenderState_GetEventKeyMod(struct Eve_RenderState* self) {
 
 struct Eve_RenderState EVE_DEFAULT_RENDER_STATE;
 
+struct Eve_Font* Eve_GetDefaultFont() {
+    return EVE_DEFAULT_RENDER_STATE.font;
+}
+
 Eve_UInt Eve_CurrentWidth() {
     return Eve_RenderState_CurrentWidth(&EVE_DEFAULT_RENDER_STATE);
 }
@@ -652,17 +675,17 @@ void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
     Eve_RenderState_FillRect(&EVE_DEFAULT_RENDER_STATE, x, y, w, h);
 }
 
-void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y) {
-    Eve_RenderState_DrawText(&EVE_DEFAULT_RENDER_STATE, text, x, y);
+void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y, struct Eve_Font* font) {
+    Eve_RenderState_DrawText(&EVE_DEFAULT_RENDER_STATE, text, x, y, font);
 }
 
-void Eve_DrawChar(Eve_UInt c, Eve_Int x, Eve_Int y) {
+void Eve_DrawChar(Eve_UInt c, Eve_Int x, Eve_Int y, struct Eve_Font* font) {
     char buffer[2];
 
     buffer[0] = c;
     buffer[1] = '\0';
 
-    Eve_DrawText(buffer, x, y);
+    Eve_DrawText(buffer, x, y, font);
 }
 
 void Eve_Clear() {
@@ -743,7 +766,7 @@ Eve_UInt Eve_GetTextWidth(const char* text) {
     int w;
     int h;
 
-    TTF_SizeUTF8(EVE_DEFAULT_RENDER_STATE.font, text, &w, &h);
+    TTF_SizeUTF8(EVE_DEFAULT_RENDER_STATE.font->font, text, &w, &h);
 
     return w;
 }
@@ -752,7 +775,7 @@ Eve_UInt Eve_GetTextHeight(const char* text) {
     int w;
     int h;
 
-    TTF_SizeUTF8(EVE_DEFAULT_RENDER_STATE.font, text, &w, &h);
+    TTF_SizeUTF8(EVE_DEFAULT_RENDER_STATE.font->font, text, &w, &h);
 
     return h;
 }

@@ -44,7 +44,19 @@
     protected Eve_GetTextHeight,
     protected Eve_GetCharWidth,
     protected Eve_GetCharHeight,
-    protected Eve_Delay;
+    protected Eve_Delay,
+    protected Eve_Font_New,
+    protected Eve_Font_Delete,
+    protected Eve_Font_GetTextWidth,
+    protected Eve_Font_GetTextHeight,
+    protected Eve_Font_GetCharWidth,
+    protected Eve_Font_GetCharHeight,
+    protected Eve_GetDefaultFont;
+
+    protected Eve_Font => ffi types void;
+
+    DefaultFont;
+
 
     InitLinux => Setup: (std os files here / '..' / 'eve' / 'libeve.so') path;
     InitMac   => Setup: (std os files here / '..' / 'eve' / 'libeve.dylib') path;
@@ -72,8 +84,8 @@
         Eve_DrawArrow <- (lib function: #'Eve_DrawArrow' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
         Eve_DrawRect <- (lib function: #'Eve_DrawRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
         Eve_FillRect <- (lib function: #'Eve_FillRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
-        Eve_DrawText <- (lib function: #'Eve_DrawText' type: ((ffi types void) function(ffi types string, ffi types int, ffi types int))) yes.
-        Eve_DrawChar <- (lib function: #'Eve_DrawChar' type: ((ffi types void) function(ffi types uint, ffi types int, ffi types int))) yes.
+        Eve_DrawText <- (lib function: #'Eve_DrawText' type: ((ffi types void) function(ffi types string, ffi types int, ffi types int, Eve_Font pointer))) yes.
+        Eve_DrawChar <- (lib function: #'Eve_DrawChar' type: ((ffi types void) function(ffi types uint, ffi types int, ffi types int, Eve_Font pointer))) yes.
         Eve_Clear <- (lib function: #'Eve_Clear' type: ((ffi types void) function())) yes.
         Eve_Render <- (lib function: #'Eve_Render' type: ((ffi types void) function())) yes.
         Eve_PollEvent <- (lib function: #'Eve_PollEvent' type: ((ffi types bool) function())) yes.
@@ -97,10 +109,21 @@
         Eve_GetCharWidth <- (lib function: #'Eve_GetCharWidth' type: ((ffi types uint) function(ffi types uint))) yes.
         Eve_GetCharHeight <- (lib function: #'Eve_GetCharHeight' type: ((ffi types uint) function(ffi types uint))) yes.
         Eve_Delay <- (lib function: #'Eve_Delay' type: ((ffi types void) function(ffi types uint))) yes.
+        Eve_Font_New <- (lib function: #'Eve_Font_New' type: ((Eve_Font pointer) function(ffi types string, ffi types uint))) yes.
+        Eve_Font_Delete <- (lib function: #'Eve_Font_Delete' type: ((ffi types void) function(Eve_Font pointer))) yes.
+        Eve_Font_GetTextWidth <- (lib function: #'Eve_Font_GetTextWidth' type: ((ffi types uint) function(Eve_Font pointer, ffi types string))) yes.
+        Eve_Font_GetTextHeight <- (lib function: #'Eve_Font_GetTextHeight' type: ((ffi types uint) function(Eve_Font pointer, ffi types string))) yes.
+        Eve_Font_GetCharWidth <- (lib function: #'Eve_Font_GetCharWidth' type: ((ffi types uint) function(Eve_Font pointer, ffi types uint))) yes.
+        Eve_Font_GetCharHeight <- (lib function: #'Eve_Font_GetCharHeight' type: ((ffi types uint) function(Eve_Font pointer, ffi types uint))) yes.
+        Eve_GetDefaultFont <- (lib function: #'Eve_GetDefaultFont' type: ((Eve_Font pointer) function())) yes.
       ^ self
     );
 
-    InitEve => Eve_Init value(DefaultFontPath, 14);
+    InitEve => (
+        | r <- Eve_Init value(DefaultFontPath, 14) |
+        DefaultFont <- ((Font clone) initWithFont: GetDefaultFont ShouldClose: false).
+      ^ r
+    );
     TerminateEve => Eve_Terminate value();
 
     CurrentWidth => Eve_CurrentWidth value();
@@ -122,8 +145,8 @@
     DrawRect(x, y, w, h) => Eve_DrawRect value(x, y, w, h);
     FillRect(x, y, w, h) => Eve_FillRect value(x, y, w, h);
 
-    DrawText(text, x, y) => Eve_DrawText value(text, x, y);
-    DrawChar(char, x, y) => Eve_DrawChar value(char asInt, x, y);
+    DrawText(text, x, y, font) => Eve_DrawText value(text, x, y, font ptr);
+    DrawChar(char, x, y, font) => Eve_DrawChar value(char asInt, x, y, font ptr);
 
     Clear => Eve_Clear value();
     Render => Eve_Render value();
@@ -157,6 +180,16 @@
     GetCharHeight(char) => Eve_GetCharHeight value(char asInt);
 
     Delay(ms) => Eve_Delay value(ms);
+
+    Font_New(path, size) => Eve_Font_New value(path, size);
+    Font_Delete(font) => Eve_Font_Delete value(font);
+    Font_GetTextWidth(font, text) => Eve_Font_GetTextWidth value(font, text);
+    Font_GetTextHeight(font, text) => Eve_Font_GetTextHeight value(font, text);
+    Font_GetCharWidth(font, char) => Eve_Font_GetCharWidth value(font, char asInt);
+    Font_GetCharHeight(font, char) => Eve_Font_GetCharHeight value(font, char asInt);
+    GetDefaultFont => Eve_GetDefaultFont value;
+
+    own Font = (here / 'Font.eco') importIn: self;
 
 
     protected own Text = {

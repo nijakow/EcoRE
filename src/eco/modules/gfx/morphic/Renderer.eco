@@ -6,7 +6,7 @@
         protected offsets,
         protected clips,
         protected eve,
-        protected texture;
+        protected font;
 
         theme;
 
@@ -22,7 +22,7 @@
                 clips       <- std util newStack.
                 clips push: (morphic X: _x Y: _y W: width H: height).
                 theme       <- _theme.
-
+                font        <- eve DefaultFont.
               ^ self
             );
 
@@ -77,10 +77,10 @@
             drawRect: rect => drawRectX: rect x Y: rect y W: rect w H: rect h;
             fillRectX: x Y: y W: w H: h => eve FillRect(xOff + x, yOff + y, w, h);
             fillRect: rect => fillRectX: rect x Y: rect y W: rect w H: rect h;
-            drawText: text X: x Y: y => eve DrawText(text text, xOff + x, yOff + y);
-            drawChar: char X: x Y: y => eve DrawChar(char, xOff + x, yOff + y);
-            drawText: text X: x Y: y Font: font => drawText: text X: x Y: y;
-            drawChar: char X: x Y: y Font: font => drawChar: char X: x Y: y;
+            drawText: text X: x Y: y => eve DrawText(text text, xOff + x, yOff + y, font);
+            drawChar: char X: x Y: y => eve DrawChar(char, xOff + x, yOff + y, font);
+            drawText: text X: x Y: y Font: font => eve DrawText(text text, xOff + x, yOff + y, font);
+            drawChar: char X: x Y: y Font: font => eve DrawChar(char, xOff + x, yOff + y, font);
             charWidth: char => eve GetCharWidth(char);
             charHeight: char => eve GetCharHeight(char);
 
