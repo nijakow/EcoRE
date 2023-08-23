@@ -1,0 +1,52 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    protected renderer,
+    x <- 0,
+    y <- 0,
+    r <- 0,
+    isPenDown <- true;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+        protected pi => 3.14159265359;
+
+        init: _renderer => (
+            renderer <- _renderer.
+          ^ self
+        );
+
+        moveToX: vx Y: vy => (
+            x <- vx.
+            y <- vy.
+          ^ self
+        );
+
+        penDown => isPenDown <- true;
+        penUp   => isPenDown <- false;
+
+        forward: n => (
+            |
+                rrad <- (r * pi) / 180,
+                ex   <- (x + (n * (rrad cos))) asInt,
+                ey   <- (y + (n * (rrad sin))) asInt
+            |
+            
+            isPenDown if: [
+                renderer drawLineX: x Y: y X: ex Y: ey. 
+            ].
+
+            x <- ex.
+            y <- ey.
+
+          ^ self
+        );
+        backward: n => self forward: (n negate);
+
+        left: n => r <- (r + n) mod: 360;
+        right: n => self left: (n negate);
+
+        writeOn: w => w << 'a turtle';
+    };
+}

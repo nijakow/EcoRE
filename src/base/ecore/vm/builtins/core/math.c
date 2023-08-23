@@ -462,9 +462,9 @@ bool Eco_VM_Builtin_Sin(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     any = Eco_Fiber_Pop(fiber);
     if (Eco_Any_IsInteger(any))
-        any = Eco_Any_FromFloating(sin(Eco_Any_AsInteger(any)));
+        any = Eco_Any_FromFloating(sinf(Eco_Any_AsInteger(any)));
     else if (Eco_Any_IsFloating(any))
-        any = Eco_Any_FromFloating(sin(Eco_Any_AsFloating(any)));
+        any = Eco_Any_FromFloating(sinf(Eco_Any_AsFloating(any)));
     else
         return false;
     Eco_Fiber_Push(fiber, any);
@@ -479,9 +479,9 @@ bool Eco_VM_Builtin_Cos(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     any = Eco_Fiber_Pop(fiber);
     if (Eco_Any_IsInteger(any))
-        any = Eco_Any_FromFloating(cos(Eco_Any_AsInteger(any)));
+        any = Eco_Any_FromFloating(cosf(Eco_Any_AsInteger(any)));
     else if (Eco_Any_IsFloating(any))
-        any = Eco_Any_FromFloating(cos(Eco_Any_AsFloating(any)));
+        any = Eco_Any_FromFloating(cosf(Eco_Any_AsFloating(any)));
     else
         return false;
     Eco_Fiber_Push(fiber, any);
@@ -496,9 +496,9 @@ bool Eco_VM_Builtin_Tan(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     any = Eco_Fiber_Pop(fiber);
     if (Eco_Any_IsInteger(any))
-        any = Eco_Any_FromFloating(tan(Eco_Any_AsInteger(any)));
+        any = Eco_Any_FromFloating(tanf(Eco_Any_AsInteger(any)));
     else if (Eco_Any_IsFloating(any))
-        any = Eco_Any_FromFloating(tan(Eco_Any_AsFloating(any)));
+        any = Eco_Any_FromFloating(tanf(Eco_Any_AsFloating(any)));
     else
         return false;
     Eco_Fiber_Push(fiber, any);

@@ -9,15 +9,29 @@
 
     own Canvas = (here / 'Canvas.eco') importIn: $;
     own CanvasRenderer = (here / 'CanvasRenderer.eco') importIn: $;
+    own Turtle = (here / 'Turtle.eco') importIn: $;
 
     Test => (
         |
             c <- Canvas new,
-            r <- CanvasRenderer new: c
+            r <- CanvasRenderer new: c,
+            t <- Turtle new: r
         |
 
         r setR: 255 G: 0 B: 0.
-        r drawLineX: 0 Y: 0 X: 100 Y: 100.
+
+        t moveToX: 100 Y: 100.
+        "1 to: 100 do: [ :i |
+            t forward: (100).
+            t right: 89.
+        ]."
+        t forward: 100.
+        t left: 90.
+        t forward: 100.
+        t left: 90.
+        t forward: 100.
+        t left: 90.
+        t forward: 100.
 
       ^ c
     );
