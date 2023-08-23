@@ -1,0 +1,9 @@
+
+{
+    static with inherited _ = std Module;
+
+    own drawables = (here / 'drawables' / '_.eco') importIn: $;
+
+    own Canvas = (here / 'Canvas.eco') importIn: $;
+    own CanvasRenderer = (here / 'CanvasRenderer.eco') importIn: $;
+}

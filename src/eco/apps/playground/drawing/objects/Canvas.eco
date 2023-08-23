@@ -1,0 +1,27 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    protected drawableObjects;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+
+        init => (
+            drawableObjects <- std util newVector.
+          ^ self
+        );
+
+        add: drawable => (
+            drawableObjects add: drawable.
+          ^ self
+        );
+
+        drawOn: renderer => (
+            drawableObjects do: [ :obj | obj drawOn: renderer ].
+          ^ self
+        );
+
+        writeOn: w => w << 'a canvas';
+    };
+}

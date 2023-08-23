@@ -1,0 +1,16 @@
+
+{
+    static with inherited _ = std Module;
+
+    own DrawObjectTrait = {
+        static with inherited _ = std Trait;
+
+        metadata => No;
+
+        drawOn: renderer => self;
+
+        writeOn: w => w << 'a drawable object';
+    };
+
+    own Line = (here / 'Line.eco') importIn: self;
+}

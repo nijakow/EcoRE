@@ -1,0 +1,32 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    protected canvas;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+
+        protected drawing = $;
+        protected drawables => drawing objects drawables;
+
+        init: _canvas => (
+            canvas <- _canvas.
+          ^ self
+        );
+
+        protected add: obj => (
+            canvas add: obj.
+          ^ self
+        );
+
+        drawPointX: x Y: y => "...";
+        drawLineX: x1 Y: y1 X: x2 Y: y2 => add: ((drawables Line) clone initWithX: x1 Y: y1 X: x2 Y: y2);
+        drawRectX: x Y: y W: w H: h => "...";
+        drawRect: rect => drawRectX: (rect x) Y: (rect y) W: (rect w) H: (rect h);
+        fillRectX: x Y: y W: w H: h => "...";
+        fillRect: rect => fillRectX: (rect x) Y: (rect y) W: (rect w) H: (rect h);
+
+        writeOn: w => w << 'a canvas renderer';
+    };
+}

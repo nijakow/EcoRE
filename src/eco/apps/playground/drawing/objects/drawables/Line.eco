@@ -1,0 +1,28 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    x1 <- 0,
+    y1 <- 0,
+    x2 <- 0,
+    y2 <- 0;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+
+        initWithX: _x1 Y: _y1 X: _x2 Y: _y2 => (
+            x1 <- _x1.
+            y1 <- _y1.
+            x2 <- _x2.
+            y2 <- _y2.
+          ^ self
+        );
+
+        drawOn: renderer => (
+            renderer drawLineX: x1 Y: y1 X: x2 Y: y2.
+          ^ self
+        );
+
+        writeOn: w => w << 'a drawable line';
+    };
+}

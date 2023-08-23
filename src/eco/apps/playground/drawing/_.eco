@@ -1,0 +1,6 @@
+
+{
+    static with inherited _ = std Module;
+
+    own objects = (here / 'objects' / '_.eco') importIn: self;
+}
