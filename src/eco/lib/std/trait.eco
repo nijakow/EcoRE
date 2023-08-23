@@ -1,5 +1,6 @@
 
 #=std/Trait: {
     with inherited _ = #<:std/Clonable>;
+    
     writeOn: writer => writer << 'a trait';
 }

@@ -1,6 +1,6 @@
 
 #=std/Module: {
-    with inherited parent = #<:std/Clonable>;
+    with inherited _ = #<:std/Clonable>;
     
     Init => self;
     Main => self;

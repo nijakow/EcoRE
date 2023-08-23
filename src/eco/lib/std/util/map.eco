@@ -1,10 +1,12 @@
 #=std/util/Map: {
-    static with inherited parent = #<:std/Clonable>;
+    static with inherited _ = #<:std/Clonable>;
     
     protected pairs;
     protected comparator;
 
     with inherited trait = {
+        static with inherited _ = #<:std/Trait>;
+        
         initWithComparator: _comparator => (
             pairs      <- std util newVector.
             comparator <- _comparator.

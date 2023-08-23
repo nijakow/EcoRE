@@ -1,10 +1,12 @@
 
 #=std/util/Stack: {
-    with inherited parent = #<:std/Clonable>;
+    with inherited _ = #<:std/Clonable>;
     
     private elements;
 
     with inherited trait = {
+        static with inherited _ = #<:std/Trait>;
+        
         init => (
             elements <- std util newVector.
           ^ self

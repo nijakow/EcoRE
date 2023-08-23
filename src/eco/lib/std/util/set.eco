@@ -1,11 +1,13 @@
 
 #=std/util/Set: {
-    with inherited parent = #<:std/Clonable>;
+    with inherited _ = #<:std/Clonable>;
 
     private elements;
 
     with inherited trait = {
-        with inherited parent = #<:std/util/StandardListConversions>;
+        static with inherited _ = #<:std/Trait>;
+
+        with inherited _ = #<:std/util/StandardListConversions>;
 
         init => (
             elements <- std util newVector.

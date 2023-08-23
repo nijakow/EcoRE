@@ -1,7 +1,10 @@
 
 #=std/Singleton: {
-    with inherited parent = #<:std/DefaultBehavior>;
+    with inherited _ = #<:std/DefaultBehavior>;
+    
     clone => self;
+    
     new => self;
+    
     writeOn: writer => writer << 'a singleton';
 }

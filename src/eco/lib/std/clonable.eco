@@ -1,6 +1,6 @@
 
 #=std/Clonable: {
-    with inherited parent = #<:std/DefaultBehavior>;
+    with inherited _ = #<:std/DefaultBehavior>;
     
     init          => ^ self;
     

@@ -1,11 +1,13 @@
 
 #=std/maybe: {
     Yes = #=std/maybe/Yes: {
-        static with inherited parent = #<:std/Clonable>;
+        static with inherited _ = #<:std/Clonable>;
 
         yes;
 
         with inherited trait = {
+            static with inherited _ = #<:std/Trait>;
+
             init: v => yes <- v;
             yes: block => block value(yes);
             no: block => self;
@@ -29,8 +31,11 @@
     Yes: value => (#<:std/maybe/Yes> clone) init: value;
 
     No = #=std/maybe/No: {
-        static with inherited parent = #<:std/Singleton>;
+        static with inherited _ = #<:std/Singleton>;
+
         with inherited trait = {
+            static with inherited _ = #<:std/Trait>;
+            
             yes: block => self;
             no: block => block value;
             yes: yblock no: nblock => nblock value;

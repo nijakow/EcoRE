@@ -2,11 +2,13 @@
 #=std/try: {
 
     Ok = #=std/try/Ok: {
-        static with inherited parent = #<:std/Clonable>;
+        static with inherited _ = #<:std/Clonable>;
 
         ok;
 
         with inherited trait = {
+            static with inherited _ = #<:std/Trait>;
+
             init: v => ok <- v;
             ok: block => block value(ok);
             error: block => self;
@@ -19,11 +21,13 @@
     Ok: value => (#<:std/try/Ok> clone) init: value;
 
     Error = #=std/try/Error: {
-        static with inherited parent = #<:std/Clonable>;
+        static with inherited _ = #<:std/Clonable>;
 
         error;
 
         with inherited trait = {
+            static with inherited _ = #<:std/Trait>;
+            
             init: v => error <- v;
             ok: block => self;
             error: block => block value(error);

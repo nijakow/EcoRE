@@ -1,8 +1,11 @@
 
 #=std/bool: {
     true = #=std/bool/true: {
-        static with inherited parent = #<:std/Clonable>;
+        static with inherited _ = #<:std/Clonable>;
+        
         with inherited trait = {
+            static with inherited _ = #<:std/Trait>;
+
             asBool           => self;
             not              => false;
             -> block         => block value;
@@ -19,8 +22,11 @@
     },
 
     false = #=std/bool/false: {
-        static with inherited parent = #<:std/Clonable>;
+        static with inherited _ = #<:std/Clonable>;
+        
         with inherited trait = {
+            static with inherited _ = #<:std/Trait>;
+            
             asBool           => self;
             not              => true;
             -> block         => self;

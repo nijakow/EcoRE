@@ -1,13 +1,15 @@
 
 #=std/util/Range: {
-    static with inherited parent = #<:std/Clonable>;
+    static with inherited _ = #<:std/Clonable>;
 
     start, end;
 
     with inherited trait = {
-        with inherited parent = #<:std/util/StandardListConversions>;
-        with inherited parent = #<:std/util/StandardListAccess>;
-        with inherited parent = #<:std/util/StandardListSearch>;
+        static with inherited _ = #<:std/Trait>;
+        
+        with inherited _ = #<:std/util/StandardListConversions>;
+        with inherited _ = #<:std/util/StandardListAccess>;
+        with inherited _ = #<:std/util/StandardListSearch>;
         
         initWithStart: _start End: _end => (
             start <- _start min: _end.

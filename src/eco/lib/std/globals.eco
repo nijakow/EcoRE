@@ -1,6 +1,8 @@
 
 #=globals: {
     char = {
+        static with inherited _ = #<:std/Module>;
+        
         space     => 32 asChar;
         backspace =>  8 asChar;
         tab       =>  9 asChar;

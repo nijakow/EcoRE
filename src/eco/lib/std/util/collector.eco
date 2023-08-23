@@ -1,11 +1,13 @@
 #=std/util/Collector: {
-    static with inherited parent = #<:std/Clonable>;
+    static with inherited _ = #<:std/Clonable>;
     
     prev,
     index = 0,
     value;
 
     with inherited trait = {
+        static with inherited _ = #<:std/Trait>;
+
         with inherited access = #<:std/util/StandardListAccess>;
         with inherited conversions = #<:std/util/StandardListConversions>;
 

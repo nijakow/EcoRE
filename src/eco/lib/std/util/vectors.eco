@@ -1,5 +1,7 @@
 
 #=std/util/vectors/VectorTrait: {
+    static with inherited _ = #<:std/Trait>;
+
     with inherited iterations = #<:std/util/StandardListIterations>;
     with inherited conversions = #<:std/util/StandardListConversions>;
     with inherited access = #<:std/util/StandardListAccess>;
@@ -69,12 +71,14 @@
 },
 
 #=std/util/ByteVector: {
-    static with inherited parent = #<:std/Clonable>;
+    static with inherited _ = #<:std/Clonable>;
 
     size = 0,
     own elements;
 
     with inherited trait = {
+        static with inherited _ = #<:std/Trait>;
+
         with inherited vectorTrait = #<:std/util/vectors/VectorTrait>;
 
         protected allocate: n => std util newBlob: n;
@@ -82,12 +86,14 @@
 },
 
 #=std/util/Vector: {
-    static with inherited parent = #<:std/Clonable>;
+    static with inherited _ = #<:std/Clonable>;
 
     size = 0,
     own elements;
 
     with inherited trait = {
+        static with inherited _ = #<:std/Trait>;
+        
         with inherited vectorTrait = #<:std/util/vectors/VectorTrait>;
         
         asString => asArray asString;
