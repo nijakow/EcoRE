@@ -6,6 +6,7 @@
     set: v => #'ecosphere.ecore.object.weakbox.set'(self, v);
 
     empty => (self == get);
+    clear => set: self;
     
     writeOn: w => (
         (empty) if: [

@@ -14,6 +14,7 @@
         set: v => get <- v;
 
         empty => (self == get);
+        clear => set: self;
     
         writeOn: w => (
             (empty) if: [

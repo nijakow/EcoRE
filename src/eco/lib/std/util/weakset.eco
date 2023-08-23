@@ -51,6 +51,17 @@
             ].
           ^ self
         );
+        remove: e => (
+            elements do: [ :box |
+                (box empty not) if: [
+                    (box get is: e) if: [
+                        box clear.
+                      ^ self
+                    ]
+                ]
+            ].
+          ^ self
+        );
         
         writeOn: w => w << 'a weak set';
     };
