@@ -23,6 +23,20 @@
     );
 },
 
+#=std/util/SafeListConversions: {
+    into: other => other from: self;
+    from: other => ( other do: [ :e | add: e ]. ^ self);
+
+    map: f => (
+        | v <- std util newVector |
+        do: [ :e | v add: (f value(e)) ].
+      ^ v asArray
+    );
+
+    asArray  => asVector asArray;
+    asVector => into: (std util newVector);
+},
+
 #=std/util/StandardListConversions: {
     into: other => other from: self;
     from: other => ( other do: [ :e | add: e ]. ^ self);

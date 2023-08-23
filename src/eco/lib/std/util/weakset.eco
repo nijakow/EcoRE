@@ -1,11 +1,11 @@
 
 #=std/util/WeakSet: {
-    with inherited parent = #<:std/Clonable>;
+    with inherited _ = #<:std/Clonable>;
 
     private elements;
 
     with inherited trait = {
-        with inherited parent = #<:std/util/StandardListConversions>;
+        with inherited _ = #<:std/util/SafeListConversions>;
 
         init => (
             elements <- std util newVector.
@@ -29,6 +29,12 @@
                 ]
             ].
           ^ self
+        );
+
+        size => (
+            | i <- 0 |
+            do: [ :e | i <- i + 1 ].
+          ^ i
         );
 
         contains: e => (
