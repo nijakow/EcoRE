@@ -625,18 +625,20 @@ Eve_UInt Eve_RenderState_GetEventMouseButtonID(struct Eve_RenderState* self) {
 }
 
 Eve_Int Eve_RenderState_GetEventMouseScrollX(struct Eve_RenderState* self) {
+    int flip_factor = (self->event.wheel.direction == SDL_MOUSEWHEEL_FLIPPED) ? -1 : 1;
     if (!(SDL_GetModState() & KMOD_LSHIFT)) {
-        return self->event.wheel.x;
+        return self->event.wheel.x * flip_factor;
     } else {
-        return self->event.wheel.y;
+        return self->event.wheel.y * flip_factor;
     }
 }
 
 Eve_Int Eve_RenderState_GetEventMouseScrollY(struct Eve_RenderState* self) {
+    int flip_factor = (self->event.wheel.direction == SDL_MOUSEWHEEL_FLIPPED) ? -1 : 1;
     if (!(SDL_GetModState() & KMOD_LSHIFT)) {
-        return self->event.wheel.y;
+        return self->event.wheel.y * flip_factor;
     } else {
-        return self->event.wheel.x;
+        return self->event.wheel.x * flip_factor;
     }
 }
 
