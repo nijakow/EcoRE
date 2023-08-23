@@ -110,6 +110,7 @@ struct Eve_TextCacheNode {
     struct Eve_TextCacheNode**  prev;
     char*                       text;
     struct Eve_Color            color;
+    TTF_Font*                   font;
     SDL_Texture*                texture;
     Eve_UInt                    width;
     Eve_UInt                    height;
@@ -117,7 +118,7 @@ struct Eve_TextCacheNode {
 
 void Eve_TextCacheNode_Unlink(struct Eve_TextCacheNode* self);
 
-void Eve_TextCacheNode_Create(struct Eve_TextCacheNode* self, struct Eve_TextCacheNode** insert_at, unsigned int age_created, const char* text, struct Eve_Color color, SDL_Texture* texture, Eve_UInt width, Eve_UInt height) {
+void Eve_TextCacheNode_Create(struct Eve_TextCacheNode* self, struct Eve_TextCacheNode** insert_at, unsigned int age_created, const char* text, struct Eve_Color color, TTF_Font* font, SDL_Texture* texture, Eve_UInt width, Eve_UInt height) {
     self->next_global = *insert_at;
     *insert_at        = self;
     self->age_created = age_created;
@@ -125,6 +126,7 @@ void Eve_TextCacheNode_Create(struct Eve_TextCacheNode* self, struct Eve_TextCac
     self->prev        = NULL;
     self->text        = strdup(text);
     self->color       = color;
+    self->font        = font;
     self->texture     = texture;
     self->width       = width;
     self->height      = height;
@@ -227,7 +229,7 @@ struct Eve_TextCacheNode* Eve_TextCache_FindOrCreate(struct Eve_TextCache* self,
     node   = bucket->head;
 
     while (node != NULL) {
-        if (strcmp(node->text, text) == 0 && node->color.rgba == color.rgba) {
+        if (strcmp(node->text, text) == 0 && node->color.rgba == color.rgba && node->font == font) {
             return node;
         }
         node = node->next;
@@ -246,7 +248,7 @@ struct Eve_TextCacheNode* Eve_TextCache_FindOrCreate(struct Eve_TextCache* self,
     SDL_FreeSurface(surface);
 
     node = malloc(sizeof(struct Eve_TextCacheNode));
-    Eve_TextCacheNode_Create(node, self->insert_at, self->age, text, color, texture, width, height);
+    Eve_TextCacheNode_Create(node, self->insert_at, self->age, text, color, font, texture, width, height);
     Eve_TextCacheNode_Link(node, &bucket->head);
     self->insert_at = &node->next_global;
     return node;
