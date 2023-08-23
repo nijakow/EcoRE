@@ -3,8 +3,8 @@
     static with inherited _ = std Clonable;
 
     protected renderer,
-    x <- 0,
-    y <- 0,
+    x <- 0.0,
+    y <- 0.0,
     r <- 0,
     isPenDown <- true;
 
@@ -29,12 +29,12 @@
         forward: n => (
             |
                 rrad <- (r * pi) / 180,
-                ex   <- (x + (n * (rrad cos))) asInt,
-                ey   <- (y + (n * (rrad sin))) asInt
+                ex   <- (x + (n * (rrad cos))),
+                ey   <- (y + (n * (rrad sin)))
             |
             
             isPenDown if: [
-                renderer drawLineX: x Y: y X: ex Y: ey. 
+                renderer drawLineX: (x asInt) Y: (y asInt) X: (ex asInt) Y: (ey asInt). 
             ].
 
             x <- ex.

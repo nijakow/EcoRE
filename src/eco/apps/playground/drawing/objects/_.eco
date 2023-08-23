@@ -20,18 +20,11 @@
 
         r setR: 255 G: 0 B: 0.
 
-        t moveToX: 100 Y: 100.
-        "1 to: 100 do: [ :i |
-            t forward: (100).
-            t right: 89.
-        ]."
-        t forward: 100.
-        t left: 90.
-        t forward: 100.
-        t left: 90.
-        t forward: 100.
-        t left: 90.
-        t forward: 100.
+        t moveToX: 200 Y: 200.
+        1 to: 100 do: [ :i |
+            t forward: i.
+            t left: 89.
+        ].
 
       ^ c
     );
