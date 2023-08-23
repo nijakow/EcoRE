@@ -56,9 +56,9 @@
 ## Timeline
 
  1) Minor UI refactoring and improvements
-    - `WindowBuilder`
-    - Color theme
-    - Morph refactoring
+    - `WindowBuilder` [done]
+    - Color theme [done]
+    - Morph refactoring [skip]
  2) Get weak data structures right
     - `WeakSet`s, `WeakMap`s, `NotificationList`s
  3) Implement reflection, types, concepts, interfaces and most basic parts of "EcoSense"

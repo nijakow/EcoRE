@@ -16,7 +16,7 @@
 
     Main => (
         (framework actions open) ui BuildAndOpen: [ :ui |
-            (ui window Construct)
+            (ui window Create)
               ~ width: 250 height: 300
               ~ content: (
                     ui Scrollable(

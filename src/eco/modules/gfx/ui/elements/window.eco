@@ -27,5 +27,5 @@
         };
     };
 
-    Construct => WindowBuilder new;
+    Create => WindowBuilder new;
 }
