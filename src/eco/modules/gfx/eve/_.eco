@@ -4,7 +4,7 @@
     input = (here / 'input' / '_.eco') importIn: self.
 
     protected lib,
-    protected DefaultFontPath <- (here / 'resources' / 'DejaVuSansMono.ttf') path;
+    protected DefaultFontPath <- (here / 'resources' / 'VictorMono-Regular.ttf') path;
 
     protected Eve_Init,
     protected Eve_Terminate,
