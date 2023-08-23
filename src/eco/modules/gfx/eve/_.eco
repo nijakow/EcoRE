@@ -57,9 +57,14 @@
 
     DefaultFont;
 
+    YScrollFactor <- 1;
 
     InitLinux => Setup: (std os files here / '..' / 'eve' / 'libeve.so') path;
-    InitMac   => Setup: (std os files here / '..' / 'eve' / 'libeve.dylib') path;
+    InitMac   => (
+        Setup: (std os files here / '..' / 'eve' / 'libeve.dylib') path.
+        YScrollFactor <- -1.
+      ^ self
+    );
     
     Init => (
         std os type
@@ -167,7 +172,7 @@
     GetEventMouseButtonID => Eve_GetEventMouseButtonID value();
 
     GetEventMouseScrollX => Eve_GetEventMouseScrollX value();
-    GetEventMouseScrollY => Eve_GetEventMouseScrollY value();
+    GetEventMouseScrollY => (Eve_GetEventMouseScrollY value()) * YScrollFactor;
 
     GetEventKeyScancode => Eve_GetEventKeyScancode value();
     GetEventKeyMod      => Eve_GetEventKeyMod value();
