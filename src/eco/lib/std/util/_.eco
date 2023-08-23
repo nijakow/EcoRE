@@ -113,13 +113,14 @@
     newStack       => (#<:std/util> Stack) new;
     newQueue       => (#<:std/util> Queue) new;
     newSet         => (#<:std/util> Set) new;
-    newWeakSet     => (#<:std/util> WeakSet) new;
     newMap         => (#<:std/util> Map) new;
     newAlist       => newMap;
     newAlistWithComparator: comp => (#<:std/util> Map clone) initWithComparator: comp;
     newRangeFrom: start To: end => ((#<:std/util> Range) clone) initWithStart: start End: end;
     newPair(a, b) => ((#<:std/util> MutablePair) clone) initWithFirst: a Second: b;
     newBox => (#<:std/util> Box) new;
+    newWeakSet => (#<:std/util> WeakSet) new;
+    newWeakMap => (#<:std/util> WeakMap) new;
 
     WriteIterable: it On: writer => (
         writer << '#('.
@@ -133,7 +134,6 @@
     Stack = #<:std/util/Stack>;
     Queue = #<:std/util/Queue>;
     Set = #<:std/util/Set>;
-    WeakSet = #<:std/util/WeakSet>;
     Vector = #<:std/util/Vector>;
     ByteVector = #<:std/util/ByteVector>;
     Collector = #<:std/util/Collector>;
@@ -141,4 +141,6 @@
     Map = #<:std/util/Map>;
     Range = #<:std/util/Range>;
     Box = #<:std/util/Box>;
+    WeakSet = #<:std/util/WeakSet>;
+    WeakMap = #<:std/util/WeakMap>;
 }

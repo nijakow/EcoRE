@@ -1,12 +1,13 @@
-#=std/util/Map: {
-    static with inherited _ = #<:std/Clonable>;
-    
+
+#=std/util/WeakMap: {
+    with inherited _ = #<:std/Clonable>;
+
     protected pairs;
     protected comparator;
 
     with inherited trait = {
         static with inherited _ = #<:std/Trait>;
-        
+
         initWithComparator: _comparator => (
             pairs      <- std util newVector.
             comparator <- _comparator.
@@ -14,7 +15,15 @@
         );
         init => initWithComparator: std util comparators DefaultComparator;
 
-        forEach: block => pairs do: [ :v | block value(v first, v second) ];
+        forEach: block => (
+            pairs do: [ :pair |
+                | v <- (pair first) get |
+                (((pair first) empty) not) if: [
+                    block value(v, pair second).
+                ].
+            ].
+          ^ self
+        );
         do: block => forEach: [ :k, :v | block value(k) ];
 
         from: collection => ( collection forEach: [ :k, :v | at: k put: v ]. ^ self );
@@ -23,8 +32,13 @@
         at: index => ( forEach: [ :k, :v | (comparator value(k, index)) if: [ ^ Yes: v ] ]. No );
 
         at: index put: value => (
-            pairs do: [ :p | (comparator value(p first, index)) if: [ p second: value. ^ self ] ].
-            pairs append: (index ~> value).
+            pairs do: [ :pair |
+                | v <- (pair first) get |
+                (((pair first) empty) not) if: [
+                    (comparator value(v, index)) if: [ p second: value. ^ self ].
+                ].
+            ].
+            pairs append: ((std util WeakBox: index) ~> value).
           ^ self
         );
 
@@ -34,6 +48,6 @@
         keys => keysInto: (std util newSet);
         values => valuesInto: (std util newSet);
 
-        writeOn: w => w << pairs;
+        writeOn: w => w << 'a weak map';
     };
 }

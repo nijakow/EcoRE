@@ -5,6 +5,7 @@
     private elements;
 
     with inherited trait = {
+        static with inherited _ = #<:std/Trait>;
         with inherited _ = #<:std/util/SafeListConversions>;
 
         init => (
@@ -24,8 +25,9 @@
         );
         do: block => (
             elements do: [ :box |
+                | v <- box get |
                 ((box empty) not) if: [
-                    block value(box get).
+                    block value(v).
                 ]
             ].
           ^ self
