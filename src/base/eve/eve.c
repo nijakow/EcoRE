@@ -3,6 +3,39 @@
 
 
 
+void Eve_Font_Create(struct Eve_Font* self, const char* path, Eve_UInt size)
+{
+    self->font = TTF_OpenFont(path, size);
+}
+
+void Eve_Font_Destroy(struct Eve_Font* self)
+{
+    TTF_CloseFont(self->font);
+}
+
+
+struct Eve_Font*  Eve_Font_New(const char* path, Eve_UInt size)
+{
+    struct Eve_Font*  font;
+
+    font = malloc(sizeof(struct Eve_Font));
+
+    if (font != NULL)
+    {
+        Eve_Font_Create(font, path, size);
+    }
+
+    return font;
+}
+
+void Eve_Font_Delete(struct Eve_Font* self)
+{
+    Eve_Font_Destroy(self);
+    free(self);
+}
+
+
+
 struct Eve_Color {
     uint32_t rgba;
 };

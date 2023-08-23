@@ -14,6 +14,21 @@ typedef uint8_t u8;
 typedef int32_t Eve_Int;
 typedef uint32_t Eve_UInt;
 
+
+
+struct Eve_Font
+{
+    TTF_Font*  font;
+};
+
+void Eve_Font_Create(struct Eve_Font* self, const char* path, Eve_UInt size);
+void Eve_Font_Destroy(struct Eve_Font* self);
+
+struct Eve_Font*  Eve_Font_New(const char* path, Eve_UInt size);
+void              Eve_Font_Delete(struct Eve_Font* self);
+
+
+
 Eve_UInt Eve_CurrentWidth();
 Eve_UInt Eve_CurrentHeight();
 
