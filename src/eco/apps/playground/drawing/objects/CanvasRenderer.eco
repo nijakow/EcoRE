@@ -7,7 +7,7 @@
     with inherited trait = {
         static with inherited _ = std Trait;
 
-        protected drawing = $;
+        protected drawing = $package;
         protected drawables => drawing objects drawables;
 
         init: _canvas => (

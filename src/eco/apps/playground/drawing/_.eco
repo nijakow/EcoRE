@@ -1,6 +1,18 @@
 
 {
     static with inherited _ = std Module;
+    with app <- $;
 
     own objects = (here / 'objects' / '_.eco') importIn: self;
+
+    Main => (
+        (framework actions open) ui BuildAndOpen: [ :ui |
+            (ui window Create)
+               ~ width: 400 height: 400
+               ~ content: (
+                    (objects morphs CanvasMorph) new
+                 )
+               ~ build
+        ]
+    );
 }

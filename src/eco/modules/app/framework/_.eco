@@ -9,6 +9,8 @@
 
     own context = {
         static with inherited _ = std Module;
+        protected app <- $package;
+        protected eve => app gfx eve;
 
         world <- No.
         world: w => world <- Yes: w;
@@ -16,6 +18,7 @@
         DefaultWorld => world yes;
         DefaultHand => DefaultWorld handMorph;
         DefaultRenderer => DefaultWorld renderer;
+        DefaultFont => eve DefaultFont;
     };
 
     writeOn: w => w << 'the framework';

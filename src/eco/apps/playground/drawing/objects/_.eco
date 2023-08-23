@@ -3,7 +3,19 @@
     static with inherited _ = std Module;
 
     own drawables = (here / 'drawables' / '_.eco') importIn: $;
+    own morphs    = (here / 'morphs' / '_.eco') importIn: $;
 
     own Canvas = (here / 'Canvas.eco') importIn: $;
     own CanvasRenderer = (here / 'CanvasRenderer.eco') importIn: $;
+
+    Test => (
+        |
+            c <- Canvas new,
+            r <- CanvasRenderer new: c
+        |
+
+        r drawLineX: 0 Y: 0 X: 100 Y: 100.
+
+      ^ c
+    );
 }

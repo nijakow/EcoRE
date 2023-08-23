@@ -1,0 +1,20 @@
+
+{
+    static with inherited _ = std Clonable;
+    with inherited own Morph = $ app gfx morphic morphs Morph;
+
+    canvas <- No;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+        protected drawing <- $package;
+        protected morphic => drawing app gfx morphic;
+
+        renderImplOn: renderer => (
+            canvas yes: [ :c | c renderOn: renderer ].
+            $(Morph) renderImplOn: renderer.
+        );
+
+        writeOn: w => w << 'a canvas morph';
+    };
+}
