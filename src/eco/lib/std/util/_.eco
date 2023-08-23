@@ -73,12 +73,12 @@
 
 #=std/util/StandardListSearch: {
     find: element => (
-        forEach: [ :i, :v | (v is: element) if: [ ^ Yes: i ] ].
+        forEach: [ :i, :v | (std util comparators DefaultComparator value(v, element)) if: [ ^ Yes: i ] ].
         ^ No
     );
 
     contains: element => (
-        forEach: [ :i, :v | (v is: element) if: [ ^ true ] ].
+        forEach: [ :i, :v | (std util comparators DefaultComparator value(v, element)) if: [ ^ true ] ].
       ^ false
     );
 },

@@ -1,6 +1,6 @@
 
 {
-    static with inherited _ = std Clonable;
+    static with inherited _ = std Module;
     with $battery = $;
 
     ui => gfx ui;

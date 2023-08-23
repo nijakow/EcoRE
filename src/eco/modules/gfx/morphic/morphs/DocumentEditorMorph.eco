@@ -17,6 +17,8 @@
 
                 render: renderer => self;
 
+                handleClickWithHand: hand => self;
+
                 ifPoint: p InBoundsDo: block => self;
             };
 
@@ -101,6 +103,8 @@
                 with inherited trait = {
                     static with inherited _ = std Trait;
 
+                    protected morphic <- $package morphic;
+
                     initWithOffset: _offset X: _xpos Y: _ypos W: _width H: _height Object: _object Text: _text => (
                         xpos   <- _xpos.
                         ypos   <- _ypos.
@@ -126,6 +130,10 @@
                         (p y < ypos) if: [ ^ self ].
                         (p y > (ypos + height)) if: [ ^ self ].
                       ^ block value(self)
+                    );
+
+                    handleClickWithHand: hand => (
+                        ((morphic app) framework actions open) OutlinerForObject: object.
                     );
                 };
             };
@@ -428,6 +436,13 @@
         );
 
         handleClick: click At: point HandMorph: hand => (
+            click ifMiddle: [
+                program yes: [ :prog |
+                    (prog findElementAtPoint: point)
+                        yes: [ :element | element handleClickWithHand: hand ].
+                  ^ true
+                ].
+            ].
             moveCursorToPixel: point.
           ^ true
         );
