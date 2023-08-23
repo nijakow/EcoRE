@@ -29,6 +29,7 @@
         fillRectX: x Y: y W: w H: h => "...";
         fillRect: rect => fillRectX: (rect x) Y: (rect y) W: (rect w) H: (rect h);
         drawChar: char X: x Y: y Font: font => add: ((drawables Character) clone initWithChar: char X: x Y: y Font: font);
+        drawChar: char X: x Y: y => drawChar: char X: x Y: y Font: (drawing app framework context DefaultFont);
 
         writeOn: w => w << 'a canvas renderer';
     };

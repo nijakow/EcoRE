@@ -47,6 +47,8 @@
         left: n => r <- (r + n) mod: 360;
         right: n => self left: (n negate);
 
+        say: char => renderer drawChar: char X: (x asInt) Y: (y asInt);
+
         writeOn: w => w << 'a turtle';
     };
 }
