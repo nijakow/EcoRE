@@ -3,6 +3,42 @@
 
 
 
+static size_t Eve_EncodeAsUtf8(Eve_UInt codepoint, char* buffer)
+{
+    if (codepoint <= 0x7F)
+    {
+        buffer[0] = codepoint;
+        return 1;
+    }
+    else if (codepoint <= 0x7FF)
+    {
+        buffer[0] = 0xC0 | (codepoint >> 6);
+        buffer[1] = 0x80 | (codepoint & 0x3F);
+        return 2;
+    }
+    else if (codepoint <= 0xFFFF)
+    {
+        buffer[0] = 0xE0 | (codepoint >> 12);
+        buffer[1] = 0x80 | ((codepoint >> 6) & 0x3F);
+        buffer[2] = 0x80 | (codepoint & 0x3F);
+        return 3;
+    }
+    else if (codepoint <= 0x10FFFF)
+    {
+        buffer[0] = 0xF0 | (codepoint >> 18);
+        buffer[1] = 0x80 | ((codepoint >> 12) & 0x3F);
+        buffer[2] = 0x80 | ((codepoint >> 6) & 0x3F);
+        buffer[3] = 0x80 | (codepoint & 0x3F);
+        return 4;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+
+
 void Eve_Font_Create(struct Eve_Font* self, const char* path, Eve_UInt size)
 {
     self->font = TTF_OpenFont(path, size);
@@ -76,20 +112,18 @@ Eve_UInt Eve_Font_GetTextHeight(struct Eve_Font* self, const char* text)
 
 Eve_UInt Eve_Font_GetCharWidth(struct Eve_Font* self, Eve_UInt c)
 {
-    char buffer[2];
+    char buffer[5];
 
-    buffer[0] = c;
-    buffer[1] = '\0';
+    buffer[Eve_EncodeAsUtf8(c, buffer)] = '\0';
 
     return Eve_Font_GetTextWidth(self, buffer);
 }
 
 Eve_UInt Eve_Font_GetCharHeight(struct Eve_Font* self, Eve_UInt c)
 {
-    char buffer[2];
+    char buffer[5];
 
-    buffer[0] = c;
-    buffer[1] = '\0';
+    buffer[Eve_EncodeAsUtf8(c, buffer)] = '\0';
 
     return Eve_Font_GetTextHeight(self, buffer);
 }
@@ -680,10 +714,9 @@ void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y, struct Eve_Font* font)
 }
 
 void Eve_DrawChar(Eve_UInt c, Eve_Int x, Eve_Int y, struct Eve_Font* font) {
-    char buffer[2];
+    char buffer[5];
 
-    buffer[0] = c;
-    buffer[1] = '\0';
+    buffer[Eve_EncodeAsUtf8(c, buffer)] = '\0';
 
     Eve_DrawText(buffer, x, y, font);
 }
@@ -781,19 +814,17 @@ Eve_UInt Eve_GetTextHeight(const char* text) {
 }
 
 Eve_UInt Eve_GetCharWidth(Eve_UInt c) {
-    char buffer[2];
+    char buffer[5];
 
-    buffer[0] = c;
-    buffer[1] = '\0';
+    buffer[Eve_EncodeAsUtf8(c, buffer)] = '\0';
 
     return Eve_GetTextWidth(buffer);
 }
 
 Eve_UInt Eve_GetCharHeight(Eve_UInt c) {
-    char buffer[2];
+    char buffer[5];
 
-    buffer[0] = c;
-    buffer[1] = '\0';
+    buffer[Eve_EncodeAsUtf8(c, buffer)] = '\0';
 
     return Eve_GetTextHeight(buffer);
 }
