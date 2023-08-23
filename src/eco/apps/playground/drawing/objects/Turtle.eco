@@ -30,7 +30,7 @@
             |
                 rrad <- (r * pi) / 180,
                 ex   <- (x + (n * (rrad cos))),
-                ey   <- (y + (n * (rrad sin)))
+                ey   <- (y - (n * (rrad sin)))
             |
             
             isPenDown if: [
