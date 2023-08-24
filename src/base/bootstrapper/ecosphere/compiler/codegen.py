@@ -19,6 +19,8 @@ class Bytecodes:
     RETURN = 0x0f
     CLOSURE = 0x10
 
+    JUMP = 0x40
+
 
 class CodeWriter:
 
@@ -142,6 +144,14 @@ class CodeWriter:
     def write_closure(self, code_object):
         self._u8(Bytecodes.CLOSURE)
         self._add_constant(code_object)
+    
+    def write_jump_offset_depth(self, offset, depth):
+        self._u8(Bytecodes.JUMP)
+        self._u8(depth)
+        self._u16(offset)
+    
+    def write_jump_offset(self, offset):
+        self.write_jump_offset_depth(offset, 0)
 
     def finish(self):
         return bytes(self._instructions), self._constants
