@@ -3,7 +3,7 @@
     static with inherited _ = std Module;
     with wisp = $;
 
-    MoleculeCorePaneForMirror: mirror Ui: ui Rebuilder: rebuilder => (
+    MoleculeCorePaneForMirror: mirror Ui: ui Replacer: replacer Rebuilder: rebuilder => (
         |
             slots <- ui VBox()
         |
@@ -27,16 +27,21 @@
                     ) ~ xLayout: ui layouts ShrinkWrap
                       ~ yLayout: ui layouts Flexible,
                     ui Button(ui Padding(3, ui Label: (slotMirror name asString)),
-                        $[ :(app, wisp, mirror) :sender :hand :click |
+                        $[ :(us, ui, app, wisp, mirror, replacer) :sender :hand :click |
                             click ifRight: [
                                 (app framework actions open) ui BuildAndOpenContextMenu: [ :cmb |
                                     cmb item: 'Open' does: $[ :(wisp, mirror) :sender | (wisp actions open) Object: (mirror slotValue) ] bind(wisp, mirror).
                                 ].
-                              ^ self
+                              ^ us
+                            ].
+                            click ifMiddle: [
+                                (wisp actions open) Object: (mirror slotValue).
+                              ^ us
                             ].
                             "If it wasn't the right button, open the slot value."
-                            (wisp actions open) Object: (mirror slotValue)
-                        ] bind(app, wisp, slotMirror)
+                            replacer value(us OutlinerPaneFor: (mirror slotValue) Ui: ui).
+                          ^ us
+                        ] bind(self, ui, app, wisp, slotMirror, replacer)
                     ) ~ xLayout: ui layouts Flexible
                       ~ yLayout: ui layouts Flexible,
                     ui Button(ui Spacer,
@@ -54,10 +59,10 @@
       ^ slots
     );
 
-    MoleculeCorePaneForObject: molecule Ui: ui Rebuilder: rebuilder => MoleculeCorePaneForMirror: (std reflect Mirror: molecule) Ui: ui Rebuilder: rebuilder;
+    MoleculeCorePaneForObject: molecule Ui: ui Replacer: replacer Rebuilder: rebuilder => MoleculeCorePaneForMirror: (std reflect Mirror: molecule) Ui: ui Replacer: replacer Rebuilder: rebuilder;
 
-    MoleculePaneFor: object Ui: ui => (
-        ui WithRebuilderDo: $[ :(us, ui, object) :rebuilder |
+    MoleculePaneFor: object Ui: ui Replacer: replacer => (
+        ui WithRebuilderDo: $[ :(us, ui, object, replacer) :rebuilder |
             ui Stacked(
                 ui VBox(
                     ui Spacer,
@@ -73,9 +78,9 @@
                         ui SpacerW: 10 H: 1
                     ) ~ yLayout: ui layouts ShrinkWrap,
                 ),
-                ui Scrollable(ui Padding(10, us MoleculeCorePaneForObject: object Ui: ui Rebuilder: rebuilder)),
+                ui Scrollable(ui Padding(10, us MoleculeCorePaneForObject: object Ui: ui Replacer: replacer Rebuilder: rebuilder)),
             ),
-        ] bind(self, ui, object)
+        ] bind(self, ui, object, replacer)
     );
 
     InterfacePaneFor: object Ui: ui => (
@@ -180,39 +185,41 @@
         )
     );
 
-    OutlinerContentPaneFor: object Ui: ui => (
+    OutlinerContentPaneFor: object Ui: ui Replacer: replacer => (
         begin
-            ~ if: [ std reflect primitives IsMolecule:  object ] then: [ ^ MoleculePaneFor:  object Ui: ui ]
-            ~ if: [ std reflect primitives IsInterface: object ] then: [ ^ InterfacePaneFor: object Ui: ui ]
-            ~ if: [ std reflect primitives IsArray:     object ] then: [ ^ ArrayPaneFor:     object Ui: ui ]
+            ~ if: [ std reflect primitives IsMolecule:  object ] then: [ ^ MoleculePaneFor:  object Ui: ui Replacer: replacer ]
+            ~ if: [ std reflect primitives IsInterface: object ] then: [ ^ InterfacePaneFor: object Ui: ui                    ]
+            ~ if: [ std reflect primitives IsArray:     object ] then: [ ^ ArrayPaneFor:     object Ui: ui                    ]
             "~ if: [ std reflect primitives IsCode:      object ] then: [ ^ CodePaneFor:      object Ui: ui ]"
         ~ default: [ ^ PresentationPaneFor: object Ui: ui ]
     );
 
     OutlinerPaneFor: object Ui: ui => (
-        | vbox <- ui VBox() |
-        vbox add: (ui Framed(OutlinerContentPaneFor: object Ui: ui)).
-        vbox add: (
-            ui HBox(
-                ui Button(ui Padding(5, ui Label: 'Copy'),
-                    $[ :(wisp, object) :sender |
-                        "TODO: Copy to clipboard"
-                        ((wisp framework actions) clipboard) CopyObject: object
-                     ] bind(wisp, object)
-                ) ~ xLayout: ui layouts Flexible,
-                ui Button(ui Padding(5, ui Label: 'Proxy'),
-                    $[ :(wisp, object) :sender |
-                        (wisp actions open) Object: (sys builtins reflect GetProxy(object))
-                    ] bind(wisp, object)
-                ) ~ xLayout: ui layouts Flexible,
-                ui Button(ui Padding(5, ui Label: 'Shell'),
-                    $[ :(wisp, ui, vbox, object) :sender |
-                        vbox add: ((wisp builder) ObjectShellPaneFor: object Ui: ui).
-                    ] bind(wisp, ui, vbox, object)
-                ) ~ xLayout: ui layouts Flexible,
-            ) ~ yLayout: ui layouts ShrinkWrap,
-        ).
-      ^ vbox
+        ui WithReplacerDo: [ :replacer |
+            | vbox <- ui VBox() |
+            vbox add: (ui Framed(OutlinerContentPaneFor: object Ui: ui Replacer: replacer)).
+            vbox add: (
+                ui HBox(
+                    ui Button(ui Padding(5, ui Label: 'Copy'),
+                        $[ :(wisp, object) :sender |
+                            "TODO: Copy to clipboard"
+                            ((wisp framework actions) clipboard) CopyObject: object
+                        ] bind(wisp, object)
+                    ) ~ xLayout: ui layouts Flexible,
+                    ui Button(ui Padding(5, ui Label: 'Proxy'),
+                        $[ :(wisp, object) :sender |
+                            (wisp actions open) Object: (sys builtins reflect GetProxy(object))
+                        ] bind(wisp, object)
+                    ) ~ xLayout: ui layouts Flexible,
+                    ui Button(ui Padding(5, ui Label: 'Shell'),
+                        $[ :(wisp, ui, vbox, object) :sender |
+                            vbox add: ((wisp builder) ObjectShellPaneFor: object Ui: ui).
+                        ] bind(wisp, ui, vbox, object)
+                    ) ~ xLayout: ui layouts Flexible,
+                ) ~ yLayout: ui layouts ShrinkWrap,
+            ).
+            vbox
+        ]
     );
 
     OutlinerWindowFor: object Ui: ui => (

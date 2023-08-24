@@ -140,6 +140,15 @@
       ^ container
     );
 
+    WithReplacerDo: aBlock => (
+        |
+            container <- ui VBox(),
+            replacer <- $[ :(builder, container) :newMorph | container replaceWith: (newMorph) ] bind(self, container)
+        |
+        container add: (aBlock value(replacer)).
+      ^ container
+    );
+
     Connection => (
         (morphic morphs ConnectionMorph) new
           ~ rigidWidth: 25
