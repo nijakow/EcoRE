@@ -14,13 +14,13 @@
 
     finishWithArgs: args Varargs: varargs => (
         "WARNING: UNCOMMENTING THIS LINE INVOKES AN OBJECT'S #'writeOn:' METHOD, EVEN IF THE OBJECT IS INCOMPLETE!"
-        /"
+        "
             io out << 'Dumping newly created code object...'. io out newline.
             io out << bytes. io out newline.
             io out << constants. io out newline.
             io out << 'Registers: ' << (maxRegister + 1) << ' Args: ' << args << ' Varargs: ' << varargs. io out newline.
             io out commit.
-        "/
+        "
         #'ecosphere.ecore.object.code.new'(bytes asBlob,
                                            constants asArray,
                                            maxRegister + 1,
@@ -165,4 +165,11 @@
         writeU8: Bytecodes RETURN.
         writeU8: depth
     );
+
+    writeJumpTo: offset Depth: depth => (
+        writeU8:  Bytecodes JUMP.
+        writeU8:  depth.
+        writeU16: offset.
+    );
+    writeJumpTo: offset => writeJumpTo: offset Depth: 0;
 }

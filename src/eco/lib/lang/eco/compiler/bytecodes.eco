@@ -17,4 +17,7 @@
     ASSIGN = 14,
     RETURN = 15,
     CLOSURE = 16,
+
+    "Extended instruction set"
+    JUMP = 64,
 }
