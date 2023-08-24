@@ -18,6 +18,8 @@
                 mapping <- std util newMap,
                 cb      <- std util newVector
             |
+            
+            cb add: (builder JumpLabel: (newContext entryLabel yes)).
 
             argdefs forEach: [ :i :arg |
                 "TODO: If the corresponding argument is a constant (e.g. a block),

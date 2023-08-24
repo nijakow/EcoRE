@@ -12,12 +12,17 @@
         );
 
         transformBuiltin: ast => (
-            "TODO: #'ecosphere.ecore.flow.reset'() will jump to the beginning of the active context"
             | args <- transformMultiple: (ast args) |
 
                  [ ast message == #'ecosphere.ecore.flow.value' ]
             and: [ args first ast type == astTypes Block        ]
-               ~ if: [ ^ Answer: (InlineValueBuiltin: (ExtendVarargs: args If: ast varargs) Varargs: ast varargs) ]
-               else: [ ^ Answer: (RewriteBuiltin: ast Args: args)                                                 ]
+               ~ if: [ ^ Answer: (InlineValueBuiltin: (ExtendVarargs: args If: ast varargs) Varargs: ast varargs) ].
+
+            (ast message == #'ecosphere.ecore.flow.reset') if: [
+                "#'ecosphere.ecore.flow.reset'() will jump to the beginning of the active context"
+              ^ Answer: (builder Jump: (context entryLabel yes))  "TODO: Graceful unpack instead of 'yes'"
+            ].
+            
+          ^ Answer: (RewriteBuiltin: ast Args: args)
         );
     }

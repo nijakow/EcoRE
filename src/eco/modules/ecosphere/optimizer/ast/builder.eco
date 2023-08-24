@@ -29,5 +29,6 @@
     Return: v Depth: d => (asts ASTReturn clone) initWithValue: v Depth: d;
 
     Jump: label Value: value => (asts ASTJump) clone initWithLabel: label Value: value;
+    Jump: label => Jump: label Value: (Constant: 42);  "TODO: Better value"
     JumpLabel: label => (asts ASTJumpLabel) clone initWithLabel: label;
 }
