@@ -27,21 +27,21 @@
                     ) ~ xLayout: ui layouts ShrinkWrap
                       ~ yLayout: ui layouts Flexible,
                     ui Button(ui Padding(3, ui Label: (slotMirror name asString)),
-                        $[ :(us, ui, app, wisp, mirror, replacer) :sender :hand :click |
+                        $[ :(app, wisp, mirror, replacer) :sender :hand :click |
                             click ifRight: [
                                 (app framework actions open) ui BuildAndOpenContextMenu: [ :cmb |
                                     cmb item: 'Open' does: $[ :(wisp, mirror) :sender | (wisp actions open) Object: (mirror slotValue) ] bind(wisp, mirror).
                                 ].
-                              ^ us
+                              ^ self
                             ].
                             click ifMiddle: [
                                 (wisp actions open) Object: (mirror slotValue).
-                              ^ us
+                              ^ self
                             ].
                             "If it wasn't the right button, open the slot value."
-                            replacer value(us OutlinerPaneFor: (mirror slotValue) Ui: ui).
-                          ^ us
-                        ] bind(self, ui, app, wisp, slotMirror, replacer)
+                            replacer value(mirror slotValue).
+                          ^ self
+                        ] bind(app, wisp, slotMirror, replacer)
                     ) ~ xLayout: ui layouts Flexible
                       ~ yLayout: ui layouts Flexible,
                     ui Button(ui Spacer,
@@ -127,7 +127,7 @@
         )
     );
 
-    ArrayPaneFor: object Ui: ui => (
+    ArrayPaneFor: object Ui: ui Replacer: replacer => (
         ui Scrollable(
             ui Padding(10,
                 ( | vbox <- ui VBox() |
@@ -142,9 +142,14 @@
                                             sw build
                                         )
                                     ),
-                                    $[ :(wisp, object, index) :sender |
-                                        (wisp actions open) Object: (object at: index)
-                                    ] bind(wisp, object, slotIndex)
+                                    $[ :(wisp, object, index, replacer) :sender :hand :click |
+                                        click ifMiddle: [
+                                            (wisp actions open) Object: (object at: index).
+                                          ^ self
+                                        ].
+                                        replacer value(object at: index).
+                                      ^ self
+                                    ] bind(wisp, object, slotIndex, replacer)
                                 ) ~ xLayout: ui layouts Flexible
                                   ~ yLayout: ui layouts ShrinkWrap,
                             ) ~ xLayout: ui layouts Flexible
@@ -189,13 +194,19 @@
         begin
             ~ if: [ std reflect primitives IsMolecule:  object ] then: [ ^ MoleculePaneFor:  object Ui: ui Replacer: replacer ]
             ~ if: [ std reflect primitives IsInterface: object ] then: [ ^ InterfacePaneFor: object Ui: ui                    ]
-            ~ if: [ std reflect primitives IsArray:     object ] then: [ ^ ArrayPaneFor:     object Ui: ui                    ]
+            ~ if: [ std reflect primitives IsArray:     object ] then: [ ^ ArrayPaneFor:     object Ui: ui Replacer: replacer ]
             "~ if: [ std reflect primitives IsCode:      object ] then: [ ^ CodePaneFor:      object Ui: ui ]"
         ~ default: [ ^ PresentationPaneFor: object Ui: ui ]
     );
 
     OutlinerPaneFor: object Ui: ui => (
-        ui WithReplacerDo: [ :replacer |
+        ui WithReplacerDo: [ :morphReplacer |
+            | replacer |
+
+            replacer <- $[ :(us, ui, morphReplacer) :object |
+                morphReplacer value(us OutlinerPaneFor: object Ui: ui)
+            ] bind(self, ui, morphReplacer).
+
             | vbox <- ui VBox() |
             vbox add: (ui Framed(OutlinerContentPaneFor: object Ui: ui Replacer: replacer)).
             vbox add: (
