@@ -2,4 +2,8 @@
 {
     static with inherited _ = std Module;
     optimizer = $;
+
+    CodeWriter => (std lang eco) compiler CodeWriter;
+    
+    own ScopedCompiler = (here / 'ScopedCompiler.eco') importIn: self;
 }

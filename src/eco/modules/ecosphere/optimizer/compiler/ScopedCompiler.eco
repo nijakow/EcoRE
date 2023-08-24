@@ -1,0 +1,41 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    scope;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+        protected compiler = $package;
+        protected ast      = $package optimizer ast;
+
+        initWithScope: _scope => (
+            scope <- _scope.
+          ^ self
+        );
+
+        compileBlock: expr => "TODO" self;
+        compileCompound: expr => "TODO" self;
+        compileReturn: expr => "TODO" self;
+        compileScope: expr => "TODO" self;
+        compileJump: expr => "TODO" self;
+        compileSend: expr => "TODO" self;
+        compileAssignment: expr => "TODO" self;
+        compileSlotAssignment: expr => "TODO" self;
+
+        compile: expr => (
+            Switch (expr type)
+              ~ case: ast types Block          do: [ compileBlock:          expr ]
+              ~ case: ast types Compound       do: [ compileCompound:       expr ]
+              ~ case: ast types Return         do: [ compileReturn:         expr ]
+              ~ case: ast types Scope          do: [ compileScope:          expr ]
+              ~ case: ast types Jump           do: [ compileJump:           expr ]
+              ~ case: ast types Send           do: [ compileSend:           expr ]
+              ~ case: ast types Assignment     do: [ compileAssignment:     expr ]
+              ~ case: ast types SlotAssignment do: [ compileSlotAssignment: expr ]
+            ~ default: [ (std sys error) ThrowMessage: 'Unable to compile expression: Type not supported' ]
+        );
+
+        writeOn: w => w << 'a scoped compiler';
+    };
+}
