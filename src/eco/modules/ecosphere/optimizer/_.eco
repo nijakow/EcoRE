@@ -24,4 +24,23 @@
     );
 
     RewriteAST: ast => rewriter Rewrite: ast;
+
+    Quickbuild: code => (
+        BuildAST: (Disassemble: code)
+    );
+
+    Quickrewrite: code => (
+        RewriteAST: (Quickbuild: code)
+    );
+
+    Quickprint: code => (
+        (ast Printer) clone initWithWriter: (std io out)
+          ~ print: (Quickbuild: code).
+        (std io out) newline commit.
+    );
+    Quickopt: code => (
+        (ast Printer) clone initWithWriter: (std io out)
+          ~ print: (Quickrewrite: code) ast.
+        (std io out) newline commit.
+    );
 }
