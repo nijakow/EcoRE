@@ -19,6 +19,7 @@ static void* DISPATCH_TABLE[] = {
     DEFDISPATCH(ASSIGN),
     DEFDISPATCH(RETURN),
     DEFDISPATCH(MAKE_CLOSURE),
+    DEFDISPATCH(JUMP),
 };
 
 
@@ -38,4 +39,3 @@ static void* DISPATCH_TABLE[] = {
 #define FAST_DROP()                { sp -= sizeof(Eco_Any); }
 #define FAST_NTH(N)                ((Eco_Any*) (sp - (N) * sizeof(Eco_Any)))
 #define FAST_DUP()                 { FAST_PUSH(FAST_NTH(1)); }
-

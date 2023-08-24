@@ -387,6 +387,32 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
 
             FAST_DISPATCH();
         }
+        TARGET(JUMP) {
+            u8                 depth;
+            u16                offset;
+            struct Eco_Frame*  target;
+
+            depth  = NEXT_U8();
+            offset = NEXT_U16();
+
+            if (depth == 0) {
+                instruction = &top->code->bytecodes[offset];
+                FAST_DISPATCH();
+            }
+
+            fiber->stack_pointer = sp;
+
+            target = Eco_Frame_NthLexical(Eco_Fiber_Top(fiber), depth);
+
+            target->instruction = &target->code->bytecodes[offset];
+
+            while (Eco_Fiber_Top(fiber) != target)
+            {
+                Eco_Fiber_PopFrame(fiber);
+            }
+
+            SLOW_DISPATCH();
+        }
         DEFAULT_TARGET() {
             Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_NOOPCODE);
             goto error;

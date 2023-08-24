@@ -1,6 +1,8 @@
 #ifndef ECO_VM_CORE_BYTECODES_H
 #define ECO_VM_CORE_BYTECODES_H
 
+#include <ecore/base/defs.h>
+
 enum Eco_Bytecode
 {
     Eco_Bytecode_NOOP = 0,
@@ -20,6 +22,16 @@ enum Eco_Bytecode
     Eco_Bytecode_ASSIGN,
     Eco_Bytecode_RETURN,
     Eco_Bytecode_MAKE_CLOSURE,
+
+    /*
+     * Extended bytecode set starts at 0x40, giving us 64 basic opcodes to work with.
+     */
+    Eco_Bytecode_JUMP = 0x40,
 };
+
+static inline bool Eco_Bytecode_IsExtended(enum Eco_Bytecode bytecode)
+{
+    return bytecode >= 0x40;
+}
 
 #endif
