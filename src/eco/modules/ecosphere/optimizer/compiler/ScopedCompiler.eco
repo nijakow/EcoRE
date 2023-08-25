@@ -12,19 +12,20 @@
         protected writer => scope lexicalBase writer;
 
 
+        protected In: scope => (compiler ScopedCompiler) clone initWithScope: scope;
+
+
         initWithScope: _scope => (
             scope <- _scope.
           ^ self
         );
 
         compileBlock: expr => (
-            | writer <- (compiler CodeWriter) new |
-
-            (In: (scope newLexicalWithWriter: writer)) compile: (expr code).
+            (In: (scope newLexical)) compile: (expr code).
 
             writer writeDelayedClosure: $[ :(writer, expr) |
                 writer finishWithArgs: (expr args) Varargs: (expr varargs)
-            ] bind(writer, expr).
+            ] bind(scope writer, expr).
         );
 
         compileCompound: expr => (
@@ -57,7 +58,9 @@
         );
 
         compileAssignment: expr => (
-            "TODO"
+            | lhs <- expr lhs, rhs <- expr rhs |
+
+            "TODO: Switch on lhs type, and perform the necessary action."
         );
 
         compileSlotAssignment: expr => (

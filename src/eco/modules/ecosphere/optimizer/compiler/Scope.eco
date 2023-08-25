@@ -1,0 +1,28 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    parentScope <- No,
+    context;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+        protected compiler = $package;
+
+        initWithContext: _context => (
+            context <- _context.
+          ^ self
+        );
+
+        initWithContext: _context Parent: _parentScope => (
+            context     <- _context.
+            parentScope <- Yes: _parentScope.
+          ^ self
+        );
+
+        newLexical  => (compiler Scope) clone initWithContext: (context subcontextWithLexicalScope: self);
+        newSubscope => (compiler Scope) clone initWithContext: context Parent: self;
+
+        writeOn: w => w << 'a scope';
+    };
+}
