@@ -1,7 +1,8 @@
 
 #=lang/eco/compiler/CodeWriter: {
-    static with inherited parent = #<:std/Clonable>;
-    with inherited module = #<:lang/eco/compiler>;
+    static with inherited _ = #<:std/Clonable>;
+
+    protected Bytecodes = #<:lang/eco/compiler/Bytecodes>;
 
     bytes, constants, maxRegister;
 
