@@ -9,19 +9,55 @@
         protected compiler = $package;
         protected ast      = $package optimizer ast;
 
+        protected writer => scope lexicalBase writer;
+
+
         initWithScope: _scope => (
             scope <- _scope.
           ^ self
         );
 
         compileBlock: expr => "TODO" self;
-        compileCompound: expr => "TODO" self;
-        compileReturn: expr => "TODO" self;
-        compileScope: expr => "TODO" self;
-        compileJump: expr => "TODO" self;
-        compileSend: expr => "TODO" self;
-        compileAssignment: expr => "TODO" self;
-        compileSlotAssignment: expr => "TODO" self;
+
+        compileCompound: expr => (
+            expr instructions do: [ :instr |
+                compile: instr.
+            ].
+        );
+        
+        compileReturn: expr => (
+            writer writeReturn: (scope lexicalDepth).
+        );
+
+        compileScope: expr => (
+            "
+                TODO: Introduce labels for beginning and end of scope.
+            "
+            (scope context entryLabel) yes: [ :label | placeJumpLabel: label ].
+            compile scope body.
+            (scope context exitLabel) yes: [ :label | placeJumpLabel: label ].
+        );
+
+        compileJump: expr => (
+            compile: (expr returnValue).
+            "TODO: (lookupLabel: (expr label)) compileJump."
+        );
+
+        compileSend: expr => (
+            expr args do: [ :arg | compile: arg. writer writePush. ].
+            expr writeSend: (expr message) Args: (expr args size) Varargs: (expr varargs).
+        );
+
+        compileAssignment: expr => (
+            "TODO"
+        );
+
+        compileSlotAssignment: expr => (
+            compile: lhs.
+            writer writePush.
+            compile: rhs.
+            writer writeAssign: slot.
+        );
 
         compile: expr => (
             Switch (expr type)
