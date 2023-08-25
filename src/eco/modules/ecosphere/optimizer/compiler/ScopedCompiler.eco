@@ -17,7 +17,15 @@
           ^ self
         );
 
-        compileBlock: expr => "TODO" self;
+        compileBlock: expr => (
+            | writer <- (compiler CodeWriter) new |
+
+            (In: (scope newLexicalWithWriter: writer)) compile: (expr code).
+
+            writer writeDelayedClosure: $[ :(writer, expr) |
+                writer finishWithArgs: (expr args) Varargs: (expr varargs)
+            ] bind(writer, expr).
+        );
 
         compileCompound: expr => (
             expr instructions do: [ :instr |

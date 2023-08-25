@@ -59,6 +59,10 @@
         writeU8: Bytecodes CLOSURE.
         addClosure: c.
     );
+    writeDelayedClosure: c => (
+        writeU8: Bytecodes CLOSURE.
+        addDelayedClosure: c.
+    );
 
     writePush => (
         writeU8: Bytecodes PUSH.

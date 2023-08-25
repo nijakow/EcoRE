@@ -85,6 +85,8 @@
 
             type => contextModule ASTType Block;
 
+            varargs => false;  "TODO!"
+
             acceptVisitor: visitor => visitor visitASTBlock: self;
 
             isAtomic => true;
