@@ -1,0 +1,177 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    protected Bytecodes => std lang eco compiler Bytecodes;
+
+    protected pulls,
+    bytes, constants, maxRegister;
+
+    init => (
+        pulls       <- std util newVector.
+        bytes       <- std util newVector.
+        constants   <- std util newVector.
+        maxRegister <- 0.
+      ^ self
+    );
+
+    finishWithArgs: args Varargs: varargs => (
+        pulls do: [ :pull | pull value ].
+        #'ecosphere.ecore.object.code.new'(bytes asBlob,
+                                           constants map asArray,
+                                           maxRegister + 1,
+                                           args,
+                                           varargs if: 1 else: 0)
+    );
+
+    protected introduceRegister: r => maxRegister <- maxRegister max: (r mod: 128);
+
+    writeU8: b => bytes append: b;
+    writeU16: s => (
+        writeU8: (s bitAnd: 0xff).
+        writeU8: ((s rshift: 8) bitAnd: 0xff)
+    );
+    addConstant: c => (
+        writeU16: constants size.
+        constants append: c
+    );
+    addClosure: c => addConstant: c;
+    addDelayedClosure: c => (
+        | i <- constants size |
+        writeU16: i.
+        constants append: 0.
+        pulls add: $[ :(v, i, f) | v at: i put: (f value) ] bind(constants, i, c).
+    );
+
+    writeNOOP => writeU8: Bytecodes NOOP;
+
+    writeConst: c => (
+        writeU8: Bytecodes CONST.
+        addConstant: c.
+    );
+
+    writePushConst: c => (
+        writeConst: c.
+        writePush.
+    );
+
+    writeClosure: c => (
+        writeU8: Bytecodes CLOSURE.
+        addClosure: c.
+    );
+
+    writePush => (
+        writeU8: Bytecodes PUSH.
+    );
+
+    writePop => (
+        writeU8: Bytecodes POP.
+    );
+
+    writeDrop => writePop;
+
+    writeDup => ( writePop. writePush. writePush. );
+
+    writeLoadLocal: r => (
+        introduceRegister: r.
+        writeU8: Bytecodes LOAD_LOCAL.
+        writeU8: r.
+    );
+
+    writeStoreLocal: r => (
+        introduceRegister: r.
+        writeU8: Bytecodes STORE_LOCAL.
+        writeU8: r.
+    );
+
+    writeLoadLexical: r Depth: d => (
+        writeU8: Bytecodes LOAD_LEXICAL.
+        writeU8: d.
+        writeU8: r.
+    );
+
+    writeStoreLexical: r Depth: d => (
+        writeU8: Bytecodes STORE_LEXICAL.
+        writeU8: d.
+        writeU8: r.
+    );
+
+    writeLoad: r => writeLoadLocal: r;
+    writeStore: r => writeStoreLocal: r;
+
+    writeLoad: r Depth: d => (
+        (d isZero)
+          ~ if: [ writeLoadLocal: r            ]
+          else: [ writeLoadLexical: r Depth: d ].
+    );
+
+    writeStore: r Depth: d => (
+        (d isZero)
+          ~ if: [ writeStoreLocal: r            ]
+          else: [ writeStoreLexical: r Depth: d ].
+    );
+
+    writeReg: src ToReg: dst => (
+        writeLoadLocal: src.
+        writeStoreLocal: dst.
+    );
+
+    writeReg: src ToReg: dst Depth: depth => (
+        writeLoadLexical: src.
+        writeStore: dst Depth: depth.
+    );
+
+    writeReg: src Depth: depth ToReg: dst => (
+        writeLoad: src Depth: depth.
+        writeStoreLexical: dst.
+    );
+
+    writeReg: src Depth: srcdepth ToReg: dst Depth: dstdepth => (
+        writeLoad: src Depth: srcdepth.
+        writeStore: dst Depth: dstdepth.
+    );
+
+    writeBuiltin: key Args: args Varargs: varargs => (
+        (varargs) if: [ writeU8: Bytecodes BUILTINV ]
+                else: [ writeU8: Bytecodes BUILTIN  ].
+        writeU8: args.
+        addConstant: key
+    );
+
+    writeBuiltin: key Args: args => writeBuiltin: key Args: args Varargs: false;
+
+    writeSend: message Args: args Varargs: varargs => (
+        (varargs) if: [ writeU8: Bytecodes SENDV ]
+                else: [ writeU8: Bytecodes SEND  ].
+        writeU8: args.
+        addConstant: message
+    );
+
+    writeSend: message Args: args => writeSend: message Args: args Varargs: false;
+
+    writeResend: message Args: args Varargs: varargs => (
+        (varargs) if: [ writeU8: Bytecodes RESENDV ]
+                else: [ writeU8: Bytecodes RESEND  ].
+        writeU8: args.
+        addConstant: message
+    );
+
+    writeResend: message Args: args => writeResend: message Args: args Varargs: false;
+
+    writeAssign: key => (
+        writeU8: Bytecodes ASSIGN.
+        addConstant: key
+    );
+
+    writeReturn: depth => (
+        writeU8: Bytecodes RETURN.
+        writeU8: depth
+    );
+
+    writeJumpTo: offset Depth: depth => (
+        writeU8:  Bytecodes JUMP.
+        writeU8:  depth.
+        writeU16: offset.
+    );
+    writeJumpTo: offset => writeJumpTo: offset Depth: 0;
+}
