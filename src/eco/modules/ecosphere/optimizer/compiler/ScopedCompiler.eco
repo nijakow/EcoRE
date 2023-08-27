@@ -49,7 +49,7 @@
 
         compileJump: expr => (
             compile: (expr returnValue).
-            "TODO: (lookupLabel: (expr label)) compileJump."
+            scope lookupLabel
         );
 
         compileSend: expr => (

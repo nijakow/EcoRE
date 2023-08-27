@@ -3,7 +3,8 @@
     static with inherited _ = std Clonable;
 
     parentScope <- No,
-    context;
+    context,
+    protected labels;
 
     with inherited trait = {
         static with inherited _ = std Trait;
@@ -11,17 +12,37 @@
 
         initWithContext: _context => (
             context <- _context.
+            labels  <- std util newMap.
           ^ self
         );
 
         initWithContext: _context Parent: _parentScope => (
             context     <- _context.
             parentScope <- Yes: _parentScope.
+            labels      <- std util newMap.
           ^ self
         );
 
         newLexical  => (compiler Scope) clone initWithContext: (context subcontextWithLexicalScope: self);
         newSubscope => (compiler Scope) clone initWithContext: context Parent: self;
+
+        lookupLabel: label IfFound: foundBlock IfNotFound: notFoundBlock Depth: depth => (
+            (labels at: label) yes: [ :result |
+              ^ foundBlock value(result, depth).
+            ] no: [
+                parentScope yes: [ :ps |
+                    ^ parentScope lookupLabel: label IfFound: foundBlock IfNotFound: notFoundBlock Depth: depth.
+                ] no: [
+                    context lexicalScope yes: [ :lex |
+                        ^ lex lookupLabel: label IfFound: foundBlock IfNotFound: notFoundBlock Depth: depth + 1.
+                    ] no: [
+                        ^ notFoundBlock value.
+                    ]
+                ]
+            ].
+        );
+        lookupLabel: label IfFound: foundBlock IfNotFound: notFoundBlock =>
+            lookupLabel: label IfFound: foundBlock IfNotFound: notFoundBlock Depth: 0;
 
         writeOn: w => w << 'a scope';
     };
