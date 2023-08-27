@@ -20,6 +20,11 @@
           ^ self
         );
 
+
+        compileConstant: expr => (
+            writer writeConst: (expr constant).
+        );
+
         compileBlock: expr => (
             (In: (scope newLexical)) compile: (expr code).
 
@@ -47,9 +52,9 @@
             (scope context exitLabel) yes: [ :label | placeJumpLabel: label ].
         );
 
-        compileJump: expr => (
-            compile: (expr returnValue).
-            scope lookupLabel
+        compileBuiltin: expr => (
+            expr args do: [ :arg | compile: arg. writer writePush. ].
+            expr writeBuiltin: (expr message) Args: (expr args size) Varargs: (expr varargs).
         );
 
         compileSend: expr => (
@@ -70,16 +75,35 @@
             writer writeAssign: slot.
         );
 
+        compileJump: expr => (
+            "TODO: Forward jump to label"
+            compile: (expr returnValue).
+            scope lookupLabel: (expr label) ifFound: [ :offset :depth |
+                writer writeJumpTo: offset Depth: depth.
+            ] ifNotFound: [
+                (std sys error) ThrowMessage: 'Unable to find label!'.
+            ].
+        );
+
+        compileLabel: expr => (
+            placeJumpLabel: (expr label).
+        );
+
         compile: expr => (
             Switch (expr type)
-              ~ case: ast types Block          do: [ compileBlock:          expr ]
+              ~ case: ast types Constant       do: [ compileConstant:       expr ]
+              "TODO: ValueRef"
               ~ case: ast types Compound       do: [ compileCompound:       expr ]
-              ~ case: ast types Return         do: [ compileReturn:         expr ]
+              ~ case: ast types Block          do: [ compileBlock:          expr ]
               ~ case: ast types Scope          do: [ compileScope:          expr ]
-              ~ case: ast types Jump           do: [ compileJump:           expr ]
+              ~ case: ast types Builtin        do: [ compileBuiltin:        expr ]
               ~ case: ast types Send           do: [ compileSend:           expr ]
+              "TODO: Resend"
               ~ case: ast types Assignment     do: [ compileAssignment:     expr ]
               ~ case: ast types SlotAssignment do: [ compileSlotAssignment: expr ]
+              ~ case: ast types Return         do: [ compileReturn:         expr ]
+              ~ case: ast types Jump           do: [ compileJump:           expr ]
+              ~ case: ast types JumpLabel      do: [ compileLabel:          expr ]
             ~ default: [ (std sys error) ThrowMessage: 'Unable to compile expression: Type not supported' ]
         );
 
