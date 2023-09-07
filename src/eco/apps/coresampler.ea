@@ -3,6 +3,48 @@
     static with inherited _ = std Module;
     with app = $;
 
+    own AimMorph = {
+        static with inherited _ = std Clonable;
+        with inherited own Morph = ($ gfx morphic) morphs Morph;
+    
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            init => (
+                $(Morph) init.
+                xLayout: ((morphic layouts) ShrinkWrap).
+                yLayout: ((morphic layouts) ShrinkWrap).
+              ^ self
+            );
+
+            magicTip => globalOffset offsetByX: -100 Y: -100;
+            
+            xRayAtMagicTipDo: block => (
+                (world) yes: [ :world |
+                    world xRayAt: (self magicTip) ReverseDo: block.
+                ].
+            );
+
+            renderImplOn: renderer => (
+                renderer setR: 255 G: 0 B: 0.
+                renderer drawLineX: 0 Y: 0 X: -100 Y: -100.
+
+                [ :break |
+                    | mt <- self magicTip, go <- globalOffset |
+                    xRayAtMagicTipDo: [ :morph |
+                        | diff <- (morph globalOffset - go) |
+
+                        renderer drawRectX: diff x Y: diff y W: (morph width) H: (morph height).
+
+                        break value.
+                    ].
+                ] withBreak
+            );
+
+            writeOn: w => w << 'a coresampler aim morph';
+        };
+    };
+
     own Kernel = {
         static with inherited _ = std Clonable;
 
@@ -17,7 +59,7 @@
 
             xRayDo: block => (
                 window yes: [ :win |
-                    | offset <- win globalOffset |
+                    | offset <- win magicTip |
 
                     (win world) yes: [ :world |
                         |
@@ -82,9 +124,11 @@
     BuildCS: ui => (
         |
             kernel <- Kernel new,
+            aim    <- AimMorph new,
             win <-
                 ui Window(380, 400,
                     ui VBox(
+                        aim,
                         ui HBox(
                             ui Spacer
                                 ~ xLayout: ui layouts Flexible
@@ -119,7 +163,7 @@
                 )
         |
 
-        kernel window: win.
+        kernel window: aim.
 
       ^ win
     );
