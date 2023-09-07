@@ -199,18 +199,25 @@
         ~ default: [ ^ PresentationPaneFor: object Ui: ui ]
     );
 
-    OutlinerPaneFor: object Ui: ui => (
+    OutlinerPaneFor: object Back: maybeBack Ui: ui => (
         ui WithReplacerDo: [ :morphReplacer |
             | replacer |
 
-            replacer <- $[ :(us, ui, morphReplacer) :object |
-                morphReplacer value(us OutlinerPaneFor: object Ui: ui)
-            ] bind(self, ui, morphReplacer).
+            replacer <- $[ :(us, ui, morphReplacer, previous) :object |
+                morphReplacer value(us OutlinerPaneFor: object Back: (Yes: previous) Ui: ui)
+            ] bind(self, ui, morphReplacer, object).
 
             | vbox <- ui VBox() |
             vbox add: (ui Framed(OutlinerContentPaneFor: object Ui: ui Replacer: replacer)).
             vbox add: (
                 ui HBox(
+                    ui Button(ui Padding(5, ui Label: 'Back'),
+                        $[ :(us, ui, morphReplacer, maybeBack) :sender |
+                            maybeBack yes: [ :back |
+                                morphReplacer value(us OutlinerPaneFor: back Ui: ui)
+                            ]
+                        ] bind(self, ui, morphReplacer, maybeBack)
+                    ) ~ xLayout: ui layouts Flexible,
                     ui Button(ui Padding(5, ui Label: 'Copy'),
                         $[ :(wisp, object) :sender |
                             "TODO: Copy to clipboard"
@@ -232,6 +239,7 @@
             vbox
         ]
     );
+    OutlinerPaneFor: object Ui: ui => OutlinerPaneFor: object Back: No Ui: ui;
 
     OutlinerWindowFor: object Ui: ui => (
         ui Window(400, 400,
