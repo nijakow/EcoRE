@@ -11,7 +11,8 @@
         protected cachedGlobalOffset,
         protected cachedLayoutingConstraints,
         protected isRenderDirty,
-        protected isChildRenderDirty;
+        protected isChildRenderDirty,
+        protected metaHandle;
 
         with inherited trait = {
             static with inherited _ = std Trait;
@@ -27,6 +28,7 @@
                 listener           <- No.
                 parent             <- No.
                 children           <- config new.
+                metaHandle         <- No.
 
                 "Caches"
                 cachedGlobalOffset         <- No.
@@ -333,6 +335,21 @@
                 isChildRenderDirty <- false.
             );
 
+            "
+                Meta
+            "
+            meta: key => (
+                metaHandle yes: [ :map | ^ map at: key ].
+              ^ No
+            );
+
+            meta: key is: value => (
+                metaHandle yes: [ :map | map                                       ]
+                            no: [ | m <- std util newMap | metaHandle <- Yes: m. m ]
+                  ~ at: key put: value.
+              ^ self
+            );
+
 
             "
                 Events
@@ -376,12 +393,14 @@
             );
 
             handleDropMorph: morph At: point => false;
+            handleDropMorph: morph At: point Meta: meta => handleDropMorph: morph At: point;
             handleClick: click At: point HandMorph: hand => false;
             handleGrabAt: point HandMorph: hand => false;
             handleScrollX: sx Y: sy At: point HandMorph: hand => false;
             handleKey: key At: point HandMorph: hand => false;
 
-            dropMorph: morph At: point => dispatchEvent: [ :e :point | e handleDropMorph: morph At: point ] At: point;
+            dropMorph: morph At: point => dropMorph: morph At: point Meta: No;
+            dropMorph: morph At: point Meta: meta => dispatchEvent: [ :e :point | e handleDropMorph: morph At: point Meta: meta ] At: point;
             click: click At: point HandMorph: hand => dispatchEvent: [ :e :point | e handleClick: click At: point HandMorph: hand ] At: point;
             grabAt: point HandMorph: hand => dispatchEvent: [ :e :point | e handleGrabAt: point HandMorph: hand ] At: point;
             scrollX: sx Y: sy At: point HandMorph: hand => dispatchEvent: [ :e :point | e handleScrollX: sx Y: sy At: point HandMorph: hand ] At: point;

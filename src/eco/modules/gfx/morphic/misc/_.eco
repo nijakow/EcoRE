@@ -4,4 +4,25 @@
     with morphic = $;
 
     own color = (here / 'color' / '_.eco') importIn: self;
+
+    own GrabInfo = {
+        static with inherited _ = std Clonable;
+
+        morph,
+        metadata <- No;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithMorph: _morph Metadata: _meta => (
+                morph    <- _morph.
+                metadata <- _meta.
+              ^ self
+            );
+
+            initWithMorph: _morph => initWithMorph: _morph Metadata: No;
+
+            writeOn: w => w << 'a morphic grab info';
+        };
+    }
 }
