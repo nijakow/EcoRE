@@ -199,13 +199,34 @@
         ~ default: [ ^ PresentationPaneFor: object Ui: ui ]
     );
 
+    own BrowseHistoryItem = {
+        static with inherited _ = std Clonable;
+
+        previous <- No,
+        object;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            
+            initWithObject: o Previous: p => (
+                previous <- p.
+                object   <- o.
+              ^ self
+            );
+
+            initWithObject: o => initWithObject: o Previous: No;
+
+            writeOn: w => w << 'a browse history item'; 
+        };
+    };
+
     OutlinerPaneFor: object Back: maybeBack Ui: ui => (
         ui WithReplacerDo: [ :morphReplacer |
             | replacer |
 
-            replacer <- $[ :(us, ui, morphReplacer, previous) :object |
-                morphReplacer value(us OutlinerPaneFor: object Back: (Yes: previous) Ui: ui)
-            ] bind(self, ui, morphReplacer, object).
+            replacer <- $[ :(us, ui, morphReplacer, history) :object |
+                morphReplacer value(us OutlinerPaneFor: object Back: history Ui: ui)
+            ] bind(self, ui, morphReplacer, Yes: (BrowseHistoryItem clone initWithObject: object Previous: maybeBack)).
 
             | vbox <- ui VBox() |
             vbox add: (ui Framed(OutlinerContentPaneFor: object Ui: ui Replacer: replacer)).
@@ -214,7 +235,7 @@
                     ui Button(ui Padding(5, ui Label: 'Back'),
                         $[ :(us, ui, morphReplacer, maybeBack) :sender |
                             maybeBack yes: [ :back |
-                                morphReplacer value(us OutlinerPaneFor: back Ui: ui)
+                                morphReplacer value(us OutlinerPaneFor: (back object) Back: (back previous) Ui: ui)
                             ]
                         ] bind(self, ui, morphReplacer, maybeBack)
                     ) ~ xLayout: ui layouts Flexible,
