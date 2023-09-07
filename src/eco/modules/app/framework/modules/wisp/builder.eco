@@ -232,7 +232,7 @@
             vbox add: (ui Framed(OutlinerContentPaneFor: object Ui: ui Replacer: replacer)).
             vbox add: (
                 ui HBox(
-                    ui Button(ui Padding(5, ui Label: 'Back'),
+                    ui Button(ui Padding(5, ui Label: '<'),
                         $[ :(us, ui, morphReplacer, maybeBack) :sender |
                             maybeBack yes: [ :back |
                                 morphReplacer value(us OutlinerPaneFor: (back object) Back: (back previous) Ui: ui)
