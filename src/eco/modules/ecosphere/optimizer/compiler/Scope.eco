@@ -26,6 +26,10 @@
         newLexical  => (compiler Scope) clone initWithContext: (context subcontextWithLexicalScope: self);
         newSubscope => (compiler Scope) clone initWithContext: context Parent: self;
 
+        lexicalBase => context;
+
+        lexicalDepth => context lexicalDepth;
+
         lookupLabel: label IfFound: foundBlock IfNotFound: notFoundBlock Depth: depth => (
             (labels at: label) yes: [ :result |
               ^ foundBlock value(result, depth).

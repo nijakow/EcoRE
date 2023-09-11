@@ -28,8 +28,8 @@
 
     writeU8: b => bytes append: b;
     writeU16: s => (
-        writeU8: (s bitAnd: 0xff).
-        writeU8: ((s rshift: 8) bitAnd: 0xff)
+        writeU8: (s bitAnd: 255).
+        writeU8: ((s rshift: 8) bitAnd: 255)
     );
     addConstant: c => (
         writeU16: constants size.

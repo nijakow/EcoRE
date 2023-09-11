@@ -30,7 +30,7 @@
 
             writer writeDelayedClosure: $[ :(writer, expr) |
                 writer finishWithArgs: (expr args) Varargs: (expr varargs)
-            ] bind(scope writer, expr).
+            ] bind(writer, expr).
         );
 
         compileCompound: expr => (
@@ -90,7 +90,7 @@
         );
 
         compile: expr => (
-            Switch (expr type)
+            Switch: (expr type)
               ~ case: ast types Constant       do: [ compileConstant:       expr ]
               "TODO: ValueRef"
               ~ case: ast types Compound       do: [ compileCompound:       expr ]
