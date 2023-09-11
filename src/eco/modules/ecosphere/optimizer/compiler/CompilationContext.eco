@@ -2,6 +2,8 @@
 {
     static with inherited _ = std Clonable;
 
+    protected argumentCount <- 0,
+    protected localCount    <- 0,
     lexicalScope <- No,
     writer;
 
@@ -26,6 +28,18 @@
         lexicalDepth => (
             lexicalScope yes: [ :ls | ^ ls lexicalDepth + 1 ]
                           no: [       ^ 0                   ]
+        );
+
+        newArgument => (
+            | i <- argumentCount |
+            argumentCount <- argumentCount + 1.
+          ^ i
+        );
+
+        newLocal => (
+            | i <- localCount |
+            localCount <- localCount + 1.
+          ^ i
         );
 
         finishWithArgs: args Varargs: varargs => writer finishWithArgs: args Varargs: varargs;

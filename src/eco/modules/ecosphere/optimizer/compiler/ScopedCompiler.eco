@@ -26,16 +26,22 @@
         );
 
         compileValueRef: expr => (
-            lookupLabel: (expr marker)
-                IfFound: [ :result :depth | writer writeLoad: result Depth: depth    ]
-             IfNotFound: [ (std sys error) ThrowMessage: 'Unable to find ValueRef!'. ]
+            scope lookupLabel: (expr marker)
+                      IfFound: [ :result :depth | writer writeLoad: result Depth: depth    ]
+                   IfNotFound: [ (std sys error) ThrowMessage: 'Unable to find ValueRef!'. ]
         );
 
         compileBlock: expr => (
             | lex <- scope newLexical |
-            (In: lex) compile: (expr code).
 
-            "TODO: Add arguments and varargs to scope."
+            (std io out << 'Expr: ' << expr) newline commit.
+
+            (expr args) do: [ :arg |
+                (std io out << arg) newline commit.
+                lex addArgument: arg
+            ].
+
+            (In: lex) compile: (expr code).
 
             writer writeDelayedClosure: $[ :(subwriter, expr) |
                 subwriter finishWithArgs: (expr args) Varargs: (expr varargs)
@@ -64,12 +70,12 @@
 
         compileBuiltin: expr => (
             expr args do: [ :arg | compile: arg. writer writePush. ].
-            expr writeBuiltin: (expr message) Args: (expr args size) Varargs: (expr varargs).
+            writer writeBuiltin: (expr message) Args: (expr args size) Varargs: (expr varargs).
         );
 
         compileSend: expr => (
             expr args do: [ :arg | compile: arg. writer writePush. ].
-            expr writeSend: (expr message) Args: (expr args size) Varargs: (expr varargs).
+            writer writeSend: (expr message) Args: (expr args size) Varargs: (expr varargs).
         );
 
         compileAssignment: expr => (
