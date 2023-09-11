@@ -18,7 +18,7 @@
     finishWithArgs: args Varargs: varargs => (
         pulls do: [ :pull | pull value ].
         #'ecosphere.ecore.object.code.new'(bytes asBlob,
-                                           constants map asArray,
+                                           constants asArray,
                                            maxRegister + 1,
                                            args,
                                            varargs if: 1 else: 0)

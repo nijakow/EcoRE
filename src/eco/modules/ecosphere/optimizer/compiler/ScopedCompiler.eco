@@ -26,11 +26,12 @@
         );
 
         compileBlock: expr => (
-            (In: (scope newLexical)) compile: (expr code).
+            | lex <- scope newLexical |
+            (In: lex) compile: (expr code).
 
-            writer writeDelayedClosure: $[ :(writer, expr) |
-                writer finishWithArgs: (expr args) Varargs: (expr varargs)
-            ] bind(writer, expr).
+            writer writeDelayedClosure: $[ :(subwriter, expr) |
+                subwriter finishWithArgs: (expr args) Varargs: (expr varargs)
+            ] bind(lex writer, expr).
         );
 
         compileCompound: expr => (
@@ -90,6 +91,7 @@
         );
 
         compile: expr => (
+            (std io out << 'Compiling ' << expr) newline commit.
             Switch: (expr type)
               ~ case: ast types Constant       do: [ compileConstant:       expr ]
               "TODO: ValueRef"

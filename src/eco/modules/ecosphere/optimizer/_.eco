@@ -45,4 +45,5 @@
     );
 
     Quickcompile: ast => compiler CompileAst: ast;
+    Quickcompile2: code => Quickcompile: (Quickbuild: code);
 }

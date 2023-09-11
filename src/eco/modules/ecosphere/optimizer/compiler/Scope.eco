@@ -27,8 +27,8 @@
         newSubscope => (compiler Scope) clone initWithContext: context Parent: self;
 
         lexicalBase => context;
-
         lexicalDepth => context lexicalDepth;
+        writer => context writer;
 
         lookupLabel: label IfFound: foundBlock IfNotFound: notFoundBlock Depth: depth => (
             (labels at: label) yes: [ :result |
