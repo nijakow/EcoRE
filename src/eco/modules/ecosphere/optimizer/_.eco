@@ -46,4 +46,9 @@
 
     Quickcompile: ast => compiler CompileAst: ast;
     Quickcompile2: code => Quickcompile: (Quickbuild: code);
+    Quickprint2: code => (
+        (ast Printer) clone initWithWriter: (std io out)
+          ~ print: (Quickbuild: code).
+        (std io out) newline commit.
+    );
 }
