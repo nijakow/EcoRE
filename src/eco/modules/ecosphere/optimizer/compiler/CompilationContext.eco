@@ -23,6 +23,8 @@
 
         subcontextWithLexicalScope: scope => (compiler CompilationContext) clone initWithLexicalScope: scope;
 
+        finishWithArgs: args Varargs: varargs => writer finishWithArgs: args Varargs: varargs;
+
         writeOn: w => w << 'a compilation context';
     };
 }

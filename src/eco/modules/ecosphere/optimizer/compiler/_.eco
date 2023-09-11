@@ -7,4 +7,21 @@
     own CompilationContext = (here / 'CompilationContext.eco') importIn: self;
     own Scope              = (here / 'Scope.eco') importIn: self;
     own ScopedCompiler     = (here / 'ScopedCompiler.eco') importIn: self;
+
+    CompileAst: ast => (
+        "
+            Todo: Expect the Ast to be a function/block declaration,
+                  so that we can extract the arguments and the body.
+        "
+
+        |
+            context  <- CompilationContext new,
+            scope    <- Scope clone initWithContext: context,
+            compiler <- ScopedCompiler clone initWithScope: scope
+        |
+
+        compiler compile: ast.
+
+      ^ context finishWithArgs: 0 Varargs: false  "todo: see above"
+    )
 }
