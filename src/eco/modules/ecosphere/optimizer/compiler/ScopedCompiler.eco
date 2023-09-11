@@ -25,9 +25,17 @@
             writer writeConst: (expr constant).
         );
 
+        compileValueRef: expr => (
+            lookupLabel: (expr marker)
+                IfFound: [ :result :depth | writer writeLoad: result Depth: depth    ]
+             IfNotFound: [ (std sys error) ThrowMessage: 'Unable to find ValueRef!'. ]
+        );
+
         compileBlock: expr => (
             | lex <- scope newLexical |
             (In: lex) compile: (expr code).
+
+            "TODO: Add arguments and varargs to scope."
 
             writer writeDelayedClosure: $[ :(subwriter, expr) |
                 subwriter finishWithArgs: (expr args) Varargs: (expr varargs)
@@ -41,6 +49,7 @@
         );
         
         compileReturn: expr => (
+            compile: (expr returnValue).
             writer writeReturn: (scope lexicalDepth).
         );
 
@@ -94,7 +103,7 @@
             (std io out << 'Compiling ' << expr) newline commit.
             Switch: (expr type)
               ~ case: ast types Constant       do: [ compileConstant:       expr ]
-              "TODO: ValueRef"
+              ~ case: ast types ValueRef       do: [ compileValueRef:       expr ]
               ~ case: ast types Compound       do: [ compileCompound:       expr ]
               ~ case: ast types Block          do: [ compileBlock:          expr ]
               ~ case: ast types Scope          do: [ compileScope:          expr ]
