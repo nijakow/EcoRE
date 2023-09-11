@@ -34,17 +34,14 @@
         compileBlock: expr => (
             | lex <- scope newLexical |
 
-            (std io out << 'Expr: ' << expr) newline commit.
-
             (expr args) do: [ :arg |
-                (std io out << arg) newline commit.
                 lex addArgument: arg
             ].
 
             (In: lex) compile: (expr code).
 
             writer writeDelayedClosure: $[ :(subwriter, expr) |
-                subwriter finishWithArgs: (expr args) Varargs: (expr varargs)
+                subwriter finishWithArgs: ((expr args) size) Varargs: (expr varargs)
             ] bind(lex writer, expr).
         );
 
@@ -56,7 +53,7 @@
         
         compileReturn: expr => (
             compile: (expr returnValue).
-            writer writeReturn: (scope lexicalDepth).
+            writer writeReturn: (expr depth).
         );
 
         compileScope: expr => (
