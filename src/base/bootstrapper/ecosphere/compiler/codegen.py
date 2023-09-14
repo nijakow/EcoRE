@@ -162,92 +162,19 @@ class CodeWriter:
 
 class CodeGenerator:
 
-    def _drop_last_value(self):
-        self._transfer_last_value(None)
-
-    def _get_self(self):
-        return self._scope.get_storage_manager().get_self_with_depth(self._scope.get_depth())
-    
-    def _transfer_value(self, src, dst):
-        if src is None:
-            src = self._get_self()
-        if dst is None:
-            if src.is_stack():
-                self._writer.write_drop()
-            else:
-                pass
-        elif dst.is_stack():
-            if src.is_stack():
-                pass
-            elif src.is_register():
-                self._writer.write_load(src.get_depth(), src.get_bc_register_number())
-                self._writer.write_push()
-            elif src.is_constant():
-                cb = self._writer.write_const_cb()
-                src.with_value(cb)
-                self._writer.write_push()
-            elif src.is_closure():
-                self._writer.write_closure(src.get_code())
-                self._writer.write_push()
-            else:
-                pass # TODO: Error
-        elif dst.is_register():
-            if src.is_stack():
-                self._writer.write_pop()
-                self._writer.write_store(dst.get_depth(), dst.get_bc_register_number())
-            elif src.is_register():
-                self._writer.write_load(src.get_depth(), src.get_bc_register_number())
-                self._writer.write_store(dst.get_depth(), dst.get_bc_register_number())
-            elif src.is_constant():
-                cb = self._writer.write_const_cb()
-                src.with_value(cb)
-                self._writer.write_store(dst.get_depth(), dst.get_bc_register_number())
-            elif src.is_closure():
-                self._writer.write_closure(src.get_code())
-                self._writer.write_store(dst.get_depth(), dst.get_bc_register_number())
-            else:
-                pass # TODO: Error
-        else:
-            pass # TODO: Error
-    
-    def _transfer_last_value(self, target):
-        if not self._last_value:
-            if target is None:
-                # We're transferring None to None -> do nothing
-                return
-            self.load_self()
-        f = self._last_value
-        self._last_value = None
-        f(target)
-    
-    def _set_last_value(self, v):
-        self._last_value = lambda target: self._transfer_value(v, target)
-    
-    def _set_last_value_to_accu(self):
-        self._set_last_value(self._scope.get_storage_manager().get_accu())
-
-    def _set_last_value_to_stack(self):
-        self._set_last_value(self._scope.get_storage_manager().get_stack())
-
     def load_self(self):
-        self._drop_last_value()
-        self._set_last_value(self._get_self())
+        self._writer.write_load(0, 0)
 
     def load_constant_cb(self):
-        constant = self._scope.get_storage_manager().get_constant()
-        self._set_last_value(constant)
-        return constant
+        return self._writer.write_const_cb()
 
     def load_constant(self, c):
-        constant = self._scope.get_storage_manager().get_constant()
-        constant(c)
-        self._set_last_value(constant)
+        self._writer.write_const(c)
 
     def load_var(self, name):
-        self._drop_last_value()
         the_type, storage_location = self._scope.get_binding(name)
         if storage_location is not None:
-            self._set_last_value(storage_location)
+            self._writer.write_load(storage_location.get_depth(), storage_location.get_bc_register_number())
             return True
         else:
             return False
@@ -264,56 +191,38 @@ class CodeGenerator:
                 self.push()
                 the_type.accept(visitor)
                 self.op_as()
-            self._transfer_last_value(storage_location)
+            self._writer.write_store(storage_location.get_depth(), storage_location.get_bc_register_number())
             return True
         else:
             return False
 
     def push(self):
-        self._transfer_last_value(self._scope.get_storage_manager().get_stack())
+        self._writer.write_push()
 
     def op_builtin(self, args, key):
-        self._drop_last_value()
         self._writer.write_builtin(args, key)
-        # self._set_last_value_to_stack()
 
     def op_builtinv(self, args, key):
-        self._drop_last_value()
         self._writer.write_builtinv(args, key)
-        # self._set_last_value_to_stack()
 
     def op_send(self, args, key):
         self._writer.write_send(args, key)
-        # self._set_last_value_to_stack()
 
     def op_sendv(self, args, key):
         self._writer.write_sendv(args, key)
-        # self._set_last_value_to_stack()
     
     def op_assign(self, key):
         self._writer.write_assign(key)
-        # self._set_last_value_to_stack()
 
     def op_return(self, depth, the_type, visitor):
         if the_type is not None:
             self.push()
             the_type.accept(visitor)
             self.op_as()
-        # self.push()
         self._writer.write_return(depth)
 
     def op_closure(self, code):
-        self._drop_last_value()
-        def writer(target):
-            if target is not None:
-                self._writer.write_closure(code)
-                if target.is_register():
-                    self._writer.write_store(target.get_depth(), target.get_bc_register_number())
-                elif target.is_stack():
-                    self._writer.write_push()
-                else:
-                    raise Exception('Ow')
-        self._last_value = writer
+        self._writer.write_closure(code)
     
     def finish(self, the_type, visitor):
         self.op_return(0, the_type, visitor)
