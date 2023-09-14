@@ -5,10 +5,12 @@
     protected Bytecodes => std lang eco compiler Bytecodes;
 
     protected pulls,
+    protected labels,
     bytes, constants, maxRegister;
 
     init => (
         pulls       <- std util newVector.
+        labels      <- std util newVector.
         bytes       <- std util newVector.
         constants   <- std util newVector.
         maxRegister <- 0.
@@ -25,6 +27,12 @@
     );
 
     protected introduceRegister: r => maxRegister <- maxRegister max: (r mod: 128);
+
+    openLabel => (
+        | l <- labels size |
+        labels add: No.
+      ^ l
+    );
 
     writeU8: b => bytes append: b;
     writeU16: s => (

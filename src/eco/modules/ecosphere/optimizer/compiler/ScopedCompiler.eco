@@ -94,11 +94,11 @@
         );
 
         compileJump: expr => (
-            "TODO: Forward jump to label"
             compile: (expr returnValue).
-            scope lookupLabel: (expr label) ifFound: [ :offset :depth |
+            "TODO: Replace this with a call to lookupJumpLabel:IfFound:IfNotFound:"
+            scope lookupLabel: (expr label) IfFound: [ :offset :depth |
                 writer writeJumpTo: offset Depth: depth.
-            ] ifNotFound: [
+            ] IfNotFound: [
                 (std sys error) ThrowMessage: 'Unable to find label!'.
             ].
         );

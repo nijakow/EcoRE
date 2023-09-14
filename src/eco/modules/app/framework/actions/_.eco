@@ -89,7 +89,7 @@
             ((framework modules eval) actions)
                   EvalDocument: document InEnvironment: environment
                       OnSuccess: $[ :val |  ]
-                      OnFailure: $[ :err |  ].
+                      OnFailure: $[ :(framework) :err | (framework actions open) ui TextMessageBox: err ] bind(framework).
           ^ self
         );
 
