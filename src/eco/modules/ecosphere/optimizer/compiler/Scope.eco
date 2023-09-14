@@ -58,6 +58,10 @@
           ^ self
         );
 
+        placeJumpLabel: marker => (
+            "TODO"
+        );
+
         writeOn: w => w << 'a scope';
     };
 }

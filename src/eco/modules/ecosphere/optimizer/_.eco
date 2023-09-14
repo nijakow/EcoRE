@@ -52,8 +52,6 @@
         (std io out) newline commit.
     );
     Quickprint3: code => (
-        (ast Printer) clone initWithWriter: (std io out)
-          ~ print: (Quickcompile: (Quickrewrite: code) ast).
-        (std io out) newline commit.
+        Quickprint: (Quickcompile: (Quickrewrite: code) ast).
     );
 }

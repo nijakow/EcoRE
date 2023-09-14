@@ -14,6 +14,8 @@
 
         protected In: scope => (compiler ScopedCompiler) clone initWithScope: scope;
 
+        protected lastValueIsOnStack => writer writePop;
+
 
         initWithScope: _scope => (
             scope <- _scope.
@@ -53,6 +55,7 @@
         
         compileReturn: expr => (
             compile: (expr returnValue).
+            writer writePush.
             writer writeReturn: (expr depth).
         );
 
@@ -60,19 +63,21 @@
             "
                 TODO: Introduce labels for beginning and end of scope.
             "
-            (scope context entryLabel) yes: [ :label | placeJumpLabel: label ].
-            compile scope body.
-            (scope context exitLabel) yes: [ :label | placeJumpLabel: label ].
+            (expr context entryLabel) yes: [ :label | scope placeJumpLabel: label ].
+            compile: expr body.
+            (expr context exitLabel) yes: [ :label | scope placeJumpLabel: label ].
         );
 
         compileBuiltin: expr => (
             expr args do: [ :arg | compile: arg. writer writePush. ].
             writer writeBuiltin: (expr message) Args: (expr args size) Varargs: (expr varargs).
+            lastValueIsOnStack.
         );
 
         compileSend: expr => (
             expr args do: [ :arg | compile: arg. writer writePush. ].
             writer writeSend: (expr message) Args: (expr args size) Varargs: (expr varargs).
+            lastValueIsOnStack.
         );
 
         compileAssignment: expr => (
@@ -99,7 +104,7 @@
         );
 
         compileLabel: expr => (
-            placeJumpLabel: (expr label).
+            scope placeJumpLabel: (expr label).
         );
 
         compile: expr => (
@@ -118,7 +123,8 @@
               ~ case: ast types Return         do: [ compileReturn:         expr ]
               ~ case: ast types Jump           do: [ compileJump:           expr ]
               ~ case: ast types JumpLabel      do: [ compileLabel:          expr ]
-            ~ default: [ (std sys error) ThrowMessage: 'Unable to compile expression: Type not supported' ]
+            ~ default: [ (std sys error) ThrowMessage: 'Unable to compile expression: Type not supported' ].
+            (std io out << 'Done compiling ' << expr) newline commit.
         );
 
         writeOn: w => w << 'a scoped compiler';
