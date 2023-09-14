@@ -1,6 +1,9 @@
 
 class StorageLocation:
 
+    def is_accu(self):
+        return False
+
     def is_register(self):
         return False
     
@@ -12,6 +15,14 @@ class StorageLocation:
 
     def is_constant(self):
         return False
+
+    def __init__(self):
+        pass
+
+class AccuLocation(StorageLocation):
+
+    def is_accu(self):
+        return True
 
     def __init__(self):
         pass
@@ -93,6 +104,7 @@ class Constant(StorageLocation):
 
 class StorageManager:
     _SELF  = Arg(0)
+    _ACCU  = AccuLocation()
     _STACK = StackLocation()
 
     def get_self(self):

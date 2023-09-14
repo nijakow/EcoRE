@@ -83,7 +83,7 @@ bool Eco_VM_Builtin_SetTrue(struct Eco_Fiber* fiber, unsigned int args)
 {
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    fiber->vm->constants.ctrue = Eco_Fiber_Peek(fiber);
+    fiber->vm->constants.ctrue = Eco_Fiber_Pop(fiber);
     return true;
 }
 
@@ -91,7 +91,7 @@ bool Eco_VM_Builtin_SetFalse(struct Eco_Fiber* fiber, unsigned int args)
 {
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    fiber->vm->constants.cfalse = Eco_Fiber_Peek(fiber);
+    fiber->vm->constants.cfalse = Eco_Fiber_Pop(fiber);
     return true;
 }
 
@@ -99,7 +99,7 @@ bool Eco_VM_Builtin_SetBasicError(struct Eco_Fiber* fiber, unsigned int args)
 {
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    fiber->vm->constants.basic_error = Eco_Fiber_Peek(fiber);
+    fiber->vm->constants.basic_error = Eco_Fiber_Pop(fiber);
     return true;
 }
 

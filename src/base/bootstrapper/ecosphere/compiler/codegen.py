@@ -223,6 +223,9 @@ class CodeGenerator:
     def _set_last_value(self, v):
         self._last_value = lambda target: self._transfer_value(v, target)
     
+    def _set_last_value_to_accu(self):
+        self._set_last_value(self._scope.get_storage_manager().get_accu())
+
     def _set_last_value_to_stack(self):
         self._set_last_value(self._scope.get_storage_manager().get_stack())
 
@@ -272,31 +275,31 @@ class CodeGenerator:
     def op_builtin(self, args, key):
         self._drop_last_value()
         self._writer.write_builtin(args, key)
-        self._set_last_value_to_stack()
+        # self._set_last_value_to_stack()
 
     def op_builtinv(self, args, key):
         self._drop_last_value()
         self._writer.write_builtinv(args, key)
-        self._set_last_value_to_stack()
+        # self._set_last_value_to_stack()
 
     def op_send(self, args, key):
         self._writer.write_send(args, key)
-        self._set_last_value_to_stack()
+        # self._set_last_value_to_stack()
 
     def op_sendv(self, args, key):
         self._writer.write_sendv(args, key)
-        self._set_last_value_to_stack()
+        # self._set_last_value_to_stack()
     
     def op_assign(self, key):
         self._writer.write_assign(key)
-        self._set_last_value_to_stack()
+        # self._set_last_value_to_stack()
 
     def op_return(self, depth, the_type, visitor):
         if the_type is not None:
             self.push()
             the_type.accept(visitor)
             self.op_as()
-        self.push()
+        # self.push()
         self._writer.write_return(depth)
 
     def op_closure(self, code):
