@@ -76,7 +76,7 @@ bool Eco_TypeSlot_Invoke(struct Eco_Message*   message,
             {
                 case Eco_TypeSlotType_INLINED:
                     Eco_Fiber_Drop(message->fiber);  /* Drop self */
-                    Eco_Fiber_Push(message->fiber, *((Eco_Any*) Eco_Molecule_At(molecule, slot->body.inlined.offset)));
+                    Eco_Fiber_SetAccu(message->fiber, *((Eco_Any*) Eco_Molecule_At(molecule, slot->body.inlined.offset)));
                     return true;
                 case Eco_TypeSlotType_CODE:
                     *Eco_Fiber_Nth(message->fiber, message->body.send.arg_count) = self;   // Assign the new self
@@ -84,6 +84,7 @@ bool Eco_TypeSlot_Invoke(struct Eco_Message*   message,
             }
             return false;
         case Eco_Message_Type_ASSIGN:
+            Eco_Fiber_SetAccu(message->fiber, Eco_Fiber_Pop(message->fiber));
             return Eco_TypeSlot_SetValue(type, index, molecule, message->body.assign.value);
         default:
             return false;

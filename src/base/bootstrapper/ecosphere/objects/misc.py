@@ -178,3 +178,4 @@ class EcoCode(ecosphere.objects.base.EcoObject):
         self._register_count = register_count
         self._parameters = parameter_count
         self._has_varargs = has_varargs
+        print(EcoCode.Disassembler(self).disassemble())

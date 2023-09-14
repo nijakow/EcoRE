@@ -39,12 +39,10 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,
 
 void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
 {
-    Eco_Any*             result;
     struct Eco_Frame*    frame;
     struct Eco_Closure*  closure;
 
     frame  = Eco_Fiber_Top(fiber);
-    result = Eco_Fiber_Nth(fiber, 1);
 
     while (frame->closures != NULL)
     {
@@ -57,8 +55,6 @@ void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)
 
     fiber->top           = frame->previous;
     fiber->stack_pointer = (char*) frame->args;
-
-    Eco_Fiber_Push(fiber, *result);  // Re-push the returned value
 }
 
 void Eco_Fiber_ResetFrame(struct Eco_Fiber* fiber)

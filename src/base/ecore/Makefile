@@ -115,7 +115,7 @@ DEPENDS = $(patsubst %.c,%.d,$(SOURCES))
 
 LDFLAGS = -lm
 CONSTANTS = 
-CFLAGS = -I.. -I/opt/homebrew/Cellar/libffi/3.4.4/include/ -Wall -Wextra -Werror -Wno-strict-aliasing -Wno-unused-result -Wno-unused-parameter -Wno-unused-label -g -Ofast -DECO_LATEST_GIT_COMMIT="\"$(shell git rev-parse --short=12 HEAD)\""
+CFLAGS = -I.. -I/opt/homebrew/Cellar/libffi/3.4.4/include/ -Wall -Wextra -Werror -Wno-strict-aliasing -Wno-unused-result -Wno-unused-parameter -Wno-unused-label -g -DECO_LATEST_GIT_COMMIT="\"$(shell git rev-parse --short=12 HEAD)\""
 
 ifdef ENABLE_LIBZ
   LDFLAGS += -lz
