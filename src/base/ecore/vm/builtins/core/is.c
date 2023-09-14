@@ -13,9 +13,9 @@ bool Eco_VM_Builtin_Is(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     arg = Eco_Fiber_Pop(fiber);
     if (Eco_Any_Equals(*Eco_Fiber_Peek(fiber), arg)) {
-        Eco_Any_AssignAny(Eco_Fiber_Peek(fiber), &fiber->vm->constants.ctrue);
+        Eco_Fiber_SetAccu(fiber, fiber->vm->constants.ctrue);
     } else {
-        Eco_Any_AssignAny(Eco_Fiber_Peek(fiber), &fiber->vm->constants.cfalse);
+        Eco_Fiber_SetAccu(fiber, fiber->vm->constants.cfalse);
     }
     return true;
 }
@@ -24,7 +24,7 @@ bool Eco_VM_Builtin_CharAsInt(struct Eco_Fiber* fiber, unsigned int args)
 {
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    *Eco_Fiber_Peek(fiber) = Eco_Any_FromInteger(Eco_Any_AsCharacter(*Eco_Fiber_Peek(fiber)));
+    Eco_Fiber_SetAccu(fiber, Eco_Any_FromInteger(Eco_Any_AsCharacter(Eco_Fiber_Pop(fiber))));
     return true;
 }
 
@@ -32,6 +32,6 @@ bool Eco_VM_Builtin_IntAsChar(struct Eco_Fiber* fiber, unsigned int args)
 {
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    *Eco_Fiber_Peek(fiber) = Eco_Any_FromCharacter(Eco_Any_AsInteger(*Eco_Fiber_Peek(fiber)));
+    Eco_Fiber_SetAccu(fiber, Eco_Any_FromCharacter(Eco_Any_AsInteger(Eco_Fiber_Pop(fiber))));
     return true;
 }

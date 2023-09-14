@@ -11,7 +11,7 @@ bool Eco_VM_Builtin_Myself(struct Eco_Fiber* fiber, unsigned int args)
 {
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
-    Eco_Fiber_Push(fiber, Eco_Fiber_Top(fiber)->myself);
+    Eco_Fiber_SetAccu(fiber, Eco_Fiber_Top(fiber)->myself);
     return true;
 }
 
@@ -46,7 +46,7 @@ bool Eco_VM_Builtin_Throw(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    value = *Eco_Fiber_Peek(fiber);
+    value = Eco_Fiber_Pop(fiber);
     Eco_Fiber_Throw(fiber, value);
     return true;
 }
@@ -57,7 +57,7 @@ bool Eco_VM_Builtin_SetExceptionHandler(struct Eco_Fiber* fiber, unsigned int ar
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    closure = Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber));    // TODO: Checks!
+    closure = Eco_Any_AsPointer(Eco_Fiber_Pop(fiber));    // TODO: Checks!
     Eco_Fiber_Top(fiber)->handler = closure;
     return true;
 }

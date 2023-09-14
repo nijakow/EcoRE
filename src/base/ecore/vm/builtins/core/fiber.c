@@ -22,7 +22,7 @@ bool Eco_VM_Builtin_StartFiber(struct Eco_Fiber* fiber, unsigned int args)
     new_fiber = Eco_VM_SpawnCode(fiber->vm, code, &lobby, 1);
 
     any = Eco_Any_FromInteger(new_fiber->id);
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
 
     return true;
 }

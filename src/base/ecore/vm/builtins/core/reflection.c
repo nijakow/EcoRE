@@ -18,9 +18,9 @@ bool Eco_VM_Builtin_IsMolecule(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     any = Eco_Fiber_Pop(fiber);
     if (Eco_Any_IsPointer(any) && Eco_Molecule_IsMolecule(Eco_Any_AsPointer(any)))
-        Eco_Fiber_Push(fiber, Eco_Any_FromInteger(1));
+        Eco_Fiber_SetAccu(fiber, Eco_Any_FromInteger(1));
     else
-        Eco_Fiber_Push(fiber, Eco_Any_FromInteger(0));
+        Eco_Fiber_SetAccu(fiber, Eco_Any_FromInteger(0));
     return true;
 }
 
@@ -32,9 +32,9 @@ bool Eco_VM_Builtin_IsInterface(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     any = Eco_Fiber_Pop(fiber);
     if (Eco_Any_IsPointer(any) && Eco_Interface_IsInterface(Eco_Any_AsPointer(any)))
-        Eco_Fiber_Push(fiber, Eco_Any_FromInteger(1));
+        Eco_Fiber_SetAccu(fiber, Eco_Any_FromInteger(1));
     else
-        Eco_Fiber_Push(fiber, Eco_Any_FromInteger(0));
+        Eco_Fiber_SetAccu(fiber, Eco_Any_FromInteger(0));
     return true;
 }
 
@@ -46,9 +46,9 @@ bool Eco_VM_Builtin_IsCode(struct Eco_Fiber* fiber, unsigned int args)
         return false;
     any = Eco_Fiber_Pop(fiber);
     if (Eco_Any_IsPointer(any) && Eco_Code_IsCode(Eco_Any_AsPointer(any)))
-        Eco_Fiber_Push(fiber, Eco_Any_FromInteger(1));
+        Eco_Fiber_SetAccu(fiber, Eco_Any_FromInteger(1));
     else
-        Eco_Fiber_Push(fiber, Eco_Any_FromInteger(0));
+        Eco_Fiber_SetAccu(fiber, Eco_Any_FromInteger(0));
     return true;
 }
 
@@ -63,9 +63,9 @@ bool Eco_VM_Builtin_GetProxy(struct Eco_Fiber* fiber, unsigned int args)
     type = Eco_Any_GetType(any);
 
     if (type->proxy == NULL) {
-        Eco_Fiber_Push(fiber, any);
+        Eco_Fiber_SetAccu(fiber, any);
     } else {
-        Eco_Fiber_Push(fiber, Eco_Any_FromPointer(type->proxy));
+        Eco_Fiber_SetAccu(fiber, Eco_Any_FromPointer(type->proxy));
     }
 
     return true;
@@ -100,7 +100,7 @@ bool Eco_VM_Builtin_GetSlotValue(struct Eco_Fiber* fiber, unsigned int args)
             break;
         }
     }
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -126,7 +126,7 @@ bool Eco_VM_Builtin_GetSlotFlags(struct Eco_Fiber* fiber, unsigned int args)
             break;
         }
     }
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -136,8 +136,8 @@ bool Eco_VM_Builtin_GetInterface(struct Eco_Fiber* fiber, unsigned int args)
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    interface = Eco_Type_GetInterface(Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber)), true);
-    *Eco_Fiber_Peek(fiber) = Eco_Any_FromPointer(interface);
+    interface = Eco_Type_GetInterface(Eco_Any_AsPointer(Eco_Fiber_Pop(fiber)), true);
+    Eco_Fiber_SetAccu(fiber, Eco_Any_FromPointer(interface));
     return true;
 }
 
@@ -147,8 +147,8 @@ bool Eco_VM_Builtin_GetPublicInterface(struct Eco_Fiber* fiber, unsigned int arg
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    interface = Eco_Type_GetInterface(Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber)), false);
-    *Eco_Fiber_Peek(fiber) = Eco_Any_FromPointer(interface);
+    interface = Eco_Type_GetInterface(Eco_Any_AsPointer(Eco_Fiber_Pop(fiber)), false);
+    Eco_Fiber_SetAccu(fiber, Eco_Any_FromPointer(interface));
     return true;
 }
 
@@ -156,7 +156,7 @@ bool Eco_VM_Builtin_GetType(struct Eco_Fiber* fiber, unsigned int args)
 {
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    *Eco_Fiber_Peek(fiber) = Eco_Any_FromPointer(Eco_Any_GetType(*Eco_Fiber_Peek(fiber)));
+    Eco_Fiber_SetAccu(fiber, Eco_Any_FromPointer(Eco_Any_GetType(Eco_Fiber_Pop(fiber))));
     return true;
 }
 
@@ -179,7 +179,7 @@ bool Eco_VM_Builtin_GetTypeSlotNames(struct Eco_Fiber* fiber, unsigned int args)
         Eco_Array_Put(array, index, any);
     }
     any = Eco_Any_FromPointer(array);
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -221,7 +221,7 @@ bool Eco_VM_Builtin_GetTypeSlotInfo(struct Eco_Fiber* fiber, unsigned int args)
     }
     else
         Eco_Any_AssignAny(&any, &fiber->vm->constants.cfalse);
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -243,7 +243,7 @@ bool Eco_VM_Builtin_GetTypeSupers(struct Eco_Fiber* fiber, unsigned int args)
         Eco_Array_Put(elements, index, any);
     }
     any = Eco_Any_FromPointer(elements);
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -265,7 +265,7 @@ bool Eco_VM_Builtin_GetTypeSubs(struct Eco_Fiber* fiber, unsigned int args)
         Eco_Array_Put(elements, index, any);
     }
     any = Eco_Any_FromPointer(elements);
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -280,7 +280,7 @@ bool Eco_VM_Builtin_GetTypeProxy(struct Eco_Fiber* fiber, unsigned int args)
     type = Eco_Any_AsPointer(any);
     if (type->proxy != NULL)    // If NULL, any will point to the type itself
         any = Eco_Any_FromPointer(type->proxy);
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -302,7 +302,7 @@ bool Eco_VM_Builtin_InterfaceGetParents(struct Eco_Fiber* fiber, unsigned int ar
         Eco_Array_Put(parents, index, Eco_Any_FromPointer(interface->parents[index]));
     
     any = Eco_Any_FromPointer(parents);
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -315,7 +315,7 @@ bool Eco_VM_Builtin_InterfaceGetImplementingTypes(struct Eco_Fiber* fiber, unsig
     
     interface = Eco_Any_AsPointer(Eco_Fiber_Pop(fiber));
 
-    Eco_Fiber_Push(fiber, Eco_Any_FromPointer(Eco_Interface_GetAllImplementingTypesAsArray(interface)));
+    Eco_Fiber_SetAccu(fiber, Eco_Any_FromPointer(Eco_Interface_GetAllImplementingTypesAsArray(interface)));
 
     return true;
 }
@@ -359,7 +359,7 @@ bool Eco_VM_Builtin_InterfaceGetEntryInfo(struct Eco_Fiber* fiber, unsigned int 
         else
             any = Eco_Any_FromPointer(interface->entries[index].arg_types[subindex]);
     }
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -383,7 +383,7 @@ bool Eco_VM_Builtin_InterfaceAddParent(struct Eco_Fiber* fiber, unsigned int arg
     // TODO, FIXME, XXX: Check if new_interface == NULL!
 
     any = Eco_Any_FromPointer(new_interface);
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -425,7 +425,7 @@ bool Eco_VM_Builtin_InterfaceAddEntry(struct Eco_Fiber* fiber, unsigned int args
     // TODO, FIXME, XXX: Check if interface == NULL!
 
     any = Eco_Any_FromPointer(interface);
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -451,7 +451,7 @@ bool Eco_VM_Builtin_InterfaceImplementsMessage(struct Eco_Fiber* fiber, unsigned
         any = fiber->vm->constants.cfalse;
     }
 
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -476,7 +476,7 @@ bool Eco_VM_Builtin_InterfaceImplementsInterface(struct Eco_Fiber* fiber, unsign
         any = fiber->vm->constants.cfalse;
     }
 
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -487,6 +487,6 @@ bool Eco_VM_Builtin_InterfaceGetAllInterfaces(struct Eco_Fiber* fiber, unsigned 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     any = Eco_Any_FromPointer(Eco_Interface_GetAllInterfacesAsArray());
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }

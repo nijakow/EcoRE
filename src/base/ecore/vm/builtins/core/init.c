@@ -34,7 +34,7 @@ bool Eco_VM_Builtin_GetVersionString(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     any = Eco_Any_FromPointer(Eco_String_New(ECO_VERSION_STRING));
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -45,7 +45,7 @@ bool Eco_VM_Builtin_GetOsVersionId(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     any = Eco_Any_FromInteger(ECO_CONFIG_TARGET_OS);
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -67,7 +67,7 @@ bool Eco_VM_Builtin_GetEnv(struct Eco_Fiber* fiber, unsigned int args)
         val = Eco_String_New(val_cstr);
         any = Eco_Any_FromPointer(val);
     }
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -75,7 +75,7 @@ bool Eco_VM_Builtin_SetLobby(struct Eco_Fiber* fiber, unsigned int args)
 {
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Any_AssignAny(&fiber->vm->constants.lobby, Eco_Fiber_Peek(fiber));
+    fiber->vm->constants.lobby = Eco_Fiber_Pop(fiber);
     return true;
 }
 
@@ -83,7 +83,7 @@ bool Eco_VM_Builtin_SetTrue(struct Eco_Fiber* fiber, unsigned int args)
 {
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Any_AssignAny(&fiber->vm->constants.ctrue, Eco_Fiber_Peek(fiber));
+    fiber->vm->constants.ctrue = Eco_Fiber_Peek(fiber);
     return true;
 }
 
@@ -91,7 +91,7 @@ bool Eco_VM_Builtin_SetFalse(struct Eco_Fiber* fiber, unsigned int args)
 {
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Any_AssignAny(&fiber->vm->constants.cfalse, Eco_Fiber_Peek(fiber));
+    fiber->vm->constants.cfalse = Eco_Fiber_Peek(fiber);
     return true;
 }
 
@@ -99,7 +99,7 @@ bool Eco_VM_Builtin_SetBasicError(struct Eco_Fiber* fiber, unsigned int args)
 {
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
-    Eco_Any_AssignAny(&fiber->vm->constants.basic_error, Eco_Fiber_Peek(fiber));
+    fiber->vm->constants.basic_error = Eco_Fiber_Peek(fiber);
     return true;
 }
 
@@ -110,7 +110,7 @@ bool Eco_VM_Builtin_SetProxy(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
     proxy = Eco_Fiber_Pop(fiber);
-    ((struct Eco_Type*) Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber)))->proxy = Eco_Any_AsPointer(proxy);
+    ((struct Eco_Type*) Eco_Any_AsPointer(Eco_Fiber_Pop(fiber)))->proxy = Eco_Any_AsPointer(proxy);
     return true;
 }
 
@@ -121,7 +121,7 @@ bool Eco_VM_Builtin_GetTypeType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_Type_TYPE);
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }
 
@@ -132,7 +132,7 @@ bool Eco_VM_Builtin_GetArrayType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_Array_TYPE);
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }
 
@@ -143,7 +143,7 @@ bool Eco_VM_Builtin_GetBlobType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_Blob_TYPE);
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }
 
@@ -154,7 +154,7 @@ bool Eco_VM_Builtin_GetCodeType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_Code_TYPE);
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }
 
@@ -165,7 +165,7 @@ bool Eco_VM_Builtin_GetIntegerType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_Integer_TYPE);
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }
 
@@ -176,7 +176,7 @@ bool Eco_VM_Builtin_GetFloatType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_Float_TYPE);
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }
 
@@ -187,7 +187,7 @@ bool Eco_VM_Builtin_GetCharacterType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_Character_TYPE);
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }
 
@@ -198,7 +198,7 @@ bool Eco_VM_Builtin_GetBlockType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_Closure_TYPE);
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }
 
@@ -209,7 +209,7 @@ bool Eco_VM_Builtin_GetKeyType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_Key_TYPE);
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }
 
@@ -220,7 +220,7 @@ bool Eco_VM_Builtin_GetStringType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_String_TYPE);
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }
 
@@ -231,7 +231,7 @@ bool Eco_VM_Builtin_GetInterfaceType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_Interface_TYPE);
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }
 
@@ -242,7 +242,7 @@ bool Eco_VM_Builtin_GetDefaultInterface(struct Eco_Fiber* fiber, unsigned int ar
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_Interface_GetDefaultInterface());
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }
 
@@ -253,7 +253,7 @@ bool Eco_VM_Builtin_GetWeakBoxType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_WeakBox_TYPE);
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }
 
@@ -264,7 +264,7 @@ bool Eco_VM_Builtin_GetFFITypeType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_FFIType_TYPE);
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }
 
@@ -275,7 +275,7 @@ bool Eco_VM_Builtin_GetFFIObjectType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_FFIObject_TYPE);
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }
 
@@ -286,7 +286,7 @@ bool Eco_VM_Builtin_GetFFIFuncType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_FFIFunc_TYPE);
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }
 
@@ -297,6 +297,6 @@ bool Eco_VM_Builtin_GetFFILibType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_FFILib_TYPE);
-    Eco_Fiber_Push(fiber, value);
+    Eco_Fiber_SetAccu(fiber, value);
     return true;
 }

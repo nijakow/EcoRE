@@ -30,7 +30,7 @@ bool Eco_VM_Builtin_Code_New(struct Eco_Fiber* fiber, unsigned int args)
                                                Eco_Any_AsInteger(fixed_args),
                                                Eco_Any_AsInteger(flags) != 0);
     result         = Eco_Any_FromPointer(code);
-    Eco_Fiber_Push(fiber, result);
+    Eco_Fiber_SetAccu(fiber, result);
     return true;
 }
 
@@ -67,7 +67,7 @@ bool Eco_VM_Builtin_Code_Bytecodes(struct Eco_Fiber* fiber, unsigned int args)
     for (i = 0; i < code->bytecode_count; i++)
         Eco_Blob_AtPutInt8(bytes, i, code->bytecodes[i]);
     any = Eco_Any_FromPointer(bytes);
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -87,7 +87,7 @@ bool Eco_VM_Builtin_Code_Constants(struct Eco_Fiber* fiber, unsigned int args)
     for (i = 0; i < code->constant_count; i++)
         Eco_Array_Put(constants, i, code->constants[i]);
     any = Eco_Any_FromPointer(constants);
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -101,7 +101,7 @@ bool Eco_VM_Builtin_Code_ArgCount(struct Eco_Fiber* fiber, unsigned int args)
 
     any       = Eco_Fiber_Pop(fiber);
     code      = Eco_Any_AsPointer(any);
-    Eco_Fiber_Push(fiber, Eco_Any_FromInteger(Eco_Code_ArgCount(code)));
+    Eco_Fiber_SetAccu(fiber, Eco_Any_FromInteger(Eco_Code_ArgCount(code)));
     return true;
 }
 
@@ -115,6 +115,6 @@ bool Eco_VM_Builtin_Code_RegisterCount(struct Eco_Fiber* fiber, unsigned int arg
 
     any       = Eco_Fiber_Pop(fiber);
     code      = Eco_Any_AsPointer(any);
-    Eco_Fiber_Push(fiber, Eco_Any_FromInteger(Eco_Code_RegisterCount(code)));
+    Eco_Fiber_SetAccu(fiber, Eco_Any_FromInteger(Eco_Code_RegisterCount(code)));
     return true;
 }

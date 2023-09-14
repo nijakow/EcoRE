@@ -35,7 +35,7 @@ bool Eco_VM_Builtin_Print(struct Eco_Fiber* fiber, unsigned int args)
         }
     }
 
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
 
     return true;
 }
@@ -67,7 +67,7 @@ bool Eco_VM_Builtin_OpenFile(struct Eco_Fiber* fiber, unsigned int args)
         fd = -1;
     }
     any = Eco_Any_FromInteger(fd);
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -84,7 +84,7 @@ bool Eco_VM_Builtin_FileExists(struct Eco_Fiber* fiber, unsigned int args)
         any = fiber->vm->constants.ctrue;
     else
         any = fiber->vm->constants.cfalse;
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -101,7 +101,7 @@ bool Eco_VM_Builtin_FileIsDirectory(struct Eco_Fiber* fiber, unsigned int args)
         any = fiber->vm->constants.ctrue;
     else
         any = fiber->vm->constants.cfalse;
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
 
@@ -132,6 +132,6 @@ bool Eco_VM_Builtin_ListFiles(struct Eco_Fiber* fiber, unsigned int args)
         Eco_LibC_Free(entries[index]);
     }
     any = Eco_Any_FromPointer(elements);
-    Eco_Fiber_Push(fiber, any);
+    Eco_Fiber_SetAccu(fiber, any);
     return true;
 }
