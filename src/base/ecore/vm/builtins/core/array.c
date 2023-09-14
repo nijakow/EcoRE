@@ -80,14 +80,17 @@ bool Eco_VM_Builtin_ArrayAtPut(struct Eco_Fiber* fiber, unsigned int args)
      */
     Eco_Any  index;
     Eco_Any  value;
+    Eco_Any  array;
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
         return false;
     value = Eco_Fiber_Pop(fiber);
     index = Eco_Fiber_Pop(fiber);
-    Eco_Array_Put((Eco_Any_AsPointer(*Eco_Fiber_Peek(fiber))),
+    array = Eco_Fiber_Pop(fiber);
+    Eco_Array_Put((Eco_Any_AsPointer(array)),
                    Eco_Any_AsInteger(index),
                    value);
+    Eco_Fiber_SetAccu(fiber, array);
     return true;
 }
 

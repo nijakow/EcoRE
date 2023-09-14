@@ -147,17 +147,20 @@ bool Eco_VM_Builtin_BlobAtPutInt8(struct Eco_Fiber* fiber, unsigned int args)
      */
     Eco_Any  index;
     Eco_Any  value;
+    Eco_Any  blob;
     i8       actual_value;
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
         return false;
     value = Eco_Fiber_Pop(fiber);
     index = Eco_Fiber_Pop(fiber);
+    blob  = Eco_Fiber_Pop(fiber);
     actual_value = Eco_Any_AsInteger(value);
-    Eco_Blob_AtPut(Eco_Any_AsPointer(Eco_Fiber_Pop(fiber)),
+    Eco_Blob_AtPut(Eco_Any_AsPointer(blob),
                    Eco_Any_AsInteger(index),
                    &actual_value,
                    sizeof(actual_value));
+    Eco_Fiber_SetAccu(fiber, blob);
     return true;
 }
 
@@ -168,17 +171,20 @@ bool Eco_VM_Builtin_BlobAtPutInt16(struct Eco_Fiber* fiber, unsigned int args)
      */
     Eco_Any  index;
     Eco_Any  value;
+    Eco_Any  blob;
     i16      actual_value;
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
         return false;
     value = Eco_Fiber_Pop(fiber);
     index = Eco_Fiber_Pop(fiber);
+    blob  = Eco_Fiber_Pop(fiber);
     actual_value = Eco_Any_AsInteger(value);
-    Eco_Blob_AtPut(Eco_Any_AsPointer(Eco_Fiber_Pop(fiber)),
+    Eco_Blob_AtPut(Eco_Any_AsPointer(blob),
                    Eco_Any_AsInteger(index),
                    &actual_value,
                    sizeof(actual_value));
+    Eco_Fiber_SetAccu(fiber, blob);
     return true;
 }
 
@@ -189,17 +195,20 @@ bool Eco_VM_Builtin_BlobAtPutInt32(struct Eco_Fiber* fiber, unsigned int args)
      */
     Eco_Any  index;
     Eco_Any  value;
+    Eco_Any  blob;
     i32      actual_value;
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
         return false;
     value = Eco_Fiber_Pop(fiber);
     index = Eco_Fiber_Pop(fiber);
+    blob  = Eco_Fiber_Pop(fiber);
     actual_value = Eco_Any_AsInteger(value);
-    Eco_Blob_AtPut(Eco_Any_AsPointer(Eco_Fiber_Pop(fiber)),
+    Eco_Blob_AtPut(Eco_Any_AsPointer(blob),
                    Eco_Any_AsInteger(index),
                    &actual_value,
                    sizeof(actual_value));
+    Eco_Fiber_SetAccu(fiber, blob);
     return true;
 }
 
@@ -223,6 +232,7 @@ bool Eco_VM_Builtin_BlobAtPutPtr(struct Eco_Fiber* fiber, unsigned int args)
     blob   = Eco_Any_AsPointer(Eco_Fiber_Pop(fiber));
     ptr    = Eco_Blob_Size(value) == 0 ? NULL : (value->bytes + offset);
     Eco_Blob_AtPut(blob, index, &ptr, sizeof(ptr));
+    Eco_Fiber_SetAccu(fiber, Eco_Any_FromPointer(blob));
     return true;
 }
 
@@ -233,15 +243,18 @@ bool Eco_VM_Builtin_BlobAtPutAny(struct Eco_Fiber* fiber, unsigned int args)
      */
     Eco_Any  index;
     Eco_Any  value;
+    Eco_Any  blob;
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 3, 3))
         return false;
     value = Eco_Fiber_Pop(fiber);
     index = Eco_Fiber_Pop(fiber);
-    Eco_Blob_AtPut(Eco_Any_AsPointer(Eco_Fiber_Pop(fiber)),
+    blob  = Eco_Fiber_Pop(fiber);
+    Eco_Blob_AtPut(Eco_Any_AsPointer(blob),
                    Eco_Any_AsInteger(index),
                    &value,
                    sizeof(value));
+    Eco_Fiber_SetAccu(fiber, blob);
     return true;
 }
 

@@ -7,12 +7,14 @@
 
 bool Eco_VM_Builtin_Is(struct Eco_Fiber* fiber, unsigned int args)
 {
-    Eco_Any  arg;
+    Eco_Any  arg1;
+    Eco_Any  arg2;
 
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 2, 2))
         return false;
-    arg = Eco_Fiber_Pop(fiber);
-    if (Eco_Any_Equals(*Eco_Fiber_Peek(fiber), arg)) {
+    arg2 = Eco_Fiber_Pop(fiber);
+    arg1 = Eco_Fiber_Pop(fiber);
+    if (Eco_Any_Equals(arg1, arg2)) {
         Eco_Fiber_SetAccu(fiber, fiber->vm->constants.ctrue);
     } else {
         Eco_Fiber_SetAccu(fiber, fiber->vm->constants.cfalse);

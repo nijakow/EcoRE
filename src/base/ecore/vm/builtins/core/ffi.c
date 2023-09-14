@@ -369,10 +369,17 @@ bool Eco_VM_Builtin_FFIObject_GetSize(struct Eco_Fiber* fiber, unsigned int args
 
 bool Eco_VM_Builtin_FFIObject_AssignNull(struct Eco_Fiber* fiber, unsigned int args)
 {
+    Eco_Any any;
+
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
         return false;
 
-    Eco_FFIObject_AssignNull(Eco_Any_AsPointer(Eco_Fiber_Pop(fiber)));
+    any = Eco_Fiber_Pop(fiber);
+
+    Eco_FFIObject_AssignNull(Eco_Any_AsPointer(any));
+
+    Eco_Fiber_SetAccu(fiber, any);
+
     return true;
 }
 

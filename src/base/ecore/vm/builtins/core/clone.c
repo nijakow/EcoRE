@@ -43,6 +43,9 @@ bool Eco_VM_Builtin_EnableFinalization(struct Eco_Fiber* fiber, unsigned int arg
         object = Eco_Any_AsPointer(any);
         object->bits.wants_finalization = true;
     }
+
+    Eco_Fiber_SetAccu(fiber, any);
+
     return true;
 }
 
