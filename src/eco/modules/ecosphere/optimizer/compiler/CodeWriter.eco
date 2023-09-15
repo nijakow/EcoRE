@@ -28,17 +28,59 @@
 
     protected introduceRegister: r => maxRegister <- maxRegister max: (r mod: 128);
 
+    Label = {
+        static with inherited _ = std Clonable;
+
+        offset, depth, pending;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            init => (
+                offset  <- No.
+                depth   <- No.
+                pending <- std util newVector.
+              ^ self
+            );
+
+            isPlaced => offset isYes;
+
+            whenPlacedDo: block => (
+                isPlaced if: [ block value(offset yes, depth yes) ]
+                       else: [ pending append: block              ]
+            );
+
+            placeAt: o Depth: d => (
+                offset  <- Yes: o.
+                depth   <- Yes: d.
+                pending do: [ :block | block value(offset yes, depth yes) ].
+                pending clear.
+              ^ self
+            );
+
+            writeOn: w => w << 'a label';
+        };
+    };
+
     openLabel => (
         | l <- labels size |
-        labels add: No.
+        labels add: (Label new).
       ^ l
     );
+
+    label: id => labels at: id;
 
     writeU8: b => bytes append: b;
     writeU16: s => (
         writeU8: (s bitAnd: 255).
         writeU8: ((s rshift: 8) bitAnd: 255)
     );
+    putU8: b At: i => bytes at: i put: b;
+    putU16: s At: i => (
+        putU8: (s bitAnd: 255) At: i.
+        putU8: ((s rshift: 8) bitAnd: 255) At: i + 1
+    );
+
     addConstant: c => (
         writeU16: constants size.
         constants append: c
@@ -186,4 +228,14 @@
         writeU16: offset.
     );
     writeJumpTo: offset => writeJumpTo: offset Depth: 0;
+
+    writeJumpToLabel: label => (
+        | pos <- bytecodes size |
+        writeJumpTo: 0 Depth: 0.
+        (labels at: label) whenPlacedDo: $[ :(us, Bytecodes, pos) :offset :depth |
+            us putU8: Bytecodes JUMP At: pos.
+            us putU8: depth At: pos + 1.
+            us putU16: offset At: pos + 2.
+        ] bind(us, Bytecodes, pos)
+    );
 }
