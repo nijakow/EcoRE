@@ -35,11 +35,8 @@
     push => writer writePush;
     drop => loadSelf;
 
-    protected lastValueIsOnStack => writer writePop;
-
     builtinWithMessage: msg ArgCount: args Varargs: varargs => (
         writer writeBuiltin: msg Args: args Varargs: varargs.
-        lastValueIsOnStack.
     );
     builtinWithMessage: msg ArgCount: args => (
         builtinWithMessage: msg ArgCount: args Varargs: false
@@ -47,7 +44,6 @@
 
     sendWithMessage: msg ArgCount: args Varargs: varargs => (
         writer writeSend: msg Args: args Varargs: varargs.
-        lastValueIsOnStack.
     );
     sendWithMessage: msg ArgCount: args => (
         sendWithMessage: msg ArgCount: args Varargs: false
@@ -55,7 +51,6 @@
 
     resendWithMessage: msg ArgCount: args Varargs: varargs => (
         writer writeResend: msg Args: args Varargs: varargs.
-        lastValueIsOnStack.
     );
     resendWithMessage: msg ArgCount: args => (
         resendWithMessage: msg ArgCount: args Varargs: false
@@ -63,11 +58,9 @@
 
     assignWithKey: key => (
         writer writeAssign: key.
-        lastValueIsOnStack.
     );
 
     returnWithDepth: depth => (
-        writer writePush. "Ensure that the value is on the stack"
         writer writeReturn: depth.
     );
 }
