@@ -1,0 +1,38 @@
+
+{
+    "
+        Class Module
+    "
+    static with inherited _ = std Module;
+
+    
+    own Point = class {
+        | x y z |
+
+        init => (
+            super init.
+          ^ self
+        );
+    };
+
+    "Translates to:"
+
+    own Point = {
+        static with inherited _ = std Clonable;
+
+        own prototype = {
+            static with inherited _ = std Clonable;
+
+            with inherited trait = {
+                class => Point;
+            };
+        };
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            new => (prototype clone) 
+        };
+    };
+
+}
