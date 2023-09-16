@@ -39,6 +39,19 @@
 
                     $(Morph) renderImplOn: renderer.
                 );
+
+                handleClick: click At: point HandMorph: hand => (
+                    hand grab: self.
+                  ^ true
+                );
+
+                handleDropMorph: morph At: point Meta: meta => (
+                    (meta morph meta: #'ecosphere.eve.morphs.ValueMorph.value') yes: [ :v |
+                        (std io out << 'Dropped value: ' << v) newline commit.
+                      ^ false
+                    ].
+                  ^ false
+                );
             };
         };
     };
@@ -55,6 +68,7 @@
     ValueMorphFor: v => (
         | m <- MakeValueMorphFor: v |
 
+        m meta: #'ecosphere.eve.morph.property.type' is: #'ecosphere.eve.morphs.ValueMorph'.
         m meta: #'ecosphere.eve.morphs.ValueMorph.value' is: v.
 
       ^ m
