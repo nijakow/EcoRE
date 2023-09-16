@@ -17,6 +17,14 @@
         ].
     );
 
+    Texture: texture => (
+        (framework actions open) ui BuildAndOpen: [ :ui |
+            builder TextureWindowFor: texture Ui: ui
+        ].
+    );
+
+    ImageByPath: path => Texture: ((app gfx eve) TextureFromPath: path);
+
     ShellFor: object Text: text => (
         (framework actions open) ui BuildAndOpen: [ :ui |
             ui Window(500, 350,

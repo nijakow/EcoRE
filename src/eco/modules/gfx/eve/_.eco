@@ -247,6 +247,8 @@
         };
     };
 
+    TextureFromPath: path => (Texture clone) initWithEve: self Ptr: (Texture_NewFromImage(path path));
+
     protected own Text = {
         static with inherited _ = std Clonable;
 

@@ -288,6 +288,8 @@
                                 begin
                                     ~ if: [ (path extension) equals: 'eco' ] then: [ (framework actions eval) FileAndShowResult: path Environment: app ]
                                     ~ if: [ (path extension) equals:  'ea' ] then: [ (framework actions eval) FileAndRun: path Environment: app ]
+                                    ~ if: [ (path extension) equals:  'png' ] then: [ ((framework modules wisp) actions open) ImageByPath: path ]
+                                    ~ if: [ (path extension) equals:  'jpg' ] then: [ ((framework modules wisp) actions open) ImageByPath: path ]
                                     ~ default: [ parent replaceWith: (us PathPaneFor: path Ui: ui) ]
                             ] bind(app, self, ui, parent, path)
             ) ~ xLayout: ui layouts Flexible,
@@ -308,6 +310,13 @@
     PathWindowFor: path Ui: ui => (
         ui Window(400, 400,
             ui Scrollable(ui Padding(20, PathPaneFor: path Ui: ui))
+        )
+    );
+
+
+    TextureWindowFor: texture Ui: ui => (
+        ui Window(400, 400,
+            ui Scrollable(ui Padding(20, ((ui morphic) morphs TextureMorph) clone initWithTexture: texture))
         )
     );
 }

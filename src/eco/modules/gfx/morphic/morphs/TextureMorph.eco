@@ -16,7 +16,7 @@
         minHeight => texture height;
 
         renderImplOn: renderer => (
-            renderer drawTexture: self AtX: x Y: y.
+            renderer drawTexture: texture X: 0 Y: 0.
             $(Morph) renderImplOn: renderer.
         );
 
