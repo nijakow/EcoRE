@@ -82,6 +82,8 @@
             drawText: text X: x Y: y Font: font => eve DrawText(text text, xOff + x, yOff + y, font);
             drawString: string X: x Y: y => eve DrawText(string, xOff + x, yOff + y, font);
             drawChar: char X: x Y: y Font: font => eve DrawChar(char, xOff + x, yOff + y, font);
+            drawTexture: texture X: x Y: y => texture drawAtX: xOff + x Y: yOff + y; "TODO: Give the texture a pointer to our renderer"
+            
             charWidth: char => eve GetCharWidth(char);
             charHeight: char => eve GetCharHeight(char);
             textWidth: string => eve GetTextWidth(string);

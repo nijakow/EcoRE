@@ -874,6 +874,14 @@ void Eve_Texture_Delete(struct Eve_Texture* self) {
     free(self);
 }
 
+Eve_Int Eve_Texture_GetWidth(struct Eve_Texture* self) {
+    return self->width;
+}
+
+Eve_Int Eve_Texture_GetHeight(struct Eve_Texture* self) {
+    return self->height;
+}
+
 
 void Eve_Delay(Eve_UInt ms) {
     SDL_Delay(ms);

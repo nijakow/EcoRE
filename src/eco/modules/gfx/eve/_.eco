@@ -55,7 +55,9 @@
     protected Eve_GetDefaultFont;
 
     protected Eve_Texture_NewFromImage,
-    protected Eve_Texture_Delete;
+    protected Eve_Texture_Delete,
+    protected Eve_Texture_GetWidth,
+    protected Eve_Texture_GetHeight;
 
     protected Eve_Font => ffi types void;
     protected Eve_Texture => ffi types void;
@@ -129,6 +131,8 @@
         Eve_GetDefaultFont <- (lib function: #'Eve_GetDefaultFont' type: ((Eve_Font pointer) function())) yes.
         Eve_Texture_NewFromImage <- (lib function: #'Eve_Texture_NewFromImage' type: ((Eve_Texture pointer) function(ffi types string))) yes.
         Eve_Texture_Delete <- (lib function: #'Eve_Texture_Delete' type: ((ffi types void) function(Eve_Texture pointer))) yes.
+        Eve_Texture_GetWidth <- (lib function: #'Eve_Texture_GetWidth' type: ((ffi types uint) function(Eve_Texture pointer))) yes.
+        Eve_Texture_GetHeight <- (lib function: #'Eve_Texture_GetHeight' type: ((ffi types uint) function(Eve_Texture pointer))) yes.
       ^ self
     );
 
@@ -161,7 +165,7 @@
     DrawText(text, x, y, font) => Eve_DrawText value(text, x, y, font ptr);
     DrawChar(char, x, y, font) => Eve_DrawChar value(char asInt, x, y, font ptr);
 
-    DrawTexture(texture, x, y) => Eve_DrawTexture value(texture ptr, x, y);
+    DrawTexture(texture, x, y) => Eve_DrawTexture value(texture, x, y);
 
     Clear => Eve_Clear value();
     Render => Eve_Render value();
@@ -210,6 +214,8 @@
 
     Texture_NewFromImage(path) => Eve_Texture_NewFromImage value(path);
     Texture_Delete(texture) => Eve_Texture_Delete value(texture);
+    Texture_GetWidth(texture) => Eve_Texture_GetWidth value(texture);
+    Texture_GetHeight(texture) => Eve_Texture_GetHeight value(texture);
 
     own Texture = {
         static with inherited _ = std Clonable;
@@ -229,8 +235,11 @@
 
             finalize => eve Texture_Delete(ptr);
 
+            width => eve Texture_GetWidth(ptr);
+            height => eve Texture_GetHeight(ptr);
+
             drawAtX: x Y: y => (
-                eve DrawTexture(self, x, y).
+                eve DrawTexture(ptr, x, y).
               ^ self
             );
 

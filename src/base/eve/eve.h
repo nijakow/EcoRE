@@ -53,6 +53,9 @@ void Eve_Texture_Destroy(struct Eve_Texture* self);
 struct Eve_Texture*  Eve_Texture_NewFromImage(const char* path);
 void                 Eve_Texture_Delete(struct Eve_Texture* self);
 
+Eve_Int Eve_Texture_GetWidth(struct Eve_Texture* self);
+Eve_Int Eve_Texture_GetHeight(struct Eve_Texture* self);
+
 
 Eve_UInt Eve_CurrentWidth();
 Eve_UInt Eve_CurrentHeight();
