@@ -1,18 +1,53 @@
 
 {
     static with inherited _ = std Module;
-    with app <- $;
+    with app <- $package;
+
+    own morphs = {
+        static with inherited _ = std Module;
+
+        own ValueMorph = {
+            static with inherited _ = std Clonable;
+            static with inherited own Morph = (($package gfx morphic) morphs) Morph;
+
+            with inherited trait = {
+                static with inherited _ = std Trait;
+
+                renderImplOn: renderer => (
+                    renderer setColor: (renderer theme lineColor).
+                    
+                    "
+                        Draw angle-shaped lines in every corner of the morph.
+                    "
+                    |
+                        d  <- ((width min: height) / 4) min: 20.
+                        dw <- (width - d),
+                        dh <- (height - d)
+                    |
+
+                    renderer drawLineX: 0 Y: 0 X: d Y: 0.
+                    renderer drawLineX: 0 Y: 0 X: 0 Y: d.
+
+                    renderer drawLineX: dw Y: 0 X: width Y: 0.
+                    renderer drawLineX: width Y: 0 X: width Y: d.
+
+                    renderer drawLineX: 0 Y: dh X: 0 Y: height.
+                    renderer drawLineX: 0 Y: height X: d Y: height.
+
+                    renderer drawLineX: dw Y: height X: width Y: height.
+                    renderer drawLineX: width Y: dh X: width Y: height.
+
+                    $(Morph) renderImplOn: renderer.
+                );
+            };
+        };
+    };
 
     protected MakeValueMorphFor: v => (
-        | m <- ((app gfx morphic) morphs Morph) new |
+        | m <- (morphs ValueMorph) new |
 
-        m customRepresentation: $[ :morph :renderer |
-            renderer setR: 0 G: 255 B: 0.
-            renderer drawRectX: 0 Y: 0 W: morph width H: morph height.
-        ].
-
-        m rigidWidth: 25.
-        m rigidHeight: 25.
+        m rigidWidth: 100.
+        m rigidHeight: 100.
 
       ^ m
     );
