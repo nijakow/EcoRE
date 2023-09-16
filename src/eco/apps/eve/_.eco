@@ -62,14 +62,18 @@
         };
     };
 
-    protected MakeValueMorphFor: v Ui: ui => (
+    protected MakePresentationMorphFor: v Ui: ui => (
         | sw <- (std io StringWriter) new |
 
         sw << v.
+        
+      ^ ui Label: sw build
+    );
 
+    protected MakeValueMorphFor: v Ui: ui => (
         | m <- (morphs ValueMorph) new |
 
-        m add: (ui Padding(5, ui Label: sw build)).
+        m add: (ui Padding(5, MakePresentationMorphFor: v Ui: ui)).
 
       ^ m
     );
