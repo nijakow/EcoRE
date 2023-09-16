@@ -13,6 +13,11 @@
             with inherited trait = {
                 static with inherited _ = std Trait;
 
+                init => (
+                    $(Morph) initWithOneChild.
+                  ^ self
+                );
+
                 renderImplOn: renderer => (
                     renderer setColor: (renderer theme lineColor).
                     
@@ -46,6 +51,7 @@
                 );
 
                 handleDropMorph: morph At: point Meta: meta => (
+                    "Just for experimental purposes: This is how you can check if the dropped morph is a ValueMorph."
                     (morph meta: #'ecosphere.eve.morphs.ValueMorph.value') yes: [ :v |
                         (std io out << 'Dropped value: ' << v) newline commit.
                       ^ false
@@ -56,17 +62,20 @@
         };
     };
 
-    protected MakeValueMorphFor: v => (
+    protected MakeValueMorphFor: v Ui: ui => (
+        | sw <- (std io StringWriter) new |
+
+        sw << v.
+
         | m <- (morphs ValueMorph) new |
 
-        m rigidWidth: 100.
-        m rigidHeight: 100.
+        m add: (ui Padding(5, ui Label: sw build)).
 
       ^ m
     );
 
-    ValueMorphFor: v => (
-        | m <- MakeValueMorphFor: v |
+    ValueMorphFor: v Ui: ui => (
+        | m <- MakeValueMorphFor: v Ui: ui |
 
         m meta: #'ecosphere.eve.morph.property.type' is: #'ecosphere.eve.morphs.ValueMorph'.
         m meta: #'ecosphere.eve.morphs.ValueMorph.value' is: v.
@@ -74,7 +83,7 @@
       ^ m
     );
 
-    OpenValueMorphFor: v => (framework actions open) Morph: (ValueMorphFor: v);
+    OpenValueMorphFor: v => (framework actions open) ui BuildAndOpen: [ :ui | ValueMorphFor: v Ui: ui ];
 
     Main => OpenValueMorphFor: 42;
 }
