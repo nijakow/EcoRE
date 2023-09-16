@@ -66,10 +66,12 @@
             present => eve Render;
 
             setR: r G: g B: b => eve SetColorRGB(r, g, b);
+            setR: r G: g B: b A: a => eve SetColorRGBA(r, g, b, a);
             setColor: color => (
                 setR: color r
                    G: color g
                    B: color b
+                   A: color a
             );
 
             drawPointX: x Y: y => eve DrawPoint(xOff + x, yOff + y);

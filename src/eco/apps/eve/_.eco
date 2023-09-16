@@ -19,8 +19,6 @@
                 );
 
                 renderImplOn: renderer => (
-                    renderer setColor: (renderer theme lineColor).
-                    
                     "
                         Draw angle-shaped lines in every corner of the morph.
                     "
@@ -29,6 +27,15 @@
                         dw <- (width - d),
                         dh <- (height - d)
                     |
+
+                    renderer setR: (renderer theme accentColor r)
+                                G: (renderer theme accentColor g)
+                                B: (renderer theme accentColor b)
+                                A: 32.
+                    
+                    renderer fillRectX: 0 Y: 0 W: width H: height.
+
+                    renderer setColor: (renderer theme lineColor).
 
                     renderer drawLineX: 0 Y: 0 X: d Y: 0.
                     renderer drawLineX: 0 Y: 0 X: 0 Y: d.

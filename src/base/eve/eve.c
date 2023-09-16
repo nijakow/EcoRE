@@ -432,6 +432,9 @@ void Eve_RenderState_Create(struct Eve_RenderState* self, struct SDL_Window* win
 
     self->texture  = SDL_CreateTexture(window_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_width, window_height);
 
+    SDL_SetTextureBlendMode(self->texture, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawBlendMode(window_renderer, SDL_BLENDMODE_BLEND);
+
     Eve_FrameStack_Create(&self->frame_stack);
     self->frame.color = Eve_Color_FromRGB(0, 0, 0);
     self->frame.x     = 0;
@@ -496,6 +499,7 @@ void Eve_RenderState_SetColor(struct Eve_RenderState* self, struct Eve_Color col
     self->frame.color = color;
     Eve_Color_ToRGBA(color, &r, &g, &b, &a);
     SDL_SetRenderDrawColor(self->renderer, r, g, b, a);
+    SDL_SetTextureAlphaMod(self->texture, a);
 }
 
 struct SDL_Rect Eve_RenderState_GetCurrentRect(struct Eve_RenderState* self) {
