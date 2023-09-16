@@ -60,6 +60,17 @@
                         (std io out << 'Unknown mouse key!') newline commit.
                       ].
                 ].
+                eve IsEventMouseButtonUp -> [
+                    | button <- eve GetEventMouseButtonID |
+
+                    Switch: button
+                      ~ case: 1 do: [ morph handMorph leftClickRelease   ]
+                      ~ case: 2 do: [ morph handMorph middleClickRelease ]
+                      ~ case: 3 do: [ morph handMorph rightClickRelease  ]
+                    ~ default: [
+                        (std io out << 'Unknown mouse key!') newline commit.
+                      ].
+                ].
                 eve IsEventMouseWheel -> [
                     |
                         scrollX <- eve GetEventMouseScrollX,

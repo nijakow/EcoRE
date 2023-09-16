@@ -68,9 +68,21 @@
                      no: [      world yes: [ :w | (w click: clickType At: gb HandMorph: self) ] ]
             );
 
+            clickRelease: clickType => (
+                |
+                    gb <- globalOffset,
+                |
+                grabbedMorph
+                  ~ yes: [ :m | world yes: [ :w | (w dropMorph: (m morph) At: gb Meta: (m metadata)) -> [ grabbedMorph <- No ] ] ]
+            );
+
             leftClick   => click: ((morphic input click) Left);
             middleClick => click: ((morphic input click) Middle);
             rightClick  => click: ((morphic input click) Right);
+
+            leftClickRelease  => clickRelease: ((morphic input click) Left);
+            middleClickRelease => clickRelease: ((morphic input click) Middle);
+            rightClickRelease  => clickRelease: ((morphic input click) Right);
 
             click => leftClick;
             grab => (
