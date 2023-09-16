@@ -117,10 +117,48 @@
                     );
 
                     render: renderer => (
-                        renderer drawString: text X: xpos Y: ypos.
+                        "
+                            Draw angle-shaped lines in every corner of the element.
+                        "
+
+                        |
+                            sx <- (xpos),
+                            sy <- (ypos),
+                            ex <- (xpos + width),
+                            ey <- (ypos + height),
+
+                            d   <- ((width min: height) / 4) min: 20,
+                            sdx <- (sx + d),
+                            sdy <- (sy + d),
+                            edx <- (ex - d),
+                            edy <- (ey - d)
+                        |
+
+                        renderer setR: (renderer theme accentColor r)
+                                    G: (renderer theme accentColor g)
+                                    B: (renderer theme accentColor b)
+                                    A: 32.
+                    
+                        renderer fillRectX: sx Y: sy W: width H: height.
+
                         renderer setColor: (renderer theme lineColor).
-                        renderer drawRectX: (xpos) Y: (ypos) W: (width) H: (height).
+
+                        renderer drawLineX: sx Y: sy X: sdx Y: sy.
+                        renderer drawLineX: sx Y: sy X: sx  Y: sdy.
+
+                        renderer drawLineX: edx Y: sy X: ex Y: sy.
+                        renderer drawLineX: ex  Y: sy X: ex Y: sdy.
+
+                        renderer drawLineX: sx Y: edy X: sx  Y: ey.
+                        renderer drawLineX: sx Y: ey  X: sdx Y: ey.
+
+                        renderer drawLineX: edx Y: ey X: ex Y: ey.
+                        renderer drawLineX: ex Y: edy X: ex Y: ey.
+
                         renderer setColor: (renderer theme textColor).
+
+                        renderer drawString: text X: (sx + 5) Y: (sy + 5).
+
                       ^ self
                     );
 
@@ -280,6 +318,28 @@
                 prog addLineOffset: yOff.
 
                 line do: [ :item |
+                    | dy <- 0 |
+
+                    item ifCharacter: [ :c |
+                        dy <- renderer charHeight: (c content).
+                    ].
+                    item ifReference: [ :r |
+                        | sw <- (std io StringWriter) new |
+                        sw << (r content).
+
+                        |
+                            text <- sw build,
+                            h    <- (renderer textHeight: text) + 10
+                        |
+                        dy <- h.
+                    ].
+
+                    m <- m max: dy.
+                ].
+
+                | base <- yOff + m |
+
+                line do: [ :item |
                     | dx <- 0, dy <- 0 |
 
                     item ifCharacter: [ :c |
@@ -287,7 +347,7 @@
                             cw <- renderer charWidth: (c content),
                             ch <- renderer charHeight: (c content)
                         |
-                        prog addElement: ((mod CharacterElement) clone initWithContent: (c content) Offset: offset X: xOff Y: yOff W: cw H: ch).
+                        prog addElement: ((mod CharacterElement) clone initWithContent: (c content) Offset: offset X: xOff Y: (base - ch) W: cw H: ch).
                         dx <- cw.
                         dy <- ch. 
                     ].
@@ -297,21 +357,20 @@
 
                         |
                             text <- sw build,
-                            w    <- renderer textWidth: text,
-                            h    <- renderer textHeight: text
+                            w    <- (renderer textWidth: text) + 10,
+                            h    <- (renderer textHeight: text) + 10
                         |
-                        prog addElement: ((mod ReferenceElement) clone initWithOffset: offset X: xOff Y: yOff W: w H: h Object: (r content) Text: text).
+                        prog addElement: ((mod ReferenceElement) clone initWithOffset: offset X: xOff Y: (base - h) W: w H: h Object: (r content) Text: text).
                         dx <- w.
                         dy <- h.
                     ].
 
                     "Draw the caret"
                     ([x == cx] and: [y == cy]) if: [
-                        prog addElement: ((mod CursorElement) clone initWithX: xOff Y: yOff W: dx H: dy).
+                        prog addElement: ((mod CursorElement) clone initWithX: xOff Y: (base - dy) W: dx H: dy).
                     ].
 
                     xOff <- xOff + dx.
-                    m    <- m max: dy.
 
                     x      <- x      + 1.
                     offset <- offset + 1.

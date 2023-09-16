@@ -23,9 +23,11 @@
                         Draw angle-shaped lines in every corner of the morph.
                     "
                     |
-                        d  <- ((width min: height) / 4) min: 20.
-                        dw <- (width - d),
-                        dh <- (height - d)
+                        d  <- ((width min: height) / 4) min: 20,
+                        ex <- width - 1,
+                        ey <- height - 1,
+                        dx <- (ex - d),
+                        dy <- (ey - d),
                     |
 
                     renderer setR: (renderer theme accentColor r)
@@ -40,14 +42,14 @@
                     renderer drawLineX: 0 Y: 0 X: d Y: 0.
                     renderer drawLineX: 0 Y: 0 X: 0 Y: d.
 
-                    renderer drawLineX: dw Y: 0 X: width Y: 0.
-                    renderer drawLineX: width Y: 0 X: width Y: d.
+                    renderer drawLineX: dx Y: 0 X: ex Y: 0.
+                    renderer drawLineX: ex Y: 0 X: ex Y: d.
 
-                    renderer drawLineX: 0 Y: dh X: 0 Y: height.
-                    renderer drawLineX: 0 Y: height X: d Y: height.
+                    renderer drawLineX: 0 Y: dy X: 0 Y: ey.
+                    renderer drawLineX: 0 Y: ey X: d Y: ey.
 
-                    renderer drawLineX: dw Y: height X: width Y: height.
-                    renderer drawLineX: width Y: dh X: width Y: height.
+                    renderer drawLineX: dx Y: ey X: ex Y: ey.
+                    renderer drawLineX: ex Y: dy X: ex Y: ey.
 
                     $(Morph) renderImplOn: renderer.
                 );
