@@ -317,6 +317,8 @@
                 renderDirty.
               ^ self
             );
+
+            customRepresentation: r => representation: (morphic representations Custom: r);
             
             maybeRenderChildrenOn: renderer => (
                 isChildRenderDirty
