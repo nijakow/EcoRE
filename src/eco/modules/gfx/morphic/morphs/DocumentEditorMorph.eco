@@ -453,7 +453,7 @@
                     (prog findElementAtPoint: point)
                         yes: [ :element | moveCaretTo: (element offset). insertReference: v. morph remove. ^ true ].
                     | lineNumber <- (prog findLineForYOffset: (point y)) |
-                    moveCaretToX: 100000 Y: lineNumber. "TOOD: Properly go to end of line"
+                    moveCaretToX: 100000 Y: lineNumber. "TODO: Properly go to end of line"
                     insertReference: v. morph remove.
                   ^ true
                 ].
