@@ -27,10 +27,16 @@
                     ) ~ xLayout: ui layouts ShrinkWrap
                       ~ yLayout: ui layouts Flexible,
                     ui Button(ui Padding(3, ui Label: (slotMirror name asString)),
-                        $[ :(app, wisp, mirror, replacer) :sender :hand :click |
+                        $[ :(app, wisp, objMirror, mirror, replacer) :sender :hand :click |
                             click ifRight: [
                                 (app framework actions open) ui BuildAndOpenContextMenu: [ :cmb |
                                     cmb item: 'Open' does: $[ :(wisp, mirror) :sender | (wisp actions open) Object: (mirror slotValue) ] bind(wisp, mirror).
+
+                                    | v <- mirror slotValue |
+
+                                    ([std reflect primitives IsCode: v] and: [v arguments == 1]) if: [
+                                        cmb item: 'Run' does: $[ :(wisp, v, target) :sender | (wisp actions open) Object: (v execute(target)) ] bind(wisp, v, mirror reflectee).
+                                    ].
                                 ].
                               ^ self
                             ].
@@ -41,7 +47,7 @@
                             "If it wasn't the right button, open the slot value."
                             replacer value(mirror slotValue).
                           ^ self
-                        ] bind(app, wisp, slotMirror, replacer)
+                        ] bind(app, wisp, mirror, slotMirror, replacer)
                     ) ~ xLayout: ui layouts Flexible
                       ~ yLayout: ui layouts Flexible,
                     ui Button(ui Spacer,
