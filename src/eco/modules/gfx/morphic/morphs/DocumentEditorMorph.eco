@@ -447,6 +447,20 @@
           ^ true
         );
 
+        handleDropMorph: morph At: point => (
+            (morph meta: #'ecosphere.eve.morphs.ValueMorph.value') yes: [ :v |
+                program yes: [ :prog |
+                    (prog findElementAtPoint: point)
+                        yes: [ :element | moveCaretTo: (element offset). insertReference: v. morph remove. ^ true ].
+                    | lineNumber <- (prog findLineForYOffset: (point y)) |
+                    moveCaretToX: 100000 Y: lineNumber. "TOOD: Properly go to end of line"
+                    insertReference: v. morph remove.
+                  ^ true
+                ].
+            ].
+          ^ false
+        );
+
         writeOn: w => w << 'a document editor morph';
     };
 }

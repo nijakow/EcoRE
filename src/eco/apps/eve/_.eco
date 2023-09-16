@@ -153,5 +153,10 @@
 
     OpenPaperBinMorph => (framework actions open) ui BuildAndOpen: [ :ui | (morphs PaperBinMorph) new ];
 
-    Main => OpenValueMorphFor: 42;
+    Main => (
+        OpenValueMorphFor: 42.
+        OpenValueMorphFor: 'Hello World'.
+        OpenValueMorphFor: (std os files here).
+      ^ self
+    );
 }

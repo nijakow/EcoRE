@@ -33,6 +33,8 @@
           ^ self
         );
 
+        moveToEnd => moveTo: root size;
+
         "Deprecated in the future, but useful for now."
         reposition => (
             offset <- (offset min: (root size)) max: 0.
