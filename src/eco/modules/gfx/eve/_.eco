@@ -22,6 +22,7 @@
     protected Eve_FillRect,
     protected Eve_DrawText,
     protected Eve_DrawChar,
+    protected Eve_DrawTexture,
     protected Eve_Clear,
     protected Eve_Render,
     protected Eve_PollEvent,
@@ -53,7 +54,11 @@
     protected Eve_Font_GetCharHeight,
     protected Eve_GetDefaultFont;
 
+    protected Eve_Texture_NewFromImage,
+    protected Eve_Texture_Delete;
+
     protected Eve_Font => ffi types void;
+    protected Eve_Texture => ffi types void;
 
     DefaultFont;
 
@@ -91,6 +96,7 @@
         Eve_FillRect <- (lib function: #'Eve_FillRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
         Eve_DrawText <- (lib function: #'Eve_DrawText' type: ((ffi types void) function(ffi types string, ffi types int, ffi types int, Eve_Font pointer))) yes.
         Eve_DrawChar <- (lib function: #'Eve_DrawChar' type: ((ffi types void) function(ffi types uint, ffi types int, ffi types int, Eve_Font pointer))) yes.
+        Eve_DrawTexture <- (lib function: #'Eve_DrawTexture' type: ((ffi types void) function(Eve_Texture pointer, ffi types int, ffi types int))) yes.
         Eve_Clear <- (lib function: #'Eve_Clear' type: ((ffi types void) function())) yes.
         Eve_Render <- (lib function: #'Eve_Render' type: ((ffi types void) function())) yes.
         Eve_PollEvent <- (lib function: #'Eve_PollEvent' type: ((ffi types bool) function())) yes.
@@ -121,6 +127,8 @@
         Eve_Font_GetCharWidth <- (lib function: #'Eve_Font_GetCharWidth' type: ((ffi types uint) function(Eve_Font pointer, ffi types uint))) yes.
         Eve_Font_GetCharHeight <- (lib function: #'Eve_Font_GetCharHeight' type: ((ffi types uint) function(Eve_Font pointer, ffi types uint))) yes.
         Eve_GetDefaultFont <- (lib function: #'Eve_GetDefaultFont' type: ((Eve_Font pointer) function())) yes.
+        Eve_Texture_NewFromImage <- (lib function: #'Eve_Texture_NewFromImage' type: ((Eve_Texture pointer) function(ffi types string))) yes.
+        Eve_Texture_Delete <- (lib function: #'Eve_Texture_Delete' type: ((ffi types void) function(Eve_Texture pointer))) yes.
       ^ self
     );
 
@@ -152,6 +160,8 @@
 
     DrawText(text, x, y, font) => Eve_DrawText value(text, x, y, font ptr);
     DrawChar(char, x, y, font) => Eve_DrawChar value(char asInt, x, y, font ptr);
+
+    DrawTexture(texture, x, y) => Eve_DrawTexture value(texture ptr, x, y);
 
     Clear => Eve_Clear value();
     Render => Eve_Render value();
@@ -196,6 +206,37 @@
 
     own Font = (here / 'Font.eco') importIn: self;
 
+
+
+    Texture_NewFromImage(path) => Eve_Texture_NewFromImage value(path);
+    Texture_Delete(texture) => Eve_Texture_Delete value(texture);
+
+    own Texture = {
+        static with inherited _ = std Clonable;
+
+        protected eve,
+        ptr;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithEve: _eve Ptr: _ptr => (
+                eve <- _eve.
+                ptr <- _ptr.
+                std reflect EnableFinalization: self.
+              ^ self
+            );
+
+            finalize => eve Texture_Delete(ptr);
+
+            drawAtX: x Y: y => (
+                eve DrawTexture(self, x, y).
+              ^ self
+            );
+
+            writeOn: w => w << 'a texture element from EVE';
+        };
+    };
 
     protected own Text = {
         static with inherited _ = std Clonable;

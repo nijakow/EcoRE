@@ -571,6 +571,17 @@ void Eve_RenderState_DrawText(struct Eve_RenderState* self, const char* text, Ev
     }
 }
 
+void Eve_RenderState_DrawTexture(struct Eve_RenderState* self, struct Eve_Texture* texture, Eve_Int x, Eve_Int y) {
+    SDL_Rect rect;
+
+    rect.x = x;
+    rect.y = y;
+    rect.w = texture->width;
+    rect.h = texture->height;
+
+    SDL_RenderCopy(self->renderer, texture->texture, NULL, &rect);
+}
+
 void Eve_RenderState_Clear(struct Eve_RenderState* self) {
     SDL_RenderClear(self->renderer);
 }
@@ -723,6 +734,10 @@ void Eve_DrawChar(Eve_UInt c, Eve_Int x, Eve_Int y, struct Eve_Font* font) {
     Eve_DrawText(buffer, x, y, font);
 }
 
+void Eve_DrawTexture(struct Eve_Texture* texture, Eve_Int x, Eve_Int y) {
+    Eve_RenderState_DrawTexture(&EVE_DEFAULT_RENDER_STATE, texture, x, y);
+}
+
 void Eve_Clear() {
     Eve_RenderState_Clear(&EVE_DEFAULT_RENDER_STATE);
 }
@@ -829,6 +844,34 @@ Eve_UInt Eve_GetCharHeight(Eve_UInt c) {
     buffer[Eve_EncodeAsUtf8(c, buffer)] = '\0';
 
     return Eve_GetTextHeight(buffer);
+}
+
+
+
+void Eve_Texture_CreateFromImage(struct Eve_Texture* self, const char* path) {
+    self->texture = IMG_LoadTexture(EVE_DEFAULT_RENDER_STATE.renderer, path);
+    SDL_QueryTexture(self->texture, NULL, NULL, &self->width, &self->height);
+}
+
+void Eve_Texture_Destroy(struct Eve_Texture* self) {
+    SDL_DestroyTexture(self->texture);
+}
+
+struct Eve_Texture* Eve_Texture_NewFromImage(const char* path) {
+    struct Eve_Texture*  texture;
+
+    texture = malloc(sizeof(struct Eve_Texture));
+
+    if (texture != NULL) {
+        Eve_Texture_CreateFromImage(texture, path);
+    }
+
+    return texture;
+}
+
+void Eve_Texture_Delete(struct Eve_Texture* self) {
+    Eve_Texture_Destroy(self);
+    free(self);
 }
 
 

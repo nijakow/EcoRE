@@ -8,6 +8,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 
 typedef uint8_t u8;
 
@@ -38,6 +39,21 @@ Eve_UInt Eve_Font_GetCharHeight(struct Eve_Font* self, Eve_UInt c);
 struct Eve_Font*  Eve_GetDefaultFont();
 
 
+
+struct Eve_Texture
+{
+    SDL_Texture*  texture;
+    Eve_Int       width;
+    Eve_Int       height;
+};
+
+void Eve_Texture_CreateFromImage(struct Eve_Texture* self, const char* path);
+void Eve_Texture_Destroy(struct Eve_Texture* self);
+
+struct Eve_Texture*  Eve_Texture_NewFromImage(const char* path);
+void                 Eve_Texture_Delete(struct Eve_Texture* self);
+
+
 Eve_UInt Eve_CurrentWidth();
 Eve_UInt Eve_CurrentHeight();
 
@@ -59,6 +75,8 @@ void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
 
 void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y, struct Eve_Font* font);
 void Eve_DrawChar(Eve_UInt c, Eve_Int x, Eve_Int y, struct Eve_Font* font);
+
+void Eve_DrawTexture(struct Eve_Texture* texture, Eve_Int x, Eve_Int y);
 
 void Eve_Clear();
 void Eve_Render();
