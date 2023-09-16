@@ -376,6 +376,17 @@
               ^ false
             );
 
+            dispatchEvent: block ToParentsOf: morph At: point => (
+                childrenReverseDo: [ :c |
+                    c containsPoint: point
+                      ~ if: [ (c dispatchEvent: block ToParentsOf: morph At: (point - c offset)) -> [ ^ true ] ]
+                ].
+                ((isIn: morph) not) if: [
+                    block value(self, point) -> [ ^ true ].
+                ].
+              ^ false
+            );
+
             xRayAt: point Do: block => (
                 block value(self).
                 childrenDo: [ :c |
@@ -402,7 +413,7 @@
             handleKey: key At: point HandMorph: hand => false;
 
             dropMorph: morph At: point => dropMorph: morph At: point Meta: No;
-            dropMorph: morph At: point Meta: meta => dispatchEvent: [ :e :point | e handleDropMorph: morph At: point Meta: meta ] At: point;
+            dropMorph: morph At: point Meta: meta => dispatchEvent: [ :e :point | e handleDropMorph: morph At: point Meta: meta ] ToParentsOf: morph At: point;
             click: click At: point HandMorph: hand => dispatchEvent: [ :e :point | e handleClick: click At: point HandMorph: hand ] At: point;
             grabAt: point HandMorph: hand => dispatchEvent: [ :e :point | e handleGrabAt: point HandMorph: hand ] At: point;
             scrollX: sx Y: sy At: point HandMorph: hand => dispatchEvent: [ :e :point | e handleScrollX: sx Y: sy At: point HandMorph: hand ] At: point;

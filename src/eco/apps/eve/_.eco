@@ -46,7 +46,7 @@
                 );
 
                 handleDropMorph: morph At: point Meta: meta => (
-                    (meta morph meta: #'ecosphere.eve.morphs.ValueMorph.value') yes: [ :v |
+                    (morph meta: #'ecosphere.eve.morphs.ValueMorph.value') yes: [ :v |
                         (std io out << 'Dropped value: ' << v) newline commit.
                       ^ false
                     ].
