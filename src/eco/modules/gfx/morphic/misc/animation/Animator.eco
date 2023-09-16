@@ -1,0 +1,13 @@
+
+{
+    static with inherited _ = std Singleton;
+
+    "
+        Return a floating point number describing the time since the start of the system.
+    "
+    now => #'ecosphere.ecore.time.since_start'();
+
+    periodicValueBetween: lower And: upper => (
+        (((((now * 2 * 3.14159265) sin) * 0.5) + 0.5) * (upper - lower)) + lower
+    );
+}

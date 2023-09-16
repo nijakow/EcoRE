@@ -26,8 +26,9 @@
             );
 
             tick => (
+                "TODO: Implement an fps counter"
                 morph maybeUpdate.
-                morph render.
+                morph fullRender.
             );
 
             findMorphAtX: x Y: y => (

@@ -3,6 +3,7 @@
     static with inherited _ = std Module;
     with morphic = $;
 
+    own animation = (here / 'animation' / '_.eco') importIn: self;
     own color = (here / 'color' / '_.eco') importIn: self;
 
     own GrabInfo = {
@@ -24,5 +25,5 @@
 
             writeOn: w => w << 'a morphic grab info';
         };
-    }
+    };
 }

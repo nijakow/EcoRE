@@ -28,6 +28,8 @@
 
             initWithEve: _eve => initWithEve: _eve X: 0 Y: 0 W: (_eve CurrentWidth) H: (_eve CurrentHeight) Theme: ((morphic misc color ColorTheme) new);
 
+            animator => morphic misc animation Animator;
+
             theme: t => theme <- t;
 
             offset => offsets top;

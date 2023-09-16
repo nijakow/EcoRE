@@ -1,0 +1,6 @@
+
+{
+    static with inherited _ = std Module;
+
+    own Animator = (here / 'Animator.eco') importIn: self;
+}
