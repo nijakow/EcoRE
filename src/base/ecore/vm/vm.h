@@ -28,6 +28,8 @@ struct Eco_VM
 
         Eco_Any  basic_error;
     } constants;
+
+    struct timeval                start_time;
 };
 
 

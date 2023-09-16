@@ -17,6 +17,7 @@
 #include "core/reflection.h"
 #include "core/slots.h"
 #include "core/string.h"
+#include "core/time.h"
 #include "core/weak.h"
 
 #include <ecore/objects/misc/key/key.h>
@@ -196,6 +197,8 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.io.list_files", Eco_VM_Builtin_ListFiles);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.os.getenv", Eco_VM_Builtin_GetEnv);
+
+    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.time.since_start", Eco_VM_Builtin_GetTimeSinceStart);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.version_string", Eco_VM_Builtin_GetVersionString);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.init.os_version_id", Eco_VM_Builtin_GetOsVersionId);

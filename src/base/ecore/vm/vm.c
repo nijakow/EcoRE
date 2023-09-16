@@ -30,6 +30,8 @@ void Eco_VM_Create(struct Eco_VM* vm)
     Eco_WeakObjectManager_Create(&vm->weak_objects);
     Eco_GC_State_Create(&vm->gc_state, vm);
     Eco_Scheduler_Create(&vm->scheduler);
+
+    gettimeofday(&vm->start_time, NULL);
 }
 
 void Eco_VM_Destroy(struct Eco_VM* vm)
