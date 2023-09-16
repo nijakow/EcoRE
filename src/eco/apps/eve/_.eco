@@ -58,6 +58,45 @@
                     ].
                   ^ false
                 );
+
+                writeOn: w => w << 'a value morph';
+            };
+        };
+
+        "A morph that calls 'remove' on every object that is dropped to it. Can have multiple children."
+        own PaperBinMorph = {
+            static with inherited _ = std Clonable;
+            static with inherited own Morph = (($package gfx morphic) morphs) Morph;
+
+            with inherited trait = {
+                static with inherited _ = std Trait;
+
+                texture <- (($package gfx eve) TextureFromPath: (here / 'trashcan.png'));
+
+                init => (
+                    $(Morph) initWithOneChild.
+                  ^ self
+                );
+
+                minWidth => texture width;
+                minHeight => texture height;
+
+                renderImplOn: renderer => (
+                    renderer drawTexture: texture X: 0 Y: 0.
+                    $(Morph) renderImplOn: renderer.
+                );
+
+                handleDropMorph: morph At: point Meta: meta => (
+                    morph remove.                    
+                  ^ true
+                );
+
+                handleClick: click At: point HandMorph: hand => (
+                    hand grab: self.
+                  ^ true
+                );
+
+                writeOn: w => w << 'a paper bin morph';
             };
         };
     };
@@ -88,6 +127,8 @@
     );
 
     OpenValueMorphFor: v => (framework actions open) ui BuildAndOpen: [ :ui | ValueMorphFor: v Ui: ui ];
+
+    OpenPaperBinMorph => (framework actions open) ui BuildAndOpen: [ :ui | (morphs PaperBinMorph) new ];
 
     Main => OpenValueMorphFor: 42;
 }
