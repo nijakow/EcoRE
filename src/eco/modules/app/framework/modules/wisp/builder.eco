@@ -36,6 +36,7 @@
 
                                     ([std reflect primitives IsCode: v] and: [v arguments == 1]) if: [
                                         cmb item: 'Run' does: $[ :(wisp, v, target) :sender | (wisp actions open) Object: (v execute(target)) ] bind(wisp, v, mirror reflectee).
+                                        cmb item: 'Run (Quiet)' does: $[ :(wisp, v, target) :sender | v execute(target) ] bind(wisp, v, mirror reflectee).
                                     ].
                                 ].
                               ^ self

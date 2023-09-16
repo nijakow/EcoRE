@@ -26,4 +26,6 @@
     );
 
     OpenValueMorphFor: v => (framework actions open) Morph: (ValueMorphFor: v);
+
+    Main => OpenValueMorphFor: 42;
 }
