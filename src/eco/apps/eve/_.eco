@@ -1,7 +1,7 @@
 
 {
     static with inherited _ = std Module;
-    with app <- app;
+    with app <- $;
 
     protected MakeValueMorphFor: v => (
         | m <- ((app gfx morphic) morphs Morph) new |
@@ -11,6 +11,9 @@
             renderer drawRectX: 0 Y: 0 W: morph width H: morph height.
         ].
 
+        m rigidWidth: 25.
+        m rigidHeight: 25.
+
       ^ m
     );
 
@@ -19,8 +22,8 @@
 
         m meta: #'ecosphere.eve.morphs.ValueMorph.value' is: v.
 
-      ^ v
+      ^ m
     );
 
-    OpenValueMorphFor: v => (framework actions ui) open Morph: (ValueMorphFor: v);
+    OpenValueMorphFor: v => (framework actions open) Morph: (ValueMorphFor: v);
 }
