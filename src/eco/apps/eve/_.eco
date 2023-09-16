@@ -68,6 +68,8 @@
             static with inherited _ = std Clonable;
             static with inherited own Morph = (($package gfx morphic) morphs) Morph;
 
+            entered <- false;
+
             with inherited trait = {
                 static with inherited _ = std Trait;
 
@@ -83,7 +85,21 @@
 
                 renderImplOn: renderer => (
                     renderer drawTexture: texture X: 0 Y: 0.
+                    (entered) if: [
+                        renderer setColor: (renderer theme lineColor).
+                        renderer drawRectX: 0 Y: 0 W: width H: height.
+                    ].
                     $(Morph) renderImplOn: renderer.
+                );
+
+                handleHandEnter: hand => (
+                    entered <- true.
+                  ^ true
+                );
+
+                handleHandExit: hand => (
+                    entered <- false.
+                  ^ true
                 );
 
                 handleDropMorph: morph At: point Meta: meta => (
