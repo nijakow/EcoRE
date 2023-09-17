@@ -6,6 +6,59 @@
     own morphs = {
         static with inherited _ = std Module;
 
+        own ModulePresentationMorph = {
+            static with inherited _ = std Clonable;
+            static with inherited own Morph = (($package gfx morphic) morphs) Morph;
+
+            with inherited trait = {
+                static with inherited _ = std Trait;
+
+                init => (
+                    $(Morph) initWithManyChildren.
+                  ^ self
+                );
+
+                renderOn: renderer => (
+                    renderer setColor: (renderer theme lineColor).
+                    renderer drawRectX: 0 Y: 0 W: width H: height.
+                    renderer withClipW: width H: height Do: [
+                        $(Morph) renderOn: renderer.
+                    ].
+                );
+
+                handleRemoveMorph: morph => (
+                    (morph meta: #'ecosphere.eve.morphs.ValueMorph.value') yes: [ :v |
+                        (std io out << 'Removed value: ' << v) newline commit.
+                      ^ true
+                    ].
+                  ^ true
+                );
+
+                handleDropMorph: morph At: point Meta: meta => (
+                    (morph meta: #'ecosphere.eve.morphs.ValueMorph.value') yes: [ :v |
+                        | gb <- globalOffset, mgb <- morph globalOffset |
+                        (tryAdd: morph) -> [
+                            (std io out << 'Added value: ' << v) newline commit.
+                            morph moveTo: (mgb - gb).
+                          ^ true
+                        ].
+                    ].
+                  ^ false
+                );
+
+                handleScrollX: sx Y: sy At: point HandMorph: hand => (
+                    (xLayout isRigid) if: [
+                        rigidWidth: (width + (25 * sx)).
+                    ].
+                    (yLayout isRigid) if: [
+                        rigidHeight: (height + (25 * sy)).
+                    ].
+                    layoutChanged.
+                  ^ true
+                );
+            };
+        };
+
         own ValueMorph = {
             static with inherited _ = std Clonable;
             static with inherited own Morph = (($package gfx morphic) morphs) Morph;
@@ -15,6 +68,7 @@
 
                 init => (
                     $(Morph) initWithOneChild.
+                    layouter: (morphic layouters Stack) new;
                   ^ self
                 );
 
@@ -142,6 +196,20 @@
       ^ m
     );
 
+    protected MakeModuleMorphUi: ui => (
+        | m <- (morphs ValueMorph) new, mp <- morphs ModulePresentationMorph new |
+
+        m add: (ui Padding(5, mp)).
+
+        mp rigidWidth: 300.
+        mp rigidHeight: 200.
+
+        m xLayout: ((app gfx morphic) layouts ShrinkWrap).
+        m yLayout: ((app gfx morphic) layouts ShrinkWrap).
+
+      ^ m
+    );
+
     ValueMorphFor: v Ui: ui => (
         | m <- MakeValueMorphFor: v Ui: ui |
 
@@ -152,6 +220,7 @@
     );
 
     OpenValueMorphFor: v => (framework actions open) ui BuildAndOpen: [ :ui | ValueMorphFor: v Ui: ui ];
+    OpenModuleMorph => (framework actions open) ui BuildAndOpen: [ :ui | MakeModuleMorphUi: ui ];
 
     OpenPaperBinMorph => (framework actions open) ui BuildAndOpen: [ :ui | (morphs PaperBinMorph) new ];
 
@@ -159,6 +228,7 @@
         OpenValueMorphFor: 42.
         OpenValueMorphFor: 'Hello World'.
         OpenValueMorphFor: (std os files here).
+        OpenModuleMorph.
       ^ self
     );
 }

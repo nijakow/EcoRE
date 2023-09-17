@@ -120,7 +120,7 @@
 
             remove: child => (
                 (children remove: child)
-                  ~ if: [ child noParent. layoutChanged. ].
+                  ~ if: [ self handleRemoveMorph: child. child noParent. layoutChanged. ].
               ^ self
             );
 
@@ -405,6 +405,7 @@
               ^ self
             );
 
+            handleRemoveMorph: morph => false;
             handleDropMorph: morph At: point => false;
             handleDropMorph: morph At: point Meta: meta => handleDropMorph: morph At: point;
             handleClick: click At: point HandMorph: hand => false;
