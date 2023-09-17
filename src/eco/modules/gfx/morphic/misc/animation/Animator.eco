@@ -10,4 +10,13 @@
     periodicValueBetween: lower And: upper => (
         (((((now * 2 * 3.14159265) sin) * 0.5) + 0.5) * (upper - lower)) + lower
     );
+
+    linearValueBetween: lower And: upper StartingAt: start Duration: duration => (
+        | n <- now, end <- start + duration |
+
+        (n < start) if: [ ^ lower ].
+        (n > end) if: [ ^ upper ].
+
+      ^ ((n - start) / duration) * (upper - lower) + lower
+    );
 }
