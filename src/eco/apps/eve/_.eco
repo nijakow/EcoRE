@@ -70,10 +70,12 @@
             static with inherited _ = std Clonable;
             static with inherited own Morph = (($package gfx morphic) morphs) Morph;
 
-            animationStart <- 0;
+            animationStart <- 0,
+            entered        <- false;
 
             with inherited trait = {
                 static with inherited _ = std Trait;
+                app <- $package;
 
                 init => (
                     $(Morph) initWithOneChild.
@@ -87,8 +89,10 @@
                     "
 
                     |
-                        animationProgress      <- (renderer animator) linearValueBetween: 0.0 And: 3.14159265 StartingAt: animationStart Duration: 0.5,
-                        animationDelta         <- ((animationProgress sin) * 5) asInt,
+                        lower                  <- entered if: 0.0 else: 5.0,
+                        upper                  <- entered if: 5.0 else: 0.0,
+                        animationProgress      <- (renderer animator) linearValueBetween: lower And: upper StartingAt: animationStart Duration: 0.25,
+                        animationDelta         <- animationProgress asInt,
                         negativeAnimationDelta <- animationDelta negate
                     |
 
@@ -129,11 +133,24 @@
                 );
 
                 handleHandEnter: hand => (
+                    entered        <- true.
+                    animationStart <- ((morphic misc animation) Animator) now.
+                  ^ false
+                );
+
+                handleHandExit: hand => (
+                    entered        <- false.
                     animationStart <- ((morphic misc animation) Animator) now.
                   ^ false
                 );
 
                 handleClick: click At: point HandMorph: hand => (
+                    (click isMiddle) if: [
+                        (meta: #'ecosphere.eve.morphs.ValueMorph.value') yes: [ :v | 
+                            (app framework actions open) OutlinerForObject: v.
+                        ].
+                      ^ true
+                    ].
                     hand grab: self.
                   ^ true
                 );
