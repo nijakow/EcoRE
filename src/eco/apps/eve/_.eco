@@ -21,6 +21,13 @@
                 renderOn: renderer => (
                     renderer setColor: (renderer theme lineColor).
                     renderer drawRectX: 0 Y: 0 W: width H: height.
+
+                    0 to: height by: 10 do: [ :y |
+                        0 to: width by: 10 do: [ :x |
+                            renderer drawPointX: x Y: y.
+                        ].
+                    ].
+
                     renderer withClipW: width H: height Do: [
                         $(Morph) renderOn: renderer.
                     ].

@@ -524,6 +524,10 @@ void Eve_RenderState_Clip(struct Eve_RenderState* self, Eve_Int x, Eve_Int y, Ev
     SDL_RenderSetClipRect(self->renderer, &rect);
 }
 
+void Eve_RenderState_DrawPoint(struct Eve_RenderState* self, Eve_Int x, Eve_Int y) {
+    SDL_RenderDrawPoint(self->renderer, x, y);
+}
+
 void Eve_RenderState_DrawLine(struct Eve_RenderState* self, Eve_Int x1, Eve_Int y1, Eve_Int x2, Eve_Int y2) {
     SDL_RenderDrawLine(self->renderer, x1, y1, x2, y2);
 }
@@ -708,6 +712,10 @@ void Eve_SetColorRGB(u8 r, u8 g, u8 b) {
 
 void Eve_Clip(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
     Eve_RenderState_Clip(&EVE_DEFAULT_RENDER_STATE, x, y, w, h);
+}
+
+void Eve_DrawPoint(Eve_Int x, Eve_Int y) {
+    Eve_RenderState_DrawPoint(&EVE_DEFAULT_RENDER_STATE, x, y);
 }
 
 void Eve_DrawLine(Eve_Int x1, Eve_Int y1, Eve_Int x2, Eve_Int y2) {

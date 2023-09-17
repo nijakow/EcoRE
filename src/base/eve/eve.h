@@ -70,6 +70,8 @@ void Eve_SetColorRGB(u8 r, u8 g, u8 b);
 
 void Eve_Clip(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
 
+void Eve_DrawPoint(Eve_Int x, Eve_Int y);
+
 void Eve_DrawLine(Eve_Int x1, Eve_Int y1, Eve_Int x2, Eve_Int y2);
 void Eve_DrawArrow(Eve_Int x1, Eve_Int y1, Eve_Int x2, Eve_Int y2);
 

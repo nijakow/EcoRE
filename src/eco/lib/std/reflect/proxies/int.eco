@@ -53,6 +53,14 @@
             ]
         );
         to: upper do: body => for: (upper + 1) do: body;
+
+        to: upper by: step do: body => (
+            | i <- self |
+            [ i < upper ] while: [
+                body value(i).
+                i <- i + step.
+            ]
+        );
     };
 
     with inherited counting_loops = {
