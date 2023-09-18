@@ -93,6 +93,8 @@
                 invalidateGlobalOffsetCache.
               ^ self
             );
+            
+            hasParent => parent isYes;
 
             isIn: morph => (
                 (self == morph) -> [ ^ true ].

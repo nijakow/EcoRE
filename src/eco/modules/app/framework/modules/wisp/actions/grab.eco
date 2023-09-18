@@ -1,0 +1,13 @@
+
+{
+    static with inherited _ = std Module;
+    protected with wisp = $;
+
+    Object: object => (
+        (framework context DefaultHand) grab: (
+            (framework actions open) ui Build: [ :ui |
+                (wisp core objects) ValueMorphFor: object Ui: ui
+            ]
+        ).
+    );
+}

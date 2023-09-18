@@ -52,9 +52,14 @@
             );
 
             grab: morph => (
-                | p <- morph globalOffset - globalOffset |
-                add: morph.
-                morph moveTo: p. "TODO: Keep offset"
+                (morph hasParent) if: [
+                    | p <- morph globalOffset - globalOffset |
+                    add: morph.
+                    morph moveTo: p.
+                ] else: [
+                    add: morph.
+                    morph reshapeX: ((morph minWidth / 2) negate) Y: ((morph minHeight / 2) negate) W: (morph minWidth) H: (morph minHeight).
+                ].
                 grabbedMorph <- Yes: ((morphic misc GrabInfo) clone initWithMorph: morph).
               ^ self
             );
