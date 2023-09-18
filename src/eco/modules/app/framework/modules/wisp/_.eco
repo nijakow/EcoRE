@@ -4,6 +4,6 @@
     with app = $;
 
     own actions = (here / 'actions' / '_.eco') importIn: self;
-    own core = (here / 'core' / '_.eco') importIn: self;
+    own core    = (here / 'core' / '_.eco') importIn: self;
     own builder = (here / 'builder.eco') importIn: self;
 }

@@ -1,7 +1,7 @@
 
 {
     static with inherited _ = std Module;
-    with app <- $package;
+    with app       <- $package;
 
     own morphs = {
         static with inherited _ = std Module;
