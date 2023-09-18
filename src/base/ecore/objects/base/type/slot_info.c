@@ -16,7 +16,8 @@ void Eco_SlotFlags_Create(struct Eco_SlotFlags* flags)
 
 void Eco_BasicSlotInfo_Create(struct Eco_BasicSlotInfo* info)
 {
-    info->key = NULL;
+    info->key         = NULL;
+    info->perspective = NULL;
     Eco_SlotFlags_Create(&info->flags);
 }
 

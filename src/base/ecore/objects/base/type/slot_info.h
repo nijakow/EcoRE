@@ -3,6 +3,8 @@
 
 #include <ecore/objects/misc/key/key.h>
 
+struct Eco_Perspective;
+
 struct Eco_SlotFlags
 {
     int is_deprecated : 1;
@@ -16,8 +18,9 @@ struct Eco_SlotFlags
 
 struct Eco_BasicSlotInfo
 {
-    struct Eco_Key*       key;
-    struct Eco_SlotFlags  flags;
+    struct Eco_Key*          key;
+    struct Eco_Perspective*  perspective;
+    struct Eco_SlotFlags     flags;
 };
 
 void Eco_SlotFlags_Create(struct Eco_SlotFlags*);

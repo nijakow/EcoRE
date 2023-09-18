@@ -21,6 +21,8 @@ bool Eco_Type_SendMessageToMolecule(struct Eco_Message*  message,
         if (slot->info.key == message->key) {
             if ((slot->info.flags.is_protected && !message->private_send) || (slot->info.flags.is_static && is_delegated))
                 continue;
+            if (slot->info.perspective != NULL)
+                continue;
             Eco_TypeSlot_Invoke(message, molecule, type, i, self);
             return true;
         }
