@@ -29,7 +29,7 @@
         (framework actions open) ui BuildAndOpen: [ :ui |
             ui Window(500, 350,
                 ui DocumentEditor: (document FromString: text)
-                    OnGetIt: $[ :(app, object) :editor | (app framework actions) eval DocumentAndShowResult: (editor document) Environment: object ] bind(app, object)
+                    OnGetIt: $[ :(app, object) :editor | (app framework actions) eval DocumentAndGrabResult: (editor document) Environment: object ] bind(app, object)
                     OnDoIt: $[ :(app, object) :editor | (app framework actions) eval Document: (editor document) Environment: object ] bind(app, object)
                     OnCancel: $[ :editor | editor clear ]
             )

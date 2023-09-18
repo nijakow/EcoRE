@@ -246,10 +246,10 @@
                             ]
                         ] bind(self, ui, morphReplacer, maybeBack)
                     ) ~ xLayout: ui layouts Flexible,
-                    ui Button(ui Padding(5, ui Label: 'Copy'),
+                    ui Button(ui Padding(5, ui Label: 'Grab'),
                         $[ :(wisp, object) :sender |
-                            "TODO: Copy to clipboard"
-                            ((wisp framework actions) clipboard) CopyObject: object
+                            "Grab the object"
+                            (wisp actions grab) Object: object
                         ] bind(wisp, object)
                     ) ~ xLayout: ui layouts Flexible,
                     ui Button(ui Padding(5, ui Label: 'Proxy'),
@@ -279,7 +279,7 @@
         | vbox <- ui VBox() |
         vbox add: (
             ui DocumentEditor: (document FromString: '')
-                    OnGetIt: $[ :(app, object) :editor | (app framework actions) eval DocumentAndShowResult: (editor document) Environment: object ] bind(app, object)
+                    OnGetIt: $[ :(app, object) :editor | (app framework actions) eval DocumentAndGrabResult: (editor document) Environment: object ] bind(app, object)
                     OnDoIt: $[ :(app, object) :editor | (app framework actions) eval Document: (editor document) Environment: object ] bind(app, object)
                     OnCancel: $[ :(vbox) :editor | vbox unlink ] bind(vbox)
         ).

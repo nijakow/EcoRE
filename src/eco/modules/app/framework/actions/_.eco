@@ -100,6 +100,13 @@
                       OnFailure: $[ :(framework) :err | (framework actions open) ui TextMessageBox: err ] bind(framework)
         );
 
+        DocumentAndGrabResult: document Environment: environment => (
+            ((framework modules eval) actions)
+                  EvalDocument: document InEnvironment: environment
+                      OnSuccess: $[ :(framework) :val | ((framework modules wisp) actions grab) Object: val ] bind(framework)
+                      OnFailure: $[ :(framework) :err | (framework actions open) ui TextMessageBox: err ] bind(framework)
+        );
+
         StringAndShowResult: string Environment: environment => (
             ((framework modules eval) actions)
                   EvalString: string InEnvironment: environment

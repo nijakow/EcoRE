@@ -144,8 +144,9 @@
 
                 handleClick: click At: point HandMorph: hand => (
                     (click isMiddle) if: [
-                        (meta: #'ecosphere.eve.morphs.ValueMorph.value') yes: [ :v | 
+                        (meta: #'ecosphere.eve.morphs.ValueMorph.value') yes: [ :v |
                             (app framework actions open) OutlinerForObject: v.
+                            remove.
                         ].
                       ^ true
                     ].
