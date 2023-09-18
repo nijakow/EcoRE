@@ -113,7 +113,7 @@
                     renderer setR: (renderer theme accentColor r)
                                 G: (renderer theme accentColor g)
                                 B: (renderer theme accentColor b)
-                                A: 32.
+                                A: 64.
                     
                     renderer fillRectX: 0 Y: 0 W: width H: height.
 
