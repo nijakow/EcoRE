@@ -6,7 +6,7 @@
     colorButton(color, ui) => (
         ui Button(
             ui Padding(5, ui ColorMorph: color),
-            $[ :(framework, color) :sender :hand | (framework actions clipboard) CopyObject: color ] bind(framework, color)
+            $[ :(framework, color) :sender :hand | ((framework modules wisp) actions grab) Object: color ] bind(framework, color)
         ) ~ rigidWidth: 25
           ~ rigidHeight: 25
     );

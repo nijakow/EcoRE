@@ -53,7 +53,7 @@
                       ~ yLayout: ui layouts Flexible,
                     ui Button(ui Spacer,
                         $[ :(wisp, mirror) :sender |
-                            (wisp actions open) Object: (mirror slotValue)
+                            (wisp actions grab) Object: (mirror slotValue)
                         ] bind(wisp, slotMirror)
                     ) ~ rigidWidth: 25
                       ~ rigidHeight: 25,

@@ -106,6 +106,10 @@
 
     MenuForMorph: morph Hand: hand => (
         (framework actions open ui) BuildAndOpenContextMenu: [ :cmb |
+            cmb item: 'Get'
+                does: $[ :(framework, morph) |
+                            ((framework modules wisp) actions grab) Object: morph
+                       ] bind(framework, morph).
             cmb item: 'Inspect'
                 does: $[ :(framework, morph) |
                             (framework actions open) OutlinerForObject: morph
