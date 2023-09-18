@@ -187,7 +187,8 @@
     );
 
     UndecoratedWindow(content) => (
-        Draggable(
+        | window <- (morphic morphs ClampFrameMorph) new |
+        window add: (
             ui Stacked(
                 ui Padding(10,
                     ui Stacked(

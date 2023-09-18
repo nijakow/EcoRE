@@ -24,7 +24,7 @@
 
         buildUsingUiToolkit: ui => (
             |
-                draggable <- (ui morphic morphs DraggableMorph) new,
+                draggable <- (ui morphic morphs ClampFrameMorph) new,
                 vbox      <- ui VBox(),
                 height    <- 20
             |
