@@ -218,7 +218,7 @@
                         ) ~ xLayout: ui layouts ShrinkWrap
                           ~ yLayout: ui layouts ShrinkWrap,
                     ) ~ yLayout: ui layouts ShrinkWrap,
-                    ui Padding(10, ui Stacked(content, BackgroundColorMorph))
+                    ui Padding(10, ui Stacked(content ", BackgroundColorMorph"))
                       ~ xLayout: ui layouts Flexible
                       ~ yLayout: ui layouts Flexible,
                     ui HBox(Spacer,
