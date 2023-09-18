@@ -1,0 +1,50 @@
+
+{
+    static with inherited _ = std Module;
+    with app <- $;
+
+    "A morph that calls 'remove' on every object that is dropped to it. Can have multiple children."
+    own PaperBinMorph = {
+        static with inherited _ = std Clonable;
+        static with inherited own Morph = (($package gfx morphic) morphs) Morph;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            texture <- (($package gfx eve) TextureFromPath: (here / 'trashcan.png'));
+
+            init => (
+                $(Morph) initWithOneChild.
+                ^ self
+            );
+
+            baseMinWidth => texture width;
+            baseMinHeight => texture height;
+
+            renderImplOn: renderer => (
+                renderer drawTexture: texture X: 0 Y: 0.
+                $(Morph) renderImplOn: renderer.
+            );
+
+            handleDropMorph: morph At: point Meta: meta => (
+                morph remove.                    
+                ^ true
+            );
+
+            writeOn: w => w << 'a paper bin morph';
+        };
+    };
+
+    Main => (
+        (framework actions open) ui BuildAndOpen: [ :ui |
+            | m <- ((app gfx morphic) morphs ClampFrameMorph) new |
+
+            m add: ui Padding(5, PaperBinMorph new).
+
+            m xLayout: ((app gfx morphic) layouts ShrinkWrap).
+            m yLayout: ((app gfx morphic) layouts ShrinkWrap).
+
+            m
+        ]
+    );
+}
