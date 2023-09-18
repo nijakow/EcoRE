@@ -173,8 +173,6 @@
             static with inherited _ = std Clonable;
             static with inherited own Morph = (($package gfx morphic) morphs) Morph;
 
-            entered <- false;
-
             with inherited trait = {
                 static with inherited _ = std Trait;
 
@@ -185,35 +183,16 @@
                   ^ self
                 );
 
-                minWidth => texture width;
-                minHeight => texture height;
+                baseMinWidth => texture width;
+                baseMinHeight => texture height;
 
                 renderImplOn: renderer => (
                     renderer drawTexture: texture X: 0 Y: 0.
-                    (entered) if: [
-                        renderer setColor: (renderer theme lineColor).
-                        renderer drawRectX: 0 Y: 0 W: width H: height.
-                    ].
                     $(Morph) renderImplOn: renderer.
-                );
-
-                handleHandEnter: hand => (
-                    entered <- true.
-                  ^ true
-                );
-
-                handleHandExit: hand => (
-                    entered <- false.
-                  ^ true
                 );
 
                 handleDropMorph: morph At: point Meta: meta => (
                     morph remove.                    
-                  ^ true
-                );
-
-                handleClick: click At: point HandMorph: hand => (
-                    hand grab: self.
                   ^ true
                 );
 
@@ -264,7 +243,16 @@
     OpenValueMorphFor: v => (framework actions open) ui BuildAndOpen: [ :ui | ValueMorphFor: v Ui: ui ];
     OpenModuleMorph => (framework actions open) ui BuildAndOpen: [ :ui | MakeModuleMorphUi: ui ];
 
-    OpenPaperBinMorph => (framework actions open) ui BuildAndOpen: [ :ui | (morphs PaperBinMorph) new ];
+    OpenPaperBinMorph => (framework actions open) ui BuildAndOpen: [ :ui |
+        | m <- ((app gfx morphic) morphs ClampFrameMorph) new |
+
+        m add: ui Padding(5, ((morphs PaperBinMorph) new)).
+
+        m xLayout: ((app gfx morphic) layouts ShrinkWrap).
+        m yLayout: ((app gfx morphic) layouts ShrinkWrap).
+
+        m
+    ];
 
     Main => (
         OpenValueMorphFor: 42.

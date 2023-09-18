@@ -12,8 +12,8 @@
           ^ self
         );
 
-        minWidth => texture width;
-        minHeight => texture height;
+        baseMinWidth => texture width;
+        baseMinHeight => texture height;
 
         renderImplOn: renderer => (
             renderer drawTexture: texture X: 0 Y: 0.
