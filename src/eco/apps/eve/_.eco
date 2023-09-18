@@ -19,6 +19,9 @@
                 );
 
                 renderOn: renderer => (
+                    renderer setColor: (renderer theme backgroundColor).
+                    renderer fillRectX: 0 Y: 0 W: width H: height.
+
                     renderer setColor: (renderer theme lineColor).
                     renderer drawRectX: 0 Y: 0 W: width H: height.
 
