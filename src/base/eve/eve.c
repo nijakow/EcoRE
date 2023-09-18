@@ -584,17 +584,20 @@ void Eve_RenderState_BlurRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y
 
     for (int xx = 0; xx < w; xx += 3) {
         for (int yy = 0; yy < h; yy += 3) {
+            unsigned int ww = (w - xx) < 3 ? (w - xx) : 3;
+            unsigned int hh = (h - yy) < 3 ? (h - yy) : 3;
+            
             unsigned int r_sum = 0;
             unsigned int g_sum = 0;
             unsigned int b_sum = 0;
 
-            for (int dx = 0; dx < 3; dx++) {
-                if (xx + dx < 0 || xx + dx >= w) {
+            for (int dx = 0; dx < ww; dx++) {
+                if (xx + dx >= w) {
                     continue;
                 }
 
-                for (int dy = 0; dy < 3; dy++) {
-                    if (yy + dy < 0 || yy + dy >= h) {
+                for (int dy = 0; dy < hh; dy++) {
+                    if (yy + dy >= h) {
                         continue;
                     }
 
@@ -606,13 +609,15 @@ void Eve_RenderState_BlurRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y
                 }
             }
 
-            SDL_SetRenderDrawColor(self->renderer, r_sum / 9, g_sum / 9, b_sum / 9, 255);
+            int count = ww * hh;
+
+            SDL_SetRenderDrawColor(self->renderer, r_sum / count, g_sum / count, b_sum / count, 255);
             // SDL_RenderDrawPoint(self->renderer, x + xx, y + yy);
 
             rect2.x = x + xx;
             rect2.y = y + yy;
-            rect2.w = 3;
-            rect2.h = 3;
+            rect2.w = ww;
+            rect2.h = hh;
 
             SDL_RenderFillRect(self->renderer, &rect2);
         }
