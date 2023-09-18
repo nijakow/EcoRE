@@ -573,10 +573,41 @@ void Eve_RenderState_BlurRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y
     rect.w = w;
     rect.h = h;
 
-    SDL_SetRenderDrawBlendMode(self->renderer, SDL_BLENDMODE_BLEND);
-    SDL_SetRenderDrawColor(self->renderer, 0, 0, 0, 32);
-    SDL_RenderFillRect(self->renderer, &rect);
-    SDL_SetRenderDrawBlendMode(self->renderer, SDL_BLENDMODE_NONE);
+    /*
+     * Gaussian blur on the texture.
+     * Iterate over all pixels of self->texture and calculate the average of the surrounding pixels.
+     */
+    SDL_Color original_pixels[w * h];
+    SDL_RenderReadPixels(self->renderer, &rect, SDL_PIXELFORMAT_ABGR8888, original_pixels, w * sizeof(SDL_Color));
+
+    for (int xx = 0; xx < w; xx++) {
+        for (int yy = 0; yy < h; yy++) {
+            unsigned int r_sum = 0;
+            unsigned int g_sum = 0;
+            unsigned int b_sum = 0;
+
+            for (int dx = -1; dx <= 1; dx++) {
+                if (xx + dx < 0 || xx + dx >= w) {
+                    continue;
+                }
+
+                for (int dy = -1; dy <= 1; dy++) {
+                    if (yy + dy < 0 || yy + dy >= h) {
+                        continue;
+                    }
+
+                    SDL_Color* original_pixel = &original_pixels[(xx + dx) + (yy + dy) * w];
+
+                    r_sum += original_pixel->r;
+                    g_sum += original_pixel->g;
+                    b_sum += original_pixel->b;
+                }
+            }
+
+            SDL_SetRenderDrawColor(self->renderer, r_sum / 9, g_sum / 9, b_sum / 9, 255);
+            SDL_RenderDrawPoint(self->renderer, x + xx, y + yy);
+        }
+    }
 }
 
 void Eve_RenderState_DrawText(struct Eve_RenderState* self, const char* text, Eve_Int x, Eve_Int y, struct Eve_Font* font) {
