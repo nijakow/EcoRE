@@ -98,6 +98,7 @@
                 protected height,
                 protected object,
                 protected text,
+                protected removeHandle,
                 offset;
 
                 with inherited trait = {
@@ -105,14 +106,15 @@
 
                     protected morphic <- $package morphic;
 
-                    initWithOffset: _offset X: _xpos Y: _ypos W: _width H: _height Object: _object Text: _text => (
-                        xpos   <- _xpos.
-                        ypos   <- _ypos.
-                        width  <- _width.
-                        height <- _height.
-                        offset <- _offset.
-                        object <- _object.
-                        text   <- _text.
+                    initWithOffset: _offset X: _xpos Y: _ypos W: _width H: _height Object: _object Text: _text RemoveHandle: _rh => (
+                        xpos         <- _xpos.
+                        ypos         <- _ypos.
+                        width        <- _width.
+                        height       <- _height.
+                        offset       <- _offset.
+                        object       <- _object.
+                        text         <- _text.
+                        removeHandle <- _rh.
                       ^ self
                     );
 
@@ -171,7 +173,8 @@
                     );
 
                     handleClickWithHand: hand => (
-                        ((morphic app) framework actions open) OutlinerForObject: object.
+                        removeHandle value.
+                        (((morphic app) framework modules wisp) actions grab) Object: object.
                     );
                 };
             };
@@ -360,7 +363,7 @@
                             w    <- (renderer textWidth: text) + 10,
                             h    <- (renderer textHeight: text) + 10
                         |
-                        prog addElement: ((mod ReferenceElement) clone initWithOffset: offset X: xOff Y: (base - h) W: w H: h Object: (r content) Text: text).
+                        prog addElement: ((mod ReferenceElement) clone initWithOffset: offset X: xOff Y: (base - h) W: w H: h Object: (r content) Text: text RemoveHandle: $[ :(us, offset) | us deleteElement: offset. ] bind(self, offset)).
                         dx <- w.
                         dy <- h.
                     ].
@@ -450,6 +453,18 @@
         protected backspace => (
             caret backspace.
             documentChanged.
+          ^ self
+        );
+
+        protected forwardDelete => (
+            caret forward.
+            backspace.
+          ^ self
+        );
+
+        deleteElement: offset => (
+            moveCaretTo: offset.
+            forwardDelete.
           ^ self
         );
 
