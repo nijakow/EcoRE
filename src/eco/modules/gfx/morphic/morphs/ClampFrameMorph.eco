@@ -1,0 +1,102 @@
+{
+    static with inherited _ = std Clonable;
+    static with inherited own Morph = $ Morph;
+
+    isResizable    <- false,
+    animationStart <- 0,
+    entered        <- false;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+        app <- $package;
+
+        init => (
+            $(Morph) initWithOneChild.
+            layouter: (morphic layouters Stack) new;
+          ^ self
+        );
+
+        resizable => isResizable <- true;
+
+        renderImplOn: renderer => (
+            "
+                Draw angle-shaped lines in every corner of the morph.
+            "
+
+            |
+                lower                  <- entered if: 0.0 else: 5.0,
+                upper                  <- entered if: 5.0 else: 0.0,
+                animationProgress      <- (renderer animator) linearValueBetween: lower And: upper StartingAt: animationStart Duration: 0.25,
+                animationDelta         <- animationProgress asInt,
+                negativeAnimationDelta <- animationDelta negate
+            |
+
+            |
+                d  <- ((width min: height) / 4) min: 20,
+                sx <- negativeAnimationDelta,
+                sy <- negativeAnimationDelta,
+                ex <- width - 1 + animationDelta,
+                ey <- height - 1 + animationDelta,
+                sdx <- (sx + d),
+                sdy <- (sy + d),
+                edx <- (ex - d),
+                edy <- (ey - d)
+            |
+
+            renderer setR: (renderer theme accentColor r)
+                        G: (renderer theme accentColor g)
+                        B: (renderer theme accentColor b)
+                        A: 32.
+            
+            renderer fillRectX: 0 Y: 0 W: width H: height.
+
+            renderer setColor: (renderer theme lineColor).
+
+            renderer drawLineX: sx Y: sy X: sdx Y: sy.
+            renderer drawLineX: sx Y: sy X: sx  Y: sdy.
+
+            renderer drawLineX: edx Y: sy X: ex Y: sy.
+            renderer drawLineX: ex  Y: sy X: ex Y: sdy.
+
+            renderer drawLineX: sx Y: edy X: sx  Y: ey.
+            renderer drawLineX: sx Y: ey  X: sdx Y: ey.
+
+            renderer drawLineX: edx Y: ey X: ex Y: ey.
+            renderer drawLineX: ex Y: edy X: ex Y: ey.
+
+            $(Morph) renderImplOn: renderer.
+        );
+
+        handleHandEnter: hand => (
+            entered        <- true.
+            animationStart <- ((morphic misc animation) Animator) now.
+          ^ false
+        );
+
+        handleHandExit: hand => (
+            entered        <- false.
+            animationStart <- ((morphic misc animation) Animator) now.
+          ^ false
+        );
+
+        handleClick: click At: point HandMorph: hand => (
+            hand grab: self.
+          ^ true
+        );
+
+        handleScrollX: sx Y: sy At: point HandMorph: hand => (
+            (isResizable) if: [
+                (xLayout isRigid) if: [
+                    rigidWidth: (width + (25 * sx)).
+                ].
+                (yLayout isRigid) if: [
+                    rigidHeight: (height + (25 * sy)).
+                ].
+                layoutChanged.
+            ].
+            ^ true
+        );
+
+        writeOn: w => w << 'a clamp frame morph';
+    };
+}

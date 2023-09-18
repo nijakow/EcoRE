@@ -202,9 +202,9 @@
     );
 
     Window(w, h, content) => (
-      | window <- (morphic morphs DraggableMorph) new |
+      | window <- (morphic morphs ClampFrameMorph) new |
       window
-          ~ add: ui Stacked(
+          ~ add: ui Padding(5,
                 ui VBox(
                     ui HBox(Spacer,
                         ui Stacked(
@@ -234,8 +234,8 @@
                           ~ yLayout: ui layouts ShrinkWrap,
                     ) ~ yLayout: ui layouts ShrinkWrap,
                 ),
-                ui Framed(BrightBackgroundColorMorph),
           )
+          ~ resizable
           ~ rigidWidth: w
           ~ rigidHeight: h
     );
