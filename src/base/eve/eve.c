@@ -550,6 +550,7 @@ void Eve_RenderState_DrawRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y
     rect.y = y;
     rect.w = w;
     rect.h = h;
+
     SDL_RenderDrawRect(self->renderer, &rect);
 }
 
@@ -560,7 +561,22 @@ void Eve_RenderState_FillRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y
     rect.y = y;
     rect.w = w;
     rect.h = h;
+
     SDL_RenderFillRect(self->renderer, &rect);
+}
+
+void Eve_RenderState_BlurRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y, Eve_UInt w, Eve_UInt h) {
+    struct SDL_Rect rect;
+
+    rect.x = x;
+    rect.y = y;
+    rect.w = w;
+    rect.h = h;
+
+    SDL_SetRenderDrawBlendMode(self->renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(self->renderer, 0, 0, 0, 32);
+    SDL_RenderFillRect(self->renderer, &rect);
+    SDL_SetRenderDrawBlendMode(self->renderer, SDL_BLENDMODE_NONE);
 }
 
 void Eve_RenderState_DrawText(struct Eve_RenderState* self, const char* text, Eve_Int x, Eve_Int y, struct Eve_Font* font) {
@@ -732,6 +748,10 @@ void Eve_DrawRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
 
 void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
     Eve_RenderState_FillRect(&EVE_DEFAULT_RENDER_STATE, x, y, w, h);
+}
+
+void Eve_BlurRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
+    Eve_RenderState_BlurRect(&EVE_DEFAULT_RENDER_STATE, x, y, w, h);
 }
 
 void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y, struct Eve_Font* font) {

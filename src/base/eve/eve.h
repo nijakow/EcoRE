@@ -77,6 +77,7 @@ void Eve_DrawArrow(Eve_Int x1, Eve_Int y1, Eve_Int x2, Eve_Int y2);
 
 void Eve_DrawRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
 void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
+void Eve_BlurRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
 
 void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y, struct Eve_Font* font);
 void Eve_DrawChar(Eve_UInt c, Eve_Int x, Eve_Int y, struct Eve_Font* font);
