@@ -5,6 +5,7 @@
     protected argumentCount <- 0,
     protected localCount    <- 0,
     lexicalScope <- No,
+    jumpLabels,
     writer;
 
     with inherited trait = {
@@ -14,12 +15,14 @@
         init => (
             lexicalScope <- No.
             writer       <- (compiler CodeWriter) new.
+            jumpLabels   <- std util newMap.
           ^ self
         );
 
         initWithLexicalScope: scope => (
             lexicalScope <- Yes: scope.
             writer       <- (compiler CodeWriter) new.
+            jumpLabels   <- std util newMap.
           ^ self
         );
 
@@ -40,6 +43,12 @@
             | i <- localCount |
             localCount <- localCount + 1.
           ^ i
+        );
+
+        lookupJumpLabel: marker => (
+            (jumpLabels at: marker)
+                yes: [ :l | ^ l ]
+                 no: [ | l <- writer openLabel | jumpLabels at: marker put: l. ^ l ]
         );
 
         finishWithArgs: args Varargs: varargs => writer finishWithArgs: args Varargs: varargs;

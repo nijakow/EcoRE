@@ -69,6 +69,10 @@
         |
         ((optimizer ast Printer) clone initWithWriter: std io out) print: answer ast.
         (std io out) newline commit.
+        | code <- optimizer Quickcompile: answer ast |
+        (std io out << 'Code: ' << code) newline commit.
+        (optimizer Disassemble: code) dumpOn: (std io out).
+        (std io out) newline commit.
     );
 
     Main => (
@@ -76,4 +80,4 @@
            #'parseArgdefsWithoutEllipsis' )
             do: [ :m | TestMethod: m ].
     );
-} Main.
+}

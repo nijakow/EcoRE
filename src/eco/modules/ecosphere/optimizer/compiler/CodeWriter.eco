@@ -230,12 +230,12 @@
     writeJumpTo: offset => writeJumpTo: offset Depth: 0;
 
     writeJumpToLabel: label => (
-        | pos <- bytecodes size |
+        | pos <- bytes size |
         writeJumpTo: 0 Depth: 0.
         (labels at: label) whenPlacedDo: $[ :(us, Bytecodes, pos) :offset :depth |
             us putU8: Bytecodes JUMP At: pos.
             us putU8: depth At: pos + 1.
             us putU16: offset At: pos + 2.
-        ] bind(us, Bytecodes, pos)
+        ] bind(self, Bytecodes, pos)
     );
 }

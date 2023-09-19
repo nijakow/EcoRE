@@ -83,24 +83,37 @@
         compileAssignment: expr => (
             | lhs <- expr lhs, rhs <- expr rhs |
 
-            "TODO: Switch on lhs type, and perform the necessary action."
+            Switch: (lhs type)
+              ~ case: ast types ValueRef do: [
+                    "
+                        Introduce the variable if it didn't exist yet.
+                        TODO: Variable might be used in an outer scope later on!
+                    "
+                    scope lookupLabel: (lhs marker)
+                              IfFound: [ :result :depth | ]
+                           IfNotFound: [ scope addLocal: lhs marker ].
+
+                    scope lookupLabel: (lhs marker)
+                              IfFound: [ :result :depth | writer writeStoreLexical: result Depth: depth ]
+                           IfNotFound: [ (std sys error) ThrowMessage: 'Unable to find ValueRef!' ].
+                ]
+              ~ default: [ (std sys error) ThrowMessage: 'Unable to compile assignment: Type not supported' ].
         );
 
         compileSlotAssignment: expr => (
             compile: lhs.
             writer writePush.
             compile: rhs.
+            writer writePush.
             writer writeAssign: slot.
         );
 
         compileJump: expr => (
             compile: (expr returnValue).
             "TODO: Replace this with a call to lookupJumpLabel:IfFound:IfNotFound:"
-            scope lookupLabel: (expr label) IfFound: [ :offset :depth |
-                writer writeJumpTo: offset Depth: depth.
-            ] IfNotFound: [
-                (std sys error) ThrowMessage: 'Unable to find label!'.
-            ].
+            
+            | label <- scope lookupJumpLabel: (expr label) |
+            writer writeJumpToLabel: label.
         );
 
         compileLabel: expr => (
@@ -108,7 +121,6 @@
         );
 
         compile: expr => (
-            (std io out << 'Compiling ' << expr) newline commit.
             Switch: (expr type)
               ~ case: ast types Constant       do: [ compileConstant:       expr ]
               ~ case: ast types ValueRef       do: [ compileValueRef:       expr ]
@@ -124,7 +136,6 @@
               ~ case: ast types Jump           do: [ compileJump:           expr ]
               ~ case: ast types JumpLabel      do: [ compileLabel:          expr ]
             ~ default: [ (std sys error) ThrowMessage: 'Unable to compile expression: Type not supported' ].
-            (std io out << 'Done compiling ' << expr) newline commit.
         );
 
         writeOn: w => w << 'a scoped compiler';

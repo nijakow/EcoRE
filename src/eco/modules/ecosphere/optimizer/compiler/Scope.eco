@@ -48,6 +48,8 @@
         lookupLabel: label IfFound: foundBlock IfNotFound: notFoundBlock =>
             lookupLabel: label IfFound: foundBlock IfNotFound: notFoundBlock Depth: 0;
         
+        lookupJumpLabel: marker => context lookupJumpLabel: marker;
+        
         addArgument: marker => (
             labels at: marker put: (context newArgument).
           ^ self
@@ -59,7 +61,7 @@
         );
 
         placeJumpLabel: marker => (
-            "TODO"
+            (lookupJumpLabel: marker)
         );
 
         writeOn: w => w << 'a scope';
