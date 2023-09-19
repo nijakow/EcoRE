@@ -89,6 +89,8 @@
                         Introduce the variable if it didn't exist yet.
                         TODO: Variable might be used in an outer scope later on!
                     "
+                    compile: rhs.
+
                     scope lookupLabel: (lhs marker)
                               IfFound: [ :result :depth | ]
                            IfNotFound: [ scope addLocal: lhs marker ].
