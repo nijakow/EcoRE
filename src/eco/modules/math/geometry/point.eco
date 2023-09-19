@@ -2,4 +2,52 @@
 {
     static with inherited _ = std Module;
 
+    own Point2d = {
+        static with inherited _ = std Clonable;
+
+        x <- 0,
+        y <- 0;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            protected geometry = $package;
+
+            x: v => x <- v;
+            y: v => y <- v;
+
+            x: xv y: yv => x: xv ~ y: yv;
+
+            duplicate => (geometry point) X: x Y: y;
+
+            + other => (geometry point) X: x + other x Y: y + other y;
+            - other => (geometry point) X: x - other x Y: y - other y;
+
+            * scale => (geometry point) X: x * scale Y: y * scale;
+            / scale => (geometry point) X: x / scale Y: y / scale;
+
+            equalsPoint: other => [ x == other x ] and: [ y == other y ];
+
+            < other => [ x < other x ] or: [ [ x == other x ] and: [ y < other y ] ];
+            <= other => [ equalsPoint: other ] or: [ self < other ];
+            > other => (self <= other) not;
+            >= other => (self < other) not;
+
+            min: other => (self < other) if: [ ^ self ] else: [ ^ other ];
+            max: other => (self > other) if: [ ^ self ] else: [ ^ other ];
+
+            midpoint: other => (geometry point) X: (x + other x) / 2 Y: (y + other y) / 2;
+
+            transpose => (geometry point) X: y Y: x;
+
+            corner: other => (geometry rectangle) Origin: self Corner: other;
+            extent: other => (geometry rectangle) Origin: self Extent: other;
+            w: w h: h => (geometry rectangle) Origin: self W: w H: h;
+
+            writeOn: w => w << 'a point(' << x << ', ' << y << ')';
+        };
+    };
+
+    X: x Y: y => (Point2d clone) x: x y: y;
+
+    Origin => X: 0 Y: 0;
 }

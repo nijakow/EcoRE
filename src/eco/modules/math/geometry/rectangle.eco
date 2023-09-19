@@ -1,5 +1,45 @@
 
 {
     static with inherited _ = std Module;
+    protected geometry = $package;
 
+
+    own Rectangle = {
+        static with inherited _ = std Clonable;
+
+        origin, corner;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithOrigin: _origin Corner: _corner => (
+                origin <- _origin.
+                corner <- _corner.
+              ^ self
+            );
+
+            x => origin x;
+            y => origin y;
+            w => corner x - origin x;
+            h => corner y - origin y;
+
+            topLeft => origin;
+            topCenter => (geometry point X: (origin x + (w / 2)) Y: origin y);
+            topRight => (geometry point X: corner x Y: origin y);
+            leftCenter => (geometry point X: origin x Y: (origin y + (h / 2)));
+            center => (geometry point X: (origin x + (w / 2)) Y: (origin y + (h / 2)));
+            rightCenter => (geometry point X: corner x Y: (origin y + (h / 2)));
+            bottomLeft => (geometry point X: origin x Y: corner y);
+            bottomCenter => (geometry point X: (origin x + (w / 2)) Y: corner y);
+            bottomRight => corner;
+
+            writeOn: w => w << 'a rectangle(' << origin << ', ' << corner << ')';
+        };
+    };
+
+    Origin: origin Corner: corner => (Rectangle clone) initWithOrigin: origin Corner: corner;
+    Origin: origin W: w H: h => (Rectangle clone) initWithOrigin: origin Corner: (geometry point X: (origin x + w) Y: (origin y + h));
+    Origin: origin Extent: extent => (Rectangle clone) initWithOrigin: origin Corner: origin + extent;
+
+    X: x Y: y W: w H: h => Origin: (geometry point X: x Y: y) Corner: (geometry point X: (x + w) Y: (y + h));
 }
