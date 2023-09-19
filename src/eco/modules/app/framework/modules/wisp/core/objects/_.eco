@@ -32,6 +32,8 @@
         m xLayout: ((app gfx morphic) layouts ShrinkWrap).
         m yLayout: ((app gfx morphic) layouts ShrinkWrap).
 
+        m meta: #'ecosphere.eve.morph.property.type' is: #'ecosphere.eve.morphs.ModuleMorph'.
+
       ^ m
     );
 

@@ -36,6 +36,12 @@
                         (std io out << 'Removed value: ' << v) newline commit.
                       ^ true
                     ].
+                    (morph meta: #'ecosphere.eve.morph.property.type') yes: [ :type |
+                        (#'ecosphere.eve.morphs.ModuleMorph' == type) if: [
+                            (std io out << 'Removed module morph') newline commit.
+                          ^ true
+                        ].
+                    ].
                   ^ true
                 );
 
@@ -46,6 +52,16 @@
                             (std io out << 'Added value: ' << v) newline commit.
                             morph moveTo: (mgb - gb).
                           ^ true
+                        ].
+                    ].
+                    (morph meta: #'ecosphere.eve.morph.property.type') yes: [ :type |
+                        (#'ecosphere.eve.morphs.ModuleMorph' == type) if: [
+                            | gb <- globalOffset, mgb <- morph globalOffset |
+                            (tryAdd: morph) -> [
+                                (std io out << 'Added module morph') newline commit.
+                                morph moveTo: (mgb - gb).
+                              ^ true
+                            ].
                         ].
                     ].
                   ^ false
