@@ -1,0 +1,36 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    protected boundedPresentables,
+    protected cachedWidth <- 0,
+    protected cachedHeight <- 0;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+
+        init => (
+            boundedPresentables <- std util newVector.
+          ^ self
+        );
+
+        presentObject: object Bounds: bounds Presentation: presentation => (
+          ^ presentPresentableObject: (presentation associateWith: object) Bounds: bounds
+        );
+
+        presentPresentableObject: object Bounds: bounds => (
+            boundedPresentables add: (object ~> bounds).
+            cachedWidth  <- cachedWidth max: (bounds x + bounds w).
+            cachedHeight <- cachedHeight max: (bounds y + bounds h). 
+          ^ self
+        );
+
+        renderOn: renderer => (
+            boundedPresentables do: [ :each |
+                (each first) renderOn: renderer Bounds: (each second)
+            ].
+        );
+
+        writeOn: w => w << 'a presenter';
+    };
+}

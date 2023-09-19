@@ -10,4 +10,5 @@
     protected wisp = $;
 
     own objects = (here / 'objects' / '_.eco') importIn: ($package app);
+    own presentation = (here / 'presentation' / '_.eco') importIn: ($package app);
 }

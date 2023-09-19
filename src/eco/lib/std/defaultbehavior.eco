@@ -20,6 +20,8 @@
 
     writeOn: writer => writer << 'an object';
 
+    subclassResponsibility => std sys error ThrowMessage: 'This method is not implemented in this object.';
+    todo => std sys error ThrowMessage: 'This method is not implemented yet (marked as TODO).';
 
     isBlock       => false;
     isCode        => false;

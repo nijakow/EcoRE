@@ -1,0 +1,9 @@
+
+{
+    static with inherited _ = std Module;
+    
+    own Presenter = (here / 'Presenter.eco') importIn: self;
+
+    own PresentableObject = (here / 'PresentableObject.eco') importIn: self;
+    own Presentation = (here / 'Presentation.eco') importIn: self;
+}

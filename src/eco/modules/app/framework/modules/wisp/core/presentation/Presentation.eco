@@ -1,0 +1,15 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+        protected presentation = $package;
+
+        drawObject: object On: renderer Bounds: bounds => subclassResponsibility;
+
+        associateWith: object => (presentation PresentableObject) clone initWithObject: object Presentation: self;
+
+        writeOn: w => w << 'a presentation';
+    };
+}
