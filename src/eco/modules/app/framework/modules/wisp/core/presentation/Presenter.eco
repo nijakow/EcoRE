@@ -9,6 +9,7 @@
     with inherited trait = {
         static with inherited _ = std Trait;
         protected presentation = $package;
+        protected geometry => (presentation app) math geometry;
 
         init => (
             boundedPresentables <- std util newVector.
@@ -27,7 +28,7 @@
         );
 
         presentPresentableObject: object At: offset => (
-            
+            presentPresentableObject: object Bounds: (geometry rectangle Origin: offset W: object minWidth H: object minHeight).
           ^ self
         );
 

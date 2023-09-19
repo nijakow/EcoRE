@@ -1,6 +1,7 @@
 
 {
     static with inherited _ = std Module;
+    app <- $;
     
     own Presenter = (here / 'Presenter.eco') importIn: self;
 
