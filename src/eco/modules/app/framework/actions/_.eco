@@ -9,7 +9,7 @@
         Morph: morph => (
             (framework context DefaultWorld)
                   open: morph
-                    at: ((framework context DefaultHand globalOffset) offsetByX: -200 Y: -200).
+                    at: ((framework context DefaultHand globalOffset) offsetByX: ((morph minWidth) / 2 ~ negate) Y: ((morph minHeight) / 2 ~ negate)).
           ^ self
         );
 
@@ -43,6 +43,8 @@
             FileBrowser => (
                 (framework actions open) Path: (std os files home)
             );
+
+            Starter => Shell;
         };
 
         own ui = {
