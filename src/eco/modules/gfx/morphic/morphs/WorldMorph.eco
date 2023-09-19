@@ -68,7 +68,7 @@
 
             handleKey: key At: point HandMorph: hand => (
                 key ifTab: [
-                    (((morphic app) framework actions open) tools Starter.
+                    ((morphic app) framework actions open) tools Starter.
                   ^ true
                 ].
               ^ false
