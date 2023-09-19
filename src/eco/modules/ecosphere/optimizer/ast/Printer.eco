@@ -68,14 +68,16 @@
     );
 
     printScope: expr => (
-        "writer << '<| ' << (expr context depth - 1) << ' / ' << expr context lexicalDepth.
+        writer << '<| ' << (expr context depth - 1) << ' / ' << expr context lexicalDepth
+                        << ', entry: ' << expr context entryLabel
+                        << ', exit: ' << expr context exitLabel.
         indented: [
             newline.
             print: expr body.
         ].
         newline.
-        writer << '|>'."
-        print: expr body.
+        writer << '|>'.
+        "print: expr body."
     );
 
     printJump: expr => (
