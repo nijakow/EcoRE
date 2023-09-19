@@ -8,6 +8,9 @@
 
         drawObject: object On: renderer Bounds: bounds => subclassResponsibility;
 
+        measureMinWidthOf: object => subclassResponsibility;
+        measureMinHeightOf: object => subclassResponsibility;
+
         associateWith: object => (presentation PresentableObject) clone initWithObject: object Presentation: self;
 
         writeOn: w => w << 'a presentation';

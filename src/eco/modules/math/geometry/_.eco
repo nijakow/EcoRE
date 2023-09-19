@@ -1,0 +1,7 @@
+
+{
+    static with inherited _ = std Module;
+
+    own point     = (here / 'point.eco') importIn: $package;
+    own rectangle = (here / 'rectangle.eco') importIn: $package;
+}

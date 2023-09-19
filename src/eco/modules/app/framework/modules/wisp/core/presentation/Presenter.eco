@@ -8,6 +8,7 @@
 
     with inherited trait = {
         static with inherited _ = std Trait;
+        protected presentation = $package;
 
         init => (
             boundedPresentables <- std util newVector.
@@ -22,6 +23,11 @@
             boundedPresentables add: (object ~> bounds).
             cachedWidth  <- cachedWidth max: (bounds x + bounds w).
             cachedHeight <- cachedHeight max: (bounds y + bounds h). 
+          ^ self
+        );
+
+        presentPresentableObject: object At: offset => (
+            
           ^ self
         );
 

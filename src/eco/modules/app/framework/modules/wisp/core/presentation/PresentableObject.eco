@@ -15,6 +15,9 @@
 
         drawOn: renderer Bounds: bounds => presentation drawObject: object On: renderer Bounds: bounds;
 
+        minWidth => presentation measureMinWidthForObject: object;
+        minHeight => presentation measureMinHeightForObject: object;
+
         writeOn: w => w << 'a presentable object';
     };
 }

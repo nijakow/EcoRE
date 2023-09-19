@@ -3,6 +3,7 @@
     static with inherited _ = std Module;
 
     own document  = (here / 'document' / '_.eco') importIn: self;
+    own math      = (here / 'math' / '_.eco') importIn: self;
     own gfx       = (here / 'gfx' / '_.eco') importIn: self;
     own app       = (here / 'app' / '_.eco') importIn: self;
 }
