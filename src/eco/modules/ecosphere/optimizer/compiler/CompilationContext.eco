@@ -51,6 +51,10 @@
                  no: [ | l <- writer openLabel | jumpLabels at: marker put: l. ^ l ]
         );
 
+        placeJumpLabel: marker => (
+            writer placeLabel: (lookupJumpLabel: marker)
+        );
+
         finishWithArgs: args Varargs: varargs => writer finishWithArgs: args Varargs: varargs;
 
         writeOn: w => w << 'a compilation context';

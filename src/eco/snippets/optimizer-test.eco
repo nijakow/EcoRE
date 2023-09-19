@@ -55,11 +55,14 @@
 
 
     TestMethod: m => (
+        (std io out) newline newline commit.
         (std io out << 'Now processing method: ' << m) newline commit.
         |
             disassembled <- optimizer Disassemble: m In: self
         |
         (std io out << 'Disassembled: ' << disassembled) newline commit.
+        disassembled dumpOn: (std io out).
+        (std io out) newline commit.
         |
             ast          <- optimizer BuildAST: disassembled
         |
@@ -71,7 +74,8 @@
         (std io out) newline commit.
         | code <- optimizer Quickcompile: answer ast |
         (std io out << 'Code: ' << code) newline commit.
-        (optimizer Disassemble: code) dumpOn: (std io out).
+        (std io out << code bytecodes) newline commit.
+        (std io out << code constants) newline commit.
         (std io out) newline commit.
     );
 

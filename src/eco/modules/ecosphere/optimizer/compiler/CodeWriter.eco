@@ -5,12 +5,10 @@
     protected Bytecodes => std lang eco compiler Bytecodes;
 
     protected pulls,
-    protected labels,
     bytes, constants, maxRegister;
 
     init => (
         pulls       <- std util newVector.
-        labels      <- std util newVector.
         bytes       <- std util newVector.
         constants   <- std util newVector.
         maxRegister <- 0.
@@ -62,13 +60,10 @@
         };
     };
 
-    openLabel => (
-        | l <- labels size |
-        labels add: (Label new).
-      ^ l
-    );
+    openLabel => Label new;
 
-    label: id => labels at: id;
+    placeLabel: label Depth: depth => label placeAt: bytes size Depth: depth;
+    placeLabel: label => placeLabel: label Depth: 0;
 
     writeU8: b => bytes append: b;
     writeU16: s => (
@@ -232,7 +227,7 @@
     writeJumpToLabel: label => (
         | pos <- bytes size |
         writeJumpTo: 0 Depth: 0.
-        (labels at: label) whenPlacedDo: $[ :(us, Bytecodes, pos) :offset :depth |
+        label whenPlacedDo: $[ :(us, Bytecodes, pos) :offset :depth |
             us putU8: Bytecodes JUMP At: pos.
             us putU8: depth At: pos + 1.
             us putU16: offset At: pos + 2.
