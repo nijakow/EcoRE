@@ -41,6 +41,8 @@
         own TextureMorph = (here / 'morphs' / 'TextureMorph.eco') importIn: self;
         own ConnectionMorph = (here / 'morphs' / 'ConnectionMorph.eco') importIn: self;
         own ClampFrameMorph = (here / 'morphs' / 'ClampFrameMorph.eco') importIn: self;
+
+        Custom => (morphic misc CustomMorphBuilder) new;
     };
 
     own misc = (here / 'misc' / '_.eco') importIn: self;

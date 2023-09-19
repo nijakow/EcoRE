@@ -26,4 +26,6 @@
             writeOn: w => w << 'a morphic grab info';
         };
     };
+
+    own CustomMorphBuilder = (here / 'CustomMorphBuilder.eco') importIn: $;
 }

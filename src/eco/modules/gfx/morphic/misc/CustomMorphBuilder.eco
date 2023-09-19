@@ -1,0 +1,28 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    protected layouterOverride <- No;
+    protected representationOverride <- No;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+        protected morphic = $package;
+
+        layouter: layouter => layouterOverride <- Yes: layouter;
+
+        representation: representation => representationOverride <- Yes: representation;
+        renderFunction: func => representationOverride <- Yes: (morphic representations Custom: func);
+
+        build => (
+            | morph <- (morphic morphs Morph) new |
+
+            layouterOverride yes: [ :layouter | morph layouter: layouter ].
+            representationOverride yes: [ :representation | morph representation: representation ].
+
+          ^ morph
+        );
+
+        writeOn: w => w << 'a custom morph builder';
+    };
+}
