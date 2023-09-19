@@ -71,11 +71,10 @@
             answer       <- optimizer RewriteAST: ast
         |
         ((optimizer ast Printer) clone initWithWriter: std io out) print: answer ast.
-        (std io out) newline commit.
+        (std io out) newline newline commit.
         | code <- optimizer Quickcompile: answer ast |
         (std io out << 'Code: ' << code) newline commit.
-        (std io out << code bytecodes) newline commit.
-        (std io out << code constants) newline commit.
+        (optimizer Disassemble: code) dumpOn: (std io out).
         (std io out) newline commit.
     );
 

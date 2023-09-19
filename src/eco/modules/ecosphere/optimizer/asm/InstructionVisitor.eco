@@ -15,4 +15,5 @@
     visitAssign: instr => visitInstruction: instr;
     visitReturn: instr => visitInstruction: instr;
     visitClosure: instr => visitInstruction: instr;
+    visitJump: instr => visitInstruction: instr;
 }

@@ -5,6 +5,9 @@
         | expr <- instructions |
         [ :break |
             1 to: indent do: [ w << '    ' ].
+            (expr instructionOffset)
+                yes: [ :off | w << off << ': ' ]
+                 no: [ w << '??: ' ]. 
             (w << expr) newline commit.
             expr withSubCode: [ :c | PrintInstructions: c instructions Indent: indent + 1 On: w ].
             expr next yes: [ :v | expr <- v ] no: [ break value ].

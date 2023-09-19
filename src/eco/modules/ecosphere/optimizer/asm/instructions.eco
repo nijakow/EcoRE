@@ -6,13 +6,15 @@
             static with inherited _ = std Clonable;
             private instructions = $;
 
-            next;
+            next, instructionOffset <- No;
 
             with inherited trait = {
                 init => (
                     next <- No.
                   ^ self
                 );
+
+                instructionOffset: v => instructionOffset <- Yes: v;
 
                 next: v => next <- Yes: v;
 
@@ -55,7 +57,7 @@
 
                 accept: visitor => visitor visitConst: self;
 
-                writeOn: w => w << 'a constant bytecode instruction';
+                writeOn: w => w << 'a constant bytecode instruction(' << constant << ')';
             };
         };
 
@@ -189,7 +191,7 @@
 
                 accept: visitor => visitor visitBuiltin: self;
 
-                writeOn: w => w << 'a call-builtin bytecode instruction';
+                writeOn: w => w << 'a call-builtin bytecode instruction(' << key << ', ' << args << ')';
             };
         };
 
@@ -211,7 +213,7 @@
                 initWithArgs: args Key: key => initWithKey: key Args: args;
                 initWithArgs: args Key: key Varargs: varargs => initWithKey: key Args: args Varargs: varargs;
 
-                writeOn: w => w << 'a sendlike bytecode instruction (' << key << ', ' << args << ')';
+                writeOn: w => w << 'a sendlike bytecode instruction(' << key << ', ' << args << ')';
             };
         };
 
@@ -222,7 +224,7 @@
             with inherited trait = {
                 accept: visitor => visitor visitSend: self;
 
-                writeOn: w => w << 'a send bytecode instruction (' << key << ', ' << args << ')';
+                writeOn: w => w << 'a send bytecode instruction(' << key << ', ' << args << ')';
             };
         };
 
@@ -233,7 +235,7 @@
             with inherited trait = {
                 accept: visitor => visitor visitResend: self;
 
-                writeOn: w => w << 'a resend bytecode instruction (' << key << ', ' << args << ')';
+                writeOn: w => w << 'a resend bytecode instruction(' << key << ', ' << args << ')';
             };
         };
 
@@ -252,7 +254,7 @@
 
                 accept: visitor => visitor visitAssign: self;
 
-                writeOn: w => w << 'an assign bytecode instruction';
+                writeOn: w => w << 'an assign bytecode instruction(' << key << ')';
             };
         };
 
@@ -272,7 +274,7 @@
 
                 accept: visitor => visitor visitReturn: self;
 
-                writeOn: w => w << 'a return bytecode instruction';
+                writeOn: w => w << 'a return bytecode instruction(' << depth << ')';
             };
         };
 
@@ -296,4 +298,28 @@
                 writeOn: w => w << 'a closure bytecode instruction';
             };
         };
+
+
+        "
+            SPECIAL INSTRUCTIONS
+        "
+        own JumpInstruction = {
+            static with inherited _ = std Clonable;
+            with inherited own super = $ ByteCodeInstruction;
+
+            depth, offset;
+
+            with inherited trait = {
+                initWithDepth: _depth Offset: _offset => (
+                    super init.
+                    depth  <- _depth.
+                    offset <- _offset.
+                  ^ self
+                );
+
+                accept: visitor => visitor visitJump: self;
+
+                writeOn: w => w << 'a jump bytecode instruction(' << depth << ', ' << offset << ')';
+            };
+        }
     }

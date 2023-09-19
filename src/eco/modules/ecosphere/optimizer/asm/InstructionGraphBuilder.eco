@@ -21,6 +21,11 @@
       ^ self
     );
 
+    withIndex: index add: instruction => (
+        instruction instructionOffset: index.
+      ^ add: instruction
+    );
+
     commit => first;
 
     writeOn: w => w << 'an instruction graph builder';
