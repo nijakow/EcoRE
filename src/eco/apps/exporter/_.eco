@@ -1,0 +1,27 @@
+
+{
+    static with inherited _ = std Module;
+
+    own ExportWriter = {
+        static with inherited _ = std Clonable;
+
+        protected stream;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithStream: _stream => (
+                stream <- _stream.
+              ^ self
+            );
+
+            export: object => (
+                "TODO"
+            );
+
+            writeOn: w => w << 'an export writer';
+        };
+    };
+
+    ExportObject: object OnStream: stream => (ExportWriter clone initWithStream: stream) export: object;
+}
