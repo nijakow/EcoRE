@@ -3,7 +3,19 @@
         static with inherited _ = std Trait;
 
         forceTransformBlock: ast => (
-          ^ Answer: (builder Block: (((In: context wrapLexical) transform: ast code) wrapIn: context) Args: (ast args))
+          | wrappedContext <- context wrapLexical |
+
+          wrappedContext enableEntryAndExitLabels.
+
+          | instructions <- std util newVector |
+
+          instructions add: (builder JumpLabel: (wrappedContext entryLabel yes)).
+          instructions add: ast code.
+          instructions add: (builder JumpLabel: (wrappedContext exitLabel yes)).
+
+          | instructionsCompound <- builder Compound: (instructions asArray) |
+
+          ^ Answer: (builder Block: (((In: wrappedContext) transform: instructionsCompound) wrapIn: context) Args: (ast args))
         );
 
         transformBlock: ast => (
