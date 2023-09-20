@@ -11,7 +11,7 @@
         measureMinWidthOf: object => subclassResponsibility;
         measureMinHeightOf: object => subclassResponsibility;
 
-        associateWith: object => (presentation PresentableObject) clone initWithObject: object Presentation: self;
+        link: object => (presentation PresentableObject) clone initWithObject: object Presentation: self;
 
         writeOn: w => w << 'a presentation';
     };

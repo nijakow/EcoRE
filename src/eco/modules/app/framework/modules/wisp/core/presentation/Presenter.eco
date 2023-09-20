@@ -16,6 +16,9 @@
           ^ self
         );
 
+        minWidth => cachedWidth;
+        minHeight => cachedHeight;
+
         presentObject: object Bounds: bounds Presentation: presentation => (
           ^ presentPresentableObject: (presentation associateWith: object) Bounds: bounds
         );

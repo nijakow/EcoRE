@@ -6,7 +6,7 @@
     Main => (
         | presentation <- (framework modules wisp) core presentation |
 
-        | po <- (presentation presentations) StringPresentation associateWith: 'Hello, World!' |
+        | po <- (presentation presentations) StringPresentation link: 'Hello, World!' |
 
         | presenter <- (presentation) Presenter new |
 
@@ -17,7 +17,8 @@
         (framework actions open) ui BuildAndOpen: [ :ui |
             ui Window(300, 300,
                 presenterMorph
-            )
+            ) ~ xLayout: (app gfx morphic layouts) ShrinkWrap
+              ~ yLayout: (app gfx morphic layouts) ShrinkWrap
         ]
     );
 }
