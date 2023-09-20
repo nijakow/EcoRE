@@ -7,7 +7,7 @@
 
     with inherited trait = {
         static with inherited _ = std Trait;
-        protected eve <- $;
+        protected eve <- $package;
 
         initWithFont: _ptr ShouldClose: _shouldClose => (
             ptr         <- _ptr.
