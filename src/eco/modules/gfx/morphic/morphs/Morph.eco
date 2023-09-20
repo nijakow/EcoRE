@@ -299,7 +299,7 @@
 
             renderChildrenOn: renderer => (
                 childrenDo: [ :c |
-                    renderer pushOffset: c globalOffset.
+                    renderer pushOffset: (renderer offset + c offset).
                     renderer accept: c.
                     renderer popOffset.
                 ].
