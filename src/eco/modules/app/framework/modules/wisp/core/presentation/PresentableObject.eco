@@ -13,10 +13,10 @@
           ^ self
         );
 
-        drawOn: renderer Bounds: bounds => presentation drawObject: object On: renderer Bounds: bounds;
+        renderOn: renderer Bounds: bounds => presentation renderObject: object On: renderer Bounds: bounds;
 
-        minWidth => presentation measureMinWidthForObject: object;
-        minHeight => presentation measureMinHeightForObject: object;
+        minWidth => presentation measureMinWidthOf: object;
+        minHeight => presentation measureMinHeightOf: object;
 
         writeOn: w => w << 'a presentable object';
     };

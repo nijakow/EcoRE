@@ -11,7 +11,10 @@
 
             font => presentation app gfx eve DefaultFont;
 
-            drawObject: object On: renderer Bounds: bounds => renderer drawText: object X: bounds x Y: bounds y Font: font;
+            renderObject: object On: renderer Bounds: bounds => (
+                renderer setColor: (renderer theme textColor).
+                renderer drawString: object X: bounds x Y: bounds y Font: font.
+            );
 
             measureMinWidthOf: object => font widthOfText: object;
             measureMinHeightOf: object => font heightOfText: object;

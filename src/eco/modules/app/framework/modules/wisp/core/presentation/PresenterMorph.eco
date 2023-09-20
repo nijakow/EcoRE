@@ -1,0 +1,23 @@
+
+{
+    static with inherited _ = std Clonable;
+    with inherited own Morph = $package app gfx morphic morphs Morph;
+
+    presenter;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+
+        initWithPresenter: _presenter => (
+            $(Morph) initWithNoChildren.
+            presenter <- _presenter.
+          ^ self
+        );
+
+        renderImplOn: renderer => (
+            presenter renderOn: renderer.
+        );
+
+        writeOn: w => w << 'a presenter morph';
+    };
+}

@@ -1,0 +1,23 @@
+
+{
+    static with inherited _ = std Module;
+    with app <- $;
+
+    Main => (
+        | presentation <- (framework modules wisp) core presentation |
+
+        | po <- (presentation presentations) StringPresentation associateWith: 'Hello, World!' |
+
+        | presenter <- (presentation) Presenter new |
+
+        presenter presentPresentableObject: po At: (app math geometry point Origin).
+
+        | presenterMorph <- (presentation) PresenterMorph clone initWithPresenter: presenter |
+
+        (framework actions open) ui BuildAndOpen: [ :ui |
+            ui Window(300, 300,
+                presenterMorph
+            )
+        ]
+    );
+}
