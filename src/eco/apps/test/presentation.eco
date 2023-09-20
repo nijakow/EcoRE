@@ -3,10 +3,10 @@
     static with inherited _ = std Module;
     with app <- $;
 
-    Main => (
+    Main: morph => (
         | presentation <- (framework modules wisp) core presentation |
 
-        | po <- (presentation presentations) StringPresentation link: 'Hello, World!' |
+        | po <- (presentation presentations) MorphPresentation link: morph |
 
         | presenter <- (presentation) Presenter new |
 

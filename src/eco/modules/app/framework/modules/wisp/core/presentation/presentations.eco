@@ -22,6 +22,26 @@
         };
     };
 
+    own MorphPresentation = {
+        static with inherited _ = std Singleton;
+        with inherited own Presentation = $package Presentation;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            renderObject: object On: renderer Bounds: bounds => (
+                renderer withPushedOffset: (renderer offset + bounds origin) Do: [
+                    object presentOn: renderer.
+                ].
+            );
+
+            measureMinWidthOf: object => object minWidth;
+            measureMinHeightOf: object => object minHeight;
+
+            writeOn: w => w << 'the generic morph presentation';
+        };
+    };
+
     own StringPresentation = {
         static with inherited _ = std Singleton;
         with inherited own Presentation = $package Presentation;
