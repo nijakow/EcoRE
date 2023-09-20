@@ -7,4 +7,6 @@
 
     own PresentableObject = (here / 'PresentableObject.eco') importIn: self;
     own Presentation = (here / 'Presentation.eco') importIn: self;
+
+    own presentations = (here / 'presentations.eco') importIn: self;
 }

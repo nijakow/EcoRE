@@ -1,0 +1,22 @@
+
+{
+    static with inherited _ = std Module;
+
+    own StringPresentation = {
+        static with inherited _ = std Singleton;
+        with inherited own Presentation = $package Presentation;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            font => presentation app gfx eve DefaultFont;
+
+            drawObject: object On: renderer Bounds: bounds => renderer drawText: object X: bounds x Y: bounds y Font: font;
+
+            measureMinWidthOf: object => font widthOfText: object;
+            measureMinHeightOf: object => font heightOfText: object;
+
+            writeOn: w => w << 'the string presentation';
+        };
+    };
+}
