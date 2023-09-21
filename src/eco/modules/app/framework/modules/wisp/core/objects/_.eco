@@ -8,11 +8,8 @@
     protected MakePresentationMorphFor: v Ui: ui => (
         | presentation <- (framework modules wisp) core presentation |
 
-        | sw <- (std io StringWriter) new |
-        sw << v.
-
         |
-            po        <- (presentation presentations) StringPresentation link: sw build,
+            po        <- (presentation presentations) BasicPresentation link: v,
             presenter <- (presentation) Presenter new,
             presenterMorph <- (presentation) PresenterMorph clone initWithPresenter: presenter
         |

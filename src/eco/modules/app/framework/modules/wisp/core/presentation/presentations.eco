@@ -11,14 +11,65 @@
 
             renderObject: object On: renderer Bounds: bounds => (
                 renderer withPushedOffset: bounds origin Do: [
-                    object renderOn: renderer.
+                    (object object) renderOn: renderer.
                 ].
             );
 
-            measureMinWidthOf: object => object minWidth;
-            measureMinHeightOf: object => object minHeight;
+            measureMinWidthOf: object => (object object) minWidth;
+            measureMinHeightOf: object => (object object) minHeight;
 
             writeOn: w => w << 'the generic presenter presentation';
+        };
+    };
+
+    own BasicPresentation = {
+        static with inherited _ = std Singleton;
+        with inherited own Presentation = $package Presentation;
+
+        with inherited trait = {
+            protected own BasicPresentableObject = {
+                static with inherited _ = std Clonable;
+                with inherited own PresentableObject = $package PresentableObject;
+
+                cachedTextualRepresentation <- No;
+
+                with inherited trait = {
+                    static with inherited _ = std Trait;
+
+                    initWithObject: _object Presentation: _presentation => (
+                        $(PresentableObject) initWithObject: _object Presentation: _presentation.
+                      ^ self
+                    );
+
+                    cachedTextualRepresentation: repr => cachedTextualRepresentation <- Yes: repr;
+                };
+            };
+
+            protected font => presentation app gfx eve DefaultFont;
+
+            protected presentableObjectType => BasicPresentableObject;
+
+            protected forceTextualRepresentationOf: object => (
+                (object cachedTextualRepresentation) no: [
+                    | sw <- (std io StringWriter) new |
+
+                    sw << (object object).
+
+                    object cachedTextualRepresentation: sw build.
+                ].
+
+              ^ (object cachedTextualRepresentation) yes
+            );
+
+            renderObject: object On: renderer Bounds: bounds => (
+                renderer setColor: (renderer theme textColor).
+                renderer drawString: (forceTextualRepresentationOf: object) X: bounds x Y: bounds y Font: font.
+            );
+
+            measureMinWidthOf: object => font widthOfText: (forceTextualRepresentationOf: object);
+            measureMinHeightOf: object => font heightOfText: (forceTextualRepresentationOf: object);
+
+            writeOn: w => w << 'the basic presentation';
         };
     };
 
@@ -31,12 +82,12 @@
 
             renderObject: object On: renderer Bounds: bounds => (
                 renderer withPushedOffset: (renderer offset + bounds origin) Do: [
-                    object presentOn: renderer.
+                    (object object) presentOn: renderer.
                 ].
             );
 
-            measureMinWidthOf: object => object minWidth;
-            measureMinHeightOf: object => object minHeight;
+            measureMinWidthOf: object => (object object) minWidth;
+            measureMinHeightOf: object => (object object) minHeight;
 
             writeOn: w => w << 'the generic morph presentation';
         };
@@ -53,11 +104,11 @@
 
             renderObject: object On: renderer Bounds: bounds => (
                 renderer setColor: (renderer theme textColor).
-                renderer drawString: object X: bounds x Y: bounds y Font: font.
+                renderer drawString: (object object) X: bounds x Y: bounds y Font: font.
             );
 
-            measureMinWidthOf: object => font widthOfText: object;
-            measureMinHeightOf: object => font heightOfText: object;
+            measureMinWidthOf: object => font widthOfText: (object object);
+            measureMinHeightOf: object => font heightOfText: (object object);
 
             writeOn: w => w << 'the generic string presentation';
         };
