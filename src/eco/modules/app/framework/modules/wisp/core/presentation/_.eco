@@ -6,6 +6,7 @@
     own Presenter = (here / 'Presenter.eco') importIn: self;
 
     own PresentableObject = (here / 'PresentableObject.eco') importIn: self;
+    own PresentedObject = (here / 'PresentedObject.eco') importIn: self;
     own Presentation = (here / 'Presentation.eco') importIn: self;
 
     own PresenterMorph = (here / 'PresenterMorph.eco') importIn: self;

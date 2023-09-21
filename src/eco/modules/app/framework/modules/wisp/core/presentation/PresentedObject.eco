@@ -1,0 +1,20 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    bounds, presentableObject;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+
+        initWithPresentableObject: _presentableObject Bounds: _bounds => (
+            presentableObject <- _presentableObject.
+            bounds <- _bounds.
+          ^ self
+        );
+
+        renderOn: renderer => presentableObject renderOn: renderer Bounds: bounds;
+
+        writeOn: w => w << 'a presented object';
+    };
+}

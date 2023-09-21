@@ -24,7 +24,7 @@
         );
 
         presentPresentableObject: object Bounds: bounds => (
-            boundedPresentables add: (object ~> bounds).
+            boundedPresentables add: (presentation PresentedObject clone initWithPresentableObject: object Bounds: bounds).
             cachedWidth  <- cachedWidth max: (bounds x + bounds w).
             cachedHeight <- cachedHeight max: (bounds y + bounds h). 
           ^ self
@@ -37,7 +37,7 @@
 
         renderOn: renderer => (
             boundedPresentables do: [ :each |
-                (each first) renderOn: renderer Bounds: (each second)
+                (each presentableObject) renderOn: renderer Bounds: (each bounds)
             ].
         );
 
