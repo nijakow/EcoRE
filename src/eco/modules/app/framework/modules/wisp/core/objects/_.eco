@@ -6,11 +6,20 @@
     own morphs = (here / 'morphs' / '_.eco') importIn: $package;
 
     protected MakePresentationMorphFor: v Ui: ui => (
-        | sw <- (std io StringWriter) new |
+        | presentation <- (framework modules wisp) core presentation |
 
+        | sw <- (std io StringWriter) new |
         sw << v.
+
+        |
+            po        <- (presentation presentations) StringPresentation link: sw build,
+            presenter <- (presentation) Presenter new,
+            presenterMorph <- (presentation) PresenterMorph clone initWithPresenter: presenter
+        |
+
+        presenter presentPresentableObject: po At: (app math geometry point Origin).
         
-      ^ ui Label: sw build
+      ^ presenterMorph
     );
 
     protected MakeValueMorphFor: v Ui: ui => (
