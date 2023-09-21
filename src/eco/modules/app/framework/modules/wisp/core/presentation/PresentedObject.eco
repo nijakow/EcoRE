@@ -15,6 +15,6 @@
 
         renderOn: renderer => presentableObject renderOn: renderer Bounds: bounds;
 
-        writeOn: w => w << 'a presented object';
+        writeOn: w => w << 'a presented object(' << presentableObject << ' in bounds ' << bounds << ')';
     };
 }

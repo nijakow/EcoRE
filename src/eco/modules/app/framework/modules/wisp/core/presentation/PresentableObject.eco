@@ -18,6 +18,6 @@
         minWidth => presentation measureMinWidthOf: object;
         minHeight => presentation measureMinHeightOf: object;
 
-        writeOn: w => w << 'a presentable object';
+        writeOn: w => w << 'a presentable object(' << object << ' as ' << presentation << ')';
     };
 }
