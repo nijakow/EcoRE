@@ -1,9 +1,26 @@
+(
+    |
+        eve <- (here / 'gfx' / 'eve' / '_.eco') import
+    |
 
-{
-    static with inherited _ = std Module;
 
-    own document  = (here / 'document' / '_.eco') importIn: self;
-    own math      = (here / 'math' / '_.eco') importIn: self;
-    own gfx       = (here / 'gfx' / '_.eco') importIn: self;
-    own app       = (here / 'app' / '_.eco') importIn: self;
-}
+    |   
+        modules <- {
+            static with inherited _ = std Module;
+
+            own eve,
+            own document,
+            own math,
+            own gfx,
+            own app
+        }
+    |
+
+    modules eve <- eve.
+    modules document <- (here / 'document' / '_.eco') importIn: modules.
+    modules math <- (here / 'math' / '_.eco') importIn: modules.
+    modules gfx <- (here / 'gfx' / '_.eco') importIn: modules.
+    modules app <- (here / 'app' / '_.eco') importIn: modules.
+
+  ^ modules
+)
