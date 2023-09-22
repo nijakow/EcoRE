@@ -52,8 +52,6 @@
     );
 
     Import: file Path: path In: host => (
-      (out << 'Importing: ' << file << ' ...') newline commit.
-
       "
           The load hooks get cleared after each file import, so they need to reinstall themselves after they were run.
           This is not the most elegant solution, but it is good enough for now.
