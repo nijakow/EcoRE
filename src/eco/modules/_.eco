@@ -3,6 +3,9 @@
         eve <- (here / 'gfx' / 'eve' / '_.eco') import
     |
 
+    eve Init.
+    eve InitEve.
+
 
     |   
         modules <- {

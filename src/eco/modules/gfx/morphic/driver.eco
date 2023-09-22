@@ -127,8 +127,6 @@
     Text: text => eve Text: text;
 
     RunWithWidth: w Height: h App: app => (
-        eve Init.
-        eve InitEve.
         (MorphicHandler clone initWithApp: app Eve: eve) launch.
     );
 }
