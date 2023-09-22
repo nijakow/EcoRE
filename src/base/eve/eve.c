@@ -414,7 +414,6 @@ struct Eve_RenderState {
 
     struct Eve_FrameStack  frame_stack;
     struct Eve_Frame       frame;
-    struct Eve_Color       color;
 
     struct Eve_TextCache   text_cache;
 };
@@ -630,7 +629,7 @@ void Eve_RenderState_DrawArc(struct Eve_RenderState* self, Eve_Int x, Eve_Int y,
     u8 color_b;
     u8 color_a;
 
-    Eve_Color_ToRGBA(self->color, &color_r, &color_g, &color_b, &color_a);
+    Eve_Color_ToRGBA(self->frame.color, &color_r, &color_g, &color_b, &color_a);
 
     arcRGBA(self->renderer, x, y, r, start, end, color_r, color_g, color_b, color_a);
 }
@@ -775,12 +774,10 @@ void Eve_TranslateI2(Eve_Int x, Eve_Int y) {
 }
 
 void Eve_SetColorRGBA(u8 r, u8 g, u8 b, u8 a) {
-    EVE_DEFAULT_RENDER_STATE.color = Eve_Color_FromRGBA(r, g, b, a);
     Eve_RenderState_SetColor(&EVE_DEFAULT_RENDER_STATE, Eve_Color_FromRGBA(r, g, b, a));
 }
 
 void Eve_SetColorRGB(u8 r, u8 g, u8 b) {
-    EVE_DEFAULT_RENDER_STATE.color = Eve_Color_FromRGB(r, g, b);
     Eve_RenderState_SetColor(&EVE_DEFAULT_RENDER_STATE, Eve_Color_FromRGB(r, g, b));
 }
 
