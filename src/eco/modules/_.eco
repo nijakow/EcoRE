@@ -6,15 +6,25 @@
             static with inherited _ = std Module;
 
             protected eve,
+            protected mod,
             protected running <- true,
+            protected terminated <- false,
             protected consoleLines <- std util newVector;
 
             StopRunning => running <- false;
 
-            StartRunning: _eve => (
+            StartRunning: _eve Mod: _mod => (
                 eve <- _eve.
+                mod <- _mod.
                 AddLine: 'Booting the UI ...'.
                 #'ecosphere.ecore.fiber.start'((std reflect Mirror: self) slot: #'Tick' ~ slotValue, self).
+            );
+
+            WaitUntilTerminated => (
+                [ :break |
+                    (terminated) if: [ break value ].
+                    #'ecosphere.ecore.fiber.yield'().
+                ] repeatWithBreak.
             );
 
             AddLine: path => (
@@ -29,6 +39,41 @@
                     us AddLine: 'Loading ' + path + ' ...'.
                     us InstallLoadHook.
                 ] bind(self).
+            );
+
+            AnimateOpeningWindow => (
+                |
+                    animationStartTime <- #'ecosphere.ecore.time.since_start'(),
+                    windowColor        <- ((mod gfx morphic) misc color ColorTheme) desktopColor
+                |
+
+                [
+                    | time <- #'ecosphere.ecore.time.since_start'() |
+                    eve SetColorRGB(0, 0, 0).
+                    eve Clear.
+                    eve SetColorRGB(255, 255, 255).
+
+                    |
+                        animationFactorComplete <- (time - animationStartTime) / 1.0,
+                    |
+
+                    (animationFactorComplete > 1.0) if: [ ^ self ].
+
+                    |
+                        dx <- ((eve CurrentWidth / 2) * animationFactorComplete) asInt,
+                        dy <- ((eve CurrentHeight / 2) * animationFactorComplete) asInt,
+                    |
+
+                    eve DrawRect(eve CurrentWidth / 2 - dx, eve CurrentHeight / 2 - dy, dx * 2, dy * 2).
+                    eve SetColorRGB(windowColor r, windowColor g, windowColor b).
+                    eve FillRect(eve CurrentWidth / 2 - dx, eve CurrentHeight / 2 - dy, dx * 2, dy * 2).
+                    
+                    eve Render.
+                    [ :break |
+                        (eve PollEvent == 0) if: [ break value ].
+                    ] repeatWithBreak.
+                    (time - animationStartTime) < 1.0
+                ] repeat.
             );
 
             Tick => (
@@ -47,7 +92,11 @@
                 |
 
                 [
-                    (running not) if: [ ^ self ].
+                    (running not) if: [
+                        AnimateOpeningWindow.
+                        terminated <- true.
+                      ^ self
+                    ].
 
                     | time <- #'ecosphere.ecore.time.since_start'() |
 
@@ -90,16 +139,8 @@
                     #'ecosphere.ecore.fiber.yield'().
                 ] repeat.
             );
-        }
-    |
+        },
 
-    eve Init.
-    eve InitEve.
-
-    LoadAnimator StartRunning: eve.
-
-
-    |
         modules <- {
             static with inherited _ = std Module;
 
@@ -111,6 +152,13 @@
         }
     |
 
+    (
+        eve Init.
+        eve InitEve.
+
+        LoadAnimator StartRunning: eve Mod: modules.
+    ).
+
     modules eve <- eve.
     modules document <- (here / 'document' / '_.eco') importIn: modules.
     modules math <- (here / 'math' / '_.eco') importIn: modules.
@@ -118,6 +166,7 @@
     modules app <- (here / 'app' / '_.eco') importIn: modules.
 
     LoadAnimator StopRunning.
+    LoadAnimator WaitUntilTerminated.
 
   ^ modules
 )
