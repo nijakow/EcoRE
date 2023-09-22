@@ -83,6 +83,12 @@
             fillRect: rect => fillRectX: rect x Y: rect y W: rect w H: rect h;
             blurRectX: x Y: y W: w H: h => eve BlurRect(xOff + x, yOff + y, w, h);
             blurRect: rect => blurRectX: rect x Y: rect y W: rect w H: rect h;
+            drawPointRectX: x Y: y W: w H: h Step: step => eve DrawPointRect(xOff + x, yOff + y, w, h, step);
+            drawPointRect: rect Step: step => drawPointRectX: rect x Y: rect y W: rect w H: rect h Step: step;
+            drawRoundedRectX: x Y: y W: w H: h R: r => eve DrawRoundedRect(xOff + x, yOff + y, w, h, r);
+            drawRoundedRect: rect R: r => drawRoundedRectX: rect x Y: rect y W: rect w H: rect h R: r;
+            fillRoundedRectX: x Y: y W: w H: h R: r => eve FillRoundedRect(xOff + x, yOff + y, w, h, r);
+            fillRoundedRect: rect R: r => fillRoundedRectX: rect x Y: rect y W: rect w H: rect h R: r;
             drawText: text X: x Y: y => eve DrawText(text text, xOff + x, yOff + y, font);
             drawChar: char X: x Y: y => eve DrawChar(char, xOff + x, yOff + y, font);
             drawText: text X: x Y: y Font: font => eve DrawText(text text, xOff + x, yOff + y, font);

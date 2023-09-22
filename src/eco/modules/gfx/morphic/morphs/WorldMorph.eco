@@ -41,6 +41,10 @@
             fullRender => (
                 renderer setColor: (renderer theme desktopColor).
                 renderer clear.
+
+                renderer setColor: (renderer theme lineColor).
+                renderer drawPointRectX: 0 Y: 0 W: (width) H: (height) Step: 10.
+
                 renderOn: renderer.
                 renderer present.
             );

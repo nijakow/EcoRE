@@ -637,6 +637,50 @@ void Eve_RenderState_BlurRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y
     }
 }
 
+void Eve_RenderState_DrawPointRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h, Eve_Int step) {
+    for (Eve_Int xx = x; xx < x + w; xx += step) {
+        for (Eve_Int yy = y; yy < y + h; yy += step) {
+            SDL_RenderDrawPoint(self->renderer, xx, yy);
+        }
+    }
+}
+
+void Eve_RenderState_DrawRoundedRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h, Eve_Int r) {
+    u8 color_r;
+    u8 color_g;
+    u8 color_b;
+    u8 color_a;
+
+    Eve_Color_ToRGBA(self->frame.color, &color_r, &color_g, &color_b, &color_a);
+
+    roundedRectangleRGBA(self->renderer, x, y, x + w, y + h, r, color_r, color_g, color_b, color_a);
+    
+    /*
+     * SDL-gfx functions are somewhat wonky in that they might change internal
+     * state of the SDL system, such as the blend mode. So to cover up this
+     * mess, we reset the whole color subsystem.
+     */
+    Eve_RenderState_RefreshColor(self);
+}
+
+void Eve_RenderState_FillRoundedRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h, Eve_Int r) {
+    u8 color_r;
+    u8 color_g;
+    u8 color_b;
+    u8 color_a;
+
+    Eve_Color_ToRGBA(self->frame.color, &color_r, &color_g, &color_b, &color_a);
+
+    roundedBoxRGBA(self->renderer, x, y, x + w, y + h, r, color_r, color_g, color_b, color_a);
+    
+    /*
+     * SDL-gfx functions are somewhat wonky in that they might change internal
+     * state of the SDL system, such as the blend mode. So to cover up this
+     * mess, we reset the whole color subsystem.
+     */
+    Eve_RenderState_RefreshColor(self);
+}
+
 void Eve_RenderState_DrawArc(struct Eve_RenderState* self, Eve_Int x, Eve_Int y, Eve_UInt r, Eve_Int start, Eve_Int end) {
     u8 color_r;
     u8 color_g;
@@ -828,6 +872,18 @@ void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
 
 void Eve_BlurRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
     Eve_RenderState_BlurRect(&EVE_DEFAULT_RENDER_STATE, x, y, w, h);
+}
+
+void Eve_DrawPointRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h, Eve_Int step) {
+    Eve_RenderState_DrawPointRect(&EVE_DEFAULT_RENDER_STATE, x, y, w, h, step);
+}
+
+void Eve_DrawRoundedRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h, Eve_Int r) {
+    Eve_RenderState_DrawRoundedRect(&EVE_DEFAULT_RENDER_STATE, x, y, w, h, r);
+}
+
+void Eve_FillRoundedRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h, Eve_Int r) {
+    Eve_RenderState_FillRoundedRect(&EVE_DEFAULT_RENDER_STATE, x, y, w, h, r);
 }
 
 void Eve_DrawArc(Eve_Int x, Eve_Int y, Eve_UInt r, Eve_Int start, Eve_Int end) {
