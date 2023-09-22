@@ -59,7 +59,8 @@
         Quote.
 
         (std io out << 'EcoRE v' << (#'ecosphere.ecore.init.version_string'()) << ' online and ready.') newline.
-        
+        (std io out) newline commit.
+
         | modules <- (std os files here / '..' / '..' / 'eco' / 'modules' / '_.eco') import |
         modules app bootstrap Main.
       ^ self.

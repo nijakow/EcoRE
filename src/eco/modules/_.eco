@@ -18,8 +18,8 @@
             );
 
             AddLine: path => (
-                consoleLines add: path.
-                (consoleLines size > 7) if: [
+                consoleLines add: (#'ecosphere.ecore.time.since_start'() ~> path).
+                (consoleLines size > 5) if: [
                     consoleLines erase: 0.
                 ].
             );
@@ -69,8 +69,16 @@
                     |
                         lineCounter <- consoleLines size,
                     |
-                    consoleLines forEach: [ :i :text |
-                        eve DrawText(text, 0, eve CurrentHeight - ((lineCounter - i) * lineHeight), consoleFont).
+                    consoleLines forEach: [ :i :entry |
+                        |
+                            lineAge    <- time - entry first,
+                            fadeFactor <- 1.0 / (lineCounter - i),
+                            color      <- (255 * fadeFactor) asInt,
+                        |
+                        (fadeFactor > 0) if: [
+                            eve SetColorRGB(color, color, color).
+                            eve DrawText(entry second, lineHeight / 2, eve CurrentHeight - ((lineCounter - i) * lineHeight), consoleFont).
+                        ]
                     ].
 
                     eve Render.
