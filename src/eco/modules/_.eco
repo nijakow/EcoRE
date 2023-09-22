@@ -6,25 +6,34 @@
             static with inherited _ = std Module;
 
             protected eve,
-            protected running <- true;
+            protected running <- true,
+            protected consoleLines <- std util newVector;
 
             StopRunning => running <- false;
 
             StartRunning: _eve => (
                 eve <- _eve.
+                AddLine: 'Booting the UI ...'.
                 #'ecosphere.ecore.fiber.start'((std reflect Mirror: self) slot: #'Tick' ~ slotValue, self).
+            );
+
+            AddLine: path => (
+                consoleLines add: path.
+                (consoleLines size > 7) if: [
+                    consoleLines erase: 0.
+                ].
             );
 
             InstallLoadHook => (
                 std io InstallLoadHook: $[ :(us) :path |
+                    us AddLine: 'Loading ' + path + ' ...'.
                     us InstallLoadHook.
-                    (std io out << 'Hook: ' << path) newline commit.
                 ] bind(self).
             );
 
             Tick => (
                 InstallLoadHook.
-                
+
                 |
                     centerText       <- 'The Ecosphere',
                     centerTextFont   <- eve DefaultFont,
@@ -33,10 +42,8 @@
                 |
 
                 |
-                    loadingText       <- 'Loading...',
-                    loadingTextFont   <- eve DefaultFont,
-                    loadingTextWidth  <- eve GetTextWidth(loadingText),
-                    loadingTextHeight <- eve GetTextHeight(loadingText),
+                    lineHeight  <- centerTextHeight,
+                    consoleFont <- eve DefaultFont,
                 |
 
                 [
@@ -59,7 +66,12 @@
                     
                     eve DrawText(centerText, (eve CurrentWidth / 2) - (centerTextWidth / 2), (eve CurrentHeight / 2) - (centerTextHeight / 2), centerTextFont).
 
-                    eve DrawText(loadingText, 0, eve CurrentHeight - loadingTextHeight, loadingTextFont).
+                    |
+                        lineCounter <- consoleLines size,
+                    |
+                    consoleLines forEach: [ :i :text |
+                        eve DrawText(text, 0, eve CurrentHeight - ((lineCounter - i) * lineHeight), consoleFont).
+                    ].
 
                     eve Render.
 
