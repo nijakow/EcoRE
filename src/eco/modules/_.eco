@@ -16,6 +16,13 @@
             );
 
             Tick => (
+                |
+                    centerText       <- 'The Ecosphere',
+                    centerTextFont   <- eve DefaultFont,
+                    centerTextWidth  <- eve GetTextWidth(centerText),
+                    centerTextHeight <- eve GetTextHeight(centerText),
+                |
+
                 [
                     (running not) if: [ ^ self ].
 
@@ -28,9 +35,13 @@
 
                     |
                         a1 <- (time * 100) asInt,
-                        a2 <- a1 + 90
+                        a2 <- a1 + 90,
+                        r  <- 100
                     | 
-                    eve DrawArc((eve CurrentWidth / 2) - 50, (eve CurrentHeight / 2) - 50, 100, a1, a2).
+                    eve DrawArc(eve CurrentWidth / 2, eve CurrentHeight / 2, r, a1, a2).
+                    eve DrawArc(eve CurrentWidth / 2, eve CurrentHeight / 2, r, a1 + 180, a2 + 180).
+                    
+                    eve DrawText(centerText, (eve CurrentWidth / 2) - (centerTextWidth / 2), (eve CurrentHeight / 2) - (centerTextHeight / 2), centerTextFont).
 
                     eve Render.
                     eve PollEvent.
