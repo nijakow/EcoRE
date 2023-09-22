@@ -624,6 +624,17 @@ void Eve_RenderState_BlurRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y
     }
 }
 
+void Eve_RenderState_FillArc(struct Eve_RenderState* self, Eve_Int x, Eve_Int y, Eve_UInt r, Eve_Int start, Eve_Int end) {
+    u8 color_r;
+    u8 color_g;
+    u8 color_b;
+    u8 color_a;
+
+    Eve_Color_ToRGBA(self->color, &color_r, &color_g, &color_b, &color_a);
+
+    arcRGBA(self->renderer, x, y, r, start, end, color_r, color_g, color_b, color_a);
+}
+
 void Eve_RenderState_DrawText(struct Eve_RenderState* self, const char* text, Eve_Int x, Eve_Int y, struct Eve_Font* font) {
     struct Eve_TextCacheNode*  node;
     SDL_Rect                   rect;
@@ -797,6 +808,10 @@ void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
 
 void Eve_BlurRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
     Eve_RenderState_BlurRect(&EVE_DEFAULT_RENDER_STATE, x, y, w, h);
+}
+
+void Eve_FillArc(Eve_Int x, Eve_Int y, Eve_UInt r, Eve_Int start, Eve_Int end) {
+    Eve_RenderState_FillArc(&EVE_DEFAULT_RENDER_STATE, x, y, r, start, end);
 }
 
 void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y, struct Eve_Font* font) {

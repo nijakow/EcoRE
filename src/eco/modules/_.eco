@@ -1,13 +1,31 @@
 (
     |
-        eve <- (here / 'gfx' / 'eve' / '_.eco') import
+        eve <- (here / 'gfx' / 'eve' / '_.eco') import,
+
+        LoadAnimator = {
+            static with inherited _ = std Module;
+
+            protected eve;
+
+            Main: _eve => (
+                eve <- _eve.
+
+                eve SetColorRGB(0, 0, 0).
+                eve Clear.
+
+                eve SetColorRGB(255, 255, 255).
+                
+
+                eve Render.
+                eve PollEvent.
+            );
+        }
     |
 
     eve Init.
     eve InitEve.
 
-    eve Render.
-    eve PollEvent.
+    LoadAnimator Main: eve.
 
 
     |

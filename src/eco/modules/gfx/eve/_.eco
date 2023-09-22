@@ -22,6 +22,7 @@
     protected Eve_DrawRect,
     protected Eve_FillRect,
     protected Eve_BlurRect,
+    protected Eve_DrawArc,
     protected Eve_DrawText,
     protected Eve_DrawChar,
     protected Eve_DrawTexture,
@@ -100,6 +101,7 @@
         Eve_DrawRect <- (lib function: #'Eve_DrawRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
         Eve_FillRect <- (lib function: #'Eve_FillRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
         Eve_BlurRect <- (lib function: #'Eve_BlurRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int))) yes.
+        Eve_DrawArc <- (lib function: #'Eve_DrawArc' type: ((ffi types void) function(ffi types int, ffi types int, ffi types uint, ffi types int, ffi types int))) yes.
         Eve_DrawText <- (lib function: #'Eve_DrawText' type: ((ffi types void) function(ffi types string, ffi types int, ffi types int, Eve_Font pointer))) yes.
         Eve_DrawChar <- (lib function: #'Eve_DrawChar' type: ((ffi types void) function(ffi types uint, ffi types int, ffi types int, Eve_Font pointer))) yes.
         Eve_DrawTexture <- (lib function: #'Eve_DrawTexture' type: ((ffi types void) function(Eve_Texture pointer, ffi types int, ffi types int))) yes.
@@ -168,6 +170,8 @@
     DrawRect(x, y, w, h) => Eve_DrawRect value(x, y, w, h);
     FillRect(x, y, w, h) => Eve_FillRect value(x, y, w, h);
     BlurRect(x, y, w, h) => Eve_BlurRect value(x, y, w, h);
+
+    DrawArc(x, y, r, a1, a2) => Eve_DrawArc value(x, y, r, a1, a2);
 
     DrawText(text, x, y, font) => Eve_DrawText value(text, x, y, font ptr);
     DrawChar(char, x, y, font) => Eve_DrawChar value(char asInt, x, y, font ptr);
