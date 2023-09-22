@@ -624,7 +624,7 @@ void Eve_RenderState_BlurRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y
     }
 }
 
-void Eve_RenderState_FillArc(struct Eve_RenderState* self, Eve_Int x, Eve_Int y, Eve_UInt r, Eve_Int start, Eve_Int end) {
+void Eve_RenderState_DrawArc(struct Eve_RenderState* self, Eve_Int x, Eve_Int y, Eve_UInt r, Eve_Int start, Eve_Int end) {
     u8 color_r;
     u8 color_g;
     u8 color_b;
@@ -775,10 +775,12 @@ void Eve_TranslateI2(Eve_Int x, Eve_Int y) {
 }
 
 void Eve_SetColorRGBA(u8 r, u8 g, u8 b, u8 a) {
+    EVE_DEFAULT_RENDER_STATE.color = Eve_Color_FromRGBA(r, g, b, a);
     Eve_RenderState_SetColor(&EVE_DEFAULT_RENDER_STATE, Eve_Color_FromRGBA(r, g, b, a));
 }
 
 void Eve_SetColorRGB(u8 r, u8 g, u8 b) {
+    EVE_DEFAULT_RENDER_STATE.color = Eve_Color_FromRGB(r, g, b);
     Eve_RenderState_SetColor(&EVE_DEFAULT_RENDER_STATE, Eve_Color_FromRGB(r, g, b));
 }
 
@@ -810,8 +812,8 @@ void Eve_BlurRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h) {
     Eve_RenderState_BlurRect(&EVE_DEFAULT_RENDER_STATE, x, y, w, h);
 }
 
-void Eve_FillArc(Eve_Int x, Eve_Int y, Eve_UInt r, Eve_Int start, Eve_Int end) {
-    Eve_RenderState_FillArc(&EVE_DEFAULT_RENDER_STATE, x, y, r, start, end);
+void Eve_DrawArc(Eve_Int x, Eve_Int y, Eve_UInt r, Eve_Int start, Eve_Int end) {
+    Eve_RenderState_DrawArc(&EVE_DEFAULT_RENDER_STATE, x, y, r, start, end);
 }
 
 void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y, struct Eve_Font* font) {

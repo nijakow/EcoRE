@@ -80,7 +80,7 @@ void Eve_DrawRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
 void Eve_FillRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
 void Eve_BlurRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h);
 
-void Eve_FillArc(Eve_Int x, Eve_Int y, Eve_UInt r, Eve_Int start, Eve_Int end);
+void Eve_DrawArc(Eve_Int x, Eve_Int y, Eve_UInt r, Eve_Int start, Eve_Int end);
 
 void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y, struct Eve_Font* font);
 void Eve_DrawChar(Eve_UInt c, Eve_Int x, Eve_Int y, struct Eve_Font* font);

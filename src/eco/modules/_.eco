@@ -5,20 +5,38 @@
         LoadAnimator = {
             static with inherited _ = std Module;
 
-            protected eve;
+            protected eve,
+            protected running <- true;
 
-            Main: _eve => (
+            StopRunning => running <- false;
+
+            StartRunning: _eve => (
                 eve <- _eve.
+                #'ecosphere.ecore.fiber.start'((std reflect Mirror: self) slot: #'Tick' ~ slotValue, self).
+            );
 
-                eve SetColorRGB(0, 0, 0).
-                eve Clear.
+            Tick => (
+                [
+                    (running not) if: [ ^ self ].
 
-                eve SetColorRGB(255, 255, 255).
+                    | time <- #'ecosphere.ecore.time.since_start'() |
 
-                eve FillArc(eve CurrentWidth / 2, eve CurrentHeight / 2, 100, 0, 90).
+                    eve SetColorRGB(0, 0, 0).
+                    eve Clear.
 
-                eve Render.
-                eve PollEvent.
+                    eve SetColorRGB(255, 255, 255).
+
+                    |
+                        a1 <- (time * 100) asInt,
+                        a2 <- a1 + 90
+                    | 
+                    eve DrawArc((eve CurrentWidth / 2) - 50, (eve CurrentHeight / 2) - 50, 100, a1, a2).
+
+                    eve Render.
+                    eve PollEvent.
+
+                    #'ecosphere.ecore.fiber.yield'().
+                ] repeat.
             );
         }
     |
@@ -26,7 +44,7 @@
     eve Init.
     eve InitEve.
 
-    LoadAnimator Main: eve.
+    LoadAnimator StartRunning: eve.
 
 
     |
@@ -46,6 +64,8 @@
     modules math <- (here / 'math' / '_.eco') importIn: modules.
     modules gfx <- (here / 'gfx' / '_.eco') importIn: modules.
     modules app <- (here / 'app' / '_.eco') importIn: modules.
+
+    LoadAnimator StopRunning.
 
   ^ modules
 )
