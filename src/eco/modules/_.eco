@@ -14,7 +14,8 @@
                 eve Clear.
 
                 eve SetColorRGB(255, 255, 255).
-                
+
+                eve FillArc(eve CurrentWidth / 2, eve CurrentHeight / 2, 100, 0, 90).
 
                 eve Render.
                 eve PollEvent.
