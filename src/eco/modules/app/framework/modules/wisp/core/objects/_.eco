@@ -22,7 +22,7 @@
     protected MakeValueMorphFor: v Ui: ui => (
         | m <- (morphs ValueMorph) new |
 
-        m add: (ui Padding(5, MakePresentationMorphFor: v Ui: ui)).
+        m add: (ui Padding(5, ui Stacked(ui Padding(5, MakePresentationMorphFor: v Ui: ui), ui BackgroundColorMorph))).
 
       ^ m
     );
