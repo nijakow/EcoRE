@@ -6,8 +6,11 @@
     eve Init.
     eve InitEve.
 
+    eve Render.
+    eve PollEvent.
 
-    |   
+
+    |
         modules <- {
             static with inherited _ = std Module;
 
