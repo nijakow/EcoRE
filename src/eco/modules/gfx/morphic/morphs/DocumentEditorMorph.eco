@@ -136,13 +136,6 @@
                             edy <- (ey - d)
                         |
 
-                        renderer setR: (renderer theme accentColor r)
-                                    G: (renderer theme accentColor g)
-                                    B: (renderer theme accentColor b)
-                                    A: 32.
-                    
-                        renderer fillRectX: sx Y: sy W: width H: height.
-
                         renderer setColor: (renderer theme lineColor).
 
                         renderer drawLineX: sx Y: sy X: sdx Y: sy.
