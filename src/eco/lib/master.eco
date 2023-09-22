@@ -59,7 +59,13 @@
         Quote.
 
         (std io out << 'EcoRE v' << (#'ecosphere.ecore.init.version_string'()) << ' online and ready.') newline.
-        (std io out << 'Type `ui.` to start the graphical user interface.') newline commit.
+        
+        | modules <- (std os files here / '..' / '..' / 'eco' / 'modules' / '_.eco') import |
+        modules app bootstrap Main.
+      ^ self.
+        
+        (std io out) newline commit.
+        (std io out << 'Interactive REPL started.') newline commit.
 
         |
             parser <- (lang eco controller) CreateParserForCharIterator: (io in)
