@@ -3,10 +3,36 @@
     static with inherited _ = std Module;
     with app <- $;
 
+    own GraphPresentation = {
+        static with inherited _ = std Singleton;
+        with inherited own Presentation = ($package framework modules wisp) core presentation Presentation;
+
+        renderObject: object On: renderer Bounds: bounds => (
+            renderer withPushedRelativeOffset: bounds origin Do: [
+                renderer setColor: (renderer theme lineColor).
+                renderer drawArrowX: 10 Y: (bounds h - 10) X: (bounds w - 10) Y: (bounds h - 10).
+                renderer drawArrowX: 10 Y: (bounds h - 10) X: 10 Y: 10.
+
+                "Draw a sin wave"
+
+                | t <- #'ecosphere.ecore.time.since_start'() * 10 |
+                1 to: bounds w do: [ :x |
+                    | yValue <- ((x + t) / 10.0) sin / 3.0 |
+                    renderer drawPointX: x Y: ((bounds h - (bounds h / 2) * (1 + yValue)) asInt).
+                ]
+            ]
+        );
+
+        measureMinWidthOf: object => 250;
+        measureMinHeightOf: object => 250;
+    
+        writeOn: w => w << 'a graph presentation';
+    };
+
     Main => (
         | presentation <- (framework modules wisp) core presentation |
 
-        | po <- (presentation presentations) StringPresentation link: 'Hello, world!' |
+        | po <- GraphPresentation link: 'Hello, world!' |
 
         | presenter <- (presentation) Presenter new |
 

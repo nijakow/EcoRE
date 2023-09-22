@@ -41,6 +41,12 @@
                 popOffset.
               ^ self
             );
+            withPushedRelativeOffset: offset Do: block => (
+                pushOffset: (self offset + offset).
+                block value.
+                popOffset.
+              ^ self
+            );
 
             clip => clips top;
             withClipW: w H: h Do: block => (
