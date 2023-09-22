@@ -23,6 +23,13 @@
                     centerTextHeight <- eve GetTextHeight(centerText),
                 |
 
+                |
+                    loadingText       <- 'Loading...',
+                    loadingTextFont   <- eve DefaultFont,
+                    loadingTextWidth  <- eve GetTextWidth(loadingText),
+                    loadingTextHeight <- eve GetTextHeight(loadingText),
+                |
+
                 [
                     (running not) if: [ ^ self ].
 
@@ -43,8 +50,13 @@
                     
                     eve DrawText(centerText, (eve CurrentWidth / 2) - (centerTextWidth / 2), (eve CurrentHeight / 2) - (centerTextHeight / 2), centerTextFont).
 
+                    eve DrawText(loadingText, 0, eve CurrentHeight - loadingTextHeight, loadingTextFont).
+
                     eve Render.
-                    eve PollEvent.
+
+                    [ :break |
+                        (eve PollEvent == 0) if: [ break value ].
+                    ] repeatWithBreak.
 
                     #'ecosphere.ecore.fiber.yield'().
                 ] repeat.
