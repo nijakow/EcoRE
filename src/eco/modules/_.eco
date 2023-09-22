@@ -15,7 +15,16 @@
                 #'ecosphere.ecore.fiber.start'((std reflect Mirror: self) slot: #'Tick' ~ slotValue, self).
             );
 
+            InstallLoadHook => (
+                std io InstallLoadHook: $[ :(us) :path |
+                    us InstallLoadHook.
+                    (std io out << 'Hook: ' << path) newline commit.
+                ] bind(self).
+            );
+
             Tick => (
+                InstallLoadHook.
+                
                 |
                     centerText       <- 'The Ecosphere',
                     centerTextFont   <- eve DefaultFont,

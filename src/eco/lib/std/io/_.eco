@@ -44,8 +44,22 @@
     EvaluateFile: file InEnv: env => (ParseFile: file) evaluateInEnv: env;
     EvaluateFile: file InEnv: env Host: host => (ParseFile: file) evaluateInEnv: env Host: host;
 
+    protected loadHooks <- #<:std/maybe/No>;
+
+    InstallLoadHook: hook => (
+        loadHooks no: [ loadHooks <- Yes: std util newVector ].
+        (loadHooks yes) add: hook.
+    );
+
     Import: file Path: path In: host => (
       (out << 'Importing: ' << file << ' ...') newline commit.
+
+      "
+          The load hooks get cleared after each file import, so they need to reinstall themselves after they were run.
+          This is not the most elegant solution, but it is good enough for now.
+      "
+      loadHooks yes: [ :hooks | loadHooks <- No. hooks do: [ :hook | hook value(path) ] ].
+
       |
         env <- {
           static with inherited _ = #<:std/Clonable>;
