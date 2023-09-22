@@ -501,6 +501,20 @@ void Eve_RenderState_SetColor(struct Eve_RenderState* self, struct Eve_Color col
     SDL_SetTextureAlphaMod(self->texture, a);
 }
 
+void Eve_RenderState_RefreshColor(struct Eve_RenderState* self) {
+    u8 r, g, b, a;
+
+    Eve_Color_ToRGBA(self->frame.color, &r, &g, &b, &a);
+    SDL_SetRenderDrawColor(self->renderer, r, g, b, a);
+    SDL_SetTextureAlphaMod(self->texture, a);
+
+    /*
+     * Set blend mode to blend, in case it was changed by the code.
+     */
+    SDL_SetTextureBlendMode(self->texture, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawBlendMode(self->renderer, SDL_BLENDMODE_BLEND);
+}
+
 struct SDL_Rect Eve_RenderState_GetCurrentRect(struct Eve_RenderState* self) {
     struct SDL_Rect rect;
     rect.x = self->frame.x;
@@ -632,6 +646,13 @@ void Eve_RenderState_DrawArc(struct Eve_RenderState* self, Eve_Int x, Eve_Int y,
     Eve_Color_ToRGBA(self->frame.color, &color_r, &color_g, &color_b, &color_a);
 
     arcRGBA(self->renderer, x, y, r, start, end, color_r, color_g, color_b, color_a);
+    
+    /*
+     * SDL-gfx functions are somewhat wonky in that they might change internal
+     * state of the SDL system, such as the blend mode. So to cover up this
+     * mess, we reset the whole color subsystem.
+     */
+    Eve_RenderState_RefreshColor(self);
 }
 
 void Eve_RenderState_DrawText(struct Eve_RenderState* self, const char* text, Eve_Int x, Eve_Int y, struct Eve_Font* font) {
