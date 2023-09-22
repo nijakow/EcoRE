@@ -10,4 +10,12 @@
             ]
         ).
     );
+
+    Object: object Presentation: presentation => (
+        (framework context DefaultHand) grab: (
+            (framework actions open) ui Build: [ :ui |
+                (wisp core objects) ValueMorphFor: object Presentation: presentation Ui: ui
+            ]
+        ).
+    );
 }

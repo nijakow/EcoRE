@@ -5,11 +5,11 @@
 
     own morphs = (here / 'morphs' / '_.eco') importIn: $package;
 
-    protected MakePresentationMorphFor: v Ui: ui => (
+    protected MakePresentationMorphFor: v Presentation: thePresentation Ui: ui => (
         | presentation <- (framework modules wisp) core presentation |
 
         |
-            po        <- (presentation presentations) BasicPresentation link: v,
+            po        <- thePresentation link: v,
             presenter <- (presentation) Presenter new,
             presenterMorph <- (presentation) PresenterMorph clone initWithPresenter: presenter
         |
@@ -19,10 +19,10 @@
       ^ presenterMorph
     );
 
-    protected MakeValueMorphFor: v Ui: ui => (
+    protected MakeValueMorphFor: v Presentation: presentation Ui: ui => (
         | m <- (morphs ValueMorph) new |
 
-        m add: (ui Padding(5, ui Stacked(ui Padding(5, MakePresentationMorphFor: v Ui: ui), ui BackgroundColorMorph))).
+        m add: (ui Padding(5, ui Stacked(ui Padding(5, MakePresentationMorphFor: v Presentation: presentation Ui: ui), ui BackgroundColorMorph))).
 
       ^ m
     );
@@ -43,14 +43,16 @@
       ^ m
     );
 
-    ValueMorphFor: v Ui: ui => (
-        | m <- MakeValueMorphFor: v Ui: ui |
+    ValueMorphFor: v Presentation: presentation Ui: ui => (
+        | m <- MakeValueMorphFor: v Presentation: presentation Ui: ui |
 
         m meta: #'ecosphere.eve.morph.property.type' is: #'ecosphere.eve.morphs.ValueMorph'.
         m meta: #'ecosphere.eve.morphs.ValueMorph.value' is: v.
 
       ^ m
     );
+
+    ValueMorphFor: v Ui: ui => ValueMorphFor: v Presentation: ((framework modules wisp) core presentation presentations BasicPresentation) Ui: ui;
 
     OpenValueMorphFor: v => (framework actions open) ui BuildAndOpen: [ :ui | ValueMorphFor: v Ui: ui ];
     OpenModuleMorph => (framework actions open) ui BuildAndOpen: [ :ui | MakeModuleMorphUi: ui ];
