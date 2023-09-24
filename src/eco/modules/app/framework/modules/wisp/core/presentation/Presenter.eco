@@ -45,12 +45,23 @@
           ^ self
         );
 
-        boundedPresentableObjectsAt: offset Do: block => (
+        boundedPresentableObjectsAt: point Do: block => (
             boundedPresentables do: [ :each |
-                (each bounds containsPoint: offset) if: [ block value(each) ].
+                (each bounds containsPoint: point) if: [ block value(each) ].
             ].
           ^ self
         );
+
+        allPresentableObjectsAt: point WithBoundsDo: block Offset: offset => (
+            boundedPresentableObjectsAt: point Do: [ :each |
+                block value(each presentableObject, (each bounds) translateBy: offset).
+                ((each presentableObject presentation) isPresenterPresentation) if: [
+                    (each presentableObject object) allPresentableObjectsAt: (point - (each bounds) origin) WithBoundsDo: block Offset: (offset + (each bounds) origin).
+                ].
+            ].
+        );
+
+        allPresentableObjectsAt: point WithBoundsDo: block => allPresentableObjectsAt: point WithBoundsDo: block Offset: (geometry point X: 0 Y: 0);
 
         renderOn: renderer => (
             boundedPresentables do: [ :each |
@@ -63,8 +74,12 @@
 
             renderer setColor: (renderer theme lineColor).
 
-            boundedPresentableObjectsAt: mousePos Do: [ :each |
+            "boundedPresentableObjectsAt: mousePos Do: [ :each |
                 renderer drawRect: each bounds.
+            ]."
+
+            allPresentableObjectsAt: mousePos WithBoundsDo: [ :each :bounds |
+                renderer drawRect: bounds.
             ].
         );
 

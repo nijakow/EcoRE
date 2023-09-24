@@ -11,6 +11,7 @@
 
         with inherited trait = {
             static with inherited _ = std Trait;
+            protected geometry = $package;
 
             initWithOrigin: _origin Corner: _corner => (
                 origin <- _origin.
@@ -40,6 +41,8 @@
                 ((p y <= corner y) not) if: [ ^ false ].
               ^ true
             );
+
+            translateBy: point => (geometry rectangle X: (origin x + point x) Y: (origin y + point y) W: w H: h);
 
             writeOn: w => w << 'a rectangle(' << origin << ', ' << corner << ')';
         };
