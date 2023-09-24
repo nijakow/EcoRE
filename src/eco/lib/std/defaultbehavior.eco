@@ -19,6 +19,7 @@
     throw         => #'ecosphere.ecore.flow.throw'(self);
 
     writeOn: writer => writer << 'an object';
+    presentOn: presentationStream => writeOn: presentationStream;
 
     subclassResponsibility => std sys error ThrowMessage: 'This method is not implemented in this object.';
     todo => std sys error ThrowMessage: 'This method is not implemented yet (marked as TODO).';
