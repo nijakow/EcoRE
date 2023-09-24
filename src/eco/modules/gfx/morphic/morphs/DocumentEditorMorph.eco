@@ -119,7 +119,7 @@
                       ^ self
                     );
 
-                    render: renderer => (
+                    render: renderer mouse: mouse => (
                         "
                             Draw angle-shaped lines in every corner of the element.
                         "
@@ -152,7 +152,7 @@
                         renderer drawLineX: ex Y: edy X: ex Y: ey.
 
                         renderer withPushedRelativeOffsetX: sx + 5 Y: sy + 5 Do: [
-                            presenter renderOn: renderer.
+                            presenter renderOn: renderer MousePos: (mouse - (morphic gfx math geometry point X: sx + 5 Y: sy + 5)).
                         ].
 
                         renderer setColor: (renderer theme textColor).
@@ -246,9 +246,9 @@
                       ^ 0
                     );
 
-                    render: renderer => (
+                    render: renderer mouse: mouse => (
                         elements do: [ :element |
-                            element render: renderer
+                            element render: renderer mouse: mouse
                         ]
                     );
 
@@ -413,7 +413,13 @@
 
         renderImplOn: renderer => (
             program no: [ buildProgram(renderer) ].
-            (program yes) render: renderer.
+
+            |
+                mousePosition         <- world yes handMorph globalOffset,
+                relativeMousePosition <- mousePosition - globalOffset,
+            |
+
+            (program yes) render: renderer mouse: relativeMousePosition.
             $(Morph) renderImplOn: renderer.
         );
 
