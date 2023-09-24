@@ -33,6 +33,14 @@
             bottomCenter => (geometry point X: (origin x + (w / 2)) Y: corner y);
             bottomRight => corner;
 
+            containsPoint: p => (
+                ((origin x <= p x) not) if: [ ^ false ].
+                ((p x <= corner x) not) if: [ ^ false ].
+                ((origin y <= p y) not) if: [ ^ false ].
+                ((p y <= corner y) not) if: [ ^ false ].
+              ^ true
+            );
+
             writeOn: w => w << 'a rectangle(' << origin << ', ' << corner << ')';
         };
     };

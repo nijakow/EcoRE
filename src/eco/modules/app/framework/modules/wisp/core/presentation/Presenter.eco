@@ -40,9 +40,26 @@
           ^ self
         );
 
+        boundedPresentableObjectsAt: offset Do: block => (
+            boundedPresentables do: [ :each |
+                (each bounds containsPoint: offset) if: [ block value: each ].
+            ].
+          ^ self
+        );
+
         renderOn: renderer => (
             boundedPresentables do: [ :each |
                 (each presentableObject) renderOn: renderer Bounds: (each bounds)
+            ].
+        );
+
+        renderOn: renderer MousePos: mousePos => (
+            renderOn: renderer.
+
+            renderer setColor: (renderer theme lineColor).
+
+            boundedPresentableObjectsAt: mousePos Do: [ :each |
+                renderer drawRect: each bounds.
             ].
         );
 

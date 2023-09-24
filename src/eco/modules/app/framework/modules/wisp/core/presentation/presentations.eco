@@ -18,6 +18,8 @@
             measureMinWidthOf: object => (object object) minWidth;
             measureMinHeightOf: object => (object object) minHeight;
 
+            isPresenterPresentation => true;
+
             writeOn: w => w << 'the generic presenter presentation';
         };
     };

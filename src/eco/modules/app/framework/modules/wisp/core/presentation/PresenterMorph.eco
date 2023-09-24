@@ -18,7 +18,12 @@
         baseMinHeight => presenter minHeight;
 
         renderImplOn: renderer => (
-            presenter renderOn: renderer.
+            |
+                mousePos         <- world yes handMorph globalOffset,
+                relativeMousePos <- mousePos - globalOffset
+            |
+
+            presenter renderOn: renderer MousePos: relativeMousePos.
         );
 
         writeOn: w => w << 'a presenter morph';

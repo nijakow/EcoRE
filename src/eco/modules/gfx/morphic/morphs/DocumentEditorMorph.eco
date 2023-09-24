@@ -16,6 +16,7 @@
                 static with inherited _ = std Trait;
 
                 render: renderer => self;
+                render: renderer mouse: mouse => render: renderer;
 
                 handleClickWithHand: hand => self;
 

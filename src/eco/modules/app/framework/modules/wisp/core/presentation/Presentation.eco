@@ -16,6 +16,8 @@
         link: object => presentableObjectType clone initWithObject: object Presentation: self;
         accepts: object => true;
 
+        isPresenterPresentation => false;
+
         writeOn: w => w << 'a presentation';
     };
 }
