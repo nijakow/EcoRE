@@ -6,6 +6,7 @@ NAME = master.ebf
 SOURCES = \
 std/_.eco \
 std/bool.eco \
+std/classlike.eco \
 std/clonable.eco \
 std/defaultbehavior.eco \
 std/enum.eco \

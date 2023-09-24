@@ -1,6 +1,6 @@
 
 {
-    static with inherited _ = std Module; "TODO: Change to 'std Classlike'"
+    static with inherited _ = std Classlike;
 
     own Instance = {
         static with inherited _ = std Clonable;

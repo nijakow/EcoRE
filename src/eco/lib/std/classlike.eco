@@ -1,0 +1,8 @@
+
+#=std/Classlike: {
+    with inherited _ = #<:std/Clonable>;
+
+    Instance => subclassResponsibility;
+
+    writeOn: writer => writer << 'a classlike';
+}

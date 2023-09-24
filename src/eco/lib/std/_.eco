@@ -5,12 +5,15 @@
 #=std: {
     with globals = #<:globals>;
 
-    DefaultBehavior = #<:std/DefaultBehavior>;
-    Clonable = #<:std/Clonable>;
-    Singleton = #<:std/Singleton>;
-    Module = #<:std/Module>;
-    Enum = #<:std/Enum>;
-    Trait = #<:std/Trait>;
+    with prototypes = {
+        DefaultBehavior = #<:std/DefaultBehavior>;
+        Clonable = #<:std/Clonable>;
+        Singleton = #<:std/Singleton>;
+        Module = #<:std/Module>;
+        Trait = #<:std/Trait>;
+        Classlike = #<:std/Classlike>;
+        Enum = #<:std/Enum>;
+    };
 
     with bool = #<:std/bool>;
     with maybe = #<:std/maybe>;
