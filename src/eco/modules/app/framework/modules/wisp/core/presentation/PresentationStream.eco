@@ -1,0 +1,56 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        emitter;
+
+        protected stack;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            protected presentation = $package;
+
+            initWithEmitter: _emitter => (
+                emitter <- _emitter.
+                stack   <- std util newVector.
+              ^ self
+            );
+
+            byte<< b => self << b;
+            char<< c => (
+                emitter emit: c presentation: (presentation presentations) CharacterPresentation.
+              ^ self
+            );
+
+            newline  => emitter newline;
+            commit   => self;
+
+            << object => (
+                (stack contains: object) if: [
+                    self << '#<ref:?cyclic>'.
+                  ^ self
+                ].
+
+                stack add: object.
+                [
+                    ((std reflect PublicInterfaceFor: object) implementsMessage: #'presentOn:')
+                        if: [ object presentOn: self ]
+                        else: [ << 'an object'       ].
+                ] ensure: [
+                    stack erase: (stack size - 1).
+                ].
+
+              ^ self
+            );
+
+            newline => ( self << (char newline). ^ self );
+
+            writeOn: w => w << 'a presentation stream';
+        };
+    };
+
+    NewWithEmitter: emitter => (Instance clone) initWithEmitter: emitter;
+}

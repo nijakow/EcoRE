@@ -14,6 +14,11 @@
             static with inherited _ = std Trait;
             app <- $package app;
 
+            initWithPresenter: _presenter => (
+                presenter <- _presenter.
+              ^ self
+            );
+
             emit: presentableObject => (
                 |
                     minWidth  <- presentableObject minWidth,
@@ -25,6 +30,8 @@
               ^ self
             );
 
+            emit: object presentation: presentation => emit: (presentation link: object);
+
             newline => (
                 xPos <- 0.
                 yPos <- yPos + lineHeight.
@@ -35,4 +42,6 @@
             writeOn: w => w << 'a presentation emitter';
         };
     };
+
+    NewWithPresenter: presenter => (Instance clone) initWithPresenter: presenter;
 }

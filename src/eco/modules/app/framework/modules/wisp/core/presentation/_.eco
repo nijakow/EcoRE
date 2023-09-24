@@ -12,6 +12,7 @@
     own PresenterMorph = (here / 'PresenterMorph.eco') importIn: self;
 
     own PresentationEmitter = (here / 'PresentationEmitter.eco') importIn: self;
+    own PresentationStream  = (here / 'PresentationStream.eco') importIn: self;
 
     own presentations = (here / 'presentations.eco') importIn: self;
 }
