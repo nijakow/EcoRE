@@ -326,9 +326,9 @@
                         |
                             presentationModule <- ((morphic gfx app) framework modules wisp core presentation),
                             presenter          <- (presentationModule Presenter) new,
-                            presentableObject  <- (presentationModule presentations) BasicPresentation link: (r content),
+                            presentationStream <- (presentationModule) PresentationStream NewWithPresenter: presenter,
                         |
-                        presenter presentPresentableObject: presentableObject.
+                        presentationStream present<< (r content).
                         |
                             h <- presenter minHeight + 10,
                         |
@@ -356,9 +356,9 @@
                         |
                             presentationModule <- ((morphic gfx app) framework modules wisp core presentation),
                             presenter          <- (presentationModule Presenter) new,
-                            presentableObject  <- (presentationModule presentations) BasicPresentation link: (r content),
+                            presentationStream <- (presentationModule) PresentationStream NewWithPresenter: presenter,
                         |
-                        presenter presentPresentableObject: presentableObject.
+                        presentationStream present<< (r content).
                         |
                             w <- presenter minWidth + 10,
                             h <- presenter minHeight + 10,
