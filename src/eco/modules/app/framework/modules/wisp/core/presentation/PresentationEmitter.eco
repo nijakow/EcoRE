@@ -1,0 +1,38 @@
+
+{
+    static with inherited _ = std Module; "TODO: Change to 'std Classlike'"
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        presenter,
+        xPos <- 0,
+        yPos <- 0,
+        lineHeight <- 0;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            app <- $package app;
+
+            emit: presentableObject => (
+                |
+                    minWidth  <- presentableObject minWidth,
+                    minHeight <- presentableObject minHeight,
+                |
+                presenter presentPresentableObject: presentableObject At: (app math geometry point X: xPos Y: yPos).
+                xPos <- xPos + minWidth.
+                lineHeight <- lineHeight max: minHeight.
+              ^ self
+            );
+
+            newline => (
+                xPos <- 0.
+                yPos <- yPos + lineHeight.
+                lineHeight <- 0.
+              ^ self
+            );
+
+            writeOn: w => w << 'a presentation emitter';
+        };
+    };
+}
