@@ -29,7 +29,7 @@
         writeOn: w => w << 'a graph presentation';
     };
 
-    Main => (
+    OldMain => (
         | presentation <- (framework modules wisp) core presentation |
 
         | po <- GraphPresentation link: 'Hello, world!' |
@@ -37,6 +37,27 @@
         | presenter <- (presentation) Presenter new |
 
         presenter presentPresentableObject: po At: (app math geometry point Origin).
+
+        | presenterMorph <- (presentation) PresenterMorph clone initWithPresenter: presenter |
+
+        (framework actions open) ui BuildAndOpen: [ :ui |
+            ui Window(300, 300,
+                presenterMorph
+            ) ~ xLayout: (app gfx morphic layouts) ShrinkWrap
+              ~ yLayout: (app gfx morphic layouts) ShrinkWrap
+        ]
+    );
+
+    Main => (
+        | presentation <- (framework modules wisp) core presentation |
+
+        |
+            presenter <- (presentation Presenter) new,
+            emitter   <- (presentation PresentationEmitter) NewWithPresenter: presenter,
+            stream    <- (presentation PresentationStream) NewWithEmitter: emitter
+        |
+
+        stream << (1 & 2 & 3 & 42 & 'Hello, world!').
 
         | presenterMorph <- (presentation) PresenterMorph clone initWithPresenter: presenter |
 
