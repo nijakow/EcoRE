@@ -47,6 +47,12 @@
                 popOffset.
               ^ self
             );
+            withPushedRelativeOffsetX: x Y: y Do: block => (
+                pushOffset: (self offset + (morphic X: x Y: y)).
+                block value.
+                popOffset.
+              ^ self
+            );
 
             clip => clips top;
             withClipW: w H: h Do: block => (

@@ -35,6 +35,11 @@
           ^ self
         );
 
+        presentPresentableObject: object => (
+            presentPresentableObject: object At: (geometry point X: 0 Y: 0).
+          ^ self
+        );
+
         renderOn: renderer => (
             boundedPresentables do: [ :each |
                 (each presentableObject) renderOn: renderer Bounds: (each bounds)

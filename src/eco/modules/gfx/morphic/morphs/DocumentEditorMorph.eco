@@ -97,7 +97,7 @@
                 protected width,
                 protected height,
                 protected object,
-                protected text,
+                protected presenter,
                 protected removeHandle,
                 offset;
 
@@ -106,14 +106,14 @@
 
                     protected morphic <- $package morphic;
 
-                    initWithOffset: _offset X: _xpos Y: _ypos W: _width H: _height Object: _object Text: _text RemoveHandle: _rh => (
+                    initWithOffset: _offset X: _xpos Y: _ypos W: _width H: _height Object: _object Presenter: _presenter RemoveHandle: _rh => (
                         xpos         <- _xpos.
                         ypos         <- _ypos.
                         width        <- _width.
                         height       <- _height.
                         offset       <- _offset.
                         object       <- _object.
-                        text         <- _text.
+                        presenter    <- _presenter.
                         removeHandle <- _rh.
                       ^ self
                     );
@@ -150,9 +150,9 @@
                         renderer drawLineX: edx Y: ey X: ex Y: ey.
                         renderer drawLineX: ex Y: edy X: ex Y: ey.
 
-                        renderer setColor: (renderer theme textColor).
-
-                        renderer drawString: text X: (sx + 5) Y: (sy + 5).
+                        renderer withPushedRelativeOffsetX: sx + 5 Y: sy + 5 Do: [
+                            presenter renderOn: renderer.
+                        ].
 
                       ^ self
                     );
@@ -348,15 +348,17 @@
                         dy <- ch. 
                     ].
                     item ifReference: [ :r |
-                        | sw <- (std io StringWriter) new |
-                        sw << (r content).
-
                         |
-                            text <- sw build,
-                            w    <- (renderer textWidth: text) + 10,
-                            h    <- (renderer textHeight: text) + 10
+                            presentationModule <- ((morphic gfx app) framework modules wisp core presentation),
+                            presenter          <- (presentationModule Presenter) new,
+                            presentableObject  <- (presentationModule presentations) BasicPresentation link: (r content),
                         |
-                        prog addElement: ((mod ReferenceElement) clone initWithOffset: offset X: xOff Y: (base - h) W: w H: h Object: (r content) Text: text RemoveHandle: $[ :(us, offset) | us deleteElement: offset. ] bind(self, offset)).
+                        presenter presentPresentableObject: presentableObject.
+                        |
+                            w <- presenter minWidth + 10,
+                            h <- presenter minHeight + 10,
+                        |
+                        prog addElement: ((mod ReferenceElement) clone initWithOffset: offset X: xOff Y: (base - h) W: w H: h Object: (r content) Presenter: presenter RemoveHandle: $[ :(us, offset) | us deleteElement: offset. ] bind(self, offset)).
                         dx <- w.
                         dy <- h.
                     ].
