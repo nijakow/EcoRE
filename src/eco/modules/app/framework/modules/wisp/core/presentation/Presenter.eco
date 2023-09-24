@@ -40,9 +40,14 @@
           ^ self
         );
 
+        boundedPresentableObjectsDo: block => (
+            boundedPresentables do: [ :each | block value(each) ].
+          ^ self
+        );
+
         boundedPresentableObjectsAt: offset Do: block => (
             boundedPresentables do: [ :each |
-                (each bounds containsPoint: offset) if: [ block value: each ].
+                (each bounds containsPoint: offset) if: [ block value(each) ].
             ].
           ^ self
         );

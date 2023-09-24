@@ -53,8 +53,7 @@
 
         |
             presenter <- (presentation Presenter) new,
-            emitter   <- (presentation PresentationEmitter) NewWithPresenter: presenter,
-            stream    <- (presentation PresentationStream) NewWithEmitter: emitter
+            stream    <- (presentation PresentationStream) NewWithPresenter: presenter
         |
 
         stream << (1 & 2 & 3 & 42 & 'Hello, world!').

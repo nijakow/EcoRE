@@ -10,7 +10,7 @@
             static with inherited _ = std Trait;
 
             renderObject: object On: renderer Bounds: bounds => (
-                renderer withPushedOffset: bounds origin Do: [
+                renderer withPushedRelativeOffset: bounds origin Do: [
                     (object object) renderOn: renderer.
                 ].
             );

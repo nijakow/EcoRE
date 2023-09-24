@@ -1,13 +1,12 @@
 
 {
     static with inherited _ = std Classlike;
+    protected presentation = $package;
 
     own Instance = {
         static with inherited _ = std Clonable;
 
         emitter;
-
-        protected stack;
 
         with inherited trait = {
             static with inherited _ = std Trait;
@@ -15,7 +14,6 @@
 
             initWithEmitter: _emitter => (
                 emitter <- _emitter.
-                stack   <- std util newVector.
               ^ self
             );
 
@@ -29,19 +27,16 @@
             commit   => self;
 
             << object => (
-                (stack contains: object) if: [
-                    self << '#<ref:?cyclic>'.
-                  ^ self
-                ].
+                |
+                    subpresenter <- (presentation Presenter) new,
+                    substream    <- (presentation PresentationStream) NewWithPresenter: subpresenter,
+                |
 
-                stack add: object.
-                [
-                    ((std reflect PublicInterfaceFor: object) implementsMessage: #'presentOn:')
-                        if: [ object presentOn: self ]
-                        else: [ << 'an object'       ].
-                ] ensure: [
-                    stack erase: (stack size - 1).
-                ].
+                ((std reflect PublicInterfaceFor: object) implementsMessage: #'presentOn:')
+                      if: [ object presentOn: substream ]
+                    else: [ substream << 'an object'    ].
+                
+                emitter emit: subpresenter presentation: (presentation presentations) PresenterPresentation.
 
               ^ self
             );
@@ -53,4 +48,5 @@
     };
 
     NewWithEmitter: emitter => (Instance clone) initWithEmitter: emitter;
+    NewWithPresenter: presenter => NewWithEmitter: ((presentation PresentationEmitter) NewWithPresenter: presenter);
 }
