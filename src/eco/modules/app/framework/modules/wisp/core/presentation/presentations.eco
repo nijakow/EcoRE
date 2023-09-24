@@ -84,7 +84,7 @@
 
             renderObject: object On: renderer Bounds: bounds => (
                 renderer withPushedOffset: (renderer offset + bounds origin) Do: [
-                    (object object) presentOn: renderer.
+                    (object object) presentOnRenderer: renderer.
                 ].
             );
 

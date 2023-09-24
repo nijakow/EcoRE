@@ -308,11 +308,11 @@
                 renderChildrenOn: renderer.
             );
             renderOn: renderer => (
-                presentOn: renderer.
+                presentOnRenderer: renderer.
                 isRenderDirty    <- false.
                 isChildRenderDirty <- false.
             );
-            presentOn: renderer => representation present: self on: renderer;
+            presentOnRenderer: renderer => representation present: self on: renderer;
 
             representation: r => (
                 representation <- r.
