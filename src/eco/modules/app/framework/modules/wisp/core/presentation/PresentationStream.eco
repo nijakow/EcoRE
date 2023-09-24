@@ -27,6 +27,12 @@
             commit   => self;
 
             << object => (
+                ((std reflect PublicInterfaceFor: object) implementsMessage: #'presentOn:')
+                      if: [ object presentOn: self ]
+                    else: [ << 'an object'         ].  
+            );
+
+            present<< object => (
                 |
                     subpresenter <- (presentation Presenter) new,
                     substream    <- (presentation PresentationStream) NewWithPresenter: subpresenter,

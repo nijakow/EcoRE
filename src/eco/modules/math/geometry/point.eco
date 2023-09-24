@@ -43,7 +43,7 @@
             extent: other => (geometry rectangle) Origin: self Extent: other;
             w: w h: h => (geometry rectangle) Origin: self W: w H: h;
 
-            writeOn: w => w << 'a point(' << x << ', ' << y << ')';
+            writeOn: w => w << 'a point(' present<< x << ', ' present<< y << ')';
         };
     };
 

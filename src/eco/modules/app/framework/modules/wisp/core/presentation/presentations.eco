@@ -133,6 +133,8 @@
             measureMinWidthOf: object => font widthOfChar: (object object);
             measureMinHeightOf: object => font heightOfChar: (object object);
 
+            isSelectable => false;
+
             writeOn: w => w << 'the generic character presentation';
         };
     };

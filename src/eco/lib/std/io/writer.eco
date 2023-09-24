@@ -29,7 +29,7 @@
             stack add: object.
             [
                 ((std reflect PublicInterfaceFor: object) implementsMessage: #'writeOn:')
-                    if: [ object writeOn: self ]
+                      if: [ object writeOn: self ]
                     else: [ << 'an object'       ].
             ] ensure: [
                 stack erase: (stack size - 1).
@@ -37,6 +37,7 @@
 
           ^ self
         );
+        present<< object => self << object;
 
         newline => ( self << (char newline). ^ self );
 

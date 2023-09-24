@@ -56,7 +56,7 @@
             stream    <- (presentation PresentationStream) NewWithPresenter: presenter
         |
 
-        stream << (1 & 2 & 3 & 42 & 'Hello, world!').
+        stream << (1 & 2 & 3 & 42 & 'Hello, world!' & (app math geometry point X: 42 Y: -3)) asArray.
 
         | presenterMorph <- (presentation) PresenterMorph clone initWithPresenter: presenter |
 

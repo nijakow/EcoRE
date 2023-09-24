@@ -17,6 +17,8 @@
         accepts: object => true;
 
         isPresenterPresentation => false;
+        
+        isSelectable => true;
 
         writeOn: w => w << 'a presentation';
     };

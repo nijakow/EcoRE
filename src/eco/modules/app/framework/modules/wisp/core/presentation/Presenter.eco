@@ -74,12 +74,10 @@
 
             renderer setColor: (renderer theme lineColor).
 
-            "boundedPresentableObjectsAt: mousePos Do: [ :each |
-                renderer drawRect: each bounds.
-            ]."
-
             allPresentableObjectsAt: mousePos WithBoundsDo: [ :each :bounds |
-                renderer drawRect: bounds.
+                ((each presentation) isSelectable) if: [
+                  renderer drawRect: bounds.
+                ].
             ].
         );
 
