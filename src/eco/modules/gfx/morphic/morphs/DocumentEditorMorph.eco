@@ -320,12 +320,14 @@
                         dy <- renderer charHeight: (c content).
                     ].
                     item ifReference: [ :r |
-                        | sw <- (std io StringWriter) new |
-                        sw << (r content).
-
                         |
-                            text <- sw build,
-                            h    <- (renderer textHeight: text) + 10
+                            presentationModule <- ((morphic gfx app) framework modules wisp core presentation),
+                            presenter          <- (presentationModule Presenter) new,
+                            presentableObject  <- (presentationModule presentations) BasicPresentation link: (r content),
+                        |
+                        presenter presentPresentableObject: presentableObject.
+                        |
+                            h <- presenter minHeight + 10,
                         |
                         dy <- h.
                     ].
