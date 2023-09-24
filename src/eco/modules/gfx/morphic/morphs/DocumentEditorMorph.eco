@@ -154,6 +154,8 @@
                             presenter renderOn: renderer.
                         ].
 
+                        renderer setColor: (renderer theme textColor).
+
                       ^ self
                     );
 

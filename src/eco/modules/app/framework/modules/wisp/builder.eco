@@ -186,13 +186,18 @@
 
 
     PresentationPaneFor: object Ui: ui => (
-        | writer <- (std io StringWriter) new |
+        |
+            presentationModule <- (framework modules wisp) core presentation,
+            presenter          <- (presentationModule) Presenter new,
+            presentableObject  <- (presentationModule presentations) BasicPresentation link: object
+        |
         
-        writer << object.
+        presenter presentPresentableObject: presentableObject.
 
         ui Scrollable(
             ui Padding(5,
-                ui TextField: (writer build)
+                (presentationModule PresenterMorph)
+                    ~ clone initWithPresenter: presenter
             )
         )
     );
