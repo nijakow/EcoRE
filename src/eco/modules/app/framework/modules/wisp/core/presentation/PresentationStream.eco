@@ -23,13 +23,14 @@
               ^ self
             );
 
-            newline  => emitter newline;
+            newline  => ( emitter newline. ^ self );
             commit   => self;
 
             << object => (
                 ((std reflect PublicInterfaceFor: object) implementsMessage: #'presentOn:')
                       if: [ object presentOn: self ]
-                    else: [ << 'an object'         ].  
+                    else: [ << 'an object'         ].
+              ^ self
             );
 
             present<< object => (
