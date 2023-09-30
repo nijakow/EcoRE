@@ -1064,7 +1064,7 @@ void Eve_Init(const char* default_font_path, Eve_UInt default_font_size) {
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
 
-    window   = SDL_CreateWindow("Eve", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_SHOWN);
+    window   = SDL_CreateWindow("Eve", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_SHOWN);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     font = TTF_OpenFont(default_font_path, default_font_size);
