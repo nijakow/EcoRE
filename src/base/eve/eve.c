@@ -776,6 +776,9 @@ Eve_UInt Eve_RenderState_GetEventMouseY(struct Eve_RenderState* self) {
 }
 
 Eve_UInt Eve_RenderState_GetEventMouseButtonID(struct Eve_RenderState* self) {
+    if ((self->event.button.button == SDL_BUTTON_LEFT) && (SDL_GetModState() & KMOD_LSHIFT)) {
+        return SDL_BUTTON_MIDDLE;
+    }
     return self->event.button.button;
 }
 
