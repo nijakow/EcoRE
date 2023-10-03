@@ -4,21 +4,54 @@
 
     protected layouterOverride <- No;
     protected representationOverride <- No;
+    protected listenerOverride <- No;
 
     with inherited trait = {
         static with inherited _ = std Trait;
         protected morphic = $package;
+
+        protected ListenerBuilder = {
+            static with inherited _ = std Clonable;
+
+            listener;
+
+            with inherited trait = {
+                static with inherited _ = std Trait;
+                protected morphic = $package;
+
+                init => (
+                    listener <- (morphic Listener) new.
+                  ^ self
+                );
+
+                writeOn: w => w << 'a custom listener builder';
+            };
+        };
 
         layouter: layouter => layouterOverride <- Yes: layouter;
 
         representation: representation => representationOverride <- Yes: representation;
         renderFunction: func => representationOverride <- Yes: (morphic representations Custom: func);
 
+        withListener: aBlock => (
+            |
+                listenerBuilder <- ListenerBuilder new
+            |
+
+            "TODO: Protect the call stack in case of nonlocal returns"
+            aBlock value(listenerBuilder).
+
+            listenerOverride <- Yes: (listenerBuilder listener).
+
+          ^ self
+        );
+
         build => (
             | morph <- (morphic morphs Morph) new |
 
             layouterOverride yes: [ :layouter | morph layouter: layouter ].
             representationOverride yes: [ :representation | morph representation: representation ].
+            listenerOverride yes: [ :listener | morph listener: listener ].
 
           ^ morph
         );
