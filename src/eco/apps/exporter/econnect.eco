@@ -93,6 +93,11 @@
                     emitSignedInt: integer.
                 );
 
+                emitFloatMessage: float => (
+                    emitMessageKey: #'ecosphere.object.float'.
+                    sys error ThrowMessage: 'Invalid object: Floats are not supported yet!'
+                );
+
                 emitCharMessage: char => (
                     emitMessageKey: #'ecosphere.object.char'.
                     emitChar: char.
@@ -108,6 +113,12 @@
                     emitMessageKey: #'ecosphere.object.key'.
                     emitUnsignedInt: (autobind: key).
                     emitKey: key.
+                );
+
+                emitArrayMessage: array => (
+                    emitMessageKey: #'ecosphere.object.array'.
+                    emitUnsignedInt: (autobind: array).
+                    emitArray: array.
                 );
 
                 emitCodeMessage: code => (
@@ -129,13 +140,32 @@
                     emitBlob: (code bytecodes).
                 );
 
+                emitMoleculeMessage: molecule => (
+                    emitMessageKey: #'ecosphere.object.molecule'.
+                    emitUnsignedInt: (autobind: molecule).
+
+                    "
+                        Fields:
+                          - Slot def count
+                          - Array of slot defs:
+                            - Flags as byte
+                            - Name as full object (i.e. recursive write object)
+                            - Depending on flag & 0x01
+                              - If 0: Value slot, decide on bit 0x02 -> Recursively write value
+                              - If 1: Code slot, write code object
+                    "
+                )
+
                 emitObjectMessage: obj => (
                     begin
-                      ~ if: [ std reflect primitives IsInt:    obj ] then: [ emitIntMessage:    obj ]
-                      ~ if: [ std reflect primitives IsChar:   obj ] then: [ emitCharMessage:   obj ]
-                      ~ if: [ std reflect primitives IsString: obj ] then: [ emitStringMessage: obj ]
-                      ~ if: [ std reflect primitives IsKey:    obj ] then: [ emitKeyMessage:    obj ]
-                      ~ if: [ std reflect primitives IsCode:   obj ] then: [ emitCodeMessage:   obj ]
+                      ~ if: [ std reflect primitives IsInt:      obj ] then: [ emitIntMessage:      obj ]
+                      ~ if: [ std reflect primitives IsFloat:    obj ] then: [ emitIntMessage:      obj ]
+                      ~ if: [ std reflect primitives IsChar:     obj ] then: [ emitCharMessage:     obj ]
+                      ~ if: [ std reflect primitives IsString:   obj ] then: [ emitStringMessage:   obj ]
+                      ~ if: [ std reflect primitives IsKey:      obj ] then: [ emitKeyMessage:      obj ]
+                      ~ if: [ std reflect primitives IsArray:    obj ] then: [ emitArrayMessage:    obj ]
+                      ~ if: [ std reflect primitives IsCode:     obj ] then: [ emitCodeMessage:     obj ]
+                      ~ if: [ std reflect primitives IsMolecule: obj ] then: [ emitMoleculeMessage: obj ]
                     ~ default: [ sys error ThrowMessage: 'Invalid object!' ].
                   ^ self
                 );
