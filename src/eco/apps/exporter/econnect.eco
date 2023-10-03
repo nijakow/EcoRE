@@ -29,6 +29,8 @@
                     ].
                 );
 
+                autobind: object => bind: object;
+
                 emitByte: b => (std io out << 'Byte: ' << b) newline commit;
 
                 emitUnsignedInt: num Continue: continue => (
@@ -98,19 +100,19 @@
 
                 emitStringMessage: string => (
                     emitMessageKey: #'ecosphere.object.string'.
-                    emitUnsignedInt: 0.
+                    emitUnsignedInt: (autobind: string).
                     emitString: string.
                 );
 
                 emitKeyMessage: key => (
                     emitMessageKey: #'ecosphere.object.key'.
-                    emitUnsignedInt: 0.
+                    emitUnsignedInt: (autobind: key).
                     emitKey: key.
                 );
 
                 emitCodeMessage: code => (
                     emitMessageKey: #'ecosphere.object.code'.
-                    emitUnsignedInt: 0.
+                    emitUnsignedInt: (autobind: code).
 
                     "
                         Fields:
