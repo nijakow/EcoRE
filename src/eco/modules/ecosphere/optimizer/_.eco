@@ -43,15 +43,4 @@
           ~ print: (Quickrewrite: code) ast.
         (std io out) newline commit.
     );
-
-    Quickcompile: ast => (compiler CompileAst: ast) constants at: 0;
-    Quickcompile2: code => Quickcompile: (Quickbuild: code);
-    Quickprint2: code => (
-        (ast Printer) clone initWithWriter: (std io out)
-          ~ print: (Quickbuild: (Quickcompile2: code)).
-        (std io out) newline commit.
-    );
-    Quickprint3: code => (
-        Quickprint: (Quickcompile: (Quickrewrite: code) ast).
-    );
 }
