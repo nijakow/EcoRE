@@ -17,6 +17,11 @@
               ^ self
             );
 
+            present: object as: presentation => (
+                emitter emit: object presentation: presentation.
+              ^ self
+            );
+
             byte<< b => self << b;
             char<< c => (
                 emitter emit: c presentation: (presentation presentations) CharacterPresentation.
