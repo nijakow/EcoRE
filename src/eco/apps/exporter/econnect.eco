@@ -15,12 +15,32 @@
 
                 init => (
                     boundObjects <- std util newMap.
+                    bind: #'ecosphere.object.key'.
                   ^ self
                 );
 
-                emitByte: b => todo;
+                bind: object => (
+                    (boundObjects at: object) yes: [ :index |
+                        ^ index
+                    ] no: [
+                        | index <- boundObjects keys size |
+                        boundObjects at: object put: index.
+                      ^ index
+                    ].
+                );
 
-                emitUnsignedInt: i => todo;
+                emitByte: b => (std io out << 'Byte: ' << b) newline commit;
+
+                emitUnsignedInt: num Continue: continue => (
+                    (num < 128) if: [
+                        emitByte: (num bitOr: (continue if: 128 else: 0)).
+                    ] else: [
+                        emitUnsignedInt: (num shift: -7) Continue: true.
+                        emitByte: ((num bitAnd: 127) bitOr: 128).
+                    ].
+                  ^ self
+                );
+                emitUnsignedInt: num => emitUnsignedInt: num Continue: false;
 
                 emitSignedInt: i => (
                     (i < 0) if: [
@@ -34,6 +54,11 @@
 
                 emitChar: c => emitUnsignedInt: c asInt;
 
+                emitArray: a => (
+                    emitUnsignedInt: a size.
+                    a do: [ :obj | writeObjectOrReference: obj ].
+                  ^ self
+                );
                 emitBlob: b => (
                     emitUnsignedInt: b size.
                     b do: [ :byte | emitByte: byte ].
@@ -43,7 +68,12 @@
                 emitKey: k => emitString: k asString;
 
                 emitMessageKey: key => (
-                    todo
+                    (boundObjects at: key) yes: [ :index |
+                        emitUnsignedInt: index.
+                    ] no: [
+                        emitUnsignedInt: (bind: key).
+                        emitKey: key.
+                    ].
                 );
 
                 emitReferenceMessage: index => (
@@ -68,28 +98,52 @@
 
                 emitStringMessage: string => (
                     emitMessageKey: #'ecosphere.object.string'.
+                    emitUnsignedInt: 0.
                     emitString: string.
                 );
 
                 emitKeyMessage: key => (
                     emitMessageKey: #'ecosphere.object.key'.
+                    emitUnsignedInt: 0.
                     emitKey: key.
                 );
 
-                writeObject: object => (
+                emitCodeMessage: code => (
+                    emitMessageKey: #'ecosphere.object.code'.
+                    emitUnsignedInt: 0.
+
+                    "
+                        Fields:
+                          - Register count
+                          - Arg count
+                          - Has varargs
+                          - Constant array (count + data)
+                          - Bytecode array (count + data)
+                    "
+                    emitUnsignedInt: (code registers).
+                    emitUnsignedInt: (code arguments).
+                    emitUnsignedInt: (false if: 1 else: 0).
+                    emitArray: (code constants).
+                    emitBlob: (code bytecodes).
+                );
+
+                emitObjectMessage: obj => (
                     begin
                       ~ if: [ std reflect primitives IsInt:    obj ] then: [ emitIntMessage:    obj ]
                       ~ if: [ std reflect primitives IsChar:   obj ] then: [ emitCharMessage:   obj ]
                       ~ if: [ std reflect primitives IsString: obj ] then: [ emitStringMessage: obj ]
                       ~ if: [ std reflect primitives IsKey:    obj ] then: [ emitKeyMessage:    obj ]
+                      ~ if: [ std reflect primitives IsCode:   obj ] then: [ emitCodeMessage:   obj ]
                     ~ default: [ sys error ThrowMessage: 'Invalid object!' ].
                   ^ self
                 );
 
+                writeObject: object => emitObjectMessage: object;
+
                 writeObjectOrReference: object => (
                     boundObjects at: object
-                      ~ yes: [ :index | emitReferenceMessage: index ].
-                    writeObject: object.
+                      ~ yes: [ :index | emitReferenceMessage: index ]
+                         no: [          emitObjectMessage: object   ].
                 );
 
 
@@ -97,4 +151,6 @@
             };
         };
     };
+
+    Test => EConnectWriter Instance new;
 }
