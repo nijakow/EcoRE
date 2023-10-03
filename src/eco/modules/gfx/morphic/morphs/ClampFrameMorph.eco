@@ -28,7 +28,10 @@
                 upper                  <- entered if: 5.0 else: 0.0,
                 animationProgress      <- (renderer animator) linearValueBetween: lower And: upper StartingAt: animationStart Duration: 0.25,
                 animationDelta         <- animationProgress asInt,
-                negativeAnimationDelta <- animationDelta negate
+                negativeAnimationDelta <- animationDelta negate,
+                lowerAlpha             <- entered if: 32 else: 64,
+                upperAlpha             <- entered if: 64 else: 32,
+                alphaValue             <- ((renderer animator) linearValueBetween: lowerAlpha And: upperAlpha StartingAt: animationStart Duration: 0.25) asInt
             |
 
             |
@@ -46,7 +49,7 @@
             renderer setR: (renderer theme accentColor r)
                         G: (renderer theme accentColor g)
                         B: (renderer theme accentColor b)
-                        A: 32.
+                        A: alphaValue.
                     
             renderer fillRectX: 0 Y: 0 W: width H: height.
 
