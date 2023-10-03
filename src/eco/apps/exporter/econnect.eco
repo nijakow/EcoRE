@@ -1,0 +1,100 @@
+
+{
+    static with inherited _ = std Module;
+
+    own EConnectWriter = {
+        static with inherited _ = std Classlike;
+
+        own Instance = {
+            static with inherited _ = std Clonable;
+
+            boundObjects;
+
+            with inherited trait = {
+                static with inherited _ = std Trait;
+
+                init => (
+                    boundObjects <- std util newMap.
+                  ^ self
+                );
+
+                emitByte: b => todo;
+
+                emitUnsignedInt: i => todo;
+
+                emitSignedInt: i => (
+                    (i < 0) if: [
+                        emitByte: 128.
+                        emitUnsignedInt: (i negate).
+                    ] else: [
+                        emitUnsignedInt: i.
+                    ].
+                  ^ self
+                );
+
+                emitChar: c => emitUnsignedInt: c asInt;
+
+                emitBlob: b => (
+                    emitUnsignedInt: b size.
+                    b do: [ :byte | emitByte: byte ].
+                  ^ self
+                );
+                emitString: s => emitBlob: s asBlob;
+                emitKey: k => emitString: k asString;
+
+                emitMessageKey: key => (
+                    todo
+                );
+
+                emitReferenceMessage: index => (
+                    emitMessageKey: #'ecosphere.econnect.id'.
+                    emitSignedInt: index.
+                );
+
+                emitUnsignedIntMessage: integer => (
+                    emitMessageKey: #'ecosphere.object.uint'.
+                    emitUnsignedInt: integer.
+                );
+
+                emitIntMessage: integer => (
+                    emitMessageKey: #'ecosphere.object.int'.
+                    emitSignedInt: integer.
+                );
+
+                emitCharMessage: char => (
+                    emitMessageKey: #'ecosphere.object.char'.
+                    emitChar: char.
+                );
+
+                emitStringMessage: string => (
+                    emitMessageKey: #'ecosphere.object.string'.
+                    emitString: string.
+                );
+
+                emitKeyMessage: key => (
+                    emitMessageKey: #'ecosphere.object.key'.
+                    emitKey: key.
+                );
+
+                writeObject: object => (
+                    begin
+                      ~ if: [ std reflect primitives IsInt:    obj ] then: [ emitIntMessage:    obj ]
+                      ~ if: [ std reflect primitives IsChar:   obj ] then: [ emitCharMessage:   obj ]
+                      ~ if: [ std reflect primitives IsString: obj ] then: [ emitStringMessage: obj ]
+                      ~ if: [ std reflect primitives IsKey:    obj ] then: [ emitKeyMessage:    obj ]
+                    ~ default: [ sys error ThrowMessage: 'Invalid object!' ].
+                  ^ self
+                );
+
+                writeObjectOrReference: object => (
+                    boundObjects at: object
+                      ~ yes: [ :index | emitReferenceMessage: index ].
+                    writeObject: object.
+                );
+
+
+                writeOn: w => w << 'an EConnect writer';
+            };
+        };
+    };
+}
