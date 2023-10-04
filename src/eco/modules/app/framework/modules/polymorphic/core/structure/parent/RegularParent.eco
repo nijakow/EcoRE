@@ -1,0 +1,21 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    morph;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+        with inherited ParentTrait = $package ParentTrait;
+
+        initWithMorph: m => (
+            morph <- m.
+          ^ self
+        );
+
+        ifNoParent: aBlock => self;
+        ifParent:   aBlock => aBlock value(morph);
+
+        writeOn: w => w << 'a regular polymorph parent(' << morph << ')';
+    };
+}

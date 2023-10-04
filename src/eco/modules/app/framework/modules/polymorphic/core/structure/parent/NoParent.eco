@@ -1,0 +1,7 @@
+
+{
+    static with inherited _ = std Singleton;
+    with inherited ParentTrait = $ ParentTrait;
+
+    writeOn: w => w << '(no parent)';
+}

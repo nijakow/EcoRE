@@ -11,31 +11,8 @@
         writeOn: w => w << 'a parent info object';
     };
 
-    own NoParent = {
-        static with inherited _ = std Singleton;
-
-        writeOn: w => w << '(no parent)';
-    };
-
-    own RegularParent = {
-        static with inherited _ = std Clonable;
-
-        morph;
-
-        with inherited trait = {
-            static with inherited _ = std Trait;
-
-            initWithMorph: m => (
-                morph <- m.
-              ^ self
-            );
-
-            ifNoParent: aBlock => self;
-            ifParent:   aBlock => aBlock value(morph);
-
-            writeOn: w => w << 'a regular polymorph parent(' << morph << ')';
-        };
-    };
+    own NoParent = (here / 'NoParent.eco') importIn: self;
+    own RegularParent = (here / 'RegularParent.eco') importIn: self;
 
     RegularParent: morph => RegularParent clone initWithMorph: morph;
 }
