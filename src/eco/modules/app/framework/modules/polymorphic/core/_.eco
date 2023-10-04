@@ -13,9 +13,9 @@
     own layouting    = (here / 'layouting' / '_.eco') importIn: $package;
     own representing = (here / 'representing' / '_.eco') importIn: $package;
 
+    own structure    = (here / 'structure' / '_.eco') importIn: $package;
+
     own MorphState    = (here / 'MorphState.eco') importIn: $package;
     own MorphBehavior = (here / 'MorphBehavior.eco') importIn: $package;
     own MorphInstance = (here / 'MorphInstance.eco') importIn: $package;
-
-    own PlacedMorph   = (here / 'PlacedMorph.eco') importIn: $package;
 }

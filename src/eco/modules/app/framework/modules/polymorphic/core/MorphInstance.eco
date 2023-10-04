@@ -5,14 +5,23 @@
     own Instance = {
         static with inherited _ = std Clonable;
 
-        behavior, state <- No;
+        structure,
+        behavior,
+        state <- No;
 
         with inherited trait = {
             static with inherited _ = std Trait;
+            protected polymorphic = $package;
 
             initWithBehavior: _behavior State: _state => (
-                behavior <- _behavior.
-                state    <- Yes: _state.
+                structure <- (polymorphic core structure) MorphStructureNode New.
+                behavior  <- _behavior.
+                state     <- Yes: _state.
+              ^ self
+            );
+            initWithBehavior: _behavior => (
+                structure <- (polymorphic core structure) MorphStructureNode New.
+                behavior  <- _behavior.
               ^ self
             );
 
