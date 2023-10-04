@@ -1,5 +1,6 @@
 
 {
     static with inherited _ = std Module;
-    
+
+    own EventHandler = (here / 'EventHandler.eco') importIn: $package;   
 }

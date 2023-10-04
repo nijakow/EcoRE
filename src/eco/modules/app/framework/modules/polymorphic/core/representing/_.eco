@@ -6,5 +6,7 @@
         static with inherited _ = std Trait;
 
         renderPlacedMorph: morph OnRenderer: renderer => subclassResponsibility;
+
+        writeOn: w => w << 'a morph representation';
     };
 }

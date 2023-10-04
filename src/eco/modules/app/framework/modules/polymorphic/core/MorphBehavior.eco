@@ -19,4 +19,6 @@
             writeOn: w => w << 'a polymorph behavior';
         };
     };
+
+    New => Instance new;
 }

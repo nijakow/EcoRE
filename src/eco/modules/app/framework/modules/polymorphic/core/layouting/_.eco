@@ -2,4 +2,9 @@
 {
     static with inherited _ = std Module;
     
+    own LayouterTrait = {
+        static with inherited _ = std Trait;
+
+        writeOn: w => w << 'a layouter';
+    };
 }
