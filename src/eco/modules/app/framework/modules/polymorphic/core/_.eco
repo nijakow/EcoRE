@@ -1,0 +1,13 @@
+
+{
+    static with inherited _ = std Module;
+
+    own math = {
+        static with inherited _ = std Module;
+        protected polymorphic = $package;
+
+        geometry => (polymorphic app math) geometry;
+    };
+
+    own Morph = (here / 'Morph.eco') importIn: $package;
+}
