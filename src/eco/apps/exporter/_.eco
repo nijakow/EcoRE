@@ -2,7 +2,7 @@
 {
     static with inherited _ = std Module;
 
-    own econnect = (here / 'econnect.eco') importIn: self;
+    own econnect = (here / 'econnect' / '_.eco') importIn: self;
 
     own ExportWriter = {
         static with inherited _ = std Clonable;

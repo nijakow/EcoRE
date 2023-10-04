@@ -1,0 +1,9 @@
+
+{
+    static with inherited _ = std Module;
+
+    own SerializationGovernor = (here / 'SerializationGovernor.eco') importIn: self;
+    own Writer = (here / 'Writer.eco') importIn: self;
+
+    Test => Writer Instance new;
+}

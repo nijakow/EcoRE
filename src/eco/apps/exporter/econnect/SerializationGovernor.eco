@@ -1,0 +1,51 @@
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            own modes = {
+                static with inherited _ = std Module;
+
+                own ModeTrait = {
+                    static with inherited _ = std Trait;
+
+                    shouldSerialize => subclassResponsibility;
+
+                    writeOn: w => w << 'a serialization mode';
+                };
+
+                own SerializeMode = {
+                    static with inherited _ = std Singleton;
+                    with inherited ModeTrait = $ ModeTrait;
+
+                    shouldSerialize => true;
+
+                    writeOn: w => w << 'the serialize mode';
+                };
+
+                own DontSerializeMode = {
+                    static with inherited _ = std Singleton;
+                    with inherited ModeTrait = $ ModeTrait;
+
+                    shouldSerialize => false;
+
+                    writeOn: w => w << 'the dont-serialize mode';
+                };
+            };
+
+            init => (
+              ^ self
+            );
+
+            serializationModeFor: object => modes SerializeMode;
+
+            writeOn: w => w << 'a serialization governor';
+        };
+    };
+
+    New => Instance new;
+}

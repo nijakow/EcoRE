@@ -1,19 +1,18 @@
 
-{
-    static with inherited _ = std Module;
-
-    own EConnectWriter = {
+    {
         static with inherited _ = std Classlike;
 
         own Instance = {
             static with inherited _ = std Clonable;
 
-            boundObjects;
+            governor, boundObjects;
 
             with inherited trait = {
                 static with inherited _ = std Trait;
+                protected econnect = $package;
 
                 init => (
+                    governor     <- (econnect SerializationGovernor) New.
                     boundObjects <- std util newMap.
                     bind: #'ecosphere.object.key'.
                   ^ self
@@ -154,7 +153,7 @@
                               - If 0: Value slot, decide on bit 0x02 -> Recursively write value
                               - If 1: Code slot, write code object
                     "
-                )
+                );
 
                 emitObjectMessage: obj => (
                     begin
@@ -170,7 +169,16 @@
                   ^ self
                 );
 
-                writeObject: object => emitObjectMessage: object;
+                writeObject: object => (
+                    "
+                        TODO: Query the 'governor' object to see if the object is
+                              supposed to be serialized or not.
+
+                              If not, emit attach a UUID or other path to the object
+                              and emit this descriptor instead.
+                    "
+                    emitObjectMessage: object.
+                );
 
                 writeObjectOrReference: object => (
                     boundObjects at: object
@@ -182,7 +190,4 @@
                 writeOn: w => w << 'an EConnect writer';
             };
         };
-    };
-
-    Test => EConnectWriter Instance new;
-}
+    }
