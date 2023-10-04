@@ -1,0 +1,10 @@
+
+{
+    static with inherited _ = std Module;
+    
+    own MorphRepresentationTrait = {
+        static with inherited _ = std Trait;
+
+        renderPlacedMorph: morph OnRenderer: renderer => subclassResponsibility;
+    };
+}
