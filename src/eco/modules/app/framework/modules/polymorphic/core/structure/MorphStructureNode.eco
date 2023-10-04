@@ -60,6 +60,24 @@
               ^ self
             );
 
+            layoutChanged => (
+                invalidateCaches.
+                "TODO"
+            );
+
+            reshape: rect => reshapeX: (rect x) Y: (rect y) W: (rect w) H: (rect h);
+            reshapeX: x Y: y W: w H: h => (
+                currentOffset    <- ((polymorphic core) math geometry) point X: x Y: y.
+                currentDimension <- ((polymorphic core) math geometry) point X: w Y: h.
+                layoutChanged.
+              ^ self
+            );
+
+            moveToX: x Y: y => reshapeX: x Y: y W: width H: height;
+            moveTo: point => moveToX: (point x) Y: (point y);
+
+            resizeToW: w H: h => reshapeX: (relativeOffset x) Y: (relativeOffset y) W: w H: h;
+
             writeOn: w => w << 'a polymorph structure node';
         };
     };
