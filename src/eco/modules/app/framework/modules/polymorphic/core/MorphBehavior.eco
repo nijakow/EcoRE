@@ -5,8 +5,16 @@
     own Instance = {
         static with inherited _ = std Clonable;
 
+        renderer     <- No;
+        layouter     <- No;
+        eventHandler <- No;
+
         with inherited trait = {
             static with inherited _ = std Trait;
+
+            renderer:     r => renderer     <- Yes: r;
+            layouter:     l => layouter     <- Yes: l;
+            eventHandler: e => eventHandler <- Yes: e;
 
             writeOn: w => w << 'a polymorph behavior';
         };
