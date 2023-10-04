@@ -14,13 +14,13 @@
             protected polymorphic = $package;
 
             initWithBehavior: _behavior State: _state => (
-                structure <- (polymorphic core structure) MorphStructureNode New.
+                structure <- (polymorphic core structure) MorphStructureNode NewForMorph: self.
                 behavior  <- _behavior.
                 state     <- Yes: _state.
               ^ self
             );
             initWithBehavior: _behavior => (
-                structure <- (polymorphic core structure) MorphStructureNode New.
+                structure <- (polymorphic core structure) MorphStructureNode NewForMorph: self.
                 behavior  <- _behavior.
               ^ self
             );

@@ -5,12 +5,21 @@
     own Instance = {
         static with inherited _ = std Clonable;
 
+        morph, parent;
+
         with inherited trait = {
             static with inherited _ = std Trait;
+            protected polymorphic = $package;
+
+            initWithMorph: _morph => (
+                morph  <- _morph.
+                parent <- ((polymorphic core) structure parent) NoParent.
+              ^ self
+            );
 
             writeOn: w => w << 'a polymorph structure node';
         };
     };
 
-    New => Instance new;
+    NewForMorph: morph => Instance clone initWithMorph: morph;
 }

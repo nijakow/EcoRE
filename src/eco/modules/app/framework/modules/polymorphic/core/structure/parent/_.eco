@@ -1,0 +1,41 @@
+
+{
+    static with inherited _ = std Module;
+
+    own ParentTrait = {
+        static with inherited _ = std Trait;
+
+        ifNoParent: aBlock => aBlock value;
+        ifParent:   aBlock => self;
+
+        writeOn: w => w << 'a parent info object';
+    };
+
+    own NoParent = {
+        static with inherited _ = std Singleton;
+
+        writeOn: w => w << '(no parent)';
+    };
+
+    own RegularParent = {
+        static with inherited _ = std Clonable;
+
+        morph;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithMorph: m => (
+                morph <- m.
+              ^ self
+            );
+
+            ifNoParent: aBlock => self;
+            ifParent:   aBlock => aBlock value(morph);
+
+            writeOn: w => w << 'a regular polymorph parent(' << morph << ')';
+        };
+    };
+
+    RegularParent: morph => RegularParent clone initWithMorph: morph;
+}

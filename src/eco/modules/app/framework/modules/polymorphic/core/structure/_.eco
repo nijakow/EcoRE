@@ -2,5 +2,8 @@
 {
     static with inherited _ = std Module;
 
+    own parent   = (here / 'parent' / '_.eco') importIn: $package;
+    own children = (here / 'children' / '_.eco') importIn: $package;
+
     own MorphStructureNode = (here / 'MorphStructureNode.eco') importIn: $package;
 }
