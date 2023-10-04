@@ -24,11 +24,14 @@
 
             moved => (
                 world yes: [ :world |
-                    world xRayAt: globalOffset ReverseDo: [ :m |
-                        (m != self) if: [
-                            lastMorphs2 add: m.
+                    [ :break |
+                        world xRayAt: globalOffset ReverseDo: [ :m |
+                            (m != self) if: [
+                                lastMorphs2 add: m.
+                            ].
+                            (m isFocusBlocking) if: [ break value ].
                         ].
-                    ].
+                    ] withBreak.
                 ].
 
                 lastMorphs do: [ :oldMorph |

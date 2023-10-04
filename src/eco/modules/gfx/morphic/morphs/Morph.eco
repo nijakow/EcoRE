@@ -6,7 +6,8 @@
         xLayout, yLayout, layouter,
         representation,
         listener,
-        parent, children;
+        parent, children,
+        isFocusBlocking;
 
         protected cachedGlobalOffset,
         protected cachedLayoutingConstraints,
@@ -28,6 +29,7 @@
                 listener           <- No.
                 parent             <- No.
                 children           <- config new.
+                isFocusBlocking    <- false.
                 metaHandle         <- No.
 
                 "Caches"
@@ -406,6 +408,8 @@
                 block value(self).
               ^ self
             );
+
+            focusBlocking => isFocusBlocking <- true;
 
             handleRemoveMorph: morph => false;
             handleDropMorph: morph At: point => false;

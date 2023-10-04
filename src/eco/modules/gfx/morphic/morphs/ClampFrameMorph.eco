@@ -12,7 +12,8 @@
 
         init => (
             $(Morph) initWithOneChild.
-            layouter: (morphic layouters Stack) new;
+            layouter: (morphic layouters Stack) new.
+            focusBlocking.
           ^ self
         );
 
