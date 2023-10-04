@@ -29,8 +29,8 @@
                 animationProgress      <- (renderer animator) linearValueBetween: lower And: upper StartingAt: animationStart Duration: 0.25,
                 animationDelta         <- animationProgress asInt,
                 negativeAnimationDelta <- animationDelta negate,
-                lowerAlpha             <- entered if: 32 else: 64,
-                upperAlpha             <- entered if: 64 else: 32,
+                lowerAlpha             <- entered if:  32 else: 128,
+                upperAlpha             <- entered if: 128 else: 32,
                 alphaValue             <- ((renderer animator) linearValueBetween: lowerAlpha And: upperAlpha StartingAt: animationStart Duration: 0.25) asInt
             |
 
