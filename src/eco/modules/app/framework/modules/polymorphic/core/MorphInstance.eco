@@ -1,0 +1,25 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        behavior, state <- No;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithBehavior: _behavior State: _state => (
+                behavior <- _behavior.
+                state    <- Yes: _state.
+              ^ self
+            );
+
+            writeOn: w => w << 'a polymorph';
+        };
+    };
+
+    Behavior: behavior State: state => Instance clone initWithBehavior: behavior State: state;
+    Behavior: behavior => Instance clone initWithBehavior: behavior;
+}

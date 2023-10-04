@@ -9,7 +9,9 @@
         geometry => (polymorphic app math) geometry;
     };
 
-    own Morph = (here / 'Morph.eco') importIn: $package;
+    own MorphState    = (here / 'MorphState.eco') importIn: $package;
+    own MorphBehavior = (here / 'MorphBehavior.eco') importIn: $package;
+    own MorphInstance = (here / 'MorphInstance.eco') importIn: $package;
 
-    own placement = (here / 'placement' / '_.eco') importIn: $package;
+    own PlacedMorph   = (here / 'PlacedMorph.eco') importIn: $package;
 }

@@ -8,7 +8,7 @@
         with inherited trait = {
             static with inherited _ = std Trait;
 
-            writeOn: w => w << 'a polymorph';
+            writeOn: w => w << 'a polymorph state';
         };
     };
 }
