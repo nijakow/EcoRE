@@ -30,6 +30,8 @@
         widthOfChar: c => eve Font_GetCharWidth(ptr, c);
         heightOfChar: c => eve Font_GetCharHeight(ptr, c);
 
+        height => heightOfChar: $' ';
+
         writeOn: w => w << 'a font';
     };
 }

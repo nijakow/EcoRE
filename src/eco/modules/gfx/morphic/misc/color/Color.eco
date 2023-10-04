@@ -8,16 +8,21 @@
 
     with inherited trait = {
         static with inherited _ = std Trait;
+        protected morphic = $package morphic;
 
         initWithR: _r G: _g B: _b => (
             r <- _r.
             g <- _g.
             b <- _b.
-            ^ self
+          ^ self
         );
 
         a => 255;
 
         writeOn: w => w << 'a color(' << r << ', ' << g << ', ' << b << ', ' << a << ')';
+        presentOn: p => (
+            p << 'a color(' present<< r << ', ' present<< g << ', ' present<< b << ', ' present<< a << ') '.
+            p present: self as: (((morphic gfx app) framework modules wisp) core presentation) presentations ColorSquarePresentation.
+        );
     };
 }
