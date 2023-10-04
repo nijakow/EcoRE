@@ -5,13 +5,47 @@
 
     own objects = (here / 'objects' / '_.eco') importIn: self;
 
+    Bezier => (
+        |
+            geometry <- app math geometry,
+
+            c <- objects Canvas new,
+            r <- objects CanvasRenderer new: c,
+        |
+
+        |
+            p1 <- (geometry point) X: 10 Y: 250,
+            p2 <- (geometry point) X: 250 Y: 10,
+            p3 <- (geometry point) X: 10 Y: 10
+        |
+
+        r setR: 255 G: 0 B: 0.
+
+        r drawPoint: p1.
+        r drawPoint: p2.
+        r drawPoint: p3.
+
+        1 to: 64 do: [ :i |
+            |
+                f  <- (i - 1) / 64.0,
+                pA <- (geometry point) X: (p1 x + ((p3 x - p1 x) * f)) Y: (p1 y + ((p3 y - p1 y) * f)),
+                pB <- (geometry point) X: (p3 x + ((p2 x - p3 x) * f)) Y: (p3 y + ((p2 y - p3 y) * f)),
+                pC <- (geometry point) X: (pA x + ((pB x - pA x) * f)) Y: (pA y + ((pB y - pA y) * f))
+            |
+
+            r drawPointX: (pC x) asInt Y: (pC y) asInt.
+        ].
+
+      ^ c
+    );
+
     Main => (
         (framework actions open) ui BuildAndOpen: [ :ui |
             (ui window Create)
                ~ width: 400 height: 400
                ~ content: (
                     (objects morphs CanvasMorph) new
-                        ~ canvas: (objects Test)
+                        ~ canvas: (Bezier)
                  )
                ~ build
         ]
