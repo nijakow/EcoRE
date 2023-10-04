@@ -34,7 +34,7 @@
                 ui Center(ui TextField: 'Look at me as I can fly!\n    - Chrom, "Regret & Testify"'),
                 ui VBox(
                     ui Button(ui Center(ui Label: 'Outliner'),
-                            $[ :(app) :sender | (app framework actions open) OutlinerForObject: lobby ]
+                            $[ :(app) :sender | (app framework actions open) OutlinerForObject: app ]
                                     bind(app))
                         ~ xLayout: ui layouts Flexible
                         ~ yLayout: ui layouts Flexible,
