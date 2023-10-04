@@ -6,7 +6,7 @@
     "A morph that calls 'remove' on every object that is dropped to it. Can have multiple children."
     own PaperBinMorph = {
         static with inherited _ = std Clonable;
-        static with inherited own Morph = (($package gfx morphic) morphs) Morph;
+        with inherited own Morph = (($package gfx morphic) morphs) Morph;
 
         with inherited trait = {
             static with inherited _ = std Trait;

@@ -1,6 +1,6 @@
 {
     static with inherited _ = std Clonable;
-    static with inherited own Morph = $ Morph;
+    with inherited own Morph = $ Morph;
 
     isResizable    <- false,
     animationStart <- 0,
