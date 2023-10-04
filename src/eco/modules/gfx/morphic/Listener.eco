@@ -2,8 +2,20 @@
 {
     static with inherited _ = std Clonable;
 
+    handlers;
+
     with inherited trait = {
         static with inherited _ = std Trait;
+
+        init => (
+            handlers <- std util newMap.
+          ^ self
+        );
+
+        forEvent: event RegisterHandler: handler => (
+            handlers at: event put: handler.
+          ^ self
+        );
 
         writeOn: w => w << 'a listener';
     };

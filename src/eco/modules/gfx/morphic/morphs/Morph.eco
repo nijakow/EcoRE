@@ -415,15 +415,25 @@
             handleScrollX: sx Y: sy At: point HandMorph: hand => false;
             handleKey: key At: point HandMorph: hand => false;
 
-            dropMorph: morph At: point => dropMorph: morph At: point Meta: No;
-            dropMorph: morph At: point Meta: meta => dispatchEvent: [ :e :point | e handleDropMorph: morph At: point Meta: meta ] ToParentsOf: morph At: point;
-            click: click At: point HandMorph: hand => dispatchEvent: [ :e :point | e handleClick: click At: point HandMorph: hand ] At: point;
-            grabAt: point HandMorph: hand => dispatchEvent: [ :e :point | e handleGrabAt: point HandMorph: hand ] At: point;
-            scrollX: sx Y: sy At: point HandMorph: hand => dispatchEvent: [ :e :point | e handleScrollX: sx Y: sy At: point HandMorph: hand ] At: point;
-            key: key At: point HandMorph: hand => dispatchEvent: [ :e :point | e handleKey: key At: point HandMorph: hand ] At: point;
-
             handleHandEnter: hand => false;
             handleHandExit: hand => false;
+
+            tryHandleRemoveMorph: morph => handleRemoveMorph: morph;
+            tryHandleDropMorph: morph At: point => handleDropMorph: morph At: point;
+            tryHandleDropMorph: morph At: point Meta: meta => handleDropMorph: morph At: point Meta: meta;
+            tryHandleClick: click At: point HandMorph: hand => handleClick: click At: point HandMorph: hand;
+            tryHandleGrabAt: point HandMorph: hand => handleGrabAt: point HandMorph: hand;
+            tryHandleScrollX: sx Y: sy At: point HandMorph: hand => handleScrollX: sx Y: sy At: point HandMorph: hand;
+            tryHandleKey: key At: point HandMorph: hand => handleKey: key At: point HandMorph: hand;
+            tryHandleHandEnter: hand => handleHandEnter: hand;
+            tryHandleHandExit: hand => handleHandExit: hand;
+
+            dropMorph: morph At: point => dropMorph: morph At: point Meta: No;
+            dropMorph: morph At: point Meta: meta => dispatchEvent: [ :e :point | e tryHandleDropMorph: morph At: point Meta: meta ] ToParentsOf: morph At: point;
+            click: click At: point HandMorph: hand => dispatchEvent: [ :e :point | e tryHandleClick: click At: point HandMorph: hand ] At: point;
+            grabAt: point HandMorph: hand => dispatchEvent: [ :e :point | e tryHandleGrabAt: point HandMorph: hand ] At: point;
+            scrollX: sx Y: sy At: point HandMorph: hand => dispatchEvent: [ :e :point | e tryHandleScrollX: sx Y: sy At: point HandMorph: hand ] At: point;
+            key: key At: point HandMorph: hand => dispatchEvent: [ :e :point | e tryHandleKey: key At: point HandMorph: hand ] At: point;
 
             dumpOn: w Indentation: i => (
                 0 to: i do: [ :j | w << '  ' ].
