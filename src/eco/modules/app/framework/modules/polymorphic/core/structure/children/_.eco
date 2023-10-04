@@ -2,5 +2,16 @@
 {
     static with inherited _ = std Module;
 
-    
+    own ChildrenTrait = {
+        static with inherited _ = std Trait;
+
+        do:        aBlock => self;
+        reverseDo: aBlock => self;
+
+        writeOn: w => w << 'a children info object';
+    };
+
+    own ManyChildren = (here / 'ManyChildren.eco') importIn: self;
+
+    Many => ManyChildren new;
 }

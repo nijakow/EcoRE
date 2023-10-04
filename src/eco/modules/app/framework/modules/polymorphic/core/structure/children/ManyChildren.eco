@@ -1,0 +1,21 @@
+
+{
+    static with inherited _ = std Clonable;
+
+    children;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+        with inherited ParentTrait = $package ChildrenTrait;
+
+        init => (
+            children <- std util newVector.
+          ^ self
+        );
+
+        do:        aBlock => children do:        aBlock;
+        reverseDo: aBlock => children reverseDo: aBlock;
+
+        writeOn: w => w << 'a regular children list';
+    };
+}

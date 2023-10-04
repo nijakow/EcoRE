@@ -5,15 +5,16 @@
     own Instance = {
         static with inherited _ = std Clonable;
 
-        morph, parent;
+        morph, parent, children;
 
         with inherited trait = {
             static with inherited _ = std Trait;
             protected polymorphic = $package;
 
             initWithMorph: _morph => (
-                morph  <- _morph.
-                parent <- ((polymorphic core) structure parent) NoParent.
+                morph    <- _morph.
+                parent   <- ((polymorphic core) structure parent) NoParent.
+                children <- ((polymorphic core) structure children) ManyChildren.
               ^ self
             );
 
