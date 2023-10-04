@@ -10,4 +10,6 @@
     };
 
     own Morph = (here / 'Morph.eco') importIn: $package;
+
+    own placement = (here / 'placement' / '_.eco') importIn: $package;
 }

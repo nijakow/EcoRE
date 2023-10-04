@@ -1,0 +1,6 @@
+
+"
+    Event dispatch
+"
+(findEventHandlerFor: event)
+  ~ yes: [ :handler | handler handleEvent: event On: self ]

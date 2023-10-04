@@ -1,0 +1,16 @@
+
+{
+    static with inherited _ = std Module;
+
+    own parent = {
+        static with inherited _ = std Module;
+
+        own NoParent = {
+            static with inherited _ = std Singleton;
+
+            writeOn: w => w << '(no parent)';
+        };
+    };
+
+    own Placement = (here / 'Placement.eco') importIn: $package;
+}

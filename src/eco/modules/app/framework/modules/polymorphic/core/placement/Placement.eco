@@ -1,0 +1,25 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        morph;
+
+        parent <- No;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithMorph: _morph => (
+                morph <- _morph.
+              ^ self
+            );
+
+            writeOn: w => w << 'a placed polymorph';
+        };
+    };
+
+    NewForMorph: morph => Instance clone initWithMorph: morph;
+}
