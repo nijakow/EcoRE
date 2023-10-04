@@ -5,16 +5,58 @@
     own Instance = {
         static with inherited _ = std Clonable;
 
-        morph, parent, children;
+        morph, parentInfo, childrenInfo;
+
+        protected currentOffset,
+        protected currentDimension;
+
+        protected cachedBounds,
+        protected cachedGlobalBounds;
 
         with inherited trait = {
             static with inherited _ = std Trait;
             protected polymorphic = $package;
 
             initWithMorph: _morph => (
-                morph    <- _morph.
-                parent   <- ((polymorphic core) structure parent) NoParent.
-                children <- ((polymorphic core) structure children) ManyChildren.
+                morph              <- _morph.
+                parentInfo         <- ((polymorphic core) structure parent) NoParent.
+                childrenInfo       <- ((polymorphic core) structure children) ManyChildren.
+                currentOffset      <- ((polymorphic core) math geometry) point X: 0 Y: 0.
+                currentDimension   <- ((polymorphic core) math geometry) point X: 0 Y: 0.
+                cachedBounds       <- No.
+                cachedGlobalBounds <- No.
+              ^ self
+            );
+
+            childrenDo:        aBlock => childrenInfo do:        aBlock;
+            childrenReverseDo: aBlock => childrenInfo reverseDo: aBlock;
+
+            allChildrenDo: aBlock => childrenDo: [ :child |
+                aBlock value(child).
+                child allChildrenDo: aBlock
+            ];
+
+            relativeOffset => currentOffset;
+            dimension      => currentDimension;
+            width          => dimension x;
+            height         => dimension y;
+
+            bounds => (
+                cachedBounds no: [ cachedBounds <- Yes: (((polymorphic core) math geometry) rectangle Origin: relativeOffset W: width H: height) ].
+              ^ cachedBounds yes
+            );
+
+            globalBounds => (
+                cachedGlobalBounds no: [ cachedGlobalBounds <- Yes: ((parentInfo hasParent) if: [ bounds translateBy: (parentInfo morph) structure globalBounds origin ] else: [ bounds ]) ].
+              ^ cachedGlobalBounds yes
+            );
+
+            globalOffset => globalBounds origin;
+
+            invalidateCaches => (
+                cachedBounds       <- No.
+                cachedGlobalBounds <- No.
+                childrenDo: [ :child | (child structure) invalidateCaches ].
               ^ self
             );
 

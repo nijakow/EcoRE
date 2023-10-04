@@ -4,4 +4,6 @@
     with app = $;
 
     own core = (here / 'core' / '_.eco') importIn: self;
+
+    SampleMorph => core MorphInstance Behavior: (core MorphBehavior New);
 }

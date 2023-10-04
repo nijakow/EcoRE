@@ -5,6 +5,8 @@
     own ParentTrait = {
         static with inherited _ = std Trait;
 
+        hasParent => false;
+
         ifNoParent: aBlock => aBlock value;
         ifParent:   aBlock => self;
 

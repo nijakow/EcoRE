@@ -13,6 +13,8 @@
           ^ self
         );
 
+        hasParent => true;
+
         ifNoParent: aBlock => self;
         ifParent:   aBlock => aBlock value(morph);
 
