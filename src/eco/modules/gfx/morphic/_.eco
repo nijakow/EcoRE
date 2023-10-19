@@ -5,7 +5,7 @@
     own Renderer = (here / 'Renderer.eco') importIn: self;
     own Listener = (here / 'Listener.eco') importIn: self;
 
-    with own orientation = (here / 'orientation.eco') importIn: self;
+    orientation => $battery app math geometry orientation;
 
     with own math = (here / 'math.eco') importIn: self;
 

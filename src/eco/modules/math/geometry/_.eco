@@ -2,6 +2,8 @@
 {
     static with inherited _ = std Module;
 
-    own point     = (here / 'point.eco') importIn: self;
-    own rectangle = (here / 'rectangle.eco') importIn: self;
+    own orientation = (here / 'orientation.eco') importIn: self;
+
+    own point       = (here / 'point.eco') importIn: self;
+    own rectangle   = (here / 'rectangle.eco') importIn: self;
 }
