@@ -3,6 +3,10 @@
     static with inherited _ = std Module;
     with wisp = $;
 
+    FunctionWriterPane => (
+
+    );
+
     MoleculeCorePaneForMirror: mirror Ui: ui Replacer: replacer Rebuilder: rebuilder => (
         |
             slots <- ui VBox()
@@ -70,23 +74,7 @@
 
     MoleculePaneFor: object Ui: ui Replacer: replacer => (
         ui WithRebuilderDo: $[ :(us, ui, object, replacer) :rebuilder |
-            ui Stacked(
-                ui VBox(
-                    ui Spacer,
-                    ui HBox(
-                        ui Spacer,
-                        ui Button(ui Padding(5, ui Label: '+'),
-                            $[ :(object, rebuilder) :sender |
-                                "TODO"
-                                #'ecosphere.ecore.reflect.add_value_slot'(object, -1, 1, any, #'newSlot', 42).
-                                rebuilder value.
-                            ] bind(object, rebuilder)
-                        ),
-                        ui SpacerW: 10 H: 1
-                    ) ~ yLayout: ui layouts ShrinkWrap,
-                ),
-                ui Scrollable(ui Padding(10, us MoleculeCorePaneForObject: object Ui: ui Replacer: replacer Rebuilder: rebuilder)),
-            ),
+            ui Scrollable(ui Padding(10, us MoleculeCorePaneForObject: object Ui: ui Replacer: replacer Rebuilder: rebuilder)),
         ] bind(self, ui, object, replacer)
     );
 
