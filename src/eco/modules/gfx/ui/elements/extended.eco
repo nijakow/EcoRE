@@ -221,19 +221,7 @@
                     ui Padding(10, ui Stacked(content, BackgroundColorMorph))
                       ~ xLayout: ui layouts Flexible
                       ~ yLayout: ui layouts Flexible,
-                    ui HBox(Spacer,
-                        ui Stacked(
-                            ui HBox(
-                                ShrinkWrap(Button(ui Label: ' ^ ', $[ :(window) :sender | window rigidHeight: (window height - 25). window layoutChanged. ] bind(window))),
-                                ShrinkWrap(Button(ui Label: ' V ', $[ :(window) :sender | window rigidHeight: (window height + 25). window layoutChanged. ] bind(window))),
-                                ShrinkWrap(Button(ui Label: ' < ', $[ :(window) :sender | window rigidWidth: (window width - 25). window layoutChanged. ] bind(window))),
-                                ShrinkWrap(Button(ui Label: ' > ', $[ :(window) :sender | window rigidWidth: (window width + 25). window layoutChanged. ] bind(window)))
-                            ) ~ xLayout: ui layouts ShrinkWrap
-                              ~ yLayout: ui layouts ShrinkWrap,
-                            BackgroundColorMorph
-                        ) ~ xLayout: ui layouts ShrinkWrap
-                          ~ yLayout: ui layouts ShrinkWrap,
-                    ) ~ yLayout: ui layouts ShrinkWrap,
+                    Spacer ~ yLayout: ui layouts ShrinkWrap,
                 ),
           )
           ~ resizable
