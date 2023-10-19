@@ -13,18 +13,22 @@
         protected cachedBounds,
         protected cachedGlobalBounds;
 
+        protected cachedLayoutingConstraints;
+
         with inherited trait = {
             static with inherited _ = std Trait;
             protected polymorphic = $package;
+            protected Point => ((polymorphic core) math geometry) point;
 
             initWithMorph: _morph => (
                 morph              <- _morph.
                 parentInfo         <- ((polymorphic core) structure parent) NoParent.
                 childrenInfo       <- ((polymorphic core) structure children) ManyChildren.
-                currentOffset      <- ((polymorphic core) math geometry) point X: 0 Y: 0.
-                currentDimension   <- ((polymorphic core) math geometry) point X: 0 Y: 0.
+                currentOffset      <- Point X: 0 Y: 0.
+                currentDimension   <- Point X: 0 Y: 0.
                 cachedBounds       <- No.
                 cachedGlobalBounds <- No.
+                cachedLayoutingConstraints <- No.
               ^ self
             );
 
@@ -56,19 +60,15 @@
             invalidateCaches => (
                 cachedBounds       <- No.
                 cachedGlobalBounds <- No.
+                cachedLayoutingConstraints <- No.
                 childrenDo: [ :child | (child structure) invalidateCaches ].
               ^ self
             );
 
-            layoutChanged => (
-                invalidateCaches.
-                "TODO"
-            );
-
             reshape: rect => reshapeX: (rect x) Y: (rect y) W: (rect w) H: (rect h);
             reshapeX: x Y: y W: w H: h => (
-                currentOffset    <- ((polymorphic core) math geometry) point X: x Y: y.
-                currentDimension <- ((polymorphic core) math geometry) point X: w Y: h.
+                currentOffset    <- Point X: x Y: y.
+                currentDimension <- Point X: w Y: h.
                 layoutChanged.
               ^ self
             );
@@ -77,6 +77,54 @@
             moveTo: point => moveToX: (point x) Y: (point y);
 
             resizeToW: w H: h => reshapeX: (relativeOffset x) Y: (relativeOffset y) W: w H: h;
+
+
+            "
+                Layouting
+            "
+            protected baseMinWidth => ((morph behavior) layouter) minWidthForMorph: morph;
+            protected baseMinHeight => ((morph behavior) layouter) minHeightForMorph: morph;
+
+            protected baseMinSizeForOrientation: orientation => (
+                orientation selectX: baseMinWidth Y: baseMinHeight
+            );
+
+            layoutChanged => (
+                invalidateCaches.
+                "TODO"
+            );
+            isLayoutDirty => cachedLayoutingConstraints isNo;
+
+            protected isLayoutDirtyForConstraints: constraints => (
+                cachedLayoutingConstraints yes: [ :c |
+                    (c equalsPoint: constraints) if: [
+                      ^ false
+                    ]
+                ].
+              ^ true
+            );
+
+            forceLayoutWithConstraints: constraints => (
+                "TODO: Call the layouter"
+                cachedLayoutingConstraints <- Yes: constraints.
+            );
+            forceLayoutInPlace => forceLayoutWithConstraints: dimension;
+
+            layoutWithConstaints: constraints => (
+                (isLayoutDirtyForConstraints: constraints) if: [
+                    forceLayoutWithConstraints: constraints.
+                ].
+            );
+            layoutInPlace => layoutWithConstaints: dimension;
+
+            layoutWithoutConstraints => (
+                layoutWithConstaitns: (Point X: (minWidth) Y: (minHeight))
+            );
+            layoutWithHintedConstraints: hint => (
+                layoutWithConstraints: (Point X: ((hint x) max: (minWidth))
+                                              Y: ((hint y) max: (minHeight)))
+            );
+
 
             writeOn: w => w << 'a polymorph structure node';
         };
