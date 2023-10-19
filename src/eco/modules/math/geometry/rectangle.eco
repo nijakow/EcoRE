@@ -44,7 +44,11 @@
 
             translateBy: point => (geometry rectangle X: (origin x + point x) Y: (origin y + point y) W: w H: h);
 
+            originForOrientation: orientation => orientation selectX: x Y: y;
+            dimensionForOrientation: orientation => orientation selectX: w Y: h;
+
             writeOn: w => w << 'a rectangle(' << origin << ', ' << corner << ')';
+            presentOn: w => w << 'a rectangle(' present<< origin << ', ' present<< corner << ')';
         };
     };
 

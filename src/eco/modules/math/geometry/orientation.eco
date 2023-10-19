@@ -1,23 +1,6 @@
 
 {
     static with inherited _ = std Module;
-    
-    own Vertical = {
-        static with inherited _ = std Singleton;
-        private module = $;
-
-        isHorizontal => false;
-        isVertical   => true;
-
-        ifHorizontal: block => self;
-        ifVertical:   block => block value;
-        ifHorizontal: horiz
-          ifVertical: verti => verti value;
-        
-        opposite => module Horizontal;
-
-        writeOn: w => w << 'the vertical orientation';
-    },
 
     own Horizontal = {
         static with inherited _ = std Singleton;
@@ -33,6 +16,27 @@
         
         opposite => module Vertical;
 
+        selectX: x Y: y => x;
+
         writeOn: w => w << 'the horizontal orientation';
-    }
+    };
+    
+    own Vertical = {
+        static with inherited _ = std Singleton;
+        private module = $;
+
+        isHorizontal => false;
+        isVertical   => true;
+
+        ifHorizontal: block => self;
+        ifVertical:   block => block value;
+        ifHorizontal: horiz
+          ifVertical: verti => verti value;
+        
+        opposite => module Horizontal;
+
+        selectX: x Y: y => y;
+
+        writeOn: w => w << 'the vertical orientation';
+    };
 }
