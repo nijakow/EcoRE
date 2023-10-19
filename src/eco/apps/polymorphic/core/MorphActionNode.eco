@@ -1,0 +1,27 @@
+
+"
+    This node acts as a public interface for the PolyMorph.
+"
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        morph;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithMorph: _morph => (
+                morph <- _morph.
+              ^ self
+            );
+
+            writeOn: w => w << 'a polymorph action node';
+        };
+    };
+
+    NewForMorph: morph => (Instance clone) initWithMorph: morph;
+}

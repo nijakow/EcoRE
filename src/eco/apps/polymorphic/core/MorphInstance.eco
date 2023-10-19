@@ -6,6 +6,7 @@
         static with inherited _ = std Clonable;
 
         structure,
+        actions,
         behavior,
         state <- No;
 
@@ -15,12 +16,14 @@
 
             initWithBehavior: _behavior State: _state => (
                 structure <- (polymorphic core structure) MorphStructureNode NewForMorph: self.
+                actions   <- (polymorphic core) MorphActionNode NewForMorph: self.
                 behavior  <- _behavior.
                 state     <- Yes: _state.
               ^ self
             );
             initWithBehavior: _behavior => (
                 structure <- (polymorphic core structure) MorphStructureNode NewForMorph: self.
+                actions   <- (polymorphic core) MorphActionNode NewForMorph: self.
                 behavior  <- _behavior.
               ^ self
             );
