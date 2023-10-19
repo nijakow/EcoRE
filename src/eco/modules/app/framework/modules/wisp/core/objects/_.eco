@@ -14,7 +14,7 @@
             presenterMorph <- (presentation) PresenterMorph clone initWithPresenter: presenter
         |
 
-        presenter presentPresentableObject: po At: (app math geometry point Origin).
+        presenter presentPresentableObject: po At: (app math geometry Point Origin).
         
       ^ presenterMorph
     );

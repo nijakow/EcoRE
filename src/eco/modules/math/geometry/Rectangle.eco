@@ -1,6 +1,6 @@
 
 {
-    static with inherited _ = std Module;
+    static with inherited _ = std Classlike;
     protected geometry = $package;
 
 
@@ -25,13 +25,13 @@
             h => corner y - origin y;
 
             topLeft => origin;
-            topCenter => (geometry point X: (origin x + (w / 2)) Y: origin y);
-            topRight => (geometry point X: corner x Y: origin y);
-            leftCenter => (geometry point X: origin x Y: (origin y + (h / 2)));
-            center => (geometry point X: (origin x + (w / 2)) Y: (origin y + (h / 2)));
-            rightCenter => (geometry point X: corner x Y: (origin y + (h / 2)));
-            bottomLeft => (geometry point X: origin x Y: corner y);
-            bottomCenter => (geometry point X: (origin x + (w / 2)) Y: corner y);
+            topCenter => (geometry Point X: (origin x + (w / 2)) Y: origin y);
+            topRight => (geometry Point X: corner x Y: origin y);
+            leftCenter => (geometry Point X: origin x Y: (origin y + (h / 2)));
+            center => (geometry Point X: (origin x + (w / 2)) Y: (origin y + (h / 2)));
+            rightCenter => (geometry Point X: corner x Y: (origin y + (h / 2)));
+            bottomLeft => (geometry Point X: origin x Y: corner y);
+            bottomCenter => (geometry Point X: (origin x + (w / 2)) Y: corner y);
             bottomRight => corner;
 
             containsPoint: p => (
@@ -42,7 +42,7 @@
               ^ true
             );
 
-            translateBy: point => (geometry rectangle X: (origin x + point x) Y: (origin y + point y) W: w H: h);
+            translateBy: point => (geometry Rectangle X: (origin x + point x) Y: (origin y + point y) W: w H: h);
 
             originForOrientation: orientation => orientation selectX: x Y: y;
             dimensionForOrientation: orientation => orientation selectX: w Y: h;
@@ -53,8 +53,8 @@
     };
 
     Origin: origin Corner: corner => (Rectangle clone) initWithOrigin: origin Corner: corner;
-    Origin: origin W: w H: h => (Rectangle clone) initWithOrigin: origin Corner: (geometry point X: (origin x + w) Y: (origin y + h));
+    Origin: origin W: w H: h => (Rectangle clone) initWithOrigin: origin Corner: (geometry Point X: (origin x + w) Y: (origin y + h));
     Origin: origin Extent: extent => (Rectangle clone) initWithOrigin: origin Corner: origin + extent;
 
-    X: x Y: y W: w H: h => Origin: (geometry point X: x Y: y) Corner: (geometry point X: (x + w) Y: (y + h));
+    X: x Y: y W: w H: h => Origin: (geometry Point X: x Y: y) Corner: (geometry Point X: (x + w) Y: (y + h));
 }

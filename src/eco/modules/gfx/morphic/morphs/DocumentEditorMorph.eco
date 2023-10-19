@@ -152,7 +152,7 @@
                         renderer drawLineX: ex Y: edy X: ex Y: ey.
 
                         renderer withPushedRelativeOffsetX: sx + 5 Y: sy + 5 Do: [
-                            presenter renderOn: renderer MousePos: (mouse - (morphic gfx math geometry point X: sx + 5 Y: sy + 5)).
+                            presenter renderOn: renderer MousePos: (mouse - (morphic gfx math geometry Point X: sx + 5 Y: sy + 5)).
                         ].
 
                         renderer setColor: (renderer theme textColor).

@@ -31,12 +31,12 @@
         );
 
         presentPresentableObject: object At: offset => (
-            presentPresentableObject: object Bounds: (geometry rectangle Origin: offset W: object minWidth H: object minHeight).
+            presentPresentableObject: object Bounds: (geometry Rectangle Origin: offset W: object minWidth H: object minHeight).
           ^ self
         );
 
         presentPresentableObject: object => (
-            presentPresentableObject: object At: (geometry point X: 0 Y: 0).
+            presentPresentableObject: object At: (geometry Point X: 0 Y: 0).
           ^ self
         );
 
@@ -61,7 +61,7 @@
             ].
         );
 
-        allPresentableObjectsAt: point WithBoundsDo: block => allPresentableObjectsAt: point WithBoundsDo: block Offset: (geometry point X: 0 Y: 0);
+        allPresentableObjectsAt: point WithBoundsDo: block => allPresentableObjectsAt: point WithBoundsDo: block Offset: (geometry Point X: 0 Y: 0);
 
         renderOn: renderer => (
             boundedPresentables do: [ :each |

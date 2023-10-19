@@ -18,7 +18,7 @@
         with inherited trait = {
             static with inherited _ = std Trait;
             protected polymorphic = $package;
-            protected Point => ((polymorphic core) math geometry) point;
+            protected Point => ((polymorphic core) math geometry) Point;
 
             initWithMorph: _morph => (
                 morph              <- _morph.

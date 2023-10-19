@@ -24,7 +24,7 @@
                     minWidth  <- presentableObject minWidth,
                     minHeight <- presentableObject minHeight,
                 |
-                presenter presentPresentableObject: presentableObject At: (app math geometry point X: xPos Y: yPos).
+                presenter presentPresentableObject: presentableObject At: (app math geometry Point X: xPos Y: yPos).
                 xPos <- xPos + minWidth.
                 lineHeight <- lineHeight max: minHeight.
               ^ self

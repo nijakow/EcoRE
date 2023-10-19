@@ -4,6 +4,6 @@
 
     own orientation = (here / 'orientation.eco') importIn: self;
 
-    own point       = (here / 'point.eco') importIn: self;
-    own rectangle   = (here / 'rectangle.eco') importIn: self;
+    own Point       = (here / 'Point.eco') importIn: self;
+    own Rectangle   = (here / 'Rectangle.eco') importIn: self;
 }

@@ -14,9 +14,9 @@
         |
 
         |
-            p1 <- (geometry point) X: 10 Y: 250,
-            p2 <- (geometry point) X: 250 Y: 10,
-            p3 <- (geometry point) X: 10 Y: 10
+            p1 <- (geometry Point) X: 10 Y: 250,
+            p2 <- (geometry Point) X: 250 Y: 10,
+            p3 <- (geometry Point) X: 10 Y: 10
         |
 
         r setR: 255 G: 0 B: 0.
@@ -28,9 +28,9 @@
         1 to: 64 do: [ :i |
             |
                 f  <- (i - 1) / 64.0,
-                pA <- (geometry point) X: (p1 x + ((p3 x - p1 x) * f)) Y: (p1 y + ((p3 y - p1 y) * f)),
-                pB <- (geometry point) X: (p3 x + ((p2 x - p3 x) * f)) Y: (p3 y + ((p2 y - p3 y) * f)),
-                pC <- (geometry point) X: (pA x + ((pB x - pA x) * f)) Y: (pA y + ((pB y - pA y) * f))
+                pA <- (geometry Point) X: (p1 x + ((p3 x - p1 x) * f)) Y: (p1 y + ((p3 y - p1 y) * f)),
+                pB <- (geometry Point) X: (p3 x + ((p2 x - p3 x) * f)) Y: (p3 y + ((p2 y - p3 y) * f)),
+                pC <- (geometry Point) X: (pA x + ((pB x - pA x) * f)) Y: (pA y + ((pB y - pA y) * f))
             |
 
             r drawPointX: (pC x) asInt Y: (pC y) asInt.

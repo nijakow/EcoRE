@@ -1,6 +1,6 @@
 
 {
-    static with inherited _ = std Module;
+    static with inherited _ = std Classlike;
 
     own Point2d = {
         static with inherited _ = std Clonable;
@@ -17,13 +17,13 @@
 
             x: xv y: yv => x: xv ~ y: yv;
 
-            duplicate => (geometry point) X: x Y: y;
+            duplicate => (geometry Point) X: x Y: y;
 
-            + other => (geometry point) X: x + other x Y: y + other y;
-            - other => (geometry point) X: x - other x Y: y - other y;
+            + other => (geometry Point) X: x + other x Y: y + other y;
+            - other => (geometry Point) X: x - other x Y: y - other y;
 
-            * scale => (geometry point) X: x * scale Y: y * scale;
-            / scale => (geometry point) X: x / scale Y: y / scale;
+            * scale => (geometry Point) X: x * scale Y: y * scale;
+            / scale => (geometry Point) X: x / scale Y: y / scale;
 
             equalsPoint: other => [ x == other x ] and: [ y == other y ];
 
@@ -35,13 +35,13 @@
             min: other => (self < other) if: [ ^ self ] else: [ ^ other ];
             max: other => (self > other) if: [ ^ self ] else: [ ^ other ];
 
-            midpoint: other => (geometry point) X: (x + other x) / 2 Y: (y + other y) / 2;
+            midpoint: other => (geometry Point) X: (x + other x) / 2 Y: (y + other y) / 2;
 
-            transpose => (geometry point) X: y Y: x;
+            transpose => (geometry Point) X: y Y: x;
 
-            corner: other => (geometry rectangle) Origin: self Corner: other;
-            extent: other => (geometry rectangle) Origin: self Extent: other;
-            w: w h: h => (geometry rectangle) Origin: self W: w H: h;
+            corner: other => (geometry Rectangle) Origin: self Corner: other;
+            extent: other => (geometry Rectangle) Origin: self Extent: other;
+            w: w h: h => (geometry Rectangle) Origin: self W: w H: h;
 
             dimensionForOrientation: orientation => orientation selectX: x Y: y;
 
