@@ -640,7 +640,7 @@ void Eve_RenderState_BlurRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y
 void Eve_RenderState_DrawPointRect(struct Eve_RenderState* self, Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h, Eve_Int step) {
     for (Eve_Int xx = x; xx < x + w; xx += step) {
         for (Eve_Int yy = y; yy < y + h; yy += step) {
-            SDL_RenderDrawPoint(self->renderer, xx, yy);
+            SDL_RenderDrawPoint(self->renderer, xx + step / 2, yy + step / 2);
         }
     }
 }
