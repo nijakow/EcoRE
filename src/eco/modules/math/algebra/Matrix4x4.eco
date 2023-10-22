@@ -1,0 +1,39 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        values;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            init => (
+                values <- std util newArray: 16;
+                do: [ :row :column |
+                    atRow: row Column: column Put: ((row == column) if: 1 else: 0)
+                ].
+              ^ self
+            );
+
+            doRows: aBlock => 0 for: 4 do: aBlock;
+            doColumns: aBlock => 0 for: 4 do: aBlock;
+            do: aBlock => (
+                0 for: 4 do: [ :row |
+                    0 for: 4 do: [ :column |
+                        aBlock value(row, column)
+                    ]
+                ]
+            );
+
+            atRow: row Column: column => values at: (row * 4 + column);
+            atRow: row Column: column Put: value => values at: (row * 4 + column) put: value;
+
+            writeOn: w => w << 'a matrix(' present<< values << ')';
+        };
+    };
+
+    Identity => Instance new;
+}

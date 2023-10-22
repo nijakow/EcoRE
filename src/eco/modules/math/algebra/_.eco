@@ -1,0 +1,6 @@
+
+{
+    static with inherited _ = std Module;
+
+    own Matrix4x4 = (here / 'Matrix4x4.eco') importIn: self;
+}

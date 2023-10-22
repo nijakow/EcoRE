@@ -2,5 +2,6 @@
 {
     static with inherited _ = std Module;
 
+    own algebra  = (here / 'algebra'  / '_.eco') importIn: $package;
     own geometry = (here / 'geometry' / '_.eco') importIn: $package;
 }
