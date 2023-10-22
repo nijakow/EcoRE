@@ -31,11 +31,14 @@
                 currentDimension   <- Point X: 0 Y: 0.
                 xLayout            <- behavior defaultHorizontalLayout.
                 yLayout            <- behavior defaultVerticalLayout.
+                world              <- No.
                 cachedBounds       <- No.
                 cachedGlobalBounds <- No.
                 cachedLayoutingConstraints <- No.
               ^ self
             );
+
+            world => parentInfo world;
 
             childrenDo:        aBlock => childrenInfo do:        aBlock;
             childrenReverseDo: aBlock => childrenInfo reverseDo: aBlock;

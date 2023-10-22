@@ -10,6 +10,8 @@
         ifNoParent: aBlock => aBlock value;
         ifParent:   aBlock => self;
 
+        world => subclassResponsibility;
+
         writeOn: w => w << 'a parent info object';
     };
 

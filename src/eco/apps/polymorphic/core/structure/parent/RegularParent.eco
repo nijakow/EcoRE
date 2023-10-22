@@ -18,6 +18,8 @@
         ifNoParent: aBlock => self;
         ifParent:   aBlock => aBlock value(morph);
 
+        world => (morph structure) world;
+
         writeOn: w => w << 'a regular polymorph parent(' << morph << ')';
     };
 }

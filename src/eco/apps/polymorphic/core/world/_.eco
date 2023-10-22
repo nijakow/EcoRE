@@ -2,5 +2,8 @@
 {
     static with inherited _ = std Module;
 
-    own World = (here / 'World.eco') importIn: $package;
+    own Manager = (here / 'Manager.eco') importIn: $package;
+    own World   = (here / 'World.eco')   importIn: $package;
+
+    NewWorld => World Manager: (Manager New);
 }

@@ -5,10 +5,13 @@
     own Instance = {
         static with inherited _ = std Clonable;
 
+        manager;
+
         with inherited trait = {
             static with inherited _ = std Trait;
 
-            init => (
+            initWithManager: _manager => (
+                manager <- _manager.
               ^ self
             );
 
@@ -16,5 +19,5 @@
         };
     };
 
-    New => Instance new;
+    Manager: manager => (Instance clone) initWithManager: manager;
 }

@@ -1,0 +1,35 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        layoutQueue;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            init => (
+                layoutQueue <- std util newQueue.
+              ^ self
+            );
+
+            needsLayout: morph => layoutQueue enqueue: morph;
+
+            updateLayout => (
+                [ (layoutQueue isEmpty) not ] while: [
+                    (layoutQueue dequeue) layoutInPlace.
+                ]
+            );
+
+            tick => (
+                updateLayout.
+            );
+
+            writeOn: w => w << 'a polymorphic world manager';
+        };
+    };
+
+    New => Instance new;
+}
