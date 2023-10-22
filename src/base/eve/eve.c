@@ -408,6 +408,12 @@ struct Eve_RenderState {
     struct SDL_Renderer*   renderer;
     struct SDL_Texture*    texture;
 
+    Eve_Int                width;
+    Eve_Int                height;
+
+    Eve_Float              dpi_scale_x;
+    Eve_Float              dpi_scale_y;
+
     struct Eve_Font*       font;
 
     SDL_Event              event;
@@ -421,6 +427,8 @@ struct Eve_RenderState {
 void Eve_RenderState_Create(struct Eve_RenderState* self, struct SDL_Window* window, struct SDL_Renderer* window_renderer, TTF_Font* font) {
     Eve_Int  window_width;
     Eve_Int  window_height;
+    Eve_Int  render_width;
+    Eve_Int  render_height;
 
     self->window   = window;
     self->renderer = window_renderer;
@@ -428,18 +436,24 @@ void Eve_RenderState_Create(struct Eve_RenderState* self, struct SDL_Window* win
     self->font     = Eve_Font_NewFromFont(font);
 
     SDL_GetWindowSize(window, &window_width, &window_height);
+    SDL_GetRendererOutputSize(window_renderer, &render_width, &render_height);
 
     self->texture  = SDL_CreateTexture(window_renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_width, window_height);
 
     SDL_SetTextureBlendMode(self->texture, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawBlendMode(window_renderer, SDL_BLENDMODE_BLEND);
 
+    self->width       = render_width;
+    self->height      = render_height;
+    self->dpi_scale_x = (Eve_Float)render_width / (Eve_Float)window_width;
+    self->dpi_scale_y = (Eve_Float)render_height / (Eve_Float)window_height;
+
     Eve_FrameStack_Create(&self->frame_stack);
     self->frame.color = Eve_Color_FromRGB(0, 0, 0);
     self->frame.x     = 0;
     self->frame.y     = 0;
-    self->frame.xmax  = window_width;
-    self->frame.ymax  = window_height;
+    self->frame.xmax  = self->width;
+    self->frame.ymax  = self->height;
 
     Eve_TextCache_Create(&self->text_cache);
 }
@@ -458,17 +472,28 @@ void Eve_RenderState_Destroy(struct Eve_RenderState* self) {
 void Eve_RenderState_Reset(struct Eve_RenderState* self) {
     Eve_Int  window_width;
     Eve_Int  window_height;
+    Eve_Int  render_width;
+    Eve_Int  render_height;
 
     SDL_RenderClear(self->renderer);
 
     SDL_GetWindowSize(self->window, &window_width, &window_height);
+    SDL_GetRendererOutputSize(self->renderer, &render_width, &render_height);
 
     Eve_FrameStack_Reset(&self->frame_stack);
     self->frame.color = Eve_Color_FromRGB(0, 0, 0);
     self->frame.x     = 0;
     self->frame.y     = 0;
-    self->frame.xmax  = window_width;
-    self->frame.ymax  = window_height;
+    self->frame.xmax  = self->width;
+    self->frame.ymax  = self->height;
+}
+
+Eve_UInt Eve_RenderState_TranslateX_UInt(struct Eve_RenderState* self, Eve_UInt x) {
+    return (Eve_UInt) (x * self->dpi_scale_x);
+}
+
+Eve_UInt Eve_RenderState_TranslateY_UInt(struct Eve_RenderState* self, Eve_UInt y) {
+    return (Eve_UInt) (y * self->dpi_scale_y);
 }
 
 Eve_UInt Eve_RenderState_CurrentWidth(struct Eve_RenderState* self) {
@@ -768,11 +793,11 @@ bool Eve_RenderState_IsEventMouseWheel(struct Eve_RenderState* self) {
 }
 
 Eve_UInt Eve_RenderState_GetEventMouseX(struct Eve_RenderState* self) {
-    return self->event.motion.x;
+    return Eve_RenderState_TranslateX_UInt(self, self->event.motion.x);
 }
 
 Eve_UInt Eve_RenderState_GetEventMouseY(struct Eve_RenderState* self) {
-    return self->event.motion.y;
+    return Eve_RenderState_TranslateY_UInt(self, self->event.motion.y);
 }
 
 Eve_UInt Eve_RenderState_GetEventMouseButtonID(struct Eve_RenderState* self) {
@@ -1059,7 +1084,7 @@ void Eve_Delay(Eve_UInt ms) {
 }
 
 
-void Eve_Init(const char* default_font_path, Eve_UInt default_font_size) {
+void Eve_Init(const char* default_font_path, Eve_UInt default_font_size, Eve_Int w, Eve_Int h) {
     struct SDL_Window*    window;
     struct SDL_Renderer*  renderer;
     TTF_Font*             font;
@@ -1067,7 +1092,7 @@ void Eve_Init(const char* default_font_path, Eve_UInt default_font_size) {
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
 
-    window   = SDL_CreateWindow("Eve", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1080, SDL_WINDOW_SHOWN);
+    window   = SDL_CreateWindow("Eve", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     font = TTF_OpenFont(default_font_path, default_font_size);

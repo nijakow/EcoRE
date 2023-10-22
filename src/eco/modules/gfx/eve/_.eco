@@ -88,7 +88,7 @@
 
     Setup: libpath => (
         lib <- (ffi DLOpen: libpath) yes.
-        Eve_Init <- (lib function: #'Eve_Init' type: ((ffi types void) function(ffi types string, ffi types uint))) yes.
+        Eve_Init <- (lib function: #'Eve_Init' type: ((ffi types void) function(ffi types string, ffi types uint, ffi types int, ffi types int))) yes.
         Eve_Terminate <- (lib function: #'Eve_Terminate' type: ((ffi types void) function())) yes.
         Eve_CurrentWidth <- (lib function: #'Eve_CurrentWidth' type: ((ffi types uint) function())) yes.
         Eve_CurrentHeight <- (lib function: #'Eve_CurrentHeight' type: ((ffi types uint) function())) yes.
@@ -149,7 +149,10 @@
     );
 
     InitEve => (
-        | r <- Eve_Init value(DefaultFontPath, 14) |
+        |
+            isOnMac <- [ :exit | (std os type) ifMacOS: [ exit value(true) ]. exit value(false). ] exitValue,
+            r <- Eve_Init value(DefaultFontPath, 14, isOnMac if: 1280 else: 1920, isOnMac if: 800 else: 1080)
+        |
         DefaultFont <- ((Font clone) initWithFont: GetDefaultFont ShouldClose: false).
       ^ r
     );

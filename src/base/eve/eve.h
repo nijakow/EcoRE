@@ -16,6 +16,8 @@ typedef uint8_t u8;
 typedef int32_t Eve_Int;
 typedef uint32_t Eve_UInt;
 
+typedef float Eve_Float;
+
 
 
 struct Eve_Font
@@ -126,7 +128,7 @@ Eve_UInt Eve_GetCharHeight(Eve_UInt c);
 void Eve_Delay(Eve_UInt ms);
 
 
-void Eve_Init(const char* default_font_path, Eve_UInt default_font_size);
+void Eve_Init(const char* default_font_path, Eve_UInt default_font_size, Eve_Int w, Eve_Int h);
 void Eve_Terminate();
 
 #endif /* EVE_H */
