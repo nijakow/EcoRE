@@ -16,6 +16,7 @@
     };
 
     own NoParent = (here / 'NoParent.eco') importIn: self;
+    own WorldParent = (here / 'WorldParent.eco') importIn: self;
     own RegularParent = (here / 'RegularParent.eco') importIn: self;
 
     RegularParent: morph => RegularParent clone initWithMorph: morph;

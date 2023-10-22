@@ -40,6 +40,8 @@
 
             world => parentInfo world;
 
+            reparent: newParent => parentInfo <- newParent;
+
             childrenDo:        aBlock => childrenInfo do:        aBlock;
             childrenReverseDo: aBlock => childrenInfo reverseDo: aBlock;
 

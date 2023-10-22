@@ -1,25 +1,31 @@
 
 {
-    static with inherited _ = std Clonable;
+    static with inherited _ = std Classlike;
 
-    morph;
+    own Instance = {
+        static with inherited _ = std Clonable;
 
-    with inherited trait = {
-        static with inherited _ = std Trait;
-        with inherited ParentTrait = $package ParentTrait;
+        morph;
 
-        initWithMorph: m => (
-            morph <- m.
-          ^ self
-        );
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            with inherited ParentTrait = $package ParentTrait;
 
-        hasParent => true;
+            initWithMorph: m => (
+                morph <- m.
+              ^ self
+            );
 
-        ifNoParent: aBlock => self;
-        ifParent:   aBlock => aBlock value(morph);
+            hasParent => true;
 
-        world => (morph structure) world;
+            ifNoParent: aBlock => self;
+            ifParent:   aBlock => aBlock value(morph);
 
-        writeOn: w => w << 'a regular polymorph parent(' << morph << ')';
+            world => (morph structure) world;
+
+            writeOn: w => w << 'a regular polymorph parent(' << morph << ')';
+        };
     };
+
+    Parent: aMorph => (Instance clone) initWithMorph: aMorph;
 }

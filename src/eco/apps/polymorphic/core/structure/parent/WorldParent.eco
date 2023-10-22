@@ -1,0 +1,24 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+        with inherited ParentTrait = $package ParentTrait;
+
+        world;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithWorld: _world => (
+                world <- _world.
+              ^ self
+            );
+
+            writeOn: w => w << '(no parent, with world)';
+        };
+    };
+
+    World: world => (Instance clone) initWithWorld: world;
+}
