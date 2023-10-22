@@ -3,14 +3,120 @@
     static with inherited _ = std Classlike;
 
     own Instance = {
-        static with inherited _ = std Singleton;
+        static with inherited _ = std Clonable;
         with inherited LayouterTrait = $package LayouterTrait;
 
-        layoutMorph: morph Constraints: constraints => (
+        protected orientation;
 
-        );
+        with inherited trait = {
+            static with inherited _ = std Trait; 
 
-        writeOn: w => w << 'a flex layouter';
+            initWithOrientation: _orientation => (
+                orientation <- _orientation.
+              ^ self
+            );
+
+            protected W: w H: h => Point X: w Y: h;
+            protected TransformedW: w H: h => (
+                orientation ifHorizontal: [ W: w H: h ] ifVertical: [ W: h H: w ]
+            );
+            protected Transformed: dimensions => (
+                TransformedW: (dimensions x) H: (dimensions y)
+            );
+            protected Layout: morph => (morph structure) layoutForOrientation: orientation;
+            protected Extent: morph => (morph structure) extentForOrientation: orientation;
+            protected OppositeLayout: morph => morph layoutForOrientation: (orientation opposite);
+            protected OppositePreferredSize: morph Constraints: constraints => (
+                (morph structure)
+                    preferredSizeForOrientation: (orientation opposite)
+                                     Constraint: (constraints dimensionForOrientation: (orientation opposite))
+            );
+
+            protected calculateMinSizeForMorphMainAxis: morph => (
+                | minSize <- 0 |
+                (morph structure) childrenDo: [ :child |
+                    minSize <- minSize + (child minSizeForOrientation: orientation).
+                ].
+              ^ minSize
+            );
+
+            protected calculateMinSizeForMorphCrossAxis: morph => (
+                | minSize <- 0 |
+                (morph structure) childrenDo: [ :child |
+                    minSize <- minSize max: ((child structure) minSizeForOrientation: (orientation opposite)).
+                ].
+              ^ minSize
+            );
+
+            baseMinSizeForMorph: morph Orientation: morphOrientation => (
+                (morphOrientation == orientation)
+                    ~ if: [ calculateMinSizeForMorphMainAxis:  morph ]
+                    else: [ calculateMinSizeForMorphCrossAxis: morph ]
+            );
+
+            layoutChildrenOfMorph: morph Constraints: constraints => (
+                |
+                    flexCount  <- 0,
+                    offset     <- 0
+                |
+                (morph structure) childrenDo: [ :child |
+                    "
+                        First, we check if the child is flexible or rigid.
+                        If it is flexible, we don't know its size yet, so we just count how
+                        many flexible children there are.
+
+                        Meanwhile, we also calculate the cross axis size.
+
+                        This way, we have all necessary information once this
+                        loop is finished.
+                    "
+                    (Layout: child) isFlexible
+                    ~ if: [ flexCount <- flexCount + 1 ]
+                    else: [
+                            "
+                                Since we know the size of the child along the main axis,
+                                we can calculate its size directly by layouting it.
+
+                                If the child is flexible along the cross axis, we use our own 'height' constraints
+                                as their preferred 'height'. This way, they will be able to grow to the correct size.
+
+                                Note that we don't move the child, since we don't know the size of the flexible children yet.
+                            "
+                            |
+                                childConstraints <- TransformedW: ((child structure) preferredSizeForOrientation: orientation Constraint: (constraints dimensionForOrientation: orientation))
+                                                               H: ((child structure) preferredSizeForOrientation: orientation opposite Constraint: (constraints dimensionForOrientation: orientation opposite)),
+                                childDimensions  <- (child structure) layoutWithConstraints: childConstraints
+                            |
+
+                            "We add the preferred size of the child to the main axis."
+                            offset <- offset + (childConstraints dimensionForOrientation: orientation).
+                    ].
+                ].
+
+                "Here we calculate the size of all flexible children."
+                |
+                    remainingSpace  <- (constraints dimensionForOrientation: orientation) - offset,
+                    flexSizeAsFloat <- (flexCount isZero) if: [ 0.0 ] else: [ remainingSpace / (flexCount asFloat) ],
+                    flexSize        <- flexSizeAsFloat asInt,
+                    position        <- 0.0
+                |
+
+                "This is the main positioning loop. We position all children along the main axis."
+                morph childrenDo: [ :child |
+                    "Move the child to the correct position."
+                    (child structure) moveTo: (TransformedW: (position asInt) H: 0).
+
+                    | childConstraints <- TransformedW: flexSize H: ((child structure) preferredSizeForOrientation: (orientation opposite) Constraint: (constraints dimensionForOrientation: (orientation opposite))) |
+
+                    "Now that we know the size distribution we can also layout the flexible children."
+                    (Layout: child) isFlexible
+                    ~ if: [ (child structure) layoutWithConstraints: childConstraints. position <- position + flexSizeAsFloat. ]
+                    else: [ position <- position + ((child structure) extentForOrientation: orientation). ].
+                ].
+            );
+
+            writeOn: w => w << 'a flex layouter';
+        };
     };
 
     Horizontal => todo;

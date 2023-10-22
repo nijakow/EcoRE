@@ -27,8 +27,6 @@
                 ifRigid:      [ :extent | ^ extent                                              ]
         );
 
-        preferredSizeForMorph: morph Orientation: orientation Constraint: constraint => subclassResponsibility;
-
         preferredSizeForMorph: morph Constraints: constraints => (
             Point X: (preferredSizeForMorph: morph Orientation: ((math geometry) orientation Horizontal) Constraint: (constraints x))
                   Y: (preferredSizeForMorph: morph Orientation: ((math geometry) orientation Vertical)   Constraint: (constraints y))

@@ -45,6 +45,8 @@
             width          => dimension x;
             height         => dimension y;
 
+            extentForOrientation: orientation => dimension dimensionForOrientation: orientation;
+
             bounds => (
                 cachedBounds no: [ cachedBounds <- Yes: (((polymorphic core) math geometry) rectangle Origin: relativeOffset W: width H: height) ].
               ^ cachedBounds yes
