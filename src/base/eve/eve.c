@@ -274,6 +274,11 @@ void Eve_TextCacheBucket_Destroy(struct Eve_TextCacheBucket* self) {
     }
 }
 
+void Eve_TextCacheBucket_Clear(struct Eve_TextCacheBucket* self) {
+    Eve_TextCacheBucket_Destroy(self);
+    Eve_TextCacheBucket_Create(self);
+}
+
 
 /*
  * A hash map of text cache nodes.
@@ -301,6 +306,15 @@ void Eve_TextCache_Destroy(struct Eve_TextCache* self) {
     for (unsigned int i = 0; i < self->bucket_count; i++) {
         Eve_TextCacheBucket_Destroy(&self->buckets[i]);
     }
+}
+
+void Eve_TextCache_Clear(struct Eve_TextCache* self) {
+    for (unsigned int i = 0; i < self->bucket_count; i++) {
+        Eve_TextCacheBucket_Clear(&self->buckets[i]);
+    }
+    self->all_nodes = NULL;
+    self->insert_at = &self->all_nodes;
+    self->age       = 0;
 }
 
 struct Eve_TextCacheNode* Eve_TextCache_FindOrCreate(struct Eve_TextCache* self, const char* text, struct Eve_Color color, SDL_Renderer* renderer, TTF_Font* font) {
@@ -479,6 +493,43 @@ void Eve_RenderState_Reset(struct Eve_RenderState* self) {
 
     SDL_GetWindowSize(self->window, &window_width, &window_height);
     SDL_GetRendererOutputSize(self->renderer, &render_width, &render_height);
+
+    Eve_FrameStack_Reset(&self->frame_stack);
+    self->frame.color = Eve_Color_FromRGB(0, 0, 0);
+    self->frame.x     = 0;
+    self->frame.y     = 0;
+    self->frame.xmax  = self->width;
+    self->frame.ymax  = self->height;
+}
+
+void Eve_RenderState_HandleResize(struct Eve_RenderState* self) {
+    Eve_Int  window_width;
+    Eve_Int  window_height;
+    Eve_Int  render_width;
+    Eve_Int  render_height;
+    Eve_Int  old_texture_width;
+    Eve_Int  old_texture_height;
+
+    SDL_GetWindowSize(self->window, &window_width, &window_height);
+    SDL_GetRendererOutputSize(self->renderer, &render_width, &render_height);
+
+    SDL_QueryTexture(self->texture, NULL, NULL, &old_texture_width, &old_texture_height);
+    
+    printf("Resize to: %dx%d\n", window_width, window_height);
+
+    if (old_texture_width < window_width || old_texture_height < window_height) {
+        printf("Old texture is too small with size %dx%d, creating new texture.\n", old_texture_width, old_texture_height);
+        Eve_TextCache_Clear(&self->text_cache);
+        SDL_DestroyTexture(self->texture);
+        self->texture = SDL_CreateTexture(self->renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, window_width, window_height);
+        SDL_SetTextureBlendMode(self->texture, SDL_BLENDMODE_BLEND);
+        SDL_SetRenderDrawBlendMode(self->renderer, SDL_BLENDMODE_BLEND);
+    }
+
+    self->width       = render_width;
+    self->height      = render_height;
+    self->dpi_scale_x = (Eve_Float)render_width / (Eve_Float)window_width;
+    self->dpi_scale_y = (Eve_Float)render_height / (Eve_Float)window_height;
 
     Eve_FrameStack_Reset(&self->frame_stack);
     self->frame.color = Eve_Color_FromRGB(0, 0, 0);
@@ -761,7 +812,18 @@ void Eve_RenderState_Render(struct Eve_RenderState* self) {
 }
 
 bool Eve_RenderState_PollEvent(struct Eve_RenderState* self) {
-    return SDL_PollEvent(&self->event) != 0;
+    if (SDL_PollEvent(&self->event) != 0) {
+        if (self->event.type == SDL_WINDOWEVENT) {
+            // Handle window events, if needed.
+
+            if (self->event.window.event == SDL_WINDOWEVENT_RESIZED) {
+                Eve_RenderState_HandleResize(self);
+            }
+        }
+
+        return true;
+    }
+    return false;
 }
 
 bool Eve_RenderState_IsEventQuit(struct Eve_RenderState* self) {
@@ -1092,7 +1154,7 @@ void Eve_Init(const char* default_font_path, Eve_UInt default_font_size, Eve_Int
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
 
-    window   = SDL_CreateWindow("Eve", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
+    window   = SDL_CreateWindow("Eve", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, w, h, SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOW_RESIZABLE);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
     font = TTF_OpenFont(default_font_path, default_font_size);
