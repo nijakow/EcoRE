@@ -10,6 +10,9 @@
         protected currentOffset,
         protected currentDimension;
 
+        protected xLayout,
+        protected yLayout;
+
         protected cachedBounds,
         protected cachedGlobalBounds;
 
@@ -20,12 +23,14 @@
             protected polymorphic = $package;
             protected Point => ((polymorphic core) math geometry) Point;
 
-            initWithMorph: _morph => (
+            initWithMorph: _morph Behavior: behavior => (
                 morph              <- _morph.
                 parentInfo         <- ((polymorphic core) structure parent) NoParent.
                 childrenInfo       <- ((polymorphic core) structure children) ManyChildren.
                 currentOffset      <- Point X: 0 Y: 0.
                 currentDimension   <- Point X: 0 Y: 0.
+                xLayout            <- behavior defaultHorizontalLayout.
+                yLayout            <- behavior defaultVerticalLayout.
                 cachedBounds       <- No.
                 cachedGlobalBounds <- No.
                 cachedLayoutingConstraints <- No.
@@ -85,6 +90,8 @@
             "
                 Layouting
             "
+            layoutForOrientation: orientation => orientation selectX: xLayout Y: yLayout;
+
             protected baseMinWidth => ((morph behavior) layouter) minWidthForMorph: morph;
             protected baseMinHeight => ((morph behavior) layouter) minHeightForMorph: morph;
 
@@ -133,5 +140,5 @@
         };
     };
 
-    NewForMorph: morph => Instance clone initWithMorph: morph;
+    NewForMorph: morph Behavior: behavior => Instance clone initWithMorph: morph Behavior: behavior;
 }

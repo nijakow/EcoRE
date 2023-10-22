@@ -22,6 +22,9 @@
             layouter:     l => layouter     <- l;
             eventHandler: e => eventHandler <- e;
 
+            defaultHorizontalLayout => (polymorphic core layouting) layouts Default;
+            defaultVerticalLayout   => (polymorphic core layouting) layouts Default;
+
             writeOn: w => w << 'a polymorph behavior';
         };
     };
