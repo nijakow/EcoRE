@@ -1,0 +1,6 @@
+
+{
+    static with inherited _ = std Module;
+
+    own World = (here / 'World.eco') importIn: $package;
+}

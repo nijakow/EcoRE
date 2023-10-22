@@ -1,0 +1,20 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            init => (
+              ^ self
+            );
+
+            writeOn: w => w << 'a polymorphic world';
+        };
+    };
+
+    New => Instance new;
+}
