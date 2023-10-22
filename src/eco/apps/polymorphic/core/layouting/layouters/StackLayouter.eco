@@ -6,8 +6,12 @@
         static with inherited _ = std Singleton;
         with inherited LayouterTrait = $package LayouterTrait;
 
-        layoutMorph: morph Constraints: constraints => (
-
+        layoutChildrenOfMorph: morph Constraints: constraints => (
+            | newShape <- (Point Origin) extent: constraints |
+            
+            (morph structure) childrenDo: [ :child |
+                (child structure) reshape: newShape.
+            ].
         );
 
         writeOn: w => w << 'a stack layouter';

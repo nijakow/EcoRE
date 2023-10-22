@@ -5,21 +5,43 @@
     own LayouterTrait = {
         static with inherited _ = std Trait;
         protected polymorphic = $package;
-        protected Point => ((polymorphic core) math geometry) Point;
+        protected math => (polymorphic core) math;
+        protected Point => (math geometry) Point;
 
-        minWidthForMorph: morph => 0;
-        minHeightForMorph: morph => 0;
+        baseMinWidthForMorph: morph => 0;
+        baseMinHeightForMorph: morph => 0;
 
-        minSizeForOrientation: orientation => orientation selectX: 0 Y: 0;
+        baseMinSizeForMorph: morph Orientation: orientation => orientation selectX: (minWidthForMorph: morph) Y: (minHeightForMorph: morph);
 
-        preferredSizeForOrientation: orientation Constraint: constraint => subclassResponsibility;
-
-        preferredSizeWithConstraints: constraints => (
-            Point X: (preferredSizeForOrientation: (morphic orientation Horizontal) Constraint: (constraints x))
-                  Y: (preferredSizeForOrientation: (morphic orientation Vertical)   Constraint: (constraints y))
+        minSizeForMorph: morph Orientation: orientation => (
+            (morph structure) layoutForOrientation: orientation
+              ~ ifShrinkWrap: [           ^ baseMinSizeForMorph: morph Orientation: orientation ]
+                ifFlexible:   [           ^ baseMinSizeForMorph: morph Orientation: orientation ]
+                ifRigid:      [ :extent | ^ extent                                              ]
         );
 
-        layoutMorph: morph Constraints: constraints => subclassResponsibility;
+        preferredSizeForMorph: morph Orientation: orientation Constraint: constraint => (
+            (morph structure) layoutForOrientation: orientation
+              ~ ifShrinkWrap: [           ^ baseMinSizeForMorph: morph Orientation: orientation ]
+                ifFlexible:   [           ^ constraint                                          ]
+                ifRigid:      [ :extent | ^ extent                                              ]
+        );
+
+        preferredSizeForMorph: morph Orientation: orientation Constraint: constraint => subclassResponsibility;
+
+        preferredSizeForMorph: morph Constraints: constraints => (
+            Point X: (preferredSizeForMorph: morph Orientation: ((math geometry) orientation Horizontal) Constraint: (constraints x))
+                  Y: (preferredSizeForMorph: morph Orientation: ((math geometry) orientation Vertical)   Constraint: (constraints y))
+        );
+
+        layoutChildrenOfMorph: morph Constraints: constraints => subclassResponsibility;
+        layoutMorph: morph Constraints: constraints => (
+            | preferredConstraints <- preferredSizeForMorph: morph Constraints: constraints |
+
+            layoutChildrenOfMorph: morph Constraints: preferredConstraints.
+
+            (morph structure) resizeTo: preferredConstraints.
+        );
 
         writeOn: w => w << 'a layouter';
     };

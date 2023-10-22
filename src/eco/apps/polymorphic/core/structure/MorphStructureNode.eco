@@ -77,6 +77,7 @@
             moveTo: point => moveToX: (point x) Y: (point y);
 
             resizeToW: w H: h => reshapeX: (relativeOffset x) Y: (relativeOffset y) W: w H: h;
+            resizeTo: point => resizeToW: (point x) H: (point y);
 
 
             "
@@ -118,7 +119,7 @@
             layoutInPlace => layoutWithConstaints: dimension;
 
             layoutWithoutConstraints => (
-                layoutWithConstaitns: (Point X: (minWidth) Y: (minHeight))
+                layoutWithConstaints: (Point X: (minWidth) Y: (minHeight))
             );
             layoutWithHintedConstraints: hint => (
                 layoutWithConstraints: (Point X: ((hint x) max: (minWidth))
