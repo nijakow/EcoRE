@@ -5,16 +5,22 @@
     own Instance = {
         static with inherited _ = std Clonable;
 
-        renderer     <- No;
-        layouter     <- No;
-        eventHandler <- No;
+        renderer;
+        layouter;
+        eventHandler;
 
         with inherited trait = {
             static with inherited _ = std Trait;
+            protected polymorphic = $package;
 
-            renderer:     r => renderer     <- Yes: r;
-            layouter:     l => layouter     <- Yes: l;
-            eventHandler: e => eventHandler <- Yes: e;
+            init => (
+                layouter <- (polymorphic core layouting) layouters NewDefault.
+              ^ self
+            );
+
+            renderer:     r => renderer     <- r;
+            layouter:     l => layouter     <- l;
+            eventHandler: e => eventHandler <- e;
 
             writeOn: w => w << 'a polymorph behavior';
         };

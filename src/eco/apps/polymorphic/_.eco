@@ -5,5 +5,11 @@
 
     own core = (here / 'core' / '_.eco') importIn: self;
 
-    SampleMorph => core MorphInstance Behavior: (core MorphBehavior New);
+    SampleMorph => (
+        | morph <- (core MorphInstance) Behavior: (core MorphBehavior New) |
+
+        (morph behavior) layouter: (((core layouting) layouters StackLayouter) New);
+
+      ^ morph
+    );
 }

@@ -4,4 +4,6 @@
 
     own FlexLayouter  = (here / 'FlexLayouter.eco') importIn: $package;
     own StackLayouter = (here / 'StackLayouter.eco') importIn: $package;
+
+    NewDefault => StackLayouter New;
 }
