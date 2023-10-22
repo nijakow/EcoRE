@@ -1,49 +1,7 @@
 
 {
     static with inherited _ = std Module;
-    
-    own LayouterTrait = {
-        static with inherited _ = std Trait;
-        protected polymorphic = $package;
-        protected math => (polymorphic core) math;
-        protected Point => (math geometry) Point;
 
-        baseMinWidthForMorph: morph => 0;
-        baseMinHeightForMorph: morph => 0;
-
-        baseMinSizeForMorph: morph Orientation: orientation => orientation selectX: (minWidthForMorph: morph) Y: (minHeightForMorph: morph);
-
-        minSizeForMorph: morph Orientation: orientation => (
-            (morph structure) layoutForOrientation: orientation
-              ~ ifShrinkWrap: [           ^ baseMinSizeForMorph: morph Orientation: orientation ]
-                ifFlexible:   [           ^ baseMinSizeForMorph: morph Orientation: orientation ]
-                ifRigid:      [ :extent | ^ extent                                              ]
-        );
-
-        preferredSizeForMorph: morph Orientation: orientation Constraint: constraint => (
-            (morph structure) layoutForOrientation: orientation
-              ~ ifShrinkWrap: [           ^ baseMinSizeForMorph: morph Orientation: orientation ]
-                ifFlexible:   [           ^ constraint                                          ]
-                ifRigid:      [ :extent | ^ extent                                              ]
-        );
-
-        preferredSizeForMorph: morph Constraints: constraints => (
-            Point X: (preferredSizeForMorph: morph Orientation: ((math geometry) orientation Horizontal) Constraint: (constraints x))
-                  Y: (preferredSizeForMorph: morph Orientation: ((math geometry) orientation Vertical)   Constraint: (constraints y))
-        );
-
-        layoutChildrenOfMorph: morph Constraints: constraints => subclassResponsibility;
-        layoutMorph: morph Constraints: constraints => (
-            | preferredConstraints <- preferredSizeForMorph: morph Constraints: constraints |
-
-            layoutChildrenOfMorph: morph Constraints: preferredConstraints.
-
-            (morph structure) resizeTo: preferredConstraints.
-        );
-
-        writeOn: w => w << 'a layouter';
-    };
-
-    own layouts   = (here / 'layouts'   / '_.eco') importIn: self;
-    own layouters = (here / 'layouters' / '_.eco') importIn: self;
+    own layouts   = (here / 'layouts'   / '_.eco') importIn: $package;
+    own layouters = (here / 'layouters' / '_.eco') importIn: $package;
 }

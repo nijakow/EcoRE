@@ -1,6 +1,7 @@
 
 {
     static with inherited _ = std Classlike;
+    protected polymorphic = $package polymorphic;
 
     own Instance = {
         static with inherited _ = std Clonable;
@@ -119,11 +120,7 @@
         };
     };
 
-    Horizontal => todo;
-    Vertical   => todo;
-    Orientation: orientation => (
-        orientation
-          ifHorizontal: [ ^ Horizontal ]
-            ifVertical: [ ^ Vertical   ]
-    );
+    Horizontal => Orientation: (((polymorphic core) math geometry) orientation Horizontal);
+    Vertical   => Orientation: (((polymorphic core) math geometry) orientation Vertical);
+    Orientation: orientation => Instance clone initWithOrientation: orientation;
 }
