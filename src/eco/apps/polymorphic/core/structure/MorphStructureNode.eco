@@ -105,8 +105,8 @@
             );
 
             forceLayoutWithConstraints: constraints => (
-                "TODO: Call the layouter"
                 cachedLayoutingConstraints <- Yes: constraints.
+                (morph behavior layouter) layoutMorph: morph Constraints: constraints.
             );
             forceLayoutInPlace => forceLayoutWithConstraints: dimension;
 

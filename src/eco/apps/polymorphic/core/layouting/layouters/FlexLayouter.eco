@@ -1,0 +1,23 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Singleton;
+        with inherited LayouterTrait = $package LayouterTrait;
+
+        layoutMorph: morph Constraints: constraints => (
+
+        );
+
+        writeOn: w => w << 'a flex layouter';
+    };
+
+    Horizontal => todo;
+    Vertical   => todo;
+    Orientation: orientation => (
+        orientation
+          ifHorizontal: [ ^ Horizontal ]
+            ifVertical: [ ^ Vertical   ]
+    );
+}

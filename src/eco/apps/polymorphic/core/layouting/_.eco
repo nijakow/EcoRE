@@ -19,6 +19,10 @@
                   Y: (preferredSizeForOrientation: (morphic orientation Vertical)   Constraint: (constraints y))
         );
 
+        layoutMorph: morph Constraints: constraints => subclassResponsibility;
+
         writeOn: w => w << 'a layouter';
     };
+
+    own layouters = (here / 'layouters' / '_.eco') importIn: self;
 }

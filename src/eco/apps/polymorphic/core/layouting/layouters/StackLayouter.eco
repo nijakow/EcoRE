@@ -1,0 +1,17 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Singleton;
+        with inherited LayouterTrait = $package LayouterTrait;
+
+        layoutMorph: morph Constraints: constraints => (
+
+        );
+
+        writeOn: w => w << 'a stack layouter';
+    };
+
+    New => Instance;
+}
