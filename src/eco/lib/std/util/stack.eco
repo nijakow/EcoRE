@@ -17,6 +17,8 @@
         isEmpty => elements isEmpty;
         size => elements size;
 
+        clear => elements clear;
+
         push: e => ( elements append: e. ^ self );
         pop => elements removeLast;
         top => elements last;

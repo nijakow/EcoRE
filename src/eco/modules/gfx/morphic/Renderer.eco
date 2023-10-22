@@ -28,6 +28,13 @@
 
             initWithEve: _eve => initWithEve: _eve X: 0 Y: 0 W: (_eve CurrentWidth) H: (_eve CurrentHeight) Theme: ((morphic misc color ColorTheme) new);
 
+            resizeToWidth: w Height: h => (
+                width <- w.
+                height <- h.
+                clips clear.
+                clips push: (morphic X: 0 Y: 0 W: width H: height).
+            );
+
             animator => morphic misc animation Animator;
 
             theme: t => theme <- t;

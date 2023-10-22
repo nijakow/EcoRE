@@ -33,6 +33,7 @@
     protected Eve_Render,
     protected Eve_PollEvent,
     protected Eve_IsEventQuit,
+    protected Eve_IsEventResize,
     protected Eve_IsEventKeyDown,
     protected Eve_IsEventKeyUp,
     protected Eve_IsEventMouseMotion,
@@ -115,6 +116,7 @@
         Eve_Render <- (lib function: #'Eve_Render' type: ((ffi types void) function())) yes.
         Eve_PollEvent <- (lib function: #'Eve_PollEvent' type: ((ffi types bool) function())) yes.
         Eve_IsEventQuit <- (lib function: #'Eve_IsEventQuit' type: ((ffi types bool) function())) yes.
+        Eve_IsEventResize <- (lib function: #'Eve_IsEventResize' type: ((ffi types bool) function())) yes.
         Eve_IsEventKeyDown <- (lib function: #'Eve_IsEventKeyDown' type: ((ffi types bool) function())) yes.
         Eve_IsEventKeyUp <- (lib function: #'Eve_IsEventKeyUp' type: ((ffi types bool) function())) yes.
         Eve_IsEventMouseMotion <- (lib function: #'Eve_IsEventMouseMotion' type: ((ffi types bool) function())) yes.
@@ -150,8 +152,7 @@
 
     InitEve => (
         |
-            isOnMac <- [ :exit | (std os type) ifMacOS: [ exit value(true) ]. exit value(false). ] exitValue,
-            r <- Eve_Init value(DefaultFontPath, 14, isOnMac if: 1280 else: 1920, isOnMac if: 800 else: 1080)
+            r <- Eve_Init value(DefaultFontPath, 14, 1280, 800)
         |
         DefaultFont <- ((Font clone) initWithFont: GetDefaultFont ShouldClose: false).
       ^ r
@@ -196,6 +197,7 @@
     PollEvent => Eve_PollEvent value();
 
     IsEventQuit => Eve_IsEventQuit value() != 0;
+    IsEventResize => Eve_IsEventResize value() != 0;
     IsEventKeyDown => Eve_IsEventKeyDown value() != 0;
     IsEventKeyUp => Eve_IsEventKeyUp value() != 0;
     IsEventMouseMotion => Eve_IsEventMouseMotion value() != 0;

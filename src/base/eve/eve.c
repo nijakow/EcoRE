@@ -830,6 +830,10 @@ bool Eve_RenderState_IsEventQuit(struct Eve_RenderState* self) {
     return self->event.type == SDL_QUIT;
 }
 
+bool Eve_RenderState_IsEventResize(struct Eve_RenderState* self) {
+    return (self->event.type == SDL_WINDOWEVENT) && (self->event.window.event == SDL_WINDOWEVENT_RESIZED);
+}
+
 bool Eve_RenderState_IsEventKeyDown(struct Eve_RenderState* self) {
     return self->event.type == SDL_KEYDOWN;
 }
@@ -1010,6 +1014,10 @@ bool Eve_PollEvent() {
 
 bool Eve_IsEventQuit() {
     return Eve_RenderState_IsEventQuit(&EVE_DEFAULT_RENDER_STATE);
+}
+
+bool Eve_IsEventResize() {
+    return Eve_RenderState_IsEventResize(&EVE_DEFAULT_RENDER_STATE);
 }
 
 bool Eve_IsEventKeyDown() {
