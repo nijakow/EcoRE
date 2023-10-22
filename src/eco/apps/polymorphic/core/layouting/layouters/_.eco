@@ -35,9 +35,13 @@
 
         layoutChildrenOfMorph: morph Constraints: constraints => subclassResponsibility;
         layoutMorph: morph Constraints: constraints => (
+            (std io out << 'Before!') newline commit.
             | preferredConstraints <- preferredSizeForMorph: morph Constraints: constraints |
+            (std io out << 'After!') newline commit.
 
             layoutChildrenOfMorph: morph Constraints: preferredConstraints.
+
+            (std io out << 'After 2!') newline commit.
 
             (morph structure) resizeTo: preferredConstraints.
         );

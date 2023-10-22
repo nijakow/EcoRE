@@ -26,7 +26,7 @@
             initWithMorph: _morph Behavior: behavior => (
                 morph              <- _morph.
                 parentInfo         <- ((polymorphic core) structure parent) NoParent.
-                childrenInfo       <- ((polymorphic core) structure children) ManyChildren.
+                childrenInfo       <- ((polymorphic core) structure children) Many.
                 currentOffset      <- Point X: 0 Y: 0.
                 currentDimension   <- Point X: 0 Y: 0.
                 xLayout            <- behavior defaultHorizontalLayout.
@@ -64,6 +64,12 @@
 
             globalOffset => globalBounds origin;
 
+            invalidatePositionCaches => (
+                cachedBounds       <- No.
+                cachedGlobalBounds <- No.
+              ^ self
+            );
+
             invalidateCaches => (
                 cachedBounds       <- No.
                 cachedGlobalBounds <- No.
@@ -76,7 +82,7 @@
             reshapeX: x Y: y W: w H: h => (
                 currentOffset    <- Point X: x Y: y.
                 currentDimension <- Point X: w Y: h.
-                layoutChanged.
+                invalidatePositionCaches.
               ^ self
             );
 
