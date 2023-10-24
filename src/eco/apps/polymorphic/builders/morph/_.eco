@@ -3,4 +3,5 @@
     static with inherited _ = std Module;
 
     own MorphBehaviorBuilder = (here / 'MorphBehaviorBuilder.eco') importIn: $package;
+    own MorphRendererBuilder = (here / 'MorphRendererBuilder.eco') importIn: $package;
 }

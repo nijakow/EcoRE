@@ -1,0 +1,28 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        protected function <- No;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            protected polymorphic = $package;
+
+            init => (
+                function <- function.
+              ^ self
+            );
+
+            function: f => function <- Yes: f;
+
+            build => (((polymorphic core) rendering renderers) DelegateRenderer) Function: (function yes);
+
+            writeOn: w => w << 'a morph renderer builder';
+        };
+    };
+
+    New => Instance new;
+}

@@ -135,6 +135,7 @@
                 currentOffset    <- Point X: x Y: y.
                 currentDimension <- Point X: w Y: h.
                 invalidatePositionCaches.
+                changed.
               ^ self
             );
 
@@ -156,6 +157,11 @@
             protected baseMinSizeForOrientation: orientation => orientation selectX: baseMinWidth Y: baseMinHeight;
 
             minSizeForOrientation: orientation => ((morph behavior) layouter) minSizeForMorph: morph Orientation: orientation;
+
+            changed => (
+                layoutChanged.
+              ^ self
+            );
 
             layoutChanged => (
                 invalidateCaches.

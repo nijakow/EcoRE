@@ -10,7 +10,8 @@
         writeOn: w => w << 'a morph renderer';
     };
 
-    own DefaultRenderer = (here / 'DefaultRenderer.eco') importIn: self;
+    own DefaultRenderer  = (here / 'DefaultRenderer.eco')  importIn: self;
+    own DelegateRenderer = (here / 'DelegateRenderer.eco') importIn: self;
 
     Default => DefaultRenderer New;
 }

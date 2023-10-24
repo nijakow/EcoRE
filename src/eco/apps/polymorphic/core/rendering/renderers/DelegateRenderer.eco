@@ -1,0 +1,26 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+        with inherited LayouterTrait = $package RendererTrait;
+
+        protected function;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithFunction: f => (
+                function <- f.
+              ^ self
+            );
+        
+            renderMorph: morph OnRenderer: renderer => function value(morph, renderer);
+
+            writeOn: w => w << 'a delegate renderer';
+        };
+    };
+
+    Function: function => (Instance clone) initWithFunction: function;
+}

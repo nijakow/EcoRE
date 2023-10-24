@@ -16,6 +16,17 @@
               ^ self
             );
 
+            buildRenderer: aBlock => (
+                behavior renderer: aBlock value(((polymorphic builders morph) MorphRendererBuilder) New).
+              ^ self
+            );
+            renderFunction: aFunction => buildRenderer: [ :builder | builder function: aFunction. builder build ];
+
+            layouter: aLayouter => (
+                behavior layouter: aLayouter.
+              ^ self
+            );
+
             build => behavior;
 
             writeOn: w => w << 'a morph behavior builder';

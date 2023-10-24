@@ -11,8 +11,8 @@
     Test => (
         |
             world  <- (core world) NewWorld,
-            morph1 <- (Create build link instantiate),
-            morph2 <- (Create build link instantiate),
+            morph1 <- (Create ~ layouter: ((core layouting layouters) StackLayouter) ~ build link instantiate),
+            morph2 <- (Create ~ renderFunction: $[ :morph :renderer | ] ~ build link instantiate),
         |
 
         world declareRoot: morph2.
