@@ -6,7 +6,7 @@
         static with inherited _ = std Clonable;
 
         behavior,
-        seed <- No;
+        seed;
 
         with inherited trait = {
             static with inherited _ = std Trait;
@@ -14,19 +14,17 @@
 
             initWithBehavior: _behavior Seed: _seed => (
                 behavior <- _behavior.
-                seed     <- Yes: _seed.
+                seed     <- _seed.
               ^ self
             );
 
-            initWithBehavior: _behavior => (
-                behavior <- _behavior.
-                seed     <- No.
-              ^ self
-            );
+            initWithBehavior: _behavior => initWithBehavior: _behavior Seed: self;
 
             instantiate => ((polymorphic core) MorphInstance) Kernel: self;
 
-            writeOn: w => w << 'a morph kernel(' << seed << ')';
+            wrapSeedForMorph: morph => behavior wrapSeed: seed Morph: morph;
+
+            writeOn: w => w << 'a morph kernel';
         };
     };
 

@@ -8,7 +8,8 @@
 
         structure,
         actions,
-        kernel;
+        kernel,
+        state <- No;
 
         with inherited trait = {
             static with inherited _ = std Trait;
@@ -18,11 +19,11 @@
                 structure <- (polymorphic core structure) MorphStructureNode NewForMorph: self Behavior: (_kernel behavior).
                 actions   <- (polymorphic core) MorphActionNode NewForMorph: self.
                 kernel    <- _kernel.
+                state     <- _kernel wrapSeedForMorph: self;
               ^ self
             );
 
             behavior => kernel behavior;
-            state    => kernel seed;
             seed     => kernel seed;
 
             writeOn: w => w << 'a polymorph';
