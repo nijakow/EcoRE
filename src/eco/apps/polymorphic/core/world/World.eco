@@ -7,18 +7,37 @@
 
         manager;
 
+        protected theRoot <- No;
+
         with inherited trait = {
             static with inherited _ = std Trait;
             protected polymorphic = $package;
 
             initWithManager: _manager => (
                 manager <- _manager.
+                theRoot <- No.
               ^ self
             );
 
-            openRoot: morph => (
-                todo.
+            declareRoot: morph => (
+                "Assert that the root is not already defined."
+                (theRoot) yes: [ :tr |
+                    (std sys error) ThrowMessage: 'Root already defined.'.
+                ].
+                
+                "Add the new root to the world."
+                (morph structure) remove.
+                (morph structure) parentInfo: ((polymorphic core structure parent) WorldParent World: self).
+                (morph structure) onAdd.
+
+                "Set the root."
+                theRoot <- Yes: morph.
+
+                "No specific return value."
+              ^ self
             );
+
+            root => theRoot yes;
 
             writeOn: w => w << 'a polymorphic world';
         };

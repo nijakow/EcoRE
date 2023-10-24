@@ -11,9 +11,9 @@
             morph <- (core MorphInstance) Behavior: (core MorphBehavior New)
         |
 
-        (morph structure) parentInfo: ((core structure parent) WorldParent World: world).
-
         (morph behavior) layouter: (((core layouting) layouters StackLayouter) New).
+
+        world declareRoot: morph.
 
       ^ morph
     );
