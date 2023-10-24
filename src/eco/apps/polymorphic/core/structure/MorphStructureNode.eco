@@ -59,17 +59,25 @@
             ];
 
             add: child => (
+                child remove.
                 childrenInfo addChild: child.
                 (child structure) onAdd.
                 "TODO: Event handling"
               ^ self
             );
 
+            protected isLinked => parentInfo hasParent;  "This method checks if we are linked to a parent morph."
+
             protected unlink => (
-                (self structure) onRemove.
-                parentInfo removeChild: self.
-                parentInfo: ((polymorphic core) structure parent) NoParent.
-                "TODO: Event handling"
+                "
+                    TODO: How are we going to handle unlinking from the world?
+                "
+                (isLinked) if: [
+                    (self structure) onRemove.
+                    parentInfo removeChild: self.
+                    parentInfo: ((polymorphic core) structure parent) NoParent.
+                    "TODO: Event handling"
+                ].
               ^ self
             );
 
@@ -77,8 +85,8 @@
 
             replaceWith: replacement => parentInfo replaceChild: self With: replacement;
 
-            onAdd    => self;  "TODO: Invalidate caches, notify world, event handling"
-            onRemove => self;  "TODO: Invalidate caches, notify world, event handling"
+            onAdd    => ( invalidateCaches. world yes: [ :w | (w manager) notifyAdd:    self ]. "TODO: Handle event" );  "TODO: Invalidate caches, notify world, event handling"
+            onRemove => ( invalidateCaches. world yes: [ :w | (w manager) notifyRemove: self ]. "TODO: Handle event" );  "TODO: Invalidate caches, notify world, event handling"
 
 
             "

@@ -9,10 +9,15 @@
 
         with inherited trait = {
             static with inherited _ = std Trait;
+            protected polymorphic = $package;
 
             initWithManager: _manager => (
                 manager <- _manager.
               ^ self
+            );
+
+            openRoot: morph => (
+                todo.
             );
 
             writeOn: w => w << 'a polymorphic world';

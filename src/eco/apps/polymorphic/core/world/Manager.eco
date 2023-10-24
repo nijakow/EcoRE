@@ -15,6 +15,9 @@
               ^ self
             );
 
+            notifyAdd:    morph => self;
+            notifyRemove: morph => self;
+
             needsLayout: morph => (
                 ((layoutQueue contains: morph) not) if: [
                     layoutQueue enqueue: morph.
