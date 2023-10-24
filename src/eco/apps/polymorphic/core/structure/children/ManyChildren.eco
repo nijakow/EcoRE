@@ -16,7 +16,14 @@
         do:        aBlock => children do:        aBlock;
         reverseDo: aBlock => children reverseDo: aBlock;
 
-        remove: aChild => children remove: child;
+        addChild:    child => children add:    child;
+        removeChild: child => children remove: child;
+
+        replaceChild: child With: replacement => (
+            children find: child
+              ~ yes: [ :i | children at: i put: replacement. ^ true  ]
+                 no: [                                       ^ false ]
+        );
 
         writeOn: w => w << 'a regular children list';
     };

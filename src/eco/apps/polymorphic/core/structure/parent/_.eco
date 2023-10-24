@@ -12,7 +12,8 @@
 
         world => subclassResponsibility;
 
-        removeChild: aChild => self;
+        replaceChild: aChild With: anotherChild => self;
+        removeChild:  aChild                    => self;
 
         writeOn: w => w << 'a parent info object';
     };

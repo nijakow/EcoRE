@@ -8,7 +8,11 @@
         do:        aBlock => self;
         reverseDo: aBlock => self;
 
-        unlinkChild: aChild => self;
+
+        addChild:    child => subclassResponsibility;
+        removeChild: child => subclassResponsibility;
+
+        replaceChild: child With: replacement => subclassResponsibility;
 
         writeOn: w => w << 'a children info object';
     };

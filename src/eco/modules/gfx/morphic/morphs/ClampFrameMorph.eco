@@ -89,7 +89,7 @@
         );
 
         handleKey: key At: point HandMorph: hand => (
-            key ifEscape: [ unlink. ^ true ].
+            key ifEscape: [ remove. ^ true ].
           ^ false
         );
 

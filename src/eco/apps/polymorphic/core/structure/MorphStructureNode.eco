@@ -43,6 +43,13 @@
             "
             world => parentInfo world;
 
+            parentInfo: newParent => parentInfo <- newParent;
+
+            parent => (
+                parentInfo ifParent: [ :p | Yes: p ].
+              ^ No
+            );
+
             childrenDo:        aBlock => childrenInfo do:        aBlock;
             childrenReverseDo: aBlock => childrenInfo reverseDo: aBlock;
 
@@ -51,10 +58,27 @@
                 child allChildrenDo: aBlock
             ];
 
-            reparent: newParent => parentInfo <- newParent;
+            add: child => (
+                childrenInfo addChild: child.
+                (child structure) onAdd.
+                "TODO: Event handling"
+              ^ self
+            );
 
-            unlink => parentInfo unlinkChild: self;
-            remove: child => childrenInfo remove: child;  "TODO: Event handling"
+            protected unlink => (
+                (self structure) onRemove.
+                parentInfo removeChild: self.
+                parentInfo: ((polymorphic core) structure parent) NoParent.
+                "TODO: Event handling"
+              ^ self
+            );
+
+            remove => unlink;
+
+            replaceWith: replacement => parentInfo replaceChild: self With: replacement;
+
+            onAdd    => self;  "TODO: Invalidate caches, notify world, event handling"
+            onRemove => self;  "TODO: Invalidate caches, notify world, event handling"
 
 
             "
