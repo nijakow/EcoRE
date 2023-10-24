@@ -76,8 +76,7 @@
             );
 
             invalidateCaches => (
-                cachedBounds       <- No.
-                cachedGlobalBounds <- No.
+                invalidatePositionCaches.
                 cachedLayoutingConstraints <- No.
                 childrenDo: [ :child | (child structure) invalidateCaches ].
               ^ self
@@ -112,7 +111,8 @@
 
             layoutChanged => (
                 invalidateCaches.
-                "TODO"
+                world yes: [ :w | (w manager) needsLayout: self ].
+              ^ self
             );
             isLayoutDirty => cachedLayoutingConstraints isNo;
 

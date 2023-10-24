@@ -21,6 +21,8 @@
         dequeue => elements removeFirst;
         front => elements first;
 
+        contains: element => elements contains: element;
+
         writeOn: w => w << 'a queue';
     };
 }

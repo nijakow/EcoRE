@@ -15,7 +15,11 @@
               ^ self
             );
 
-            needsLayout: morph => layoutQueue enqueue: morph;
+            needsLayout: morph => (
+                ((layoutQueue contains: morph) not) if: [
+                    layoutQueue enqueue: morph.
+                ].
+            );
 
             updateLayout => (
                 [ (layoutQueue isEmpty) not ] while: [

@@ -12,7 +12,7 @@
             static with inherited _ = std Trait;
 
             initWithWorld: _world => (
-                world <- _world.
+                world <- Yes: _world.
               ^ self
             );
 
