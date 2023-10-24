@@ -1,0 +1,15 @@
+
+{
+    xxx => (
+        stream text << 'Hello, world: '.
+        stream morph << (
+            | m <- theActualMorph |
+
+            "Dummy code"
+            MakeMorph
+              ~ middleClickAction: $[ :(m) :us :hand | hand grab: m. document findAndDelete: m. forceUiRebuild. ]
+              ~ add: Center(m)
+              ~ build
+        );
+    );
+}

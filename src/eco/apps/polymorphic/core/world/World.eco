@@ -39,6 +39,30 @@
 
             root => theRoot yes;
 
+            allMorphsDo: aBlock => theRoot yes: [ :root |
+                (root structure) allChildrenDo: aBlock
+            ];
+
+            allMorphsReverseDo: aBlock => theRoot yes: [ :root |
+                (root structure) allChildrenReverseDo: aBlock
+            ];
+
+            renderOn: renderer => (
+                theRoot yes: [ :root |
+                    (root structure) allDoBefore: [ :morph |
+                        renderer pushOffset: ((morph structure) globalOffset).
+                        ((morph behavior) renderer) renderMorph: morph OnRenderer: renderer.
+                    ] After: [ :morph |
+                        renderer popOffset.
+                    ]
+                ]
+            );
+
+            tick => (
+                manager tick.
+              ^ self
+            );
+
             newSession  => ((polymorphic core world) Session) World: self;
             newViewport => ((polymorphic core world) Viewport) World: self;
             newTerminal => ((polymorphic core world) Terminal) World: self;

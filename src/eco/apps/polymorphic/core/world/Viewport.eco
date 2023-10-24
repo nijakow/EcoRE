@@ -19,6 +19,11 @@
 
             renderer: r => renderer <- Yes: r;
 
+            renderOn: renderer => world renderOn: renderer;
+            render => renderOn: (renderer yes);
+
+            tick => world tick;
+
             writeOn: w => w << 'a polymorphic viewport';
         };
     };

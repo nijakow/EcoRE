@@ -38,6 +38,7 @@
               ^ self
             );
 
+
             "
                 World and Tree
             "
@@ -57,6 +58,17 @@
                 aBlock value(child).
                 child allChildrenDo: aBlock
             ];
+
+            allChildrenReverseDo: aBlock => childrenReverseDo: [ :child |
+                child allChildrenReverseDo: aBlock.
+                aBlock value(child)
+            ];
+
+            allDoBefore: beforeBlock After: afterBlock => (
+                beforeBlock value(self morph).
+                childrenDo: [ :child | (child structure) allDoBefore: beforeBlock After: afterBlock ].
+                afterBlock value(self morph)
+            );
 
             add: child => (
                 (child structure) remove.
@@ -106,7 +118,7 @@
             extentForOrientation: orientation => dimension dimensionForOrientation: orientation;
 
             bounds => (
-                cachedBounds no: [ cachedBounds <- Yes: (((polymorphic core) math geometry) rectangle Origin: relativeOffset W: width H: height) ].
+                cachedBounds no: [ cachedBounds <- Yes: (((polymorphic core) math geometry) Rectangle Origin: relativeOffset W: width H: height) ].
               ^ cachedBounds yes
             );
 

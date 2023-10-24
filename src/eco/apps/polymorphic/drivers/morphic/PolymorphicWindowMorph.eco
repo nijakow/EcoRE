@@ -23,9 +23,37 @@
                 relativeMousePos <- mousePos - globalOffset
             |
 
-            (polymorphicTerminal viewport) renderer: renderer.
+            (polymorphicTerminal controller)
+                mouseMovedToX: (relativeMousePos x)
+                            Y: (relativeMousePos y).
 
-            "TODO: Tick the world through the controller and render the world through the terminal's viewport"
+            (polymorphicTerminal viewport) tick.
+            (polymorphicTerminal viewport) renderOn: renderer.
+        );
+
+        handleClick: click At: point HandMorph: hand => (
+            (polymorphicTerminal controller)
+                mouseMovedToX: (point x)
+                            Y: (point y).
+            "TODO"
+          ^ true
+        );
+
+        handleKey: key At: point HandMorph: hand => (
+            (polymorphicTerminal controller)
+                mouseMovedToX: (point x)
+                            Y: (point y).
+            (polymorphicTerminal controller) keyPressed: key.
+            (polymorphicTerminal controller) keyReleased: key.
+          ^ true
+        );
+
+        handleScrollX: sx Y: sy HandMorph: hand => (
+            (polymorphicTerminal controller)
+                mouseMovedToX: (point x)
+                            Y: (point y).
+            (polymorphicTerminal controller) mouseScrolledByX: sx Y: sy.
+          ^ true
         );
 
         writeOn: w => w << 'a polymorphic window morph';
