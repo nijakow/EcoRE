@@ -85,8 +85,8 @@
 
             replaceWith: replacement => parentInfo replaceChild: self With: replacement;
 
-            onAdd    => ( invalidateCaches. world yes: [ :w | (w manager) notifyAdd:    self ]. "TODO: Handle event" );  "TODO: Invalidate caches, notify world, event handling"
-            onRemove => ( invalidateCaches. world yes: [ :w | (w manager) notifyRemove: self ]. "TODO: Handle event" );  "TODO: Invalidate caches, notify world, event handling"
+            onAdd    => ( invalidateCaches. world yes: [ :w | (w manager) notifyAdd:    (self morph) ]. "TODO: Handle event" );  "TODO: Invalidate caches, notify world, event handling"
+            onRemove => ( invalidateCaches. world yes: [ :w | (w manager) notifyRemove: (self morph) ]. "TODO: Handle event" );  "TODO: Invalidate caches, notify world, event handling"
 
 
             "

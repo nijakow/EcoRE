@@ -21,7 +21,7 @@
             needsLayout: morph => (
                 ((layoutQueue contains: morph) not) if: [
                     layoutQueue enqueue: morph.
-                ].
+                ]
             );
 
             updateLayout => (
