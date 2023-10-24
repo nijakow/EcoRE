@@ -6,13 +6,13 @@
     own core     = (here / 'core' / '_.eco') importIn: self;
     own builders = (here / 'builders' / '_.eco') importIn: self;
 
-    CreateNewMorphType => (builders morph MorphBehaviorBuilder) New;
+    Create => (builders morph MorphBehaviorBuilder) New;
 
     SampleMorph => (
         |
             world  <- (core world) NewWorld,
-            morph1 <- (CreateNewMorphType build link instantiate),
-            morph2 <- (CreateNewMorphType build link instantiate),
+            morph1 <- (Create build link instantiate),
+            morph2 <- (Create build link instantiate),
         |
 
         world declareRoot: morph2.
