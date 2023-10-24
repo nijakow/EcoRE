@@ -22,6 +22,8 @@
             renderOn: renderer => world renderOn: renderer;
             render => renderOn: (renderer yes);
 
+            resizeW: w H: h => world resizeW: w H: h;
+
             tick => world tick;
 
             writeOn: w => w << 'a polymorphic viewport';

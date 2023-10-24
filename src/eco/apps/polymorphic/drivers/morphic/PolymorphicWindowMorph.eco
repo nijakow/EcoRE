@@ -5,12 +5,15 @@
 
     polymorphicTerminal;
 
+    protected cachedDimensions;
+
     with inherited trait = {
         static with inherited _ = std Trait;
 
         initWithWorld: _world => (
             $(Morph) initWithNoChildren.
             polymorphicTerminal <- _world newTerminal.
+            cachedDimensions    <- ((morphic app math geometry) Point) X: 0 Y: 0.
           ^ self
         );
 
@@ -22,6 +25,11 @@
                 mousePos         <- (world yes) handMorph globalOffset,
                 relativeMousePos <- mousePos - globalOffset
             |
+
+            (([width == cachedDimensions x] and: [height == cachedDimensions y]) not) if: [
+                cachedDimensions <- ((morphic app math geometry) Point) X: width Y: height.
+                (polymorphicTerminal viewport) resizeW: width H: height.
+            ].
 
             (polymorphicTerminal controller)
                 mouseMovedToX: (relativeMousePos x)

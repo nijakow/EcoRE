@@ -177,7 +177,7 @@
 
             layoutChanged => (
                 invalidateCaches.
-                world yes: [ :w | (w manager) needsLayout: self ].
+                world yes: [ :w | (w manager) needsLayout: (self morph) ].
               ^ self
             );
             isLayoutDirty => cachedLayoutingConstraints isNo;

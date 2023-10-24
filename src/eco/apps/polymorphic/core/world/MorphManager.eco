@@ -26,7 +26,7 @@
 
             updateLayout => (
                 [ (layoutQueue isEmpty) not ] while: [
-                    (layoutQueue dequeue) layoutInPlace.
+                    ((layoutQueue dequeue) structure) layoutInPlace.
                 ]
             );
 

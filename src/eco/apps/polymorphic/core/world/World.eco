@@ -63,6 +63,13 @@
               ^ self
             );
 
+            resizeW: w H: h => (
+                theRoot yes: [ :root |
+                    (root structure) resizeToW: w H: h.
+                ].
+              ^ self
+            );
+
             newSession  => ((polymorphic core world) Session) World: self;
             newViewport => ((polymorphic core world) Viewport) World: self;
             newTerminal => ((polymorphic core world) Terminal) World: self;
