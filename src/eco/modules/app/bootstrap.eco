@@ -10,7 +10,17 @@
 
     openInWorld: world => (
         framework context world: world.
-      ^ world open: build
+
+        |
+            menuMorph <- build
+        |
+
+        world open: menuMorph.
+
+        menuMorph moveToX: ((world width  / 2) - (menuMorph width  / 2))
+                        Y: ((world height / 2) - (menuMorph height / 2)).
+
+      ^ menuMorph
     );
 
     framework: fr => (
