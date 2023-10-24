@@ -8,6 +8,8 @@
         do:        aBlock => self;
         reverseDo: aBlock => self;
 
+        unlinkChild: aChild => self;
+
         writeOn: w => w << 'a children info object';
     };
 

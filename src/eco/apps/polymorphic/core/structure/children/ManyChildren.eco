@@ -16,6 +16,8 @@
         do:        aBlock => children do:        aBlock;
         reverseDo: aBlock => children reverseDo: aBlock;
 
+        remove: aChild => children remove: child;
+
         writeOn: w => w << 'a regular children list';
     };
 }

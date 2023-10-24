@@ -38,9 +38,10 @@
               ^ self
             );
 
+            "
+                World and Tree
+            "
             world => parentInfo world;
-
-            reparent: newParent => parentInfo <- newParent;
 
             childrenDo:        aBlock => childrenInfo do:        aBlock;
             childrenReverseDo: aBlock => childrenInfo reverseDo: aBlock;
@@ -50,6 +51,15 @@
                 child allChildrenDo: aBlock
             ];
 
+            reparent: newParent => parentInfo <- newParent;
+
+            unlink => parentInfo unlinkChild: self;
+            remove: child => childrenInfo remove: child;  "TODO: Event handling"
+
+
+            "
+                Position and Size
+            "
             relativeOffset => currentOffset;
             dimension      => currentDimension;
             width          => dimension x;

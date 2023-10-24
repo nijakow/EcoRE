@@ -23,6 +23,8 @@
 
             world => (morph structure) world;
 
+            removeChild: aChild => (morph structure) remove: aChild;
+
             writeOn: w => w << 'a regular polymorph parent(' << morph << ')';
         };
     };
