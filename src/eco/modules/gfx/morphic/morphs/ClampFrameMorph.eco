@@ -88,6 +88,11 @@
           ^ true
         );
 
+        handleKey: key At: point HandMorph: hand => (
+            key ifEscape: [ unlink. ^ true ].
+          ^ false
+        );
+
         handleScrollX: sx Y: sy At: point HandMorph: hand => (
             (isResizable) if: [
                 (xLayout isRigid) if: [

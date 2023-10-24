@@ -8,6 +8,7 @@
             static with inherited _ = std Trait;
 
             ifEscape:    block => self;
+            ifQuit:      block => self;
             ifBackspace: block => self;
             ifEnter:     block => self;
             ifTab:       block => self;
@@ -132,6 +133,7 @@
 
         special_enter     = { static with inherited _ = std Enum; with inherited trait = $ trait; ifEnter:     block => ( block value. ^ self ); };
         special_escape    = { static with inherited _ = std Enum; with inherited trait = $ trait; ifEscape:    block => ( block value. ^ self ); };
+        special_quit      = { static with inherited _ = std Enum; with inherited trait = $ trait; ifQuit:      block => ( block value. ^ self ); };
         special_backspace = { static with inherited _ = std Enum; with inherited trait = $ trait; ifBackspace: block => ( block value. ^ self ); };
         special_tab       = { static with inherited _ = std Enum; with inherited trait = $ trait; ifTab:       block => ( block value. ^ self ); keyText => Yes: '\t'; };
         special_space     = { static with inherited _ = std Enum; with inherited trait = $ trait; keyText => Yes: ' '; };
@@ -487,7 +489,7 @@
         |
 
         Switch: sdlscan
-          ~ case: sdlscans SDL_SCANCODE_ESCAPE    do: [ ^ keycodes special_escape    ]
+          ~ case: sdlscans SDL_SCANCODE_ESCAPE    do: [ ^ isShift if: [ keycodes special_quit ] else: [ keycodes special_escape ] ]
           ~ case: sdlscans SDL_SCANCODE_BACKSPACE do: [ ^ keycodes special_backspace ]
           ~ case: sdlscans SDL_SCANCODE_TAB       do: [ ^ keycodes special_tab       ]
           ~ case: sdlscans SDL_SCANCODE_RETURN    do: [ ^ keycodes special_enter     ]

@@ -116,7 +116,7 @@
 
                             begin
                             ~ if: [ eve IsEventResize ] then: [ handleResize ]
-                            ~ if: [ eve IsEventKeyDown ] then: [ | k <- eve GetEventKey | k ifEscape: [ ^ self ]. handleKey: k ]
+                            ~ if: [ eve IsEventKeyDown ] then: [ | k <- eve GetEventKey | k ifQuit: [ ^ self ]. handleKey: k ]
                             ~ default: [ handleEvent ].
                         ] repeatWithBreak.
                     ] catch: [ :e |
