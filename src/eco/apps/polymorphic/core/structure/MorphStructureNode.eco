@@ -150,12 +150,12 @@
             "
             layoutForOrientation: orientation => orientation selectX: xLayout Y: yLayout;
 
+            "TODO: Are these methods really needed?"
             protected baseMinWidth => ((morph behavior) layouter) minWidthForMorph: morph;
             protected baseMinHeight => ((morph behavior) layouter) minHeightForMorph: morph;
+            protected baseMinSizeForOrientation: orientation => orientation selectX: baseMinWidth Y: baseMinHeight;
 
-            protected baseMinSizeForOrientation: orientation => (
-                orientation selectX: baseMinWidth Y: baseMinHeight
-            );
+            minSizeForOrientation: orientation => ((morph behavior) layouter) minSizeForMorph: morph Orientation: orientation;
 
             layoutChanged => (
                 invalidateCaches.

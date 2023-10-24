@@ -9,23 +9,20 @@
         protected math => (polymorphic core) math;
         protected Point => (math geometry) Point;
 
-        baseMinWidthForMorph: morph => 0;
-        baseMinHeightForMorph: morph => 0;
-
-        baseMinSizeForMorph: morph Orientation: orientation => orientation selectX: (minWidthForMorph: morph) Y: (minHeightForMorph: morph);
+        calculateMinSizeForMorph: morph Orientation: orientation => orientation selectX: 0 Y: 0;
 
         minSizeForMorph: morph Orientation: orientation => (
             (morph structure) layoutForOrientation: orientation
-              ~ ifShrinkWrap: [           ^ baseMinSizeForMorph: morph Orientation: orientation ]
-                ifFlexible:   [           ^ baseMinSizeForMorph: morph Orientation: orientation ]
-                ifRigid:      [ :extent | ^ extent                                              ]
+              ~ ifShrinkWrap: [           ^ calculateMinSizeForMorph: morph Orientation: orientation ]
+                ifFlexible:   [           ^ calculateMinSizeForMorph: morph Orientation: orientation ]
+                ifRigid:      [ :extent | ^ extent                                                   ]
         );
 
         preferredSizeForMorph: morph Orientation: orientation Constraint: constraint => (
             (morph structure) layoutForOrientation: orientation
-              ~ ifShrinkWrap: [           ^ baseMinSizeForMorph: morph Orientation: orientation ]
-                ifFlexible:   [           ^ constraint                                          ]
-                ifRigid:      [ :extent | ^ extent                                              ]
+              ~ ifShrinkWrap: [           ^ calculateMinSizeForMorph: morph Orientation: orientation ]
+                ifFlexible:   [           ^ constraint                                               ]
+                ifRigid:      [ :extent | ^ extent                                                   ]
         );
 
         preferredSizeForMorph: morph Constraints: constraints => (
