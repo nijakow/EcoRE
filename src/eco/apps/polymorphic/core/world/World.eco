@@ -50,7 +50,7 @@
             renderOn: renderer => (
                 theRoot yes: [ :root |
                     (root structure) allDoBefore: [ :morph |
-                        renderer pushOffset: ((morph structure) globalOffset).
+                        renderer pushRelativeOffset: ((morph structure) offset).
                         ((morph behavior) renderer) renderMorph: morph OnRenderer: renderer.
                     ] After: [ :morph |
                         renderer popOffset.

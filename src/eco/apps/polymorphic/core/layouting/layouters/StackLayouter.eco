@@ -19,11 +19,7 @@
         );
 
         layoutChildrenOfMorph: morph Constraints: constraints => (
-            (std io out << 'Here we go') newline commit.
-
             | newShape <- (Point Origin) extent: constraints |
-            
-            (std io out << 'layouting ' << morph << ' to ' << newShape) newline commit.
 
             (morph structure) childrenDo: [ :child |
                 (child structure) reshape: newShape.

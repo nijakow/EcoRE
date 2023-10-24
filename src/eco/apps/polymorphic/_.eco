@@ -13,7 +13,7 @@
         |
             world  <- (core world) NewWorld,
             morph1 <- (Create ~ layouter: ((core layouting layouters) StackLayouter New) ~ build link instantiate),
-            morph2 <- (Create ~ renderFunction: $[ :morph :renderer | ] ~ build link instantiate),
+            morph2 <- (Create ~ renderFunction: $[ :morph :renderer | renderer setR: 255 G: 0 B: 0. renderer fillRectX: 0 Y: 0 W: (morph structure width) H: (morph structure height). ] ~ build link instantiate),
         |
 
         world declareRoot: morph2.

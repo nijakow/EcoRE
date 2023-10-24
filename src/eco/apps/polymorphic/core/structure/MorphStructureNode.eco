@@ -110,6 +110,7 @@
             "
                 Position and Size
             "
+            offset         => currentOffset;
             relativeOffset => currentOffset;
             dimension      => currentDimension;
             width          => dimension x;

@@ -41,6 +41,7 @@
 
             offset => offsets top;
             pushOffset: point => offsets push: point;
+            pushRelativeOffset: point => offsets push: (self offset + point);
             popOffset => offsets pop;
             withPushedOffset: offset Do: block => (
                 pushOffset: offset.
