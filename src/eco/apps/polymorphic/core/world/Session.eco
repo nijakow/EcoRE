@@ -1,0 +1,26 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        world;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            protected polymorphic = $package;
+
+            initWithWorld: _world => (
+                world <- _world.
+              ^ self
+            );
+
+            newDesktopController => ((polymorphic core world) Controller) Session: self;
+
+            writeOn: w => w << 'a polymorphic session';
+        };
+    };
+
+    World: world => (Instance clone) initWithWorld: world;
+}

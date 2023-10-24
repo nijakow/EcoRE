@@ -8,7 +8,7 @@
 
     Create => (builders morph MorphBehaviorBuilder) New;
 
-    SampleMorph => (
+    Test => (
         |
             world  <- (core world) NewWorld,
             morph1 <- (Create build link instantiate),
@@ -19,6 +19,6 @@
 
         (morph2 structure) add: morph1.
 
-      ^ morph2
+      ^ world
     );
 }

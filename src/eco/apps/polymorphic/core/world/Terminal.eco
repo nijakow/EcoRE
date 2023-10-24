@@ -1,0 +1,25 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        controller,
+        viewport;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithWorld: _world => (
+                controller <- _world newSession newDesktopController.
+                viewport   <- _world newViewport.
+              ^ self
+            );
+
+            writeOn: w => w << 'a polymorphic terminal';
+        };
+    };
+
+    World: world => (Instance clone) initWithWorld: world;
+}

@@ -5,19 +5,25 @@
     own Instance = {
         static with inherited _ = std Clonable;
 
-        protected world;
+        protected session;
 
         with inherited trait = {
             static with inherited _ = std Trait;
 
-            initWithWorld: _world => (
-                world <- _world.
+            initWithSession: _session => (
+                session  <- _session.
               ^ self
             );
 
-            writeOn: w => w << 'a polymorphic world controller';
+            keyPressed:  key => self;
+            keyReleased: key => self;
+
+            mouseMovedToX:    x Y: y => self;
+            mouseScrolledByX: x Y: y => self;
+
+            writeOn: w => w << 'a polymorphic session controller';
         };
     };
 
-    World: world => (Instance clone) initWithWorld: world;
+    Session: session => (Instance clone) initWithSession: session;
 }

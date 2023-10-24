@@ -1,0 +1,27 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        protected world,
+        protected renderer;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithWorld: _world => (
+                world    <- _world.
+                renderer <- No.
+              ^ self
+            );
+
+            renderer: r => renderer <- Yes: r;
+
+            writeOn: w => w << 'a polymorphic viewport';
+        };
+    };
+
+    World: world => (Instance clone) initWithWorld: world;
+}

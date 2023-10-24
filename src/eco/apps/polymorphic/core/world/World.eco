@@ -5,8 +5,7 @@
     own Instance = {
         static with inherited _ = std Clonable;
 
-        manager,
-        controller;
+        manager;
 
         protected theRoot <- No;
 
@@ -16,7 +15,6 @@
 
             initWithManager: _manager => (
                 manager    <- _manager.
-                controller <- ((polymorphic core world) Controller) World: self.
                 theRoot <- No.
               ^ self
             );
@@ -40,6 +38,10 @@
             );
 
             root => theRoot yes;
+
+            newSession  => ((polymorphic core world) Session) World: self;
+            newViewport => ((polymorphic core world) Viewport) World: self;
+            newTerminal => ((polymorphic core world) Terminal) World: self;
 
             writeOn: w => w << 'a polymorphic world';
         };
