@@ -3,14 +3,14 @@
     static with inherited _ = std Clonable;
     with inherited own Morph = $package app gfx morphic morphs Morph;
 
-    polymorphicWorld;
+    polymorphicTerminal;
 
     with inherited trait = {
         static with inherited _ = std Trait;
 
         initWithWorld: _world => (
             $(Morph) initWithNoChildren.
-            polymorphicWorld <- _world.
+            polymorphicTerminal <- _world newTerminal.
           ^ self
         );
 
@@ -19,11 +19,13 @@
 
         renderImplOn: renderer => (
             |
-                mousePos         <- world yes handMorph globalOffset,
+                mousePos         <- (world yes) handMorph globalOffset,
                 relativeMousePos <- mousePos - globalOffset
             |
 
-            
+            (polymorphicTerminal viewport) renderer: renderer.
+
+            "TODO: Tick the world through the controller and render the world through the terminal's viewport"
         );
 
         writeOn: w => w << 'a polymorphic window morph';
