@@ -1,0 +1,6 @@
+
+{
+    static with inherited _ = std Module;
+
+    own morphic = (here / 'morphic' / '_.eco') importIn: $package;
+}

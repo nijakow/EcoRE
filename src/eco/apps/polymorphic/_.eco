@@ -3,12 +3,13 @@
     static with inherited _ = std Module;
     with app = $;
 
-    own core     = (here / 'core' / '_.eco') importIn: self;
+    own core     = (here / 'core' / '_.eco')     importIn: self;
     own builders = (here / 'builders' / '_.eco') importIn: self;
+    own drivers  = (here / 'drivers' / '_.eco')  importIn: self;
 
     Create => (builders morph MorphBehaviorBuilder) New;
 
-    Test => (
+    MakeTestWorld => (
         |
             world  <- (core world) NewWorld,
             morph1 <- (Create ~ layouter: ((core layouting layouters) StackLayouter) ~ build link instantiate),
@@ -20,5 +21,13 @@
         (morph2 structure) add: morph1.
 
       ^ world
+    );
+
+    Main => (
+        (framework actions open) ui BuildAndOpen: [ :ui |
+            ui Window(400, 400,
+                (drivers morphic PolymorphicWindowMorph) clone initWithWorld: MakeTestWorld
+            )
+        ]
     );
 }

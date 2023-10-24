@@ -1,0 +1,31 @@
+
+{
+    static with inherited _ = std Clonable;
+    with inherited own Morph = $package app gfx morphic morphs Morph;
+
+    polymorphicWorld;
+
+    with inherited trait = {
+        static with inherited _ = std Trait;
+
+        initWithWorld: _world => (
+            $(Morph) initWithNoChildren.
+            polymorphicWorld <- _world.
+          ^ self
+        );
+
+        "baseMinWidth => presenter minWidth;
+        baseMinHeight => presenter minHeight;"
+
+        renderImplOn: renderer => (
+            |
+                mousePos         <- world yes handMorph globalOffset,
+                relativeMousePos <- mousePos - globalOffset
+            |
+
+            
+        );
+
+        writeOn: w => w << 'a polymorphic window morph';
+    };
+}
