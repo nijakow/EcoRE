@@ -1,0 +1,26 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        protected behavior;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            protected polymorphic = $package;
+
+            init => (
+                behavior <- (polymorphic core) MorphBehavior New.
+              ^ self
+            );
+
+            build => behavior;
+
+            writeOn: w => w << 'a morph behavior builder';
+        };
+    };
+
+    New => Instance new;
+}

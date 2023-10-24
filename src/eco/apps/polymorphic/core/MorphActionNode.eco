@@ -9,7 +9,7 @@
     own Instance = {
         static with inherited _ = std Clonable;
 
-        morph;
+        protected morph;
 
         with inherited trait = {
             static with inherited _ = std Trait;

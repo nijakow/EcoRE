@@ -10,6 +10,13 @@
 
         with inherited trait = {
             static with inherited _ = std Trait;
+            protected polymorphic = $package;
+
+            initWithBehavior: _behavior State: _state => (
+                behavior <- _behavior.
+                state    <- Yes: _state.
+              ^ self
+            );
 
             initWithBehavior: _behavior => (
                 behavior <- _behavior.
@@ -17,12 +24,12 @@
               ^ self
             );
 
-            state: s => state <- Yes: s;
+            instantiate => ((polymorphic core) MorphInstance) Kernel: self;
 
             writeOn: w => w << 'a morph kernel(' << state << ')';
         };
     };
 
-    Behavior: behavior => (Instance clone) initWithBehavior: behavior;
-    Behavior: behavior State: state => (Behavior: behavior) state: state;
+    Behavior: behavior State: state => (Instance clone) initWithBehavior: behavior State: state;
+    Behavior: behavior              => (Instance clone) initWithBehavior: behavior;
 }

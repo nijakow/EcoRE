@@ -28,6 +28,8 @@
         };
     };
 
-    Behavior: behavior => (Instance clone) initWithKernel: ((polymorphic core) MorphKernel Behavior: behavior);
-    Behavior: behavior State: state => (Instance clone) initWithKernel: ((polymorphic core) MorphKernel Behavior: behavior State: state);
+    Kernel:   kernel                => (Instance clone) initWithKernel: kernel;
+    
+    Behavior: behavior              => Kernel: ((polymorphic core) MorphKernel Behavior: behavior);
+    Behavior: behavior State: state => Kernel: ((polymorphic core) MorphKernel Behavior: behavior State: state);
 }

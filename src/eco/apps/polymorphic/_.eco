@@ -3,18 +3,22 @@
     static with inherited _ = std Module;
     with app = $;
 
-    own core = (here / 'core' / '_.eco') importIn: self;
+    own core     = (here / 'core' / '_.eco') importIn: self;
+    own builders = (here / 'builders' / '_.eco') importIn: self;
+
+    CreateNewMorphType => (builders morph MorphBehaviorBuilder) New;
 
     SampleMorph => (
         |
-            world <- (core world) NewWorld,
-            morph <- (core MorphInstance) Behavior: (core MorphBehavior New)
+            world  <- (core world) NewWorld,
+            morph1 <- (CreateNewMorphType build link instantiate),
+            morph2 <- (CreateNewMorphType build link instantiate),
         |
 
-        (morph behavior) layouter: (((core layouting) layouters StackLayouter) New).
+        world declareRoot: morph2.
 
-        world declareRoot: morph.
+        (morph2 structure) add: morph1.
 
-      ^ morph
+      ^ morph2
     );
 }
