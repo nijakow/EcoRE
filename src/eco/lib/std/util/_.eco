@@ -109,6 +109,7 @@
     traits = #<:std/util/traits>;
 
     text = #<:std/util/text>;
+    graphics = #<:std/util/graphics>;
 
     newArray(...) => #'ecosphere.ecore.object.array.array'(...);
     newArray: size => #'ecosphere.ecore.object.array.new'(size);

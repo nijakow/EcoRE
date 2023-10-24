@@ -1,0 +1,30 @@
+
+#=std/util/graphics/Color: {
+    with inherited _ = #<:std/Classlike>;
+
+    own Instance = {
+        static with inherited _ = #<:std/Clonable>;
+
+        r <- 0,
+        g <- 0,
+        b <- 0,
+        a <- 255;
+
+        with inherited trait = {
+            static with inherited _ = #<:std/Trait>;
+
+            initWithR: _r G: _g B: _b A: _a => (
+                r <- _r.
+                g <- _g.
+                b <- _b.
+                a <- _a.
+              ^ self
+            );
+
+            writeOn: w => w << 'a color(' << r << ', ' << g << ', ' << b << ', ' << a << ')';
+        };
+    };
+
+    R: r G: g B: b A: a => (Instance clone) initWithR: r G: g B: b A: a;
+    R: r G: g B: b      => R: r G: g B: b A: 255;
+}

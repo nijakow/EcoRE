@@ -1,0 +1,6 @@
+
+#=std/util/graphics: {
+    with inherited _ = #<:std/Module>;
+
+    own Color = #<:std/util/graphics/Color>;
+}
