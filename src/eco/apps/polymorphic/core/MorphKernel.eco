@@ -1,0 +1,28 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        behavior,
+        state <- No;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+
+            initWithBehavior: _behavior => (
+                behavior <- _behavior.
+                state    <- No.
+              ^ self
+            );
+
+            state: s => state <- Yes: s;
+
+            writeOn: w => w << 'a morph kernel(' << state << ')';
+        };
+    };
+
+    Behavior: behavior => (Instance clone) initWithBehavior: behavior;
+    Behavior: behavior State: state => (Behavior: behavior) state: state;
+}

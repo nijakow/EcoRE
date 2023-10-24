@@ -1,37 +1,33 @@
 
 {
     static with inherited _ = std Classlike;
+    protected polymorphic = $package;
 
     own Instance = {
         static with inherited _ = std Clonable;
 
         structure,
         actions,
-        behavior,
-        state <- No;
+        kernel;
 
         with inherited trait = {
             static with inherited _ = std Trait;
             protected polymorphic = $package;
 
-            initWithBehavior: _behavior State: _state => (
-                structure <- (polymorphic core structure) MorphStructureNode NewForMorph: self Behavior: _behavior.
+            initWithKernel: _kernel => (
+                structure <- (polymorphic core structure) MorphStructureNode NewForMorph: self Behavior: (_kernel behavior).
                 actions   <- (polymorphic core) MorphActionNode NewForMorph: self.
-                behavior  <- _behavior.
-                state     <- Yes: _state.
+                kernel    <- _kernel.
               ^ self
             );
-            initWithBehavior: _behavior => (
-                structure <- (polymorphic core structure) MorphStructureNode NewForMorph: self Behavior: _behavior.
-                actions   <- (polymorphic core) MorphActionNode NewForMorph: self.
-                behavior  <- _behavior.
-              ^ self
-            );
+
+            behavior => kernel behavior;
+            state    => kernel state;
 
             writeOn: w => w << 'a polymorph';
         };
     };
 
-    Behavior: behavior State: state => Instance clone initWithBehavior: behavior State: state;
-    Behavior: behavior => Instance clone initWithBehavior: behavior;
+    Behavior: behavior => (Instance clone) initWithKernel: ((polymorphic core) MorphKernel Behavior: behavior);
+    Behavior: behavior State: state => (Instance clone) initWithKernel: ((polymorphic core) MorphKernel Behavior: behavior State: state);
 }
