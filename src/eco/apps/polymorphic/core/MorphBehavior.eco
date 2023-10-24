@@ -14,7 +14,8 @@
             protected polymorphic = $package;
 
             init => (
-                layouter <- (polymorphic core layouting) layouters NewDefault.
+                renderer <- (polymorphic core rendering) renderers Default.
+                layouter <- (polymorphic core layouting) layouters Default.
               ^ self
             );
 

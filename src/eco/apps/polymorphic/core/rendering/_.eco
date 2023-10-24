@@ -1,0 +1,6 @@
+
+{
+    static with inherited _ = std Module;
+
+    own renderers = (here / 'renderers' / '_.eco') importIn: $package;
+}

@@ -52,5 +52,5 @@
     own FlexLayouter  = (here / 'FlexLayouter.eco') importIn: self;
     own StackLayouter = (here / 'StackLayouter.eco') importIn: self;
 
-    NewDefault => StackLayouter New;
+    Default => StackLayouter New;
 }

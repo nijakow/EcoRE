@@ -11,7 +11,7 @@
 
     own events       = (here / 'events' / '_.eco') importIn: $package;
     own layouting    = (here / 'layouting' / '_.eco') importIn: $package;
-    own representing = (here / 'representing' / '_.eco') importIn: $package;
+    own rendering    = (here / 'rendering' / '_.eco') importIn: $package;
     own structure    = (here / 'structure' / '_.eco') importIn: $package;
     own world        = (here / 'world' / '_.eco') importIn: $package;
 

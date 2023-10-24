@@ -1,0 +1,16 @@
+
+{
+    static with inherited _ = std Module;
+
+    own RendererTrait = {
+        static with inherited _ = std Trait;
+
+        renderMorph: morph OnRenderer: renderer => subclassResponsibility;
+
+        writeOn: w => w << 'a morph renderer';
+    };
+
+    own DefaultRenderer = (here / 'DefaultRenderer.eco') importIn: self;
+
+    Default => DefaultRenderer New;
+}
