@@ -26,11 +26,8 @@
             defaultHorizontalLayout => (polymorphic core layouting) layouts Default;
             defaultVerticalLayout   => (polymorphic core layouting) layouts Default;
 
-            "This mechanism allows to wrap a state in some instance-specific metadata."
-            wrapState: state => state;
-
-            link: state => ((polymorphic core) MorphKernel) Behavior: self State: (wrapState: state);
-            link        => ((polymorphic core) MorphKernel) Behavior: self;
+            link: seed => ((polymorphic core) MorphKernel) Behavior: self Seed: seed;
+            link       => ((polymorphic core) MorphKernel) Behavior: self;
 
             writeOn: w => w << 'a polymorph behavior';
         };

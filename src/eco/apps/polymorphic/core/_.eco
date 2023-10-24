@@ -16,7 +16,6 @@
     own world        = (here / 'world' / '_.eco') importIn: $package;
 
     own MorphActionNode = (here / 'MorphActionNode.eco') importIn: $package;
-    own MorphState      = (here / 'MorphState.eco') importIn: $package;
     own MorphBehavior   = (here / 'MorphBehavior.eco') importIn: $package;
     own MorphKernel     = (here / 'MorphKernel.eco') importIn: $package;
     own MorphInstance   = (here / 'MorphInstance.eco') importIn: $package;

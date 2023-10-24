@@ -6,30 +6,30 @@
         static with inherited _ = std Clonable;
 
         behavior,
-        state <- No;
+        seed <- No;
 
         with inherited trait = {
             static with inherited _ = std Trait;
             protected polymorphic = $package;
 
-            initWithBehavior: _behavior State: _state => (
+            initWithBehavior: _behavior Seed: _seed => (
                 behavior <- _behavior.
-                state    <- Yes: _state.
+                seed     <- Yes: _seed.
               ^ self
             );
 
             initWithBehavior: _behavior => (
                 behavior <- _behavior.
-                state    <- No.
+                seed     <- No.
               ^ self
             );
 
             instantiate => ((polymorphic core) MorphInstance) Kernel: self;
 
-            writeOn: w => w << 'a morph kernel(' << state << ')';
+            writeOn: w => w << 'a morph kernel(' << seed << ')';
         };
     };
 
-    Behavior: behavior State: state => (Instance clone) initWithBehavior: behavior State: state;
-    Behavior: behavior              => (Instance clone) initWithBehavior: behavior;
+    Behavior: behavior Seed: seed => (Instance clone) initWithBehavior: behavior Seed: seed;
+    Behavior: behavior            => (Instance clone) initWithBehavior: behavior;
 }

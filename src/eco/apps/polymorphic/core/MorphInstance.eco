@@ -22,14 +22,15 @@
             );
 
             behavior => kernel behavior;
-            state    => kernel state;
+            state    => kernel seed;
+            seed     => kernel seed;
 
             writeOn: w => w << 'a polymorph';
         };
     };
 
-    Kernel:   kernel                => (Instance clone) initWithKernel: kernel;
+    Kernel:   kernel               => (Instance clone) initWithKernel: kernel;
     
-    Behavior: behavior              => Kernel: ((polymorphic core) MorphKernel Behavior: behavior);
-    Behavior: behavior State: state => Kernel: ((polymorphic core) MorphKernel Behavior: behavior State: state);
+    Behavior: behavior             => Kernel: ((polymorphic core) MorphKernel Behavior: behavior);
+    Behavior: behavior Seed: seed  => Kernel: ((polymorphic core) MorphKernel Behavior: behavior Seed: seed);
 }
