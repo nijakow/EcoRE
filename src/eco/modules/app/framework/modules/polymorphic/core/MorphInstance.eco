@@ -19,7 +19,7 @@
                 structure <- (polymorphic core structure) MorphStructureNode NewForMorph: self Behavior: (_kernel behavior).
                 actions   <- (polymorphic core) MorphActionNode NewForMorph: self.
                 kernel    <- _kernel.
-                state     <- _kernel wrapSeedForMorph: self;
+                state     <- (_kernel behavior) wrapSeed: (_kernel seed) Morph: self;
               ^ self
             );
 

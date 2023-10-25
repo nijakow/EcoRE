@@ -26,41 +26,22 @@
                   ~ verticalLayout: ((core layouting layouts) ShrinkWrap)
                   ~ build
             ),
-            morph1 <- (
+            FlexBehavior <- (
                 Create
                   ~ layouter: ((core layouting layouters) FlexLayouter Vertical)
                   ~ build
-                  ~ link
-                  ~ instantiate
             ),
-            morph2 <- (
-                ColorSquareBehavior
-                  ~ link: (((std util graphics) Color) R: 0 G: 0 B: 0)
-                  ~ instantiate
-            ),
-            morph3 <- (
-                ColorSquareBehavior
-                  ~ link: (((std util graphics) Color) R: 255 G: 0 B: 0)
-                  ~ instantiate
-            ),
-            morph4 <- (
-                ColorSquareBehavior
-                  ~ link: (((std util graphics) Color) R: 255 G: 255 B: 0)
-                  ~ instantiate
-            ),
-            morph5 <- (
-                TextBehavior
-                  ~ link: ((app gfx eve) Text: 'Hello, world!')
+            morph1 <- (
+                (FlexBehavior link)
+                  ~ add: (ColorSquareBehavior ~ link: (((std util graphics) Color) R:   0 G:   0 B: 0))
+                  ~ add: (ColorSquareBehavior ~ link: (((std util graphics) Color) R: 255 G:   0 B: 0))
+                  ~ add: (ColorSquareBehavior ~ link: (((std util graphics) Color) R: 255 G: 255 B: 0))
+                  ~ add: (TextBehavior ~ link: ((app gfx eve) Text: 'Hello, world!'))
                   ~ instantiate
             ),
         |
 
         world declareRoot: morph1.
-
-        (morph1 structure) add: morph2.
-        (morph1 structure) add: morph3.
-        (morph1 structure) add: morph4.
-        (morph1 structure) add: morph5.
 
       ^ world
     );
