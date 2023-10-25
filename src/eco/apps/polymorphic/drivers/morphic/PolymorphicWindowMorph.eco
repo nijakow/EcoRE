@@ -35,7 +35,11 @@
                 mouseMovedToX: (relativeMousePos x)
                             Y: (relativeMousePos y).
 
-            (polymorphicTerminal viewport) tick.
+            [
+                (polymorphicTerminal viewport) tick.
+            ] catch: [ :ex |
+            ].
+
             (polymorphicTerminal viewport) renderOn: renderer.
         );
 

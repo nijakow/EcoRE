@@ -206,15 +206,15 @@
             );
             forceLayoutInPlace => forceLayoutWithConstraints: dimension;
 
-            layoutWithConstaints: constraints => (
+            layoutWithConstraints: constraints => (
                 (isLayoutDirtyForConstraints: constraints) if: [
                     forceLayoutWithConstraints: constraints.
                 ].
             );
-            layoutInPlace => layoutWithConstaints: dimension;
+            layoutInPlace => layoutWithConstraints: dimension;
 
             layoutWithoutConstraints => (
-                layoutWithConstaints: (Point X: (minWidth) Y: (minHeight))
+                layoutWithConstraints: (Point X: (minWidth) Y: (minHeight))
             );
             layoutWithHintedConstraints: hint => (
                 layoutWithConstraints: (Point X: ((hint x) max: (minWidth))

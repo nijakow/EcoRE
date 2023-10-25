@@ -84,8 +84,8 @@
                                 Note that we don't move the child, since we don't know the size of the flexible children yet.
                             "
                             |
-                                childConstraints <- TransformedW: ((child structure) preferredSizeForOrientation: orientation Constraint: (constraints dimensionForOrientation: orientation))
-                                                               H: ((child structure) preferredSizeForOrientation: orientation opposite Constraint: (constraints dimensionForOrientation: orientation opposite)),
+                                childConstraints <- TransformedW: (preferredSizeForMorph: child Orientation: orientation Constraint: (constraints dimensionForOrientation: orientation))
+                                                               H: (preferredSizeForMorph: child Orientation: orientation opposite Constraint: (constraints dimensionForOrientation: orientation opposite)),
                                 childDimensions  <- (child structure) layoutWithConstraints: childConstraints
                             |
 
@@ -103,11 +103,11 @@
                 |
 
                 "This is the main positioning loop. We position all children along the main axis."
-                morph childrenDo: [ :child |
+                (morph structure) childrenDo: [ :child |
                     "Move the child to the correct position."
                     (child structure) moveTo: (TransformedW: (position asInt) H: 0).
 
-                    | childConstraints <- TransformedW: flexSize H: ((child structure) preferredSizeForOrientation: (orientation opposite) Constraint: (constraints dimensionForOrientation: (orientation opposite))) |
+                    | childConstraints <- TransformedW: flexSize H: (preferredSizeForMorph: child Orientation: (orientation opposite) Constraint: (constraints dimensionForOrientation: (orientation opposite))) |
 
                     "Now that we know the size distribution we can also layout the flexible children."
                     (Layout: child) isFlexible

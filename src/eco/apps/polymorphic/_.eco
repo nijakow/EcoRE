@@ -15,7 +15,7 @@
             world  <- (core world) NewWorld,
             morph1 <- (
                 Create
-                  ~ layouter: ((core layouting layouters) StackLayouter New)
+                  ~ layouter: ((core layouting layouters) FlexLayouter Vertical)
                   ~ build
                   ~ link
                   ~ instantiate
@@ -24,14 +24,30 @@
                 Create
                   ~ renderer: ((core rendering renderers) ColorSquareRenderer New)
                   ~ build
+                  ~ link: (((std util graphics) Color) R: 255 G: 0 B: 0)
+                  ~ instantiate
+            ),
+            morph3 <- (
+                Create
+                  ~ renderer: ((core rendering renderers) ColorSquareRenderer New)
+                  ~ build
+                  ~ link: (((std util graphics) Color) R: 255 G: 255 B: 0)
+                  ~ instantiate
+            ),
+            morph4 <- (
+                Create
+                  ~ renderer: ((core rendering renderers) ColorSquareRenderer New)
+                  ~ build
                   ~ link: (((std util graphics) Color) R: 0 G: 255 B: 0)
                   ~ instantiate
             ),
         |
 
-        world declareRoot: morph2.
+        world declareRoot: morph1.
 
-        (morph2 structure) add: morph1.
+        (morph1 structure) add: morph2.
+        (morph1 structure) add: morph3.
+        (morph1 structure) add: morph4.
 
       ^ world
     );
