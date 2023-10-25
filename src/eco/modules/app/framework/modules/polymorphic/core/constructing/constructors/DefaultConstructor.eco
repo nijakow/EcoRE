@@ -3,32 +3,15 @@
     static with inherited _ = std Classlike;
 
     own Instance = {
-        static with inherited _ = std Clonable;
-        with inherited LayouterTrait = $package ConstructorTrait;
+        static with inherited _ = std Singleton;
+        with inherited ConstructorTrait = $package ConstructorTrait;
 
-        protected children;
+        constructMorph: morph => (
+          ^ morph
+        );
 
-        with inherited trait = {
-            static with inherited _ = std Trait;
-
-            init => (
-                children <- std util newVector.
-              ^ self
-            );
-
-            add: child => (
-                children add: child.
-              ^ self
-            );
-
-            constructMorph: morph => (
-                children do: [ :child | (morph structure) add: (child instantiate) ].
-              ^ morph
-            );
-
-            writeOn: w => w << 'the default morph constructor';
-        };
+        writeOn: w => w << 'the default morph constructor';
     };
 
-    New => Instance new;
+    New => Instance;
 }

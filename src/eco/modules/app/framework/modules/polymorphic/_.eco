@@ -29,6 +29,7 @@
             FlexBehavior <- (
                 Create
                   ~ layouter: ((core layouting layouters) FlexLayouter Vertical)
+                  ~ constructor: (core constructing constructors) AddConstructor
                   ~ build
             ),
             morph1 <- (

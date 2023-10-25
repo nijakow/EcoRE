@@ -33,6 +33,11 @@
               ^ self
             );
 
+            constructor: aConstructorClass => (
+                behavior constructor: aConstructorClass.
+              ^ self
+            );
+
             horizontalLayout: layout => (
                 behavior horizontalLayout: layout.
               ^ self

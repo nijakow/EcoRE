@@ -11,6 +11,7 @@
     };
 
     own DefaultConstructor = (here / 'DefaultConstructor.eco') importIn: self;
+    own AddConstructor     = (here / 'AddConstructor.eco')     importIn: self;
 
     Default => DefaultConstructor;
 }
