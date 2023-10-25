@@ -17,8 +17,7 @@
         protected cachedLocalBounds,
         protected cachedGlobalBounds;
 
-        protected cachedLayoutingConstraints,
-        protected layoutOk;
+        protected cachedLayoutingConstraints;
 
         with inherited trait = {
             static with inherited _ = std Trait;
@@ -38,7 +37,6 @@
                 cachedLocalBounds  <- No.
                 cachedGlobalBounds <- No.
                 cachedLayoutingConstraints <- No.
-                layoutOk                   <- false.
               ^ self
             );
 
@@ -149,7 +147,6 @@
             invalidateCaches => (
                 invalidatePositionCaches.
                 cachedLayoutingConstraints <- No.
-                layoutOk: false.
                 childrenDo: [ :child | (child structure) invalidateCaches ].
               ^ self
             );
@@ -172,9 +169,6 @@
             "
                 Layouting
             "
-            layoutOk:  ok => layoutOk <- ok;
-            layoutIsNowOk => layoutOk: true;
-
             layoutForOrientation: orientation => orientation selectX: xLayout Y: yLayout;
 
             "TODO: Are these methods really needed?"
@@ -232,7 +226,6 @@
             forceLayoutWithConstraints: constraints => (
                 cachedLayoutingConstraints <- Yes: constraints.
                 (morph behavior layouter) layoutMorph: morph Constraints: constraints.
-                layoutIsNowOk.
             );
             forceLayoutInPlace => forceLayoutWithConstraints: dimension;
 
