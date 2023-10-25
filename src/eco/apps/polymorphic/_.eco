@@ -43,10 +43,10 @@
             ),
             morph5 <- (
                 Create
-                  ~ renderer: ((core rendering renderers) BasicStringRenderer New)
+                  ~ renderer: ((core rendering renderers) BasicTextRenderer New)
                   ~ verticalLayout: ((core layouting layouts) ShrinkWrap)
                   ~ build
-                  ~ link: 'Hello, world!'
+                  ~ link: ((app gfx eve) Text: 'Hello, world!')
                   ~ instantiate
             ),
         |

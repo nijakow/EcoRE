@@ -11,11 +11,11 @@
         
             renderMorph: morph OnRenderer: renderer => (
                 renderer setColor: (renderer theme textColor).
-                renderer drawString: (morph seed) X: 0 Y: 0.
+                renderer drawText: (morph seed) X: 0 Y: 0.
               ^ self
             );
 
-            writeOn: w => w << 'a basic string renderer';
+            writeOn: w => w << 'a basic text renderer';
         };
     };
 
