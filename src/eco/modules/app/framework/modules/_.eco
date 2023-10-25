@@ -1,6 +1,7 @@
 {
     static with inherited _ = std Module;
 
-    own eval        = (here / 'eval' / '_.eco') importIn: $;
-    own wisp        = (here / 'wisp' / '_.eco') importIn: $;
+    own polymorphic = (here / 'polymorphic' / '_.eco') importIn: $;
+    own eval        = (here / 'eval'        / '_.eco') importIn: $;
+    own wisp        = (here / 'wisp'        / '_.eco') importIn: $;
 }
