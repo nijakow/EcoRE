@@ -33,10 +33,13 @@
             ),
             morph1 <- (
                 (FlexBehavior link)
-                  ~ add: (ColorSquareBehavior ~ link: (((std util graphics) Color) R:   0 G:   0 B: 0))
-                  ~ add: (ColorSquareBehavior ~ link: (((std util graphics) Color) R: 255 G:   0 B: 0))
-                  ~ add: (ColorSquareBehavior ~ link: (((std util graphics) Color) R: 255 G: 255 B: 0))
-                  ~ add: (TextBehavior ~ link: ((app gfx eve) Text: 'Hello, world!'))
+                  ~ configure: [ :constructor |
+                      constructor
+                        ~ add: (ColorSquareBehavior ~ link: (((std util graphics) Color) R:   0 G:   0 B: 0))
+                        ~ add: (ColorSquareBehavior ~ link: (((std util graphics) Color) R: 255 G:   0 B: 0))
+                        ~ add: (ColorSquareBehavior ~ link: (((std util graphics) Color) R: 255 G: 255 B: 0))
+                        ~ add: (TextBehavior ~ link: ((app gfx eve) Text: 'Hello, world!'))
+                  ]
                   ~ instantiate
             ),
         |

@@ -1,0 +1,16 @@
+
+{
+    static with inherited _ = std Module;
+
+    own ConstructorTrait = {
+        static with inherited _ = std Trait;
+
+        constructMorph: morph => subclassResponsibility;
+
+        writeOn: w => w << 'a morph constructor';
+    };
+
+    own DefaultConstructor = (here / 'DefaultConstructor.eco') importIn: self;
+
+    Default => DefaultConstructor;
+}

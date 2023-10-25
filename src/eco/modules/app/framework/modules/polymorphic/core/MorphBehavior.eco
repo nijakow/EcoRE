@@ -8,7 +8,8 @@
         renderer,
         layouter,
         metrics,
-        eventHandler;
+        eventHandler,
+        constructorClass;
 
         protected preferredHorizontalLayout,
         protected preferredVerticalLayout;
@@ -18,9 +19,10 @@
             protected polymorphic = $package;
 
             init => (
-                renderer <- (polymorphic core rendering) renderers Default.
-                layouter <- (polymorphic core layouting) layouters Default.
-                metrics  <- (polymorphic core metrics)   metrics   Default.
+                renderer         <- (polymorphic core rendering)    renderers    Default.
+                layouter         <- (polymorphic core layouting)    layouters    Default.
+                metrics          <- (polymorphic core metrics)      metrics      Default.
+                constructorClass <- (polymorphic core constructing) constructors Default.
                 preferredHorizontalLayout <- No.
                 preferredVerticalLayout   <- No.
               ^ self
@@ -30,6 +32,7 @@
             layouter:     l => layouter     <- l;
             metrics:      m => metrics      <- m;
             eventHandler: e => eventHandler <- e;
+            constructor:  c => constructorClass <- c;
 
             defaultHorizontalLayout => (
                 preferredHorizontalLayout yes: [ :hl | ^ hl ].

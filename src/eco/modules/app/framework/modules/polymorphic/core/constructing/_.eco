@@ -1,0 +1,6 @@
+
+{
+    static with inherited _ = std Module;
+
+    own constructors = (here / 'constructors' / '_.eco') importIn: $package;
+}

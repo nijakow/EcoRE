@@ -7,24 +7,23 @@
 
         behavior,
         seed,
-        protected children;
+        protected constructor;
 
         with inherited trait = {
             static with inherited _ = std Trait;
             protected polymorphic = $package;
 
             initWithBehavior: _behavior Seed: _seed => (
-                behavior <- _behavior.
-                seed     <- _seed.
-                children <- No.
+                behavior    <- _behavior.
+                seed        <- _seed.
+                constructor <- (_behavior constructorClass) New.
               ^ self
             );
 
             initWithBehavior: _behavior => initWithBehavior: _behavior Seed: self;
 
-            add: child => (
-                children no: [ children <- Yes: (std util newVector) ].
-                (children yes) add: child.
+            configure: aBlock => (
+                aBlock value(constructor).
               ^ self
             );
 
@@ -33,11 +32,7 @@
                     instance <- ((polymorphic core) MorphInstance) Kernel: self
                 |
                 
-                children yes: [ :children |
-                    children do: [ :child |
-                        (instance structure) add: (child instantiate).
-                    ].
-                ].
+                constructor constructMorph: instance.
 
               ^ instance
             );
