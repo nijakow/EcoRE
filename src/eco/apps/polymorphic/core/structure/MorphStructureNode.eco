@@ -14,6 +14,7 @@
         protected yLayout;
 
         protected cachedBounds,
+        protected cachedLocalBounds,
         protected cachedGlobalBounds;
 
         protected cachedLayoutingConstraints;
@@ -33,6 +34,7 @@
                 yLayout            <- behavior defaultVerticalLayout.
                 world              <- No.
                 cachedBounds       <- No.
+                cachedLocalBounds  <- No.
                 cachedGlobalBounds <- No.
                 cachedLayoutingConstraints <- No.
               ^ self
@@ -123,6 +125,11 @@
               ^ cachedBounds yes
             );
 
+            localBounds => (
+                cachedLocalBounds no: [ cachedLocalBounds <- Yes: ((Point Origin) extent: dimension). ].
+              ^ cachedLocalBounds yes
+            );
+
             globalBounds => (
                 cachedGlobalBounds no: [ cachedGlobalBounds <- Yes: ((parentInfo hasParent) if: [ bounds translateBy: (parentInfo morph) structure globalBounds origin ] else: [ bounds ]) ].
               ^ cachedGlobalBounds yes
@@ -132,6 +139,7 @@
 
             invalidatePositionCaches => (
                 cachedBounds       <- No.
+                cachedLocalBounds  <- No.
                 cachedGlobalBounds <- No.
               ^ self
             );

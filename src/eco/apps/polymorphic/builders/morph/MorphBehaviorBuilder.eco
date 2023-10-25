@@ -16,11 +16,12 @@
               ^ self
             );
 
-            buildRenderer: aBlock => (
-                behavior renderer: aBlock value(((polymorphic builders morph) MorphRendererBuilder) New).
+            renderer: aRenderer => (
+                behavior renderer: aRenderer.
               ^ self
             );
-            renderFunction: aFunction => buildRenderer: [ :builder | builder function: aFunction. builder build ];
+
+            renderFunction: aFunction => renderer: (((polymorphic core rendering) renderers DelegateRenderer) Function: aFunction);
 
             layouter: aLayouter => (
                 behavior layouter: aLayouter.

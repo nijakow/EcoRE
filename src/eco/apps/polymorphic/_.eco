@@ -3,9 +3,10 @@
     static with inherited _ = std Module;
     with app = $;
 
-    own core     = (here / 'core' / '_.eco')     importIn: self;
+    own core     = (here / 'core'     / '_.eco') importIn: self;
     own builders = (here / 'builders' / '_.eco') importIn: self;
-    own drivers  = (here / 'drivers' / '_.eco')  importIn: self;
+    own drivers  = (here / 'drivers'  / '_.eco') importIn: self;
+    own misc     = (here / 'misc'     / '_.eco') importIn: self;
 
     Create => (builders morph MorphBehaviorBuilder) New;
 
@@ -13,7 +14,13 @@
         |
             world  <- (core world) NewWorld,
             morph1 <- (Create ~ layouter: ((core layouting layouters) StackLayouter New) ~ build link instantiate),
-            morph2 <- (Create ~ renderFunction: $[ :morph :renderer | renderer setR: 255 G: 0 B: 0. renderer fillRectX: 0 Y: 0 W: (morph structure width) H: (morph structure height). ] ~ build link instantiate),
+            morph2 <- (
+                Create
+                  ~ renderer: ((core rendering renderers) ColorSquareRenderer New)
+                  ~ build
+                  ~ link: (((std util graphics) Color) R: 0 G: 255 B: 0)
+                  ~ instantiate
+            ),
         |
 
         world declareRoot: morph2.

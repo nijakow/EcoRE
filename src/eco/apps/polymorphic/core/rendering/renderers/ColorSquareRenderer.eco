@@ -1,0 +1,23 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Singleton;
+        with inherited LayouterTrait = $package RendererTrait;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+        
+            renderMorph: morph OnRenderer: renderer => (
+                renderer setColor: (morph seed).
+                renderer fillRect: ((morph structure) localBounds).
+              ^ self
+            );
+
+            writeOn: w => w << 'a color square renderer';
+        };
+    };
+
+    New => Instance;
+}

@@ -13,5 +13,7 @@
     own DefaultRenderer  = (here / 'DefaultRenderer.eco')  importIn: self;
     own DelegateRenderer = (here / 'DelegateRenderer.eco') importIn: self;
 
+    own ColorSquareRenderer = (here / 'ColorSquareRenderer.eco') importIn: self;
+
     Default => DefaultRenderer New;
 }
