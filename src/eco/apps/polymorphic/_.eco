@@ -13,7 +13,13 @@
     MakeTestWorld => (
         |
             world  <- (core world) NewWorld,
-            morph1 <- (Create ~ layouter: ((core layouting layouters) StackLayouter New) ~ build link instantiate),
+            morph1 <- (
+                Create
+                  ~ layouter: ((core layouting layouters) StackLayouter New)
+                  ~ build
+                  ~ link
+                  ~ instantiate
+            ),
             morph2 <- (
                 Create
                   ~ renderer: ((core rendering renderers) ColorSquareRenderer New)
