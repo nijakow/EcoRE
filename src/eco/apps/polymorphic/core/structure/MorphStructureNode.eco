@@ -107,8 +107,8 @@
 
             replaceWith: replacement => parentInfo replaceChild: self With: replacement;
 
-            onAdd    => ( invalidateCaches. world yes: [ :w | (w manager) notifyAdd:    (self morph) ]. "TODO: Handle event" );  "TODO: Propagate event to children"
-            onRemove => ( invalidateCaches. world yes: [ :w | (w manager) notifyRemove: (self morph) ]. "TODO: Handle event" );  "TODO: Propagate event to children"
+            onAdd    => ( structureChanged. world yes: [ :w | (w manager) notifyAdd:    (self morph) ]. "TODO: Handle event" );  "TODO: Propagate event to children"
+            onRemove => ( structureChanged. world yes: [ :w | (w manager) notifyRemove: (self morph) ]. "TODO: Handle event" );  "TODO: Propagate event to children"
 
 
             "
@@ -158,8 +158,7 @@
             reshapeX: x Y: y W: w H: h => (
                 currentOffset    <- Point X: x Y: y.
                 currentDimension <- Point X: w Y: h.
-                invalidatePositionCaches.
-                maybeChanged.
+                shapeChanged.
               ^ self
             );
 
@@ -187,27 +186,40 @@
             minWidth  => minSizeForOrientation: ((polymorphic core) math geometry) orientation Horizontal;
             minHeight => minSizeForOrientation: ((polymorphic core) math geometry) orientation Vertical;
 
+            notifyParentAboutChange => (
+                parentInfo aChildLayoutChanged.
+              ^ self
+            );
+
+            structureChanged => (
+                invalidateCaches.
+                notifyParentAboutChange.
+              ^ self
+            );
+
+            shapeChanged => (
+                (isLayoutDirty) if: [
+                    layoutChanged.
+                ] else: [
+                    invalidatePositionCaches.
+                    notifyParentAboutChange.
+                ].
+              ^ self
+            );
+
             changed => (
                 layoutChanged.
               ^ self
             );
 
-            maybeChanged => (
-                (isLayoutDirtyForConstraints: dimension) if: [
-                    changed.
-                ].
-              ^ self
-            );
-
             layoutChanged => (
-                invalidateCaches.
-                "TODO: Force parents to relayout themselves"
-                parentInfo aChildLayoutChanged.
+                invalidatePositionCaches.
+                notifyParentAboutChange.
                 world yes: [ :w | (w manager) needsLayout: (self morph) ].
               ^ self
             );
-            isLayoutDirty => cachedLayoutingConstraints isNo;
 
+            protected isLayoutDirty => isLayoutDirtyForConstraints: dimension;
             protected isLayoutDirtyForConstraints: constraints => (
                 cachedLayoutingConstraints yes: [ :c |
                     (c equalsPoint: constraints) if: [
