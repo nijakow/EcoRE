@@ -1,0 +1,8 @@
+
+{
+    static with inherited _ = std Module;
+
+    own program = (here / 'program' / '_.eco') importIn: $package;
+
+    own Paper = (here / 'Paper.eco') importIn: $package;
+}
