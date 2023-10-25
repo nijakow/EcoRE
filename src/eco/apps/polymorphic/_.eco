@@ -13,6 +13,19 @@
     MakeTestWorld => (
         |
             world  <- (core world) NewWorld,
+            ColorSquareBehavior <- (
+                Create
+                  ~ renderer: ((core rendering renderers) ColorSquareRenderer New)
+                  ~ build
+            ),
+            TextBehavior <- (
+                Create
+                  ~ renderer: ((core rendering renderers) BasicTextRenderer New)
+                  ~ metrics: ((core metrics metrics) BasicTextMorphMetrics New)
+                  ~ horizontalLayout: ((core layouting layouts) ShrinkWrap)
+                  ~ verticalLayout: ((core layouting layouts) ShrinkWrap)
+                  ~ build
+            ),
             morph1 <- (
                 Create
                   ~ layouter: ((core layouting layouters) FlexLayouter Vertical)
@@ -21,33 +34,22 @@
                   ~ instantiate
             ),
             morph2 <- (
-                Create
-                  ~ renderer: ((core rendering renderers) ColorSquareRenderer New)
-                  ~ build
+                ColorSquareBehavior
                   ~ link: (((std util graphics) Color) R: 0 G: 0 B: 0)
                   ~ instantiate
             ),
             morph3 <- (
-                Create
-                  ~ renderer: ((core rendering renderers) ColorSquareRenderer New)
-                  ~ build
+                ColorSquareBehavior
                   ~ link: (((std util graphics) Color) R: 255 G: 0 B: 0)
                   ~ instantiate
             ),
             morph4 <- (
-                Create
-                  ~ renderer: ((core rendering renderers) ColorSquareRenderer New)
-                  ~ build
+                ColorSquareBehavior
                   ~ link: (((std util graphics) Color) R: 255 G: 255 B: 0)
                   ~ instantiate
             ),
             morph5 <- (
-                Create
-                  ~ renderer: ((core rendering renderers) BasicTextRenderer New)
-                  ~ metrics: ((core metrics metrics) BasicTextMorphMetrics New)
-                  ~ horizontalLayout: ((core layouting layouts) ShrinkWrap)
-                  ~ verticalLayout: ((core layouting layouts) ShrinkWrap)
-                  ~ build
+                TextBehavior
                   ~ link: ((app gfx eve) Text: 'Hello, world!')
                   ~ instantiate
             ),
