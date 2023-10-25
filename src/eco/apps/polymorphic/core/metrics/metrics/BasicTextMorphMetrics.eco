@@ -9,7 +9,7 @@
         protected minWidthOfMorph:  morph => (morph seed) width;
         protected minHeightOfMorph: morph => (morph seed) height;
 
-        writeOn: w => w << 'the default metrics';
+        writeOn: w => w << 'some basic text morph metrics';
     };
 
     New => Instance;

@@ -18,6 +18,8 @@
     };
 
     own DefaultMetrics = (here / 'DefaultMetrics.eco') importIn: self;
+    
+    own BasicTextMorphMetrics = (here / 'BasicTextMorphMetrics.eco') importIn: self;
 
     Default => DefaultMetrics New;
 }

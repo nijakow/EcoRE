@@ -38,7 +38,7 @@
                 (morph structure) childrenDo: [ :child |
                     minSize <- minSize + ((child structure) minSizeForOrientation: orientation).
                 ].
-              ^ minSize
+              ^ minSize max: (baseMinSizeOfMorph: morph Orientation: orientation)
             );
 
             protected calculateMinSizeForMorphCrossAxis: morph => (
@@ -46,7 +46,7 @@
                 (morph structure) childrenDo: [ :child |
                     minSize <- minSize max: ((child structure) minSizeForOrientation: (orientation opposite)).
                 ].
-              ^ minSize
+              ^ minSize max: (baseMinSizeOfMorph: morph Orientation: (orientation opposite))
             );
 
             calculateMinSizeForMorph: morph Orientation: morphOrientation => (
