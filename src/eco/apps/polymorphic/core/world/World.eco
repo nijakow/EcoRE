@@ -70,6 +70,9 @@
               ^ self
             );
 
+            minWidth  => theRoot yes: [ :root | (root structure) minWidth  ] no: 0;
+            minHeight => theRoot yes: [ :root | (root structure) minHeight ] no: 0;
+
             newSession  => ((polymorphic core world) Session) World: self;
             newViewport => ((polymorphic core world) Viewport) World: self;
             newTerminal => ((polymorphic core world) Terminal) World: self;

@@ -24,6 +24,9 @@
 
             resizeW: w H: h => world resizeW: w H: h;
 
+            minWidth  => world minWidth;
+            minHeight => world minHeight;
+
             tick => world tick;
 
             writeOn: w => w << 'a polymorphic viewport';

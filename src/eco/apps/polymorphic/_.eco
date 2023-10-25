@@ -45,6 +45,7 @@
                 Create
                   ~ renderer: ((core rendering renderers) BasicTextRenderer New)
                   ~ metrics: ((core metrics metrics) BasicTextMorphMetrics New)
+                  ~ horizontalLayout: ((core layouting layouts) ShrinkWrap)
                   ~ verticalLayout: ((core layouting layouts) ShrinkWrap)
                   ~ build
                   ~ link: ((app gfx eve) Text: 'Hello, world!')

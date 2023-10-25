@@ -17,8 +17,8 @@
           ^ self
         );
 
-        "baseMinWidth => presenter minWidth;
-        baseMinHeight => presenter minHeight;"
+        baseMinWidth  => (polymorphicTerminal viewport) minWidth;
+        baseMinHeight => (polymorphicTerminal viewport) minHeight;
 
         renderImplOn: renderer => (
             |
