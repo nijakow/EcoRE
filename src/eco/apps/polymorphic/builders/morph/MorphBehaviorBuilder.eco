@@ -28,6 +28,16 @@
               ^ self
             );
 
+            horizontalLayout: layout => (
+                behavior horizontalLayout: layout.
+              ^ self
+            );
+
+            verticalLayout: layout => (
+                behavior verticalLayout: layout.
+              ^ self
+            );
+
             build => behavior;
 
             writeOn: w => w << 'a morph behavior builder';
