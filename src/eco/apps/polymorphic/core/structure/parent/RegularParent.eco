@@ -26,6 +26,8 @@
             replaceChild: aChild With: anotherChild => ((morph structure) childrenInfo) replaceChild: aChild With: anotherChild;
             removeChild: aChild => ((morph structure) childrenInfo) remove: aChild;
 
+            aChildLayoutChanged => (morph structure) changed;
+
             writeOn: w => w << 'a regular polymorph parent(' << morph << ')';
         };
     };

@@ -17,7 +17,8 @@
         protected cachedLocalBounds,
         protected cachedGlobalBounds;
 
-        protected cachedLayoutingConstraints;
+        protected cachedLayoutingConstraints,
+        protected layoutOk;
 
         with inherited trait = {
             static with inherited _ = std Trait;
@@ -37,6 +38,7 @@
                 cachedLocalBounds  <- No.
                 cachedGlobalBounds <- No.
                 cachedLayoutingConstraints <- No.
+                layoutOk                   <- false.
               ^ self
             );
 
@@ -147,6 +149,7 @@
             invalidateCaches => (
                 invalidatePositionCaches.
                 cachedLayoutingConstraints <- No.
+                layoutOk: false.
                 childrenDo: [ :child | (child structure) invalidateCaches ].
               ^ self
             );
@@ -156,7 +159,7 @@
                 currentOffset    <- Point X: x Y: y.
                 currentDimension <- Point X: w Y: h.
                 invalidatePositionCaches.
-                changed.
+                maybeChanged.
               ^ self
             );
 
@@ -170,6 +173,9 @@
             "
                 Layouting
             "
+            layoutOk:  ok => layoutOk <- ok;
+            layoutIsNowOk => layoutOk: true;
+
             layoutForOrientation: orientation => orientation selectX: xLayout Y: yLayout;
 
             "TODO: Are these methods really needed?"
@@ -186,8 +192,17 @@
               ^ self
             );
 
+            maybeChanged => (
+                (isLayoutDirtyForConstraints: dimension) if: [
+                    changed.
+                ].
+              ^ self
+            );
+
             layoutChanged => (
                 invalidateCaches.
+                "TODO: Force parents to relayout themselves"
+                parentInfo aChildLayoutChanged.
                 world yes: [ :w | (w manager) needsLayout: (self morph) ].
               ^ self
             );
@@ -205,6 +220,7 @@
             forceLayoutWithConstraints: constraints => (
                 cachedLayoutingConstraints <- Yes: constraints.
                 (morph behavior layouter) layoutMorph: morph Constraints: constraints.
+                layoutIsNowOk.
             );
             forceLayoutInPlace => forceLayoutWithConstraints: dimension;
 
