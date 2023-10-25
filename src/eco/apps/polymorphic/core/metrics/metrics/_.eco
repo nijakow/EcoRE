@@ -1,0 +1,23 @@
+
+{
+    static with inherited _ = std Module;
+
+    own MetricsTrait = {
+        static with inherited _ = std Trait;
+
+        protected minWidthOfMorph:  morph => 0;
+        protected minHeightOfMorph: morph => 0;
+
+        minSizeOfMorph: morph Orientation: orientation => (
+            orientation
+              ~ ifHorizontal: [ ^ minWidthOfMorph:  morph ]
+                  ifVertical: [ ^ minHeightOfMorph: morph ]
+        );
+        
+        writeOn: w => w << 'a morph metric';
+    };
+
+    own DefaultMetrics = (here / 'DefaultMetrics.eco') importIn: self;
+
+    Default => DefaultMetrics New;
+}

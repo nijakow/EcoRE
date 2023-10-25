@@ -7,7 +7,7 @@
         with inherited LayouterTrait = $package LayouterTrait;
 
         calculateMinSizeForMorph: morph Orientation: orientation => (
-            | m <- 0 |
+            | m <- baseMinSizeOfMorph: morph Orientation: orientation |
 
             (morph structure) childrenDo: [ :child |
                 | childMinSize <- (child structure) minSizeForOrientation: orientation |

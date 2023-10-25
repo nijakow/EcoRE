@@ -176,7 +176,7 @@
             protected baseMinHeight => ((morph behavior) layouter) minHeightForMorph: morph;
             protected baseMinSizeForOrientation: orientation => orientation selectX: baseMinWidth Y: baseMinHeight;
 
-            minSizeForOrientation: orientation => ((morph behavior) layouter) minSizeForMorph: morph Orientation: orientation;
+            minSizeForOrientation: orientation => (morph behavior metrics) minSizeForMorph: morph Orientation: orientation;
             minWidth  => minSizeForOrientation: ((polymorphic core) math geometry) orientation Horizontal;
             minHeight => minSizeForOrientation: ((polymorphic core) math geometry) orientation Vertical;
 

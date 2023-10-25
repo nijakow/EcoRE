@@ -5,8 +5,9 @@
     own Instance = {
         static with inherited _ = std Clonable;
 
-        renderer;
-        layouter;
+        renderer,
+        layouter,
+        metrics,
         eventHandler;
 
         protected preferredHorizontalLayout,
@@ -19,6 +20,7 @@
             init => (
                 renderer <- (polymorphic core rendering) renderers Default.
                 layouter <- (polymorphic core layouting) layouters Default.
+                metrics  <- (polymorphic core metrics)   metrics   Default.
                 preferredHorizontalLayout <- No.
                 preferredVerticalLayout   <- No.
               ^ self
@@ -26,6 +28,7 @@
 
             renderer:     r => renderer     <- r;
             layouter:     l => layouter     <- l;
+            metrics:      m => metrics      <- m;
             eventHandler: e => eventHandler <- e;
 
             defaultHorizontalLayout => (

@@ -1,0 +1,16 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Singleton;
+        with inherited LayouterTrait = $package MetricsTrait;
+
+        protected minWidthOfMorph:  morph => (morph seed) width;
+        protected minHeightOfMorph: morph => (morph seed) height;
+
+        writeOn: w => w << 'the default metrics';
+    };
+
+    New => Instance;
+}

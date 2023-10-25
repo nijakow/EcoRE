@@ -9,7 +9,13 @@
         protected math => (polymorphic core) math;
         protected Point => (math geometry) Point;
 
-        calculateMinSizeForMorph: morph Orientation: orientation => orientation selectX: 0 Y: 0;
+        baseMinSizeOfMorph: morph Orientation: orientation => (morph behavior metrics) minSizeOfMorph: morph Orientation: orientation;
+
+        calculateMinSizeForMorph: morph Orientation: orientation => baseMinSizeOfMorph: morph Orientation: orientation;
+        
+        calculateMinWidthForMorph:  morph => calculateMinSizeForMorph: morph Orientation: ((math geometry) orientation Horizontal);
+        calculateMinHeightForMorph: morph => calculateMinSizeForMorph: morph Orientation: ((math geometry) orientation Vertical);
+
 
         minSizeForMorph: morph Orientation: orientation => (
             (morph structure) layoutForOrientation: orientation

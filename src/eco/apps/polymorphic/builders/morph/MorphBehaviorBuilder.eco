@@ -28,6 +28,11 @@
               ^ self
             );
 
+            metrics: aMetrics => (
+                behavior metrics: aMetrics.
+              ^ self
+            );
+
             horizontalLayout: layout => (
                 behavior horizontalLayout: layout.
               ^ self

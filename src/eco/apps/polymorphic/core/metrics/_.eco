@@ -1,0 +1,6 @@
+
+{
+    static with inherited _ = std Module;
+
+    own metrics = (here / 'metrics' / '_.eco') importIn: $package;
+}
