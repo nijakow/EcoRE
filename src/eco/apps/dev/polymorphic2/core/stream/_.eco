@@ -2,5 +2,6 @@
 {
     static with inherited _ = std Module;
 
-    
+    own Emitter = (here / 'Emitter.eco') importIn: $package;
+    own Stream  = (here / 'Stream.eco')  importIn: $package;
 }
