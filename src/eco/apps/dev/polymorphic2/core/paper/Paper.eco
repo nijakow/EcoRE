@@ -1,0 +1,32 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        protected program;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            protected polymorphic = $package;
+
+            init => (
+                program <- ((polymorphic core paper) PaperProgram) New.
+              ^ self
+            );
+
+            "Place a morph kernel on the paper at the given bounds."
+            place: morphKernel bounds: bounds => (
+                program place: morphKernel bounds: bounds.
+              ^ self
+            );
+
+            newInstance => ((polymorphic core paper) PaperInstance) Program: program;
+            
+            writeOn: w => w << 'a sheet of paper';
+        };
+    };
+
+    New => Instance new;
+}

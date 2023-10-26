@@ -1,0 +1,46 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        protected program,
+        protected morphInstances;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            
+            initWithProgram: _program => (
+                program        <- _program.
+                morphInstances <- std util newVector.
+              ^ self
+            );
+
+            protected clear => (
+                morphInstances clear.
+              ^ self
+            );
+
+            protected playProgram => (
+                program playOn: self.
+              ^ self
+            );
+
+            protected update => (
+                clear.
+                playProgram.
+              ^ self
+            );
+
+            acceptPlacedMorph: placedMorph => (
+                "TODO: morphInstanced add: ..."
+              ^ self
+            );
+
+            writeOn: w => w << 'a paper instance';
+        };
+    };
+
+    Program: program => (Instance clone) initWithProgram: program;
+}

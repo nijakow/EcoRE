@@ -1,6 +1,0 @@
-
-{
-    static with inherited _ = std Module;
-
-    own PaperProgram = (here / 'PaperProgram.eco') importIn: $package;
-}

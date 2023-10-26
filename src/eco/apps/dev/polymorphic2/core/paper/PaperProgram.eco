@@ -1,0 +1,35 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        protected morphs;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            protected polymorphic = $package;
+
+            init => (
+                morphs <- std util newVector.
+              ^ self
+            );
+
+            place: morphKernel bounds: bounds => (
+                | placedMorph <- ((polymorphic core paper) PlacedMorph) Kernel: kernel Bounds: bounds |
+                morphs add: placedMorph.
+              ^ self
+            );
+
+            playOn: paperInstance => (
+                morphs do: [ :each | paperInstance acceptPlacedMorph: each ].
+              ^ self
+            );
+            
+            writeOn: w => w << 'a paper program';
+        };
+    };
+
+    New => Instance new;
+}

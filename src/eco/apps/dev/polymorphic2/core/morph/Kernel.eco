@@ -1,0 +1,24 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        kernel, state;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+             
+            initWithKernel: _kernel State: _state => (
+                kernel <- _kernel.
+                state  <- _state.
+              ^ self
+            );
+             
+            writeOn: w => w << 'a polymorph kernel';
+        };
+    };
+
+    Kernel: kernel State: state => (Instance clone) initWithKernel: kernel State: state;
+}

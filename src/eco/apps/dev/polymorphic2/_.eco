@@ -1,7 +1,7 @@
 
 {
     static with inherited _ = std Module;
-    own app = $;
+    with app = $;
 
     own core = (here / 'core' / '_.eco') importIn: self;
 }

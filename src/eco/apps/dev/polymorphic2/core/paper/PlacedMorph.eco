@@ -1,0 +1,26 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        kernel,
+        bounds;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            protected polymorphic = $package;
+            
+            initWithKernel: _kernel Bounds: _bounds => (
+                kernel <- _kernel.
+                bounds <- _bounds.
+              ^ self
+            );
+            
+            writeOn: w => w << 'a placed morph';
+        };
+    };
+
+    Kernel: kernel Bounds: bounds => (Instance clone) initWithKernel: kernel Bounds: bounds;
+}

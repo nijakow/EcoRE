@@ -1,0 +1,30 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        protected morph;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            
+            init => (
+                morph <- (GraphRepresentation link: MyGraph).
+              ^ self
+            );
+
+            presentMorph: morph On: stream Context: context => (
+                stream withRoom: (Point X: 42 Y: 42) ForGraphicsDo: [ :graphics |
+                    graphics at: (Point X: 0 Y: 0)  PutText: 'Hello, world!'.
+                    graphics at: (Point X: 5 Y: 10) PutMorph: morph.
+                ]
+            );
+            
+            writeOn: w => w << 'an object';
+        };
+    };
+
+    New => Instance new;
+}

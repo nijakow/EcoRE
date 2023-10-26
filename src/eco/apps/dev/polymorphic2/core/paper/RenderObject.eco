@@ -5,12 +5,14 @@
     own Instance = {
         static with inherited _ = std Clonable;
 
-        protected program <- No;
-
         with inherited trait = {
             static with inherited _ = std Trait;
-
-            writeOn: w => w << 'a paper program';
+            
+            init => (
+              ^ self
+            );
+            
+            writeOn: w => w << 'a render object';
         };
     };
 
