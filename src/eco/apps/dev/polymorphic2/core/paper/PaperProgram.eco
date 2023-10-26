@@ -17,13 +17,13 @@
             );
 
             place: morphKernel bounds: bounds => (
-                | placedMorph <- ((polymorphic core paper) PlacedMorph) Kernel: kernel Bounds: bounds |
+                | placedMorph <- ((polymorphic core morph) PlacedMorph) Kernel: kernel Bounds: bounds |
                 morphs add: placedMorph.
               ^ self
             );
 
-            playOn: paperInstance => (
-                morphs do: [ :each | paperInstance acceptPlacedMorph: each ].
+            playOn: receiver => (
+                morphs do: [ :each | receiver acceptPlacedMorph: each ].
               ^ self
             );
             

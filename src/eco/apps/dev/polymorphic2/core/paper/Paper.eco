@@ -21,8 +21,6 @@
                 program place: morphKernel bounds: bounds.
               ^ self
             );
-
-            newInstance => ((polymorphic core paper) PaperInstance) Program: program;
             
             writeOn: w => w << 'a sheet of paper';
         };
