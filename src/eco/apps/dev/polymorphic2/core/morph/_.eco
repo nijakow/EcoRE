@@ -2,5 +2,8 @@
 {
     static with inherited _ = std Module;
 
-    own Behavior = (here / 'Behavior.eco') importIn: $package;
+    own Behavior    = (here / 'Behavior.eco')    importIn: $package;
+    own Kernel      = (here / 'Kernel.eco')      importIn: $package;
+    own PlacedMorph = (here / 'PlacedMorph.eco') importIn: $package;
+    own State       = (here / 'State.eco')       importIn: $package;
 }

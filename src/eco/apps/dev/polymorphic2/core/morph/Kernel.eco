@@ -5,14 +5,14 @@
     own Instance = {
         static with inherited _ = std Clonable;
 
-        kernel, state;
+        behavior, state;
 
         with inherited trait = {
             static with inherited _ = std Trait;
              
-            initWithKernel: _kernel State: _state => (
-                kernel <- _kernel.
-                state  <- _state.
+            initWithBehavior: _behavior State: _state => (
+                behavior <- _behavior.
+                state    <- _state.
               ^ self
             );
              
@@ -20,5 +20,5 @@
         };
     };
 
-    Kernel: kernel State: state => (Instance clone) initWithKernel: kernel State: state;
+    Behavior: behavior State: state => (Instance clone) initWithBehavior: behavior State: state;
 }
