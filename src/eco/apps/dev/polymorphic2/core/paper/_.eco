@@ -5,4 +5,6 @@
     own Paper        = (here / 'Paper.eco')        importIn: $package;
     own PaperProgram = (here / 'PaperProgram.eco') importIn: $package;
     own PlacedMorph  = (here / 'PlacedMorph.eco')  importIn: $package;
+
+    own PaperProgramRenderer = (here / 'PaperProgramRenderer.eco') importIn: $package;
 }

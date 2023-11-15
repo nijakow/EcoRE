@@ -1,0 +1,31 @@
+
+{
+    static with inherited _ = std Classlike;
+
+    own Instance = {
+        static with inherited _ = std Clonable;
+
+        protected renderer;
+
+        with inherited trait = {
+            static with inherited _ = std Trait;
+            protected polymorphic = $package;
+
+            initWithRenderer: _renderer => (
+                renderer <- _renderer.
+              ^ self
+            );
+
+            acceptPlacedMorph: placedMorph => (
+                renderer withPushedRelativeOffset: (placedMorph bounds origin) do: [
+                    "Run the primitive rendering method. TODO: How do we handle clipping?"
+                    (placedMorph paper) renderOn: renderer.
+                ].
+            );
+            
+            writeOn: w => w << 'a paper program renderer';
+        };
+    };
+
+    Renderer: renderer => (Instance clone) initWithRenderer: renderer;
+}

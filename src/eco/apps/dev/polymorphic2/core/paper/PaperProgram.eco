@@ -17,7 +17,7 @@
             );
 
             place: morphKernel bounds: bounds => (
-                | placedMorph <- ((polymorphic core morph) PlacedMorph) Kernel: kernel Bounds: bounds |
+                | placedMorph <- ((polymorphic core paper) PlacedMorph) Kernel: kernel Bounds: bounds |
                 morphs add: placedMorph.
               ^ self
             );

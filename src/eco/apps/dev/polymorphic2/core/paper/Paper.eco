@@ -21,6 +21,14 @@
                 program place: morphKernel bounds: bounds.
               ^ self
             );
+
+            renderOn: renderer => (
+                | paperProgramRenderer <- ((polymorphic core paper) PaperProgramRenderer) Renderer: renderer |
+
+                program playOn: paperProgramRenderer.
+
+              ^ self
+            );
             
             writeOn: w => w << 'a sheet of paper';
         };
