@@ -1,4 +1,8 @@
 
+"
+    Just an object for testing purposes...
+"
+
 {
     isa std Clonable;
 
@@ -12,6 +16,29 @@
     {
         inherits std Trait;
 	
-        writeOn: w => w << 
+        writeOn: w => w << 'a thing';
+    }
+}
+
+
+
+"
+    The evaluation environment (sample).
+
+    Every expression is evaluated in this.
+"
+
+{
+    isa std Module;
+
+    {
+        static => "the 'static' tag object";
+	with   => "the 'with'   tag object";
+	"..."
+    }
+
+    {
+        int => "the 'int' type object";
+	"..."
     }
 }
