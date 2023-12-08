@@ -1,0 +1,17 @@
+
+{
+    isa std Clonable;
+
+    |
+        @category 42;
+
+        (private) x <- No,
+	(private) y <- No;
+    |
+
+    {
+        inherits std Trait;
+	
+        writeOn: w => w << 
+    }
+}
