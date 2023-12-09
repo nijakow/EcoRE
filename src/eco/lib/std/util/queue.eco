@@ -14,8 +14,7 @@
 
         from: sequence => ( sequence do: [ :e | enqueue: e ]. ^ self);
 
-        empty? => elements isEmpty;
-        isEmpty => empty?;
+        empty? => elements empty?;
         size => elements size;
         
         enqueue: e => elements append: e;

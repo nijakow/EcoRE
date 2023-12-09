@@ -14,8 +14,7 @@
 
         from: sequence => ( sequence do: [ :e | push: e ]. ^ self).
 
-        empty? => elements isEmpty;
-        isEmpty => empty?;
+        empty? => elements empty?;
         size => elements size;
 
         clear => elements clear;

@@ -12,7 +12,7 @@
     );
 
     allocate => (
-        (freeSet isEmpty) if: [ allocateN: 1 ]
+        (freeSet empty?) if: [ allocateN: 1 ]
                         else: [ freeSet take ]
     );
     allocateN: n => ( | c <- counter | counter <- counter + n. ^ c );

@@ -164,7 +164,7 @@
         );
 
         nextToken => (
-            (pushbacks isEmpty) unless: [ ^ pushbacks pop ].
+            (pushbacks empty?) unless: [ ^ pushbacks pop ].
 
             skipWhitespace.
 

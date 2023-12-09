@@ -20,15 +20,14 @@
         do: block => elements do: block;
         iterator => elements iterator;
 
-        empty? => elements isEmpty;
-        isEmpty => empty?;
+        empty? => elements empty?;
         size => elements size;
 
         contains: e => (elements find: e) yes: [ :i | ^ true ] no: [ ^ false ];
         add: e => (contains: e) unless: [ elements add: e ];
         remove: e => elements remove: e;
         take => (
-            elements isEmpty if: [ invalidIndexError ].
+            elements empty? if: [ invalidIndexError ].
             | v <- elements at: 0 |
             elements erase: 0.
           ^ v

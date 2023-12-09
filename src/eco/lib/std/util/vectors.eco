@@ -11,7 +11,6 @@
 
     capacity => elements size;
     empty? => size isZero;
-    isEmpty => empty?;
 
     at: index => elements at: index;
     at: index put: value => elements at: index put: value;  "TODO: Index >= capacity"

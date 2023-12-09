@@ -43,7 +43,7 @@
 
     IFixedCollection = #=IFixedCollection: %[
         with #<:IIterable>;
-        #'isEmpty',
+        #'empty?',
         #'size',
         #'asArray'
     ];
@@ -57,14 +57,14 @@
     ];
 
     IStack = #=IStack: %[
-        #'isEmpty',
+        #'empty?',
         #'push:'(element),
         #'pop',
         #'top'
     ];
 
     IQueue = #=IQueue: %[
-        #'isEmpty',
+        #'empty?',
         #'enqueue:'(element),
         #'dequeue',
         #'front'
@@ -72,7 +72,7 @@
 
     ISet = #=ISet: %[
         with #<:IIterable>;
-        #'isEmpty',
+        #'empty?',
         #'contains:'(element),
         #'add:'(element),
         #'remove:'(element),
