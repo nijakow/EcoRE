@@ -20,7 +20,8 @@
         do: block => elements do: block;
         iterator => elements iterator;
 
-        isEmpty => elements isEmpty;
+        empty? => elements isEmpty;
+        isEmpty => empty?;
         size => elements size;
 
         contains: e => (elements find: e) yes: [ :i | ^ true ] no: [ ^ false ];

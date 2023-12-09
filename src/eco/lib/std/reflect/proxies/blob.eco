@@ -3,7 +3,8 @@
     static with inherited parent = #<:std/Clonable>;
     
     size => #'ecosphere.ecore.object.blob.size'(self);
-    isEmpty => size isZero;
+    empty => size isZero;
+    isEmpty => empty?;
 
     at: index => #'ecosphere.ecore.object.blob.at_int8'(self, index);
     at: index put: value => #'ecosphere.ecore.object.blob.at_put_int8'(self, index, value);
