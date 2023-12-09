@@ -1,0 +1,89 @@
+
+"
+    Just an object for testing purposes...
+"
+
+{
+    isa std Clonable;
+
+    |
+        @category 42;
+
+        (private) x <- No,
+	(private) y <- No;
+    |
+
+    {
+        inherits std Trait;
+	
+        writeOn: w => w << 'a thing';
+    }
+}
+
+
+
+"
+    The evaluation environment (sample).
+
+    Every expression is evaluated in this.
+"
+
+{
+    isa std Module;
+
+    {
+        static => "the 'static' tag object";
+	with   => "the 'with'   tag object";
+	"..."
+    }
+
+    {
+        int => "the 'int' type object";
+	"..."
+    }
+}
+
+
+
+
+"Some new ideas:"
+
+
+{
+    isa expr;
+}
+
+"can also be written like"
+
+expr {
+}
+
+
+
+(std Module) {
+
+    subjects :: @import 'subjects.eco';
+
+    (with) stuff :: Module {
+
+    };
+
+    inherits stuff :: Module {
+
+        [int] square([int] x) => x * x;
+
+        [int] f: x => (x * x) as int;
+
+    };
+
+    Foo :: @class {  "TODO: How to do class methods?"
+        | x <- 42 |
+
+        writeOn: w => w << 'a foo';
+    };
+
+    Main => [
+        (std io out << 'Hello, world!') newline commit.
+      ^ 42
+    ];
+}
