@@ -14,7 +14,7 @@
               ^ self
             );
 
-            writeOn: w => w << 'a Marker(' << (tag ?? '') << ')';
+            writeOn: w => w << 'a Marker(' << (tag ??: '') << ')';
         };
     };
 

@@ -22,7 +22,7 @@
             ifYes: block => block value(self);
             ifNo:  block => self;
 
-            ?? v => yes;
+            ??: v => yes;
 
             writeOn: writer => writer << 'Yes: ' << yes;
         };
@@ -49,7 +49,7 @@
             ifYes: block => self;
             ifNo:  block => block value(self);
 
-            ?? v => v;
+            ??: v => v;
 
             writeOn: writer => writer << 'No';
         };
