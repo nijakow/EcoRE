@@ -39,13 +39,38 @@
                                     Body: body
         ] no: [
             | value |
-            (check: TokenType ASSIGNMENT) yes: [ value <- parseExpression ]
-                                           no: [ value <- newASTSelf ].
+            (check: TokenType ASSIGNMENT) yes: [
+                value <- parseExpression
+            ] no: [
+                (check: TokenType DOUBLECOLON) yes: [
+                    flags setOwn.
+                    value <- parseExpression
+                ] no: [
+                    value <- newASTSelf
+                ]
+            ].
             builder addValueSlotWithFlags: flags
                                      Type: type
                                      Name: slotname
                                     Value: value
         ]
+    );
+
+    parseIsaSlotWithBuilder: builder => (
+        |
+            flags    <- builder openFlags,
+            type     <- parseOptionalType,
+            slotname <- #'_'
+        |
+
+        flags setStatic.
+        flags setWith.
+        flags setInherited.
+
+        builder addValueSlotWithFlags: flags
+                                 Type: type
+                                 Name: slotname
+                                Value: parseExpression.
     );
 
     parseMolecule => (
@@ -57,9 +82,8 @@
     parseMoleculeUntil: stop WithBuilder: builder => (
         [ :break |
             begin
-              if: [ (check: stop)             isYes ] then: [ break value                                               ] ~
-              if: [ (check: TokenType LPAREN) isYes ] then: [ parseMoleculeUntil: TokenType RPAREN WithBuilder: builder ] ~
-              if: [ (check: TokenType CARET)  isYes ] then: [ builder addParent: parseExpression                        ] ~
+              if: [ (check: stop)          isYes ] then: [ break value                      ] ~
+              if: [ (check: TokenType ISA) isYes ] then: [ parseIsaSlotWithBuilder: builder ] ~
             default: [ parseSlotWithBuilder: builder ].
             (check: stop) yes: [ break value ].
             expect: TokenType SEPARATOR
