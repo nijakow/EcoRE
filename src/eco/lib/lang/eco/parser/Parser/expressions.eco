@@ -83,6 +83,39 @@
               ] ~
               if: [ [ followups level > 1 ] and: [ (check: TokenType TILDE) isYes ] ] then: [
               ] ~
+              if: [ (check: TokenType LCURLY) isYes ] then: [
+                "
+                    This is an expression of the sort
+
+                        std Module {
+                          ...
+                        }
+                    
+                    which is equivalent to
+
+                        {
+                           isa std Module;
+
+                           ...
+                        }
+                "
+
+                |
+                    builder <- newASTMoleculeBuilder,
+                    flags   <- builder openFlags
+                |
+
+                flags setStatic.
+                flags setWith.
+                flags setInherited.
+
+                builder addValueSlotWithFlags: flags
+                                         Type: (newASTConstantWithValue: any) "TODO"
+                                         Name: #'_'
+                                        Value: ast.
+
+                ast <- parseMoleculeWithBuilder: builder.
+              ] ~
               if: [ ast is: next ] then: [
                 ^ ast
               ] ~
