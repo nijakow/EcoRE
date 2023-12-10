@@ -73,20 +73,57 @@
                                 Value: parseExpression.
     );
 
-    parseMolecule => (
-        | builder <- newASTMoleculeBuilder |
-        parseMoleculeUntil: TokenType RCURLY WithBuilder: builder.
-      ^ builder commit
+    parseTraitWithBuilder: builder => (
+        | subbuilder <- newASTMoleculeBuilder |
+
+        "Add the header to the builder"
+        (
+            |
+                subflags <- builder openFlags
+            |
+
+            subflags setStatic.
+            subflags setWith.
+            subflags setInherited.
+
+            subbuilder addValueSlotWithFlags: subflags
+                                        Type: (newASTConstantWithValue: any) "TODO"
+                                        Name: #'_'
+                                       Value: (newASTConstantWithValue: #<:std/Trait>).
+        ).
+
+        "Parse the trait body"
+        |
+            flags <- builder openFlags,
+            val   <- parseMoleculeWithBuilder: subbuilder
+        |
+
+        flags setWith.
+        flags setInherited.
+
+        "Add the trait to the builder"
+        builder addValueSlotWithFlags: flags
+                                 Type: (newASTConstantWithValue: any) "TODO"
+                                 Name: #'trait'
+                                Value: val.
     );
 
     parseMoleculeUntil: stop WithBuilder: builder => (
         [ :break |
             begin
-              if: [ (check: stop)          isYes ] then: [ break value                      ] ~
-              if: [ (check: TokenType ISA) isYes ] then: [ parseIsaSlotWithBuilder: builder ] ~
+              if: [ (check: stop)             isYes ] then: [ break value                      ] ~
+              if: [ (check: TokenType ISA)    isYes ] then: [ parseIsaSlotWithBuilder: builder ] ~
+              if: [ (check: TokenType LCURLY) isYes ] then: [ parseTraitWithBuilder: builder   ] ~
             default: [ parseSlotWithBuilder: builder ].
             (check: stop) yes: [ break value ].
             expect: TokenType SEPARATOR
         ] repeatWithBreak.
     );
+
+    parseMoleculeWithBuilder: builder => (
+        parseMoleculeUntil: TokenType RCURLY WithBuilder: builder.
+      ^ builder commit
+    );
+
+    parseMolecule => parseMoleculeWithBuilder: newASTMoleculeBuilder;
 }
