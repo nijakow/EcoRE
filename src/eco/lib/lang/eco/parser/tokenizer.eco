@@ -186,6 +186,7 @@
             (peeks: '.')   if: [ ^ newTokenWithType: TokenType SEPARATOR   ].
             (peeks: ',')   if: [ ^ newTokenWithType: TokenType SEPARATOR   ].
             (peeks: ';')   if: [ ^ newTokenWithType: TokenType SEPARATOR   ].
+            (peeks: '::')  if: [ ^ newTokenWithType: TokenType DOUBLECOLON ].
             (peeks: ':')   if: [ ^ newTokenWithType: TokenType COLON       ].
             (peeks: '|')   if: [ ^ newTokenWithType: TokenType BAR         ].
             (peeks: '^')   if: [ ^ newTokenWithType: TokenType CARET       ].
@@ -211,6 +212,7 @@
             (sb equals: 'self')        if: [ ^ newTokenWithType: TokenType SELF       ].
             (sb equals: 'my')          if: [ ^ newTokenWithType: TokenType MY         ].
             (sb equals: 'as')          if: [ ^ newTokenWithType: TokenType AS         ].
+            (sb equals: 'isa')         if: [ ^ newTokenWithType: TokenType ISA        ].
             (sb equals: 'with')        if: [ ^ newTokenWithType: TokenType WITH       ].
             (sb equals: 'inherited')   if: [ ^ newTokenWithType: TokenType INHERITED  ].
             (sb equals: 'own')         if: [ ^ newTokenWithType: TokenType OWN        ].
