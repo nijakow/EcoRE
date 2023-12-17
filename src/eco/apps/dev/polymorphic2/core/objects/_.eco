@@ -12,4 +12,6 @@ std Module
     };
 
     FilledCircle :: (here / 'FilledCircle.eco') importIn: (self DrawObject);
+
+    Rectangle :: (here / 'Rectangle.eco') importIn: (self DrawObject);
 }

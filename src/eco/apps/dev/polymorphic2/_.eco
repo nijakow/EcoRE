@@ -40,6 +40,7 @@ std Module
         stream emit: circle.
 
         stream withRoom: (math geometry Point X: 100 Y: 100) ForGraphicsDo: [ :graphics |
+            graphics at: (math geometry Point X:  0 Y:  0) put: (core objects Rectangle Bounds: (graphics bounds)).
             graphics at: (math geometry Point X: 50 Y: 50) put: (core objects FilledCircle Radius: 25).
         ].
 
