@@ -1,7 +1,7 @@
 
 {
-    static with inherited _ = std Module;
+    isa std Module;
     with app = $;
 
-    own core = (here / 'core' / '_.eco') importIn: self;
+    core :: (here / 'core' / '_.eco') importIn: self;
 }

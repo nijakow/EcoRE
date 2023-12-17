@@ -1,8 +1,8 @@
 
 {
-    static with inherited _ = std Module;
+    isa std Module;
 
-    own morph  = (here / 'morph'  / '_.eco') importIn: $package;
-    own paper  = (here / 'paper'  / '_.eco') importIn: $package;
-    own stream = (here / 'stream' / '_.eco') importIn: $package;
+    morph  :: (here / 'morph'  / '_.eco') importIn: $package;
+    paper  :: (here / 'paper'  / '_.eco') importIn: $package;
+    stream :: (here / 'stream' / '_.eco') importIn: $package;
 }
