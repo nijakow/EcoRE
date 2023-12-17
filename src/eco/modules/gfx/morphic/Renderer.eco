@@ -109,6 +109,10 @@
             drawRoundedRect: rect R: r => drawRoundedRectX: rect x Y: rect y W: rect w H: rect h R: r;
             fillRoundedRectX: x Y: y W: w H: h R: r => eve FillRoundedRect(xOff + x, yOff + y, w, h, r);
             fillRoundedRect: rect R: r => fillRoundedRectX: rect x Y: rect y W: rect w H: rect h R: r;
+            drawCircle: offset R: r => eve DrawCircle(xOff + offset x, yOff + offset y, r);
+            drawCircleX: x Y: y R: r => eve DrawCircle(xOff + x, yOff + y, r);
+            fillCircle: offset R: r => eve FillCircle(xOff + offset x, yOff + offset y, r);
+            fillCircleX: x Y: y R: r => eve FillCircle(xOff + x, yOff + y, r);
             drawText: text X: x Y: y => eve DrawText(text text, xOff + x, yOff + y, font);
             drawChar: char X: x Y: y => eve DrawChar(char, xOff + x, yOff + y, font);
             drawText: text X: x Y: y Font: font => eve DrawText(text text, xOff + x, yOff + y, font);

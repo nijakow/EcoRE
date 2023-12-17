@@ -1,0 +1,26 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            offset,
+            object
+        |
+
+        {
+            offset: off object: obj => (
+                offset <- off.
+                object <- obj.
+              ^ self
+            );
+
+            renderOn: renderer => object renderAt: offset On: renderer;
+
+            writeOn: w => w << 'a presentation';
+        }
+    };
+
+    At: offset Object: object => (Instance clone) offset: offset object: object;
+}

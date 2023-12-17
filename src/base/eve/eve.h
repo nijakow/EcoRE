@@ -85,6 +85,9 @@ void Eve_DrawPointRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h, Eve_Int step)
 void Eve_DrawRoundedRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h, Eve_Int r);
 void Eve_FillRoundedRect(Eve_Int x, Eve_Int y, Eve_Int w, Eve_Int h, Eve_Int r);
 
+void Eve_DrawCircle(Eve_Int x, Eve_Int y, Eve_UInt r);
+void Eve_FillCircle(Eve_Int x, Eve_Int y, Eve_UInt r);
+
 void Eve_DrawArc(Eve_Int x, Eve_Int y, Eve_UInt r, Eve_Int start, Eve_Int end);
 
 void Eve_DrawText(const char* text, Eve_Int x, Eve_Int y, struct Eve_Font* font);

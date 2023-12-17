@@ -1,5 +1,6 @@
 
 std Module
 {
-    Paper :: (here / 'Paper.eco') importIn: self;
+    Paper        :: (here / 'Paper.eco')        importIn: $package;
+    Presentation :: (here / 'Presentation.eco') importIn: $package;
 }

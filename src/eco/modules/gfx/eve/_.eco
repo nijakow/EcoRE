@@ -25,6 +25,8 @@
     protected Eve_DrawPointRect,
     protected Eve_DrawRoundedRect,
     protected Eve_FillRoundedRect,
+    protected Eve_DrawCircle,
+    protected Eve_FillCircle,
     protected Eve_DrawArc,
     protected Eve_DrawText,
     protected Eve_DrawChar,
@@ -108,6 +110,8 @@
         Eve_DrawPointRect <- (lib function: #'Eve_DrawPointRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int, ffi types int))) yes.
         Eve_DrawRoundedRect <- (lib function: #'Eve_DrawRoundedRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int, ffi types int))) yes.
         Eve_FillRoundedRect <- (lib function: #'Eve_FillRoundedRect' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int, ffi types int, ffi types int))) yes.
+        Eve_DrawCircle <- (lib function: #'Eve_DrawCircle' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int))) yes.
+        Eve_FillCircle <- (lib function: #'Eve_FillCircle' type: ((ffi types void) function(ffi types int, ffi types int, ffi types int))) yes.
         Eve_DrawArc <- (lib function: #'Eve_DrawArc' type: ((ffi types void) function(ffi types int, ffi types int, ffi types uint, ffi types int, ffi types int))) yes.
         Eve_DrawText <- (lib function: #'Eve_DrawText' type: ((ffi types void) function(ffi types string, ffi types int, ffi types int, Eve_Font pointer))) yes.
         Eve_DrawChar <- (lib function: #'Eve_DrawChar' type: ((ffi types void) function(ffi types uint, ffi types int, ffi types int, Eve_Font pointer))) yes.
@@ -183,6 +187,9 @@
     DrawPointRect(x, y, w, h, step) => Eve_DrawPointRect value(x, y, w, h, step);
     DrawRoundedRect(x, y, w, h, r) => Eve_DrawRoundedRect value(x, y, w, h, r);
     FillRoundedRect(x, y, w, h, r) => Eve_FillRoundedRect value(x, y, w, h, r);
+
+    DrawCircle(x, y, r) => Eve_DrawCircle value(x, y, r);
+    FillCircle(x, y, r) => Eve_FillCircle value(x, y, r);
 
     DrawArc(x, y, r, a1, a2) => Eve_DrawArc value(x, y, r, a1, a2);
 

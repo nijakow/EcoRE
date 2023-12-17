@@ -5,12 +5,17 @@
     Instance :: Clonable
     {
         |
-            objects
+            presentations
         |
 
         {
             init => (
-                objects <- std util newVector.
+                presentations <- std util newVector.
+              ^ self
+            );
+
+            renderOn: renderer => (
+                presentations do: [ :each | each renderOn: renderer ].
               ^ self
             );
 
