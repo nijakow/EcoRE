@@ -1,0 +1,115 @@
+
+
+"Resizable circle"
+{
+    isa Clonable;
+
+    drawOn: stream DynamicInfo: dynamic => (
+        | radius <- dynamic radius |
+
+        stream withRoom: (Rectangle W: radius H: radius) ForGraphicsDo: [ :graphics |
+            graphics at: (Point X: 0 Y: 0) put: (FilledCircle R: radius Color: (Colors Green)).
+        ]
+    );
+}
+
+
+
+
+Dynamic <- {
+    isa Clonable;
+
+    button <- Button Caption: 'Click Me' OnClick: [ ... ].
+}
+
+
+Static <- {
+    isa Singleton;
+
+    addObject: object DynamicInfo: dynamic => (
+        (dynamic list) add: object.
+      ^ true
+    );
+
+    grabObject: object DynamicInfo: dynamic => (
+        (dynamic list) remove: object.
+      ^ true
+    );
+
+    dynamic => (animation stopped?);
+
+    drawOn: stream DynamicInfo: dynamic => (
+        (stream << 'Hello World!') newline.
+
+        " Gets translated into:
+
+        paper at: (Point X:  0 Y: 0) put: (CharacterGuiObject Character: $'H').
+        paper at: (Point X: 16 Y: 0) put: (CharacterGuiObject Character: $'e').
+        paper at: (Point X: 32 Y: 0) put: (CharacterGuiObject Character: $'l').
+        paper at: (Point X: 48 Y: 0) put: (CharacterGuiObject Character: $'l').
+        paper at: (Point X: 64 Y: 0) put: (CharacterGuiObject Character: $'o').
+        paper at: (Point X: 80 Y: 0) put: (CharacterGuiObject Character: $' ').
+        paper at: (Point X: 96 Y: 0) put: (CharacterGuiObject Character: $'W').
+        paper at: (Point X:112 Y: 0) put: (CharacterGuiObject Character: $'o').
+        paper at: (Point X:128 Y: 0) put: (CharacterGuiObject Character: $'r').
+        paper at: (Point X:144 Y: 0) put: (CharacterGuiObject Character: $'l').
+        paper at: (Point X:160 Y: 0) put: (CharacterGuiObject Character: $'d').
+        paper at: (Point X:176 Y: 0) put: (CharacterGuiObject Character: $'!').
+        "
+
+        (stream emit: (Button Caption: 'Click Me' OnClick: [ ... ])) newline.
+
+        " Gets translated into:
+        paper at: (Point X:  0 Y: 16) put: (MorphGuiObject Morph: button)."
+
+        "
+            Hello World!
+             - [   Click   ]
+               [    me!    ]
+             - [Click Me #2]
+                  __
+             -   /  \
+                 \__/
+        "
+
+        (
+            (dynamic list) do: [ :uiObject |
+                stream << ' - '.
+                (stream emit: uiObject) newline.
+            ]
+        ).
+
+        stream withRoom: (Rectangle W: 100 H: 100) ForGraphicsDo: [ :graphics |
+            graphics at: (Point X: 10 Y: 10) put: (FilledCircle R: 10 Color: (Colors Green)).
+            graphics at: (Point X: 10 Y: 30) put: (Text Caption: 'Hi').
+
+            graphics at: (Point X: 10 Y: 50) put: (Button Caption: 'Click Me' OnClick: $[ ... ]).
+            graphics at: (Point X: 10 Y: 50) put: (dynamic button).
+
+            (
+                | y <- 50 |
+                (dynamic list) do: [ :uiObject |
+                    graphics at: (Point X: 10 Y: y) put: uiObject.
+                    y <- y + 20.
+                ]
+            ).
+        ]
+    );
+}
+
+
+Kernel <- {
+    isa Clonable;
+
+    add: kernel => (
+        (staticPart addObject: kernel DynamicInfo: dynamicPart) ifFalse: [ std except Throw: 'Error!' ].
+      ^ self
+    );
+}
+
+{
+    Main => (
+        (Static marry: (Dynamic new))
+            add: (Button Caption: 'Click Me' OnClick: [ ... ])
+    );
+}
