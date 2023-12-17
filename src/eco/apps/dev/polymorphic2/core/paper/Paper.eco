@@ -14,10 +14,18 @@
               ^ self
             );
 
+            add: presentation => (
+                presentations add: presentation.
+              ^ self
+            );
+
             renderOn: renderer => (
                 presentations do: [ :each | each renderOn: renderer ].
               ^ self
             );
+
+            "For now, ignore viewport and just render everything."
+            renderOn: renderer Viewport: viewport => renderOn: renderer;
 
             writeOn: w => w << 'a paper';
         }

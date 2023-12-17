@@ -4,4 +4,45 @@ std Module
     with app = $;
 
     core :: (here / 'core' / '_.eco') importIn: self;
+
+
+    PaperWrapperMorph :: Clonable {
+        with inherited own Morph = $package gfx morphic morphs Morph;
+
+        paper <- No;
+
+        {
+            paper: p => (
+                paper <- Yes: p.
+                renderDirty.
+              ^ self
+            );
+
+            renderImplOn: renderer => (
+                paper yes: [ :p | p renderOn: renderer ].
+              ^ self
+            );
+
+            writeOn: w => w << 'a paper wrapper morph';
+        }
+    };
+
+
+    Test => (
+        | paper <- ((core paper) Paper) New, r <- 5 |
+
+        1 to: 2500 do: [ :i |
+            paper
+              ~ add: ((core paper Presentation) At: (math geometry Point X: (((i mod: 100) * r * 2) + r) Y: (r + (r * 2 * (i / 100)))) Object: (core objects FilledCircle Radius: r)).
+        ].
+
+        (framework actions open) ui BuildAndOpen: [ :ui |
+            ui Window(400, 400,
+                ui VBox(
+                    ui Label: 'Hello World!',
+                    PaperWrapperMorph new paper: paper
+                )
+            )
+        ]
+    );
 }
