@@ -36,6 +36,16 @@ std Module
             circle <- (core objects FilledCircle Radius: r)
         |
 
+        stream emit: circle.
+        stream emit: circle.
+
+        stream withRoom: (math geometry Point X: 100 Y: 100) ForGraphicsDo: [ :graphics |
+            graphics at: (math geometry Point X: 50 Y: 50) put: (core objects FilledCircle Radius: 25).
+        ].
+
+        stream emit: circle.
+        stream newline.
+
         1 to: 2500 do: [ :i |
             stream emit: circle.
             ((i mod: 50) == 0) if: [

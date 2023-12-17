@@ -28,8 +28,9 @@
             protected graphicsInBounds: bounds => emitter graphicsForBounds: bounds;
             
             protected graphicsExtent: extent => (
+                | currentCursor <- cursor |
                 reserveExtent: extent.
-              ^ graphicsInBounds: (cursor extent: extent)
+              ^ graphicsInBounds: (currentCursor extent: extent)
             );
 
             protected reserveExtent: extent => (

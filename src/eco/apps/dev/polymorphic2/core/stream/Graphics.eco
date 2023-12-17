@@ -16,9 +16,14 @@
               ^ self
             );
 
+            at: offset put: object => (
+                emitter at: (bounds origin + offset) emit: object.
+              ^ self
+            );
+
             writeOn: w => w << 'a graphics stream';
         }
     };
 
-    Emitter: emitter Bounds: bounds => (Instance clone) emitter: emitter Bounds: bounds;
+    Emitter: emitter Bounds: bounds => (Instance clone) emitter: emitter bounds: bounds;
 }
