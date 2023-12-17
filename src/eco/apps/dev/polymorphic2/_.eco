@@ -58,7 +58,9 @@ std Module
             ui Window(400, 400,
                 ui VBox(
                     ui Label: 'Hello World!',
-                    PaperWrapperMorph new paper: paper
+                    ui Clipped(
+                        PaperWrapperMorph new paper: paper
+                    )
                 )
             )
         ]
