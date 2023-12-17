@@ -49,9 +49,9 @@ std Module
         stream emit: circle.
         stream newline.
 
-        1 to: 2500 do: [ :i |
+        1 to: 25 do: [ :i |
             stream emit: circle.
-            ((i mod: 50) == 0) if: [
+            ((i mod: 5) == 0) if: [
                 stream newline.
             ].
         ].
@@ -63,11 +63,8 @@ std Module
 
         (framework actions open) ui BuildAndOpen: [ :ui |
             ui Window(400, 400,
-                ui VBox(
-                    ui Label: 'Hello World!',
-                    ui Clipped(
-                        PaperWrapperMorph new paper: paper
-                    )
+                ui Clipped(
+                    PaperWrapperMorph new paper: paper
                 )
             )
         ]

@@ -6,7 +6,9 @@ std Module
 
         catches: aPoint => false;
 
-        bounds => subclassResponsibility;
+        bounds    => subclassResponsibility;
+
+        emitOnStream: stream => stream emitDrawable: self;
 
         renderAt: offset On: renderer => self;
     };

@@ -16,6 +16,8 @@
               ^ self
             );
 
+            emitOnStream: stream => stream emitMorphKernel: self;
+
             writeOn: w => w << 'a morph kernel';
         }
     };

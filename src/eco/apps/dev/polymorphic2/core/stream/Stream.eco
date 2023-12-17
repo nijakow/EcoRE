@@ -47,15 +47,22 @@
 
             "TODO: Outputting objects at a specific position using 'emit:at:'"
 
-            emit: object => (
+            emitDrawable: object => (
                 |
-                    objectBounds  <- object bounds,
+                    objectBounds  <- object minBounds,
                     currentCursor <- cursor
                 |
                 reserveExtent: objectBounds extent.
                 emitter emit: object at: (currentCursor - (objectBounds origin)).
               ^ self
             );
+
+            emitMorphKernel: kernel => (
+                "TODO"
+              ^ self
+            );
+
+            emit: object => object emitOnStream: self;
 
             "TODO: Outputting objects without adjusting their position"
 

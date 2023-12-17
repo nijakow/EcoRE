@@ -1,0 +1,33 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        with inherited DrawObject <- $package;
+        
+        |
+            kernel,
+            bounds
+        |
+
+        {
+            initWithKernel: kernel Extent: extent => (
+                kernel <- kernel.
+                bounds <- (polymorphic math geometry Rectangle) X: 0 Y: 0 W: (extent x) H: (extent y).
+              ^ self
+            );
+
+            catches: aPoint => bounds containsPoint: aPoint;
+
+            renderAt: offset On: renderer => (
+                "TODO"
+              ^ self
+            );
+
+            writeOn: w => w << 'a placed morph';
+        }
+    };
+
+    Kernel: kernel Extent: extent => (Instance clone) initWithKernel: kernel Extent: extent;
+}
