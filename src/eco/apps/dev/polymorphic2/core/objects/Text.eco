@@ -1,0 +1,34 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        with inherited DrawObject <- $package;
+        
+        |
+            text,
+            bounds
+        |
+
+        {
+            initWithCaption: caption => (
+                text <- (polymorphic gfx eve) Text: caption.
+                bounds <- (polymorphic math geometry Rectangle) X: 0 Y: 0 W: (text width) H: (text height).
+              ^ self
+            );
+
+            catches: aPoint => bounds containsPoint: aPoint;
+
+            renderAt: offset On: renderer => (
+                renderer setR: 255 G: 255 B: 255.
+                renderer drawText: text X: (offset x) Y: (offset y).
+              ^ self
+            );
+
+            writeOn: w => w << 'some text';
+        }
+    };
+
+    Caption: caption => (Instance clone) initWithCaption: caption;
+}
