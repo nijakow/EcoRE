@@ -29,6 +29,8 @@
             varargs  <- decl third
         |
 
+        (slotname == #'') if: [ ^ self ].
+
         (check: TokenType RARROW) yes: [
             | body <- parseExpression |
             builder addCodeSlotWithFlags: flags
@@ -110,13 +112,17 @@
 
     parseMoleculeUntil: stop WithBuilder: builder => (
         [ :break |
-            begin
-              if: [ (check: stop)             isYes ] then: [ break value                      ] ~
-              if: [ (check: TokenType ISA)    isYes ] then: [ parseIsaSlotWithBuilder: builder ] ~
-              if: [ (check: TokenType LCURLY) isYes ] then: [ parseTraitWithBuilder: builder   ] ~
-            default: [ parseSlotWithBuilder: builder ].
-            (check: stop) yes: [ break value ].
-            expect: TokenType SEPARATOR
+            [ :continue |
+                begin
+                  if: [ (check: stop)             isYes ] then: [ break    value                   ] ~
+                  if: [ (check: TokenType BAR)    isYes ] then: [ continue value                   ] ~
+                  if: [ (check: TokenType ISA)    isYes ] then: [ parseIsaSlotWithBuilder: builder ] ~
+                  if: [ (check: TokenType LCURLY) isYes ] then: [ parseTraitWithBuilder:   builder ] ~
+                default: [ parseSlotWithBuilder: builder ].
+                (check: TokenType BAR) yes: [ continue value ].
+                (check: stop) yes: [ break value ].
+                expect: TokenType SEPARATOR
+            ] withRestart.
         ] repeatWithBreak.
     );
 
