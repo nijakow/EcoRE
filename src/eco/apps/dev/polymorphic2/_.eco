@@ -29,11 +29,18 @@ std Module
 
 
     Test => (
-        | paper <- ((core paper) Paper) New, r <- 5 |
+        |
+            paper  <- ((core paper) Paper) Extent: (math geometry Point X: 400 Y: 400),
+            stream <- paper stream,
+            r      <- 5,
+            circle <- (core objects FilledCircle Radius: r)
+        |
 
         1 to: 2500 do: [ :i |
-            paper
-              ~ add: ((core paper Presentation) At: (math geometry Point X: (((i mod: 100) * r * 2) + r) Y: (r + (r * 2 * (i / 100)))) Object: (core objects FilledCircle Radius: r)).
+            stream emit: circle.
+            ((i mod: 50) == 0) if: [
+                stream newline.
+            ].
         ].
 
         (framework actions open) ui BuildAndOpen: [ :ui |

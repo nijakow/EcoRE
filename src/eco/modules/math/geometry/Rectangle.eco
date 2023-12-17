@@ -24,6 +24,8 @@
             w => corner x - origin x;
             h => corner y - origin y;
 
+            extent => (geometry Point X: w Y: h);
+
             topLeft => origin;
             topCenter => (geometry Point X: (origin x + (w / 2)) Y: origin y);
             topRight => (geometry Point X: corner x Y: origin y);
@@ -43,6 +45,7 @@
             );
 
             translateBy: point => (geometry Rectangle X: (origin x + point x) Y: (origin y + point y) W: w H: h);
+            translateToOrigin  => (geometry Rectangle X: 0 Y: 0 W: w H: h); 
 
             originForOrientation: orientation => orientation selectX: x Y: y;
             dimensionForOrientation: orientation => orientation selectX: w Y: h;

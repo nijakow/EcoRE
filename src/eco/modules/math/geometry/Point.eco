@@ -45,6 +45,7 @@
             corner: other => (geometry Rectangle) Origin: self Corner: other;
             extent: other => (geometry Rectangle) Origin: self Extent: other;
             w: w h: h => (geometry Rectangle) Origin: self W: w H: h;
+            asRectangle => (geometry Rectangle) Origin: (geometry Point Origin) Extent: self;
 
             dimensionForOrientation: orientation => orientation selectX: x Y: y;
 

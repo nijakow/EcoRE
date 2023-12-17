@@ -5,11 +5,15 @@
     Instance :: Clonable
     {
         |
+            bounds,
             presentations
         |
 
         {
-            init => (
+            protected polymorphic <- $package;
+
+            initWithBounds: _bounds => (
+                bounds        <- _bounds.
                 presentations <- std util newVector.
               ^ self
             );
@@ -18,6 +22,9 @@
                 presentations add: presentation.
               ^ self
             );
+
+            emitter => (polymorphic core stream Emitter) Paper: self;
+            stream  => emitter stream;
 
             renderOn: renderer => (
                 presentations do: [ :each | each renderOn: renderer ].
@@ -31,5 +38,6 @@
         }
     };
 
-    New => Instance new;
+    Bounds: bounds => (Instance clone) initWithBounds: bounds;
+    Extent: extent => Bounds: (extent asRectangle);
 }

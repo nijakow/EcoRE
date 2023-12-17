@@ -4,20 +4,72 @@
     Instance :: Clonable
     {
         |
+            emitter,
+
             xOffset <- 0,
-            yOffset <- 0
+            yOffset <- 0,
+
+            nextLineDelta <- 0
         |
 
         {
-            protected polymorphic <- $;
+            protected polymorphic <- $package;
+
+            emitter: e x: x y: y => (
+                emitter <- e.
+                xOffset <- x.
+                yOffset <- y.
+              ^ self
+            );
 
             protected cursor => (polymorphic math geometry Point) X: xOffset Y: yOffset;
+            protected bounds => emitter bounds;
 
-            protected graphicsInBounds: bounds => todo;
-            protected graphicsExtent:   extent => graphicsInBounds: (cursor extent: extent);
+            protected graphicsInBounds: bounds => emitter graphicsForBounds: bounds;
+            
+            protected graphicsExtent: extent => (
+                reserveExtent: extent.
+              ^ graphicsInBounds: (cursor extent: extent)
+            );
 
+            protected reserveExtent: extent => (
+                xOffset <- xOffset + (extent x).
+                nextLineDelta <- nextLineDelta max: (extent y).
+              ^ self
+            );
+
+            withGraphicsDo: block => block value(graphicsInBounds: self bounds);
             withGraphicsInBounds: bounds Do: block => block value(graphicsInBounds: bounds);
             withRoom: extent ForGraphicsDo: block  => block value(graphicsExtent: extent);
+
+            "TODO: Outputting objects via the '<<' operator"
+
+            "TODO: Outputting objects at a specific position using 'emit:at:'"
+
+            emit: object => (
+                |
+                    objectBounds  <- object bounds,
+                    currentCursor <- cursor
+                |
+                reserveExtent: objectBounds extent.
+                emitter emit: object at: (currentCursor - (objectBounds origin)).
+              ^ self
+            );
+
+            "TODO: Outputting objects without adjusting their position"
+
+            newline => (
+                xOffset <- bounds x.
+                yOffset <- yOffset + nextLineDelta.
+                nextLineDelta <- 0.
+              ^ self
+            );
+
+            commit => self;
         }
     };
+
+    Emitter: emitter X: x Y: y => (Instance clone) emitter: emitter x: x y: y;
+    Emitter: emitter At: point => Emitter: emitter X: (point x) Y: (point y);
+    Emitter: emitter           => Emitter: emitter X: (emitter bounds x) Y: (emitter bounds y);
 }

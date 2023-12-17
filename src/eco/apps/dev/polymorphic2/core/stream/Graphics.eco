@@ -1,11 +1,24 @@
+
 {
     isa std Classlike;
 
     Instance :: Clonable
     {
+        |
+            emitter,
+            bounds
+        |
 
         {
+            emitter: e bounds: b => (
+                emitter <- e.
+                bounds <- b.
+              ^ self
+            );
 
+            writeOn: w => w << 'a graphics stream';
         }
     };
+
+    Emitter: emitter Bounds: bounds => (Instance clone) emitter: emitter Bounds: bounds;
 }

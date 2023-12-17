@@ -1,0 +1,42 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            paper,
+            bounds
+        |
+
+        {
+            protected polymorphic <- $package;
+
+            paper: p bounds: b => (
+                paper  <- p.
+                bounds <- b.
+              ^ self
+            );
+
+            graphicsForBounds: bounds => (polymorphic core stream Graphics) Emitter: self Bounds: bounds;
+            streamAtX: x Y: y         => (polymorphic core stream Stream) Emitter: self X: x Y: y;
+            streamAt: point           => (polymorphic core stream Stream) Emitter: self At: point;
+            stream                    => (polymorphic core stream Stream) Emitter: self;
+
+            at: offset emit: presentable => (
+                | presentation <- (polymorphic core paper Presentation) At: offset Object: presentable |
+
+                paper add: presentation.
+
+              ^ self
+            );
+
+            emit: presentable at: offset => at: offset emit: presentable;
+
+            writeOn: w => w << 'an emitter';
+        }
+    };
+
+    Paper: paper Bounds: bounds => (Instance clone) paper: paper bounds: bounds;
+    Paper: paper                => Paper: paper Bounds: (paper bounds);
+}
