@@ -1,7 +1,6 @@
 
+std Module
 {
-    isa std Module;
-
     morph  :: (here / 'morph'  / '_.eco') importIn: $package;
     paper  :: (here / 'paper'  / '_.eco') importIn: $package;
     stream :: (here / 'stream' / '_.eco') importIn: $package;

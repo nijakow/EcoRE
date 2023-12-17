@@ -1,0 +1,21 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        behavior, state;
+        
+        {
+            initWithBehavior: b State: s => (
+                behavior <- b.
+                state <- s.
+              ^ self
+            );
+
+            writeOn: w => w << 'a morph kernel';
+        }
+    };
+
+    Behavior: behavior State: state => (Instance new) initWithBehavior: behavior State: state;
+}

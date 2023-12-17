@@ -1,0 +1,14 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        
+        {
+            writeOn: w => w << 'a morph state';
+        }
+    };
+
+    New => Instance new;
+}

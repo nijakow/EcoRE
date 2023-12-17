@@ -1,0 +1,18 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        
+        {
+            protected polymorphic <- $package;
+
+            link: state => ((polymorphic core morph) Kernel) Behavior: self State: state;
+
+            writeOn: w => w << 'a morph behavior';
+        }
+    };
+
+    New => Instance new;
+}
