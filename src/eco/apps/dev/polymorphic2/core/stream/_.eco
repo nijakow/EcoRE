@@ -1,4 +1,6 @@
 
 std Module
 {
+    Stream   :: (here / 'Stream.eco')   importIn: $package;
+    Graphics :: (here / 'Graphics.eco') importIn: $package;
 }

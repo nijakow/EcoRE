@@ -1,0 +1,11 @@
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+
+        {
+
+        }
+    };
+}

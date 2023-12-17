@@ -1,0 +1,23 @@
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            xOffset <- 0,
+            yOffset <- 0
+        |
+
+        {
+            protected polymorphic <- $;
+
+            protected cursor => (polymorphic math geometry Point) X: xOffset Y: yOffset;
+
+            protected graphicsInBounds: bounds => todo;
+            protected graphicsExtent:   extent => graphicsInBounds: (cursor extent: extent);
+
+            withGraphicsInBounds: bounds Do: block => block value(graphicsInBounds: bounds);
+            withRoom: extent ForGraphicsDo: block  => block value(graphicsExtent: extent);
+        }
+    };
+}
