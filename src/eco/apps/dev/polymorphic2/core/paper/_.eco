@@ -1,4 +1,5 @@
 
 std Module
 {
+    Paper :: (here / 'Paper.eco') importIn: self;
 }

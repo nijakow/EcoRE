@@ -37,6 +37,9 @@
 
             midpoint: other => (geometry Point) X: (x + other x) / 2 Y: (y + other y) / 2;
 
+            distanceTo: other => (((x - other x) * (x - other x)) + ((y - other y) * (y - other y))) sqrt;
+            distanceToOrigin  => ((x * x) + (y * y)) sqrt;
+
             transpose => (geometry Point) X: y Y: x;
 
             corner: other => (geometry Rectangle) Origin: self Corner: other;

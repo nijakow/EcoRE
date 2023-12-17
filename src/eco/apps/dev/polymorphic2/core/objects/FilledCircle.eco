@@ -1,0 +1,30 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        with inherited DrawObject <- $package;
+        
+        |
+            radius <- 0,
+            protected cachedBounds
+        |
+
+        {
+            initWithRadius: r => (
+                radius <- r.
+                cachedBounds <- ((polymorphic math geometry) Rectangle) X: (r negate) Y: (r negate) W: (r * 2) H: (r * 2).
+              ^ self
+            );
+
+            catches: aPoint => (aPoint distanceToOrigin) <= radius;
+
+            bounds => cachedBounds;
+
+            writeOn: w => w << 'a filled circle of radius ' << radius;
+        }
+    };
+
+    Radius: radius => (Instance new) initWithRadius: radius;
+}

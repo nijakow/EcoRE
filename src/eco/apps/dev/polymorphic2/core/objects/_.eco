@@ -1,0 +1,13 @@
+
+std Module
+{
+    DrawObject :: Trait {
+        protected polymorphic = $package;
+
+        catches: aPoint => false;
+
+        bounds => subclassResponsibility;
+    };
+
+    FilledCircle :: (here / 'FilledCircle.eco') importIn: (self DrawObject);
+}

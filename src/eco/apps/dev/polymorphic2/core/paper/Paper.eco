@@ -1,0 +1,22 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            objects
+        |
+
+        {
+            init => (
+                objects <- std util newVector.
+              ^ self
+            );
+
+            writeOn: w => w << 'a paper';
+        }
+    };
+
+    New => Instance new;
+}
