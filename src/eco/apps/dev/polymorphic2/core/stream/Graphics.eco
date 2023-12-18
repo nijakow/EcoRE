@@ -22,8 +22,8 @@
                 |
                     objectBounds <-
                         (polymorphic math geometry Rectangle)
-                            X: object bounds x + offset x + bounds x
-                            Y: object bounds y + offset y + bounds y
+                            X: offset x + bounds x
+                            Y: offset y + bounds y
                             W: object bounds w
                             H: object bounds h.
                 |
