@@ -10,6 +10,8 @@
         |
 
         {
+            protected polymorphic <- $package;
+
             emitter: e bounds: b => (
                 emitter <- e.
                 bounds <- b.
@@ -17,7 +19,17 @@
             );
 
             at: offset put: object => (
-                emitter at: (bounds origin + offset) emit: object.
+                |
+                    objectBounds <-
+                        (polymorphic math geometry Rectangle)
+                            X: object bounds x + offset x + bounds x
+                            Y: object bounds y + offset y + bounds y
+                            W: object bounds w
+                            H: object bounds h.
+                |
+
+                emitter emit: object in: objectBounds.
+
               ^ self
             );
 

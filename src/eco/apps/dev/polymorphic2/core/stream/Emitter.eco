@@ -23,15 +23,15 @@
             streamAt: point           => (polymorphic core stream Stream) Emitter: self At: point;
             stream                    => (polymorphic core stream Stream) Emitter: self;
 
-            at: offset emit: presentable => (
-                | presentation <- (polymorphic core paper Presentation) At: offset Object: presentable |
+            in: bounds emit: presentable => (
+                | presentation <- (polymorphic core paper Presentation) Object: presentable Bounds: bounds |
 
                 paper add: presentation.
 
               ^ self
             );
 
-            emit: presentable at: offset => at: offset emit: presentable;
+            emit: presentable in: bounds => in: bounds emit: presentable;
 
             writeOn: w => w << 'an emitter';
         }

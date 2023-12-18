@@ -49,16 +49,21 @@
 
             emitDrawable: object => (
                 |
-                    objectBounds  <- object minBounds,
+                    objectBounds  <- object bounds,
                     currentCursor <- cursor
                 |
                 reserveExtent: objectBounds extent.
-                emitter emit: object at: (currentCursor - (objectBounds origin)).
+                emitter emit: object in: ((polymorphic math geometry Rectangle) X: (currentCursor x - objectBounds x) Y: (currentCursor y - objectBounds y) W: (objectBounds w) H: (objectBounds h)).
               ^ self
             );
 
             emitMorphKernel: kernel => (
-                "TODO"
+                |
+                    objectBounds  <- kernel minBounds,
+                    currentCursor <- cursor
+                |
+                reserveExtent: objectBounds extent.
+                "emitter emitMorph: kernel at: (currentCursor - (objectBounds origin))."
               ^ self
             );
 
