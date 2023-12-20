@@ -8,7 +8,7 @@
     minHeightOfKernel: kernel => 10;
 
     drawOn: stream Kernel: kernel => (
-        stream emit: ((polymorphic core objects Text) Caption: 'Morph!').
+        stream emit: ((polymorphic core objects Rectangle) X: 0 Y: 0 W: (minWidthOfKernel: kernel) H: (minHeightOfKernel: kernel)).
       ^ self
     );
 

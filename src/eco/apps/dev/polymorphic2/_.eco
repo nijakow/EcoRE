@@ -58,7 +58,17 @@ std Module
 
         stream newline.
 
-        stream emit: (((core morph Behavior) New) link).
+        | behavior <- (core morph Behavior) New |
+
+        stream emit: (behavior link).
+        stream emit: circle.
+        stream emit: (behavior link).
+        stream emit: circle.
+        stream newline.
+        stream emit: circle.
+        stream emit: (behavior link).
+        stream emit: circle.
+        stream emit: (behavior link).
 
         stream withGraphicsDo: [ :graphics |
             graphics at: (math geometry Point X:  0 Y:  0) put: (core objects Rectangle Bounds: (graphics bounds)).

@@ -16,6 +16,8 @@
               ^ self
             );
 
+            initWithX: x Y: y W: w H: h => initWithBounds: ((polymorphic math geometry Rectangle) X: x Y: y W: w H: h);
+
             catches: aPoint => bounds containsPoint: aPoint;
 
             renderAt: offset On: renderer => (
@@ -29,4 +31,5 @@
     };
 
     Bounds: bounds => (Instance clone) initWithBounds: bounds;
+    X: x Y: y W: w H: h => (Instance clone) initWithX: x Y: y W: w H: h;
 }
