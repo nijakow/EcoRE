@@ -26,7 +26,7 @@
 
             protected ensureNotDirty => (
                 dirty? -> [
-                    kernel drawOnStream: (paper stream).
+                    kernel drawOnStream: (paper stream) Instance: self.
                     dirty? <- false.
                 ].
               ^ self
