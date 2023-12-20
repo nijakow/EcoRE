@@ -2,6 +2,4 @@
 std Module
 {
     presenting :: (here / 'presenting' / '_.eco') importIn: $package;
-
-    Paper :: (here / 'Paper.eco') importIn: $package;
 }

@@ -24,19 +24,19 @@
             stream                    => (polymorphic core stream Stream) Emitter: self;
 
             emitDrawable: drawable In: bounds => (
-                | presentation <- (polymorphic core paper Presentation) Object: drawable Bounds: bounds |
+                | presentation <- (polymorphic core paper presenting DrawablePresentation) Object: drawable Bounds: bounds |
 
                 paper add: presentation.
 
               ^ self
             );
 
-            emitMorph: morph In: bounds => (
-                "TODO: Lookup morph in the paper cache"
+            emitMorph: kernel In: bounds => (
+                "TODO: Lookup morph kernel in the paper cache"
 
-                | wrapped <- (polymorphic core paper MorphWrapper) Morph: morph Bounds: (bounds translateToOrigin) |
+                | presentation <- (polymorphic core objects presenting MorphPresentation) Kernel: kernel Bounds: bounds |
 
-                emitDrawable: wrapped In: bounds.
+                paper add: presentation.
 
               ^ self
             );

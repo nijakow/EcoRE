@@ -1,0 +1,10 @@
+
+{
+    isa std Trait;
+
+    with inherited DefaultPresenter <- $package;
+
+    drawOn: stream Kernel: kernel => subclassResponsibility;
+
+    writeOn: w => w << 'a presenter';
+}

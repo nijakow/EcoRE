@@ -1,0 +1,7 @@
+
+std Module
+{
+    PresenterTrait :: (here / 'PresenterTrait.eco') importIn: $package;
+
+    DefaultPresenter :: (here / 'DefaultPresenter.eco') importIn: (self PresenterTrait);
+}

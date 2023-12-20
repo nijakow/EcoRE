@@ -1,0 +1,10 @@
+
+{
+    isa std Singleton;
+
+    with PresenterTrait <- $package;
+
+    drawOn: stream Kernel: kernel => self;
+
+    writeOn: w => w << 'the default presenter';
+}

@@ -1,0 +1,48 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            bounds,
+            kernel,
+            paper,
+
+            protected dirty? <- true
+        |
+
+        {
+            with inherited Presentation <- $package;
+
+            bounds: b kernel: k => (
+                bounds <- b.
+                kernel <- k.
+                paper  <- (polymorphic core paper Paper) Bounds: b.
+              ^ self
+            );
+
+            morphPresentation? => true;
+
+            protected ensureNotDirty => (
+                dirty? -> [
+                    kernel drawOnStream: (paper stream).
+                    dirty? <- false.
+                ].
+              ^ self
+            );
+
+            renderOn: renderer => (
+                ensureNotDirty.
+                withPushedRelativeOffset: offset Do: [
+                    paper renderOn: renderer.
+                ].
+              ^ self
+            );
+
+            writeOn: w => w << 'a morph presentation';
+        }
+    };
+
+    Kernel: kernel Bounds: bounds  => (Instance clone) bounds: bounds kernel: kernel;
+}

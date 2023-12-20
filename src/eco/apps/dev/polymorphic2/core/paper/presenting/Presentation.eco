@@ -1,0 +1,15 @@
+
+{
+    isa std Trait;
+
+    protected polymorphic <- $package;
+
+    bounds => subclassResponsibility;
+    offset => bounds origin;
+
+    morphPresentation? => false;
+
+    renderOn: renderer => subclassResponsibility;
+
+    writeOn: w => w << 'a presentation';
+}

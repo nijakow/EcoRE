@@ -4,4 +4,6 @@ std Module
     Kernel   :: (here / 'Kernel.eco')   importIn: $package;
     Behavior :: (here / 'Behavior.eco') importIn: $package;
     State    :: (here / 'State.eco')    importIn: $package;
+
+    behavior :: (here / 'behavior' / '_.eco') importIn: $package;
 }

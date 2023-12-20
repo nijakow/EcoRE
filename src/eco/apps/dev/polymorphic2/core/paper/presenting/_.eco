@@ -1,0 +1,7 @@
+
+std Module
+{
+    Presentation         :: (here / 'Presentation.eco')         importIn: $package;
+    MorphPresentation    :: (here / 'MorphPresentation.eco')    importIn: (self Presentation);
+    DrawablePresentation :: (here / 'DrawablePresentation.eco') importIn: (self Presentation);
+}

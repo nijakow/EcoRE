@@ -10,17 +10,17 @@
         |
 
         {
+            with inherited Presentation <- $package;
+
             bounds: b object: obj => (
                 bounds <- b.
                 object <- obj.
               ^ self
             );
 
-            offset => bounds origin;
-
             renderOn: renderer => object renderAt: offset On: renderer;
 
-            writeOn: w => w << 'a presentation';
+            writeOn: w => w << 'a drawable presentation';
         }
     };
 

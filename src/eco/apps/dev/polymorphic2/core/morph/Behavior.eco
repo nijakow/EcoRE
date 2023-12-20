@@ -4,9 +4,19 @@
 
     Instance :: Clonable
     {
+        |
+            presenter
+        |
         
         {
             protected polymorphic <- $package;
+
+            init => (
+                presenter <- (polymorphic core morph behavior presenting) DefaultPresenter.
+              ^ self
+            );
+
+            presenter: p => presenter <- p;
 
             link: state => ((polymorphic core morph) Kernel) Behavior: self State: state;
 
