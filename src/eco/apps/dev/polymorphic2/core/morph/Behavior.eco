@@ -21,6 +21,7 @@
             linkWithState: state => ((polymorphic core morph) Kernel) Behavior: self State: state;
 
             link => linkWithState: ((polymorphic core morph) State) New;
+            link: payload => linkWithState: ((polymorphic core morph) State) Payload: payload;
 
             writeOn: w => w << 'a morph behavior';
         }

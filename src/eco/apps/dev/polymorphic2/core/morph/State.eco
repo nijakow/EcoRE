@@ -4,11 +4,24 @@
 
     Instance :: Clonable
     {
-        
+        |
+            protected myPayload <- No
+        |
+
         {
+            init => (
+                myPayload <- No.
+              ^ self
+            );
+
+            payload    => myPayload yes;
+            payload: p => myPayload <- Yes: p;
+
             writeOn: w => w << 'a morph state';
         }
     };
 
     New => Instance new;
+
+    Payload: payload => (Instance new) payload: payload;
 }
