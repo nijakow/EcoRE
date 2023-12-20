@@ -33,11 +33,13 @@
               ^ graphicsInBounds: (currentCursor extent: extent)
             );
 
-            protected reserveExtent: extent => (
-                xOffset <- xOffset + (extent x).
-                nextLineDelta <- nextLineDelta max: (extent y).
+            protected reserveExtentX: x Y: y => (
+                xOffset <- xOffset + x.
+                nextLineDelta <- nextLineDelta max: y.
               ^ self
             );
+
+            protected reserveExtent: extent => reserveExtentX: (extent x) Y: (extent y);
 
             withGraphicsDo: block => block value(graphicsInBounds: self bounds);
             withGraphicsInBounds: bounds Do: block => block value(graphicsInBounds: bounds);
@@ -50,20 +52,22 @@
             emitDrawable: object => (
                 |
                     objectBounds  <- object bounds,
-                    currentCursor <- cursor
+                    currentX      <- xOffset,
+                    currentY      <- yOffset
                 |
-                reserveExtent: objectBounds extent.
-                emitter emitDrawable: object In: ((polymorphic math geometry Rectangle) X: (currentCursor x - objectBounds x) Y: (currentCursor y - objectBounds y) W: (objectBounds w) H: (objectBounds h)).
+                reserveExtentX: (objectBounds w) Y: (objectBounds h).
+                emitter emitDrawable: object In: ((polymorphic math geometry Rectangle) X: (currentX - objectBounds x) Y: (currentY - objectBounds y) W: (objectBounds w) H: (objectBounds h)).
               ^ self
             );
 
             emitMorphKernel: kernel => (
                 |
                     objectBounds  <- kernel minBounds,
-                    currentCursor <- cursor
+                    currentX      <- xOffset,
+                    currentY      <- yOffset
                 |
-                reserveExtent: objectBounds extent.
-                "emitter emitMorph: kernel at: (currentCursor - (objectBounds origin))."
+                reserveExtentX: (objectBounds w) Y: (objectBounds h).
+                emitter emitMorph: kernel In: ((polymorphic math geometry Rectangle) X: (currentX - objectBounds x) Y: (currentY - objectBounds y) W: (objectBounds w) H: (objectBounds h)).
               ^ self
             );
 
