@@ -18,20 +18,26 @@
               ^ self
             );
 
-            at: offset put: object => (
-                |
-                    objectBounds <-
-                        (polymorphic math geometry Rectangle)
-                            X: offset x + bounds x
-                            Y: offset y + bounds y
-                            W: object bounds w
-                            H: object bounds h.
-                |
+            protected boundsForOffset: offset => (
+              ^ (polymorphic math geometry Rectangle)
+                    X: offset x + bounds x
+                    Y: offset y + bounds y
+                    W: bounds w
+                    H: bounds h
+            );
 
-                emitter emit: object in: objectBounds.
-
+            at: offset PutDrawable: drawable => (
+                emitter emitDrawable: drawable In: (boundsForOffset: offset).
               ^ self
             );
+
+            at: offset PutMorph: morph => (
+                emitter emitMorph: morph In: (boundsForOffset: offset).
+              ^ self
+            );
+
+            at: offset put: object => object emitOnGraphics: self At: offset;
+            in: bounds put: object => object emitOnGraphics: self In: bounds;
 
             writeOn: w => w << 'a graphics stream';
         }

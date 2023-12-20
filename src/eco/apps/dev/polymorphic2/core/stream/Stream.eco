@@ -53,7 +53,7 @@
                     currentCursor <- cursor
                 |
                 reserveExtent: objectBounds extent.
-                emitter emit: object in: ((polymorphic math geometry Rectangle) X: (currentCursor x - objectBounds x) Y: (currentCursor y - objectBounds y) W: (objectBounds w) H: (objectBounds h)).
+                emitter emitDrawable: object In: ((polymorphic math geometry Rectangle) X: (currentCursor x - objectBounds x) Y: (currentCursor y - objectBounds y) W: (objectBounds w) H: (objectBounds h)).
               ^ self
             );
 

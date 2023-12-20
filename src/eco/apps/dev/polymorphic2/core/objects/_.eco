@@ -9,6 +9,8 @@ std Module
         bounds    => subclassResponsibility;
 
         emitOnStream: stream => stream emitDrawable: self;
+        emitOnGraphics: graphics At: offset => graphics at: offset PutDrawable: self;
+        emitOnGraphics: graphics In: bounds => graphics in: bounds PutDrawable: self;
 
         renderAt: offset On: renderer => self;
     };

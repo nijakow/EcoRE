@@ -23,15 +23,23 @@
             streamAt: point           => (polymorphic core stream Stream) Emitter: self At: point;
             stream                    => (polymorphic core stream Stream) Emitter: self;
 
-            in: bounds emit: presentable => (
-                | presentation <- (polymorphic core paper Presentation) Object: presentable Bounds: bounds |
+            emitDrawable: drawable In: bounds => (
+                | presentation <- (polymorphic core paper Presentation) Object: drawable Bounds: bounds |
 
                 paper add: presentation.
 
               ^ self
             );
 
-            emit: presentable in: bounds => in: bounds emit: presentable;
+            emitMorph: morph In: bounds => (
+                "TODO: Lookup morph in the paper cache"
+
+                | wrapped <- (polymorphic core paper MorphWrapper) Morph: morph Bounds: (bounds translateToOrigin) |
+
+                emitDrawable: wrapped In: bounds.
+
+              ^ self
+            );
 
             writeOn: w => w << 'an emitter';
         }
