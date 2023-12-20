@@ -34,7 +34,7 @@
 
             renderOn: renderer => (
                 ensureNotDirty.
-                withPushedRelativeOffset: offset Do: [
+                renderer withPushedRelativeOffset: offset Do: [
                     paper renderOn: renderer.
                 ].
               ^ self

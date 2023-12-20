@@ -2,9 +2,15 @@
 {
     isa std Singleton;
 
-    with PresenterTrait <- $package;
+    with inherited PresenterTrait <- $package;
 
-    drawOn: stream Kernel: kernel => self;
+    minWidthOfKernel:  kernel => 50;
+    minHeightOfKernel: kernel => 10;
+
+    drawOn: stream Kernel: kernel => (
+        stream emit: ((polymorphic core objects Text) Caption: 'Morph!').
+      ^ self
+    );
 
     writeOn: w => w << 'the default presenter';
 }

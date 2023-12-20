@@ -2,7 +2,10 @@
 {
     isa std Trait;
 
-    with inherited DefaultPresenter <- $package;
+    protected polymorphic <- $package;
+
+    minWidthOfKernel:  kernel => subclassResponsibility;
+    minHeightOfKernel: kernel => subclassResponsibility;
 
     drawOn: stream Kernel: kernel => subclassResponsibility;
 

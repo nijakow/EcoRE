@@ -56,6 +56,10 @@ std Module
             ].
         ].
 
+        stream newline.
+
+        stream emit: (((core morph Behavior) New) link).
+
         stream withGraphicsDo: [ :graphics |
             graphics at: (math geometry Point X:  0 Y:  0) put: (core objects Rectangle Bounds: (graphics bounds)).
             graphics at: (math geometry Point X: (graphics bounds w / 2) Y: (graphics bounds h / 2)) put: (core objects FilledCircle Radius: 25).

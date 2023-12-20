@@ -62,12 +62,13 @@
 
             emitMorphKernel: kernel => (
                 |
-                    objectBounds  <- kernel minBounds,
-                    currentX      <- xOffset,
-                    currentY      <- yOffset
+                    objectMinWidth  <- kernel minWidth,
+                    objectMinHeight <- kernel minHeight,
+                    currentX        <- xOffset,
+                    currentY        <- yOffset
                 |
-                reserveExtentX: (objectBounds w) Y: (objectBounds h).
-                emitter emitMorph: kernel In: ((polymorphic math geometry Rectangle) X: (currentX - objectBounds x) Y: (currentY - objectBounds y) W: (objectBounds w) H: (objectBounds h)).
+                reserveExtentX: objectMinWidth Y: objectMinHeight.
+                emitter emitMorph: kernel In: ((polymorphic math geometry Rectangle) X: (currentX) Y: (currentY) W: (objectMinWidth) H: (objectMinHeight)).
               ^ self
             );
 

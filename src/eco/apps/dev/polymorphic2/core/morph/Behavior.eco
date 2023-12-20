@@ -18,7 +18,9 @@
 
             presenter: p => presenter <- p;
 
-            link: state => ((polymorphic core morph) Kernel) Behavior: self State: state;
+            linkWithState: state => ((polymorphic core morph) Kernel) Behavior: self State: state;
+
+            link => linkWithState: ((polymorphic core morph) State) New;
 
             writeOn: w => w << 'a morph behavior';
         }
