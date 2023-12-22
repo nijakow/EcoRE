@@ -23,7 +23,18 @@
             minWidth  => (behavior presenter) minWidthOfKernel: self;
             minHeight => (behavior presenter) minHeightOfKernel: self;
 
-            drawOnStream: stream Instance: instance => (behavior presenter) drawOn: stream Kernel: self;
+            drawOnStream: stream                    => ( (behavior presenter) drawOn: stream Kernel: self. ^ self );
+            drawOnStream: stream Instance: instance => drawOnStream: stream;
+
+            drawOnPaper: paper => drawOnStream: (paper stream);
+
+            drawOnEmptyPaper => (
+                | paper <- (polymorphic core paper Paper) New |
+
+                drawOnPaper: paper.
+
+              ^ paper
+            );
 
             writeOn: w => w << 'a morph kernel';
         }
