@@ -48,7 +48,7 @@
             );
 
             emitter => (polymorphic core stream Emitter) Paper: self;
-            stream  => emitter stream;
+            stream  => (polymorphic core stream Stream) Emitter: emitter;
 
             renderOn: renderer => (
                 presentations do: [ :each | each renderOn: renderer ].

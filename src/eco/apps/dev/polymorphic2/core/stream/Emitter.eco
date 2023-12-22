@@ -28,10 +28,6 @@
             graphicsWithOrigin: origin MaybeExtent: extent => (polymorphic core stream Graphics) Emitter: self Origin: origin MaybeExtent: extent;
             graphicsForBounds: bounds                      => graphicsWithOrigin: (bounds origin) MaybeExtent: (Yes: (bounds extent));
 
-            streamAtX: x Y: y         => (polymorphic core stream Stream) Emitter: self X: x Y: y;
-            streamAt: point           => (polymorphic core stream Stream) Emitter: self At: point;
-            stream                    => (polymorphic core stream Stream) Emitter: self;
-
             emitDrawable: drawable In: bounds => (
                 | presentation <- (polymorphic core paper presenting DrawablePresentation) Object: drawable Bounds: bounds |
 
