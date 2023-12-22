@@ -25,6 +25,8 @@
             minWidth  => (behavior presenter) minWidthOfKernel: self;
             minHeight => (behavior presenter) minHeightOfKernel: self;
 
+            layoutForOrientation: orientation => ((polymorphic core morph) behavior layouting) ShrinkWrap;
+
             drawOnStream: stream                    => ( (behavior presenter) drawOn: stream Kernel: self. ^ self );
             drawOnStream: stream Instance: instance => drawOnStream: stream;
 
