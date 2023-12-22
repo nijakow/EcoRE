@@ -6,33 +6,52 @@
     {
         |
             emitter,
-            bounds
+            origin,
+            maybeExtent
         |
 
         {
             protected polymorphic <- $package;
 
-            emitter: e bounds: b => (
-                emitter <- e.
-                bounds <- b.
+            emitter: e Origin: o MaybeExtent: me => (
+                emitter     <- e.
+                origin      <- o.
+                maybeExtent <- me.
               ^ self
             );
 
-            protected boundsForOffset: offset => (
+            maybeBounds => (
+                maybeExtent yes: [ :extent |
+                  ^ Yes: (polymorphic math geometry Rectangle) Origin: origin Extent: extent
+                ].
+              ^ No
+            );
+
+            bounds => (polymorphic math geometry Rectangle) Origin: origin Extent: (maybeExtent yes);
+
+            protected boundsForOffset: offset Drawable: drawable => (
               ^ (polymorphic math geometry Rectangle)
-                    X: offset x + bounds x
-                    Y: offset y + bounds y
-                    W: bounds w
-                    H: bounds h
+                    X: origin x + offset x
+                    Y: origin y + offset y
+                    W: drawable bounds w
+                    H: drawable bounds h
+            );
+
+            protected boundsForOffset: offset Morph: kernel => (
+              ^ (polymorphic math geometry Rectangle)
+                    X: origin x + offset x
+                    Y: origin y + offset y
+                    W: kernel minWidth
+                    H: kernel minHeight
             );
 
             at: offset PutDrawable: drawable => (
-                emitter emitDrawable: drawable In: (boundsForOffset: offset).
+                emitter emitDrawable: drawable In: (boundsForOffset: offset Drawable: drawable).
               ^ self
             );
 
             at: offset PutMorph: morph => (
-                emitter emitMorph: morph In: (boundsForOffset: offset).
+                emitter emitMorph: morph In: (boundsForOffset: offset Morph: morph).
               ^ self
             );
 
@@ -43,5 +62,9 @@
         }
     };
 
-    Emitter: emitter Bounds: bounds => (Instance clone) emitter: emitter bounds: bounds;
+    Emitter: emitter Origin: origin MaybeExtent: extent => (Instance clone) emitter: emitter Origin: origin MaybeExtent: extent;
+    Emitter: emitter Origin: origin Extent: extent      => Emitter: emitter Origin: origin MaybeExtent: (Yes: extent);
+    Emitter: emitter Origin: origin                     => Emitter: emitter Origin: origin MaybeExtent: No;
+    Emitter: emitter Bounds: bounds                     => Emitter: emitter Origin: (bounds origin) Extent: (bounds extent);
+    Emitter: emitter                                    => Emitter: emitter Origin: (emitter origin) MaybeExtent: (emitter maybeExtent);
 }

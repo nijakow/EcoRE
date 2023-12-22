@@ -2,23 +2,32 @@
 {
     isa std Classlike;
 
+    protected polymorphic <- $package;
+
     Instance :: Clonable
     {
         |
             paper,
-            bounds
+            origin,
+            maybeExtent
         |
 
         {
             protected polymorphic <- $package;
 
-            paper: p bounds: b => (
-                paper  <- p.
-                bounds <- b.
+            paper: p origin: o maybeExtent: e => (
+                paper       <- p.
+                origin      <- o.
+                maybeExtent <- e.
               ^ self
             );
 
-            graphicsForBounds: bounds => (polymorphic core stream Graphics) Emitter: self Bounds: bounds;
+            extent => maybeExtent yes;
+            bounds => (polymorphic math geometry Rectangle) Origin: origin Extent: extent;
+
+            graphicsWithOrigin: origin MaybeExtent: extent => (polymorphic core stream Graphics) Emitter: self Origin: origin MaybeExtent: extent;
+            graphicsForBounds: bounds                      => graphicsWithOrigin: (bounds origin) MaybeExtent: (Yes: (bounds extent));
+
             streamAtX: x Y: y         => (polymorphic core stream Stream) Emitter: self X: x Y: y;
             streamAt: point           => (polymorphic core stream Stream) Emitter: self At: point;
             stream                    => (polymorphic core stream Stream) Emitter: self;
@@ -45,6 +54,8 @@
         }
     };
 
-    Paper: paper Bounds: bounds => (Instance clone) paper: paper bounds: bounds;
-    Paper: paper                => Paper: paper Bounds: (paper bounds);
+    Paper: paper Origin: origin MaybeExtent: extent => (Instance clone) paper: paper origin: origin maybeExtent: extent;
+    Paper: paper Origin: origin Extent: extent      => Paper: paper Origin: origin MaybeExtent: (Yes: extent);
+    Paper: paper Origin: origin                     => Paper: paper Origin: origin MaybeExtent: (paper maybeExtent);
+    Paper: paper                                    => Paper: paper Origin: ((polymorphic math geometry Point) Origin);
 }

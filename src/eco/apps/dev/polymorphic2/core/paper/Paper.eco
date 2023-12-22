@@ -5,18 +5,20 @@
     Instance :: Clonable
     {
         |
-            bounds,
+            extent <- No,
             presentations
         |
 
         {
             protected polymorphic <- $package;
 
-            initWithBounds: _bounds => (
-                bounds        <- _bounds.
+            initWithMaybeExtent: _extent => (
+                extent        <- _extent.
                 presentations <- std util newVector.
               ^ self
             );
+
+            maybeExtent => extent;
 
             add: presentation => (
                 presentations add: presentation.
@@ -38,6 +40,6 @@
         }
     };
 
-    Bounds: bounds => (Instance clone) initWithBounds: bounds;
-    Extent: extent => Bounds: (extent asRectangle);
+    Extent: extent => (Instance clone) initWithMaybeExtent: (Yes: extent);
+    New            => (Instance clone) initWithMaybeExtent: No;
 }

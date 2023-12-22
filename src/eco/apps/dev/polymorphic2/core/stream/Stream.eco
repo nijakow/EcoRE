@@ -25,7 +25,8 @@
             protected cursor => (polymorphic math geometry Point) X: xOffset Y: yOffset;
             protected bounds => emitter bounds;
 
-            protected graphicsInBounds: bounds => emitter graphicsForBounds: bounds;
+            protected graphicsWithOrigin: origin MaybeExtent: extent => emitter graphicsWithOrigin: origin MaybeExtent: extent;
+            protected graphicsInBounds: bounds                       => emitter graphicsForBounds: bounds;
             
             protected graphicsExtent: extent => (
                 | currentCursor <- cursor |
@@ -41,7 +42,7 @@
 
             protected reserveExtent: extent => reserveExtentX: (extent x) Y: (extent y);
 
-            withGraphicsDo: block => block value(graphicsInBounds: self bounds);
+            withGraphicsDo: block => block value(graphicsWithOrigin: (emitter origin) MaybeExtent: (emitter maybeExtent));
             withGraphicsInBounds: bounds Do: block => block value(graphicsInBounds: bounds);
             withRoom: extent ForGraphicsDo: block  => block value(graphicsExtent: extent);
 
@@ -77,7 +78,7 @@
             "TODO: Outputting objects without adjusting their position"
 
             newline => (
-                xOffset <- bounds x.
+                xOffset <- emitter origin x.
                 yOffset <- yOffset + nextLineDelta.
                 nextLineDelta <- 0.
               ^ self
@@ -89,5 +90,5 @@
 
     Emitter: emitter X: x Y: y => (Instance clone) emitter: emitter x: x y: y;
     Emitter: emitter At: point => Emitter: emitter X: (point x) Y: (point y);
-    Emitter: emitter           => Emitter: emitter X: (emitter bounds x) Y: (emitter bounds y);
+    Emitter: emitter           => Emitter: emitter X: (emitter origin x) Y: (emitter origin y);
 }

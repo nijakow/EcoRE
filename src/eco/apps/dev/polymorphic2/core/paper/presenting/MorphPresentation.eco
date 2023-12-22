@@ -18,7 +18,7 @@
             bounds: b kernel: k => (
                 bounds <- b.
                 kernel <- k.
-                paper  <- (polymorphic core paper Paper) Bounds: (b translateToOrigin).
+                paper  <- (polymorphic core paper Paper) Extent: (b extent).
               ^ self
             );
 
