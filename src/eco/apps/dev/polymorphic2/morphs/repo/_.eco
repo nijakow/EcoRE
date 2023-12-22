@@ -8,11 +8,8 @@ std Module
 
                         with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
 
-                        minWidthOfKernel:  kernel => 64;
-                        minHeightOfKernel: kernel => 64;
-
                         drawOn: stream Kernel: kernel => (
-                            stream emit: ((polymorphic core objects Rectangle) X: 0 Y: 0 W: (minWidthOfKernel: kernel) H: (minHeightOfKernel: kernel)).
+                            stream emit: ((polymorphic core objects Rectangle) X: 0 Y: 0 W: 64 H: 64).
                           ^ self
                         );
 
