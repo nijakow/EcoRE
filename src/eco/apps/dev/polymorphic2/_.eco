@@ -3,7 +3,8 @@ std Module
 {
     with app = $;
 
-    core :: (here / 'core' / '_.eco') importIn: self;
+    core   :: (here / 'core'   / '_.eco') importIn: self;
+    morphs :: (here / 'morphs' / '_.eco') importIn: self;
 
 
     PaperWrapperMorph :: Clonable {
@@ -69,6 +70,8 @@ std Module
         stream emit: (behavior link).
         stream emit: circle.
         stream emit: (behavior link).
+        stream newline.
+        stream emit: (morphs TestMorph link).
 
         stream withGraphicsDo: [ :graphics |
             graphics at: (math geometry Point X:  0 Y:  0) put: (core objects Rectangle Bounds: (graphics bounds)).
