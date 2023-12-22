@@ -79,6 +79,16 @@
 
             "TODO: Outputting objects without adjusting their position"
 
+            << object => (
+                | sw <- (std io StringWriter) new |
+
+                sw << object.
+
+                self emit: ((polymorphic core objects Text) Caption: (sw build)).
+
+              ^ self
+            );
+
             newline => (
                 xOffset <- emitter origin x.
                 yOffset <- yOffset + nextLineDelta.

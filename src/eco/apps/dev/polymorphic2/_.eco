@@ -37,6 +37,8 @@ std Module
             circle <- (core objects FilledCircle Radius: r)
         |
 
+        1 to: 5 do: [ :i | (stream << i) newline ].
+
         stream emit: ((core objects Text) Caption: 'Hello World!').
 
         stream emit: circle.
