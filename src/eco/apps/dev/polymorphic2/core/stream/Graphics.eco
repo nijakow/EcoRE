@@ -52,7 +52,7 @@
 
             at: offset PutMorph: morph => (
                 | paper <- morph drawOnEmptyPaper |
-                emitter emitMorph: morph In: (boundsForOffset: offset Morph: morph Paper: paper) Paper: paper.
+                emitter emitMorph: morph In: (boundsForOffset: offset Morph: morph Paper: paper).
               ^ self
             );
 

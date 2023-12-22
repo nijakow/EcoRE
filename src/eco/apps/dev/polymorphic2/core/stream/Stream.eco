@@ -71,7 +71,7 @@
                     bounds          <- (polymorphic math geometry Rectangle) X: (currentX) Y: (currentY) W: (objectMinWidth) H: (objectMinHeight)
                 |
                 reserveExtentX: objectMinWidth Y: objectMinHeight.
-                emitter emitMorph: kernel In: bounds Paper: paper.
+                emitter emitMorph: kernel In: bounds.
               ^ self
             );
 
