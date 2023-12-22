@@ -74,6 +74,7 @@ std Module
         stream emit: (behavior link).
         stream newline.
         stream emit: (morphs repo TestMorph link).
+        stream emit: ((morphs repo EmitMorph) link: (core objects FilledCircle Radius: 25)).
 
         stream withGraphicsDo: [ :graphics |
             graphics at: (math geometry Point X:  0 Y:  0) put: (core objects Rectangle Bounds: (graphics bounds)).

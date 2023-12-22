@@ -15,4 +15,19 @@ std Module
 
                         writeOn: w => w << 'the test presenter';
                     };
+    
+    EmitMorph <- ($package core morph Behavior) New
+                ~ presenter:
+                    {
+                        isa std Singleton;
+
+                        with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
+
+                        drawOn: stream Kernel: kernel => (
+                            stream emit: ((kernel state) payload).
+                          ^ self
+                        );
+
+                        writeOn: w => w << 'the emit presenter';
+                    };
 }
