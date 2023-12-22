@@ -5,10 +5,10 @@
     Instance :: Clonable
     {
         |
-            extent <- No,
-            presentations,
+            extent     <- No,
             realWidth  <- 0,
             realHeight <- 0,
+            presentations,
         |
 
         {
@@ -23,6 +23,7 @@
             );
 
             maybeExtent => extent;
+            realExtent  => (polymorphic math geometry Point) X: realWidth Y: realHeight;
 
             claimBounds: bounds => (
                 | bottomRight <- bounds bottomRight |

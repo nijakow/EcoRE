@@ -63,13 +63,15 @@
 
             emitMorphKernel: kernel => (
                 |
-                    objectMinWidth  <- kernel minWidth,
-                    objectMinHeight <- kernel minHeight,
+                    paper           <- kernel drawOnEmptyPaper,
+                    objectMinWidth  <- paper realWidth,
+                    objectMinHeight <- paper realHeight,
                     currentX        <- xOffset,
-                    currentY        <- yOffset
+                    currentY        <- yOffset,
+                    bounds          <- (polymorphic math geometry Rectangle) X: (currentX) Y: (currentY) W: (objectMinWidth) H: (objectMinHeight)
                 |
                 reserveExtentX: objectMinWidth Y: objectMinHeight.
-                emitter emitMorph: kernel In: ((polymorphic math geometry Rectangle) X: (currentX) Y: (currentY) W: (objectMinWidth) H: (objectMinHeight)).
+                emitter emitMorph: kernel In: bounds Paper: paper.
               ^ self
             );
 

@@ -15,10 +15,10 @@
         {
             with inherited Presentation <- $package;
 
-            bounds: b kernel: k => (
+            bounds: b kernel: k paper: p => (
                 bounds <- b.
                 kernel <- k.
-                paper  <- (polymorphic core paper Paper) Extent: (b extent).
+                paper  <- p.
               ^ self
             );
 
@@ -44,5 +44,5 @@
         }
     };
 
-    Kernel: kernel Bounds: bounds  => (Instance clone) bounds: bounds kernel: kernel;
+    Kernel: kernel Bounds: bounds Paper: paper => (Instance clone) bounds: bounds kernel: kernel paper: paper;
 }

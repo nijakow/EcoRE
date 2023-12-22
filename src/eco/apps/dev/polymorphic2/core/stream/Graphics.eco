@@ -37,12 +37,12 @@
                     H: drawable bounds h
             );
 
-            protected boundsForOffset: offset Morph: kernel => (
+            protected boundsForOffset: offset Morph: kernel Paper: paper => (
               ^ (polymorphic math geometry Rectangle)
                     X: origin x + offset x
                     Y: origin y + offset y
-                    W: kernel minWidth
-                    H: kernel minHeight
+                    W: paper realWidth
+                    H: paper realHeight
             );
 
             at: offset PutDrawable: drawable => (
@@ -51,7 +51,8 @@
             );
 
             at: offset PutMorph: morph => (
-                emitter emitMorph: morph In: (boundsForOffset: offset Morph: morph).
+                | paper <- morph drawOnEmptyPaper |
+                emitter emitMorph: morph In: (boundsForOffset: offset Morph: morph Paper: paper) Paper: paper.
               ^ self
             );
 

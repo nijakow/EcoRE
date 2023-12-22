@@ -40,15 +40,17 @@
               ^ self
             );
 
-            emitMorph: kernel In: bounds => (
+            emitMorph: kernel In: bounds Paper: morphPaper => (
                 "TODO: Lookup morph kernel in the paper cache"
 
-                | presentation <- (polymorphic core paper presenting MorphPresentation) Kernel: kernel Bounds: bounds |
+                | presentation <- (polymorphic core paper presenting MorphPresentation) Kernel: kernel Bounds: bounds Paper: morphPaper |
 
                 paper add: presentation.
 
               ^ self
             );
+
+            emitMorph: kernel In: bounds => emitMorph: kernel In: bounds Paper: ((polymorphic core paper Paper) New);
 
             writeOn: w => w << 'an emitter';
         }
