@@ -6,7 +6,9 @@
     {
         |
             extent <- No,
-            presentations
+            presentations,
+            realWidth  <- 0,
+            realHeight <- 0,
         |
 
         {
@@ -15,13 +17,32 @@
             initWithMaybeExtent: _extent => (
                 extent        <- _extent.
                 presentations <- std util newVector.
+                realWidth     <- 0.
+                realHeight    <- 0.
               ^ self
             );
 
             maybeExtent => extent;
 
+            claimBounds: bounds => (
+                | bottomRight <- bounds bottomRight |
+
+                realWidth  <- realWidth  max: bottomRight x.
+                realHeight <- realHeight max: bottomRight y.
+
+              ^ self
+            );
+
             add: presentation => (
+                claimBounds: presentation bounds.
                 presentations add: presentation.
+              ^ self
+            );
+
+            clear => (
+                presentations clear.
+                realWidth  <- 0.
+                realHeight <- 0.
               ^ self
             );
 
