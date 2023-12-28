@@ -31,6 +31,8 @@
 
             bounds: b kernel: k => bounds: b kernel: k paper: ((polymorphic core paper Paper) New);
 
+            morphPresentation? => true;
+
             noParent => (
                 parent <- No.
               ^ self
@@ -42,12 +44,27 @@
               ^ self
             );
 
-            morphPresentation? => true;
+            protected _redraw => (
+                kernel drawOnStream: (paper stream) Instance: self.
+                dirty? <- false.
+              ^ self
+            );
+
+            redrawInPlace => (
+                paper clear.
+                _redraw.
+              ^ self
+            );
+            redrawFreely  => (
+                paper clearAndReset.
+                _redraw.
+                "TODO: If the size of the paper has changed, we need to forward the change to the parent presentation."
+              ^ self
+            );
 
             protected ensureNotDirty => (
                 dirty? -> [
-                    kernel drawOnStream: (paper stream) Instance: self.
-                    dirty? <- false.
+                    _redraw.
                 ].
               ^ self
             );

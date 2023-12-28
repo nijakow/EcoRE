@@ -100,7 +100,7 @@ std Module
                     |
 
                     1 to: 10 do: [ :i |
-                        (payload3 morphs) add: ((morphs repo EmitMorph) link: (core objects FilledCircle Radius: (i * 3))).
+                        (payload3 morphs) add: ((morphs repo EmitMorph) link: (core objects FilledCircle Radius: ((11 - i) * 3))).
                     ].
 
                     (payload2 morphs) add: flex3.

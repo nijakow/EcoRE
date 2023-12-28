@@ -55,6 +55,12 @@
               ^ self
             );
 
+            clearAndReset => (
+                self clear.
+                self extent <- No.
+              ^ self
+            );
+
             emitter => (polymorphic core stream Emitter) Paper: self;
             stream  => (polymorphic core stream Stream) Emitter: emitter;
 
