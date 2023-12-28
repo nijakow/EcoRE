@@ -44,6 +44,7 @@
 
             withGraphicsDo: block => block value(graphicsWithOrigin: (emitter origin) MaybeExtent: (emitter maybeExtent));
             withGraphicsInBounds: bounds Do: block => block value(graphicsInBounds: bounds);
+            withGraphicsAtX: x Y: y W: w H: h Do: block => block value(graphicsInBounds: ((polymorphic math geometry Rectangle) X: x Y: y W: w H: h));
             withRoom: extent ForGraphicsDo: block  => block value(graphicsExtent: extent);
 
             "TODO: Outputting objects via the '<<' operator"
