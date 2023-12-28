@@ -87,8 +87,6 @@ std Module
                             |
 
                             stream withGraphicsAtX: 0 Y: 0 W: w H: h Do: [ :graphics |
-                                graphics at: ((polymorphic math geometry Point) X: 0 Y: 0) put: ((polymorphic core objects Rectangle) X: 0 Y: 0 W: w H: h).
-
                                 |
                                     offset <- 0,
                                 |

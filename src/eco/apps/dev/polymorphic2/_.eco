@@ -82,21 +82,35 @@ std Module
 
             (payload morphs) add: (morphs repo TestMorph link).
             (payload morphs) add: (morphs repo TestMorph link).
-            (payload morphs) add: (morphs repo TestMorph link).
-            (payload morphs) add: (morphs repo TestMorph link).
 
-            stream emit: flex.
-            stream newline.
-        ).
+            (
+                |
+                    flex2    <- morphs repo FlexMorph Vertical,
+                    payload2 <- (flex2 state) payload
+                |
 
-        (
-            |
-                flex    <- morphs repo FlexMorph Vertical,
-                payload <- (flex state) payload
-            |
+                (payload2 morphs) add: (morphs repo TestMorph link).
+                (payload2 morphs) add: (morphs repo TestMorph link).
+                (payload2 morphs) add: (morphs repo TestMorph link).
 
-            (payload morphs) add: (morphs repo TestMorph link).
-            (payload morphs) add: (morphs repo TestMorph link).
+                (
+                    |
+                        flex3    <- morphs repo FlexMorph Horizontal,
+                        payload3 <- (flex3 state) payload
+                    |
+
+                    1 to: 10 do: [ :i |
+                        (payload3 morphs) add: ((morphs repo EmitMorph) link: (core objects FilledCircle Radius: (i * 3))).
+                    ].
+
+                    (payload2 morphs) add: flex3.
+                ).
+
+                (payload2 morphs) add: (morphs repo TestMorph link).
+
+                (payload morphs) add: flex2.
+            ).
+
             (payload morphs) add: (morphs repo TestMorph link).
             (payload morphs) add: (morphs repo TestMorph link).
 
