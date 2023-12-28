@@ -16,6 +16,17 @@ std Module
                         writeOn: w => w << 'the test presenter';
                     };
     
+    EmitMorph <- ($package core morph Behavior) New
+                ~ presenter:
+                    {
+                        drawOn: stream Kernel: kernel => (
+                            stream emit: ((kernel state) payload).
+                          ^ self
+                        );
+
+                        writeOn: w => w << 'the emit presenter';
+                    };
+
     FlexMorph :: Module
     {
         protected polymorphic <- $package;
@@ -78,15 +89,4 @@ std Module
         Horizontal => ForOrientation: (polymorphic math geometry orientation) Horizontal;
         Vertical   => ForOrientation: (polymorphic math geometry orientation) Vertical;
     };
-
-    EmitMorph <- ($package core morph Behavior) New
-                ~ presenter:
-                    {
-                        drawOn: stream Kernel: kernel => (
-                            stream emit: ((kernel state) payload).
-                          ^ self
-                        );
-
-                        writeOn: w => w << 'the emit presenter';
-                    };
 }

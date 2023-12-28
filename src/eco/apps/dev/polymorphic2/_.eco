@@ -103,7 +103,7 @@ std Module
             stream emit: flex.
             stream newline.
         ).
-        stream emit: (morphs repo TestMorph link).
+
         stream emit: ((morphs repo EmitMorph) link: (core objects FilledCircle Radius: 25)).
 
         stream withGraphicsDo: [ :graphics |
