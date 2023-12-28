@@ -9,6 +9,9 @@
         isHorizontal => true;
         isVertical   => false;
 
+        horizontal? => true;
+        vertical?   => false;
+
         ifHorizontal: block => block value;
         ifVertical:   block => self;
         ifHorizontal: horiz
@@ -27,6 +30,9 @@
 
         isHorizontal => false;
         isVertical   => true;
+
+        horizontal? => false;
+        vertical?   => true;
 
         ifHorizontal: block => self;
         ifVertical:   block => block value;

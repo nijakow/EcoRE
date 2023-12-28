@@ -71,7 +71,36 @@ std Module
         stream emit: circle.
         stream emit: (behavior link).
         stream newline.
-        stream emit: (morphs repo TestMorph link).
+
+        (
+            |
+                flex    <- morphs repo FlexMorph Horizontal,
+                payload <- (flex state) payload
+            |
+
+            (payload morphs) add: (morphs repo TestMorph link).
+            (payload morphs) add: (morphs repo TestMorph link).
+            (payload morphs) add: (morphs repo TestMorph link).
+            (payload morphs) add: (morphs repo TestMorph link).
+
+            stream emit: flex.
+            stream newline.
+        ).
+
+        (
+            |
+                flex    <- morphs repo FlexMorph Vertical,
+                payload <- (flex state) payload
+            |
+
+            (payload morphs) add: (morphs repo TestMorph link).
+            (payload morphs) add: (morphs repo TestMorph link).
+            (payload morphs) add: (morphs repo TestMorph link).
+            (payload morphs) add: (morphs repo TestMorph link).
+
+            stream emit: flex.
+            stream newline.
+        ).
 
         stream withGraphicsDo: [ :graphics |
             graphics at: (math geometry Point X:  0 Y:  0) put: (core objects Rectangle Bounds: (graphics bounds)).

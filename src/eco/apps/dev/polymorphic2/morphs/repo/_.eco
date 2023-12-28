@@ -18,4 +18,67 @@ std Module
 
                         writeOn: w => w << 'the test presenter';
                     };
+    
+    FlexMorph :: Module
+    {
+        protected polymorphic <- $package;
+
+        Behavior <- ($package core morph Behavior) New
+                  ~ presenter:
+                      {
+                        isa std Singleton;
+
+                        with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
+
+                        minWidthOfKernel:  kernel => 0;
+                        minHeightOfKernel: kernel => 0;
+
+                        drawOn: stream Kernel: kernel => (
+                            |
+                                orientation <- ((kernel state) payload) orientation,
+                                morphs      <- ((kernel state) payload) morphs
+                            |
+
+                            morphs do: [ :morph |
+                                "Very simple for now..."
+                                stream emit: morph.
+                                (orientation vertical?) -> [
+                                    stream newline.
+                                ].
+                            ].
+
+                          ^ self
+                        );
+
+                        writeOn: w => w << 'the flex presenter';
+                      };
+        
+        Payload :: Classlike
+        {
+            Instance :: Clonable
+            {
+                |
+                    orientation,
+                    morphs
+                |
+
+                {
+                    protected polymorphic <- $package;
+
+                    initWithOrientation: o => (
+                        orientation <- o.
+                        morphs      <- std util newVector.
+                      ^ self
+                    );
+                }
+            };
+
+            Orientation: orientation => (Instance clone) initWithOrientation: orientation;
+        };
+
+        ForOrientation: orientation => (Behavior link: (Payload Orientation: orientation));
+
+        Horizontal => ForOrientation: (polymorphic math geometry orientation) Horizontal;
+        Vertical   => ForOrientation: (polymorphic math geometry orientation) Vertical;
+    };
 }
