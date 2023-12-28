@@ -58,7 +58,7 @@
                     currentY      <- yOffset
                 |
                 reserveExtentX: (objectBounds w) Y: (objectBounds h).
-                emitter emitDrawable: object In: ((polymorphic math geometry Rectangle) X: (currentX - objectBounds x) Y: (currentY - objectBounds y) W: (objectBounds w) H: (objectBounds h)).
+                emitter emitDrawable: object At: ((polymorphic math geometry Point) X: (currentX - objectBounds x) Y: (currentY - objectBounds y)).
               ^ self
             );
 

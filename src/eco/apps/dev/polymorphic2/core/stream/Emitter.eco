@@ -33,6 +33,14 @@
               ^ self
             );
 
+            emitDrawable: drawable At: offset => (
+                | presentation <- (polymorphic core paper presenting DrawablePresentation) Object: drawable Offset: offset |
+
+                paper add: presentation.
+
+              ^ self
+            );
+
             emitMorph: kernel In: bounds => (
                 "TODO: Lookup morph kernel in the paper cache"
 

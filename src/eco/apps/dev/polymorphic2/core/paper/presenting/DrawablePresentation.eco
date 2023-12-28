@@ -6,6 +6,7 @@
     {
         |
             bounds,
+            offset,
             object
         |
 
@@ -13,7 +14,15 @@
             with inherited Presentation <- $package;
 
             bounds: b object: obj => (
+                offset <- b origin.
                 bounds <- b.
+                object <- obj.
+              ^ self
+            );
+
+            offset: o object: obj => (
+                offset <- o.
+                bounds <- (obj bounds) translateBy: offset.
                 object <- obj.
               ^ self
             );
@@ -28,4 +37,5 @@
     };
 
     Object: object Bounds: bounds  => (Instance clone) bounds: bounds object: object;
+    Object: object Offset: offset  => (Instance clone) offset: offset object: object;
 }
