@@ -43,6 +43,11 @@
               ^ self
             );
 
+            claimBounds: bounds => (
+                paper claimBounds: (bounds translateBy: origin).
+              ^ self
+            );
+
             writeOn: w => w << 'an emitter';
         }
     };

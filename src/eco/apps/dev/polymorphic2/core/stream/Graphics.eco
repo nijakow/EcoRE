@@ -17,6 +17,9 @@
                 emitter     <- e.
                 origin      <- o.
                 maybeExtent <- me.
+                me yes: [ :extent |
+                    emitter claimBounds: ((polymorphic math geometry Rectangle) Origin: origin Extent: extent).
+                ].
               ^ self
             );
 
@@ -53,6 +56,16 @@
             at: offset PutMorph: morph => (
                 | paper <- morph drawOnEmptyPaper |
                 emitter emitMorph: morph In: (boundsForOffset: offset Morph: morph Paper: paper).
+              ^ self
+            );
+
+            in: bounds PutDrawable: drawable => (
+                emitter emitDrawable: drawable In: bounds.
+              ^ self
+            );
+
+            in: bounds PutMorph: morph => (
+                emitter emitMorph: morph In: bounds.
               ^ self
             );
 
