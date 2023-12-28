@@ -115,6 +115,7 @@ std Module
             (payload morphs) add: (morphs repo TestMorph link).
 
             stream emit: flex.
+            stream emit: ((core objects Text) Caption: 'Some text :D').
             stream newline.
         ).
 

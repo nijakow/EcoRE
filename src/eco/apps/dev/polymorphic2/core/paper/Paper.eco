@@ -5,9 +5,10 @@
     Instance :: Clonable
     {
         |
-            extent     <- No,
-            realWidth  <- 0,
-            realHeight <- 0,
+            extent             <- No,
+            realWidth          <- 0,
+            realHeight         <- 0,
+            parentPresentation <- No,
             presentations,
         |
 
@@ -15,15 +16,18 @@
             protected polymorphic <- $package;
 
             initWithMaybeExtent: _extent => (
-                extent        <- _extent.
-                presentations <- std util newVector.
-                realWidth     <- 0.
-                realHeight    <- 0.
+                extent             <- _extent.
+                presentations      <- std util newVector.
+                realWidth          <- 0.
+                realHeight         <- 0.
+                parentPresentation <- No.
               ^ self
             );
 
             maybeExtent => extent;
             realExtent  => (polymorphic math geometry Point) X: realWidth Y: realHeight;
+
+            parentPresentation: p => parentPresentation <- Yes: p;
 
             claimBounds: bounds => (
                 | bottomRight <- bounds bottomRight |
@@ -35,12 +39,16 @@
             );
 
             add: presentation => (
+                parentPresentation yes: [ :pp |
+                    presentation parent: pp.
+                ].
                 claimBounds: presentation bounds.
                 presentations add: presentation.
               ^ self
             );
 
             clear => (
+                presentations do: [ :each | each noParent ].
                 presentations clear.
                 realWidth  <- 0.
                 realHeight <- 0.

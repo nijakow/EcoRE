@@ -9,6 +9,9 @@
 
     morphPresentation? => false;
 
+    noParent => subclassResponsibility;
+    parent: p => subclassResponsibility;
+
     renderOn: renderer => subclassResponsibility;
 
     writeOn: w => w << 'a presentation';
