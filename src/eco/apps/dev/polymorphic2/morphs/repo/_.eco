@@ -42,6 +42,16 @@ std Module
 
                         with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
 
+
+                        protected calculatePreferredExtentForMorph(morph, orientation, flexSize) => (
+                            | layout <- morph layoutForOrientation: orientation |
+
+                            (layout flexible?)   -> [ ^ flexSize ].
+                            (layout shrinkWrap?) -> [ ^ morph minExtentForOrientation: orientation ].
+
+                          ^ std sys error ThrowMessage: 'Unknown layout type'
+                        );
+
                         drawOn: stream Kernel: kernel => (
                             |
                                 orientation          <- ((kernel state) payload) orientation,
@@ -86,8 +96,8 @@ std Module
                                 morphs do: [ :morph |
 
                                     |
-                                        morphMainAxisExtent  <- (morph minExtentForOrientation: mainAxisOrientation),
-                                        morphCrossAxisExtent <- (morph minExtentForOrientation: crossAxisOrientation),
+                                        morphMainAxisExtent     <- calculatePreferredExtentForMorph(morph, mainAxisOrientation, flexSize),
+                                        morphCrossAxisExtent    <- calculatePreferredExtentForMorph(morph, crossAxisOrientation, crossAxisSize),
                                         bounds <- (polymorphic math geometry Rectangle)
                                                     X: (mainAxisOrientation selectX: offset Y: 0)
                                                     Y: (mainAxisOrientation selectX: 0      Y: offset)
