@@ -24,6 +24,12 @@
 
             minWidth  => (behavior presenter) minWidthOfKernel: self;
             minHeight => (behavior presenter) minHeightOfKernel: self;
+            minExtent => ((polymorphic math geometry) Point) X: minWidth Y: minHeight;
+            minExtentForOrientation: orientation => (
+                (orientation horizontal?) -> [ ^ minWidth  ].
+                (orientation vertical?)   -> [ ^ minHeight ].
+              ^ std sys error ThrowMessage: 'Unknown orientation!'
+            );
 
             layoutForOrientation: orientation => ((polymorphic core morph) behavior layouting) ShrinkWrap;
 

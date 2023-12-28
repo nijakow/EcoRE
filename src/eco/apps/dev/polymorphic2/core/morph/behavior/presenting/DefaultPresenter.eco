@@ -4,9 +4,6 @@
 
     with inherited PresenterTrait <- $package;
 
-    minWidthOfKernel:  kernel => (kernel drawOnEmptyPaper) realWidth;
-    minHeightOfKernel: kernel => (kernel drawOnEmptyPaper) realHeight;
-
     drawOn: stream Kernel: kernel => (
         stream emit: ((polymorphic core objects Rectangle) X: 0 Y: 0 W: 16 H: 16).
       ^ self

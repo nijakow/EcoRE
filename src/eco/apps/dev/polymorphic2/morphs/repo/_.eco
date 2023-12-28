@@ -19,6 +19,10 @@ std Module
     EmitMorph <- ($package core morph Behavior) New
                 ~ presenter:
                     {
+                        isa std Singleton;
+
+                        with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
+
                         drawOn: stream Kernel: kernel => (
                             stream emit: ((kernel state) payload).
                           ^ self
@@ -40,9 +44,19 @@ std Module
 
                         drawOn: stream Kernel: kernel => (
                             |
-                                orientation <- ((kernel state) payload) orientation,
-                                morphs      <- ((kernel state) payload) morphs
+                                orientation          <- ((kernel state) payload) orientation,
+                                morphs               <- ((kernel state) payload) morphs,
+                                mainAxisOrientation  <- orientation,
+                                crossAxisOrientation <- orientation opposite,
+                                mainAxisMinSize      <- 0,
+                                crossAxisMinSize     <- 0,
                             |
+
+                            "Compute the minimum size of the main axis and the cross axis."
+                            morphs do: [ :morph |
+                                mainAxisMinSize  <- mainAxisMinSize + (morph minExtentForOrientation: mainAxisOrientation).
+                                crossAxisMinSize <- crossAxisMinSize max: (morph minExtentForOrientation: crossAxisOrientation).
+                            ].
 
                             morphs do: [ :morph |
                                 "Very simple for now..."

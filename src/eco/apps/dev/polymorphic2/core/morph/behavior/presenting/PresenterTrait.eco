@@ -4,8 +4,8 @@
 
     protected polymorphic <- $package;
 
-    minWidthOfKernel:  kernel => subclassResponsibility;
-    minHeightOfKernel: kernel => subclassResponsibility;
+    minWidthOfKernel:  kernel => (kernel drawOnEmptyPaper) realWidth;
+    minHeightOfKernel: kernel => (kernel drawOnEmptyPaper) realHeight;
 
     drawOn: stream Kernel: kernel => subclassResponsibility;
 
