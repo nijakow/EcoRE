@@ -25,8 +25,8 @@
             protected cursor => (polymorphic math geometry Point) X: xOffset Y: yOffset;
             protected bounds => emitter bounds;
 
-            protected graphicsWithOrigin: origin MaybeExtent: extent => emitter graphicsWithOrigin: origin MaybeExtent: extent;
-            protected graphicsInBounds: bounds                       => emitter graphicsForBounds: bounds;
+            protected graphicsWithOrigin: origin MaybeExtent: extent => (polymorphic core stream Graphics) Emitter: emitter Origin: origin MaybeExtent: extent;
+            protected graphicsInBounds: bounds                       => graphicsWithOrigin: (bounds origin) MaybeExtent: (Yes: (bounds extent));
             
             protected graphicsExtent: extent => (
                 | currentCursor <- cursor |
@@ -63,19 +63,31 @@
 
             emitMorphKernel: kernel => (
                 |
-                    objectMinWidth  <- kernel minWidth,
-                    objectMinHeight <- kernel minHeight,
+                    paper           <- kernel drawOnEmptyPaper,
+                    objectMinWidth  <- paper realWidth,
+                    objectMinHeight <- paper realHeight,
                     currentX        <- xOffset,
-                    currentY        <- yOffset
+                    currentY        <- yOffset,
+                    bounds          <- (polymorphic math geometry Rectangle) X: (currentX) Y: (currentY) W: (objectMinWidth) H: (objectMinHeight)
                 |
                 reserveExtentX: objectMinWidth Y: objectMinHeight.
-                emitter emitMorph: kernel In: ((polymorphic math geometry Rectangle) X: (currentX) Y: (currentY) W: (objectMinWidth) H: (objectMinHeight)).
+                emitter emitMorph: kernel In: bounds.
               ^ self
             );
 
             emit: object => object emitOnStream: self;
 
             "TODO: Outputting objects without adjusting their position"
+
+            << object => (
+                | sw <- (std io StringWriter) new |
+
+                sw << object.
+
+                self emit: ((polymorphic core objects Text) Caption: (sw build)).
+
+              ^ self
+            );
 
             newline => (
                 xOffset <- emitter origin x.

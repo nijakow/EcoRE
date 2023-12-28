@@ -5,8 +5,10 @@
     Instance :: Clonable
     {
         |
-            extent <- No,
-            presentations
+            extent     <- No,
+            realWidth  <- 0,
+            realHeight <- 0,
+            presentations,
         |
 
         {
@@ -15,18 +17,38 @@
             initWithMaybeExtent: _extent => (
                 extent        <- _extent.
                 presentations <- std util newVector.
+                realWidth     <- 0.
+                realHeight    <- 0.
               ^ self
             );
 
             maybeExtent => extent;
+            realExtent  => (polymorphic math geometry Point) X: realWidth Y: realHeight;
+
+            claimBounds: bounds => (
+                | bottomRight <- bounds bottomRight |
+
+                realWidth  <- realWidth  max: bottomRight x.
+                realHeight <- realHeight max: bottomRight y.
+
+              ^ self
+            );
 
             add: presentation => (
+                claimBounds: presentation bounds.
                 presentations add: presentation.
               ^ self
             );
 
+            clear => (
+                presentations clear.
+                realWidth  <- 0.
+                realHeight <- 0.
+              ^ self
+            );
+
             emitter => (polymorphic core stream Emitter) Paper: self;
-            stream  => emitter stream;
+            stream  => (polymorphic core stream Stream) Emitter: emitter;
 
             renderOn: renderer => (
                 presentations do: [ :each | each renderOn: renderer ].
