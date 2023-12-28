@@ -48,15 +48,31 @@ std Module
                                 morphs               <- ((kernel state) payload) morphs,
                                 mainAxisOrientation  <- orientation,
                                 crossAxisOrientation <- orientation opposite,
-                                mainAxisMinSize      <- 0,
-                                crossAxisMinSize     <- 0,
+                                mainAxisSize         <- 0,
+                                crossAxisSize        <- 0,
+                                flexCount            <- 0,
+                                morphCount           <- morphs size,
+                                assignedSize         <- 0,
                             |
 
-                            "Compute the minimum size of the main axis and the cross axis."
+                            "Compute the size of the main axis and the cross axis."
                             morphs do: [ :morph |
-                                mainAxisMinSize  <- mainAxisMinSize + (morph minExtentForOrientation: mainAxisOrientation).
-                                crossAxisMinSize <- crossAxisMinSize max: (morph minExtentForOrientation: crossAxisOrientation).
+                                |
+                                    morphMainAxisExtent  <- (morph minExtentForOrientation: mainAxisOrientation),
+                                    morphCrossAxisExtent <- (morph minExtentForOrientation: crossAxisOrientation),
+                                |
+
+                                mainAxisSize  <- mainAxisSize + morphMainAxisExtent.
+                                crossAxisSize <- crossAxisSize max: morphCrossAxisExtent.
+
+                                (morph layoutForOrientation: mainAxisOrientation) flexible?
+                                  ~ if: [ flexCount <- flexCount + 1 ]
+                                  else: [ assignedSize <- assignedSize + morphMainAxisExtent ].
                             ].
+
+                            |
+                                flexSize <- (flexCount zero?) if: [ 0 ] else: [ ((mainAxisSize - assignedSize) asFloat / flexCount asFloat) asInt ],
+                            |
 
                             morphs do: [ :morph |
                                 "Very simple for now..."

@@ -17,11 +17,15 @@
     };
 
     with inherited checks = {
+        zero?         => (self == 0);
         isZero        => (self == 0);
         isNotZero     => isZero not;
+        negative?     => self < 0;
         isNegative    => self < 0;
         isNotNegative => isNegative not;
+        positive?     => self >= 0;
         isPositive    => self >= 0;
+        strictlyPositive?  => self > 0;
         isStrictlyPositive => self >= 0;
         isBetween: a And: b => [ self >= a ] and: [ self <= b ];
     };
