@@ -38,9 +38,6 @@ std Module
 
                         with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
 
-                        minWidthOfKernel:  kernel => 0;
-                        minHeightOfKernel: kernel => 0;
-
                         drawOn: stream Kernel: kernel => (
                             |
                                 orientation <- ((kernel state) payload) orientation,
