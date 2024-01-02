@@ -21,8 +21,17 @@
 
             world => (parent) yes: [ :p | ^ p world ] no: [ ^ No ];
 
-            reparent: p => parent <- Yes: p;
-            disconnect  => parent <- No;
+            reparent: p => (
+                parent <- Yes: p.
+                p addChild: self.
+              ^ self
+            );
+
+            disconnect => (
+                p removeChild: self.
+                parent <- No.
+              ^ self
+            );
 
             writeOn: w => (
                 w << 'a morph node'.

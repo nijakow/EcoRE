@@ -2,18 +2,14 @@
 {
     isa std Singleton;
 
-    with inherited Node :: $package;
-
-    init => (
-        $(Node) init.
-      ^ self
-    );
-
     parent => No;
     world  => No;
 
-    reparent: p => self;
-    disconnect  => self;
+    addChild:    child => self;
+    removeChild: child => self;
+
+    childrenDo:        block => self;
+    childrenReverseDo: block => self;
 
     writeOn: w => w << 'a void node';
 }

@@ -19,9 +19,6 @@
 
             parent => No;
 
-            reparent: p => self;
-            disconnect  => self;
-
             writeOn: w => w << 'a world node';
         }
     };
