@@ -6,7 +6,8 @@
     {
         |
             behavior,
-            state
+            state,
+            protected morphs
         |
         
         {
@@ -14,7 +15,8 @@
 
             initWithBehavior: b State: s => (
                 behavior <- b.
-                state <- s.
+                state    <- s.
+                morphs   <- std util newVector.
               ^ self
             );
 
@@ -48,6 +50,23 @@
 
             instantiateWithPaper: paper => ((polymorphic core morph) Morph) Kernel: self Paper: paper;
             instantiate                 => ((polymorphic core morph) Morph) Kernel: self;
+
+            addMorph: morph => (
+                morphs add: morph.
+              ^ self
+            );
+
+            removeMorph: morph => (
+                morphs remove: morph.
+              ^ self
+            );
+
+            changed => (
+                morphs do: [ :each |
+                    each changed.
+                ].
+              ^ self
+            );
 
             writeOn: w => w << 'a morph kernel';
         }

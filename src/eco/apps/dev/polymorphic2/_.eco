@@ -78,6 +78,8 @@ std Module
         stream emit: (behavior link).
         stream newline.
 
+        | flex2 |
+
         (
             |
                 flex    <- morphs repo FlexMorph Horizontal,
@@ -88,9 +90,9 @@ std Module
             (payload morphs) add: (morphs repo TestMorph link).
 
             (
-                |
+                
                     flex2    <- morphs repo FlexMorph Vertical,
-                    payload2 <- (flex2 state) payload
+                |    payload2 <- (flex2 state) payload
                 |
 
                 (payload2 morphs) add: (morphs repo TestMorph link).
@@ -103,7 +105,7 @@ std Module
                         payload3 <- (flex3 state) payload
                     |
 
-                    1 to: 10 do: [ :i |
+                    1 to: 4 do: [ :i |
                         (payload3 morphs) add: ((morphs repo EmitMorph) link: (core objects FilledCircle Radius: ((11 - i) * 3))).
                     ].
 
@@ -112,6 +114,7 @@ std Module
 
                 (payload2 morphs) add: (morphs repo TestMorph link).
 
+                (payload morphs) add: flex2.
                 (payload morphs) add: flex2.
             ).
 
@@ -122,6 +125,9 @@ std Module
             stream emit: ((core objects Text) Caption: 'Some text :D').
             stream newline.
         ).
+
+        ((flex2 state payload) morphs) add: ((morphs repo EmitMorph) link: ((core objects Text) Caption: 'This is where the fun begins >:D')).
+        flex2 changed.
 
         stream emit: ((morphs repo EmitMorph) link: (core objects FilledCircle Radius: 25)).
 

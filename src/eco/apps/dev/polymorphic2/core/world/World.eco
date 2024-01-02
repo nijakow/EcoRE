@@ -29,13 +29,11 @@
             );
 
             iAmDirty: morph => (
-                (std io out << 'Dirty: ' << morph) newline commit.
                 morph redrawInPlace.
               ^ self
             );
 
             iHaveChanged: morph => (
-                (std io out << 'Changed: ' << morph) newline commit.
                 morph redrawFreely.
               ^ self
             );

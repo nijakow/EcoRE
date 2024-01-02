@@ -39,11 +39,13 @@
 
             protected enterWorld: world => (
                 world addMorph: self.
+                kernel addMorph: self.
                 world iAmDirty: self.
               ^ self
             );
 
             protected exitWorld: world => (
+                kernel removeMorph: self.
                 world removeMorph: self.
               ^ self
             );
@@ -76,7 +78,6 @@
             );
 
             protected internalRedraw => (
-                (std io out << 'Internal redraw') newline commit.
                 kernel drawOnStream: (paper stream) Instance: self.
               ^ self
             );
@@ -87,8 +88,6 @@
               ^ self
             );
             redrawFreely  => (
-                (std io out << 'Redrawing freely...') newline commit.
-
                 | extent <- paper realExtent |
                 
                 paper clearAndReset.
@@ -97,11 +96,9 @@
 
                 "If the size of the paper has changed, we need to forward the change to the parent presentation."
                 (((paper realExtent) equalsPoint: extent) not) -> [
-                    (std io out << 'Paper extent has changed...') newline commit.
                     parentMorph yes: [ :p |
-                        (std io out << ' -> forwarding to parent...') newline commit.
                         p changed.
-                    ]
+                    ].
                 ].
               ^ self
             );
