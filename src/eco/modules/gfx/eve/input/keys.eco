@@ -559,8 +559,9 @@
           ~ case: sdlscans SDL_SCANCODE_PERIOD       do: [ isShift if: [ ^ keycodes symbol_greater_than ] else: [ ^ keycodes symbol_period        ] ]
           ~ case: sdlscans SDL_SCANCODE_SLASH        do: [ isShift if: [ ^ keycodes symbol_question     ] else: [ ^ keycodes symbol_slash         ] ]
           ~ case: sdlscans SDL_SCANCODE_BACKSLASH    do: [ isShift if: [ ^ keycodes symbol_pipe         ] else: [ ^ keycodes symbol_backslash     ] ]
-          ~ case: sdlscans SDL_SCANCODE_F1           do: [ ^ keycodes special_copy ]
+          ~ case: sdlscans SDL_SCANCODE_F1           do: [ ^ keycodes special_copy  ]
           ~ case: sdlscans SDL_SCANCODE_F2           do: [ ^ keycodes special_paste ]
+          ~ case: sdlscans SDL_SCANCODE_F12          do: [ ^ keycodes special_quit  ]
         ~ default: [ ^ keycodes special_unknown ]
     );
 }
