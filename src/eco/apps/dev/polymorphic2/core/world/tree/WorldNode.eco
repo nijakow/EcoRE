@@ -2,7 +2,7 @@
 {
     isa std Classlike;
 
-    Instance :: std Clonable
+    Instance :: Clonable
     {
         |
             world
@@ -10,7 +10,7 @@
 
         {
             initWithWorld: w => (
-                world <- w.
+                world <- Yes: w.
               ^ self
             );
 

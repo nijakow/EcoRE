@@ -8,7 +8,6 @@
             extent             <- No,
             realWidth          <- 0,
             realHeight         <- 0,
-            parentPresentation <- No,
             presentations,
         |
 
@@ -20,14 +19,11 @@
                 presentations      <- std util newVector.
                 realWidth          <- 0.
                 realHeight         <- 0.
-                parentPresentation <- No.
               ^ self
             );
 
             maybeExtent => extent;
             realExtent  => (polymorphic math geometry Point) X: realWidth Y: realHeight;
-
-            parentPresentation: p => parentPresentation <- Yes: p;
 
             claimBounds: bounds => (
                 | bottomRight <- bounds bottomRight |
@@ -39,16 +35,14 @@
             );
 
             add: presentation => (
-                parentPresentation yes: [ :pp |
-                    presentation parent: pp.
-                ].
+                "TODO: Set the node of the presented object to the paper's node..."
                 claimBounds: presentation bounds.
                 presentations add: presentation.
               ^ self
             );
 
             clear => (
-                presentations do: [ :each | each noParent ].
+                "presentations do: [ :each | each noParent ]."
                 presentations clear.
                 realWidth  <- 0.
                 realHeight <- 0.

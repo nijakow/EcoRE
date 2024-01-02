@@ -1,0 +1,9 @@
+
+{
+    isa std Singleton;
+
+    parent => No;
+    world  => No;
+
+    writeOn: w => w << 'a void node';
+}

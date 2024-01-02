@@ -2,7 +2,7 @@
 {
     isa std Classlike;
 
-    Instance :: std Clonable
+    Instance :: Clonable
     {
         |
             parent <- No
@@ -14,7 +14,7 @@
               ^ self
             );
 
-            world => (parent yes) world;
+            world => (parent) yes: [ :p | ^ p world ] no: [ ^ No ];
 
             writeOn: w => w << 'a morph node';
         }

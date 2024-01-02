@@ -9,7 +9,7 @@
             kernel,
             paper,
 
-            parent <- No,
+            node,
 
             protected dirty? <- true
         |
@@ -22,9 +22,9 @@
                 kernel <- k.
                 paper  <- p.
 
-                parent <- No.
+                node   <- (polymorphic core world) tree VoidNode.
 
-                p parentPresentation: self.
+                "TODO: Set the paper's node to a MorphNode pointing to us..."
 
               ^ self
             );
@@ -32,17 +32,6 @@
             bounds: b kernel: k => bounds: b kernel: k paper: ((polymorphic core paper Paper) New);
 
             morphPresentation? => true;
-
-            noParent => (
-                parent <- No.
-              ^ self
-            );
-
-            parent: newParent => (
-                self noParent.
-                parent <- Yes: newParent.
-              ^ self
-            );
 
             protected _redraw => (
                 kernel drawOnStream: (paper stream) Instance: self.

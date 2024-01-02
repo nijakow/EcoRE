@@ -27,9 +27,6 @@
               ^ self
             );
 
-            noParent => self;
-            parent: p => self;
-
             renderOn: renderer => object renderAt: offset On: renderer;
 
             writeOn: w => w << 'a drawable presentation';
