@@ -5,30 +5,38 @@
     Instance :: std Clonable
     {
         |
-            node
+            node,
+            morphs
         |
 
         {
             protected polymorphic <- $package;
 
             init => (
-                node <- (((polymorphic core morph) tree nodes) WorldNode) World: self.
+                node   <- (((polymorphic core morph) tree nodes) WorldNode) World: self.
+                morphs <- std util newVector.
               ^ self
             );
 
             addMorph: morph => (
-                (std io out << 'Adding morph ' << morph) newline commit.
+                morphs add: morph. "TODO, FIXME, XXX: Add only if not present!"
               ^ self
             );
 
             removeMorph: morph => (
-                (std io out << 'Removing morph ' << morph) newline commit.
+                morphs remove: morph.
               ^ self
             );
 
             iAmDirty: morph => (
                 (std io out << 'Dirty: ' << morph) newline commit.
                 morph redrawInPlace.
+              ^ self
+            );
+
+            iHaveChanged: morph => (
+                (std io out << 'Changed: ' << morph) newline commit.
+                morph redrawFreely.
               ^ self
             );
 

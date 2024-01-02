@@ -5,6 +5,8 @@
     reparent: p => self;
     disconnect  => self;
 
+    maybeMorph => No;
+
     childrenDo: block => self;
 
     writeOn: w => w << 'a node';

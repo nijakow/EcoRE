@@ -5,18 +5,20 @@
     Instance :: Clonable
     {
         |
-            parent <- No,
-            morph
+            parent     <- No,
+            maybeMorph <- No
         |
 
         {
             with inherited Node <- $package;
 
             initWithMorph: m => (
-                parent <- No.
-                morph  <- m.
+                parent     <- No.
+                maybeMorph <- Yes: m.
               ^ self
             );
+
+            morph => maybeMorph yes;
 
             world => (parent) yes: [ :p | ^ p world ] no: [ ^ No ];
 

@@ -32,6 +32,11 @@
               ^ self
             );
 
+            changed => (
+                world yes: [ :w | w iHaveChanged: self ].
+              ^ self
+            );
+
             protected enterWorld: world => (
                 world addMorph: self.
                 world iAmDirty: self.
@@ -56,8 +61,10 @@
               ^ self
             );
 
-            parent => node parent;
-            world  => node world;
+            parent      => node parent;
+            parentMorph => parent yes: [ :p | p maybeMorph ];
+
+            world => node world;
 
             childrenDo: block => (
                 "This is a bit of a hack, but it works like a charm :D"
@@ -69,6 +76,7 @@
             );
 
             protected internalRedraw => (
+                (std io out << 'Internal redraw') newline commit.
                 kernel drawOnStream: (paper stream) Instance: self.
               ^ self
             );
@@ -79,9 +87,22 @@
               ^ self
             );
             redrawFreely  => (
+                (std io out << 'Redrawing freely...') newline commit.
+
+                | extent <- paper realExtent |
+                
                 paper clearAndReset.
+                
                 internalRedraw.
-                "TODO: If the size of the paper has changed, we need to forward the change to the parent presentation."
+
+                "If the size of the paper has changed, we need to forward the change to the parent presentation."
+                (((paper realExtent) equalsPoint: extent) not) -> [
+                    (std io out << 'Paper extent has changed...') newline commit.
+                    parentMorph yes: [ :p |
+                        (std io out << ' -> forwarding to parent...') newline commit.
+                        p changed.
+                    ]
+                ].
               ^ self
             );
 
