@@ -46,6 +46,9 @@
               ^ paper
             );
 
+            instantiateWithPaper: paper => ((polymorphic core morph) Morph) Kernel: self Paper: paper;
+            instantiate                 => ((polymorphic core morph) Morph) Kernel: self;
+
             writeOn: w => w << 'a morph kernel';
         }
     };

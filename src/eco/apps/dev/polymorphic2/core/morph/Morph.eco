@@ -5,16 +5,62 @@
     Instance :: Clonable
     {
         |
+            bounds,
             kernel,
-            node
+            paper,
+
+            node,
+
+            protected dirty? <- true
         |
 
         {
             protected polymorphic <- $package;
 
-            initWithKernel: k => (
+            initWithKernel: k Paper: p => (
                 kernel <- k.
+                paper  <- p.
                 node   <- ((polymorphic core world) tree MorphNode) Morph: self.
+
+                paper node: node. "Set the paper's node to a MorphNode pointing to us..."
+
+              ^ self
+            );
+
+            initWithKernel: kernel => initWithKernel: kernel Paper: ((polymorphic core paper Paper) New);
+
+            connectToParentNode: parentNode => (
+                node reparent: parentNode.
+              ^ self
+            );
+
+            disconnectFromParentNode => (
+                node disconnect.
+              ^ self
+            );
+
+            protected _redraw => (
+                kernel drawOnStream: (paper stream) Instance: self.
+                dirty? <- false.
+              ^ self
+            );
+
+            redrawInPlace => (
+                paper clear.
+                _redraw.
+              ^ self
+            );
+            redrawFreely  => (
+                paper clearAndReset.
+                _redraw.
+                "TODO: If the size of the paper has changed, we need to forward the change to the parent presentation."
+              ^ self
+            );
+
+            ensureNotDirty => (
+                dirty? -> [
+                    _redraw.
+                ].
               ^ self
             );
             
@@ -22,5 +68,6 @@
         }
     };
 
-    Kernel: kernel => (Instance clone) initWithKernel: kernel;
+    Kernel: kernel Paper: paper => (Instance clone) initWithKernel: kernel Paper: paper;
+    Kernel: kernel              => (Instance clone) initWithKernel: kernel;
 }

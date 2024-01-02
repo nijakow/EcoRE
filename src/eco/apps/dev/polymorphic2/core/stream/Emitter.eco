@@ -44,7 +44,10 @@
             emitMorph: kernel In: bounds => (
                 "TODO: Lookup morph kernel in the paper cache"
 
-                | presentation <- (polymorphic core paper presenting MorphPresentation) Kernel: kernel Bounds: bounds |
+                |
+                    morph        <- kernel instantiate,
+                    presentation <- (polymorphic core paper presenting MorphPresentation) Morph: morph Bounds: bounds
+                |
 
                 paper add: presentation.
 

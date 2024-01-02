@@ -5,73 +5,35 @@
     Instance :: Clonable
     {
         |
-            bounds,
-            kernel,
-            paper,
-
-            node,
-
-            protected dirty? <- true
+            morph,
+            bounds
         |
 
         {
             with inherited Presentation <- $package;
 
-            bounds: b kernel: k paper: p => (
+            initWithMorph: m Bounds: b => (
+                morph  <- m.
                 bounds <- b.
-                kernel <- k.
-                paper  <- p.
-
-                node   <- ((polymorphic core world) tree MorphNode) Morph: self.
-
-                paper node: node. "Set the paper's node to a MorphNode pointing to us..."
-
               ^ self
             );
-
-            bounds: b kernel: k => bounds: b kernel: k paper: ((polymorphic core paper Paper) New);
 
             morphPresentation? => true;
 
             connectToParentNode: parentNode => (
-                node reparent: parentNode.
+                morph connectToParentNode: parentNode.
               ^ self
             );
 
             disconnectFromParentNode => (
-                node disconnect.
-              ^ self
-            );
-
-            protected _redraw => (
-                kernel drawOnStream: (paper stream) Instance: self.
-                dirty? <- false.
-              ^ self
-            );
-
-            redrawInPlace => (
-                paper clear.
-                _redraw.
-              ^ self
-            );
-            redrawFreely  => (
-                paper clearAndReset.
-                _redraw.
-                "TODO: If the size of the paper has changed, we need to forward the change to the parent presentation."
-              ^ self
-            );
-
-            protected ensureNotDirty => (
-                dirty? -> [
-                    _redraw.
-                ].
+                morph disconnect.
               ^ self
             );
 
             renderOn: renderer => (
-                ensureNotDirty.
+                morph ensureNotDirty.
                 renderer withPushedRelativeOffset: offset Do: [
-                    paper renderOn: renderer.
+                    (morph paper) renderOn: renderer.
                 ].
               ^ self
             );
@@ -80,6 +42,5 @@
         }
     };
 
-    Kernel: kernel Bounds: bounds Paper: paper => (Instance clone) bounds: bounds kernel: kernel paper: paper;
-    Kernel: kernel Bounds: bounds              => (Instance clone) bounds: bounds kernel: kernel;
+    Morph: morph Bounds: bounds => (Instance clone) initWithMorph: morph Bounds: bounds;
 }
