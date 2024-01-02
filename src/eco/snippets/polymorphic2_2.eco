@@ -1,0 +1,31 @@
+
+std Module
+{
+
+    Main => (
+
+        | behavior <- NewBehavior
+            ~ on: (handlers Key: (keys F1)) do: $[ :key | ]
+            ~ on: (handlers Key: (keys F2)) do: $[ :key | ]
+            ~ on: (handlers GenericKey)     do: $[ :key | ]
+            ~ on: (handlers MouseMovement)  do: $[ :mm  | ]
+            ~ on: (handlers Drop)           do: $[ :dr  | ]
+            ~ render: $[ :stream :kernel :polymorphic |
+                stream emit: ((polymorphic core objects Text) Caption: 'Hello World!').
+                stream newline.
+              ]
+            ~ done
+        |
+
+        Morph <- (
+            NewBehavior
+              ~ on: (handlers Key: (keys F1)) do: $[ :key :instance | (instance payload) addText: 'Hi!' ]
+              ~ on: (handlers Key: (keys F2)) do: $[ :key :instance |  ]
+              ~ on: (handlers GenericKey)     do: $[ :key :instance |  ]
+              ~ on: (handlers MouseMovement)  do: $[ :mm  :instance |  ]
+              ~ on: (handlers Drop)           do: $[ :dr  :instance |  ]
+              ~ done
+            ~ link: (info)
+        );
+    );
+}
