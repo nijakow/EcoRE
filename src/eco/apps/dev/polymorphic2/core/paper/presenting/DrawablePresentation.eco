@@ -28,6 +28,7 @@
             );
 
             connectToParentNode: node => self;
+            disconnectFromParentNode  => self;
 
             renderOn: renderer => object renderAt: offset On: renderer;
 

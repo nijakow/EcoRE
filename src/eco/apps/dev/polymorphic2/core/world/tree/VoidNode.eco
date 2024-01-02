@@ -5,5 +5,8 @@
     parent => No;
     world  => No;
 
+    reparent: p => self;
+    disconnect  => self;
+
     writeOn: w => w << 'a void node';
 }

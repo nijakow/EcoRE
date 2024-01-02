@@ -33,8 +33,13 @@
 
             morphPresentation? => true;
 
-            connectToParentNode: node => (
-                "TODO: Disconnect our node and connect it to the new parent"
+            connectToParentNode: parentNode => (
+                node reparent: parentNode.
+              ^ self
+            );
+
+            disconnectFromParentNode => (
+                node disconnect.
               ^ self
             );
 

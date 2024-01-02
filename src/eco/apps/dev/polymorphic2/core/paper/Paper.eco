@@ -46,7 +46,7 @@
             );
 
             clear => (
-                "presentations do: [ :each | each noParent ]."
+                presentations do: [ :each | each disconnect ].
                 presentations clear.
                 realWidth  <- 0.
                 realHeight <- 0.

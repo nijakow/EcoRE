@@ -18,7 +18,15 @@
 
             world => (parent) yes: [ :p | ^ p world ] no: [ ^ No ];
 
-            writeOn: w => w << 'a morph node';
+            reparent: p => parent <- Yes: p;
+            disconnect  => parent <- No;
+
+            writeOn: w => (
+                w << 'a morph node'.
+                parent yes: [ :p |
+                    w << ' (parent is ' << p << ')'.
+                ].
+            );
         }
     };
 
