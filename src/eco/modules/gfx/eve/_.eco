@@ -84,7 +84,6 @@
     InitFreeBsd => InitLinux;
     
     Init => (
-        (std io out << 'OS type: ' << (std os type)) newline commit.
         std os type
             ~ ifLinux:   [ ^ InitLinux   ]
             ~ ifMacOS:   [ ^ InitMac     ]
