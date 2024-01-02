@@ -39,6 +39,18 @@
               ^ self
             );
 
+            parent => node parent;
+            world  => node world;
+
+            childrenDo: block => (
+                "This is a bit of a hack, but it works like a charm :D"
+                paper presentationsDo: [ :presentation |
+                    (presentation morphPresentation?)
+                      ~ if: [ block value(presentation morph) ]
+                ].
+              ^ self
+            );
+
             protected _redraw => (
                 kernel drawOnStream: (paper stream) Instance: self.
                 dirty? <- false.

@@ -29,6 +29,8 @@
 
             node: n => node <- n;
 
+            presentationsDo: block => presentations do: block;
+
             claimBounds: bounds => (
                 | bottomRight <- bounds bottomRight |
 

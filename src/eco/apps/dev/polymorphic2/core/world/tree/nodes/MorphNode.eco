@@ -4,16 +4,15 @@
 
     Instance :: Clonable
     {
-        with inherited Node :: $package;
-
         |
             parent <- No,
             morph
         |
 
         {
+            with inherited Node <- $package;
+
             initWithMorph: m => (
-                $(Node) init.
                 parent <- No.
                 morph  <- m.
               ^ self
@@ -23,13 +22,16 @@
 
             reparent: p => (
                 parent <- Yes: p.
-                p addChild: self.
               ^ self
             );
 
             disconnect => (
-                p removeChild: self.
                 parent <- No.
+              ^ self
+            );
+
+            childrenDo: block => (
+                morph childrenDo: block.
               ^ self
             );
 

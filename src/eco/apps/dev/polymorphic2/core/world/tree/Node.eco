@@ -1,33 +1,11 @@
 
 {
-    isa std Clonable;
+    isa std Trait;
 
-    |
-        protected children
-    |
+    reparent: p => self;
+    disconnect  => self;
 
-    {
-        init => (
-            children <- std util newVector.
-          ^ self
-        );
+    childrenDo: block => self;
 
-        reparent: p => self;
-        disconnect  => self;
-
-        childrenDo:        block => children do:        block;
-        childrenReverseDo: block => children reverseDo: block;
-
-        addChild: child => (
-            children add: child.
-          ^ self
-        );
-
-        removeChild: child => (
-            children remove: child.
-          ^ self
-        );
-
-        writeOn: w => w << 'a node';
-    }
+    writeOn: w => w << 'a node';
 }
