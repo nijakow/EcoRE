@@ -18,7 +18,7 @@
             initWithMaybeExtent: _extent => (
                 extent             <- _extent.
                 presentations      <- std util newVector.
-                node               <- ((polymorphic core world) tree nodes) VoidNode.
+                node               <- ((polymorphic core morph) tree nodes) VoidNode.
                 realWidth          <- 0.
                 realHeight         <- 0.
               ^ self

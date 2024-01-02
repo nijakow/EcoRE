@@ -1,8 +1,5 @@
 
 std Module
 {
-    tree :: (here / 'tree' / '_.eco') importIn: $package;
-
-    World   :: (here / 'World.eco')   importIn: $package;
-    Session :: (here / 'Session.eco') importIn: $package;
+    World :: (here / 'World.eco')   importIn: $package;
 }

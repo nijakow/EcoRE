@@ -6,5 +6,6 @@ std Module
     Kernel   :: (here / 'Kernel.eco')   importIn: $package;
     Morph    :: (here / 'Morph.eco')    importIn: $package;
 
+    tree     :: (here / 'tree'     / '_.eco') importIn: $package;
     behavior :: (here / 'behavior' / '_.eco') importIn: $package;
 }
