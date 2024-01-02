@@ -5,14 +5,16 @@
     Instance :: Clonable
     {
         |
-            presenter
+            presenter,
+            dispatcher
         |
         
         {
             protected polymorphic <- $package;
 
             init => (
-                presenter <- (polymorphic core morph behavior presenting) DefaultPresenter.
+                presenter  <- ((polymorphic core morph) behavior presenting) DefaultPresenter.
+                dispatcher <- (((polymorphic core world) event handling) Dispatcher) New.
               ^ self
             );
 
@@ -20,8 +22,8 @@
 
             linkWithState: state => ((polymorphic core morph) Kernel) Behavior: self State: state;
 
-            link => linkWithState: ((polymorphic core morph) State) New;
             link: payload => linkWithState: (((polymorphic core morph) State) Payload: payload);
+            link          => linkWithState: (((polymorphic core morph) State) New);
 
             writeOn: w => w << 'a morph behavior';
         }

@@ -1,0 +1,5 @@
+
+std Module
+{
+    handling :: (here / 'handling' / '_.eco') importIn: $package;
+}

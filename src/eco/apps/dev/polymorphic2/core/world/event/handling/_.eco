@@ -1,0 +1,9 @@
+
+std Module
+{
+    Rule       :: (here / 'Rule.eco')       importIn: $package;
+    Dispatcher :: (here / 'Dispatcher.eco') importIn: $package;
+
+    results :: (here / 'results' / '_.eco') importIn: $package;
+    rules   :: (here / 'rules'   / '_.eco') importIn: $package;
+}

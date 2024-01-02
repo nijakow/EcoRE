@@ -1,0 +1,13 @@
+
+std Module
+{
+    Result :: Trait {
+        successful? => subclassResponsibility;
+        asMaybe     => subclassResponsibility;
+
+        writeOn: w => w << 'an event handling result';
+    };
+
+    Success :: (here / 'Success.eco') importIn: (self Result);
+    Failure :: (here / 'Failure.eco') importIn: (self Result);
+}

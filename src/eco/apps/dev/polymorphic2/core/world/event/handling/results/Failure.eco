@@ -1,0 +1,11 @@
+
+{
+    isa Singleton;
+
+    with inherited Result <- $package;
+
+    successful? => false;
+    asMaybe     => No;
+
+    writeOn: w => w << 'a failed result';
+}

@@ -1,5 +1,7 @@
 
 std Module
 {
-    World :: (here / 'World.eco')   importIn: $package;
+    event :: (here / 'event' / '_.eco') importIn: $package;
+
+    World :: (here / 'World.eco') importIn: $package;
 }

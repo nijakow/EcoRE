@@ -1,0 +1,38 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            rules
+        |
+
+        {
+            protected polymorphic <- $package;
+
+            init => (
+                rules <- std util newVector.
+              ^ self
+            );
+
+            addRule: rule => (
+                rules add: rule.
+              ^ self
+            );
+
+            handle: event => (
+                rules do: [ :statement |
+                    statement
+                        runWithEvent: event
+                           OnSuccess: [ :v | ^ (((polymorphic core world) event handling) results Success) Value: v ]
+                ].
+              ^ ((polymorphic core world) event handling) results Failure
+            );
+
+            writeOn: w => w << 'an event dispatcher';
+        }
+    };
+
+    New => Instance new;
+}

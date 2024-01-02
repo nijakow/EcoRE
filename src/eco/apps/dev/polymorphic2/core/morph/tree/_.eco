@@ -1,7 +1,7 @@
 
 std Module
 {
-    Node  :: (here / 'Node.eco')     importIn: $package;
+    Node  :: (here / 'Node.eco') importIn: $package;
 
     nodes :: (here / 'nodes' / '_.eco') importIn: (self Node);
 }

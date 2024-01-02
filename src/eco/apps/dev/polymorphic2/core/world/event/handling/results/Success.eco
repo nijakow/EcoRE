@@ -1,0 +1,29 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            protected maybeVal
+        |
+
+        {
+            with inherited Result <- $package;
+
+            initWithVal: v => (
+                maybeVal <- Yes: v.
+              ^ self
+            );
+
+            asMaybe => maybeVal;
+            val     => maybeVal yes;
+
+            successful? => true;
+
+            writeOn: w => w << 'a successful result';
+        }
+    };
+
+    Value: v => (Instance clone) initWithVal: v;
+}
