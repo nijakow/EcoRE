@@ -1,7 +1,7 @@
 
 std Module
 {
-    VoidNode  :: (here / 'VoidNode.eco')  importIn: $package;
-    MorphNode :: (here / 'MorphNode.eco') importIn: $package;
-    WorldNode :: (here / 'WorldNode.eco') importIn: $package;
+    Node  :: (here / 'Node.eco')     importIn: $package;
+
+    nodes :: (here / 'nodes' / '_.eco') importIn: (self Node);
 }

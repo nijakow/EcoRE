@@ -1,0 +1,8 @@
+
+{
+    isa std Clonable;
+
+    {
+        writeOn: w => w << 'a node';
+    }
+}

@@ -20,7 +20,7 @@
             initWithKernel: k Paper: p => (
                 kernel <- k.
                 paper  <- p.
-                node   <- ((polymorphic core world) tree MorphNode) Morph: self.
+                node   <- (((polymorphic core world) tree nodes) MorphNode) Morph: self.
 
                 paper node: node. "Set the paper's node to a MorphNode pointing to us..."
 

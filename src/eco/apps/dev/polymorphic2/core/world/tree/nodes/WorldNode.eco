@@ -4,12 +4,15 @@
 
     Instance :: Clonable
     {
+        with inherited Node :: $package;
+
         |
             world
         |
 
         {
             initWithWorld: w => (
+                $(Node) init.
                 world <- Yes: w.
               ^ self
             );

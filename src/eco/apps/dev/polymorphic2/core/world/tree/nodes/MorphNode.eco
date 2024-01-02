@@ -4,6 +4,8 @@
 
     Instance :: Clonable
     {
+        with inherited Node :: $package;
+
         |
             parent <- No,
             morph
@@ -11,6 +13,7 @@
 
         {
             initWithMorph: m => (
+                $(Node) init.
                 parent <- No.
                 morph  <- m.
               ^ self

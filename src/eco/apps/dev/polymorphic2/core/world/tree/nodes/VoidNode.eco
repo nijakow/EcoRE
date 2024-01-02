@@ -2,6 +2,13 @@
 {
     isa std Singleton;
 
+    with inherited Node :: $package;
+
+    init => (
+        $(Node) init.
+      ^ self
+    );
+
     parent => No;
     world  => No;
 
