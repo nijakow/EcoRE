@@ -123,8 +123,11 @@ std Module
         stream emit: ((morphs repo EmitMorph) link: (core objects FilledCircle Radius: 25)).
 
         stream withGraphicsDo: [ :graphics |
-            graphics at: (math geometry Point X:  0 Y:  0) put: (core objects Rectangle Bounds: (graphics bounds)).
-            graphics at: (math geometry Point X: (graphics bounds w / 2) Y: (graphics bounds h / 2)) put: (core objects FilledCircle Radius: 25 Color: (color colors Red)).
+            graphics at: (math geometry Point X:  0 Y:  0)
+                    put: (core objects Rectangle Bounds: (graphics bounds) Color: (color colors Red)).
+
+            graphics at: (math geometry Point X: (graphics bounds w / 2) Y: (graphics bounds h / 2))
+                    put: (core objects FilledCircle Radius: 25 Color: (color colors Red)).
         ].
 
         (framework actions open) ui BuildAndOpen: [ :ui |

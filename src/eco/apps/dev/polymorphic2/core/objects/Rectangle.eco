@@ -7,21 +7,26 @@
         with inherited DrawObject <- $package;
         
         |
-            bounds
+            bounds,
+            color
         |
 
         {
-            initWithBounds: b => (
+            initWithBounds: b Color: c => (
                 bounds <- b.
+                color  <- c.
               ^ self
             );
 
-            initWithX: x Y: y W: w H: h => initWithBounds: ((polymorphic math geometry Rectangle) X: x Y: y W: w H: h);
+            initWithBounds: b => initWithBounds: b Color: ((polymorphic color colors) Default);
+
+            initWithX: x Y: y W: w H: h Color: c => initWithBounds: ((polymorphic math geometry Rectangle) X: x Y: y W: w H: h) Color: c;
+            initWithX: x Y: y W: w H: h          => initWithBounds: ((polymorphic math geometry Rectangle) X: x Y: y W: w H: h);
 
             catches: aPoint => bounds containsPoint: aPoint;
 
             renderAt: offset On: renderer => (
-                renderer setR: 0 G: 255 B: 0.
+                color onRenderer: renderer.
                 renderer drawRect: bounds.
               ^ self
             );
@@ -30,6 +35,9 @@
         }
     };
 
-    Bounds: bounds => (Instance clone) initWithBounds: bounds;
-    X: x Y: y W: w H: h => (Instance clone) initWithX: x Y: y W: w H: h;
+    Bounds: bounds Color: color => (Instance clone) initWithBounds: bounds Color: color;
+    Bounds: bounds              => (Instance clone) initWithBounds: bounds;
+
+    X: x Y: y W: w H: h Color: color => (Instance clone) initWithX: x Y: y W: w H: h Color: color;
+    X: x Y: y W: w H: h              => (Instance clone) initWithX: x Y: y W: w H: h;
 }
