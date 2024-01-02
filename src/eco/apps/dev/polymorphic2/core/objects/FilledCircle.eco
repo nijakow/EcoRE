@@ -8,22 +8,26 @@
         
         |
             radius <- 0,
+            color,
             protected cachedBounds
         |
 
         {
-            initWithRadius: r => (
+            initWithRadius: r Color: c => (
                 radius <- r.
+                color  <- c.
                 cachedBounds <- ((polymorphic math geometry) Rectangle) X: (r negate) Y: (r negate) W: (r * 2) H: (r * 2).
               ^ self
             );
+
+            initWithRadius: r => initWithRadius: r Color: ((polymorphic color colors) Default);
 
             catches: aPoint => (aPoint distanceToOrigin) <= radius;
 
             bounds => cachedBounds;
 
             renderAt: offset On: renderer => (
-                renderer setR: 0 G: 255 B: 0.
+                color onRenderer: renderer.
                 renderer fillCircle: offset R: radius.
               ^ self
             );
@@ -32,5 +36,6 @@
         }
     };
 
-    Radius: radius => (Instance clone) initWithRadius: radius;
+    Radius: radius Color: color => (Instance clone) initWithRadius: radius Color: color;
+    Radius: radius              => (Instance clone) initWithRadius: radius;
 }

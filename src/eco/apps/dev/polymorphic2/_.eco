@@ -4,6 +4,7 @@ std Module
     with app = $;
 
     core   :: (here / 'core'   / '_.eco') importIn: self;
+    color  :: (here / 'color'  / '_.eco') importIn: self;
     morphs :: (here / 'morphs' / '_.eco') importIn: self;
 
 
@@ -123,7 +124,7 @@ std Module
 
         stream withGraphicsDo: [ :graphics |
             graphics at: (math geometry Point X:  0 Y:  0) put: (core objects Rectangle Bounds: (graphics bounds)).
-            graphics at: (math geometry Point X: (graphics bounds w / 2) Y: (graphics bounds h / 2)) put: (core objects FilledCircle Radius: 25).
+            graphics at: (math geometry Point X: (graphics bounds w / 2) Y: (graphics bounds h / 2)) put: (core objects FilledCircle Radius: 25 Color: (color colors Red)).
         ].
 
         (framework actions open) ui BuildAndOpen: [ :ui |

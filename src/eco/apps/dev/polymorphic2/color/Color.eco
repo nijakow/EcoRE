@@ -1,0 +1,37 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            r,
+            g,
+            b,
+            a,
+        |
+
+        {
+            initWithR: _r G: _g B: _b A: _a => (
+                r <- _r.
+                g <- _g.
+                b <- _b.
+                a <- _a.
+              ^ self
+            );
+
+            onRenderer: renderer => (
+                renderer setR: r G: g B: b A: a.
+              ^ self
+            );
+
+            writeOn: w => w << 'a color(' << r << ', '
+                                          << g << ', '
+                                          << b << ', '
+                                          << a << ')';
+        }
+    };
+
+    R: r G: g B: b A: a => (Instance clone) initWithR: r G: g B: b A: a;
+    R: r G: g B: b      => R: r G: g B: b A: 255;
+}
