@@ -50,5 +50,5 @@
         }
     };
 
-    Behavior: behavior State: state => (Instance new) initWithBehavior: behavior State: state;
+    Behavior: behavior State: state => (Instance clone) initWithBehavior: behavior State: state;
 }

@@ -1,0 +1,26 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            kernel,
+            node
+        |
+
+        {
+            protected polymorphic <- $package;
+
+            initWithKernel: k => (
+                kernel <- k.
+                node   <- ((polymorphic core world) tree MorphNode) Morph: self.
+              ^ self
+            );
+            
+            writeOn: w => w << 'a morph';
+        }
+    };
+
+    Kernel: kernel => (Instance clone) initWithKernel: kernel;
+}
