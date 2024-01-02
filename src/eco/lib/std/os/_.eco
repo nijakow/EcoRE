@@ -4,6 +4,7 @@
 
     ifLinux: block => self;
     ifMacOS: block => self;
+    ifFreeBsd: block => self;
 
     writeOn: w => w << 'an unknown OS type';
 };
@@ -33,6 +34,8 @@
         FreeBSD = {
             static with inherited _ = #<:std/Enum>;
             with inherited trait = #<:std/os/OsTypeTrait>;
+
+            ifFreeBsd: block => ( block value(self). ^ self );
 
             writeOn: w => w << 'FreeBSD';
         };

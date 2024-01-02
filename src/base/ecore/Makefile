@@ -124,7 +124,8 @@ ifdef ENABLE_LIBZ
 endif
 
 ifdef ENABLE_LIBFFI
-  LDFLAGS += -lffi
+  CFLAGS += -I/usr/local/include
+  LDFLAGS += -L/usr/local/lib -lffi
   CONSTANTS += -DECO_CONFIG_MAKEFILE_ENABLE_LIBFFI
 endif
 
