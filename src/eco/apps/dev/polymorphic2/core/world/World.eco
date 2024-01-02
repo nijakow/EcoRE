@@ -4,14 +4,33 @@
 
     Instance :: std Clonable
     {
+        |
+            node
+        |
+
         {
             protected polymorphic <- $package;
 
             init => (
+                node <- (((polymorphic core morph) tree nodes) WorldNode) World: self.
               ^ self
             );
 
-            newSession => ((polymorphic core world) Session) World: self;
+            addMorph: morph => (
+                (std io out << 'Adding morph ' << morph) newline commit.
+              ^ self
+            );
+
+            removeMorph: morph => (
+                (std io out << 'Removing morph ' << morph) newline commit.
+              ^ self
+            );
+
+            iAmDirty: morph => (
+                (std io out << 'Dirty: ' << morph) newline commit.
+                morph redrawInPlace.
+              ^ self
+            );
 
             writeOn: w => w << 'a polymorphic world';
         }

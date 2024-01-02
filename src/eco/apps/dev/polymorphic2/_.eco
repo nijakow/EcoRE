@@ -32,11 +32,14 @@ std Module
 
     Test => (
         |
+            world  <- ((core world) World) New,
             paper  <- ((core paper) Paper) Extent: (math geometry Point X: 400 Y: 400),
             stream <- paper stream,
             r      <- 5,
             circle <- (core objects FilledCircle Radius: r)
         |
+
+        paper node: (world node).
 
         1 to: 5 do: [ :i | (stream << i) newline ].
 

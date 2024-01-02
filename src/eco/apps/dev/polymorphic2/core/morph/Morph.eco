@@ -9,9 +9,7 @@
             kernel,
             paper,
 
-            node,
-
-            protected dirty? <- true
+            node
         |
 
         {
@@ -29,12 +27,31 @@
 
             initWithKernel: kernel => initWithKernel: kernel Paper: ((polymorphic core paper Paper) New);
 
+            iAmDirty => (
+                world yes: [ :w | w iAmDirty: self ].
+              ^ self
+            );
+
+            protected enterWorld: world => (
+                world addMorph: self.
+                world iAmDirty: self.
+              ^ self
+            );
+
+            protected exitWorld: world => (
+                world removeMorph: self.
+              ^ self
+            );
+
             connectToParentNode: parentNode => (
                 node reparent: parentNode.
+                world yes: [ :w | enterWorld: w ].
               ^ self
             );
 
             disconnectFromParentNode => (
+                paper clear. "Clear the paper, so that all children are purged."
+                world yes: [ :w | exitWorld: w ].
                 node disconnect.
               ^ self
             );
@@ -51,33 +68,24 @@
               ^ self
             );
 
-            protected _redraw => (
+            protected internalRedraw => (
                 kernel drawOnStream: (paper stream) Instance: self.
-                dirty? <- false.
               ^ self
             );
 
             redrawInPlace => (
                 paper clear.
-                _redraw.
+                internalRedraw.
               ^ self
             );
             redrawFreely  => (
                 paper clearAndReset.
-                _redraw.
+                internalRedraw.
                 "TODO: If the size of the paper has changed, we need to forward the change to the parent presentation."
               ^ self
             );
 
-            protected ensureNotDirty => (
-                dirty? -> [
-                    _redraw.
-                ].
-              ^ self
-            );
-
             renderAtOffset: offset On: renderer => (
-                ensureNotDirty.
                 renderer withPushedRelativeOffset: offset Do: [
                     paper renderOn: renderer.
                 ].
