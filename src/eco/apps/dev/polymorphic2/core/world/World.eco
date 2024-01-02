@@ -5,9 +5,13 @@
     Instance :: std Clonable
     {
         {
+            protected polymorphic <- $package;
+
             init => (
               ^ self
             );
+
+            newSession => ((polymorphic core world) Session) World: self;
 
             writeOn: w => w << 'a polymorphic world';
         }
