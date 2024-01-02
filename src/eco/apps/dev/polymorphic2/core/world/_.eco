@@ -1,0 +1,5 @@
+
+std Module
+{
+    World :: (here / 'World.eco') importIn: $package;
+}

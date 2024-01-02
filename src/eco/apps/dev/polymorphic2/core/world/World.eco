@@ -1,0 +1,17 @@
+
+{
+    isa std Classlike;
+
+    Instance :: std Clonable
+    {
+        {
+            init => (
+              ^ self
+            );
+
+            writeOn: w => w << 'a polymorphic world';
+        }
+    };
+
+    New => Instance new;
+}

@@ -5,4 +5,5 @@ std Module
     stream  :: (here / 'stream'  / '_.eco') importIn: $package;
     objects :: (here / 'objects' / '_.eco') importIn: $package;
     morph   :: (here / 'morph'   / '_.eco') importIn: $package;
+    world   :: (here / 'world'   / '_.eco') importIn: $package;
 }
