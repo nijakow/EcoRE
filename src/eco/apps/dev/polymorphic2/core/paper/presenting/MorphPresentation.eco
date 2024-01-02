@@ -31,10 +31,7 @@
             );
 
             renderOn: renderer => (
-                morph ensureNotDirty.
-                renderer withPushedRelativeOffset: offset Do: [
-                    (morph paper) renderOn: renderer.
-                ].
+                morph renderAtOffset: offset On: renderer.
               ^ self
             );
 

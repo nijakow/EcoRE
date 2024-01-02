@@ -57,9 +57,17 @@
               ^ self
             );
 
-            ensureNotDirty => (
+            protected ensureNotDirty => (
                 dirty? -> [
                     _redraw.
+                ].
+              ^ self
+            );
+
+            renderAtOffset: offset On: renderer => (
+                ensureNotDirty.
+                renderer withPushedRelativeOffset: offset Do: [
+                    paper renderOn: renderer.
                 ].
               ^ self
             );
