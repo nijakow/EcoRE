@@ -22,9 +22,9 @@
                 kernel <- k.
                 paper  <- p.
 
-                node   <- (polymorphic core world) tree VoidNode.
+                node   <- ((polymorphic core world) tree MorphNode) Morph: self.
 
-                "TODO: Set the paper's node to a MorphNode pointing to us..."
+                paper node: node. "Set the paper's node to a MorphNode pointing to us..."
 
               ^ self
             );
@@ -32,6 +32,11 @@
             bounds: b kernel: k => bounds: b kernel: k paper: ((polymorphic core paper Paper) New);
 
             morphPresentation? => true;
+
+            connectToParentNode: node => (
+                "TODO: Disconnect our node and connect it to the new parent"
+              ^ self
+            );
 
             protected _redraw => (
                 kernel drawOnStream: (paper stream) Instance: self.

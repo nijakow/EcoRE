@@ -9,6 +9,8 @@
 
     morphPresentation? => false;
 
+    connectToParentNode: node => subclassResponsibility;
+
     renderOn: renderer => subclassResponsibility;
 
     writeOn: w => w << 'a presentation';

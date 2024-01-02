@@ -5,12 +5,14 @@
     Instance :: Clonable
     {
         |
-            parent <- No
+            parent <- No,
+            morph
         |
 
         {
-            initWithParent: p => (
-                parent <- Yes: p.
+            initWithMorph: m => (
+                parent <- No.
+                morph  <- m.
               ^ self
             );
 
@@ -20,5 +22,5 @@
         }
     };
 
-    Parent: parent => (Instance clone) initWithParent: parent;
+    Morph: morph => (Instance clone) initWithMorph: morph;
 }

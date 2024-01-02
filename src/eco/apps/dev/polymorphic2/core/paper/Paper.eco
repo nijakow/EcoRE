@@ -9,6 +9,7 @@
             realWidth          <- 0,
             realHeight         <- 0,
             presentations,
+            node
         |
 
         {
@@ -17,6 +18,7 @@
             initWithMaybeExtent: _extent => (
                 extent             <- _extent.
                 presentations      <- std util newVector.
+                node               <- (polymorphic core world) tree VoidNode.
                 realWidth          <- 0.
                 realHeight         <- 0.
               ^ self
@@ -24,6 +26,8 @@
 
             maybeExtent => extent;
             realExtent  => (polymorphic math geometry Point) X: realWidth Y: realHeight;
+
+            node: n => node <- n;
 
             claimBounds: bounds => (
                 | bottomRight <- bounds bottomRight |
@@ -35,7 +39,7 @@
             );
 
             add: presentation => (
-                "TODO: Set the node of the presented object to the paper's node..."
+                presentation connectToParentNode: node. "Connect the node of the presented object to the paper's node..."
                 claimBounds: presentation bounds.
                 presentations add: presentation.
               ^ self
