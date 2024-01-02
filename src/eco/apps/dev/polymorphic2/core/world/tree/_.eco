@@ -1,0 +1,6 @@
+
+std Module
+{
+    MorphNode :: (here / 'MorphNode.eco') importIn: $package;
+    WorldNode :: (here / 'WorldNode.eco') importIn: $package;
+}

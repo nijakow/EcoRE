@@ -1,0 +1,24 @@
+
+{
+    isa std Classlike;
+
+    Instance :: std Clonable
+    {
+        |
+            world
+        |
+
+        {
+            initWithWorld: w => (
+                world <- w.
+              ^ self
+            );
+
+            parent => No;
+
+            writeOn: w => w << 'a world node';
+        }
+    };
+
+    World: world => (Instance clone) initWithWorld: world;
+}

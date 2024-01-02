@@ -1,0 +1,24 @@
+
+{
+    isa std Classlike;
+
+    Instance :: std Clonable
+    {
+        |
+            parent <- No
+        |
+
+        {
+            initWithParent: p => (
+                parent <- Yes: p.
+              ^ self
+            );
+
+            world => (parent yes) world;
+
+            writeOn: w => w << 'a morph node';
+        }
+    };
+
+    Parent: parent => (Instance clone) initWithParent: parent;
+}
