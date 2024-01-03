@@ -7,16 +7,18 @@
         |
             behavior,
             state,
-            protected morphs
+            protected morphs,
+            protected cachedMinExtent
         |
         
         {
             protected polymorphic <- $package;
 
             initWithBehavior: b State: s => (
-                behavior <- b.
-                state    <- s.
-                morphs   <- std util newVector.
+                behavior        <- b.
+                state           <- s.
+                morphs          <- std util newVector.
+                cachedMinExtent <- No.
               ^ self
             );
 
@@ -24,9 +26,33 @@
             emitOnGraphics: graphics At: offset => graphics at: offset PutMorph: self;
             emitOnGraphics: graphics In: bounds => graphics in: bounds PutMorph: self;
 
-            minWidth  => (behavior presenter) minWidthOfKernel: self;
-            minHeight => (behavior presenter) minHeightOfKernel: self;
-            minExtent => ((polymorphic math geometry) Point) X: minWidth Y: minHeight;
+            protected calcMinWidth  => (behavior presenter) minWidthOfKernel: self;
+            protected calcMinHeight => (behavior presenter) minHeightOfKernel: self;
+
+            protected maybeSaveMinExtent => (
+                (behavior caching?) if: [
+                    cachedMinExtent <- Yes: (((polymorphic math geometry) Point)
+                                                X: calcMinWidth
+                                                Y: calcMinHeight).
+                ].
+              ^ self
+            );
+
+            minWidth => (
+                cachedMinExtent  no: [ maybeSaveMinExtent ].
+                cachedMinExtent yes: [ :cm | ^ cm x ].
+              ^ calcMinWidth
+            );
+            minHeight => (
+                cachedMinExtent  no: [ maybeSaveMinExtent ].
+                cachedMinExtent yes: [ :cm | ^ cm y ].
+              ^ calcMinHeight
+            );
+            minExtent => (
+                cachedMinExtent  no: [ maybeSaveMinExtent ].
+                cachedMinExtent yes: [ :cm | ^ cm ].
+              ^ ((polymorphic math geometry) Point) X: calcMinWidth Y: calcMinHeight.
+            );
             minExtentForOrientation: orientation => (
                 (orientation horizontal?) -> [ ^ minWidth  ].
                 (orientation vertical?)   -> [ ^ minHeight ].
@@ -62,6 +88,7 @@
             );
 
             changed => (
+                cachedMinExtent <- No.
                 morphs do: [ :each |
                     each changed.
                 ].

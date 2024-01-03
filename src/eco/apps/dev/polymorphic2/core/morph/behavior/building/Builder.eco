@@ -26,6 +26,13 @@
               ^ self
             );
 
+            caching: bool => (
+                behavior caching: bool.
+              ^ self
+            );
+
+            disableCaching => caching: false;
+
             build => behavior;
 
             writeOn: w => w << 'a behavior builder';
