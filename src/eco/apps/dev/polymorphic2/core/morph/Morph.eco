@@ -15,8 +15,9 @@
         {
             protected polymorphic <- $package;
 
-            initWithKernel: k Paper: p => (
+            initWithKernel: k Bounds: b Paper: p => (
                 kernel <- k.
+                bounds <- b.
                 paper  <- p.
                 node   <- (((polymorphic core morph) tree nodes) MorphNode) Morph: self.
 
@@ -25,7 +26,7 @@
               ^ self
             );
 
-            initWithKernel: kernel => initWithKernel: kernel Paper: ((polymorphic core paper Paper) New);
+            initWithKernel: kernel Bounds: bounds => initWithKernel: kernel Bounds: bounds Paper: ((polymorphic core paper Paper) New);
 
             iAmDirty => (
                 world yes: [ :w | w iAmDirty: self ].
@@ -114,6 +115,6 @@
         }
     };
 
-    Kernel: kernel Paper: paper => (Instance clone) initWithKernel: kernel Paper: paper;
-    Kernel: kernel              => (Instance clone) initWithKernel: kernel;
+    Kernel: kernel Bounds: bounds Paper: paper => (Instance clone) initWithKernel: kernel Bounds: bounds Paper: paper;
+    Kernel: kernel Bounds: bounds              => (Instance clone) initWithKernel: kernel Bounds: bounds;
 }

@@ -45,8 +45,8 @@
                 "TODO: Lookup morph kernel in the paper cache"
 
                 |
-                    morph        <- kernel instantiate,
-                    presentation <- (polymorphic core paper presenting MorphPresentation) Morph: morph Bounds: bounds
+                    morph        <- kernel instantiateInBounds: bounds,
+                    presentation <- (polymorphic core paper presenting MorphPresentation) Morph: morph
                 |
 
                 paper add: presentation.

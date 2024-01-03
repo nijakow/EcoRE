@@ -42,7 +42,6 @@ std Module
 
                         with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
 
-
                         protected calculatePreferredExtentForMorph(morph, orientation, flexSize) => (
                             | layout <- morph layoutForOrientation: orientation |
 

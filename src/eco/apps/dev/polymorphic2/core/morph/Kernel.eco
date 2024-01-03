@@ -48,8 +48,8 @@
               ^ paper
             );
 
-            instantiateWithPaper: paper => ((polymorphic core morph) Morph) Kernel: self Paper: paper;
-            instantiate                 => ((polymorphic core morph) Morph) Kernel: self;
+            instantiateInBounds: bounds WithPaper: paper => ((polymorphic core morph) Morph) Kernel: self Bounds: bounds Paper: paper;
+            instantiateInBounds: bounds                  => ((polymorphic core morph) Morph) Kernel: self Bounds: bounds;
 
             addMorph: morph => (
                 morphs add: morph.

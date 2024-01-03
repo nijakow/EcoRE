@@ -5,18 +5,18 @@
     Instance :: Clonable
     {
         |
-            morph,
-            bounds
+            morph
         |
 
         {
             with inherited Presentation <- $package;
 
-            initWithMorph: m Bounds: b => (
+            initWithMorph: m => (
                 morph  <- m.
-                bounds <- b.
               ^ self
             );
+
+            bounds => morph bounds;
 
             morphPresentation? => true;
 
@@ -39,5 +39,5 @@
         }
     };
 
-    Morph: morph Bounds: bounds => (Instance clone) initWithMorph: morph Bounds: bounds;
+    Morph: morph => (Instance clone) initWithMorph: morph;
 }
