@@ -1,0 +1,62 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        with inherited DrawObject <- $package;
+        
+        |
+            start,
+            end,
+            bounds,
+            color
+        |
+
+        {
+            initWithStart: s End: e Color: c => (
+                start  <- s.
+                end    <- e.
+                color  <- c.
+                
+                |
+                    x1 <- (start x) min: (end x),
+                    y1 <- (start y) min: (end y),
+                    x2 <- (start x) max: (end x),
+                    y2 <- (start y) max: (end y)
+                |
+                
+                bounds <- ((polymorphic math geometry) Rectangle)
+                                X: x1
+                                Y: y1
+                                W: x2 - x1
+                                H: y2 - y1.
+
+              ^ self
+            );
+
+            initWithStart: start End: end => initWithStart: start End: end Color: ((polymorphic color colors) Default);
+            initWithEnd: end Color: color => initWithStart: ((polymorphic math geometry) Point Origin) End: end Color: color;
+            initWithEnd: end              => initWithStart: ((polymorphic math geometry) Point Origin) End: end Color: ((polymorphic color colors) Default);
+
+            catches: aPoint => bounds containsPoint: aPoint; "TODO: Check if point is close to line"
+
+            renderAt: offset On: renderer => (
+                color onRenderer: renderer.
+                renderer drawLineX: offset x + start x
+                                 Y: offset y + start y
+                                 X: offset x + end x
+                                 Y: offset y + end y.
+              ^ self
+            );
+
+            writeOn: w => w << 'a line';
+        }
+    };
+
+    Start: start End: end Color: color => (Instance clone) initWithStart: start End: end Color: color;
+    Start: start End: end              => (Instance clone) initWithStart: start End: end;
+
+    End: end Color: color => (Instance clone) initWithEnd: end Color: color;
+    End: end              => (Instance clone) initWithEnd: end;
+}

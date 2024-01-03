@@ -15,6 +15,7 @@ std Module
         renderAt: offset On: renderer => self;
     };
 
+    Line         :: (here / 'Line.eco') importIn: (self DrawObject);
     FilledCircle :: (here / 'FilledCircle.eco') importIn: (self DrawObject);
     Rectangle    :: (here / 'Rectangle.eco') importIn: (self DrawObject);
     Text         :: (here / 'Text.eco') importIn: (self DrawObject);

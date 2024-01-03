@@ -151,6 +151,8 @@ std Module
             stream emit: flex.
         ).
 
+        stream emit: ((morphs repo TestMorph3) link).
+
         (framework actions open) ui BuildAndOpen: [ :ui |
             ui Window(400, 400,
                 ui Clipped(
