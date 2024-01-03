@@ -21,11 +21,13 @@ std Module
                                     |
                                         v1  <- ((i / (10 asFloat)) * 3.14159 * 2) sin,
                                         v2  <- (((i + 1) / (10 asFloat)) * 3.14159 * 2) sin,
-                                        vp1 <- ((v1 * 50) + 50) asInt,
-                                        vp2 <- ((v2 * 50) + 50) asInt
+                                        vp1 <- ((v1 negate * 50) + 50) asInt,
+                                        vp2 <- ((v2 negate * 50) + 50) asInt,
+                                        p   <- ((polymorphic math geometry) Point X: i * 25 Y: vp1)
                                     |
-                                    graphics at: ((polymorphic math geometry) Point X: i * 25 Y: vp1)
-                                            put: (((polymorphic core objects) Line) End: ((polymorphic math geometry) Point X: 25 Y: (vp2 - vp1)))
+                                    graphics at: p put: (((polymorphic core objects) Line) End: ((polymorphic math geometry) Point X: 25 Y: (vp2 - vp1))).
+                                    graphics at: p put: (((polymorphic core objects) Text) Caption: 'Point!').
+                                    graphics at: p put: (((polymorphic core objects) FilledCircle) Radius: 3 Color: (((polymorphic color colors) Red))).
                                 ]
                           ].
                       ] bind($package)
