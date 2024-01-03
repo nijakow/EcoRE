@@ -142,4 +142,71 @@ std Module
         Horizontal => ForOrientation: (polymorphic math geometry orientation) Horizontal;
         Vertical   => ForOrientation: (polymorphic math geometry orientation) Vertical;
     };
+
+    MarginMorph :: Module
+    {
+        protected polymorphic <- $package;
+
+        Behavior <- ($package core morph Behavior) New
+                  ~ presenter:
+                      {
+                        isa std Singleton;
+
+                        with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
+
+                        drawOn: stream Kernel: kernel => (
+                            (((kernel state) payload) child) yes: [ :morph |
+                                |
+                                    margin <- ((kernel state) payload) margin,
+                                    extent <- morph minExtent,
+                                    w      <- (extent x) + (margin * 2),
+                                    h      <- (extent y) + (margin * 2),
+                                |
+
+                                stream withGraphicsAtX: 0 Y: 0 W: w H: h Do: [ :graphics |
+                                    |
+                                        bounds <- (polymorphic math geometry Rectangle)
+                                                    X: margin
+                                                    Y: margin
+                                                    W: extent x
+                                                    H: extent y,
+                                    |
+
+                                    graphics in: bounds put: morph.
+                                ].
+
+                              ^ self
+                            ].
+                        );
+
+                        writeOn: w => w << 'the margin presenter';
+                      };
+        
+        Payload :: Classlike
+        {
+            Instance :: Clonable
+            {
+                |
+                    margin <- 0,
+                    child  <- No
+                |
+
+                {
+                    protected polymorphic <- $package;
+
+                    initWithMargin: m => (
+                        margin <- m.
+                        child  <- No.
+                      ^ self
+                    );
+
+                    child: c => child <- Yes: c;
+                }
+            };
+
+            Margin: margin => (Instance clone) initWithMargin: margin;
+        };
+
+        Margin: margin => (Behavior link: (Payload Margin: margin));
+    };
 }

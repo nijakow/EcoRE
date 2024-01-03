@@ -129,7 +129,22 @@ std Module
         ((flex2 state payload) morphs) add: ((morphs repo EmitMorph) link: ((core objects Text) Caption: 'This is where the fun begins >:D')).
         flex2 changed.
 
+        (
+            |
+                margin1  <- (morphs repo MarginMorph) Margin: 10,
+            |
+
+            (margin1 state) payload
+              ~ child: ((morphs repo EmitMorph) link: (core objects FilledCircle Radius: 25)).
+            
+            stream emit: margin1.
+        ).
+
         stream emit: ((morphs repo EmitMorph) link: (core objects FilledCircle Radius: 25)).
+        stream newline.
+        stream emit: (core objects FilledCircle Radius: 25).
+        stream emit: (core objects FilledCircle Radius: 25).
+        stream newline.
 
         stream withGraphicsDo: [ :graphics |
             graphics at: (math geometry Point X:  0 Y:  0)
