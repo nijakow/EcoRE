@@ -25,6 +25,8 @@
             protected cursor => (polymorphic math geometry Point) X: xOffset Y: yOffset;
             protected bounds => emitter bounds;
 
+            maybeExtent => emitter maybeExtent;
+
             protected graphicsWithOrigin: origin MaybeExtent: extent => (polymorphic core stream Graphics) Emitter: emitter Origin: origin MaybeExtent: extent;
             protected graphicsInBounds: bounds                       => graphicsWithOrigin: (bounds origin) MaybeExtent: (Yes: (bounds extent));
             

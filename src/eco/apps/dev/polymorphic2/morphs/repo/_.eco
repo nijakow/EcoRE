@@ -154,24 +154,37 @@ std Module
 
                         with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
 
+                        protected calculatePreferredExtentForMorph(morph, orientation, extentLimits, margin) => (
+                            extentLimits no: [ ^ (morph minExtentForOrientation: orientation) ].
+                            
+                            | layout <- morph layoutForOrientation: orientation |
+
+                            (layout flexible?)   -> [ ^ ((extentLimits yes) dimensionForOrientation: orientation) ].
+                            (layout shrinkWrap?) -> [ ^ (morph minExtentForOrientation: orientation) ].
+
+                          ^ std sys error ThrowMessage: 'Unknown layout type'
+                        );
+
                         drawOn: stream Kernel: kernel => (
                             (((kernel state) payload) child) yes: [ :morph |
                                 |
-                                    margin <- ((kernel state) payload) margin,
-                                    extent <- morph minExtent,
-                                    w      <- (extent x) + (margin * 2),
-                                    h      <- (extent y) + (margin * 2),
-                                |
-
-                                stream withGraphicsAtX: 0 Y: 0 W: w H: h Do: [ :graphics |
-                                    |
-                                        bounds <- (polymorphic math geometry Rectangle)
+                                    margin  <- ((kernel state) payload) margin,
+                                    extent  <- stream maybeExtent,
+                                    extent2 <- extent yes: [ :e | Yes: ((polymorphic math geometry) Point X: (e x - (margin * 2)) Y: (e y - (margin * 2))) ] no: [ No ],
+                                    w       <- calculatePreferredExtentForMorph(morph, ((polymorphic math geometry) orientation) Horizontal, extent2, margin),
+                                    h       <- calculatePreferredExtentForMorph(morph, ((polymorphic math geometry) orientation) Vertical,   extent2, margin),
+                                    bounds  <- ((polymorphic math geometry) Rectangle)
                                                     X: margin
                                                     Y: margin
-                                                    W: extent x
-                                                    H: extent y,
-                                    |
+                                                    W: w
+                                                    H: h,
+                                    ourBounds <- ((polymorphic math geometry) Rectangle)
+                                                       X: 0
+                                                       Y: 0
+                                                  Extent: (extent yes: [ :e | e ] no: [ ((polymorphic math geometry) Point X: (bounds w + (margin * 2)) Y: (bounds h + (margin * 2)))])
+                                |
 
+                                stream withGraphicsInBounds: ourBounds Do: [ :graphics |
                                     graphics in: bounds put: morph.
                                 ].
 
