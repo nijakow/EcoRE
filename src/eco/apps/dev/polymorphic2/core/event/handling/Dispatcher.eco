@@ -22,8 +22,8 @@
             );
 
             handle: event => (
-                rules do: [ :statement |
-                    statement
+                rules do: [ :rule |
+                    rule
                         runWithEvent: event
                            OnSuccess: [ :v | ^ (((polymorphic core event) handling) results Success) Value: v ]
                 ].

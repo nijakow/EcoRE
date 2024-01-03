@@ -1,0 +1,8 @@
+
+{
+    isa Trait;
+
+    accepts?: head => subclassResponsibility;
+
+    writeOn: w => w << 'an event predicate';
+}

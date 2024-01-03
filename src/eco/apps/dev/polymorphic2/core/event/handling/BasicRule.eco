@@ -1,0 +1,33 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            predicate,
+            handler,
+        |
+
+        {
+            with inherited Rule <- $package;
+
+            initWithPredicate: p Handler: h => (
+                predicate <- p.
+                handler   <- h.
+              ^ self
+            );
+
+            runWithEvent: event OnSuccess: success OnFailure: failure => (
+                ((predicate accepts?: (event head)) not) if: [                    
+                  ^ failure value
+                ].
+              ^ success value(handler run: event)
+            );
+
+            writeOn: w => w << 'a basic rule';
+        }
+    };
+
+    Predicate: predicate Handler: handler => (Instance clone) initWithPredicate: predicate Handler: handler;
+}

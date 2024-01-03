@@ -1,0 +1,24 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            head,
+            body,
+        |
+
+        {
+            initWithHead: h Body: b => (
+                head <- h.
+                body <- b.
+              ^ self
+            );
+
+            writeOn: w => w << 'a basic event';
+        }
+    };
+
+    Head: head Body: body => (Instance clone) initWithHead: head Body: body;
+}

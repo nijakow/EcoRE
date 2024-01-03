@@ -1,9 +1,13 @@
 
 std Module
 {
+    Predicate  :: (here / 'Predicate.eco')  importIn: $package;
+    Handler    :: (here / 'Handler.eco')    importIn: $package;
     Rule       :: (here / 'Rule.eco')       importIn: $package;
     Dispatcher :: (here / 'Dispatcher.eco') importIn: $package;
 
     results :: (here / 'results' / '_.eco') importIn: $package;
-    rules   :: (here / 'rules'   / '_.eco') importIn: $package;
+
+    BasicRule  :: (here / 'BasicRule.eco')  importIn: (self Rule);
+    BasicEvent :: (here / 'BasicEvent.eco') importIn: $package;
 }
