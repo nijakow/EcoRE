@@ -80,56 +80,32 @@ std Module
         stream emit: (behavior link).
         stream newline.
 
-        | flex2 |
-
         (
-            |
-                flex    <- morphs repo FlexMorph Horizontal,
-                payload <- (flex state) payload
-            |
+            stream emit: ((morphs repo FrameMorph) Child: (
+                (morphs repo FlexMorph) Horizontal
+                  ~ add: ((morphs repo TestMorph) link)
+                  ~ add: ((morphs repo TestMorph) link)
+                  ~ add: (
+                        (morphs repo FlexMorph) Vertical
+                          ~ add: ((morphs repo TestMorph) link)
+                          ~ add: ((morphs repo TestMorph) link)
+                          ~ add: ((morphs repo TestMorph) link)
+                          ~ add: (
+                              | flex3 <- (morphs repo FlexMorph) Horizontal |
 
-            (payload morphs) add: (morphs repo TestMorph link).
-            (payload morphs) add: (morphs repo TestMorph link).
+                              1 to: 4 do: [ :i |
+                                  flex3 add: ((morphs repo EmitMorph) link: (core objects FilledCircle Radius: ((11 - i) * 3))).
+                              ].
 
-            (
-                
-                    flex2    <- morphs repo FlexMorph Vertical,
-                |    payload2 <- (flex2 state) payload
-                |
-
-                (payload2 morphs) add: (morphs repo TestMorph link).
-                (payload2 morphs) add: (morphs repo TestMorph link).
-                (payload2 morphs) add: (morphs repo TestMorph link).
-
-                (
-                    |
-                        flex3    <- morphs repo FlexMorph Horizontal,
-                        payload3 <- (flex3 state) payload
-                    |
-
-                    1 to: 4 do: [ :i |
-                        (payload3 morphs) add: ((morphs repo EmitMorph) link: (core objects FilledCircle Radius: ((11 - i) * 3))).
-                    ].
-
-                    (payload2 morphs) add: flex3.
-                ).
-
-                (payload2 morphs) add: (morphs repo TestMorph link).
-
-                (payload morphs) add: flex2.
-                (payload morphs) add: flex2.
-            ).
-
-            (payload morphs) add: (morphs repo TestMorph link).
-            (payload morphs) add: (morphs repo TestMorph link).
-
-            stream emit: ((morphs repo FrameMorph) Child: flex).
+                              flex3
+                          )
+                          ~ add: ((morphs repo TestMorph) link)
+                  )
+                  ~ add: ((morphs repo TestMorph) link)
+            )).
             stream emit: ((core objects Text) Caption: 'Some text :D').
             stream newline.
         ).
-
-        ((flex2 state payload) morphs) add: ((morphs repo EmitMorph) link: ((core objects Text) Caption: 'This is where the fun begins >:D')).
-        flex2 changed.
 
         (
             |
