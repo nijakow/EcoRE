@@ -81,12 +81,14 @@ std Module
         stream newline.
 
         (
+            | lol |
             stream emit: ((morphs repo FrameMorph) Child: (
                 (morphs repo FlexMorph) Horizontal
                   ~ add: ((morphs repo TestMorph) link)
                   ~ add: ((morphs repo TestMorph) link)
                   ~ add: (
                         (morphs repo FlexMorph) Vertical
+                          ~ let: [ :s | lol <- s. s ]
                           ~ add: ((morphs repo TestMorph) link)
                           ~ add: ((morphs repo TestMorph) link)
                           ~ add: ((morphs repo TestMorph) link)
@@ -105,6 +107,12 @@ std Module
             )).
             stream emit: ((core objects Text) Caption: 'Some text :D').
             stream newline.
+            lol add: (
+                (morphs repo FlexMorph) Horizontal
+                  ~ add: ((morphs repo TestMorph2) link)
+                  ~ add: ((morphs repo FrameMorph) Child: ((morphs repo TestMorph2) link))
+                  ~ add: ((morphs repo TestMorph2) link)
+            ).
         ).
 
         (
