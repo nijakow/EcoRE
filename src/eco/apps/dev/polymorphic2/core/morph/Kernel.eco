@@ -87,8 +87,13 @@
               ^ self
             );
 
-            changed => (
+            clearCaches => (
                 cachedMinExtent <- No.
+              ^ self
+            );
+
+            changed => (
+                clearCaches.
                 morphs do: [ :each |
                     each changed.
                 ].
