@@ -33,8 +33,19 @@
               ^ self
             );
 
-            changed => (
+            protected executeChanged => (
+                parentMorph yes: [ :pm | pm changed ].
                 world yes: [ :w | w iHaveChanged: self ].
+              ^ self
+            );
+
+            kernelChangeCallback => (
+                executeChanged.
+              ^ self
+            );
+
+            changed => (
+                kernel changed.
               ^ self
             );
 

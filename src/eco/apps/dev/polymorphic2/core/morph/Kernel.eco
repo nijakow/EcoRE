@@ -95,7 +95,7 @@
             changed => (
                 clearCaches.
                 morphs do: [ :each |
-                    each changed.
+                    each kernelChangeCallback.
                 ].
               ^ self
             );
