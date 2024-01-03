@@ -24,7 +24,6 @@ std Module
 
         Behavior <- ($package core) NewBehavior
                       ~ on: (($package event) predicates AddMorph) do: $[ :kernel :event |
-                                (std io out << 'Received an add event!') newline commit.
                                 ((kernel state) payload) add: (event body).
                                 kernel changed.
                         ]
