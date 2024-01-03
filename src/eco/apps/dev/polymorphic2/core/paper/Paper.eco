@@ -9,6 +9,7 @@
             realWidth          <- 0,
             realHeight         <- 0,
             presentations,
+            cachedMorphs,
             node
         |
 
@@ -18,6 +19,7 @@
             initWithMaybeExtent: _extent => (
                 extent             <- _extent.
                 presentations      <- std util newVector.
+                cachedMorphs       <- std util newVector.
                 node               <- ((polymorphic core morph) tree nodes) VoidNode.
                 realWidth          <- 0.
                 realHeight         <- 0.
@@ -29,7 +31,24 @@
 
             node: n => node <- n;
 
+            resize: newExtent => (
+                extent     <- newExtent.
+                realWidth  <- realWidth max: (extent x).
+                realHeight <- realWidth max: (extent y).
+              ^ self
+            );
+
             presentationsDo: block => presentations do: block;
+
+            lookupKernel: kernel => (
+                cachedMorphs forEach: [ :i :each |
+                    (each kernel == kernel) if: [
+                        cachedMorphs erase: i.
+                      ^ Yes: each
+                    ].
+                ].
+              ^ No
+            );
 
             claimBounds: bounds => (
                 | bottomRight <- bounds bottomRight |
@@ -48,10 +67,25 @@
             );
 
             clear => (
-                presentations do: [ :each | each disconnectFromParentNode ].
+                "Clear the old morph cache, if it exists."
+                ((cachedMorphs empty?) not) if: [
+                    "TODO: Maybe we might have to call a few destructors here?"
+                    cachedMorphs <- std util newVector.
+                ].
+
+                "Throw out the old presentations, but keep the references to the morphs."
+                presentations do: [ :each |
+                    each disconnectFromParentNode. "TODO: Move this up into the morph cache clearing part?"
+                    (each morphPresentation?) if: [
+                        cachedMorphs add: (each morph).
+                    ].
+                ].
+
                 presentations clear.
+
                 realWidth  <- 0.
                 realHeight <- 0.
+
               ^ self
             );
 

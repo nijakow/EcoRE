@@ -38,6 +38,16 @@
               ^ self
             );
 
+            changeBounds: newBounds => (
+                ((newBounds extent) equalsPoint: (bounds extent)) if: [
+                    paper clearAndReset.
+                    paper resize: (newBounds extent).
+                    iAmDirty.
+                ].
+                bounds <- newBounds.
+              ^ self
+            );
+
             protected enterWorld: world => (
                 world addMorph: self.
                 kernel addMorph: self.
