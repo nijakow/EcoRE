@@ -6,4 +6,6 @@ std Module
     objects :: (here / 'objects' / '_.eco') importIn: $package;
     morph   :: (here / 'morph'   / '_.eco') importIn: $package;
     world   :: (here / 'world'   / '_.eco') importIn: $package;
+
+    NewBehavior => (morph behavior building) Builder new;
 }

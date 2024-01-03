@@ -1,6 +1,7 @@
 
 std Module
 {
+    building   :: (here / 'building'   / '_.eco') importIn: $package;
     layouting  :: (here / 'layouting'  / '_.eco') importIn: $package;
     presenting :: (here / 'presenting' / '_.eco') importIn: $package;
 }

@@ -1,0 +1,36 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            protected behavior
+        |
+
+        {
+            protected polymorphic <- $package;
+
+            init => (
+                behavior <- ((polymorphic core morph) Behavior) New.
+              ^ self
+            );
+
+            on: eventType do: handlerFunction => (
+                "TODO: (behavior dispatcher) addRule:" 
+              ^ self
+            );
+
+            presenter: p => (
+                behavior presenter: p.
+              ^ self
+            );
+
+            build => behavior;
+
+            writeOn: w => w << 'a behavior builder';
+        }
+    };
+
+    new => Instance new;
+}

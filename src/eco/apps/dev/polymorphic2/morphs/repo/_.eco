@@ -1,118 +1,121 @@
 
 std Module
 {
-    TestMorph <- ($package core morph Behavior) New
-                ~ presenter:
-                    {
-                        isa std Singleton;
-
-                        with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
-
-                        drawOn: stream Kernel: kernel => (
-                            stream emit: ((polymorphic core objects Rectangle) X: 0 Y: 0 W: 64 H: 64).
-                          ^ self
-                        );
-
-                        writeOn: w => w << 'the test presenter';
-                    };
+    TestMorph <- ($package core) NewBehavior
+                    ~ presenter:
+                        {
+                            isa std Singleton;
     
-    EmitMorph <- ($package core morph Behavior) New
-                ~ presenter:
-                    {
-                        isa std Singleton;
-
-                        with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
-
-                        drawOn: stream Kernel: kernel => (
-                            stream emit: ((kernel state) payload).
-                          ^ self
-                        );
-
-                        writeOn: w => w << 'the emit presenter';
-                    };
+                            with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
+    
+                            drawOn: stream Kernel: kernel => (
+                                stream emit: ((polymorphic core objects Rectangle) X: 0 Y: 0 W: 64 H: 64).
+                              ^ self
+                            );
+    
+                            writeOn: w => w << 'the test presenter';
+                        }
+                    ~ build;
+    
+    EmitMorph <- ($package core) NewBehavior
+                    ~ presenter:
+                        {
+                            isa std Singleton;
+    
+                            with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
+    
+                            drawOn: stream Kernel: kernel => (
+                                stream emit: ((kernel state) payload).
+                              ^ self
+                            );
+    
+                            writeOn: w => w << 'the emit presenter';
+                        }
+                    ~ build;
 
     FlexMorph :: Module
     {
         protected polymorphic <- $package;
 
-        Behavior <- ($package core morph Behavior) New
-                  ~ presenter:
-                      {
-                        isa std Singleton;
-
-                        with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
-
-                        protected calculatePreferredExtentForMorph(morph, orientation, flexSize) => (
-                            | layout <- morph layoutForOrientation: orientation |
-
-                            (layout flexible?)   -> [ ^ flexSize ].
-                            (layout shrinkWrap?) -> [ ^ morph minExtentForOrientation: orientation ].
-
-                          ^ std sys error ThrowMessage: 'Unknown layout type'
-                        );
-
-                        drawOn: stream Kernel: kernel => (
-                            |
-                                orientation          <- ((kernel state) payload) orientation,
-                                morphs               <- ((kernel state) payload) morphs,
-                                mainAxisOrientation  <- orientation,
-                                crossAxisOrientation <- orientation opposite,
-                                mainAxisSize         <- 0,
-                                crossAxisSize        <- 0,
-                                flexCount            <- 0,
-                                morphCount           <- morphs size,
-                                assignedSize         <- 0,
-                            |
-
-                            "Compute the size of the main axis and the cross axis."
-                            morphs do: [ :morph |
+        Behavior <- ($package core) NewBehavior
+                      ~ presenter:
+                          {
+                            isa std Singleton;
+    
+                            with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
+    
+                            protected calculatePreferredExtentForMorph(morph, orientation, flexSize) => (
+                                | layout <- morph layoutForOrientation: orientation |
+    
+                                (layout flexible?)   -> [ ^ flexSize ].
+                                (layout shrinkWrap?) -> [ ^ morph minExtentForOrientation: orientation ].
+    
+                              ^ std sys error ThrowMessage: 'Unknown layout type'
+                            );
+    
+                            drawOn: stream Kernel: kernel => (
                                 |
-                                    morphMainAxisExtent  <- (morph minExtentForOrientation: mainAxisOrientation),
-                                    morphCrossAxisExtent <- (morph minExtentForOrientation: crossAxisOrientation),
+                                    orientation          <- ((kernel state) payload) orientation,
+                                    morphs               <- ((kernel state) payload) morphs,
+                                    mainAxisOrientation  <- orientation,
+                                    crossAxisOrientation <- orientation opposite,
+                                    mainAxisSize         <- 0,
+                                    crossAxisSize        <- 0,
+                                    flexCount            <- 0,
+                                    morphCount           <- morphs size,
+                                    assignedSize         <- 0,
                                 |
-
-                                mainAxisSize  <- mainAxisSize + morphMainAxisExtent.
-                                crossAxisSize <- crossAxisSize max: morphCrossAxisExtent.
-
-                                (morph layoutForOrientation: mainAxisOrientation) flexible?
-                                  ~ if: [ flexCount <- flexCount + 1 ]
-                                  else: [ assignedSize <- assignedSize + morphMainAxisExtent ].
-                            ].
-
-                            |
-                                flexSize <- (flexCount zero?) if: [ 0 ] else: [ ((mainAxisSize - assignedSize) asFloat / flexCount asFloat) asInt ],
-                                w        <- mainAxisOrientation selectX: mainAxisSize  Y: crossAxisSize,
-                                h        <- mainAxisOrientation selectX: crossAxisSize Y: mainAxisSize,
-                            |
-
-                            stream withGraphicsAtX: 0 Y: 0 W: w H: h Do: [ :graphics |
-                                |
-                                    offset <- 0,
-                                |
-
+    
+                                "Compute the size of the main axis and the cross axis."
                                 morphs do: [ :morph |
-
                                     |
-                                        morphMainAxisExtent     <- calculatePreferredExtentForMorph(morph, mainAxisOrientation, flexSize),
-                                        morphCrossAxisExtent    <- calculatePreferredExtentForMorph(morph, crossAxisOrientation, crossAxisSize),
-                                        bounds <- (polymorphic math geometry Rectangle)
-                                                    X: (mainAxisOrientation selectX: offset Y: 0)
-                                                    Y: (mainAxisOrientation selectX: 0      Y: offset)
-                                                    W: (mainAxisOrientation selectX: morphMainAxisExtent  Y: morphCrossAxisExtent)
-                                                    H: (mainAxisOrientation selectX: morphCrossAxisExtent Y: morphMainAxisExtent),
+                                        morphMainAxisExtent  <- (morph minExtentForOrientation: mainAxisOrientation),
+                                        morphCrossAxisExtent <- (morph minExtentForOrientation: crossAxisOrientation),
                                     |
-
-                                    graphics in: bounds put: morph.
-
-                                    offset <- offset + morphMainAxisExtent.
+    
+                                    mainAxisSize  <- mainAxisSize + morphMainAxisExtent.
+                                    crossAxisSize <- crossAxisSize max: morphCrossAxisExtent.
+    
+                                    (morph layoutForOrientation: mainAxisOrientation) flexible?
+                                      ~ if: [ flexCount <- flexCount + 1 ]
+                                      else: [ assignedSize <- assignedSize + morphMainAxisExtent ].
                                 ].
-                            ].
-
-                          ^ self
-                        );
-
-                        writeOn: w => w << 'the flex presenter';
-                      };
+    
+                                |
+                                    flexSize <- (flexCount zero?) if: [ 0 ] else: [ ((mainAxisSize - assignedSize) asFloat / flexCount asFloat) asInt ],
+                                    w        <- mainAxisOrientation selectX: mainAxisSize  Y: crossAxisSize,
+                                    h        <- mainAxisOrientation selectX: crossAxisSize Y: mainAxisSize,
+                                |
+    
+                                stream withGraphicsAtX: 0 Y: 0 W: w H: h Do: [ :graphics |
+                                    |
+                                        offset <- 0,
+                                    |
+    
+                                    morphs do: [ :morph |
+    
+                                        |
+                                            morphMainAxisExtent     <- calculatePreferredExtentForMorph(morph, mainAxisOrientation, flexSize),
+                                            morphCrossAxisExtent    <- calculatePreferredExtentForMorph(morph, crossAxisOrientation, crossAxisSize),
+                                            bounds <- (polymorphic math geometry Rectangle)
+                                                        X: (mainAxisOrientation selectX: offset Y: 0)
+                                                        Y: (mainAxisOrientation selectX: 0      Y: offset)
+                                                        W: (mainAxisOrientation selectX: morphMainAxisExtent  Y: morphCrossAxisExtent)
+                                                        H: (mainAxisOrientation selectX: morphCrossAxisExtent Y: morphMainAxisExtent),
+                                        |
+    
+                                        graphics in: bounds put: morph.
+    
+                                        offset <- offset + morphMainAxisExtent.
+                                    ].
+                                ].
+    
+                              ^ self
+                            );
+    
+                            writeOn: w => w << 'the flex presenter';
+                          }
+                      ~ build;
         
         Payload :: Classlike
         {
@@ -147,53 +150,54 @@ std Module
     {
         protected polymorphic <- $package;
 
-        Behavior <- ($package core morph Behavior) New
-                  ~ presenter:
-                      {
-                        isa std Singleton;
-
-                        with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
-
-                        protected calculatePreferredExtentForMorph(morph, orientation, extentLimits, margin) => (
-                            extentLimits no: [ ^ (morph minExtentForOrientation: orientation) ].
-                            
-                            | layout <- morph layoutForOrientation: orientation |
-
-                            (layout flexible?)   -> [ ^ ((extentLimits yes) dimensionForOrientation: orientation) ].
-                            (layout shrinkWrap?) -> [ ^ (morph minExtentForOrientation: orientation) ].
-
-                          ^ std sys error ThrowMessage: 'Unknown layout type'
-                        );
-
-                        drawOn: stream Kernel: kernel => (
-                            (((kernel state) payload) child) yes: [ :morph |
-                                |
-                                    margin  <- ((kernel state) payload) margin,
-                                    extent  <- stream maybeExtent,
-                                    extent2 <- extent yes: [ :e | Yes: ((polymorphic math geometry) Point X: (e x - (margin * 2)) Y: (e y - (margin * 2))) ] no: [ No ],
-                                    w       <- calculatePreferredExtentForMorph(morph, ((polymorphic math geometry) orientation) Horizontal, extent2, margin),
-                                    h       <- calculatePreferredExtentForMorph(morph, ((polymorphic math geometry) orientation) Vertical,   extent2, margin),
-                                    bounds  <- ((polymorphic math geometry) Rectangle)
-                                                    X: margin
-                                                    Y: margin
-                                                    W: w
-                                                    H: h,
-                                    ourBounds <- ((polymorphic math geometry) Rectangle)
-                                                       X: 0
-                                                       Y: 0
-                                                  Extent: (extent yes: [ :e | e ] no: [ ((polymorphic math geometry) Point X: (bounds w + (margin * 2)) Y: (bounds h + (margin * 2)))])
-                                |
-
-                                stream withGraphicsInBounds: ourBounds Do: [ :graphics |
-                                    graphics in: bounds put: morph.
+        Behavior <- ($package core) NewBehavior
+                      ~ presenter:
+                          {
+                            isa std Singleton;
+    
+                            with inherited PresenterTrait <- ($package core morph behavior presenting) PresenterTrait;
+    
+                            protected calculatePreferredExtentForMorph(morph, orientation, extentLimits, margin) => (
+                                extentLimits no: [ ^ (morph minExtentForOrientation: orientation) ].
+                                
+                                | layout <- morph layoutForOrientation: orientation |
+    
+                                (layout flexible?)   -> [ ^ ((extentLimits yes) dimensionForOrientation: orientation) ].
+                                (layout shrinkWrap?) -> [ ^ (morph minExtentForOrientation: orientation) ].
+    
+                              ^ std sys error ThrowMessage: 'Unknown layout type'
+                            );
+    
+                            drawOn: stream Kernel: kernel => (
+                                (((kernel state) payload) child) yes: [ :morph |
+                                    |
+                                        margin  <- ((kernel state) payload) margin,
+                                        extent  <- stream maybeExtent,
+                                        extent2 <- extent yes: [ :e | Yes: ((polymorphic math geometry) Point X: (e x - (margin * 2)) Y: (e y - (margin * 2))) ] no: [ No ],
+                                        w       <- calculatePreferredExtentForMorph(morph, ((polymorphic math geometry) orientation) Horizontal, extent2, margin),
+                                        h       <- calculatePreferredExtentForMorph(morph, ((polymorphic math geometry) orientation) Vertical,   extent2, margin),
+                                        bounds  <- ((polymorphic math geometry) Rectangle)
+                                                        X: margin
+                                                        Y: margin
+                                                        W: w
+                                                        H: h,
+                                        ourBounds <- ((polymorphic math geometry) Rectangle)
+                                                           X: 0
+                                                           Y: 0
+                                                      Extent: (extent yes: [ :e | e ] no: [ ((polymorphic math geometry) Point X: (bounds w + (margin * 2)) Y: (bounds h + (margin * 2)))])
+                                    |
+    
+                                    stream withGraphicsInBounds: ourBounds Do: [ :graphics |
+                                        graphics in: bounds put: morph.
+                                    ].
+    
+                                  ^ self
                                 ].
-
-                              ^ self
-                            ].
-                        );
-
-                        writeOn: w => w << 'the margin presenter';
-                      };
+                            );
+    
+                            writeOn: w => w << 'the margin presenter';
+                          }
+                      ~ build;
         
         Payload :: Classlike
         {
