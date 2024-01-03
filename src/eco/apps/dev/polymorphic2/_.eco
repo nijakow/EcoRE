@@ -54,6 +54,7 @@ std Module
         ].
 
         stream emit: circle.
+        stream emit: ((morphs repo FrameMorph) Child: ((morphs repo TestMorph2) link)).
         stream newline.
 
         1 to: 25 do: [ :i |
@@ -121,7 +122,7 @@ std Module
             (payload morphs) add: (morphs repo TestMorph link).
             (payload morphs) add: (morphs repo TestMorph link).
 
-            stream emit: flex.
+            stream emit: ((morphs repo FrameMorph) Child: flex).
             stream emit: ((core objects Text) Caption: 'Some text :D').
             stream newline.
         ).

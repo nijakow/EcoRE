@@ -4,6 +4,15 @@ std Module
     TestMorph <- ($package core) NewBehavior
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel | stream emit: ((polymorphic core objects Rectangle) X: 0 Y: 0 W: 64 H: 64) ] bind($package)
                     ~ build;
+
+    TestMorph2 <- ($package core) NewBehavior
+                    ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
+                          stream
+                            ~ emit: ((polymorphic core objects Text) Caption: 'Look at me')
+                            ~ newline
+                            ~ emit: ((polymorphic core objects Text) Caption: '  as I can fly!').
+                      ] bind($package)
+                    ~ build;
     
     EmitMorph <- ($package core) NewBehavior
                     ~ presenterFunction: $[ :stream :kernel | stream emit: ((kernel state) payload) ]
@@ -201,5 +210,56 @@ std Module
         };
 
         Margin: margin => (Behavior link: (Payload Margin: margin));
+        Margin: margin Child: child => (Behavior link: (Payload Margin: margin ~ child: child));
+    };
+
+
+    FrameMorph :: Module
+    {
+        protected polymorphic <- $package;
+
+        Behavior <- ($package core) NewBehavior
+                      ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
+                            ((kernel state payload) child) yes: [ :child |
+                                |
+                                    origin <- ((polymorphic math geometry) Point) Origin,
+                                    extent <- child minExtent
+                                |
+                                stream withGraphicsDo: [ :graphics |
+                                    |
+                                        rect <- (polymorphic core objects) Rectangle
+                                                    Bounds: (origin extent: extent)
+                                    |
+                                    graphics at: origin put: child.
+                                    graphics at: origin put: rect.
+                                ].
+                            ].
+                        ] bind($package)
+                      ~ build;
+        
+        Payload :: Classlike
+        {
+            Instance :: Clonable
+            {
+                |
+                    child <- No
+                |
+
+                {
+                    protected polymorphic <- $package;
+
+                    child: c => child <- Yes: c;
+                }
+            };
+
+            New => Instance new;
+        };
+
+        New      => (Behavior link: (Payload New));
+        Child: c => (
+            | p <- Payload New |
+            p child: c.
+          ^ (Behavior link: p)
+        );
     };
 }

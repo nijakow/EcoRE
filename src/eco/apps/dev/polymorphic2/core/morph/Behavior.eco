@@ -16,7 +16,7 @@
             init => (
                 presenter  <- ((polymorphic core morph) behavior presenting) DefaultPresenter.
                 dispatcher <- (((polymorphic core event) handling) Dispatcher) New.
-                caching?   <- true.
+                caching?   <- false. "TODO, FIXME, XXX: Changed for testing purposes... the caching system is broken"
               ^ self
             );
 
