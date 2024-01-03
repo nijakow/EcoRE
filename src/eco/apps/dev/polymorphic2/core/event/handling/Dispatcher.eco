@@ -25,9 +25,9 @@
                 rules do: [ :statement |
                     statement
                         runWithEvent: event
-                           OnSuccess: [ :v | ^ (((polymorphic core world) event handling) results Success) Value: v ]
+                           OnSuccess: [ :v | ^ (((polymorphic core event) handling) results Success) Value: v ]
                 ].
-              ^ ((polymorphic core world) event handling) results Failure
+              ^ ((polymorphic core event) handling) results Failure
             );
 
             writeOn: w => w << 'an event dispatcher';

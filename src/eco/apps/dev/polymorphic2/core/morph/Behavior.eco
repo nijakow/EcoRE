@@ -15,7 +15,7 @@
 
             init => (
                 presenter  <- ((polymorphic core morph) behavior presenting) DefaultPresenter.
-                dispatcher <- (((polymorphic core world) event handling) Dispatcher) New.
+                dispatcher <- (((polymorphic core event) handling) Dispatcher) New.
                 caching?   <- true.
               ^ self
             );
