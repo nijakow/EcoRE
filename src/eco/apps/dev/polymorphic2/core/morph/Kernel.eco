@@ -100,6 +100,12 @@
               ^ self
             );
 
+            add: kernel => (
+                | event <- (polymorphic event events) AddMorph: kernel | 
+                (behavior dispatcher) handle: event context: self.
+              ^ self
+            );
+
             writeOn: w => w << 'a morph kernel';
         }
     };

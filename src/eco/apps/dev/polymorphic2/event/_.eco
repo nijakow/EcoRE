@@ -3,4 +3,5 @@ std Module
 {
     types      :: (here / 'types'      / '_.eco') importIn: $package;
     predicates :: (here / 'predicates' / '_.eco') importIn: $package;
+    events     :: (here / 'events'     / '_.eco') importIn: $package;
 }

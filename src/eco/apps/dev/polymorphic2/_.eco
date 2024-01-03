@@ -156,6 +156,17 @@ std Module
                     put: (core objects FilledCircle Radius: 25 Color: (color colors Red)).
         ].
 
+        (
+            |
+                flex <- (morphs repo FlexMorph) Horizontal
+                           ~ add: ((morphs repo EmitMorph) link: ((core objects FilledCircle) Radius: 5 Color: (color colors Red)))
+                           ~ add: ((morphs repo EmitMorph) link: ((core objects FilledCircle) Radius: 5 Color: (color colors Red)))
+                           ~ add: ((morphs repo EmitMorph) link: ((core objects FilledCircle) Radius: 5 Color: (color colors Red)))
+            |
+
+            stream emit: flex.
+        ).
+
         (framework actions open) ui BuildAndOpen: [ :ui |
             ui Window(400, 400,
                 ui Clipped(

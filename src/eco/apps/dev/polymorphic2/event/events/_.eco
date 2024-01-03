@@ -4,7 +4,7 @@ std Module
     protected polymorphic <- $package;
 
     protected Head: head Body: body => (
-      ^ ((polymorphic core event) BasicEvent)
+      ^ ((polymorphic core event) handling BasicEvent)
                 Head: head
                 Body: body
     );

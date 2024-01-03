@@ -23,6 +23,11 @@ std Module
         protected polymorphic <- $package;
 
         Behavior <- ($package core) NewBehavior
+                      ~ on: (($package event) predicates AddMorph) do: $[ :kernel :event |
+                                (std io out << 'Received an add event!') newline commit.
+                                ((kernel state) payload) add: (event body).
+                                kernel changed.
+                        ]
                       ~ presenter:
                           {
                             isa std Singleton;
@@ -119,6 +124,8 @@ std Module
                         morphs      <- std util newVector.
                       ^ self
                     );
+
+                    add: morph => morphs add: morph;
                 }
             };
 
