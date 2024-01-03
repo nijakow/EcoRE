@@ -26,6 +26,8 @@
               ^ self
             );
 
+            presenterFunction: f => presenter: ((((polymorphic core morph) behavior presenting) FunctionPresenter) Function: f);
+
             caching: bool => (
                 behavior caching: bool.
               ^ self

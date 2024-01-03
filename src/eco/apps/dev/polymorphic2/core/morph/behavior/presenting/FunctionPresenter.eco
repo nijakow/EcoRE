@@ -1,0 +1,29 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            function
+        |
+
+        {
+            with inherited PresenterTrait <- $package;
+
+            initWithFunction: f => (
+                function <- f.
+              ^ self
+            );
+
+            drawOn: stream Kernel: kernel => (
+                function value(stream, kernel).
+              ^ self
+            );
+
+            writeOn: w => w << 'a function presenter';
+        }
+    };
+
+    Function: function => (Instance clone) initWithFunction: function;
+}

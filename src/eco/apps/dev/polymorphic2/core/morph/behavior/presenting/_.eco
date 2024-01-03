@@ -3,5 +3,6 @@ std Module
 {
     PresenterTrait :: (here / 'PresenterTrait.eco') importIn: $package;
 
-    DefaultPresenter :: (here / 'DefaultPresenter.eco') importIn: (self PresenterTrait);
+    DefaultPresenter  :: (here / 'DefaultPresenter.eco')  importIn: (self PresenterTrait);
+    FunctionPresenter :: (here / 'FunctionPresenter.eco') importIn: (self PresenterTrait);
 }
