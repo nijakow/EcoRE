@@ -34,6 +34,7 @@
             );
 
             changed => (
+                kernel clearCaches.
                 world yes: [ :w | w iHaveChanged: self ].
               ^ self
             );
