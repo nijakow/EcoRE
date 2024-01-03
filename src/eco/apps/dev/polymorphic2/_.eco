@@ -5,6 +5,7 @@ std Module
 
     core   :: (here / 'core'   / '_.eco') importIn: self;
     color  :: (here / 'color'  / '_.eco') importIn: self;
+    event  :: (here / 'event'  / '_.eco') importIn: self;
     morphs :: (here / 'morphs' / '_.eco') importIn: self;
 
 

@@ -16,8 +16,13 @@
               ^ self
             );
 
-            on: eventType do: handlerFunction => (
-                "TODO: (behavior dispatcher) addRule:" 
+            on: predicate do: handlerFunction => (
+                |
+                    rule <- ((polymorphic core event) handling BasicRule)
+                                Predicate: predicate
+                                  Handler: handlerFunction
+                |
+                (behavior dispatcher) addRule: rule.
               ^ self
             );
 

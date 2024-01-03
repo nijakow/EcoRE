@@ -1,0 +1,9 @@
+
+std Module
+{
+    protected polymorphic <- $package;
+
+    Predicate :: (here / 'Predicate.eco') importIn: $package;
+
+    AddMorph => Predicate for: ((polymorphic event types) AddMorph);
+}

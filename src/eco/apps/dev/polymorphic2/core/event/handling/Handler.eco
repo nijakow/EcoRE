@@ -1,8 +1,0 @@
-
-{
-    isa Trait;
-
-    run: event => subclassResponsibility;
-
-    writeOn: w => w << 'an event handler';
-}

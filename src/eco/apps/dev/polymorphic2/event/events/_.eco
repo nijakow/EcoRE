@@ -1,0 +1,15 @@
+
+std Module
+{
+    protected polymorphic <- $package;
+
+    protected Head: head Body: body => (
+      ^ ((polymorphic core event) BasicEvent)
+                Head: head
+                Body: body
+    );
+
+    protected types => (polymorphic event) types;
+
+    AddMorph: morph => Head: (types AddMorph) Body: morph;
+}

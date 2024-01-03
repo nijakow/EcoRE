@@ -21,10 +21,11 @@
               ^ self
             );
 
-            handle: event => (
+            handle: event context: context => (
                 rules do: [ :rule |
                     rule
                         runWithEvent: event
+                             Context: context
                            OnSuccess: [ :v | ^ (((polymorphic core event) handling) results Success) Value: v ]
                 ].
               ^ ((polymorphic core event) handling) results Failure

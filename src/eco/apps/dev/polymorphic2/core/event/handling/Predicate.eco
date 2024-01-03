@@ -2,7 +2,8 @@
 {
     isa Trait;
 
-    accepts?: head => subclassResponsibility;
+    accepts?: event                                         => subclassResponsibility;
+    forwardEvent: event ToHandler: handler Context: context => subclassResponsibility;
 
     writeOn: w => w << 'an event predicate';
 }

@@ -1,0 +1,26 @@
+
+{
+    isa Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            type,
+        |
+        
+        {
+            with inherited Predicate <- ($package core event) handling Predicate;
+
+            initWithType: t => (
+                type <- t.
+              ^ self
+            );
+
+            accepts?: event => (type == (event head));
+
+            forwardEvent: event ToHandler: handler Context: context => handler value(context, event);
+        }
+    };
+
+    for: type => (Instance clone) initWithType: type;
+}

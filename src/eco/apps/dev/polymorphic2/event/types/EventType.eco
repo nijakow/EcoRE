@@ -1,0 +1,6 @@
+
+{
+    isa Trait;
+
+    isAddMorphEvent? => false;
+}

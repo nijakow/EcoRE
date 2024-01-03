@@ -2,8 +2,8 @@
 {
     isa Trait;
 
-    runWithEvent: event OnSuccess: success OnFailure: failure => subclassResponsibility;
-    runWithEvent: event OnSuccess: success                    => runWithHead: head Body: body OnSuccess: success OnFailure: [];
+    runWithEvent: event Context: context OnSuccess: success OnFailure: failure => subclassResponsibility;
+    runWithEvent: event Context: context OnSuccess: success                    => runWithEvent: event Context: context OnSuccess: success OnFailure: [];
 
     writeOn: w => w << 'an event rule';
 }
