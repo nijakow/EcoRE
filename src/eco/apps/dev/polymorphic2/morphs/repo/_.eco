@@ -8,9 +8,9 @@ std Module
     TestMorph2 <- ($package core) NewBehavior
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                           stream
-                            ~ emit: ((polymorphic core objects Text) Caption: 'Look at me')
-                            ~ newline
-                            ~ emit: ((polymorphic core objects Text) Caption: '  as I can fly!').
+                              ~ << 'Look at me'
+                              ~ newline
+                              ~ << '  as I can fly!!!'.
                       ] bind($package)
                     ~ build;
     
