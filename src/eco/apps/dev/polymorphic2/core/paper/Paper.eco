@@ -39,6 +39,13 @@
             );
 
             presentationsDo: block => presentations do: block;
+            morphsDo: block => (
+                presentationsDo: [ :presentation |
+                    (presentation morphPresentation?)
+                      ~ if: [ block value(presentation morph) ]
+                ].
+              ^ self
+            );
 
             lookupKernel: kernel => (
                 cachedMorphs forEach: [ :i :each |

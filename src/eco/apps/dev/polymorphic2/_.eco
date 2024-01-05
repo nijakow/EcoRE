@@ -77,6 +77,8 @@ std Module
 
         driver run.
 
+        ((driver world) node) dumpOn: (std io out).
+
         (framework actions open) ui BuildAndOpen: [ :ui |
             ui Window(450, 450,
                 ui Clipped(

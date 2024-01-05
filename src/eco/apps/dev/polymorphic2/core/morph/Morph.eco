@@ -91,11 +91,7 @@
             world => node world;
 
             childrenDo: block => (
-                "This is a bit of a hack, but it works like a charm :D"
-                paper presentationsDo: [ :presentation |
-                    (presentation morphPresentation?)
-                      ~ if: [ block value(presentation morph) ]
-                ].
+                paper morphsDo: block.
               ^ self
             );
 

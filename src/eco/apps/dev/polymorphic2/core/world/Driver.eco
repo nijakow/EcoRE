@@ -19,6 +19,7 @@
                 rootMorph <- ((polymorphic morphs) repo TestMorph4) link.
 
                 rootPaper node: (world node).
+                (world node) paper: rootPaper.
 
               ^ self
             );

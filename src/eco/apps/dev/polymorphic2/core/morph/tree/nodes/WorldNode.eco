@@ -5,18 +5,27 @@
     Instance :: Clonable
     {
         |
-            world
+            world,
+            maybePaper
         |
 
         {
             with inherited Node <- $package;
 
             initWithWorld: w => (
-                world <- Yes: w.
+                world      <- Yes: w.
+                maybePaper <- No.
               ^ self
             );
 
+            paper: p => maybePaper <- Yes: p;
+
             parent => No;
+
+            childrenDo: block => (
+                maybePaper yes: [ :p | p morphsDo: [ :each | block value(each node) ] ].
+              ^ self
+            );
 
             writeOn: w => w << 'a world node';
         }

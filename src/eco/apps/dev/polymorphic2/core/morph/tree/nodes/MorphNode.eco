@@ -33,15 +33,12 @@
             );
 
             childrenDo: block => (
-                morph childrenDo: block.
+                morph childrenDo: [ :each | block value(each node) ].
               ^ self
             );
 
             writeOn: w => (
                 w << 'a morph node'.
-                parent yes: [ :p |
-                    w << ' (parent is ' << p << ')'.
-                ].
             );
         }
     };

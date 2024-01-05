@@ -9,5 +9,21 @@
 
     childrenDo: block => self;
 
+    dumpOn: stream Depth: depth => (
+        0 for: depth do: [ :i | (stream << '  ') ].
+        stream << ' - '.
+        maybeMorph yes: [ :morph |
+            stream << morph.
+        ] no: [
+            stream << self.
+        ].
+        stream newline commit.
+        childrenDo: [ :child |
+            (child) dumpOn: stream Depth: (depth + 1).
+        ].
+      ^ self
+    );
+    dumpOn: stream => dumpOn: stream Depth: 0;
+
     writeOn: w => w << 'a node';
 }
