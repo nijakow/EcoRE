@@ -12,7 +12,12 @@ std Module
     DriverWrapperMorph :: Clonable {
         with inherited own Morph = ($package gfx morphic) morphs Morph;
 
-        driver <- No;
+        |
+            driver <- No,
+            
+            protected cachedCursorX <- 0,
+            protected cachedCursorY <- 0
+        |
 
         {
             driver: d => (
@@ -28,9 +33,8 @@ std Module
                         relativeMousePos <- mousePos - globalOffset
                     |
 
-                    (theDriver)
-                        mouseMovedToX: (relativeMousePos x)
-                                    Y: (relativeMousePos y).
+                    updateX: (relativeMousePos x)
+                          Y: (relativeMousePos y).
 
                     [
                         (theDriver) tick.
@@ -43,18 +47,31 @@ std Module
               ^ self
             );
 
-            handleClick: click At: point HandMorph: hand => (
+            protected movedToX: x Y: y => (
+                cachedCursorX <- x.
+                cachedCursorY <- y.
+
                 (driver yes)
-                    mouseMovedToX: (point x)
-                                Y: (point y).
-                "TODO"
+                    mouseMovedToX: x
+                                Y: y.
+                
+              ^ self
+            );
+
+            protected updateX: x Y: y => (
+                [ cachedCursorX != x ] or: [ cachedCursorY != y ]
+                  ~ if: [ movedToX: x Y: y ].
+              ^ self
+            );
+
+            handleClick: click At: point HandMorph: hand => (
+                updateX: (point x) Y: (point y).        
+                (driver yes) mouseClicked: click.
               ^ true
             );
 
             handleKey: key At: point HandMorph: hand => (
-                (driver yes)
-                    mouseMovedToX: (point x)
-                                Y: (point y).
+                updateX: (point x) Y: (point y).
                 (driver yes) keyPressed: key.
                 (driver yes) keyReleased: key.
               ^ true

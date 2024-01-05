@@ -26,7 +26,13 @@
 
             initWithoutWorld => initWithWorld: (((polymorphic core world) World) New);
 
-            mouseMovedToX: cx Y: cy => (
+            mouseMovedToX: x Y: y => (
+                (std io out << 'Mouse moved to ' << x << ' ' << y) newline commit.
+              ^ self
+            );
+
+            mouseClicked: click => (
+                (std io out << 'Mouse clicked!') newline commit.
               ^ self
             );
 
@@ -35,6 +41,7 @@
             );
 
             keyPressed: key => (
+                (std io out << 'Key pressed!') newline commit.
               ^ self
             );
 
