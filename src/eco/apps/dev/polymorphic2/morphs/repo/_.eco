@@ -14,6 +14,15 @@ std Module
                       ] bind($package)
                     ~ build;
     
+    TestMorph3_Point <- ($package core) NewBehavior
+                          ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
+                                stream << 'Point!'.
+                                stream withGraphicsDo: [ :graphics |
+                                    graphics at: ((polymorphic math geometry) Point Origin) put: (((polymorphic core objects) FilledCircle) Radius: 3 Color: (((polymorphic color colors) Red))).
+                                ].
+                          ] bind($package)
+                          ~ build;
+    
     TestMorph3 <- ($package core) NewBehavior
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                           stream withGraphicsDo: [ :graphics |
@@ -26,8 +35,7 @@ std Module
                                         p   <- ((polymorphic math geometry) Point X: i * 25 Y: vp1)
                                     |
                                     graphics at: p put: (((polymorphic core objects) Line) End: ((polymorphic math geometry) Point X: 25 Y: (vp2 - vp1))).
-                                    graphics at: p put: (((polymorphic core objects) Text) Caption: 'Point!').
-                                    graphics at: p put: (((polymorphic core objects) FilledCircle) Radius: 3 Color: (((polymorphic color colors) Red))).
+                                    graphics at: p put: (((polymorphic morphs) repo TestMorph3_Point) link).
                                 ]
                           ].
                       ] bind($package)
@@ -156,6 +164,10 @@ std Module
     EmitMorph <- ($package core) NewBehavior
                     ~ presenterFunction: $[ :stream :kernel | stream emit: ((kernel state) payload) ]
                     ~ build;
+    
+    FunctionEmitMorph <- ($package core) NewBehavior
+                            ~ presenterFunction: $[ :stream :kernel | ((kernel state) payload) value(stream, kernel) ]
+                            ~ build;
 
     FlexMorph :: Module
     {
