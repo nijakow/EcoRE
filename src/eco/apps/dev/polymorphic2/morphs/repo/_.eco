@@ -16,7 +16,7 @@ std Module
     
     TestMorph3_Point <- ($package core) NewBehavior
                           ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
-                                stream << 'Point!'.
+                                stream << 'Point!' ~ newline.
                                 stream withGraphicsDo: [ :graphics |
                                     graphics at: ((polymorphic math geometry) Point Origin) put: (((polymorphic core objects) FilledCircle) Radius: 3 Color: (((polymorphic color colors) Red))).
                                 ].
@@ -40,6 +40,30 @@ std Module
                           ].
                       ] bind($package)
                     ~ build;
+    
+    TestMorph3_1 <- ($package core) NewBehavior
+                      ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
+                            |
+                                Point <- (polymorphic math geometry) Point,
+                                PointMorph <- (polymorphic morphs) repo TestMorph3_Point
+                            |
+
+                            stream withGraphicsDo: [ :graphics |
+                                | n <- 10, r <- 50 |
+
+                                1 to: n do: [ :i |
+                                    |
+                                        d <- ((i / (n asFloat)) * 3.14159 * 2),
+                                        x <- ((d sin * r) + r) asInt,
+                                        y <- ((d cos * r) + r) asInt,
+                                    |
+
+                                    graphics at: (Point X: x Y: y)
+                                            put: (PointMorph link).
+                                ].
+                            ].
+                      ] bind($package)
+                      ~ build;
     
     TestMorph4 <- ($package core) NewBehavior
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
@@ -158,6 +182,8 @@ std Module
                 ).
 
                 stream emit: (((polymorphic morphs) repo TestMorph3) link).
+                stream newline.
+                stream emit: (((polymorphic morphs) repo TestMorph3_1) link).
                     ] bind($package)
                     ~ build;
     
