@@ -7,7 +7,7 @@
         |
             world,
             rootPaper,
-            rootMorph
+            rootMorph,
         |
 
         {
@@ -17,20 +17,33 @@
                 world     <- w.
                 rootPaper <- ((polymorphic core paper) Paper) Extent: ((polymorphic math geometry) Point X: 400 Y: 400).
                 rootMorph <- ((polymorphic morphs) repo TestMorph4) link.
+
+                rootPaper node: (world node).
+
               ^ self
             );
 
             initWithoutWorld => initWithWorld: (((polymorphic core world) World) New);
 
+            mouseMovedToX: cx Y: cy => (
+              ^ self
+            );
+
+            mouseScrolledByX: dx Y: dy => (
+              ^ self
+            );
+
+            keyPressed: key => (
+              ^ self
+            );
+
+            keyReleased: key => (
+              ^ self
+            );
+
             run => (
-                |
-                    paper  <- rootPaper,
-                    stream <- paper stream,
-                |
-
-                paper node: (world node).
-
-                stream emit: rootMorph.
+                (rootPaper stream) emit: rootMorph.
+              ^ self
             );
 
             writeOn: w => w << 'a polymorphic driver';
