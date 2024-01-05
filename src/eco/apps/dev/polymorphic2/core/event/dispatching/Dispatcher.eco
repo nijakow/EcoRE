@@ -4,13 +4,33 @@
 
     Instance :: Clonable
     {
+        |
+            driver,
+        |
+
         {
-            init => (
+            initWithDriver: d => (
+                driver <- d.
               ^ self
             );
 
+            protected dispatch: event AtX: x Y: y Morph: morph Stopper: stopper => (
+              ^ self
+            );
+
+            protected beginDispatch: event AtX: x Y: y Morph: morph Stopper: stopper => (
+              ^ dispatch: event
+                     AtX: (morph origin) x
+                       Y: (morph origin) y
+                   Morph: morph
+                 Stopper: stopper
+            );
+
             dispatch: event AtX: x Y: y => (
-                "TODO"
+                | stopper <- [ ^ self ] |
+                (driver rootPaper) morphsDo: [ :each |
+                    beginDispatch: event AtX: x Y: y Morph: each Stopper: stopper.
+                ].
               ^ self
             );
 
@@ -38,5 +58,5 @@
         }
     };
 
-    New => Instance new;
+    Driver: driver => (Instance clone) initWithDriver: driver;
 }
