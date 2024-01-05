@@ -22,8 +22,47 @@ std Module
             );
 
             renderImplOn: renderer => (
-                driver yes: [ :d | (d rootPaper) renderOn: renderer ].
+                driver yes: [ :theDriver | 
+                    |
+                        mousePos         <- (world yes) handMorph globalOffset,
+                        relativeMousePos <- mousePos - globalOffset
+                    |
+
+                    (theDriver)
+                        mouseMovedToX: (relativeMousePos x)
+                                    Y: (relativeMousePos y).
+
+                    [
+                        (theDriver) tick.
+                        (theDriver rootPaper) renderOn: renderer.
+                    ] catch: [ :ex |
+                        (std io out << 'Oops! Something went wrong in polymorphic2!') newline commit.
+                    ].
+                ].
+
               ^ self
+            );
+
+            handleClick: click At: point HandMorph: hand => (
+                (driver yes)
+                    mouseMovedToX: (point x)
+                                Y: (point y).
+                "TODO"
+              ^ true
+            );
+
+            handleKey: key At: point HandMorph: hand => (
+                (driver yes)
+                    mouseMovedToX: (point x)
+                                Y: (point y).
+                (driver yes) keyPressed: key.
+                (driver yes) keyReleased: key.
+              ^ true
+            );
+
+            handleScrollX: sx Y: sy HandMorph: hand => (
+                (driver yes) mouseScrolledByX: sx Y: sy.
+              ^ true
             );
 
             writeOn: w => w << 'a driver wrapper morph';

@@ -41,6 +41,11 @@
               ^ self
             );
 
+            tick => (
+                "Do nothing..."
+              ^ self
+            );
+
             run => (
                 (rootPaper stream) emit: rootMorph.
               ^ self
