@@ -9,154 +9,39 @@ std Module
     morphs :: (here / 'morphs' / '_.eco') importIn: self;
 
 
-    PaperWrapperMorph :: Clonable {
-        with inherited own Morph = $package gfx morphic morphs Morph;
+    DriverWrapperMorph :: Clonable {
+        with inherited own Morph = ($package gfx morphic) morphs Morph;
 
-        paper <- No;
+        driver <- No;
 
         {
-            paper: p => (
-                paper <- Yes: p.
+            driver: d => (
+                driver <- Yes: d.
                 renderDirty.
               ^ self
             );
 
             renderImplOn: renderer => (
-                paper yes: [ :p | p renderOn: renderer ].
+                driver yes: [ :d | (d rootPaper) renderOn: renderer ].
               ^ self
             );
 
-            writeOn: w => w << 'a paper wrapper morph';
+            writeOn: w => w << 'a driver wrapper morph';
         }
     };
 
 
     Test => (
         |
-            world  <- ((core world) World) New,
-            paper  <- ((core paper) Paper) Extent: (math geometry Point X: 400 Y: 400),
-            stream <- paper stream,
-            r      <- 5,
-            circle <- (core objects FilledCircle Radius: r)
+            driver <- ((core world) Driver) New
         |
 
-        paper node: (world node).
-
-        1 to: 5 do: [ :i | (stream << i) newline ].
-
-        stream emit: ((core objects Text) Caption: 'Hello World!').
-
-        stream emit: circle.
-        stream emit: circle.
-
-        stream withRoom: (math geometry Point X: 100 Y: 100) ForGraphicsDo: [ :graphics |
-            graphics at: (math geometry Point X:  0 Y:  0) put: (core objects Rectangle Bounds: (graphics bounds)).
-            graphics at: (math geometry Point X: 50 Y: 50) put: (core objects FilledCircle Radius: 25).
-        ].
-
-        stream emit: circle.
-        stream emit: ((morphs repo FrameMorph) Child: ((morphs repo TestMorph2) link)).
-        stream newline.
-
-        1 to: 25 do: [ :i |
-            stream emit: circle.
-            ((i mod: 5) == 0) if: [
-                stream newline.
-            ].
-        ].
-
-        stream newline.
-
-        | behavior <- (core morph Behavior) New |
-
-        stream emit: (behavior link).
-        stream emit: circle.
-        stream emit: (behavior link).
-        stream emit: circle.
-        stream newline.
-        stream emit: circle.
-        stream emit: (behavior link).
-        stream emit: circle.
-        stream emit: (behavior link).
-        stream newline.
-
-        (
-            | lol |
-            stream emit: ((morphs repo FrameMorph) Child: (
-                (morphs repo FlexMorph) Horizontal
-                  ~ add: ((morphs repo TestMorph) link)
-                  ~ add: ((morphs repo TestMorph) link)
-                  ~ add: (
-                        (morphs repo FlexMorph) Vertical
-                          ~ let: [ :s | lol <- s. s ]
-                          ~ add: ((morphs repo TestMorph) link)
-                          ~ add: ((morphs repo TestMorph) link)
-                          ~ add: ((morphs repo TestMorph) link)
-                          ~ add: (
-                              | flex3 <- (morphs repo FlexMorph) Horizontal |
-
-                              1 to: 4 do: [ :i |
-                                  flex3 add: ((morphs repo EmitMorph) link: (core objects FilledCircle Radius: ((11 - i) * 3))).
-                              ].
-
-                              flex3
-                          )
-                          ~ add: ((morphs repo TestMorph) link)
-                  )
-                  ~ add: ((morphs repo TestMorph) link)
-            )).
-            stream emit: ((core objects Text) Caption: 'Some text :D').
-            stream newline.
-            lol add: (
-                (morphs repo FlexMorph) Horizontal
-                  ~ add: ((morphs repo TestMorph2) link)
-                  ~ add: ((morphs repo FrameMorph) Child: ((morphs repo TestMorph2) link))
-                  ~ add: ((morphs repo TestMorph2) link)
-            ).
-        ).
-
-        (
-            |
-                margin1  <- (morphs repo MarginMorph) Margin: 10,
-            |
-
-            (margin1 state) payload
-              ~ child: ((morphs repo EmitMorph) link: (core objects FilledCircle Radius: 25)).
-            
-            stream emit: margin1.
-        ).
-
-        stream emit: ((morphs repo EmitMorph) link: (core objects FilledCircle Radius: 25)).
-        stream newline.
-        stream emit: (core objects FilledCircle Radius: 25).
-        stream emit: (core objects FilledCircle Radius: 25).
-        stream newline.
-
-        stream withGraphicsDo: [ :graphics |
-            graphics at: (math geometry Point X:  0 Y:  0)
-                    put: (core objects Rectangle Bounds: (graphics bounds) Color: (color colors Red)).
-
-            graphics at: (math geometry Point X: (graphics bounds w / 2) Y: (graphics bounds h / 2))
-                    put: (core objects FilledCircle Radius: 25 Color: (color colors Red)).
-        ].
-
-        (
-            |
-                flex <- (morphs repo FlexMorph) Horizontal
-                           ~ add: ((morphs repo EmitMorph) link: ((core objects FilledCircle) Radius: 5 Color: (color colors Red)))
-                           ~ add: ((morphs repo EmitMorph) link: ((core objects FilledCircle) Radius: 5 Color: (color colors Red)))
-                           ~ add: ((morphs repo EmitMorph) link: ((core objects FilledCircle) Radius: 5 Color: (color colors Red)))
-            |
-
-            stream emit: flex.
-        ).
-
-        stream emit: ((morphs repo TestMorph3) link).
+        driver run.
 
         (framework actions open) ui BuildAndOpen: [ :ui |
-            ui Window(400, 400,
+            ui Window(450, 450,
                 ui Clipped(
-                    PaperWrapperMorph new paper: paper
+                    (DriverWrapperMorph new) driver: driver
                 )
             )
         ]
