@@ -8,15 +8,20 @@
             world,
             rootPaper,
             rootMorph,
+            dispatcher,
+
+            cachedMouseX <- 0,
+            cachedMouseY <- 0,
         |
 
         {
             protected polymorphic <- $package;
 
             initWithWorld: w => (
-                world     <- w.
-                rootPaper <- ((polymorphic core paper) Paper) Extent: ((polymorphic math geometry) Point X: 400 Y: 400).
-                rootMorph <- ((polymorphic morphs) repo TestMorph4) link.
+                world      <- w.
+                rootPaper  <- ((polymorphic core paper) Paper) Extent: ((polymorphic math geometry) Point X: 400 Y: 400).
+                rootMorph  <- ((polymorphic morphs) repo TestMorph4) link.
+                dispatcher <- ((polymorphic core event) dispatching Dispatcher) New;
 
                 rootPaper node: (world node).
                 (world node) paper: rootPaper.
@@ -27,12 +32,21 @@
             initWithoutWorld => initWithWorld: (((polymorphic core world) World) New);
 
             mouseMovedToX: x Y: y => (
-                (std io out << 'Mouse moved to ' << x << ' ' << y) newline commit.
+                cachedMouseX <- x,
+                cachedMouseY <- y.
+
+                dispatcher
+                    mouseMovedToX: x
+                                Y: y.
+                
               ^ self
             );
 
             mouseClicked: click => (
-                (std io out << 'Mouse clicked!') newline commit.
+                dispatcher
+                    mouseClickedAtX: cachedMouseX
+                                  Y: cachedMouseY
+                              Click: click.
               ^ self
             );
 
@@ -41,11 +55,18 @@
             );
 
             keyPressed: key => (
-                (std io out << 'Key pressed!') newline commit.
+                dispatcher
+                    keyPressedAtX: cachedMouseX
+                                Y: cachedMouseY
+                              Key: key.
               ^ self
             );
 
             keyReleased: key => (
+                dispatcher
+                    keyReleasedAtX: cachedMouseX
+                                 Y: cachedMouseY
+                               Key: key.
               ^ self
             );
 

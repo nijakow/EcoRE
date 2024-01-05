@@ -1,0 +1,42 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        {
+            init => (
+              ^ self
+            );
+
+            dispatch: event AtX: x Y: y => (
+                "TODO"
+              ^ self
+            );
+
+            mouseMovedToX: x Y: y => (
+                (std io out << 'Mouse moved to ' << x << ' ' << y) newline commit.
+              ^ self
+            );
+
+            mouseClickedAtX: x Y: y Click: click => (
+                (std io out << 'Mouse clicked!') newline commit.
+              ^ self
+            );
+
+            keyPressedAtX: x Y: y Key: key => (
+                (std io out << 'Key pressed!') newline commit.
+              ^ self
+            );
+
+            keyReleasedAtX: x Y: y Key: key => (
+                (std io out << 'Key released!') newline commit.
+              ^ self
+            );
+
+            writeOn: w => w << 'an event dispatcher';
+        }
+    };
+
+    New => Instance new;
+}

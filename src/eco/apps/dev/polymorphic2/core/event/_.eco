@@ -1,5 +1,6 @@
 
 std Module
 {
-    handling :: (here / 'handling' / '_.eco') importIn: $package;
+    handling    :: (here / 'handling'    / '_.eco') importIn: $package;
+    dispatching :: (here / 'dispatching' / '_.eco') importIn: $package;
 }

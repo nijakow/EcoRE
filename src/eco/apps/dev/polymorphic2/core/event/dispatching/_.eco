@@ -1,0 +1,5 @@
+
+std Module
+{
+    Dispatcher :: (here / 'Dispatcher.eco') importIn: $package;
+}
