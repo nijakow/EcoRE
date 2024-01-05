@@ -33,6 +33,126 @@ std Module
                       ] bind($package)
                     ~ build;
     
+    TestMorph4 <- ($package core) NewBehavior
+                    ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
+                |
+                    r      <- 5,
+                    circle <- ((polymorphic core objects) FilledCircle Radius: r)
+                |
+
+                1 to: 5 do: [ :i | (stream << i) newline ].
+
+                stream emit: ((polymorphic core objects Text) Caption: 'Hello World!').
+
+                stream emit: circle.
+                stream emit: circle.
+
+                stream withRoom: ((polymorphic math geometry) Point X: 100 Y: 100) ForGraphicsDo: [ :graphics |
+                    graphics at: ((polymorphic math geometry) Point X:   0 Y:   0) put: ((polymorphic core objects) Rectangle Bounds: (graphics bounds)).
+                    graphics at: ((polymorphic math geometry) Point X:  50 Y:  50) put: ((polymorphic core objects) FilledCircle Radius: 25).
+                ].
+
+                stream emit: circle.
+                stream emit: (((polymorphic morphs) repo FrameMorph) Child: (((polymorphic morphs) repo TestMorph2) link)).
+                stream newline.
+
+                1 to: 25 do: [ :i |
+                    stream emit: circle.
+                    ((i mod: 5) == 0) if: [
+                        stream newline.
+                    ].
+                ].
+
+                stream newline.
+
+                | behavior <- ((polymorphic core morph) Behavior) New |
+
+                stream emit: (behavior link).
+                stream emit: circle.
+                stream emit: (behavior link).
+                stream emit: circle.
+                stream newline.
+                stream emit: circle.
+                stream emit: (behavior link).
+                stream emit: circle.
+                stream emit: (behavior link).
+                stream newline.
+
+                (
+                    stream emit: (((polymorphic morphs) repo FrameMorph) Child: (
+                        ((polymorphic morphs) repo FlexMorph) Horizontal
+                          ~ add: (((polymorphic morphs) repo TestMorph) link)
+                          ~ add: (((polymorphic morphs) repo TestMorph) link)
+                          ~ add: (
+                                  ((polymorphic morphs) repo FlexMorph) Vertical
+                                    ~ add: (((polymorphic morphs) repo TestMorph) link)
+                                    ~ add: (((polymorphic morphs) repo TestMorph) link)
+                                    ~ add: (((polymorphic morphs) repo TestMorph) link)
+                                    ~ add: (
+                                        | flex3 <- ((polymorphic morphs) repo FlexMorph) Horizontal |
+    
+                                        1 to: 4 do: [ :i |
+                                            flex3 add: (((polymorphic morphs) repo EmitMorph) link: ((polymorphic core objects) FilledCircle Radius: ((11 - i) * 3))).
+                                        ].
+    
+                                        flex3
+                                    )
+                                    ~ add: (((polymorphic morphs) repo TestMorph) link)
+                                    ~ add: (
+                                        ((polymorphic morphs) repo FlexMorph) Horizontal
+                                        ~ add: (((polymorphic morphs) repo TestMorph2) link)
+                                        ~ add: (((polymorphic morphs) repo FrameMorph) Child: (((polymorphic morphs) repo TestMorph2) link))
+                                        ~ add: (((polymorphic morphs) repo TestMorph2) link)
+                                    )
+                          )
+                          ~ add: (((polymorphic morphs) repo TestMorph) link)
+                    )).
+                    stream emit: (((polymorphic core objects) Text) Caption: 'Some text :D').
+                    stream newline.
+                ).
+
+                (
+                    |
+                        margin1  <- ((polymorphic morphs) repo MarginMorph) Margin: 10,
+                    |
+
+                    (margin1 state) payload
+                    ~ child: (((polymorphic morphs) repo EmitMorph) link: ((polymorphic core objects) FilledCircle Radius: 25)).
+                    
+                    stream emit: margin1.
+                ).
+
+                stream emit: (((polymorphic morphs) repo EmitMorph) link: ((polymorphic core objects) FilledCircle Radius: 25)).
+                stream newline.
+                stream emit: ((polymorphic core objects) FilledCircle Radius: 25).
+                stream emit: ((polymorphic core objects) FilledCircle Radius: 25).
+                stream newline.
+
+                stream withGraphicsDo: [ :graphics |
+                    (graphics maybeBounds) yes: [ :bnds |
+                        graphics at: ((polymorphic math geometry) Point X:  0 Y:  0)
+                                put: ((polymorphic core objects) Rectangle Bounds: (bnds) Color: ((polymorphic color) colors Red)).
+
+                        graphics at: ((polymorphic math geometry) Point X: (bnds w / 2) Y: (bnds h / 2))
+                                put: ((polymorphic core objects) FilledCircle Radius: 25 Color: ((polymorphic color) colors Red)).
+                    ].
+                ].
+
+                (
+                    |
+                        flex <- ((polymorphic morphs) repo FlexMorph) Horizontal
+                                ~ add: (((polymorphic morphs) repo EmitMorph) link: (((polymorphic core objects) FilledCircle) Radius: 5 Color: ((polymorphic color) colors Red)))
+                                ~ add: (((polymorphic morphs) repo EmitMorph) link: (((polymorphic core objects) FilledCircle) Radius: 5 Color: ((polymorphic color) colors Red)))
+                                ~ add: (((polymorphic morphs) repo EmitMorph) link: (((polymorphic core objects) FilledCircle) Radius: 5 Color: ((polymorphic color) colors Red)))
+                    |
+
+                    stream emit: flex.
+                ).
+
+                stream emit: (((polymorphic morphs) repo TestMorph3) link).
+                    ] bind($package)
+                    ~ build;
+    
     EmitMorph <- ($package core) NewBehavior
                     ~ presenterFunction: $[ :stream :kernel | stream emit: ((kernel state) payload) ]
                     ~ build;

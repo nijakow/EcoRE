@@ -25,7 +25,7 @@
 
             maybeBounds => (
                 maybeExtent yes: [ :extent |
-                  ^ Yes: (polymorphic math geometry Rectangle) Origin: origin Extent: extent
+                  ^ Yes: ((polymorphic math geometry) Rectangle) Origin: origin Extent: extent
                 ].
               ^ No
             );
