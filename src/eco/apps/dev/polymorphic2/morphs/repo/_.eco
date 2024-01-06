@@ -40,7 +40,6 @@ std Module
                                 ]
                           ].
                       ] bind($package)
-                    ~ enableAnimation
                     ~ build;
     
     TestMorph3_1 <- ($package core) NewBehavior
