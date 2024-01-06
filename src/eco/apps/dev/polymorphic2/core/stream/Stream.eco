@@ -66,14 +66,13 @@
 
             emitMorphKernel: kernel => (
                 |
-                    paper           <- kernel drawOnEmptyPaper,
-                    objectMinWidth  <- paper realWidth,
-                    objectMinHeight <- paper realHeight,
+                    objectMinWidth  <- kernel minWidth,
+                    objectMinHeight <- kernel minHeight,
                     currentX        <- xOffset,
                     currentY        <- yOffset,
                     bounds          <- (polymorphic math geometry Rectangle)
-                                            X: (currentX - paper minX)
-                                            Y: (currentY - paper minY)
+                                            X: currentX "TODO: (currentX - paper minX)"
+                                            Y: currentY "TODO: (currentY - paper minY)"
                                             W: (objectMinWidth)
                                             H: (objectMinHeight)
                 |
