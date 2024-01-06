@@ -80,7 +80,7 @@ bool Eco_TypeSlot_Invoke(struct Eco_Message*   message,
                     return true;
                 case Eco_TypeSlotType_CODE:
                     *Eco_Fiber_Nth(message->fiber, message->body.send.arg_count) = self;   // Assign the new self
-                    return Eco_Fiber_Enter(message->fiber, Eco_Any_FromPointer(molecule), NULL, slot->body.code.code, message->body.send.arg_count);
+                    return Eco_Fiber_EnterWithName(message->fiber, Eco_Any_FromPointer(molecule), NULL, slot->body.code.code, message->body.send.arg_count, message->key);
             }
             return false;
         case Eco_Message_Type_ASSIGN:

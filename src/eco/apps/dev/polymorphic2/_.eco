@@ -37,8 +37,8 @@ std Module
                           Y: (relativeMousePos y).
 
                     [
-                        (theDriver) tick.
                         (theDriver rootPaper) renderOn: renderer.
+                        (theDriver) tick.
                     ] catch: [ :ex |
                         (std io out << 'Oops! Something went wrong in polymorphic2!') newline commit.
                     ].

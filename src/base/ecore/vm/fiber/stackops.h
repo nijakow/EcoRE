@@ -6,7 +6,10 @@
 
 #include "fiber.h"
 
+struct Eco_Key;
 
+
+struct Eco_Frame* Eco_Fiber_PushNamedFrame(struct Eco_Fiber*, Eco_Any, unsigned int, unsigned int, unsigned int, struct Eco_Key* name);
 struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber*, Eco_Any, unsigned int, unsigned int, unsigned int);
 void Eco_Fiber_PopFrame(struct Eco_Fiber*);
 

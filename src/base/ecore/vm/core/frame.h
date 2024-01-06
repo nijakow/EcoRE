@@ -17,6 +17,8 @@ struct Eco_Frame
     struct Eco_Closure*  closures;
     struct Eco_Closure*  handler;
 
+    struct Eco_Key*      name;
+
     struct Eco_Code*     code;
     u8*                  instruction;
 

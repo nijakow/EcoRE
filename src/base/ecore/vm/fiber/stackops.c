@@ -4,11 +4,12 @@
 #include <ecore/vm/core/frame.h>
 
 
-struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,
-                                      Eco_Any      myself,
-                                      unsigned int argument_count,
-                                      unsigned int fixed_argument_count,
-                                      unsigned int register_count)
+struct Eco_Frame* Eco_Fiber_PushNamedFrame(struct Eco_Fiber* fiber,
+                                           Eco_Any      myself,
+                                           unsigned int argument_count,
+                                           unsigned int fixed_argument_count,
+                                           unsigned int register_count,
+                                           struct Eco_Key* name)
 {
     struct Eco_Frame*  the_frame;
     Eco_Any*           the_args;
@@ -28,6 +29,7 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,
     the_frame->lexical         = NULL;
     the_frame->closures        = NULL;
     the_frame->handler         = NULL;
+    the_frame->name            = name;
     the_frame->myself          = myself;
     the_frame->named_arg_count = fixed_argument_count;
     the_frame->args            = the_args;
@@ -35,6 +37,15 @@ struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,
     fiber->top                 = the_frame;
 
     return the_frame;
+}
+
+struct Eco_Frame* Eco_Fiber_PushFrame(struct Eco_Fiber* fiber,
+                                      Eco_Any      myself,
+                                      unsigned int argument_count,
+                                      unsigned int fixed_argument_count,
+                                      unsigned int register_count)
+{
+    return Eco_Fiber_PushNamedFrame(fiber, myself, argument_count, fixed_argument_count, register_count, NULL);
 }
 
 void Eco_Fiber_PopFrame(struct Eco_Fiber* fiber)

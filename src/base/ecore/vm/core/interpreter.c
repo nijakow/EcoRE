@@ -31,11 +31,12 @@ bool Eco_Fiber_EnterThunk(struct Eco_Fiber* fiber, Eco_Any* lobby, struct Eco_Co
     return Eco_Fiber_EnterCodeWithArgs(fiber, code, lobby, 1);
 }
 
-bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
-                     Eco_Any            myself,
-                     struct Eco_Frame*  lexical,
-                     struct Eco_Code*   code,
-                     unsigned int       arg_count)
+bool Eco_Fiber_EnterWithName(struct Eco_Fiber*  fiber,
+                             Eco_Any            myself,
+                             struct Eco_Frame*  lexical,
+                             struct Eco_Code*   code,
+                             unsigned int       arg_count,
+                             struct Eco_Key*    name)
 {
     struct Eco_Frame*  frame;
 
@@ -49,13 +50,22 @@ bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
         }
     }
 
-    frame = Eco_Fiber_PushFrame(fiber, myself, arg_count, code->arg_count, code->register_count);
+    frame = Eco_Fiber_PushNamedFrame(fiber, myself, arg_count, code->arg_count, code->register_count, name);
 
     frame->lexical     = lexical;
     frame->code        = code;
     frame->instruction = code->bytecodes;
 
     return true;
+}
+
+bool Eco_Fiber_Enter(struct Eco_Fiber*  fiber,
+                     Eco_Any            myself,
+                     struct Eco_Frame*  lexical,
+                     struct Eco_Code*   code,
+                     unsigned int       arg_count)
+{
+    return Eco_Fiber_EnterWithName(fiber, myself, lexical, code, arg_count, NULL);
 }
 
 bool Eco_Fiber_EnterClosure(struct Eco_Fiber*   fiber,
@@ -122,6 +132,17 @@ Eco_Any* Eco_Frame_RegisterByBytecode(struct Eco_Frame* frame, u8 address) {
         return &frame->registers[address & 0x7f];
     else
         return &frame->args[address];
+}
+
+
+void Eco_Fiber_MiniBacktrace(struct Eco_Fiber* fiber)
+{
+    struct Eco_Frame*  frame;
+
+    for (frame = fiber->top; frame != NULL; frame = frame->previous)
+    {
+        Eco_Log_Debug("  --> in frame %s\n", (frame->name == NULL ? "?" : (frame->name)->name));
+    }
 }
 
 void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
@@ -247,6 +268,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                                          *Eco_Fiber_Nth(fiber, message.body.send.arg_count)),
                            false)) {
                 Eco_Log_Warning("Message send failed: %s\n", ((struct Eco_Key*) message.key)->name);
+                Eco_Fiber_MiniBacktrace(fiber);
                 Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
                 goto error;
             }
@@ -277,6 +299,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                                          *Eco_Fiber_Nth(fiber, message.body.send.arg_count)),
                            false)) {
                 Eco_Log_Warning("Message send with varargs failed: %s\n", ((struct Eco_Key*) message.key)->name);
+                Eco_Fiber_MiniBacktrace(fiber);
                 Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
                 goto error;
             }
@@ -299,6 +322,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                            true,
                            false)) {
                 Eco_Log_Warning("Message send failed: %s\n", ((struct Eco_Key*) message.key)->name);
+                Eco_Fiber_MiniBacktrace(fiber);
                 Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
                 goto error;
             }
@@ -326,6 +350,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                            true,
                            false)) {
                 Eco_Log_Warning("Message send with varargs failed: %s\n", ((struct Eco_Key*) message.key)->name);
+                Eco_Fiber_MiniBacktrace(fiber);
                 Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_SENDFAILED);
                 goto error;
             }
@@ -350,6 +375,7 @@ void Eco_Fiber_Run(struct Eco_Fiber* fiber, unsigned int steps)
                         || Eco_Any_Equals(Eco_Fiber_Top(fiber)->myself, *Eco_Fiber_Nth(fiber, 1)),
                            false)) {
                 Eco_Log_Warning("Assign failed: %s\n", ((struct Eco_Key*) message.key)->name);
+                Eco_Fiber_MiniBacktrace(fiber);
                 Eco_Fiber_GenericInternalError(fiber, Eco_Fiber_State_ERROR_ASSIGNFAILED);
                 goto error;
             }

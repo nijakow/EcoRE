@@ -13,8 +13,8 @@
             protected polymorphic <- $package;
 
             init => (
-                node   <- (((polymorphic core morph) tree nodes) WorldNode) World: self.
-                morphs <- std util newVector.
+                node    <- (((polymorphic core morph) tree nodes) WorldNode) World: self.
+                morphs  <- std util newVector.
               ^ self
             );
 
@@ -38,7 +38,10 @@
               ^ self
             );
 
-            tickAll => morphs do: [ :each | each tick ];
+            tickAll => (
+                morphs do: [ :each | each tick ].
+              ^ self
+            );
 
             writeOn: w => w << 'a polymorphic world';
         }
