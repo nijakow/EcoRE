@@ -6,8 +6,10 @@
     {
         |
             extent             <- No,
-            realWidth          <- 0,
-            realHeight         <- 0,
+            minX               <- 0,
+            minY               <- 0,
+            maxX               <- 0,
+            maxY               <- 0,
             presentations,
             cachedMorphs,
             node
@@ -21,10 +23,15 @@
                 presentations      <- std util newVector.
                 cachedMorphs       <- std util newVector.
                 node               <- ((polymorphic core morph) tree nodes) VoidNode.
-                realWidth          <- 0.
-                realHeight         <- 0.
+                minX               <- 0.
+                minY               <- 0.
+                maxX               <- 0.
+                maxY               <- 0.
               ^ self
             );
+
+            realWidth  => maxX - minX;
+            realHeight => maxY - minY;
 
             maybeExtent => extent;
             realExtent  => (polymorphic math geometry Point) X: realWidth Y: realHeight;
@@ -32,9 +39,9 @@
             node: n => node <- n;
 
             resize: newExtent => (
-                extent     <- newExtent.
-                realWidth  <- realWidth max: (extent x).
-                realHeight <- realWidth max: (extent y).
+                extent <- newExtent.
+                maxX   <- maxX max: (extent x).
+                maxY   <- maxY max: (extent y).
               ^ self
             );
 
@@ -60,8 +67,10 @@
             claimBounds: bounds => (
                 | bottomRight <- bounds bottomRight |
 
-                realWidth  <- realWidth  max: bottomRight x.
-                realHeight <- realHeight max: bottomRight y.
+                "TODO: Min dimensions"
+
+                maxX <- maxX max: bottomRight x.
+                maxY <- maxY max: bottomRight y.
 
               ^ self
             );
@@ -90,8 +99,10 @@
 
                 presentations clear.
 
-                realWidth  <- 0.
-                realHeight <- 0.
+                minX <- 0.
+                minY <- 0.
+                maxX <- 0.
+                maxY <- 0.
 
               ^ self
             );
