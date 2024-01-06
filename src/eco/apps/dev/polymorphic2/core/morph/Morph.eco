@@ -52,7 +52,7 @@
             );
 
             changeBounds: newBounds => (
-                ((newBounds extent) equalsPoint: (bounds extent)) if: [
+                (((newBounds extent) equalsPoint: (bounds extent)) not) if: [
                     paper clearAndReset.
                     paper resize: (newBounds extent).
                     iAmDirty.
