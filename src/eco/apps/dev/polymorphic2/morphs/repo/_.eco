@@ -54,8 +54,8 @@ std Module
                                 1 to: n do: [ :i |
                                     |
                                         d <- ((i / (n asFloat)) * 3.14159 * 2),
-                                        x <- ((d sin * r) + r) asInt,
-                                        y <- ((d cos * r) + r) asInt,
+                                        x <- (d sin * r) asInt,
+                                        y <- (d cos * r) asInt,
                                     |
 
                                     graphics at: (Point X: x Y: y)
@@ -182,6 +182,9 @@ std Module
                 ).
 
                 stream emit: (((polymorphic morphs) repo TestMorph3) link).
+                stream newline.
+                stream emit: (((polymorphic morphs) repo TestMorph3_1) link).
+                stream emit: (((polymorphic morphs) repo TestMorph3_1) link).
                 stream newline.
                 stream emit: (((polymorphic morphs) repo TestMorph3_1) link).
                     ] bind($package)

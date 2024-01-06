@@ -71,7 +71,11 @@
                     objectMinHeight <- paper realHeight,
                     currentX        <- xOffset,
                     currentY        <- yOffset,
-                    bounds          <- (polymorphic math geometry Rectangle) X: (currentX) Y: (currentY) W: (objectMinWidth) H: (objectMinHeight)
+                    bounds          <- (polymorphic math geometry Rectangle)
+                                            X: (currentX - paper minX)
+                                            Y: (currentY - paper minY)
+                                            W: (objectMinWidth)
+                                            H: (objectMinHeight)
                 |
                 reserveExtentX: objectMinWidth Y: objectMinHeight.
                 emitter emitMorph: kernel In: bounds.
