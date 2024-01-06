@@ -22,6 +22,8 @@
               ^ self
             );
 
+            name => behavior name;
+
             emitOnStream: stream                => stream emitMorphKernel: self;
             emitOnGraphics: graphics At: offset => graphics at: offset PutMorph: self;
             emitOnGraphics: graphics In: bounds => graphics in: bounds PutMorph: self;

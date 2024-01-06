@@ -15,6 +15,7 @@ std Module
                     ~ build;
     
     TestMorph3_Point <- ($package core) NewBehavior
+                          ~ name: 'a point morph'
                           ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                                 stream << 'Point!' ~ newline.
                                 stream withGraphicsDo: [ :graphics |
@@ -24,6 +25,7 @@ std Module
                           ~ build;
     
     TestMorph3 <- ($package core) NewBehavior
+                    ~ name: 'a sine wave morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                           | delta <- #'ecosphere.ecore.time.since_start'() |
                           stream withGraphicsDo: [ :graphics |
@@ -43,6 +45,7 @@ std Module
                     ~ build;
     
     TestMorph3_1 <- ($package core) NewBehavior
+                      ~ name: 'an animated circle morph'
                       ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                             |
                                 Point <- (polymorphic math geometry) Point,
@@ -68,6 +71,7 @@ std Module
                       ~ build;
     
     TestMorph3_2 <- ($package core) NewBehavior
+                      ~ name: 'a multi-emitter morph'
                       ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                             ((kernel state) payload) do: [ :each | stream emit: each ].
                       ] bind($package)

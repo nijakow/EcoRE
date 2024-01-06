@@ -28,6 +28,8 @@
 
             initWithKernel: kernel Bounds: bounds => initWithKernel: kernel Bounds: bounds Paper: ((polymorphic core paper Paper) New);
 
+            name => kernel name;
+
             origin => bounds origin;
 
             iAmDirty => (

@@ -7,6 +7,7 @@
         |
             presenter,
             dispatcher,
+            name <- 'a morph',
             caching? <- true,
             animated? <- false
         |
@@ -21,6 +22,7 @@
               ^ self
             );
 
+            name: n => name <- n;
             caching: c => caching? <- c;
             animated: a => animated? <- a;
 
