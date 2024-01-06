@@ -40,6 +40,11 @@
 
             disableCaching => caching: false;
 
+            enableAnimation => (
+                behavior animated: true.
+              ^ self
+            );
+
             build => behavior;
 
             writeOn: w => w << 'a behavior builder';

@@ -129,6 +129,11 @@
                 ].
               ^ self
             );
+
+            tick => (
+                ((kernel behavior) animated?) -> [ changed ].
+              ^ self
+            );
             
             writeOn: w => w << 'a morph';
         }

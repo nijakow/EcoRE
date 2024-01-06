@@ -7,7 +7,8 @@
         |
             presenter,
             dispatcher,
-            caching? <- true
+            caching? <- true,
+            animated? <- false
         |
         
         {
@@ -21,6 +22,7 @@
             );
 
             caching: c => caching? <- c;
+            animated: a => animated? <- a;
 
             presenter: p => presenter <- p;
 

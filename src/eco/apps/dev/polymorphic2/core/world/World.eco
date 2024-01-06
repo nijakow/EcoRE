@@ -38,6 +38,8 @@
               ^ self
             );
 
+            tickAll => morphs do: [ :each | each tick ];
+
             writeOn: w => w << 'a polymorphic world';
         }
     };

@@ -49,11 +49,11 @@ std Module
                             |
 
                             stream withGraphicsDo: [ :graphics |
-                                | n <- 10, r <- 50 |
+                                | n <- 10, r <- 50, delta <- #'ecosphere.ecore.time.since_start'() |
 
                                 1 to: n do: [ :i |
                                     |
-                                        d <- ((i / (n asFloat)) * 3.14159 * 2),
+                                        d <- (((i / (n asFloat)) + delta) * 3.14159 * 2),
                                         x <- (d sin * r) asInt,
                                         y <- (d cos * r) asInt,
                                     |
@@ -63,6 +63,7 @@ std Module
                                 ].
                             ].
                       ] bind($package)
+                      ~ enableAnimation
                       ~ build;
     
     TestMorph4 <- ($package core) NewBehavior
