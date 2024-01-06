@@ -79,13 +79,22 @@
             connectToParentNode: parentNode => (
                 node reparent: parentNode.
                 world yes: [ :w | enterWorld: w ].
+                enable.
               ^ self
             );
 
             disconnectFromParentNode => (
-                paper clear. "Clear the paper, so that all children are purged."
+                paper destroy. "Destroy the paper, so that all children are purged."
                 world yes: [ :w | exitWorld: w ].
                 node disconnect.
+              ^ self
+            );
+
+            enable => (
+              ^ self
+            );
+
+            disable => (
               ^ self
             );
 
@@ -137,7 +146,7 @@
               ^ self
             );
             
-            writeOn: w => w << 'a morph';
+            writeOn: w => w << name;
         }
     };
 

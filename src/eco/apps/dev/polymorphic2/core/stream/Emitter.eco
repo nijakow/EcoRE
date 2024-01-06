@@ -49,7 +49,7 @@
                         presentation <- (polymorphic core paper presenting MorphPresentation) Morph: morph
                     |
 
-                    paper add: presentation.
+                    paper addOld: presentation.
                 ] no: [
                     |
                         morph        <- kernel instantiateInBounds: bounds,

@@ -86,18 +86,37 @@
               ^ self
             );
 
+            addOld: presentation => (
+                (presentation morphPresentation?) if: [ (presentation morph) enable ].
+                claimBounds: presentation bounds.
+                presentations add: presentation.
+              ^ self
+            );
+
+            protected destroyCachedMorphs => (
+                cachedMorphs do: [ :each | each disconnectFromParentNode ].
+                cachedMorphs <- std util newVector. "New vector to make sure the old vector doesn't keep any resources alive"
+              ^ self
+            );
+
+            destroy => (
+                destroyCachedMorphs.
+              ^ self
+            );
+
             clear => (
                 "Clear the old morph cache, if it exists."
                 ((cachedMorphs empty?) not) if: [
-                    "TODO: Maybe we might have to call a few destructors here?"
-                    cachedMorphs <- std util newVector.
+                    destroyCachedMorphs.
                 ].
 
                 "Throw out the old presentations, but keep the references to the morphs."
                 presentations do: [ :each |
-                    each disconnectFromParentNode. "TODO: Move this up into the morph cache clearing part?"
                     (each morphPresentation?) if: [
+                        (each morph) disable.
                         cachedMorphs add: (each morph).
+                    ] else: [
+                        each disconnectFromParentNode.
                     ].
                 ].
 
