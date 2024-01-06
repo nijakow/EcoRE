@@ -34,7 +34,7 @@
             realHeight => maxY - minY;
 
             maybeExtent => extent;
-            realExtent  => (polymorphic math geometry Point) X: realWidth Y: realHeight;
+            realExtent  => (polymorphic math geometry Point) X: maxX Y: maxY;
 
             node: n => node <- n;
 
@@ -65,9 +65,13 @@
             );
 
             claimBounds: bounds => (
-                | bottomRight <- bounds bottomRight |
+                |
+                    topLeft     <- bounds origin,
+                    bottomRight <- bounds bottomRight
+                |
 
-                "TODO: Min dimensions"
+                minX <- minX min: topLeft x.
+                minY <- minY min: topLeft y.
 
                 maxX <- maxX max: bottomRight x.
                 maxY <- maxY max: bottomRight y.
