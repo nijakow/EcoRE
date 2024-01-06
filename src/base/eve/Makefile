@@ -1,7 +1,7 @@
 # Compiler and linker options
 CC := gcc
-CFLAGS := -Wall -Werror -fPIC -MMD -I/opt/homebrew/Cellar/sdl2/2.28.3/include -I/opt/homebrew/Cellar/sdl2/2.28.3/include/SDL2 -I/opt/homebrew/Cellar/sdl2_ttf/2.20.2/include -I/opt/homebrew/Cellar/sdl2_image/2.6.3_2/include -I/opt/homebrew/Cellar/sdl2_gfx/1.0.4/include
-LDFLAGS := -lm -shared -L/opt/homebrew/Cellar/sdl2/2.28.3/lib -L/opt/homebrew/Cellar/sdl2_ttf/2.20.2/lib -L/opt/homebrew/Cellar/sdl2_image/2.6.3_2/lib -L/opt/homebrew/Cellar/sdl2_gfx/1.0.4/lib
+CFLAGS := -Wall -Werror -fPIC -MMD -I/opt/homebrew/Cellar/sdl2/2.28.5/include -I/opt/homebrew/Cellar/sdl2/2.28.5/include/SDL2 -I/opt/homebrew/Cellar/sdl2_ttf/2.20.2/include -I/opt/homebrew/Cellar/sdl2_image/2.8.2/include -I/opt/homebrew/Cellar/sdl2_gfx/1.0.4/include
+LDFLAGS := -lm -shared -L/opt/homebrew/Cellar/sdl2/2.28.5/lib -L/opt/homebrew/Cellar/sdl2_ttf/2.20.2/lib -L/opt/homebrew/Cellar/sdl2_image/2.8.2/lib -L/opt/homebrew/Cellar/sdl2_gfx/1.0.4/lib
 LIBS := -lSDL2 -lSDL2_ttf -lSDL2_image -lSDL2_gfx
 
 # Source files and object files
