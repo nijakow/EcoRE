@@ -39,9 +39,9 @@
             node: n => node <- n;
 
             resize: newExtent => (
-                extent <- newExtent.
-                maxX   <- maxX max: (extent x).
-                maxY   <- maxY max: (extent y).
+                extent <- Yes: newExtent.
+                maxX   <- maxX max: (newExtent x).
+                maxY   <- maxY max: (newExtent y).
               ^ self
             );
 
