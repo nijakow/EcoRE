@@ -45,8 +45,8 @@
             protected beginDispatch: event AtX: x Y: y Morph: morph Stopper: stopper => (
                 ((morph bounds) containsX: x Y: y) -> [
                     dispatch: event
-                         AtX: x - (morph origin) x
-                           Y: y - (morph origin) y
+                         AtX: x - (morph boundsInfo offset) x
+                           Y: y - (morph boundsInfo offset) y
                        Morph: morph
                      Stopper: stopper
                 ].
