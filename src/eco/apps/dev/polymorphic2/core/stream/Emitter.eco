@@ -45,7 +45,10 @@
                 |
                     boundsInfo <- ((polymorphic core morph) BoundsInfo) Bounds: bounds,
                 |
+              ^ emitMorph: kernel BoundsInfo: boundsInfo
+            );
 
+            emitMorph: kernel BoundsInfo: boundsInfo => (
                 (paper lookupKernel: kernel) yes: [ :morph |
                     morph changeBounds: boundsInfo.
 

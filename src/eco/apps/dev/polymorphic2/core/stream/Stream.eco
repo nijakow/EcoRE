@@ -65,14 +65,12 @@
                     objectMinBounds <- kernel minBounds,
                     currentX        <- xOffset,
                     currentY        <- yOffset,
-                    bounds          <- (polymorphic math geometry Rectangle)
-                                            X: (currentX - (objectMinBounds origin) x)
-                                            Y: (currentY - (objectMinBounds origin) y)
-                                            W: (objectMinBounds w)
-                                            H: (objectMinBounds h)
+                    displacement    <- ((polymorphic math geometry) Point)
+                                            X: currentX - (objectMinBounds origin) x
+                                            Y: currentY - (objectMinBounds origin) y
                 |
                 reserveExtentX: (objectMinBounds w) Y: (objectMinBounds h).
-                emitter emitMorph: kernel In: bounds.
+                emitter emitMorph: kernel BoundsInfo: (kernel offsetBy: displacement).
               ^ self
             );
 
