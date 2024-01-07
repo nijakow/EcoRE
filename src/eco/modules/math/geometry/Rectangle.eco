@@ -36,11 +36,21 @@
             bottomCenter => (geometry Point X: (origin x + (w / 2)) Y: corner y);
             bottomRight => corner;
 
+            equalsRectangle: other => (
+                | abort <- [ ^ false ] |
+                ((x == other x) not) if: abort.
+                ((y == other y) not) if: abort.
+                ((w == other w) not) if: abort.
+                ((h == other h) not) if: abort.
+              ^ true
+            );
+
             containsX: x Y: y => (
-                ((origin x <= x) not) if: [ ^ false ].
-                ((x <= corner x) not) if: [ ^ false ].
-                ((origin y <= y) not) if: [ ^ false ].
-                ((y <= corner y) not) if: [ ^ false ].
+                | abort <- [ ^ false ] |
+                ((origin x <= x) not) if: abort.
+                ((x <= corner x) not) if: abort.
+                ((origin y <= y) not) if: abort.
+                ((y <= corner y) not) if: abort.
               ^ true
             );
 

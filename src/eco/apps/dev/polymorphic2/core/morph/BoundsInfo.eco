@@ -7,18 +7,24 @@
         |
             bounds,
             offset,
+            translatedBounds,
         |
 
         {
             protected polymorphic <- $package;
 
             initWithBounds: b Offset: o => (
-                bounds <- b.
-                offset <- o.
+                bounds           <- b.
+                offset           <- o.
+                translatedBounds <- bounds translateBy: offset.
               ^ self
             );
 
             initWithBounds: bounds => initWithBounds: bounds Offset: ((polymorphic math geometry) Point Origin);
+
+            equalsBoundsInfo: other => (
+              ^ [ offset equalsPoint: other offset ] and: [ bounds equalsRectangle: other bounds ]
+            );
 
             writeOn: w => w << 'a bounds info instance';
         }
