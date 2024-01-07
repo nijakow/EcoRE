@@ -49,10 +49,6 @@
             withGraphicsAtX: x Y: y W: w H: h Do: block => block value(graphicsInBounds: ((polymorphic math geometry Rectangle) X: x Y: y W: w H: h));
             withRoom: extent ForGraphicsDo: block  => block value(graphicsExtent: extent);
 
-            "TODO: Outputting objects via the '<<' operator"
-
-            "TODO: Outputting objects at a specific position using 'emit:at:'"
-
             emitDrawable: object => (
                 |
                     objectBounds  <- object bounds,
@@ -66,24 +62,21 @@
 
             emitMorphKernel: kernel => (
                 |
-                    objectMinWidth  <- kernel minWidth,
-                    objectMinHeight <- kernel minHeight,
+                    objectMinBounds <- kernel minBounds,
                     currentX        <- xOffset,
                     currentY        <- yOffset,
                     bounds          <- (polymorphic math geometry Rectangle)
-                                            X: currentX "TODO: (currentX - paper minX)"
-                                            Y: currentY "TODO: (currentY - paper minY)"
-                                            W: (objectMinWidth)
-                                            H: (objectMinHeight)
+                                            X: (currentX - (objectMinBounds origin) x)
+                                            Y: (currentY - (objectMinBounds origin) y)
+                                            W: (objectMinBounds w)
+                                            H: (objectMinBounds h)
                 |
-                reserveExtentX: objectMinWidth Y: objectMinHeight.
+                reserveExtentX: (objectMinBounds w) Y: (objectMinBounds h).
                 emitter emitMorph: kernel In: bounds.
               ^ self
             );
 
             emit: object => object emitOnStream: self;
-
-            "TODO: Outputting objects without adjusting their position"
 
             << object => (
                 | sw <- (std io StringWriter) new |
