@@ -1,0 +1,39 @@
+
+std Module
+{
+    Behavior <- ($package core) NewBehavior
+                    ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
+                            (stream << 'Hello, world!') newline commit.
+                            stream withGraphicsDo: [ :graphics |
+                                graphics at: (kernel payload) hand position
+                                        put: (kernel payload) handMorph.
+                            ].
+                    ] bind($package)
+                    ~ build;
+
+    State :: Classlike {
+        Instance :: Clonable
+        {
+            |
+                handMorph,
+            |
+
+            {
+                protected polymorphic <- $package;
+
+                init => (
+                    handMorph <- (((polymorphic morphs) repo system) Hand) New.
+                  ^ self
+                );
+
+                hand => handMorph payload;
+
+                writeOn: w => w << 'a session';
+            }
+        };
+
+        New => Instance new;
+    };
+
+    New => Behavior link: (State New);
+}

@@ -22,7 +22,8 @@
               ^ self
             );
 
-            name => behavior name;
+            name    => behavior name;
+            payload => state payload;
 
             emitOnStream: stream                => stream emitMorphKernel: self;
             emitOnGraphics: graphics At: offset => graphics at: offset PutMorph: self;

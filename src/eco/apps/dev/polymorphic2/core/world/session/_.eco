@@ -1,6 +1,0 @@
-
-std Module
-{
-    Session :: (here / 'Session.eco') importIn: $package;
-    Hand    :: (here / 'Hand.eco')    importIn: $package;
-}
