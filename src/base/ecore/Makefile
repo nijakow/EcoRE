@@ -7,7 +7,7 @@ else
   RM = rm
 endif
 
-EXECUTABLE = ./ecore.app
+EXECUTABLE = ./ecore.exe
 BOOTSTRAP_ENVIRONMENT = ../../eco/lib
 BOOTSTRAP_MASTER      = $(BOOTSTRAP_ENVIRONMENT)/master.ebf
 
