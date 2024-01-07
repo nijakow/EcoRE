@@ -6,6 +6,7 @@
 
     minWidthOfKernel:  kernel => (kernel drawOnEmptyPaper) realWidth;
     minHeightOfKernel: kernel => (kernel drawOnEmptyPaper) realHeight;
+    minBoundsOfKernel: kernel => (kernel drawOnEmptyPaper) realBounds;
 
     drawOn: stream Kernel: kernel => subclassResponsibility;
 

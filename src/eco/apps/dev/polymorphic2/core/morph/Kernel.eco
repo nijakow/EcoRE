@@ -28,15 +28,7 @@
             emitOnGraphics: graphics At: offset => graphics at: offset PutMorph: self;
             emitOnGraphics: graphics In: bounds => graphics in: bounds PutMorph: self;
 
-            protected calcMinWidth  => (behavior presenter) minWidthOfKernel: self;
-            protected calcMinHeight => (behavior presenter) minHeightOfKernel: self;
-            protected calcMinBounds => (
-              ^ ((polymorphic math geometry) Rectangle)
-                    X: 0
-                    Y: 0
-                    W: calcMinWidth
-                    H: calcMinHeight
-            );
+            protected calcMinBounds => (behavior presenter) minBoundsOfKernel: self;
 
             protected maybeSaveMinBounds => (
                 (behavior caching?) if: [

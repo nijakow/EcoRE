@@ -32,6 +32,11 @@
 
             realWidth  => maxX - minX;
             realHeight => maxY - minY;
+            realBounds => (polymorphic math geometry Rectangle)
+                              X: minX
+                              Y: minY
+                              W: realWidth
+                              H: realHeight;
 
             maybeExtent => extent;
             realExtent  => (polymorphic math geometry Point) X: maxX Y: maxY;
