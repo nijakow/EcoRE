@@ -58,6 +58,8 @@
       "
       loadHooks yes: [ :hooks | loadHooks <- No. hooks do: [ :hook | hook value(file) ] ].
 
+      (std io out << file) newline commit.
+
       |
         env <- {
           static with inherited _ = #<:std/Clonable>;

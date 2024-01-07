@@ -1,0 +1,24 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            hand,
+        |
+
+        {
+            protected polymorphic <- $package;
+
+            init => (
+                hand <- ((polymorphic core world) session Hand) New.
+              ^ self
+            );
+
+            writeOn: w => w << 'a session';
+        }
+    };
+
+    New => Instance new;
+}

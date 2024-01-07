@@ -25,7 +25,7 @@
                                 & (((polymorphic morphs) repo fun) TestMorph3_1) link
                                 ~ asArray
                 ),
-                dispatcher <- ((polymorphic core event) dispatching Dispatcher) Driver: self;
+                dispatcher <- ((polymorphic core event) dispatching Dispatcher) Driver: self.
 
                 rootPaper node: (world node).
                 (world node) paper: rootPaper.

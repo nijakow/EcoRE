@@ -3,4 +3,6 @@ std Module
 {
     World  :: (here / 'World.eco')  importIn: $package;
     Driver :: (here / 'Driver.eco') importIn: $package;
+
+    session :: (here / 'session' / '_.eco') importIn: $package;
 }

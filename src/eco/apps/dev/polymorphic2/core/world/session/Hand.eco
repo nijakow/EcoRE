@@ -1,0 +1,26 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            position,
+            grabbedMorph,
+        |
+
+        {
+            protected polymorphic <- $package;
+
+            init => (
+                position     <- (polymorphic math geometry) Point Origin.
+                grabbedMorph <- No.
+              ^ self
+            );
+
+            writeOn: w => w << 'a hand';
+        }
+    };
+
+    New => Instance new;
+}
