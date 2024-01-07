@@ -1,0 +1,29 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            bounds,
+            offset,
+        |
+
+        {
+            protected polymorphic <- $package;
+
+            initWithBounds: b Offset: o => (
+                bounds <- b.
+                offset <- o.
+              ^ self
+            );
+
+            initWithBounds: bounds => initWithBounds: bounds Offset: ((polymorphic math geometry) Point Origin);
+
+            writeOn: w => w << 'a bounds info instance';
+        }
+    };
+
+    Bounds: bounds Offset: offset => (Instance clone) initWithBounds: bounds Offset: offset;
+    Bounds: bounds                => (Instance clone) initWithBounds: bounds;
+}
