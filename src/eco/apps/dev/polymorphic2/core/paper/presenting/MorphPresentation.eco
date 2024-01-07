@@ -31,7 +31,7 @@
             );
 
             renderOn: renderer => (
-                morph renderAtOffset: offset On: renderer.
+                morph renderAtOffset: ((morph boundsInfo) offset) On: renderer.
               ^ self
             );
 

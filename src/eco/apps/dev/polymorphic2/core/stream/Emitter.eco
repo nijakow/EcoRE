@@ -43,7 +43,13 @@
 
             emitMorph: kernel In: bounds => (
                 |
-                    boundsInfo <- ((polymorphic core morph) BoundsInfo) Bounds: bounds,
+                    boundsInfo <- ((polymorphic core morph) BoundsInfo)
+                                        Bounds: (((polymorphic math geometry) Rectangle)
+                                                    X: 0
+                                                    Y: 0
+                                                    W: (bounds w)
+                                                    H: (bounds h))
+                                        Offset: (bounds origin)
                 |
               ^ emitMorph: kernel BoundsInfo: boundsInfo
             );
