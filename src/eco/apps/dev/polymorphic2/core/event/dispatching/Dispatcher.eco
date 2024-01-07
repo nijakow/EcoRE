@@ -17,7 +17,7 @@
             );
 
             protected dispatch: event AtX: x Y: y Morph: morph Stopper: stopper => (
-                (std io out << 'Dispatching event ' << event << ' at ' << x << ' ' << y << ' on ' << morph) newline commit.
+                (std io out << ' - Dispatching event ' << event << ' at ' << x << ' ' << y << ' on ' << morph) newline commit.
 
                 |
                     behavior <- (morph kernel) behavior,
@@ -43,7 +43,6 @@
             );
 
             protected beginDispatch: event AtX: x Y: y Morph: morph Stopper: stopper => (
-                (std io out << 'Begin dispatching event ' << event << ' at ' << x << ' ' << y << ' on ' << morph << ' in ' << morph bounds) newline commit.
                 ((morph bounds) containsX: x Y: y) -> [
                     dispatch: event
                          AtX: x - (morph origin) x

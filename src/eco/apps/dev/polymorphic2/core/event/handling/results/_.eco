@@ -5,7 +5,7 @@ std Module
         successful? => subclassResponsibility;
         asMaybe     => subclassResponsibility;
 
-        shouldStop? => successful? not;
+        shouldStop? => successful?;
 
         writeOn: w => w << 'an event handling result';
     };
