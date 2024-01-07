@@ -1,0 +1,13 @@
+
+std Module
+{
+    HandMorph <- ($package core) NewBehavior
+                        ~ presenterFunction: $[ :stream :kernel | ]
+                        ~ build;
+
+    SessionMorph <- ($package core) NewBehavior
+                        ~ presenterFunction: $[ :stream :kernel |
+                                (stream << 'Hello, world!') newline commit.
+                        ]
+                        ~ build;
+}

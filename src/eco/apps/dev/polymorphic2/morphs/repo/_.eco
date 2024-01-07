@@ -1,6 +1,7 @@
 
 std Module
 {
-    core :: (here / 'core' / '_.eco') importIn: $package;
-    fun  :: (here / 'fun'  / '_.eco') importIn: $package;
+    core   :: (here / 'core'   / '_.eco') importIn: $package;
+    fun    :: (here / 'fun'    / '_.eco') importIn: $package;
+    system :: (here / 'system' / '_.eco') importIn: $package;
 }

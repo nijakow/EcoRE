@@ -8,6 +8,7 @@
             world,
             rootPaper,
             rootMorph,
+            session,
             dispatcher,
 
             cachedMouseX <- 0,
@@ -20,11 +21,8 @@
             initWithWorld: w => (
                 world      <- w.
                 rootPaper  <- ((polymorphic core paper) Paper) Extent: ((polymorphic math geometry) Point X: 400 Y: 400).
-                rootMorph  <- (((polymorphic morphs) repo fun) TestMorph3_2) link: (
-                                  (((polymorphic morphs) repo fun) TestMorph3) link
-                                & (((polymorphic morphs) repo fun) TestMorph3_1) link
-                                ~ asArray
-                ),
+                session    <- ((polymorphic core world) session Session) New.
+                rootMorph  <- (((polymorphic morphs) repo system) SessionMorph) link: session.
                 dispatcher <- ((polymorphic core event) dispatching Dispatcher) Driver: self.
 
                 rootPaper node: (world node).
