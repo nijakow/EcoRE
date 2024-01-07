@@ -18,6 +18,11 @@
               ^ self
             );
 
+            moveToX: x Y: y => (
+                position <- (polymorphic math geometry) Point X: x Y: y.
+              ^ self
+            );
+
             writeOn: w => w << 'a hand';
         }
     };
