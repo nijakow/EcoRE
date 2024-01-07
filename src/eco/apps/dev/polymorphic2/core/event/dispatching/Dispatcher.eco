@@ -62,7 +62,6 @@
             );
 
             mouseMovedToX: x Y: y => (
-                (std io out << 'Mouse moved to ' << x << ' ' << y) newline commit.
               ^ self
             );
 
