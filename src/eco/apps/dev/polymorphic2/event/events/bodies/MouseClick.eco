@@ -1,0 +1,22 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            info
+        |
+
+        {
+            initWithInfo: i => (
+                info <- i.
+              ^ self
+            );
+
+            writeOn: w => w << 'a mouse click event';
+        }
+    };
+
+    Info: info => (Instance clone) initWithInfo: info;
+}

@@ -4,4 +4,6 @@ std Module
     EventType :: (here / 'EventType.eco') importIn: $package;
 
     AddMorph  :: (here / 'AddMorph.eco') importIn: (self EventType);
+
+    MouseClick :: (here / 'MouseClick.eco') importIn: (self EventType);
 }

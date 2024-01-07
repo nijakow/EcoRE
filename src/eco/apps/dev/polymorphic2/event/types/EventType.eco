@@ -3,4 +3,6 @@
     isa Trait;
 
     isAddMorphEvent? => false;
+
+    isMouseClick? => false;
 }

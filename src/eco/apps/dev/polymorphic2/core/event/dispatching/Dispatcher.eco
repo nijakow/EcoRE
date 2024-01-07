@@ -9,6 +9,8 @@
         |
 
         {
+            protected polymorphic <- $package;
+
             initWithDriver: d => (
                 driver <- d.
               ^ self
@@ -40,7 +42,14 @@
             );
 
             mouseClickedAtX: x Y: y Click: click => (
+                |
+                    event <- (polymorphic event events) MouseClick: click
+                |
+
                 (std io out << 'Mouse clicked!') newline commit.
+
+                dispatch: event AtX: x Y: y.
+
               ^ self
             );
 

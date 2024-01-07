@@ -1,0 +1,8 @@
+
+{
+    isa Singleton;
+
+    with inherited EventType <- $package;
+
+    isMouseClick? => true;
+}
