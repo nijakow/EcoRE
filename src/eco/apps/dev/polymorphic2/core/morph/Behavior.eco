@@ -9,7 +9,8 @@
             dispatcher,
             name <- 'a morph',
             caching? <- true,
-            animated? <- false
+            blessing? <- false,
+            animated? <- false,
         |
         
         {
@@ -19,11 +20,14 @@
                 presenter  <- ((polymorphic core morph) behavior presenting) DefaultPresenter.
                 dispatcher <- (((polymorphic core event) handling) Dispatcher) New.
                 caching?   <- true.
+                blessing?  <- false.
+                animated?  <- false.
               ^ self
             );
 
             name: n => name <- n;
             caching: c => caching? <- c;
+            blessing: b => blessing? <- b;
             animated: a => animated? <- a;
 
             presenter: p => presenter <- p;

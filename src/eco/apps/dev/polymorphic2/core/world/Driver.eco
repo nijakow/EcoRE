@@ -32,10 +32,6 @@
             initWithoutWorld => initWithWorld: (((polymorphic core world) World) New);
 
             protected session => rootMorph payload;
-            protected handChanged => (
-                rootMorph changed.
-              ^ self
-            );
 
             mouseMovedToX: x Y: y => (
                 cachedMouseX <- x,
@@ -48,7 +44,6 @@
                 (session hand)
                     moveToX: x
                           Y: y.
-                handChanged.
                 
               ^ self
             );

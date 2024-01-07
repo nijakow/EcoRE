@@ -38,6 +38,13 @@
               ^ self
             );
 
+            blessing: bool => (
+                behavior blessing: bool.
+              ^ self
+            );
+
+            enableBlessing => blessing: true;
+
             caching: bool => (
                 behavior caching: bool.
               ^ self

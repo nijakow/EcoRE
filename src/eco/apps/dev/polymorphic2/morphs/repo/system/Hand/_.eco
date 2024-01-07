@@ -2,15 +2,18 @@
 std Module
 {
     Behavior <- ($package core) NewBehavior
+                    ~ name: 'a hand morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                         stream << 'a hand'.
                     ] bind($package)
+                    ~ enableBlessing
                     ~ build;
 
     State :: Classlike {
         Instance :: Clonable
         {
             |
+                maybeMorphKernel <- No,
                 position,
                 grabbedMorph,
             |
@@ -19,13 +22,22 @@ std Module
                 protected polymorphic <- $package;
 
                 init => (
-                    position     <- (polymorphic math geometry) Point Origin.
-                    grabbedMorph <- No.
+                    maybeMorphKernel <- No.
+                    position         <- (polymorphic math geometry) Point Origin.
+                    grabbedMorph     <- No.
                   ^ self
                 );
 
+                protected changed => (
+                    maybeMorphKernel yes: [ :kernel | kernel changed ].
+                  ^ self
+                );
+
+                bless: kernel => maybeMorphKernel <- Yes: kernel;
+
                 moveToX: x Y: y => (
                     position <- (polymorphic math geometry) Point X: x Y: y.
+                    changed.
                   ^ self
                 );
 

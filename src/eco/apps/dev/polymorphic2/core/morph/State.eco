@@ -17,6 +17,11 @@
             payload    => myPayload yes;
             payload: p => myPayload <- Yes: p;
 
+            bless: morph => (
+                myPayload yes: [ :payload | payload bless: morph ].
+              ^ self
+            );
+
             writeOn: w => w << 'a morph state';
         }
     };
