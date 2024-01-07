@@ -88,7 +88,10 @@
             );
 
             run => (
-                (rootPaper stream) emit: rootMorph.
+                (rootPaper stream) withGraphicsDo: [ :graphics |
+                    graphics at: ((polymorphic math geometry) Point Origin)
+                            put: rootMorph.
+                ].
               ^ self
             );
 

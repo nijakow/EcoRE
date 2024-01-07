@@ -54,8 +54,7 @@
             );
 
             at: offset PutMorph: morph => (
-                | paper <- morph drawOnEmptyPaper |
-                emitter emitMorph: morph In: (boundsForOffset: offset Morph: morph Paper: paper).
+                emitter emitMorph: morph BoundsInfo: (morph offsetBy: (origin + offset)).
               ^ self
             );
 

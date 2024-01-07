@@ -2,9 +2,13 @@
 std Module
 {
     Behavior <- ($package core) NewBehavior
-                    ~ presenterFunction: $[ :stream :kernel |
+                    ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                         stream << 'a hand'.
-                    ]
+                        stream withGraphicsDo: [ :graphics |
+                            graphics at: ((polymorphic math geometry) Point Origin)
+                                    put: (kernel payload) circle.
+                        ].
+                    ] bind($package)
                     ~ build;
 
     State :: Classlike {
@@ -13,6 +17,7 @@ std Module
             |
                 position,
                 grabbedMorph,
+                circle,
             |
 
             {
@@ -21,6 +26,7 @@ std Module
                 init => (
                     position     <- (polymorphic math geometry) Point Origin.
                     grabbedMorph <- No.
+                    circle       <- ((polymorphic morphs) repo fun) TestMorph3_1 link.
                   ^ self
                 );
 

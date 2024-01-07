@@ -67,8 +67,8 @@ std Module
                                 1 to: n do: [ :i |
                                     |
                                         d <- (((i / (n asFloat)) + delta) * 3.14159 * 2),
-                                        x <- (d sin * r) asInt + r,
-                                        y <- (d cos * r) asInt + r,
+                                        x <- (d sin * r) asInt,
+                                        y <- (d cos * r) asInt,
                                     |
 
                                     graphics at: (Point X: x Y: y)
