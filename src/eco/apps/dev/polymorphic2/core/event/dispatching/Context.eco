@@ -1,0 +1,26 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            morph,
+            x,
+            y,
+        |
+
+        {
+            initWithMorph: _morph X: _x Y: _y => (
+                morph <- _morph.
+                x     <- _x.
+                y     <- _y.
+              ^ self
+            );
+
+            writeOn: w => w << 'an event context';
+        }
+    };
+
+    Morph: morph X: x Y: y => (Instance clone) initWithMorph: morph X: x Y: y;
+}

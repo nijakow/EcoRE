@@ -2,4 +2,5 @@
 std Module
 {
     Dispatcher :: (here / 'Dispatcher.eco') importIn: $package;
+    Context    :: (here / 'Context.eco')    importIn: $package;
 }

@@ -36,13 +36,15 @@
             bottomCenter => (geometry Point X: (origin x + (w / 2)) Y: corner y);
             bottomRight => corner;
 
-            containsPoint: p => (
-                ((origin x <= p x) not) if: [ ^ false ].
-                ((p x <= corner x) not) if: [ ^ false ].
-                ((origin y <= p y) not) if: [ ^ false ].
-                ((p y <= corner y) not) if: [ ^ false ].
+            containsX: x Y: y => (
+                ((origin x <= x) not) if: [ ^ false ].
+                ((x <= corner x) not) if: [ ^ false ].
+                ((origin y <= y) not) if: [ ^ false ].
+                ((y <= corner y) not) if: [ ^ false ].
               ^ true
             );
+
+            containsPoint: p => containsX: (p x) Y: (p y);
 
             translateBy: point => (geometry Rectangle X: (origin x + point x) Y: (origin y + point y) W: w H: h);
             translateToOrigin  => (geometry Rectangle X: 0 Y: 0 W: w H: h); 

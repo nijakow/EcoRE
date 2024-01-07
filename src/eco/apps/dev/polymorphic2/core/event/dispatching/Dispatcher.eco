@@ -17,15 +17,41 @@
             );
 
             protected dispatch: event AtX: x Y: y Morph: morph Stopper: stopper => (
+                (std io out << 'Dispatching event ' << event << ' at ' << x << ' ' << y << ' on ' << morph) newline commit.
+
+                |
+                    behavior <- (morph kernel) behavior,
+                    context  <- ((polymorphic core event) dispatching Context)
+                                    Morph: morph
+                                        X: x
+                                        Y: y
+                |
+
+                |
+                    result <- (behavior dispatcher)
+                                   handle: event
+                                  context: context
+                |
+
+                (result shouldStop?) -> [ stopper value ].
+
+                morph childrenDo: [ :each |
+                    beginDispatch: event AtX: x Y: y Morph: each Stopper: stopper.
+                ].
+
               ^ self
             );
 
             protected beginDispatch: event AtX: x Y: y Morph: morph Stopper: stopper => (
-              ^ dispatch: event
-                     AtX: (morph origin) x
-                       Y: (morph origin) y
-                   Morph: morph
-                 Stopper: stopper
+                (std io out << 'Begin dispatching event ' << event << ' at ' << x << ' ' << y << ' on ' << morph << ' in ' << morph bounds) newline commit.
+                ((morph bounds) containsX: x Y: y) -> [
+                    dispatch: event
+                         AtX: x - (morph origin) x
+                           Y: y - (morph origin) y
+                       Morph: morph
+                     Stopper: stopper
+                ].
+              ^ self
             );
 
             dispatch: event AtX: x Y: y => (
@@ -46,7 +72,7 @@
                     event <- (polymorphic event events) MouseClick: click
                 |
 
-                (std io out << 'Mouse clicked!') newline commit.
+                (std io out << 'Mouse clicked! ' << x << ' ' << y) newline commit.
 
                 dispatch: event AtX: x Y: y.
 
