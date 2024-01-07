@@ -42,18 +42,22 @@
             );
 
             emitMorph: kernel In: bounds => (
+                |
+                    boundsInfo <- ((polymorphic core morph) BoundsInfo) Bounds: bounds,
+                |
+
                 (paper lookupKernel: kernel) yes: [ :morph |
-                    morph changeBounds: bounds.
+                    morph changeBounds: boundsInfo.
 
                     |
-                        presentation <- (polymorphic core paper presenting MorphPresentation) Morph: morph
+                        presentation <- ((polymorphic core paper) presenting MorphPresentation) Morph: morph
                     |
 
                     paper addOld: presentation.
                 ] no: [
                     |
-                        morph        <- kernel instantiateInBounds: bounds,
-                        presentation <- (polymorphic core paper presenting MorphPresentation) Morph: morph
+                        morph        <- kernel instantiateInBoundsInfo: boundsInfo,
+                        presentation <- ((polymorphic core paper) presenting MorphPresentation) Morph: morph
                     |
 
                     paper add: presentation.

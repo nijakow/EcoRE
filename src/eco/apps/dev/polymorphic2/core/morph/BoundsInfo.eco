@@ -26,6 +26,8 @@
               ^ [ offset equalsPoint: other offset ] and: [ bounds equalsRectangle: other bounds ]
             );
 
+            extent => bounds extent;
+
             writeOn: w => w << 'a bounds info instance';
         }
     };

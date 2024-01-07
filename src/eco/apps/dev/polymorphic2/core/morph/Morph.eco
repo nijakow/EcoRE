@@ -5,7 +5,7 @@
     Instance :: Clonable
     {
         |
-            bounds,
+            boundsInfo,
             kernel,
             paper,
 
@@ -15,21 +15,22 @@
         {
             protected polymorphic <- $package;
 
-            initWithKernel: k Bounds: b Paper: p => (
-                kernel <- k.
-                bounds <- b.
-                paper  <- p.
-                node   <- (((polymorphic core morph) tree nodes) MorphNode) Morph: self.
+            initWithKernel: k BoundsInfo: bi Paper: p => (
+                kernel     <- k.
+                boundsInfo <- bi.
+                paper      <- p.
+                node       <- (((polymorphic core morph) tree nodes) MorphNode) Morph: self.
 
                 paper node: node. "Set the paper's node to a MorphNode pointing to us..."
 
               ^ self
             );
 
-            initWithKernel: kernel Bounds: bounds => initWithKernel: kernel Bounds: bounds Paper: ((polymorphic core paper Paper) New);
+            initWithKernel: kernel BoundsInfo: boundsInfo => initWithKernel: kernel BoundsInfo: boundsInfo Paper: ((polymorphic core paper Paper) New);
 
             name => kernel name;
 
+            bounds => boundsInfo translatedBounds;
             origin => bounds origin;
 
             iAmDirty => (
@@ -59,7 +60,7 @@
                     paper resize: (newBounds extent).
                     iAmDirty.
                 ].
-                bounds <- newBounds.
+                boundsInfo <- newBounds.
               ^ self
             );
 
@@ -150,6 +151,6 @@
         }
     };
 
-    Kernel: kernel Bounds: bounds Paper: paper => (Instance clone) initWithKernel: kernel Bounds: bounds Paper: paper;
-    Kernel: kernel Bounds: bounds              => (Instance clone) initWithKernel: kernel Bounds: bounds;
+    Kernel: kernel BoundsInfo: bounds Paper: paper => (Instance clone) initWithKernel: kernel BoundsInfo: bounds Paper: paper;
+    Kernel: kernel BoundsInfo: bounds              => (Instance clone) initWithKernel: kernel BoundsInfo: bounds;
 }

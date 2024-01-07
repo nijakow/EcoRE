@@ -66,8 +66,8 @@
               ^ paper
             );
 
-            instantiateInBounds: bounds WithPaper: paper => ((polymorphic core morph) Morph) Kernel: self Bounds: bounds Paper: paper;
-            instantiateInBounds: bounds                  => ((polymorphic core morph) Morph) Kernel: self Bounds: bounds;
+            instantiateInBoundsInfo: bounds WithPaper: paper => ((polymorphic core morph) Morph) Kernel: self BoundsInfo: bounds Paper: paper;
+            instantiateInBoundsInfo: bounds                  => ((polymorphic core morph) Morph) Kernel: self BoundsInfo: bounds;
 
             addMorph: morph => (
                 morphs add: morph.
