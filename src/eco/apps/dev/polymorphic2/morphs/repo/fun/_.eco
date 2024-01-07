@@ -106,7 +106,7 @@ std Module
                 ].
 
                 stream emit: circle.
-                stream emit: ((((polymorphic morphs) repo core) FrameMorph) Child: ((((polymorphic morphs) repo core) TestMorph2) link)).
+                stream emit: ((((polymorphic morphs) repo core) FrameMorph) Child: ((((polymorphic morphs) repo fun) TestMorph2) link)).
                 stream newline.
 
                 1 to: 25 do: [ :i |
@@ -137,7 +137,7 @@ std Module
                           ~ add: ((((polymorphic morphs) repo fun) TestMorph) link)
                           ~ add: ((((polymorphic morphs) repo fun) TestMorph) link)
                           ~ add: (
-                                  ((polymorphic morphs) repo FlexMorph) Vertical
+                                  (((polymorphic morphs) repo core) FlexMorph) Vertical
                                     ~ add: ((((polymorphic morphs) repo fun) TestMorph) link)
                                     ~ add: ((((polymorphic morphs) repo fun) TestMorph) link)
                                     ~ add: ((((polymorphic morphs) repo fun) TestMorph) link)
