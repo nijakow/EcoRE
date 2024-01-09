@@ -90,9 +90,12 @@
 
             changed => (
                 clearCaches.
-                morphs do: [ :each |
-                    each kernelChangeCallback.
-                ].
+                morphs do: [ :each | each kernelChangeCallback ].
+              ^ self
+            );
+
+            dispose => (
+                morphs do: [ :each | each kernelDisposeCallback ].
               ^ self
             );
 

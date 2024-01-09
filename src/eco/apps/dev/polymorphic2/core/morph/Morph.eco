@@ -54,6 +54,11 @@
               ^ self
             );
 
+            kernelDisposeCallback => (
+                "TODO"
+              ^ self
+            );
+
             changeBounds: newBounds => (
                 (((newBounds extent) equalsPoint: (bounds extent)) not) if: [
                     paper clearAndReset.
