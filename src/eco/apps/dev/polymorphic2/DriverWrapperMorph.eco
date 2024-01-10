@@ -1,0 +1,96 @@
+Clonable {
+        with inherited own Morph = ($package gfx morphic) morphs Morph;
+
+        |
+            driver <- No,
+            
+            protected cachedCursorX <- 0,
+            protected cachedCursorY <- 0,
+            protected cachedWidth   <- 0,
+            protected cachedHeight  <- 0,
+        |
+
+        {
+            protected polymorphic <- $package;
+
+            driver: d => (
+                driver <- Yes: d.
+                d extent: ((polymorphic math geometry) Point X: width Y: height).
+                renderDirty.
+              ^ self
+            );
+
+            protected refreshDimensionCache => (
+                cachedWidth  <- width.
+                cachedHeight <- height.
+                driver yes: [ :d | d extent: ((polymorphic math geometry) Point X: width Y: height) ].
+              ^ self
+            );
+
+            protected updateDimensions => (
+                [ width != cachedWidth ] or: [ height != cachedHeight ]
+                    ~ if: [ refreshDimensionCache ].
+              ^ self
+            );
+
+            renderImplOn: renderer => (
+                driver yes: [ :theDriver | 
+                    |
+                        mousePos         <- (world yes) handMorph globalOffset,
+                        relativeMousePos <- mousePos - globalOffset
+                    |
+
+                    updateDimensions.
+
+                    updateX: (relativeMousePos x)
+                          Y: (relativeMousePos y).
+
+                    [
+                        (theDriver rootPaper) renderOn: renderer.
+                        (theDriver) tick.
+                    ] catch: [ :ex |
+                        (std io out << 'Oops! Something went wrong in polymorphic2!') newline commit.
+                    ].
+                ].
+
+              ^ self
+            );
+
+            protected movedToX: x Y: y => (
+                cachedCursorX <- x.
+                cachedCursorY <- y.
+
+                (driver yes)
+                    mouseMovedToX: x
+                                Y: y.
+                
+              ^ self
+            );
+
+            protected updateX: x Y: y => (
+                [ cachedCursorX != x ] or: [ cachedCursorY != y ]
+                  ~ if: [ movedToX: x Y: y ].
+              ^ self
+            );
+
+            handleClick: click At: point HandMorph: hand => (
+                updateX: (point x) Y: (point y).        
+                (driver yes) mouseClicked: click.
+              ^ true
+            );
+
+            handleKey: key At: point HandMorph: hand => (
+                updateX: (point x) Y: (point y).
+                (driver yes) keyPressed: key.
+                (driver yes) keyReleased: key.
+              ^ true
+            );
+
+            handleScrollX: sx Y: sy HandMorph: hand => (
+                (driver yes) mouseScrolledByX: sx Y: sy.
+              ^ true
+            );
+
+            writeOn: w => w << 'a driver wrapper morph';
+        }
+    }

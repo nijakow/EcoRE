@@ -33,6 +33,11 @@ std Module
                 hand    => handMorph payload;
                 desktop => desktopMorph payload;
 
+                extent: extent => (
+                    desktop extent: extent.
+                  ^ self
+                );
+
                 writeOn: w => w << 'a session';
             }
         };

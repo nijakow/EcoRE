@@ -33,6 +33,11 @@
 
             protected session => rootMorph payload;
 
+            extent: extent => (
+                session extent: extent.
+              ^ self
+            );
+
             mouseMovedToX: x Y: y => (
                 cachedMouseX <- x,
                 cachedMouseY <- y.

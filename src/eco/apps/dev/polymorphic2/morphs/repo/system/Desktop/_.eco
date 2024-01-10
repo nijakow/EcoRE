@@ -6,7 +6,7 @@ std Module
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                         stream withGraphicsDo: [ :graphics |
                             (stream << 'Hello, world!') newline commit.
-                            (kernel payload) windows forEach: [ :window :winbounds |
+                            ((kernel payload) windows) forEach: [ :window :winbounds |
                                 graphics in: winbounds put: window.
                             ].
                         ].
@@ -17,6 +17,7 @@ std Module
         Instance :: Clonable
         {
             |
+                extent,
                 windows,
             |
 
@@ -24,7 +25,13 @@ std Module
                 protected polymorphic <- $package;
 
                 init => (
+                    extent  <- (polymorphic math geometry) Point X: 0 Y: 0.
                     windows <- std util newMap.
+                  ^ self
+                );
+
+                extent: extent => (
+                    (std io out << 'Resizing to ' << extent) newline commit.
                   ^ self
                 );
 
