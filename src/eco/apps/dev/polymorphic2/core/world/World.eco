@@ -39,7 +39,11 @@
             );
 
             tickAll => (
-                morphs do: [ :each | each tick ].
+                (std io out << 'Iterating over morphs...') newline commit.
+                morphs do: [ :each |
+                    (std io out << 'Ticking ' << (each name)) newline commit.
+                    each tick.
+                ].
               ^ self
             );
 

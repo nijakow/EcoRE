@@ -83,6 +83,7 @@
 
             tick => (
                 "Do nothing..."
+                (std io out << '---') newline commit.
                 world tickAll.
               ^ self
             );

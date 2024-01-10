@@ -16,6 +16,8 @@
             protected polymorphic <- $package;
 
             initWithKernel: k BoundsInfo: bi Paper: p => (
+                (std io out << 'Creating a new morph: ' << (k name)) newline commit.
+
                 kernel     <- k.
                 boundsInfo <- bi.
                 paper      <- p.
@@ -39,7 +41,8 @@
             );
 
             protected executeChanged => (
-                parentMorph yes: [ :pm | pm changed ].
+                (std io out << 'I changed: ' << kernel name) newline commit.
+                "parentMorph yes: [ :pm | pm changed ]."
                 world yes: [ :w | w iHaveChanged: self ].
               ^ self
             );
@@ -115,6 +118,7 @@
             );
 
             protected internalRedraw => (
+                (std io out << 'Redrawing: ' << kernel name) newline commit.
                 kernel drawOnStream: (paper stream) Instance: self.
               ^ self
             );
@@ -124,7 +128,7 @@
                 internalRedraw.
               ^ self
             );
-            redrawFreely  => (
+            redrawFreely => (
                 | extent <- paper realExtent |
                 
                 paper clearAndReset.
