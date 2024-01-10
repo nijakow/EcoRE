@@ -2,11 +2,13 @@
 std Module
 {
     Behavior <- ($package core) NewBehavior
+                    ~ name: 'a session morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
-                            (stream << 'Hello, world!') newline commit.
                             stream withGraphicsDo: [ :graphics |
                                 graphics at: (kernel payload) hand position
                                         put: (kernel payload) handMorph.
+                                graphics at: ((polymorphic math geometry) Point Origin)
+                                        put: (kernel payload) desktopMorph.
                             ].
                     ] bind($package)
                     ~ build;
@@ -16,17 +18,20 @@ std Module
         {
             |
                 handMorph,
+                desktopMorph,
             |
 
             {
                 protected polymorphic <- $package;
 
                 init => (
-                    handMorph <- (((polymorphic morphs) repo system) Hand) New.
+                    handMorph    <- (((polymorphic morphs) repo system) Hand) New.
+                    desktopMorph <- (((polymorphic morphs) repo system) Desktop) New.
                   ^ self
                 );
 
-                hand => handMorph payload;
+                hand    => handMorph payload;
+                desktop => desktopMorph payload;
 
                 writeOn: w => w << 'a session';
             }

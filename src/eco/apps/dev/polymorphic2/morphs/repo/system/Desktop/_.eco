@@ -1,0 +1,39 @@
+
+std Module
+{
+    Behavior <- ($package core) NewBehavior
+                    ~ name: 'a desktop morph'
+                    ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
+                        stream withGraphicsDo: [ :graphics |
+                            (stream << 'Hello, world!') newline commit.
+                            (kernel payload) windows forEach: [ :window :winbounds |
+                                graphics in: winbounds put: window.
+                            ].
+                        ].
+                    ] bind($package)
+                    ~ build;
+
+    State :: Classlike {
+        Instance :: Clonable
+        {
+            |
+                windows,
+            |
+
+            {
+                protected polymorphic <- $package;
+
+                init => (
+                    windows <- std util newMap.
+                  ^ self
+                );
+
+                writeOn: w => w << 'a desktop';
+            }
+        };
+
+        New => Instance new;
+    };
+
+    New => Behavior link: (State New);
+}
