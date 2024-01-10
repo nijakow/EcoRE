@@ -11,6 +11,10 @@ std Module
                             ].
                         ].
                     ] bind($package)
+                    ~ on: (($package event) predicates AddMorph) do: $[ :kernel :event |
+                        ((kernel state) payload) openMorph: (event body).
+                        kernel changed.
+                    ]
                     ~ build;
 
     State :: Classlike {
@@ -31,8 +35,20 @@ std Module
                 );
 
                 extent: e => (
-                    (std io out << 'Resizing to ' << extent) newline commit.
                     extent <- e.
+                  ^ self
+                );
+
+                openMorph: kernel => (
+                    |
+                        minBounds <- kernel minBounds,
+                        newBounds <- (polymorphic math geometry) Rectangle
+                                        X: (extent x / 2) - (minBounds w / 2)
+                                        Y: (extent y / 2) - (minBounds h / 2)
+                                        W: minBounds w
+                                        H: minBounds h
+                    |
+                    windows at: kernel put: newBounds.
                   ^ self
                 );
 

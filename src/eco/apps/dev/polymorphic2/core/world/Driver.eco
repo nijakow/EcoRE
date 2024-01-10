@@ -31,7 +31,7 @@
 
             initWithoutWorld => initWithWorld: (((polymorphic core world) World) New);
 
-            protected session => rootMorph payload;
+            session => rootMorph payload;
 
             extent: extent => (
                 session extent: extent.

@@ -8,6 +8,8 @@ Clonable {
             protected cachedCursorY <- 0,
             protected cachedWidth   <- 0,
             protected cachedHeight  <- 0,
+
+            protected added? <- false,
         |
 
         {
@@ -41,6 +43,11 @@ Clonable {
                     |
 
                     updateDimensions.
+
+                    (added? not) if: [
+                        (theDriver session) desktopMorph add: (((polymorphic morphs) repo core) FrameMorph Child: (((polymorphic morphs) repo fun) NewTestMorph3)).
+                        added? <- true.
+                    ].
 
                     updateX: (relativeMousePos x)
                           Y: (relativeMousePos y).
