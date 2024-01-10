@@ -74,6 +74,7 @@
 
             protected enterWorld: world => (
                 world addMorph: self.
+                kernel addMorph: self.
                 world iAmDirty: self.
               ^ self
             );
@@ -98,12 +99,10 @@
             );
 
             enable => (
-                kernel addMorph: self.
               ^ self
             );
 
             disable => (
-                kernel removeMorph: self.
               ^ self
             );
 
