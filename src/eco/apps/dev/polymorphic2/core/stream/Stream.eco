@@ -9,7 +9,8 @@
             xOffset <- 0,
             yOffset <- 0,
 
-            nextLineDelta <- 0
+            nextLineDelta <- 0,
+            protected minNextLineDelta <- 0
         |
 
         {
@@ -19,6 +20,8 @@
                 emitter <- e.
                 xOffset <- x.
                 yOffset <- y.
+                nextLineDelta <- 0,
+                minNextLineDelta <- ((polymorphic gfx eve) DefaultFont) height.
               ^ self
             );
 
@@ -88,7 +91,7 @@
 
             newline => (
                 xOffset <- emitter origin x.
-                yOffset <- yOffset + nextLineDelta.
+                yOffset <- yOffset + (nextLineDelta max: minNextLineDelta).
                 nextLineDelta <- 0.
               ^ self
             );

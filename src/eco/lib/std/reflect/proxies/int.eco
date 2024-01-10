@@ -20,6 +20,7 @@
         zero?         => (self == 0);
         isZero        => (self == 0);
         isNotZero     => isZero not;
+        notZero?      => zero? not;
         negative?     => self < 0;
         isNegative    => self < 0;
         isNotNegative => isNegative not;
@@ -28,6 +29,9 @@
         strictlyPositive?  => self > 0;
         isStrictlyPositive => self >= 0;
         isBetween: a And: b => [ self >= a ] and: [ self <= b ];
+
+        even? => (self mod: 2) zero?;
+        odd?  => (self mod: 2) notZero?;
     };
 
     with inherited misc = {
