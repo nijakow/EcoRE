@@ -6,15 +6,19 @@
     {
         |
             node,
-            morphs
+            morphs,
+            morphsToRedraw,
+            morphsToTick,
         |
 
         {
             protected polymorphic <- $package;
 
             init => (
-                node    <- (((polymorphic core morph) tree nodes) WorldNode) World: self.
-                morphs  <- std util newVector.
+                node           <- (((polymorphic core morph) tree nodes) WorldNode) World: self.
+                morphs         <- std util newVector.
+                morphsToRedraw <- std util newVector.
+                morphsToTick   <- std util newVector.
               ^ self
             );
 
@@ -25,6 +29,8 @@
 
             removeMorph: morph => (
                 morphs remove: morph.
+                morphsToRedraw remove: morph.
+                morphsToTick remove: morph.
               ^ self
             );
 
@@ -34,16 +40,26 @@
             );
 
             iHaveChanged: morph => (
-                morph redrawFreely.
+                morphsToRedraw add: morph.
               ^ self
             );
 
             tickAll => (
+                morphsToTick clear.
+                morphs into: morphsToTick.
+
                 (std io out << 'Iterating over morphs...') newline commit.
-                morphs do: [ :each |
-                    (std io out << 'Ticking ' << (each name)) newline commit.
-                    each tick.
+                [ (morphsToTick empty?) not ] while: [
+                    | morph <- morphsToTick removeFirst |
+                    (std io out << 'Ticking ' << morph) newline commit.
+                    morph tick.
                 ].
+
+                [ (morphsToRedraw empty?) not ] while: [
+                    | morph <- morphsToRedraw removeFirst |
+                    morph redrawFreely.
+                ].
+
               ^ self
             );
 

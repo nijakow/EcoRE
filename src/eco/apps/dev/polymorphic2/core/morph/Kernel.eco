@@ -90,6 +90,7 @@
 
             changed => (
                 clearCaches.
+                (std io out << name << ': ' << morphs) newline commit.
                 morphs do: [ :each | each kernelChangeCallback ].
               ^ self
             );

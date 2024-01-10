@@ -74,7 +74,6 @@
 
             protected enterWorld: world => (
                 world addMorph: self.
-                kernel addMorph: self.
                 world iAmDirty: self.
               ^ self
             );
@@ -88,7 +87,6 @@
             connectToParentNode: parentNode => (
                 node reparent: parentNode.
                 world yes: [ :w | enterWorld: w ].
-                enable.
               ^ self
             );
 
@@ -100,10 +98,12 @@
             );
 
             enable => (
+                kernel addMorph: self.
               ^ self
             );
 
             disable => (
+                kernel removeMorph: self.
               ^ self
             );
 
@@ -152,7 +152,7 @@
             );
 
             tick => (
-                ((kernel behavior) animated?) -> [ changed ].
+                ((kernel behavior) animated?) -> [ kernel changed ].
               ^ self
             );
             
