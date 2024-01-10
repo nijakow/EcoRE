@@ -79,6 +79,7 @@
             protected enterWorld: world => (
                 world addMorph: self.
                 kernel addMorph: self.
+                iAmDirty.
               ^ self
             );
 
@@ -102,12 +103,10 @@
             );
 
             enable => (
-                kernel addMorph: self.
               ^ self
             );
 
             disable => (
-                kernel removeMorph: self.
               ^ self
             );
 
@@ -133,19 +132,13 @@
               ^ self
             );
             redrawFreely => (
-                "
-                    This algorithm doesn't seem to be suitable.
-                    If a morph was placed using exact bounds, this mechanism might force yet another redraw of this morph.
-                "
-
-                | extent <- paper realExtent |
+                | b <- paper realBounds |
                 
-                paper clearAndReset.
-                
+                paper clear.
                 internalRedraw.
 
                 "If the size of the paper has changed, we need to forward the change to the parent presentation."
-                (((paper realExtent) equalsPoint: extent) not) -> [
+                (((paper realBounds) equalsRectangle: b) not) -> [
                     parentMorph yes: [ :p |
                         p aChildChanged.
                     ].
