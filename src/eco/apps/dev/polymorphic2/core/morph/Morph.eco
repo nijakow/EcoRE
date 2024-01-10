@@ -42,7 +42,6 @@
 
             protected executeChanged => (
                 (std io out << 'I changed: ' << kernel name) newline commit.
-                "parentMorph yes: [ :pm | pm changed ]."
                 world yes: [ :w | w iHaveChanged: self ].
               ^ self
             );
@@ -54,6 +53,11 @@
 
             changed => (
                 kernel changed.
+              ^ self
+            );
+
+            aChildChanged => (
+                executeChanged.
               ^ self
             );
 
@@ -75,7 +79,6 @@
             protected enterWorld: world => (
                 world addMorph: self.
                 kernel addMorph: self.
-                world iAmDirty: self.
               ^ self
             );
 
@@ -99,10 +102,12 @@
             );
 
             enable => (
+                kernel addMorph: self.
               ^ self
             );
 
             disable => (
+                kernel removeMorph: self.
               ^ self
             );
 
@@ -128,6 +133,11 @@
               ^ self
             );
             redrawFreely => (
+                "
+                    This algorithm doesn't seem to be suitable.
+                    If a morph was placed using exact bounds, this mechanism might force yet another redraw of this morph.
+                "
+
                 | extent <- paper realExtent |
                 
                 paper clearAndReset.
@@ -137,7 +147,7 @@
                 "If the size of the paper has changed, we need to forward the change to the parent presentation."
                 (((paper realExtent) equalsPoint: extent) not) -> [
                     parentMorph yes: [ :p |
-                        p changed.
+                        p aChildChanged.
                     ].
                 ].
               ^ self
