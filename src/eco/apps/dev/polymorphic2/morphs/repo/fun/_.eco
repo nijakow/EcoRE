@@ -35,9 +35,13 @@ std Module
     TestMorph3 <- ($package core) NewBehavior
                     ~ name: 'a sine wave morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
-                          | delta <- #'ecosphere.ecore.time.since_start'() / 5.0 |
+                          |
+                              state <- kernel payload,
+                              count <- state pointCount,
+                              delta <- #'ecosphere.ecore.time.since_start'() / 5.0
+                          |
                           stream withGraphicsDo: [ :graphics |
-                                0 to: 9 do: [ :i |
+                                0 to: (count - 1) do: [ :i |
                                     |
                                         v1  <- (((i / (10 asFloat)) + delta) * 3.14159 * 2) sin,
                                         v2  <- ((((i + 1) / (10 asFloat)) + delta) * 3.14159 * 2) sin,
@@ -46,12 +50,40 @@ std Module
                                         p   <- ((polymorphic math geometry) Point X: i * 25 Y: vp1)
                                     |
                                     graphics at: p put: (((polymorphic core objects) Line) End: ((polymorphic math geometry) Point X: 25 Y: (vp2 - vp1))).
-                                    graphics at: p put: ((((polymorphic morphs) repo fun) TestMorph3_Point) link).
+                                    graphics at: p put: (state pointAt: i).
                                 ]
                           ].
                       ] bind($package)
                     ~ enableAnimation
                     ~ build;
+    
+    TestMorph3State :: Classlike {
+        Instance :: Clonable {
+            |
+                pointList,
+            |
+
+            {
+                protected polymorphic <- $package;
+
+                initWithCount: count => (
+                    pointList <- std util newVector.
+                    1 to: count do: [ :each | pointList add: (((polymorphic morphs) repo fun) TestMorph3_Point) link ].
+                  ^ self
+                );
+
+                pointCount => pointList size;
+
+                pointAt: index => pointList at: index;
+
+                writeOn: w => w << 'a test morph state with ' << pointCount << ' points';
+            }
+        };
+
+        Count: count => (Instance clone) initWithCount: count;
+    };
+
+    NewTestMorph3 => TestMorph3 link: (TestMorph3State Count: 10);
     
     TestMorph3_1 <- ($package core) NewBehavior
                       ~ name: 'an animated circle morph'

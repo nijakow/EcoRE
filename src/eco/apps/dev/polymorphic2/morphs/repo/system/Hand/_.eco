@@ -5,6 +5,10 @@ std Module
                     ~ name: 'a hand morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                         stream << 'a hand'.
+                        ((kernel payload) grabbedMorph) yes: [ :gm |
+                            stream newline.
+                            stream emit: gm.
+                        ].
                     ] bind($package)
                     ~ enableBlessing
                     ~ build;

@@ -30,8 +30,9 @@ std Module
                   ^ self
                 );
 
-                extent: extent => (
+                extent: e => (
                     (std io out << 'Resizing to ' << extent) newline commit.
+                    extent <- e.
                   ^ self
                 );
 
