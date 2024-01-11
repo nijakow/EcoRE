@@ -5,10 +5,10 @@ std Module
                     ~ name: 'a session morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                             stream withGraphicsDo: [ :graphics |
-                                graphics at: (kernel payload) hand position
-                                        put: (kernel payload) handMorph.
                                 graphics at: ((polymorphic math geometry) Point Origin)
                                         put: (kernel payload) desktopMorph.
+                                graphics at: (kernel payload) hand position
+                                        put: (kernel payload) handMorph.
                             ].
                     ] bind($package)
                     ~ build;
