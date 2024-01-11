@@ -18,6 +18,8 @@
               ^ self
             );
 
+            kernel => morph kernel;
+
             writeOn: w => w << 'an event context';
         }
     };

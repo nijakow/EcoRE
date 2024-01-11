@@ -5,7 +5,6 @@ std Module
                     ~ name: 'a desktop morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                         stream withGraphicsDo: [ :graphics |
-                            (stream << 'Hello, world!') newline commit.
                             ((kernel payload) windows) forEach: [ :window :winbounds |
                                 graphics in: winbounds put: window.
                             ].

@@ -14,5 +14,5 @@ std Module
 
     AddMorph: morph => Head: (types AddMorph) Body: morph;
 
-    MouseClick: info => Head: (types MouseClick) Body: ((bodies MouseClick) Info: info);
+    MouseClick: info Hand: hand => Head: (types MouseClick) Body: ((bodies MouseClick) Info: info Hand: hand);
 }

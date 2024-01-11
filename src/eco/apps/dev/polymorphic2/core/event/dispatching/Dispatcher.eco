@@ -67,7 +67,7 @@
 
             mouseClickedAtX: x Y: y Click: click => (
                 |
-                    event <- (polymorphic event events) MouseClick: click
+                    event <- (polymorphic event events) MouseClick: click Hand: ((driver session) handMorph)
                 |
 
                 (std io out << 'Mouse clicked! ' << x << ' ' << y) newline commit.

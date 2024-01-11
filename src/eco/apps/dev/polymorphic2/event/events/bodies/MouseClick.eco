@@ -5,12 +5,14 @@
     Instance :: Clonable
     {
         |
-            info
+            info,
+            hand,
         |
 
         {
-            initWithInfo: i => (
+            initWithInfo: i Hand: h => (
                 info <- i.
+                hand <- h.
               ^ self
             );
 
@@ -18,5 +20,5 @@
         }
     };
 
-    Info: info => (Instance clone) initWithInfo: info;
+    Info: info Hand: hand => (Instance clone) initWithInfo: info Hand: hand;
 }

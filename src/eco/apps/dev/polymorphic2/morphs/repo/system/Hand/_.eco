@@ -4,10 +4,10 @@ std Module
     Behavior <- ($package core) NewBehavior
                     ~ name: 'a hand morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
-                        stream << 'a hand'.
                         ((kernel payload) grabbedMorph) yes: [ :gm |
-                            stream newline.
                             stream emit: gm.
+                        ] no: [
+                            stream << 'a hand'.
                         ].
                     ] bind($package)
                     ~ enableBlessing
@@ -48,6 +48,21 @@ std Module
                     position <- (polymorphic math geometry) Point X: x Y: y.
                     changedPlacement.
                   ^ self
+                );
+
+                tryGrab: kernel => (
+                    grabbedMorph <- Yes: kernel.
+                    changed.
+                  ^ self
+                );
+
+                tryRelease => (
+                    grabbedMorph yes: [ :gm |
+                        "TODO"
+                        changed.
+                      ^ true
+                    ].
+                  ^ false
                 );
 
                 writeOn: w => w << 'a hand';

@@ -68,12 +68,12 @@
             );
 
             mouseReleased: click => (
-                "TODO: Mouse release"
-                (std io out << 'Mouse was released!') newline commit.
-                dispatcher
+                (session hand)
+                    tryRelease.
+                "dispatcher
                     mouseReleasedAtX: cachedMouseX
                                    Y: cachedMouseY
-                               Click: click.
+                               Click: click."
               ^ self
             );
 
