@@ -46,9 +46,10 @@ Clonable {
 
                     (added? not) if: [
                         (theDriver session) desktopMorph
-                          ~ add: (((polymorphic morphs) repo core) ButtonMorph
-                                    Child: (((polymorphic morphs) repo core) FrameMorph
-                                              Child: (((polymorphic morphs) repo fun) NewTestMorph3))).
+                          ~ add: (((polymorphic morphs) repo system) Window
+                                    Child: (((polymorphic morphs) repo core) MarginMorph
+                                              Margin: 10
+                                               Child: (((polymorphic morphs) repo fun) NewTestMorph3))).
                         added? <- true.
                     ].
 
