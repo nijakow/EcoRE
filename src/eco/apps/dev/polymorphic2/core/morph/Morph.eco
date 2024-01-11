@@ -46,8 +46,19 @@
               ^ self
             );
 
-            kernelChangeCallback => (
+            kernelChangedContentCallback => (
                 executeChanged.
+              ^ self
+            );
+
+            kernelChangedPlacementCallback => (
+                parentMorph yes: [ :p | p aChildChanged ].
+              ^ self
+            );
+
+            kernelChangeCallback => (
+                kernelChangedContentCallback.
+                kernelChangedPlacementCallback.
               ^ self
             );
 

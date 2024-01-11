@@ -37,11 +37,17 @@ std Module
                   ^ self
                 );
 
+                protected changedPlacement => (
+                    maybeMorphKernel yes: [ :kernel | kernel changedPlacement ].
+                  ^ self
+                );
+
                 bless: kernel => maybeMorphKernel <- Yes: kernel;
 
                 moveToX: x Y: y => (
+                    (std io out << 'Moving the hand morph') newline commit.
                     position <- (polymorphic math geometry) Point X: x Y: y.
-                    changed.
+                    changedPlacement.
                   ^ self
                 );
 

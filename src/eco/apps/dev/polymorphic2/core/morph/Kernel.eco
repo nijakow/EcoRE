@@ -88,9 +88,18 @@
               ^ self
             );
 
-            changed => (
+            changedContent => (
                 clearCaches.
-                (std io out << name << ': ' << morphs) newline commit.
+                morphs do: [ :each | each kernelChangedContentCallback ].
+              ^ self
+            );
+
+            changedPlacement => (
+                morphs do: [ :each | each kernelChangedPlacementCallback ].
+              ^ self
+            );
+
+            changed => (
                 morphs do: [ :each | each kernelChangeCallback ].
               ^ self
             );
