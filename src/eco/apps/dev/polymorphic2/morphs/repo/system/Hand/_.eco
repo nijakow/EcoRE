@@ -20,6 +20,7 @@ std Module
         Instance :: Clonable
         {
             |
+                driver,
                 maybeMorphKernel <- No,
                 position,
                 grabbedMorph,
@@ -29,7 +30,8 @@ std Module
             {
                 protected polymorphic <- $package;
 
-                init => (
+                initWithDriver: _driver => (
+                    driver                  <- _driver.
                     maybeMorphKernel        <- No.
                     position                <- (polymorphic math geometry) Point Origin.
                     grabbedMorph            <- No.
@@ -66,7 +68,9 @@ std Module
 
                 tryRelease => (
                     grabbedMorph yes: [ :gm |
-                        "TODO"
+                        (driver dispatcher)
+                            dropMorph: gm Hand: self. "TODO: Check if the event was handled"
+                        grabbedMorph <- No.
                         changed.
                       ^ true
                     ].
@@ -77,8 +81,8 @@ std Module
             }
         };
 
-        New => Instance new;
+        Driver: driver => (Instance clone) initWithDriver: driver;
     };
 
-    New => Behavior link: (State New);
+    Driver: driver => Behavior link: (State Driver: driver);
 }

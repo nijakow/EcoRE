@@ -24,8 +24,8 @@ std Module
             {
                 protected polymorphic <- $package;
 
-                init => (
-                    handMorph    <- (((polymorphic morphs) repo system) Hand) New.
+                initWithDriver: driver => (
+                    handMorph    <- (((polymorphic morphs) repo system) Hand) Driver: driver.
                     desktopMorph <- (((polymorphic morphs) repo system) Desktop) New.
                   ^ self
                 );
@@ -42,8 +42,8 @@ std Module
             }
         };
 
-        New => Instance new;
+        Driver: driver => (Instance clone) initWithDriver: driver;
     };
 
-    New => Behavior link: (State New);
+    Driver: driver => Behavior link: (State Driver: driver);
 }

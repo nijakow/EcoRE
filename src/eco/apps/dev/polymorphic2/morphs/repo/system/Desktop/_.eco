@@ -14,6 +14,10 @@ std Module
                         ((kernel state) payload) openMorph: (event body).
                         kernel changed.
                     ]
+                    ~ on: (($package event) predicates DropMorph) do: $[ :context :event |
+                        ((context kernel) payload) openMorph: (event body).
+                        (context kernel) changed.
+                    ]
                     ~ disposeFunction: $[ :kernel :other |
                         (((kernel state) payload) windows) erase: other.
                         kernel changed.

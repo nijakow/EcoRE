@@ -20,7 +20,7 @@
             initWithWorld: w => (
                 world      <- w.
                 rootPaper  <- ((polymorphic core paper) Paper) Extent: ((polymorphic math geometry) Point X: 400 Y: 400).
-                rootMorph  <- (((polymorphic morphs) repo system) Session) New.
+                rootMorph  <- (((polymorphic morphs) repo system) Session) Driver: self.
                 dispatcher <- ((polymorphic core event) dispatching Dispatcher) Driver: self.
 
                 rootPaper node: (world node).

@@ -3,7 +3,8 @@ std Module
 {
     EventType :: (here / 'EventType.eco') importIn: $package;
 
-    AddMorph  :: (here / 'AddMorph.eco') importIn: (self EventType);
+    AddMorph  :: (here / 'AddMorph.eco')  importIn: (self EventType);
+    DropMorph :: (here / 'DropMorph.eco') importIn: (self EventType);
 
     MouseClick :: (here / 'MouseClick.eco') importIn: (self EventType);
 }

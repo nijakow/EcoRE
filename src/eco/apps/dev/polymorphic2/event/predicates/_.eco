@@ -6,5 +6,6 @@ std Module
     Predicate :: (here / 'Predicate.eco') importIn: $package;
 
     AddMorph   => Predicate for: ((polymorphic event types) AddMorph);
+    DropMorph  => Predicate for: ((polymorphic event types) DropMorph);
     MouseClick => Predicate for: ((polymorphic event types) MouseClick);
 }

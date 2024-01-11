@@ -61,6 +61,16 @@
               ^ self
             );
 
+            dropMorph: morph Hand: hand => (
+                |
+                    event <- (polymorphic event events) DropMorph: morph
+                |
+
+                dispatch: event AtX: ((hand position) x) Y: ((hand position) y).
+
+              ^ self
+            );
+
             mouseMovedToX: x Y: y => (
               ^ self
             );
