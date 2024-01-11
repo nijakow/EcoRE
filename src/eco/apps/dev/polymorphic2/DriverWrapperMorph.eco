@@ -90,6 +90,12 @@ Clonable {
               ^ true
             );
 
+            handleClickRelease: click At: point HandMorph: hand => (
+                updateX: (point x) Y: (point y).
+                (driver yes) mouseReleased: click.
+              ^ true
+            );
+
             handleKey: key At: point HandMorph: hand => (
                 updateX: (point x) Y: (point y).
                 (driver yes) keyPressed: key.

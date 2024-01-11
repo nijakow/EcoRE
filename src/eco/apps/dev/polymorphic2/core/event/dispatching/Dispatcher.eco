@@ -77,6 +77,11 @@
               ^ self
             );
 
+            mouseReleasedAtX: x Y: y Click: click => (
+                "TODO"
+              ^ self
+            );
+
             keyPressedAtX: x Y: y Key: key => (
                 (std io out << 'Key pressed!') newline commit.
               ^ self

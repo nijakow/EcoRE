@@ -415,6 +415,7 @@
             handleDropMorph: morph At: point => false;
             handleDropMorph: morph At: point Meta: meta => handleDropMorph: morph At: point;
             handleClick: click At: point HandMorph: hand => false;
+            handleClickRelease: click At: point HandMorph: hand => false;
             handleGrabAt: point HandMorph: hand => false;
             handleScrollX: sx Y: sy At: point HandMorph: hand => false;
             handleKey: key At: point HandMorph: hand => false;
@@ -426,6 +427,7 @@
             tryHandleDropMorph: morph At: point => handleDropMorph: morph At: point;
             tryHandleDropMorph: morph At: point Meta: meta => handleDropMorph: morph At: point Meta: meta;
             tryHandleClick: click At: point HandMorph: hand => handleClick: click At: point HandMorph: hand;
+            tryHandleClickRelease: click At: point HandMorph: hand => handleClickRelease: click At: point HandMorph: hand;
             tryHandleGrabAt: point HandMorph: hand => handleGrabAt: point HandMorph: hand;
             tryHandleScrollX: sx Y: sy At: point HandMorph: hand => handleScrollX: sx Y: sy At: point HandMorph: hand;
             tryHandleKey: key At: point HandMorph: hand => handleKey: key At: point HandMorph: hand;
@@ -435,6 +437,7 @@
             dropMorph: morph At: point => dropMorph: morph At: point Meta: No;
             dropMorph: morph At: point Meta: meta => dispatchEvent: [ :e :point | e tryHandleDropMorph: morph At: point Meta: meta ] ToParentsOf: morph At: point;
             click: click At: point HandMorph: hand => dispatchEvent: [ :e :point | e tryHandleClick: click At: point HandMorph: hand ] At: point;
+            clickRelease: click At: point HandMorph: hand => dispatchEvent: [ :e :point | e tryHandleClickRelease: click At: point HandMorph: hand ] At: point;
             grabAt: point HandMorph: hand => dispatchEvent: [ :e :point | e tryHandleGrabAt: point HandMorph: hand ] At: point;
             scrollX: sx Y: sy At: point HandMorph: hand => dispatchEvent: [ :e :point | e tryHandleScrollX: sx Y: sy At: point HandMorph: hand ] At: point;
             key: key At: point HandMorph: hand => dispatchEvent: [ :e :point | e tryHandleKey: key At: point HandMorph: hand ] At: point;

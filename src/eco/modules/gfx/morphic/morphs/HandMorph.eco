@@ -82,6 +82,7 @@
                 |
                 grabbedMorph
                   ~ yes: [ :m | world yes: [ :w | (w dropMorph: (m morph) At: gb Meta: (m metadata)) -> [ grabbedMorph <- No ] ] ]
+                     no: [      world yes: [ :w | (w clickRelease: clickType At: gb HandMorph: self) ] ]
             );
 
             leftClick   => click: ((morphic input click) Left);

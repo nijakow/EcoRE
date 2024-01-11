@@ -67,6 +67,16 @@
               ^ self
             );
 
+            mouseReleased: click => (
+                "TODO: Mouse release"
+                (std io out << 'Mouse was released!') newline commit.
+                dispatcher
+                    mouseReleasedAtX: cachedMouseX
+                                   Y: cachedMouseY
+                               Click: click.
+              ^ self
+            );
+
             mouseScrolledByX: dx Y: dy => (
               ^ self
             );
