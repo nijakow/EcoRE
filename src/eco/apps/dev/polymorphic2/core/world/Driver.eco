@@ -88,16 +88,18 @@
             );
 
             tick => (
-                "Do nothing..."
                 world tickAll.
-              ^ self
-            );
 
-            run => (
+                rootPaper clear.
                 (rootPaper stream) withGraphicsDo: [ :graphics |
                     graphics at: ((polymorphic math geometry) Point Origin)
                             put: rootMorph.
                 ].
+                
+              ^ self
+            );
+
+            run => (
               ^ self
             );
 
