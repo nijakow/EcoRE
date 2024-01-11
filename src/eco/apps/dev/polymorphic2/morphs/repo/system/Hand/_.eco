@@ -45,7 +45,6 @@ std Module
                 bless: kernel => maybeMorphKernel <- Yes: kernel;
 
                 moveToX: x Y: y => (
-                    (std io out << 'Moving the hand morph') newline commit.
                     position <- (polymorphic math geometry) Point X: x Y: y.
                     changedPlacement.
                   ^ self

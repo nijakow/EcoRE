@@ -21,6 +21,7 @@ std Module
         Instance :: Clonable
         {
             |
+                maybeMorphKernel <- No,
                 extent,
                 windows,
             |
@@ -29,13 +30,22 @@ std Module
                 protected polymorphic <- $package;
 
                 init => (
-                    extent  <- (polymorphic math geometry) Point X: 0 Y: 0.
-                    windows <- std util newMap.
+                    maybeMorphKernel <- No.
+                    extent           <- (polymorphic math geometry) Point X: 0 Y: 0.
+                    windows          <- std util newMap.
+                  ^ self
+                );
+
+                bless: kernel => maybeMorphKernel <- Yes: kernel;
+
+                protected changed => (
+                    maybeMorphKernel yes: [ :kernel | kernel changed ].
                   ^ self
                 );
 
                 extent: e => (
                     extent <- e.
+                    changed.
                   ^ self
                 );
 
@@ -49,6 +59,7 @@ std Module
                                         H: minBounds h
                     |
                     windows at: kernel put: newBounds.
+                    changed.
                   ^ self
                 );
 

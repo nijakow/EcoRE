@@ -41,7 +41,6 @@
             );
 
             protected executeChanged => (
-                (std io out << 'I changed: ' << kernel name) newline commit.
                 world yes: [ :w | w iHaveChanged: self ].
               ^ self
             );
@@ -132,7 +131,6 @@
             );
 
             protected internalRedraw => (
-                (std io out << 'Redrawing: ' << kernel name) newline commit.
                 kernel drawOnStream: (paper stream) Instance: self.
               ^ self
             );

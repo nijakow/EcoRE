@@ -35,6 +35,12 @@
 
             extent: extent => (
                 session extent: extent.
+
+                "This is a bit of a hack, but it is the only way to access Morph instances from the Kernel."
+                rootMorph instancesDo: [ :each |
+                    each changeBounds: (((polymorphic core morph) BoundsInfo) Extent: extent).
+                ].
+                
               ^ self
             );
 
@@ -83,7 +89,6 @@
 
             tick => (
                 "Do nothing..."
-                (std io out << '---') newline commit.
                 world tickAll.
               ^ self
             );

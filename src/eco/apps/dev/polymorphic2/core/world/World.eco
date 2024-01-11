@@ -48,10 +48,8 @@
                 morphsToTick clear.
                 morphs into: morphsToTick.
 
-                (std io out << 'Iterating over morphs...') newline commit.
                 [ (morphsToTick empty?) not ] while: [
                     | morph <- morphsToTick removeFirst |
-                    (std io out << 'Ticking ' << morph) newline commit.
                     morph tick.
                 ].
 

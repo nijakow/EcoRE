@@ -21,6 +21,7 @@
             );
 
             initWithBounds: bounds => initWithBounds: bounds Offset: ((polymorphic math geometry) Point Origin);
+            initWithExtent: extent => initWithBounds: (((polymorphic math geometry) Point Origin) extent: extent);
 
             equalsBoundsInfo: other => (
               ^ [ offset equalsPoint: other offset ] and: [ bounds equalsRectangle: other bounds ]
@@ -34,4 +35,5 @@
 
     Bounds: bounds Offset: offset => (Instance clone) initWithBounds: bounds Offset: offset;
     Bounds: bounds                => (Instance clone) initWithBounds: bounds;
+    Extent: extent                => (Instance clone) initWithExtent: extent;
 }
