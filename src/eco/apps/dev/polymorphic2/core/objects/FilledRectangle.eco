@@ -1,0 +1,43 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        with inherited DrawObject <- $package;
+        
+        |
+            bounds,
+            color
+        |
+
+        {
+            initWithBounds: b Color: c => (
+                bounds <- b.
+                color  <- c.
+              ^ self
+            );
+
+            initWithBounds: b => initWithBounds: b Color: ((polymorphic color colors) Default);
+
+            initWithX: x Y: y W: w H: h Color: c => initWithBounds: ((polymorphic math geometry Rectangle) X: x Y: y W: w H: h) Color: c;
+            initWithX: x Y: y W: w H: h          => initWithBounds: ((polymorphic math geometry Rectangle) X: x Y: y W: w H: h);
+
+            catches: aPoint => bounds containsPoint: aPoint;
+
+            renderAt: offset On: renderer => (
+                color onRenderer: renderer.
+                renderer fillRect: bounds.
+              ^ self
+            );
+
+            writeOn: w => w << 'a rectangle with bounds ' << bounds;
+        }
+    };
+
+    Bounds: bounds Color: color => (Instance clone) initWithBounds: bounds Color: color;
+    Bounds: bounds              => (Instance clone) initWithBounds: bounds;
+
+    X: x Y: y W: w H: h Color: color => (Instance clone) initWithX: x Y: y W: w H: h Color: color;
+    X: x Y: y W: w H: h              => (Instance clone) initWithX: x Y: y W: w H: h;
+}

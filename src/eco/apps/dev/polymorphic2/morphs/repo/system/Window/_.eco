@@ -7,11 +7,12 @@ std Module
                         stream withGraphicsDo: [ :graphics |
                             (graphics maybeBounds) yes: [ :bounds |
                                 graphics at: ((polymorphic math geometry) Point Origin)
-                                        put: (((polymorphic core objects) Rectangle)
+                                        put: (((polymorphic core objects) FilledRectangle)
                                                     X: 0
                                                     Y: 0
                                                     W: (bounds w)
-                                                    H: (bounds h)).
+                                                    H: (bounds h)
+                                                Color: ((polymorphic color) Color R: 192 G: 128 B: 128)).
                             ].
                             ((kernel payload) child) yes: [ :c | stream emit: c ].
                         ].
@@ -28,7 +29,6 @@ std Module
             |
                 maybeMorphKernel <- No,
                 child            <- No,
-                bounds,
             |
 
             {
@@ -37,7 +37,6 @@ std Module
                 init => (
                     maybeMorphKernel <- No.
                     child            <- No.
-                    bounds           <- ((polymorphic math geometry) Rectangle) X: 0 Y: 0 W: 0 H: 0.
                   ^ self
                 );
 
@@ -49,14 +48,6 @@ std Module
                 );
 
                 child: c => child <- Yes: c;
-
-                bounds: b => (
-                    bounds <- b.
-                    changed.
-                  ^ self
-                );
-
-                extent => bounds extent;
 
                 writeOn: w => w << 'a desktop';
             }
