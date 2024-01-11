@@ -28,6 +28,11 @@
           ^ self
         );
 
+        erase: index => (
+            pairs forEach: [ :i, :p | (comparator value(p first, index)) if: [ pairs erase: i. ^ self ] ].
+          ^ self
+        );
+
         keysInto: collection => ( forEach: [ :k, :v | collection add: k ]. ^ collection );
         valuesInto: collection => ( forEach: [ :k, :v | collection add: v ]. ^ collection );
 

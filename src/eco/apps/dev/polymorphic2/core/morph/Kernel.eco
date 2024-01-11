@@ -114,6 +114,13 @@
               ^ self
             );
 
+            disposeChild: child => (
+                (behavior disposeFunction) yes: [ :df |
+                    df value(self, child).
+                ].
+              ^ self
+            );
+
             add: kernel => (
                 | event <- (polymorphic event events) AddMorph: kernel | 
                 (behavior dispatcher) handle: event context: self.

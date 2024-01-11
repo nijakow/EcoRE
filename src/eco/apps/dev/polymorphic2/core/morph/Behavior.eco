@@ -11,6 +11,7 @@
             caching? <- true,
             blessing? <- false,
             animated? <- false,
+            disposeFunction <- No,
         |
         
         {
@@ -22,6 +23,7 @@
                 caching?   <- true.
                 blessing?  <- false.
                 animated?  <- false.
+                disposeFunction <- No.
               ^ self
             );
 
@@ -29,6 +31,7 @@
             caching: c => caching? <- c;
             blessing: b => blessing? <- b;
             animated: a => animated? <- a;
+            disposeFunction: f => disposeFunction <- Yes: f;
 
             presenter: p => presenter <- p;
 

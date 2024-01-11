@@ -72,7 +72,9 @@
             );
 
             kernelDisposeCallback => (
-                "TODO"
+                parentMorph yes: [ :p |
+                    (p kernel) disposeChild: (self kernel).
+                ].
               ^ self
             );
 

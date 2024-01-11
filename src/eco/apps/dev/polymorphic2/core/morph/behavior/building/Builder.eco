@@ -32,6 +32,11 @@
             );
 
             presenterFunction: f => presenter: ((((polymorphic core morph) behavior presenting) FunctionPresenter) Function: f);
+            
+            disposeFunction:   f => (
+                behavior disposeFunction: f.
+              ^ self
+            );
 
             name: n => (
                 behavior name: n.

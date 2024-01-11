@@ -14,6 +14,10 @@ std Module
                         ((kernel state) payload) openMorph: (event body).
                         kernel changed.
                     ]
+                    ~ disposeFunction: $[ :kernel :other |
+                        (((kernel state) payload) windows) erase: other.
+                        kernel changed.
+                    ]
                     ~ build;
 
     State :: Classlike {

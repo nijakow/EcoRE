@@ -24,6 +24,7 @@ std Module
                     ~ on: (($package event) predicates MouseClick) do: $[ :(polymorphic) :context :event |
                         | hand <- ((event body) hand) payload |
                         hand tryGrab: (context kernel) Translation: ((polymorphic math geometry) Point X: ((context x) negate) Y: ((context y) negate)).
+                        (context kernel) dispose. "TODO: Only dispose if the grab was successful."
                     ] bind($package)
                     ~ build;
 
