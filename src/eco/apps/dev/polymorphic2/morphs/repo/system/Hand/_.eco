@@ -5,7 +5,10 @@ std Module
                     ~ name: 'a hand morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                         ((kernel payload) grabbedMorph) yes: [ :gm |
-                            stream emit: gm.
+                            stream withGraphicsDo: [ :graphics |
+                                graphics at: ((kernel payload) grabbedMorphTranslation)
+                                        put: gm. 
+                            ].
                         ] no: [
                             stream << 'a hand'.
                         ].
@@ -20,15 +23,17 @@ std Module
                 maybeMorphKernel <- No,
                 position,
                 grabbedMorph,
+                grabbedMorphTranslation,
             |
 
             {
                 protected polymorphic <- $package;
 
                 init => (
-                    maybeMorphKernel <- No.
-                    position         <- (polymorphic math geometry) Point Origin.
-                    grabbedMorph     <- No.
+                    maybeMorphKernel        <- No.
+                    position                <- (polymorphic math geometry) Point Origin.
+                    grabbedMorph            <- No.
+                    grabbedMorphTranslation <- (polymorphic math geometry) Point Origin.
                   ^ self
                 );
 
@@ -50,11 +55,14 @@ std Module
                   ^ self
                 );
 
-                tryGrab: kernel => (
-                    grabbedMorph <- Yes: kernel.
+                tryGrab: kernel Translation: translation => (
+                    grabbedMorph            <- Yes: kernel.
+                    grabbedMorphTranslation <- translation.
                     changed.
                   ^ self
                 );
+
+                tryGrab: kernel => tryGrab: kernel Translation: ((polymorphic math geometry) Point Origin);
 
                 tryRelease => (
                     grabbedMorph yes: [ :gm |

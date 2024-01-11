@@ -21,10 +21,10 @@ std Module
                         ((kernel state) payload) child: (event body).
                         kernel changed.
                     ]
-                    ~ on: (($package event) predicates MouseClick) do: $[ :context :event |
+                    ~ on: (($package event) predicates MouseClick) do: $[ :(polymorphic) :context :event |
                         | hand <- ((event body) hand) payload |
-                        hand tryGrab: (context kernel).
-                    ]
+                        hand tryGrab: (context kernel) Translation: ((polymorphic math geometry) Point X: ((context x) negate) Y: ((context y) negate)).
+                    ] bind($package)
                     ~ build;
 
     State :: Classlike {

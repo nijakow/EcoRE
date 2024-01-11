@@ -41,6 +41,7 @@
             distanceToOrigin  => ((x * x) + (y * y)) sqrt;
 
             transpose => (geometry Point) X: y Y: x;
+            negate    => (geometry Point) X: (x negate) Y: (y negate);
 
             corner: other => (geometry Rectangle) Origin: self Corner: other;
             extent: other => (geometry Rectangle) Origin: self Extent: other;
