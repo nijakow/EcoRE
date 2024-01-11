@@ -62,12 +62,16 @@
                         presentation <- ((polymorphic core paper) presenting MorphPresentation) Morph: morph
                     |
 
+                    (morph paper) resize: (boundsInfo extent).
+
                     paper addOld: presentation.
                 ] no: [
                     |
                         morph        <- kernel instantiateInBoundsInfo: boundsInfo,
                         presentation <- ((polymorphic core paper) presenting MorphPresentation) Morph: morph
                     |
+
+                    (morph paper) resize: (boundsInfo extent).
 
                     paper add: presentation.
                 ].
