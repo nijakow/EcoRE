@@ -16,8 +16,6 @@
             protected polymorphic <- $package;
 
             initWithKernel: k BoundsInfo: bi Paper: p => (
-                (std io out << 'Creating a new morph: ' << (k name)) newline commit.
-
                 kernel     <- k.
                 boundsInfo <- bi.
                 paper      <- p.
