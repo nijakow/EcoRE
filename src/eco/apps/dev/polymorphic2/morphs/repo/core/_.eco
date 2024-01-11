@@ -2,10 +2,12 @@
 std Module
 {
     EmitMorph <- ($package core) NewBehavior
+                    ~ name: 'an emit morph'
                     ~ presenterFunction: $[ :stream :kernel | stream emit: ((kernel state) payload) ]
                     ~ build;
     
     FunctionEmitMorph <- ($package core) NewBehavior
+                            ~ name: 'a function emit morph'
                             ~ presenterFunction: $[ :stream :kernel | ((kernel state) payload) value(stream, kernel) ]
                             ~ build;
 
@@ -14,6 +16,7 @@ std Module
         protected polymorphic <- $package;
 
         Behavior <- ($package core) NewBehavior
+                      ~ name: 'a flex morph'
                       ~ on: (($package event) predicates AddMorph) do: $[ :kernel :event |
                                 ((kernel state) payload) add: (event body).
                                 kernel changed.
@@ -133,6 +136,7 @@ std Module
         protected polymorphic <- $package;
 
         Behavior <- ($package core) NewBehavior
+                      ~ name: 'a margin morph'
                       ~ presenter:
                           {
                             isa std Singleton;
@@ -216,6 +220,7 @@ std Module
         protected polymorphic <- $package;
 
         Behavior <- ($package core) NewBehavior
+                      ~ name: 'a frame morph'
                       ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                             ((kernel state payload) child) yes: [ :child |
                                 |
@@ -232,6 +237,48 @@ std Module
                                 ].
                             ].
                         ] bind($package)
+                      ~ build;
+        
+        Payload :: Classlike
+        {
+            Instance :: Clonable
+            {
+                |
+                    child <- No
+                |
+
+                {
+                    protected polymorphic <- $package;
+
+                    child: c => child <- Yes: c;
+                }
+            };
+
+            New => Instance new;
+        };
+
+        New      => (Behavior link: (Payload New));
+        Child: c => (
+            | p <- Payload New |
+            p child: c.
+          ^ (Behavior link: p)
+        );
+    };
+
+    ButtonMorph :: Module
+    {
+        protected polymorphic <- $package;
+
+        Behavior <- ($package core) NewBehavior
+                      ~ name: 'a button morph'
+                      ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
+                            ((kernel state payload) child) yes: [ :child |
+                                stream emit: child.
+                            ].
+                        ] bind($package)
+                      ~ on: (($package event) predicates MouseClick) do: $[ :a :b |
+                                (std io out << 'Clicked the button! ') newline commit.
+                        ]
                       ~ build;
         
         Payload :: Classlike
