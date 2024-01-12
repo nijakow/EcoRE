@@ -5,7 +5,9 @@ std Module
                     ~ name: 'a session morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                             stream withGraphicsDo: [ :graphics |
-                                graphics at: ((polymorphic math geometry) Point Origin)
+                                "(std io out << 'Redrawing session with extent ' << (((kernel payload) desktop) extent)) newline commit."
+                                graphics in: (((polymorphic math geometry) Point Origin)
+                                                    extent: (((kernel payload) desktop) extent))
                                         put: (kernel payload) desktopMorph.
                                 graphics at: (kernel payload) hand position
                                         put: (kernel payload) handMorph.
