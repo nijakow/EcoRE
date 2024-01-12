@@ -4,10 +4,12 @@ std Module
     Behavior <- ($package core) NewBehavior
                     ~ name: 'a session morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
-                            stream withGraphicsDo: [ :graphics |
-                                "(std io out << 'Redrawing session with extent ' << (((kernel payload) desktop) extent)) newline commit."
-                                graphics in: (((polymorphic math geometry) Point Origin)
-                                                    extent: (((kernel payload) desktop) extent))
+                            |
+                                extent <- ((kernel payload) desktop) extent
+                            |
+
+                            stream withRoom: extent ForGraphicsDo: [ :graphics |
+                                graphics in: (((polymorphic math geometry) Point Origin) extent: extent)
                                         put: (kernel payload) desktopMorph.
                                 graphics at: (kernel payload) hand position
                                         put: (kernel payload) handMorph.
@@ -19,6 +21,7 @@ std Module
         Instance :: Clonable
         {
             |
+                bounds,
                 handMorph,
                 desktopMorph,
             |
@@ -27,6 +30,7 @@ std Module
                 protected polymorphic <- $package;
 
                 initWithDriver: driver => (
+                    bounds       <- ((polymorphic math geometry) Rectangle) W: 0 H: 0.
                     handMorph    <- (((polymorphic morphs) repo system) Hand) Driver: driver.
                     desktopMorph <- (((polymorphic morphs) repo system) Desktop) New.
                   ^ self
@@ -36,6 +40,7 @@ std Module
                 desktop => desktopMorph payload;
 
                 extent: extent => (
+                    bounds <- ((polymorphic math geometry) Rectangle) Extent: extent.
                     desktop extent: extent.
                   ^ self
                 );

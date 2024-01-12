@@ -35,12 +35,6 @@
 
             extent: extent => (
                 session extent: extent.
-
-                "This is a bit of a hack, but it is the only way to access Morph instances from the Kernel."
-                rootMorph instancesDo: [ :each |
-                    each changeBounds: (((polymorphic core morph) BoundsInfo) Extent: extent).
-                ].
-                
               ^ self
             );
 
@@ -102,7 +96,7 @@
 
                 rootPaper clear.
                 (rootPaper stream) withGraphicsDo: [ :graphics |
-                    graphics at: ((polymorphic math geometry) Point Origin)
+                    graphics in: (session bounds)
                             put: rootMorph.
                 ].
                 

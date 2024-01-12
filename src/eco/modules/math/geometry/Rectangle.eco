@@ -68,9 +68,13 @@
     };
 
     Origin: origin Corner: corner => (Rectangle clone) initWithOrigin: origin Corner: corner;
-    Origin: origin W: w H: h => (Rectangle clone) initWithOrigin: origin Corner: (geometry Point X: (origin x + w) Y: (origin y + h));
+    Origin: origin W: w H: h      => (Rectangle clone) initWithOrigin: origin Corner: (geometry Point X: (origin x + w) Y: (origin y + h));
     Origin: origin Extent: extent => (Rectangle clone) initWithOrigin: origin Corner: origin + extent;
 
     X: x Y: y W: w H: h      => Origin: (geometry Point X: x Y: y) Corner: (geometry Point X: (x + w) Y: (y + h));
     X: x Y: y Extent: extent => Origin: (geometry Point X: x Y: y) Extent: extent;
+
+    W: w H: h => X: 0 Y: 0 W: w H: h;
+
+    Extent: extent => W: (extent x) H: (extent y);
 }
