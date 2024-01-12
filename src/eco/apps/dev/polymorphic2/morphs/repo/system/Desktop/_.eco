@@ -5,7 +5,6 @@ std Module
                     ~ name: 'a desktop morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                         stream withGraphicsDo: [ :graphics |
-                            (std io out << 'Redrawing desktop! ' << graphics maybeExtent) newline commit.
                             ((kernel payload) windows) forEach: [ :window :winbounds |
                                 graphics in: winbounds put: window.
                             ].
@@ -53,7 +52,6 @@ std Module
 
                 extent: e => (
                     extent <- e.
-                    (std io out << 'Extent changed: ' << e) newline commit.
                     changed.
                   ^ self
                 );
