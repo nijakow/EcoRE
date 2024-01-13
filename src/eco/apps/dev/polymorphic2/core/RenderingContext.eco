@@ -1,0 +1,22 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            theme,
+        |
+
+        {
+            initWithTheme: t => (
+                theme <- t.
+              ^ self
+            );
+
+            writeOn: w => w << 'a rendering context';
+        }
+    };
+
+    Theme: theme => (Instance clone) initWithTheme: theme;
+}

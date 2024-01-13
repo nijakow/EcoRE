@@ -8,5 +8,7 @@ std Module
     world   :: (here / 'world'   / '_.eco') importIn: $package;
     event   :: (here / 'event'   / '_.eco') importIn: $package;
 
+    RenderingContext :: (here / 'RenderingContext.eco') importIn: $package;
+
     NewBehavior => (morph behavior building) Builder new;
 }

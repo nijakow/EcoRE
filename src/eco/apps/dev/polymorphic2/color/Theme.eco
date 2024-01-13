@@ -26,6 +26,8 @@
             mainAccentColor:  c => mainAccentColor <- c;
             textColor:        c => textColor <- c;
             inverseTextColor: c => inverseTextColor <- c;
+
+            writeOn: w => w << 'a polymorphic color theme';
         }
     };
 
