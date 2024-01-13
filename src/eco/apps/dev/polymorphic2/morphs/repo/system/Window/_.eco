@@ -6,13 +6,23 @@ std Module
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                         stream withGraphicsDo: [ :graphics |
                             (graphics maybeBounds) yes: [ :bounds |
-                                graphics at: ((polymorphic math geometry) Point Origin)
+                                |
+                                    origin <- (polymorphic math geometry) Point Origin
+                                |
+                                graphics at: (origin)
                                         put: (((polymorphic core objects) FilledRectangle)
                                                     X: 0
                                                     Y: 0
                                                     W: (bounds w)
                                                     H: (bounds h)
-                                                Color: ((graphics context) theme) mainAccentColor).
+                                                Color: ((graphics context) theme) baseColor).
+                                graphics at: (origin)
+                                        put: (((polymorphic core objects) Rectangle)
+                                                    X: 0
+                                                    Y: 0
+                                                    W: (bounds w)
+                                                    H: (bounds h)
+                                                Color: ((graphics context) theme) mainAccentColor). 
                             ].
                             ((kernel payload) child) yes: [ :c | stream emit: c ].
                         ].
