@@ -35,7 +35,7 @@
 
                 (result shouldStop?) -> [ stopper value ].
 
-                morph childrenDo: [ :each |
+                morph childrenReverseDo: [ :each |
                     beginDispatch: event AtX: x Y: y Morph: each Stopper: stopper.
                 ].
 

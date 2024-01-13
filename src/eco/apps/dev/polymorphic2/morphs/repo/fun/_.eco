@@ -93,7 +93,7 @@ std Module
                                 PointMorph <- ((polymorphic morphs) repo fun) TestMorph3_Point
                             |
 
-                            | n <- 2, r <- 50, delta <- #'ecosphere.ecore.time.since_start'() |
+                            | n <- 4, r <- 50, delta <- #'ecosphere.ecore.time.since_start'() |
 
                             stream withRoom: ((polymorphic math geometry) Point X: r * 2 Y: r * 2) ForGraphicsDo: [ :graphics |
                                 1 to: n do: [ :i |

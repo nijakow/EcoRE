@@ -132,6 +132,11 @@
               ^ self
             );
 
+            childrenReverseDo: block => (
+                paper morphsReverseDo: block.
+              ^ self
+            );
+
             protected internalRedraw => (
                 kernel drawOnStream: (paper stream) Instance: self.
               ^ self

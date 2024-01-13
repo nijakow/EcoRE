@@ -62,6 +62,15 @@
               ^ self
             );
 
+            presentationsReverseDo: block => presentations reverseDo: block;
+            morphsReverseDo: block => (
+                presentationsReverseDo: [ :presentation |
+                    (presentation morphPresentation?)
+                      ~ if: [ block value(presentation morph) ]
+                ].
+              ^ self
+            );
+
             lookupKernel: kernel => (
                 cachedMorphs forEach: [ :i :each |
                     (each kernel == kernel) if: [
