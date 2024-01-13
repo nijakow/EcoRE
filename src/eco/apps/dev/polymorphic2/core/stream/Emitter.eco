@@ -9,18 +9,22 @@
         |
             paper,
             origin,
-            maybeExtent
+            maybeContext,
+            maybeExtent,
         |
 
         {
             protected polymorphic <- $package;
 
-            paper: p origin: o maybeExtent: e => (
-                paper       <- p.
-                origin      <- o.
-                maybeExtent <- e.
+            paper: p Origin: o MaybeExtent: e MaybeContext: c => (
+                paper        <- p.
+                origin       <- o.
+                maybeContext <- c.
+                maybeExtent  <- e.
               ^ self
             );
+
+            context => maybeContext yes;
 
             extent => maybeExtent yes;
             bounds => (polymorphic math geometry Rectangle) Origin: origin Extent: extent;
@@ -87,8 +91,12 @@
         }
     };
 
-    Paper: paper Origin: origin MaybeExtent: extent => (Instance clone) paper: paper origin: origin maybeExtent: extent;
+    Paper: paper Origin: origin MaybeExtent: extent MaybeContext: context => (Instance clone) paper: paper Origin: origin MaybeExtent: extent MaybeContext: context;
+
+    Paper: paper Origin: origin MaybeExtent: extent => Paper: paper Origin: origin MaybeExtent: extent MaybeContext: No;
     Paper: paper Origin: origin Extent: extent      => Paper: paper Origin: origin MaybeExtent: (Yes: extent);
     Paper: paper Origin: origin                     => Paper: paper Origin: origin MaybeExtent: (paper maybeExtent);
     Paper: paper                                    => Paper: paper Origin: ((polymorphic math geometry Point) Origin);
+
+    Paper: paper MaybeContext: context => Paper: paper Origin: ((polymorphic math geometry Point) Origin) MaybeExtent: (paper maybeExtent) MaybeContext: context;
 }

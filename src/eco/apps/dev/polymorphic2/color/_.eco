@@ -19,7 +19,7 @@ std Module
     };
 
     themes :: Module {
-        Standard <- ($ Theme) New;
+        Default <- ($ Theme) New;
     };
 
     R: r G: g B: b A: a => Color R: r G: g B: b A: a;

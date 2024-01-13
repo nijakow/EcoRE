@@ -5,6 +5,7 @@
     Instance :: Clonable
     {
         |
+            maybeContext       <- No,
             extent             <- No,
             minX               <- 0,
             minY               <- 0,
@@ -19,6 +20,7 @@
             protected polymorphic <- $package;
 
             initWithMaybeExtent: _extent => (
+                maybeContext       <- No.
                 extent             <- _extent.
                 presentations      <- std util newVector.
                 cachedMorphs       <- std util newVector.
@@ -41,7 +43,8 @@
             maybeExtent => extent;
             realExtent  => (polymorphic math geometry Point) X: maxX Y: maxY;
 
-            node: n => node <- n;
+            node:    n => node <- n;
+            context: c => maybeContext <- Yes: c;
 
             resize: newExtent => (
                 extent <- Yes: newExtent.
@@ -149,7 +152,7 @@
               ^ self
             );
 
-            emitter => (polymorphic core stream Emitter) Paper: self;
+            emitter => (polymorphic core stream Emitter) Paper: self MaybeContext: maybeContext;
             stream  => (polymorphic core stream Stream) Emitter: emitter;
 
             renderOn: renderer => (

@@ -23,6 +23,8 @@
               ^ self
             );
 
+            maybeContext => emitter maybeContext;
+
             maybeBounds => (
                 maybeExtent yes: [ :extent |
                   ^ Yes: (((polymorphic math geometry) Rectangle) Origin: origin Extent: extent)

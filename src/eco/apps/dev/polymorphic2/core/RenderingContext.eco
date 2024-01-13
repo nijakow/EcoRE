@@ -9,8 +9,10 @@
         |
 
         {
-            initWithTheme: t => (
-                theme <- t.
+            protected polymorphic <- $package;
+
+            init => (
+                theme <- (polymorphic color themes) Default.
               ^ self
             );
 
@@ -18,5 +20,5 @@
         }
     };
 
-    Theme: theme => (Instance clone) initWithTheme: theme;
+    New => Instance new;
 }

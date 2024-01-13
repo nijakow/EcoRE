@@ -26,6 +26,8 @@
                 rootPaper node: (world node).
                 (world node) paper: rootPaper.
 
+                rootPaper context: ((polymorphic core) RenderingContext) New.
+
               ^ self
             );
 
