@@ -53,6 +53,14 @@ Clonable {
                           ~ add: (((polymorphic morphs) repo system) Window
                                     Child: (((polymorphic morphs) repo core) MarginMorph
                                               Margin: 10
+                                               Child: (((polymorphic morphs) repo fun) TestMorph link)))
+                          ~ add: (((polymorphic morphs) repo system) Window
+                                    Child: (((polymorphic morphs) repo core) MarginMorph
+                                              Margin: 10
+                                               Child: (((polymorphic morphs) repo fun) TestMorph4 link)))
+                          ~ add: (((polymorphic morphs) repo system) Window
+                                    Child: (((polymorphic morphs) repo core) MarginMorph
+                                              Margin: 10
                                                Child: (((polymorphic morphs) repo fun) TestMorph2 link))).
                         added? <- true.
                     ].

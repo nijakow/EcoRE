@@ -234,13 +234,14 @@ std Module
 
                     stream emit: flex.
                 ).
-
+"
                 stream emit: ((((polymorphic morphs) repo fun) TestMorph3) link).
                 stream newline.
                 stream emit: ((((polymorphic morphs) repo fun) TestMorph3_1) link).
                 stream emit: ((((polymorphic morphs) repo fun) TestMorph3_1) link).
                 stream newline.
                 stream emit: ((((polymorphic morphs) repo fun) TestMorph3_1) link).
+"
                     ] bind($package)
                     ~ build;
 }
