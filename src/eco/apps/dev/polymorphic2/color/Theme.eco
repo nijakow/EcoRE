@@ -1,0 +1,33 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            baseColor,
+            mainAccentColor,
+            textColor,
+            inverseTextColor,
+        |
+
+        {
+            protected color <- $package;
+
+            init => (
+                baseColor:        (color) colors Black;
+                mainAccentColor:  (color) colors Gray;
+                textColor:        (color) colors White;
+                inverseTextColor: (color) colors Black;
+              ^ self
+            );
+
+            baseColor:        c => baseColor <- c;
+            mainAccentColor:  c => mainAccentColor <- c;
+            textColor:        c => textColor <- c;
+            inverseTextColor: c => inverseTextColor <- c;
+        }
+    };
+
+    New => Instance new;
+}

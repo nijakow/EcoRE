@@ -2,6 +2,7 @@
 std Module
 {
     Color :: (here / 'Color.eco') importIn: $package;
+    Theme :: (here / 'Theme.eco') importIn: self;
 
     colors :: Module {
         Transparent <- ($ Color) R: 0 G: 0 B: 0 A: 0;
@@ -16,4 +17,11 @@ std Module
 
         Default => Green;
     };
+
+    themes :: Module {
+        Standard <- ($ Theme) New;
+    };
+
+    R: r G: g B: b A: a => Color R: r G: g B: b A: a;
+    R: r G: g B: b      => Color R: r G: g B: b;
 }
