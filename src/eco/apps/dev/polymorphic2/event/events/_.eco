@@ -12,8 +12,9 @@ std Module
     types => (polymorphic event) types;
     bodies :: (here / 'bodies' / '_.eco') importIn: $package;
 
-    AddMorph: morph  => Head: (types AddMorph)  Body: morph;
-    DropMorph: morph => Head: (types DropMorph) Body: morph;
+    AddMorph: morph => Head: (types AddMorph)  Body: morph;
+
+    DropMorph: morph Displacement: displacement => Head: (types DropMorph) Body: ((bodies DropMorph) Morph: morph Displacement: displacement);
 
     MouseClick: info Hand: hand => Head: (types MouseClick) Body: ((bodies MouseClick) Info: info Hand: hand);
 }

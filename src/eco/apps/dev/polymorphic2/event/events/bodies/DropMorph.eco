@@ -1,0 +1,24 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            morph,
+            displacement,
+        |
+
+        {
+            initWithMorph: m Displacement: d => (
+                morph        <- m.
+                displacement <- d.
+              ^ self
+            );
+
+            writeOn: w => w << 'a drop morph event';
+        }
+    };
+
+    Morph: morph Displacement: displacement => (Instance clone) initWithMorph: morph Displacement: displacement;
+}

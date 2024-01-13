@@ -62,9 +62,9 @@
               ^ self
             );
 
-            dropMorph: morph Hand: hand => (
+            dropMorph: morph Hand: hand Displacement: displacement => (
                 |
-                    event <- (polymorphic event events) DropMorph: morph
+                    event <- (polymorphic event events) DropMorph: morph Displacement: displacement
                 |
 
                 dispatch: event AtX: ((hand position) x) Y: ((hand position) y).

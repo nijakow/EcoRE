@@ -15,7 +15,11 @@ std Module
                         kernel changed.
                     ]
                     ~ on: (($package event) predicates DropMorph) do: $[ :context :event |
-                        ((context kernel) payload) openMorph: (event body).
+                        | body <- event body |
+                        ((context kernel) payload)
+                            openMorph: (body morph)
+                                  AtX: (context x) + ((body displacement) x)
+                                    Y: (context y) + ((body displacement) y).
                         (context kernel) changed.
                     ]
                     ~ disposeFunction: $[ :kernel :other |
@@ -62,6 +66,20 @@ std Module
                         newBounds <- (polymorphic math geometry) Rectangle
                                         X: (extent x / 2) - (minBounds w / 2)
                                         Y: (extent y / 2) - (minBounds h / 2)
+                                        W: minBounds w
+                                        H: minBounds h
+                    |
+                    windows at: kernel put: newBounds.
+                    changed.
+                  ^ self
+                );
+
+                openMorph: kernel AtX: x Y: y => (
+                    |
+                        minBounds <- kernel minBounds,
+                        newBounds <- (polymorphic math geometry) Rectangle
+                                        X: x
+                                        Y: y
                                         W: minBounds w
                                         H: minBounds h
                     |

@@ -69,7 +69,7 @@ std Module
                 tryRelease => (
                     grabbedMorph yes: [ :gm |
                         (driver dispatcher)
-                            dropMorph: gm Hand: self. "TODO: Check if the event was handled"
+                            dropMorph: gm Hand: self Displacement: grabbedMorphTranslation. "TODO: Check if the event was handled"
                         grabbedMorph <- No.
                         changed.
                       ^ true
