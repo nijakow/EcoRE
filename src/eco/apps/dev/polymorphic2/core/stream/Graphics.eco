@@ -24,6 +24,7 @@
             );
 
             maybeContext => emitter maybeContext;
+            context      => emitter context;
 
             maybeBounds => (
                 maybeExtent yes: [ :extent |

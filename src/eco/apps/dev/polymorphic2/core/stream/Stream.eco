@@ -29,6 +29,8 @@
             protected bounds => emitter bounds;
 
             maybeContext => emitter maybeContext;
+            context      => emitter context;
+
             maybeExtent  => emitter maybeExtent;
 
             protected graphicsWithOrigin: origin MaybeExtent: extent => (polymorphic core stream Graphics) Emitter: emitter Origin: origin MaybeExtent: extent;

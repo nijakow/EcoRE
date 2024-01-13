@@ -71,7 +71,7 @@
                     paper addOld: presentation.
                 ] no: [
                     |
-                        morph        <- kernel instantiateInBoundsInfo: boundsInfo,
+                        morph        <- kernel instantiateInBoundsInfo: boundsInfo MaybeContext: maybeContext,
                         presentation <- ((polymorphic core paper) presenting MorphPresentation) Morph: morph
                     |
 

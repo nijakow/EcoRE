@@ -15,18 +15,20 @@
         {
             protected polymorphic <- $package;
 
-            initWithKernel: k BoundsInfo: bi Paper: p => (
+            initWithKernel: k BoundsInfo: bi Paper: p MaybeContext: c => (
                 kernel     <- k.
                 boundsInfo <- bi.
                 paper      <- p.
                 node       <- (((polymorphic core morph) tree nodes) MorphNode) Morph: self.
 
                 paper node: node. "Set the paper's node to a MorphNode pointing to us..."
+                c yes: [ :con | paper context: con ]. 
 
               ^ self
             );
 
-            initWithKernel: kernel BoundsInfo: boundsInfo => initWithKernel: kernel BoundsInfo: boundsInfo Paper: ((polymorphic core paper Paper) New);
+            initWithKernel: kernel BoundsInfo: boundsInfo => initWithKernel: kernel BoundsInfo: boundsInfo Paper: ((polymorphic core paper Paper) New) MaybeContext: No;
+            initWithKernel: kernel BoundsInfo: boundsInfo MaybeContext: context => initWithKernel: kernel BoundsInfo: boundsInfo Paper: ((polymorphic core paper Paper) New) MaybeContext: context;
 
             name => kernel name;
 
@@ -171,6 +173,6 @@
         }
     };
 
-    Kernel: kernel BoundsInfo: bounds Paper: paper => (Instance clone) initWithKernel: kernel BoundsInfo: bounds Paper: paper;
-    Kernel: kernel BoundsInfo: bounds              => (Instance clone) initWithKernel: kernel BoundsInfo: bounds;
+    Kernel: kernel BoundsInfo: bounds Paper: paper          => (Instance clone) initWithKernel: kernel BoundsInfo: bounds Paper: paper;
+    Kernel: kernel BoundsInfo: bounds MaybeContext: context => (Instance clone) initWithKernel: kernel BoundsInfo: bounds MaybeContext: context;
 }

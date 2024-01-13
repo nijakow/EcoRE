@@ -12,7 +12,7 @@ std Module
                                                     Y: 0
                                                     W: (bounds w)
                                                     H: (bounds h)
-                                                Color: ((polymorphic color) Color R: 192 G: 128 B: 128)).
+                                                Color: ((graphics context) theme) mainAccentColor).
                             ].
                             ((kernel payload) child) yes: [ :c | stream emit: c ].
                         ].
