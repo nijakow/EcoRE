@@ -49,6 +49,13 @@
       ^ self
     );
 
+    insert: element before: prev => (
+        (find: prev)
+          yes: [ :i | insert: element at: i ]
+           no: [ add: element ].
+      ^ self
+    );
+
     erase: index => (
         | elem <- at: index |
         index to: (size - 2) do: [ :i | at: i put: (at: i + 1) ].

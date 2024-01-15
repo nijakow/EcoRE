@@ -16,6 +16,8 @@
               ^ self
             );
 
+            kernel => morph;
+
             writeOn: w => w << 'a drop morph event';
         }
     };

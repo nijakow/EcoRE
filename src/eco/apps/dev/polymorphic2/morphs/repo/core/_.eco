@@ -18,8 +18,33 @@ std Module
         Behavior <- ($package core) NewBehavior
                       ~ name: 'a flex morph'
                       ~ on: (($package event) predicates AddMorph) do: $[ :kernel :event |
+                            ((kernel state) payload) add: (event body).
+                            kernel changed.
+                        ]
+                      ~ on: (($package event) predicates DropMorph) do: $[ :context :event |
+                            | body <- event body, x <- context x, y <- context y |
+                            (std io out << 'Received drop event! X: ' << x << ' Y: ' << y) newline commit.
+                            [ :break |
+                                (context morph) childrenReverseDo: [ :each |
+                                    (std io out << 'Checking for intersection with ' << each << '...') newline commit.
+                                    ((each bounds) containsX: x Y: y) if: [
+                                        (std io out << 'Yup!') newline commit.
+                                        (std io out << 'Adding at ' << (each kernel) name) newline commit.
+                                        ((kernel state) payload)
+                                            insert: (body kernel)
+                                            before: (each kernel).
+                                        break value.
+                                    ].
+                                ].
+
                                 ((kernel state) payload) add: (event body).
-                                kernel changed.
+                            ] withBreak.
+
+                            kernel changed.
+                        ]
+                      ~ disposeFunction: $[ :kernel :other |
+                            ((kernel state) payload) erase: other.
+                            kernel changed.
                         ]
                       ~ presenter:
                           {
