@@ -84,8 +84,6 @@
                     event <- (polymorphic event events) MouseClick: click Hand: ((driver session) handMorph)
                 |
 
-                (std io out << 'Mouse clicked! ' << x << ' ' << y) newline commit.
-
                 dispatch: event AtX: x Y: y.
 
               ^ self

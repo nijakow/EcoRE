@@ -100,7 +100,7 @@ Clonable {
             );
 
             handleClick: click At: point HandMorph: hand => (
-                updateX: (point x) Y: (point y).        
+                updateX: (point x) Y: (point y).
                 (driver yes) mouseClicked: click.
               ^ true
             );

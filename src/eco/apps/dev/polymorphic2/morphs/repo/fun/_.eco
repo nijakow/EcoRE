@@ -27,9 +27,6 @@ std Module
                                                          Color: (((polymorphic color colors) Red))).
                                 ].
                           ] bind($package)
-                          ~ on: (($package event) predicates MouseClick) do: $[ :a :b |
-                                (std io out << 'Clicked me! ' << a << ' / ' << b) newline commit.
-                          ]
                           ~ build;
     
     TestMorph3 <- ($package core) NewBehavior
