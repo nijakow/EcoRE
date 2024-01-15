@@ -2,4 +2,5 @@
 std Module
 {
     polymorphic :: (here / 'polymorphic' / '_.eco') importIn: ($package app);
+    ui          :: (here / 'ui'          / '_.eco') importIn: $package;
 }
