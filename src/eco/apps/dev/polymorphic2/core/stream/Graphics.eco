@@ -74,6 +74,10 @@
             at: offset put: object => object emitOnGraphics: self At: offset;
             in: bounds put: object => object emitOnGraphics: self In: bounds;
 
+            atOriginPut: object               => at: ((polymorphic math geometry) Point Origin) put: object;
+            atX: x Y: y Put: object           => at: ((polymorphic math geometry) Point X: x Y: y) put: object;
+            inX: x Y: y W: w H: h Put: object => in: ((polymorphic math geometry) Rectangle X: x Y: y W: w H: h) put: object;
+
             writeOn: w => w << 'a graphics stream';
         }
     };
