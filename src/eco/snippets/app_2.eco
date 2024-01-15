@@ -1,0 +1,19 @@
+
+std Module
+{
+    BuildSlot: ui => (
+
+        ui Margin: 12 Child: (
+            ui HFlex(
+                ui Text: 'Hello',
+                ui Spacer
+            )
+
+            "Both work!"
+            
+            ui HFlex
+              ~ add: (ui Text: 'Hello')
+              ~ add: (ui Spacer)
+        )
+    );
+}
