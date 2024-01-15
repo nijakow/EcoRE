@@ -1,7 +1,8 @@
 
 std Module
 {
-    with app = $;
+    framework <- $package;
+    with app  <- ($package app);
 
     core   :: (here / 'core'   / '_.eco') importIn: self;
     color  :: (here / 'color'  / '_.eco') importIn: self;
@@ -21,11 +22,11 @@ std Module
             driver <- ((core world) Driver) New
         |
 
-        driver run.
+        ((driver session) desktop) openMorph: ((framework modules wisp) components Browser) New
+                                         AtX: 0
+                                           Y: 0.
 
-        ((driver world) node) dumpOn: (std io out).
-
-        (framework actions open) ui BuildAndOpen: [ :ui |
+        ((app framework) actions open) ui BuildAndOpen: [ :ui |
             ui Window(450, 450,
                 ui Clipped(
                     (DriverWrapperMorph new) driver: driver

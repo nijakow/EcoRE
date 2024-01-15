@@ -14,4 +14,6 @@ std Module
     VFlex(...) => BuildFlex: (((polymorphic morphs repo) core FlexMorph) Vertical) Elements: (std util newArray(...));
 
     Margin: margin Child: child => ((polymorphic morphs repo) core MarginMorph) Margin: margin Child: child;
+
+    MiniWindow(child) => (((polymorphic morphs) repo system) Window) Child: child;
 }

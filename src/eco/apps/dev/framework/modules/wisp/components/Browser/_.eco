@@ -3,6 +3,11 @@ std Module
 {
     Behavior <- ($package modules polymorphic) NewBehavior
                     ~ name: 'a browser'
+                    ~ presenterFunction: $[ :stream :kernel |
+                            ((kernel payload) current) yes: [ :current |
+                                stream emit: current.
+                            ].
+                      ]
                     ~ build;
     
     State :: Classlike
@@ -10,18 +15,39 @@ std Module
         Instance :: Clonable
         {
             |
+                current <- No,
                 views,
             |
 
             {
+                protected ui <- ($package modules polymorphic) ui;
+
                 init => (
-                    views <- std util newStack.
+                    current <- No.
+                    views   <- std util newStack.
+                    rebuild.
                   ^ self
+                );
+
+                protected current: c => current <- Yes: c;
+
+                rebuild => (
+                    current: (
+                        ui MiniWindow(
+                            ui VFlex(
+                                ui Label: 'Hey!',
+                                ui Label: 'This is a test!'
+                            )
+                        )
+                    )
                 );
 
                 writeOn: w => w << 'a browser state';
             }
         };
+
+        New => Instance new;
     };
 
+    New => Behavior link: (State New);
 }

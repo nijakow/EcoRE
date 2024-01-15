@@ -3,6 +3,6 @@ std Module
 {
     framework <- $package;
 
-    polymorphic :: (here / 'polymorphic' / '_.eco') importIn: ($package app);
+    polymorphic :: (here / 'polymorphic' / '_.eco') importIn: $package;
     wisp        :: (here / 'wisp'        / '_.eco') importIn: self;
 }
