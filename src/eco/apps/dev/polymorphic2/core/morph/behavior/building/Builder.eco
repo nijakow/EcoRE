@@ -38,6 +38,11 @@
               ^ self
             );
 
+            minBoundsFunction: f => (
+                behavior minBoundsFunction: f.
+              ^ self
+            );
+
             name: n => (
                 behavior name: n.
               ^ self

@@ -54,6 +54,7 @@ std Module
                                 ]
                           ].
                       ] bind($package)
+                    ~ minBoundsFunction: $[ :(polymorphic) :kernel | ((polymorphic math geometry) Rectangle W: 250 H: 100) ] bind($package)
                     ~ enableAnimation
                     ~ build;
     

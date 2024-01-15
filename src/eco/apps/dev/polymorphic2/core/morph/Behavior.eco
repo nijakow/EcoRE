@@ -13,6 +13,7 @@
             animated? <- false,
             dispatch? <- true,
             disposeFunction <- No,
+            minBoundsFunction,
         |
         
         {
@@ -26,6 +27,7 @@
                 animated?  <- false.
                 dispatch?  <- true.
                 disposeFunction <- No.
+                minBoundsFunction <- $[ :kernel | ((kernel behavior) presenter) minBoundsOfKernel: kernel ].
               ^ self
             );
 
@@ -35,6 +37,7 @@
             animated: a => animated? <- a;
             dispatch: d => dispatch? <- d;
             disposeFunction: f => disposeFunction <- Yes: f;
+            minBoundsFunction: f => minBoundsFunction <- f;
 
             presenter: p => presenter <- p;
 
