@@ -30,8 +30,6 @@ std Module
                                 (context morph) childrenReverseDo: [ :each |
                                     (std io out << 'Checking for intersection with ' << each << '...') newline commit.
                                     ((each bounds) containsX: x Y: y) if: [
-                                        (std io out << 'Yup!') newline commit.
-                                        (std io out << 'Adding at ' << (each kernel) name) newline commit.
                                         ((kernel state) payload)
                                             insert: (body kernel)
                                             before: (each kernel).
@@ -39,7 +37,7 @@ std Module
                                     ].
                                 ].
 
-                                ((kernel state) payload) add: (event body).
+                                ((kernel state) payload) add: (body kernel).
                             ] withBreak.
 
                             kernel changed.

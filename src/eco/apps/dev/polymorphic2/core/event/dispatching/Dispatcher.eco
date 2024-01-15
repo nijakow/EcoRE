@@ -17,7 +17,7 @@
             );
 
             protected dispatch: event AtX: x Y: y Morph: morph Stopper: stopper => (
-                (std io out << ' - Dispatching event ' << event << ' at ' << x << ' ' << y << ' on ' << morph) newline commit.
+                "(std io out << ' - Dispatching event ' << event << ' at ' << x << ' ' << y << ' on ' << morph) newline commit."
 
                 morph childrenReverseDo: [ :each |
                     beginDispatch: event AtX: x Y: y Morph: each Stopper: stopper.
