@@ -1,5 +1,0 @@
-
-std Module
-{
-    builder :: (here / 'builder' / '_.eco') importIn: self;
-}

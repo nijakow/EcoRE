@@ -1,0 +1,10 @@
+
+std Module
+{
+    protected polymorphic <- $package;
+
+    HFlex => ((polymorphic morphs repo) core FlexMorph) Horizontal;
+    VFlex => ((polymorphic morphs repo) core FlexMorph) Vertical;
+
+    Margin: margin Child: child => ((polymorphic morphs repo) core MarginMorph) Margin: margin Child: child;
+}

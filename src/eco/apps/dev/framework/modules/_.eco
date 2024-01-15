@@ -4,6 +4,5 @@ std Module
     framework <- $package;
 
     polymorphic :: (here / 'polymorphic' / '_.eco') importIn: ($package app);
-    ui          :: (here / 'ui'          / '_.eco') importIn: self;
     wisp        :: (here / 'wisp'        / '_.eco') importIn: self;
 }
