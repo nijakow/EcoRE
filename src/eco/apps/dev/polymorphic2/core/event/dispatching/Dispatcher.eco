@@ -19,6 +19,10 @@
             protected dispatch: event AtX: x Y: y Morph: morph Stopper: stopper => (
                 (std io out << ' - Dispatching event ' << event << ' at ' << x << ' ' << y << ' on ' << morph) newline commit.
 
+                morph childrenReverseDo: [ :each |
+                    beginDispatch: event AtX: x Y: y Morph: each Stopper: stopper.
+                ].
+
                 |
                     behavior <- (morph kernel) behavior,
                     context  <- ((polymorphic core event) dispatching Context)
@@ -35,21 +39,20 @@
 
                 (result shouldStop?) -> [ stopper value ].
 
-                morph childrenReverseDo: [ :each |
-                    beginDispatch: event AtX: x Y: y Morph: each Stopper: stopper.
-                ].
-
               ^ self
             );
 
             protected beginDispatch: event AtX: x Y: y Morph: morph Stopper: stopper => (
                 "(std io out << ' - CHECKING: Dispatching event ' << event << ' at ' << x << ' ' << y << ' on ' << morph << ' with bounds ' << (morph bounds)) newline commit."
+                
                 ((morph bounds) containsX: x Y: y) -> [
-                    dispatch: event
-                         AtX: x - (morph boundsInfo offset) x
-                           Y: y - (morph boundsInfo offset) y
-                       Morph: morph
-                     Stopper: stopper
+                    (((morph kernel) behavior) dispatch?) -> [
+                        dispatch: event
+                            AtX: x - (morph boundsInfo offset) x
+                              Y: y - (morph boundsInfo offset) y
+                          Morph: morph
+                        Stopper: stopper
+                    ].
                 ].
               ^ self
             );

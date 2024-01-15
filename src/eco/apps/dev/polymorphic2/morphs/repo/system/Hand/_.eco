@@ -14,6 +14,7 @@ std Module
                         ].
                     ] bind($package)
                     ~ enableBlessing
+                    ~ disableDispatch
                     ~ build;
 
     State :: Classlike {
