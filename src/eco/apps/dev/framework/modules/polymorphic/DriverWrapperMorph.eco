@@ -53,31 +53,6 @@ Clonable {
                           ~ add: (((polymorphic morphs) repo system) Window
                                     Child: (((polymorphic morphs) repo core) MarginMorph
                                               Margin: 10
-                                               Child: (((polymorphic morphs) repo fun) TestMorph link)))
-                          ~ add: (((polymorphic morphs) repo system) Window
-                                    Child: (((polymorphic morphs) repo core) MarginMorph
-                                              Margin: 10
-                                               Child: (((polymorphic morphs) repo core) FlexMorph Vertical
-                                                        ~ add: (((polymorphic morphs) repo core) FlexMorph Horizontal
-                                                                  ~ add: (((polymorphic morphs) repo core) EmitMorph link: ((polymorphic core objects) FilledCircle Radius: 30)))
-                                                        ~ add: (((polymorphic morphs) repo core) MarginMorph
-                                                                   Margin: 10
-                                                                    Child: (((polymorphic morphs) repo fun) TestMorph link)))))
-                          ~ add: (((polymorphic morphs) repo system) Window
-                                    Child: (((polymorphic morphs) repo core) MarginMorph
-                                              Margin: 10
-                                               Child: (((polymorphic morphs) repo core) EmitMorph link: ((polymorphic core objects) FilledCircle Radius: 25))))
-                          ~ add: (((polymorphic morphs) repo system) Window
-                                    Child: (((polymorphic morphs) repo core) MarginMorph
-                                              Margin: 10
-                                               Child: (((polymorphic morphs) repo core) EmitMorph link: ((polymorphic core objects) FilledCircle Radius: 20))))
-                          ~ add: (((polymorphic morphs) repo system) Window
-                                    Child: (((polymorphic morphs) repo core) MarginMorph
-                                              Margin: 10
-                                               Child: (((polymorphic morphs) repo core) EmitMorph link: ((polymorphic core objects) FilledCircle Radius: 10))))
-                          ~ add: (((polymorphic morphs) repo system) Window
-                                    Child: (((polymorphic morphs) repo core) MarginMorph
-                                              Margin: 10
                                                Child: (((polymorphic morphs) repo fun) TestMorph2 link))).
                         added? <- true.
                     ].
