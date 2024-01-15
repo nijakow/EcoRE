@@ -6,6 +6,7 @@
     {
         |
             baseColor,
+            backgroundColor,
             mainAccentColor,
             textColor,
             inverseTextColor,
@@ -15,14 +16,18 @@
             protected color <- $package;
 
             init => (
-                baseColor:        (color) colors Black;
-                mainAccentColor:  (color) colors Gray;
-                textColor:        (color) colors White;
-                inverseTextColor: (color) colors Black;
+                baseColor:        (color) colors Black.
+                backgroundColor:  (color) colors DarkGray.
+                mainAccentColor:  (color) colors Gray.
+                textColor:        (color) colors White.
+                inverseTextColor: (color) colors Black.
               ^ self
             );
 
+            desktopColor => baseColor;
+
             baseColor:        c => baseColor <- c;
+            backgroundColor:  c => backgroundColor <- c;
             mainAccentColor:  c => mainAccentColor <- c;
             textColor:        c => textColor <- c;
             inverseTextColor: c => inverseTextColor <- c;

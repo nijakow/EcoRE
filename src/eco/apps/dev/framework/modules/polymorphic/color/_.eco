@@ -7,9 +7,10 @@ std Module
     colors :: Module {
         Transparent <- ($ Color) R: 0 G: 0 B: 0 A: 0;
 
-        Black <- ($ Color) R:   0 G:   0 B:   0;
-        Gray  <- ($ Color) R: 128 G: 128 B: 128;
-        White <- ($ Color) R: 255 G: 255 B: 255;
+        Black    <- ($ Color) R:   0 G:   0 B:   0;
+        DarkGray <- ($ Color) R:  32 G:  32 B:  32;
+        Gray     <- ($ Color) R: 128 G: 128 B: 128;
+        White    <- ($ Color) R: 255 G: 255 B: 255;
 
         Red   <- ($ Color) R: 255 G:   0 B:   0;
         Green <- ($ Color) R:   0 G: 255 B:   0;

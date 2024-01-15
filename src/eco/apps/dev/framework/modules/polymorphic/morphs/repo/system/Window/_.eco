@@ -19,7 +19,7 @@ std Module
                                                             Y: 0
                                                             W: (bounds w)
                                                             H: (bounds h)
-                                                        Color: ((graphics context) theme) baseColor).
+                                                        Color: ((graphics context) theme) backgroundColor).
                             graphics atOriginPut: (((polymorphic core objects) Rectangle)
                                                             X: 0
                                                             Y: 0

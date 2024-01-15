@@ -11,6 +11,20 @@ std Module
                             ~ presenterFunction: $[ :stream :kernel | ((kernel state) payload) value(stream, kernel) ]
                             ~ build;
 
+    LabelMorph :: Module
+    {
+        protected polymorphic <- $package;
+
+        Behavior <- ($package core) NewBehavior
+                      ~ name: 'a label morph'
+                      ~ presenterFunction: $[ :stream :kernel |
+                            stream emit: ((kernel state) payload).
+                        ]
+                      ~ build;
+
+        Text: text => Behavior link: (((polymorphic core objects) Text) Caption: text);
+    };
+
     FlexMorph :: Module
     {
         protected polymorphic <- $package;

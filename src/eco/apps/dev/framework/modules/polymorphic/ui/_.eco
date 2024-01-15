@@ -8,6 +8,8 @@ std Module
       ^ flex
     );
 
+    Label: text => ((polymorphic morphs repo) core LabelMorph) Text: text;
+
     HFlex(...) => BuildFlex: (((polymorphic morphs repo) core FlexMorph) Horizontal) Elements: (std util newArray(...));
     VFlex(...) => BuildFlex: (((polymorphic morphs repo) core FlexMorph) Vertical) Elements: (std util newArray(...));
 

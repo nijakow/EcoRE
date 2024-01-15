@@ -11,7 +11,7 @@ std Module
                                                             Y: 0
                                                             W: (extent x)
                                                             H: (extent y)
-                                                        Color: ((graphics context) theme) baseColor).
+                                                        Color: ((graphics context) theme) desktopColor).
                             ((kernel payload) windows) forEach: [ :window :offset |
                                 graphics at: offset put: window.
                             ].

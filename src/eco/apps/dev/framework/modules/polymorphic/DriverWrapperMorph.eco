@@ -51,6 +51,10 @@ Clonable {
                                               Margin: 10
                                                Child: (((polymorphic morphs) repo fun) NewTestMorph3)))
                           ~ add: (((polymorphic morphs) repo system) Window
+                                    Child: ((polymorphic ui)
+                                              Margin: 10
+                                               Child: (polymorphic ui Label: 'Fidibumms!')))
+                          ~ add: (((polymorphic morphs) repo system) Window
                                     Child: (((polymorphic morphs) repo core) MarginMorph
                                               Margin: 10
                                                Child: (((polymorphic morphs) repo fun) TestMorph2 link))).
