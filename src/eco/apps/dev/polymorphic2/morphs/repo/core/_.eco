@@ -22,8 +22,10 @@ std Module
                             kernel changed.
                         ]
                       ~ on: (($package event) predicates DropMorph) do: $[ :context :event |
-                            | body <- event body, x <- context x, y <- context y |
+                            | kernel <- context kernel, body <- event body, x <- context x, y <- context y |
+                            
                             (std io out << 'Received drop event! X: ' << x << ' Y: ' << y) newline commit.
+                            
                             [ :break |
                                 (context morph) childrenReverseDo: [ :each |
                                     (std io out << 'Checking for intersection with ' << each << '...') newline commit.
@@ -43,7 +45,7 @@ std Module
                             kernel changed.
                         ]
                       ~ disposeFunction: $[ :kernel :other |
-                            ((kernel state) payload) erase: other.
+                            ((kernel state) payload) remove: other.
                             kernel changed.
                         ]
                       ~ presenter:
@@ -143,7 +145,11 @@ std Module
                       ^ self
                     );
 
-                    add: morph => morphs add: morph;
+                    add:    morph => morphs add:    morph;
+                    remove: morph => morphs remove: morph;
+
+                    insert: morph before: other => morphs insert: morph before: other;
+                    insert: morph after:  other => morphs insert: morph after:  other;
                 }
             };
 
