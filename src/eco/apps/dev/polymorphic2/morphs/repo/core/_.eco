@@ -24,11 +24,8 @@ std Module
                       ~ on: (($package event) predicates DropMorph) do: $[ :context :event |
                             | kernel <- context kernel, body <- event body, x <- context x, y <- context y |
                             
-                            (std io out << 'Received drop event! X: ' << x << ' Y: ' << y) newline commit.
-                            
                             [ :break |
                                 (context morph) childrenReverseDo: [ :each |
-                                    (std io out << 'Checking for intersection with ' << each << '...') newline commit.
                                     ((each bounds) containsX: x Y: y) if: [
                                         ((kernel state) payload)
                                             insert: (body kernel)
