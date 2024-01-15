@@ -3,8 +3,13 @@ std Module
 {
     protected polymorphic <- $package;
 
-    HFlex => ((polymorphic morphs repo) core FlexMorph) Horizontal;
-    VFlex => ((polymorphic morphs repo) core FlexMorph) Vertical;
+    protected BuildFlex: flex Elements: elements => (
+        elements do: [ :each | flex add: each ].
+      ^ flex
+    );
+
+    HFlex(...) => BuildFlex: (((polymorphic morphs repo) core FlexMorph) Horizontal) Elements: (std util newArray(...));
+    VFlex(...) => BuildFlex: (((polymorphic morphs repo) core FlexMorph) Vertical) Elements: (std util newArray(...));
 
     Margin: margin Child: child => ((polymorphic morphs repo) core MarginMorph) Margin: margin Child: child;
 }
