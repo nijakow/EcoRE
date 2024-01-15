@@ -1,0 +1,5 @@
+
+std Module
+{
+    polymorphic :: (here / '..' / '..' / 'polymorphic2' / '_.eco') importIn: ($package app);
+}

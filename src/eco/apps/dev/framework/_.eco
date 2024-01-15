@@ -1,0 +1,8 @@
+
+std Module
+{
+    app <- $package;
+
+    actions :: (here / 'actions' / '_.eco') importIn: self;
+    modules :: (here / 'modules' / '_.eco') importIn: self;
+}
