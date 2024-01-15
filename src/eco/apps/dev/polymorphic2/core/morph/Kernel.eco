@@ -105,6 +105,7 @@
             );
 
             changed => (
+                clearCaches.
                 morphs do: [ :each | each kernelChangeCallback ].
               ^ self
             );
