@@ -9,8 +9,7 @@ std Module
                             |
 
                             stream withRoom: extent ForGraphicsDo: [ :graphics |
-                                graphics in: (((polymorphic math geometry) Point Origin) extent: extent)
-                                        put: (kernel payload) desktopMorph.
+                                graphics inX: 0 Y: 0 Extent: extent Put: (kernel payload) desktopMorph.
                                 graphics at: (kernel payload) hand position
                                         put: (kernel payload) handMorph.
                             ].

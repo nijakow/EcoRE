@@ -6,13 +6,12 @@ std Module
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                         stream withGraphicsDo: [ :graphics |
                             | extent <- (kernel payload) extent |
-                            graphics at: ((polymorphic math geometry) Point Origin)
-                                    put: (((polymorphic core objects) FilledRectangle)
-                                                X: 0
-                                                Y: 0
-                                                W: (extent x)
-                                                H: (extent y)
-                                            Color: ((graphics context) theme) baseColor).
+                            graphics atOriginPut:(((polymorphic core objects) FilledRectangle)
+                                                            X: 0
+                                                            Y: 0
+                                                            W: (extent x)
+                                                            H: (extent y)
+                                                        Color: ((graphics context) theme) baseColor).
                             ((kernel payload) windows) forEach: [ :window :offset |
                                 graphics at: offset put: window.
                             ].
