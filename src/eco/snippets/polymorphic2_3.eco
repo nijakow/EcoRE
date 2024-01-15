@@ -1,0 +1,26 @@
+
+std Module
+{
+
+    WithRoom: room ForGraphicsOnStream: stream Do: block => (
+        "..."
+    );
+
+    drawOn: stream Kernel: kernel => (
+
+        WithRoom: (X: 100 Y: 100) ForGraphicsDo: [ :graphics |
+            Draw: (X: x Y: y W: w H: h) On: stream.
+
+            Draw: (Circle R: 15) On: stream.
+
+            At: (X:  5 Y:  7) Draw: (Circle R: 15) On: stream.
+            At: (X: 19 Y: 32) Draw: (Text: 'Hello') On: stream.
+        ]
+    );
+
+    rebuildOn: ui => (
+        ui VFlex
+          ~ add: (SlotMorph For: #'a' Mirror: mirror)
+          ~ add: "..."
+    )
+}
