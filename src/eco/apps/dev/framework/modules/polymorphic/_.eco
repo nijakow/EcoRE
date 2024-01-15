@@ -22,10 +22,6 @@ std Module
             driver <- ((core world) Driver) New
         |
 
-        ((driver session) desktop) openMorph: ((framework modules wisp) components Browser) New
-                                         AtX: 0
-                                           Y: 0.
-
         ((app framework) actions open) ui BuildAndOpen: [ :ui |
             ui Window(450, 450,
                 ui Clipped(
