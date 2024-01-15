@@ -13,8 +13,8 @@ std Module
                                                 W: (extent x)
                                                 H: (extent y)
                                             Color: ((graphics context) theme) baseColor).
-                            ((kernel payload) windows) forEach: [ :window :winbounds |
-                                graphics in: winbounds put: window.
+                            ((kernel payload) windows) forEach: [ :window :offset |
+                                graphics at: offset put: window.
                             ].
                         ].
                     ] bind($package)
@@ -71,13 +71,11 @@ std Module
                 openMorph: kernel => (
                     |
                         minBounds <- kernel minBounds,
-                        newBounds <- (polymorphic math geometry) Rectangle
+                        newOffset <- (polymorphic math geometry) Point
                                         X: (extent x / 2) - (minBounds w / 2)
                                         Y: (extent y / 2) - (minBounds h / 2)
-                                        W: minBounds w
-                                        H: minBounds h
                     |
-                    windows at: kernel put: newBounds.
+                    windows at: kernel put: newOffset.
                     changed.
                   ^ self
                 );
@@ -85,13 +83,11 @@ std Module
                 openMorph: kernel AtX: x Y: y => (
                     |
                         minBounds <- kernel minBounds,
-                        newBounds <- (polymorphic math geometry) Rectangle
+                        newOffset <- (polymorphic math geometry) Point
                                         X: x
                                         Y: y
-                                        W: minBounds w
-                                        H: minBounds h
                     |
-                    windows at: kernel put: newBounds.
+                    windows at: kernel put: newOffset.
                     changed.
                   ^ self
                 );
