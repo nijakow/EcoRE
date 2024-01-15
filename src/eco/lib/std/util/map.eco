@@ -39,6 +39,8 @@
         keys => keysInto: (std util newSet);
         values => valuesInto: (std util newSet);
 
+        size => pairs size;
+
         writeOn: w => w << pairs;
     };
 }
