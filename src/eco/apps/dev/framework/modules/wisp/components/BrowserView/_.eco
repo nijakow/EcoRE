@@ -1,0 +1,24 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            objectMirror,
+            openShells,
+        |
+
+        {
+            initWithMirror: mirror => (
+                objectMirror <- mirror.
+                openShells   <- std util newVector.
+              ^ self
+            );
+
+            writeOn: w => w << 'a browser view';
+        }
+    };
+
+    Mirror: mirror => (Instance clone) initWithMirror: mirror;
+}

@@ -1,5 +1,7 @@
 
 std Module
 {
-    components :: (here / 'components' / '_.eco') importIn: $package;
+    modules <- $package;
+
+    components :: (here / 'components' / '_.eco') importIn: self;
 }

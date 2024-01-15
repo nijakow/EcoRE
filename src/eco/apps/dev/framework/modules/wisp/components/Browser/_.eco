@@ -1,18 +1,24 @@
 
 std Module
 {
-    Behavior <- ($package polymorphic) NewBehavior
-                    ~ name: 'a browser';
+    Behavior <- ($package modules polymorphic) NewBehavior
+                    ~ name: 'a browser'
+                    ~ build;
     
     State :: Classlike
     {
         Instance :: Clonable
         {
             |
-                history,
+                views,
             |
 
             {
+                init => (
+                    views <- std util newStack.
+                  ^ self
+                );
+
                 writeOn: w => w << 'a browser state';
             }
         };
