@@ -5,25 +5,31 @@ std Module
                     ~ name: 'a window morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                         stream withGraphicsDo: [ :graphics |
-                            (graphics maybeBounds) yes: [ :bounds |
-                                |
-                                    origin <- (polymorphic math geometry) Point Origin
-                                |
-                                graphics at: (origin)
-                                        put: (((polymorphic core objects) FilledRectangle)
-                                                    X: 0
-                                                    Y: 0
-                                                    W: (bounds w)
-                                                    H: (bounds h)
-                                                Color: ((graphics context) theme) baseColor).
-                                graphics at: (origin)
-                                        put: (((polymorphic core objects) Rectangle)
-                                                    X: 0
-                                                    Y: 0
-                                                    W: (bounds w)
-                                                    H: (bounds h)
-                                                Color: ((graphics context) theme) mainAccentColor). 
-                            ].
+                            |
+                                bounds <- (graphics maybeBounds)
+                                              yes: [ :b | b ]
+                                               no: [ (((polymorphic math geometry) Rectangle)
+                                                        Extent: (((kernel payload) child)
+                                                                   yes: [ :c | c minExtent ]
+                                                                    no: [ ((polymorphic math geometry) Point X: 50 Y: 50) ])) ],
+                                origin <- (polymorphic math geometry) Point Origin
+                            |
+
+                            graphics at: (origin)
+                                    put: (((polymorphic core objects) FilledRectangle)
+                                                X: 0
+                                                Y: 0
+                                                W: (bounds w)
+                                                H: (bounds h)
+                                            Color: ((graphics context) theme) baseColor).
+                            graphics at: (origin)
+                                    put: (((polymorphic core objects) Rectangle)
+                                                X: 0
+                                                Y: 0
+                                                W: (bounds w)
+                                                H: (bounds h)
+                                            Color: ((graphics context) theme) mainAccentColor).
+                            
                             ((kernel payload) child) yes: [ :c | stream emit: c ].
                         ].
                     ] bind($package)

@@ -11,6 +11,7 @@ std Module
 
     DriverWrapperMorph :: (here / 'DriverWrapperMorph.eco') importIn: self;
 
+    DefaultRenderingContext <- ((self) core RenderingContext) New;
 
     Test => (
         |

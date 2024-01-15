@@ -20,7 +20,7 @@
             protected polymorphic <- $package;
 
             initWithMaybeExtent: _extent => (
-                maybeContext       <- No.
+                maybeContext       <- Yes: (polymorphic DefaultRenderingContext).
                 extent             <- _extent.
                 presentations      <- std util newVector.
                 cachedMorphs       <- std util newVector.
