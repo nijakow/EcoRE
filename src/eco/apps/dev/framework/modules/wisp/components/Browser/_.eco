@@ -1,0 +1,21 @@
+
+std Module
+{
+    Behavior <- ($package polymorphic) NewBehavior
+                    ~ name: 'a browser';
+    
+    State :: Classlike
+    {
+        Instance :: Clonable
+        {
+            |
+                history,
+            |
+
+            {
+                writeOn: w => w << 'a browser state';
+            }
+        };
+    };
+
+}

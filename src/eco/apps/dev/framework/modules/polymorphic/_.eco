@@ -13,6 +13,8 @@ std Module
 
     DefaultRenderingContext <- ((self) core RenderingContext) New;
 
+    NewBehavior => core NewBehavior;
+
     Test => (
         |
             driver <- ((core world) Driver) New
