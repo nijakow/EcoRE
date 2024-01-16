@@ -36,10 +36,19 @@ std Module
                 rebuild => (
                     current: (
                         ui VFlex(
-                            (views empty?)
-                                  if: [ ui Label: 'Nothing to show' ]
-                                else: [ (views top) morph           ],
-                            ui Label: '<--'
+                            ui Framed(
+                                ui Margin: 5 Child: (
+                                    (views empty?)
+                                          if: [ ui Label: 'Nothing to show' ]
+                                        else: [ (views top) morph           ],
+                                )
+                            ),
+                            ui HFlex(
+                                ui Framed(ui Margin: 5 Child: ui Label('<--')),
+                                ui Framed(ui Margin: 5 Child: ui Label('Grab')),
+                                ui Framed(ui Margin: 5 Child: ui Label('Proxy')),
+                                ui Framed(ui Margin: 5 Child: ui Label('Shell')),
+                            )
                         )
                     ).
                   ^ self

@@ -9,11 +9,15 @@ std Module
     );
 
     Label: text => ((polymorphic morphs repo) core LabelMorph) Text: text;
+    Label(text) => Label: text;
 
     HFlex(...) => BuildFlex: (((polymorphic morphs repo) core FlexMorph) Horizontal) Elements: (std util newArray(...));
     VFlex(...) => BuildFlex: (((polymorphic morphs repo) core FlexMorph) Vertical) Elements: (std util newArray(...));
 
     Margin: margin Child: child => ((polymorphic morphs repo) core MarginMorph) Margin: margin Child: child;
+
+    Framed: child => ((polymorphic morphs repo) core FrameMorph) Child: child;
+    Framed(child) => Framed: child;
 
     MiniWindow(child) => (((polymorphic morphs) repo system) Window) Child: child;
 }
