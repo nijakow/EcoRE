@@ -87,7 +87,7 @@
 
                 sw << object.
 
-                self emit: ((polymorphic core objects Text) Caption: (sw build)).
+                self emit: ((polymorphic core objects Text) Caption: (sw build) Color: ((context theme) textColor)).
 
               ^ self
             );

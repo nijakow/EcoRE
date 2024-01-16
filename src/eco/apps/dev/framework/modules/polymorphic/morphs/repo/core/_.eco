@@ -17,12 +17,19 @@ std Module
 
         Behavior <- ($package core) NewBehavior
                       ~ name: 'a label morph'
-                      ~ presenterFunction: $[ :stream :kernel |
-                            stream emit: ((kernel state) payload).
-                        ]
+                      ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
+                            |
+                                caption <- ((kernel state) payload),
+                                color   <- ((stream context) theme) textColor,
+                                text    <- ((polymorphic core objects) Text)
+                                                Caption: caption
+                                                  Color: color
+                            |
+                            stream emit: text.
+                        ] bind($package)
                       ~ build;
 
-        Text: text => Behavior link: (((polymorphic core objects) Text) Caption: text);
+        Text: text => Behavior link: text;
     };
 
     FlexMorph :: Module
@@ -271,6 +278,7 @@ std Module
                                     |
                                         rect <- (polymorphic core objects) Rectangle
                                                     Bounds: (origin extent: extent)
+                                                     Color: ((graphics context) theme) lineColor
                                     |
                                     graphics at: origin put: child.
                                     graphics at: origin put: rect.

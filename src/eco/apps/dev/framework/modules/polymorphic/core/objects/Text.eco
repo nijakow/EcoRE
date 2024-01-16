@@ -7,21 +7,25 @@
         with inherited DrawObject <- $package;
         
         |
+            bounds,
             text,
-            bounds
+            color,
         |
 
         {
-            initWithCaption: caption => (
-                text <- (polymorphic gfx eve) Text: caption.
+            initWithCaption: caption Color: _color => (
+                text   <- (polymorphic gfx eve) Text: caption.
                 bounds <- (polymorphic math geometry Rectangle) X: 0 Y: 0 W: (text width) H: (text height).
+                color  <- _color.
               ^ self
             );
+
+            initWithCaption: caption => initWithCaption: caption Color: ((polymorphic color colors) Gray);
 
             catches: aPoint => bounds containsPoint: aPoint;
 
             renderAt: offset On: renderer => (
-                renderer setR: 255 G: 255 B: 255.
+                color onRenderer: renderer.
                 renderer drawText: text X: (offset x) Y: (offset y).
               ^ self
             );
@@ -30,5 +34,6 @@
         }
     };
 
-    Caption: caption => (Instance clone) initWithCaption: caption;
+    Caption: caption Color: color => (Instance clone) initWithCaption: caption Color: color;
+    Caption: caption              => (Instance clone) initWithCaption: caption;
 }
