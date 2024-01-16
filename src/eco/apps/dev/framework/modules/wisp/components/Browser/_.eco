@@ -33,11 +33,9 @@ std Module
 
                 rebuild => (
                     current: (
-                        ui MiniWindow(
-                            ui VFlex(
-                                ui Label: 'Hey!',
-                                ui Label: 'This is a test!'
-                            )
+                        ui VFlex(
+                            ui Label: 'Hey!',
+                            ui Label: 'This is a test!'
                         )
                     )
                 );
