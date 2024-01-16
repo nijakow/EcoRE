@@ -7,13 +7,29 @@
         |
             objectMirror,
             openShells,
+            maybeMorph,
         |
 
         {
+            protected ui <- ($package modules polymorphic) ui;
+
             initWithMirror: mirror => (
                 objectMirror <- mirror.
                 openShells   <- std util newVector.
+                maybeMorph   <- No.
               ^ self
+            );
+
+            build => (
+                maybeMorph <- Yes: (
+                    ui Label: 'A view'
+                ).
+              ^ self
+            );
+
+            morph => (
+                maybeMorph no: [ build ].
+              ^ maybeMorph yes
             );
 
             writeOn: w => w << 'a browser view';

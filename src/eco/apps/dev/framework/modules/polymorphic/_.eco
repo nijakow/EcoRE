@@ -23,7 +23,7 @@ std Module
         |
 
         ((driver session) desktop)
-            openMorph: (ui MiniWindow(((framework modules wisp) components Browser) New))
+            openMorph: (ui MiniWindow(ui Margin: 10 Child: ((framework modules wisp) components Browser) New))
                   AtX: 0
                     Y: 0.
 

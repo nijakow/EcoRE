@@ -20,11 +20,13 @@ std Module
             |
 
             {
-                protected ui <- ($package modules polymorphic) ui;
+                protected wisp <- $package;
+                protected ui   <- ($package modules polymorphic) ui;
 
                 init => (
                     current <- No.
                     views   <- std util newStack.
+                    views push: ((wisp components BrowserView) Mirror: (std reflect Mirror: 42)).
                     rebuild.
                   ^ self
                 );
@@ -34,10 +36,13 @@ std Module
                 rebuild => (
                     current: (
                         ui VFlex(
-                            ui Label: 'Hey!',
-                            ui Label: 'This is a test!'
+                            (views empty?)
+                                  if: [ ui Label: 'Nothing to show' ]
+                                else: [ (views top) morph           ],
+                            ui Label: '<--'
                         )
-                    )
+                    ).
+                  ^ self
                 );
 
                 writeOn: w => w << 'a browser state';
