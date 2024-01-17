@@ -1,0 +1,32 @@
+
+std Module
+{
+    Layout :: std Trait {
+        flexible?   => false;
+        shrinkWrap? => false;
+
+        selectMin: min Max: max => subclassResponsibility;
+
+        writeOn: w => w << 'a layout';
+    };
+
+    Flexible :: std Singleton {
+        with inherited Layout <- $ Layout;
+
+        flexible? => true;
+
+        selectMin: min Max: max => max;
+
+        writeOn: w => w << 'the flexible layout';
+    };
+
+    ShrinkWrap :: std Singleton {
+        with inherited Layout <- $ Layout;
+
+        shrinkWrap? => true;
+
+        selectMin: min Max: max => min;
+
+        writeOn: w => w << 'the shrink wrap layout';
+    };
+}

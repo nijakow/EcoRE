@@ -58,7 +58,7 @@
               ^ std sys error ThrowMessage: 'Unknown orientation!'
             );
 
-            layoutForOrientation: orientation => ((polymorphic core morph) behavior layouting) ShrinkWrap;
+            layoutForOrientation: orientation => ((polymorphic core morph) behavior layouting) layouts ShrinkWrap;
 
             drawOnStream: stream                    => ( (behavior presenter) drawOn: stream Kernel: self. ^ self );
             drawOnStream: stream Instance: instance => drawOnStream: stream;
