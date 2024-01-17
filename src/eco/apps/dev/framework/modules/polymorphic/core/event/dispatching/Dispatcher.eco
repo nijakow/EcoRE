@@ -48,8 +48,8 @@
                 ((morph bounds) containsX: x Y: y) -> [
                     (((morph kernel) behavior) dispatch?) -> [
                         dispatch: event
-                            AtX: x - (morph boundsInfo offset) x
-                              Y: y - (morph boundsInfo offset) y
+                            AtX: x - (morph placement offset) x
+                              Y: y - (morph placement offset) y
                           Morph: morph
                         Stopper: stopper
                     ].

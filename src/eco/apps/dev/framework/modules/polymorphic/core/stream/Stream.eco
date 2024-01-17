@@ -76,7 +76,7 @@
                                             Y: currentY - (objectMinBounds origin) y
                 |
                 reserveExtentX: (objectMinBounds w) Y: (objectMinBounds h).
-                emitter emitMorph: kernel BoundsInfo: (kernel offsetBy: displacement).
+                emitter emitMorph: kernel Placement: (kernel offsetBy: displacement).
               ^ self
             );
 

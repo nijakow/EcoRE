@@ -57,7 +57,7 @@
             );
 
             at: offset PutMorph: morph => (
-                emitter emitMorph: morph BoundsInfo: (morph offsetBy: (origin + offset)).
+                emitter emitMorph: morph Placement: (morph offsetBy: (origin + offset)).
               ^ self
             );
 

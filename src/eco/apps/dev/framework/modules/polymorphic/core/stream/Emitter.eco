@@ -47,7 +47,7 @@
 
             emitMorph: kernel In: bounds => (
                 |
-                    boundsInfo <- ((polymorphic core morph) BoundsInfo)
+                    placement <- ((polymorphic core morph) Placement)
                                         Bounds: (((polymorphic math geometry) Rectangle)
                                                     X: 0
                                                     Y: 0
@@ -55,27 +55,27 @@
                                                     H: (bounds h))
                                         Offset: (bounds origin)
                 |
-              ^ emitMorph: kernel BoundsInfo: boundsInfo
+              ^ emitMorph: kernel Placement: placement
             );
 
-            emitMorph: kernel BoundsInfo: boundsInfo => (
+            emitMorph: kernel Placement: placement => (
                 (paper lookupKernel: kernel) yes: [ :morph |
-                    morph changeBounds: boundsInfo.
+                    morph changeBounds: placement.
 
                     |
                         presentation <- ((polymorphic core paper) presenting MorphPresentation) Morph: morph
                     |
 
-                    (morph paper) resize: (boundsInfo extent).
+                    (morph paper) resize: (placement extent).
 
                     paper addOld: presentation.
                 ] no: [
                     |
-                        morph        <- kernel instantiateInBoundsInfo: boundsInfo MaybeContext: maybeContext,
+                        morph        <- kernel instantiateWithPlacement: placement MaybeContext: maybeContext,
                         presentation <- ((polymorphic core paper) presenting MorphPresentation) Morph: morph
                     |
 
-                    (morph paper) resize: (boundsInfo extent).
+                    (morph paper) resize: (placement extent).
 
                     paper add: presentation.
                 ].

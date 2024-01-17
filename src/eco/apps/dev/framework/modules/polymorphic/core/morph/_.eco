@@ -1,7 +1,7 @@
 
 std Module
 {
-    BoundsInfo :: (here / 'BoundsInfo.eco') importIn: $package;
+    Placement :: (here / 'Placement.eco') importIn: $package;
 
     Behavior :: (here / 'Behavior.eco') importIn: $package;
     State    :: (here / 'State.eco')    importIn: $package;

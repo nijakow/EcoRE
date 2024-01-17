@@ -23,13 +23,13 @@
             initWithBounds: bounds => initWithBounds: bounds Offset: ((polymorphic math geometry) Point Origin);
             initWithExtent: extent => initWithBounds: (((polymorphic math geometry) Point Origin) extent: extent);
 
-            equalsBoundsInfo: other => (
+            equalsPlacement: other => (
               ^ [ offset equalsPoint: other offset ] and: [ bounds equalsRectangle: other bounds ]
             );
 
             extent => bounds extent;
 
-            writeOn: w => w << 'a bounds info instance';
+            writeOn: w => w << 'a placement';
         }
     };
 
