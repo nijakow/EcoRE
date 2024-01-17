@@ -45,11 +45,17 @@
             protected beginDispatch: event AtX: x Y: y Morph: morph Stopper: stopper => (
                 "(std io out << ' - CHECKING: Dispatching event ' << event << ' at ' << x << ' ' << y << ' on ' << morph << ' with bounds ' << (morph bounds)) newline commit."
                 
-                ((morph bounds) containsX: x Y: y) -> [
+                |
+                    placement <- morph placement,
+                    tx        <- x - ((placement offset) x),
+                    ty        <- y - ((placement offset) y)
+                |
+
+                ((placement bounds) containsX: tx Y: ty) -> [
                     (((morph kernel) behavior) dispatch?) -> [
                         dispatch: event
-                            AtX: x - (morph placement offset) x
-                              Y: y - (morph placement offset) y
+                            AtX: tx
+                              Y: ty
                           Morph: morph
                         Stopper: stopper
                     ].

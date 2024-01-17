@@ -27,6 +27,11 @@ std Module
                                                             H: (bounds h)
                                                         Color: ((graphics context) theme) mainAccentColor).
                             
+                            ((kernel payload) maybeTitleMorphKernel) yes: [ :title |
+                                graphics at: ((polymorphic math geometry) Point X: 0 Y: (title minHeight negate))
+                                        put: title.
+                            ].
+                            
                             ((kernel payload) child) yes: [ :c | stream emit: c ].
                         ].
                     ] bind($package)
@@ -45,16 +50,18 @@ std Module
         Instance :: Clonable
         {
             |
-                maybeMorphKernel <- No,
-                child            <- No,
+                maybeMorphKernel      <- No,
+                child                 <- No,
+                maybeTitleMorphKernel <- No,
             |
 
             {
                 protected polymorphic <- $package;
 
                 init => (
-                    maybeMorphKernel <- No.
-                    child            <- No.
+                    maybeMorphKernel      <- No.
+                    child                 <- No.
+                    maybeTitleMorphKernel <- No.
                   ^ self
                 );
 
@@ -65,7 +72,17 @@ std Module
                   ^ self
                 );
 
-                child: c => child <- Yes: c;
+                child: c => (
+                    child <- Yes: c.
+                    maybeTitleMorphKernel <- Yes: (
+                        (polymorphic ui) Framed(
+                            (polymorphic ui) Margin: 5 Child: (
+                                (polymorphic ui) Label: (c name)
+                            )
+                        )
+                    ).
+                  ^ self
+                );
 
                 writeOn: w => w << 'a desktop';
             }
