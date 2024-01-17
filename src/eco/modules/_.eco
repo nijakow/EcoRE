@@ -106,14 +106,27 @@
                     eve SetColorRGB(255, 255, 255).
 
                     |
-                        a1 <- (time * 250) asInt,
-                        a2 <- a1 + 90,
-                        r  <- 100
+                        a1    <- (time * 250) asInt,
+                        a2    <- a1 + 90,
+                        r     <- 100,
+                        textX <- (eve CurrentWidth / 2) - (centerTextWidth / 2),
+                        textY <- (eve CurrentHeight / 2) - (centerTextHeight / 2)
                     | 
                     eve DrawArc(eve CurrentWidth / 2, eve CurrentHeight / 2, r, a1, a2).
                     eve DrawArc(eve CurrentWidth / 2, eve CurrentHeight / 2, r, a1 + 180, a2 + 180).
                     
-                    eve DrawText(centerText, (eve CurrentWidth / 2) - (centerTextWidth / 2), (eve CurrentHeight / 2) - (centerTextHeight / 2), centerTextFont).
+                    eve DrawText(centerText, textX, textY, centerTextFont).
+
+                    |
+                        displacement <- (((((time * 1000) asInt) mod: 1000) / 1000.0) * centerTextWidth * 2) asInt,
+                        barWidth     <- (centerTextWidth - displacement),
+                        barX         <- textX + (displacement asInt),
+                        barX2        <- (barX - centerTextWidth),
+                        barY         <- textY + (centerTextHeight) + 2
+                    |
+
+                    (barWidth > 0)  -> [ eve DrawLine(barX, barY, barX + barWidth, barY) ].
+                    (barX2 > textX) -> [ eve DrawLine(textX, barY, barX2, barY)          ].
 
                     |
                         lineCounter <- consoleLines size,
