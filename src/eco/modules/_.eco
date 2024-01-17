@@ -54,7 +54,7 @@
                     eve SetColorRGB(255, 255, 255).
 
                     |
-                        animationFactorComplete <- (time - animationStartTime) / 1.0,
+                        animationFactorComplete <- (time - animationStartTime) asFloat,
                     |
 
                     (animationFactorComplete > 1.0) if: [ ^ self ].
@@ -106,7 +106,7 @@
                     eve SetColorRGB(255, 255, 255).
 
                     |
-                        a1 <- (time * 100) asInt,
+                        a1 <- (time * 250) asInt,
                         a2 <- a1 + 90,
                         r  <- 100
                     | 
