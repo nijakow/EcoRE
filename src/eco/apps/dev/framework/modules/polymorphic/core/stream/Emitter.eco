@@ -8,26 +8,23 @@
     {
         |
             paper,
-            origin,
-            maybeContext,
-            maybeExtent,
         |
 
         {
             protected polymorphic <- $package;
 
-            paper: p Origin: o MaybeExtent: e MaybeContext: c => (
-                paper        <- p.
-                origin       <- o.
-                maybeContext <- c.
-                maybeExtent  <- e.
+            initWithPaper: p => (
+                paper <- p.
               ^ self
             );
 
-            context => maybeContext yes;
+            maybeContext => paper maybeContext;
+            maybeBounds  => paper maybeFixedBounds;
+            maybeExtent  => maybeBounds yes: [ :bounds | Yes: bounds extent ] no: [ No ];
 
-            extent => maybeExtent yes;
-            bounds => (polymorphic math geometry Rectangle) Origin: origin Extent: extent;
+            context => maybeContext yes;
+            extent  => maybeExtent  yes;
+            bounds  => maybeBounds  yes;
 
             emitDrawable: drawable In: bounds => (
                 | presentation <- (polymorphic core paper presenting DrawablePresentation) Object: drawable Bounds: bounds |
@@ -83,7 +80,7 @@
             );
 
             claimBounds: bounds => (
-                paper claimBounds: (bounds translateBy: origin).
+                paper claimBounds: bounds.
               ^ self
             );
 
@@ -91,12 +88,5 @@
         }
     };
 
-    Paper: paper Origin: origin MaybeExtent: extent MaybeContext: context => (Instance clone) paper: paper Origin: origin MaybeExtent: extent MaybeContext: context;
-
-    Paper: paper Origin: origin MaybeExtent: extent => Paper: paper Origin: origin MaybeExtent: extent MaybeContext: No;
-    Paper: paper Origin: origin Extent: extent      => Paper: paper Origin: origin MaybeExtent: (Yes: extent);
-    Paper: paper Origin: origin                     => Paper: paper Origin: origin MaybeExtent: (paper maybeExtent);
-    Paper: paper                                    => Paper: paper Origin: ((polymorphic math geometry Point) Origin);
-
-    Paper: paper MaybeContext: context => Paper: paper Origin: ((polymorphic math geometry Point) Origin) MaybeExtent: (paper maybeExtent) MaybeContext: context;
+    Paper: paper => (Instance clone) initWithPaper: paper;
 }

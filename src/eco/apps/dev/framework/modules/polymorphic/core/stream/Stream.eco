@@ -33,13 +33,15 @@
 
             maybeExtent  => emitter maybeExtent;
 
-            protected graphicsWithOrigin: origin MaybeExtent: extent => (polymorphic core stream Graphics) Emitter: emitter Origin: origin MaybeExtent: extent;
-            protected graphicsInBounds: bounds                       => graphicsWithOrigin: (bounds origin) MaybeExtent: (Yes: (bounds extent));
+            protected graphicsWithOrigin: origin MaybeBounds: maybeBounds => ((polymorphic core stream) Graphics) Emitter: emitter Origin: origin MaybeBounds: maybeBounds;
+            protected graphicsWithOrigin: origin Bounds: bounds           => graphicsWithOrigin: origin MaybeBounds: (Yes: bounds);
+            protected graphicsInMaybeBounds: maybeBounds                  => graphicsWithOrigin: ((polymorphic math geometry) Point Origin) MaybeBounds: maybeBounds;
+            protected graphicsInBounds: bounds                            => graphicsInMaybeBounds: (Yes: bounds);
             
             protected graphicsExtent: extent => (
                 | currentCursor <- cursor |
                 reserveExtent: extent.
-              ^ graphicsInBounds: (currentCursor extent: extent)
+              ^ graphicsWithOrigin: currentCursor Bounds: (((polymorphic math geometry) Rectangle) Extent: extent)
             );
 
             protected reserveExtentX: x Y: y => (
@@ -50,10 +52,10 @@
 
             protected reserveExtent: extent => reserveExtentX: (extent x) Y: (extent y);
 
-            withGraphicsDo: block => block value(graphicsWithOrigin: (emitter origin) MaybeExtent: (emitter maybeExtent));
-            withGraphicsInBounds: bounds Do: block => block value(graphicsInBounds: bounds);
-            withGraphicsAtX: x Y: y W: w H: h Do: block => block value(graphicsInBounds: ((polymorphic math geometry Rectangle) X: x Y: y W: w H: h));
-            withRoom: extent ForGraphicsDo: block  => block value(graphicsExtent: extent);
+            withGraphicsDo: block => block value(graphicsInMaybeBounds: (emitter maybeBounds));
+            withGraphicsInBounds: bounds Do: block => block value(graphicsWithOrigin: (bounds origin) Bounds: ((polymorphic math geometry) Rectangle W: (bounds w) H: (bounds h)));
+            withGraphicsAtX: x Y: y W: w H: h Do: block => block value(graphicsWithOrigin: ((polymorphic math geometry) Point X: x Y: y) Bounds: (((polymorphic math geometry) Rectangle) X: 0 Y: 0 W: w H: h));
+            withRoom: extent ForGraphicsDo: block => block value(graphicsExtent: extent);
 
             emitDrawable: object => (
                 |
@@ -93,7 +95,7 @@
             );
 
             newline => (
-                xOffset <- emitter origin x.
+                xOffset <- 0. "TODO: Different start of line?"
                 yOffset <- yOffset + (nextLineDelta max: minNextLineDelta).
                 nextLineDelta <- 0.
               ^ self
@@ -105,5 +107,5 @@
 
     Emitter: emitter X: x Y: y => (Instance clone) emitter: emitter x: x y: y;
     Emitter: emitter At: point => Emitter: emitter X: (point x) Y: (point y);
-    Emitter: emitter           => Emitter: emitter X: (emitter origin x) Y: (emitter origin y);
+    Emitter: emitter           => Emitter: emitter X: 0 Y: 0;
 }

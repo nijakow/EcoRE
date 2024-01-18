@@ -161,8 +161,8 @@
               ^ self
             );
 
-            emitter => (polymorphic core stream Emitter) Paper: self MaybeContext: maybeContext;
-            stream  => (polymorphic core stream Stream) Emitter: emitter;
+            emitter => ((polymorphic core stream) Emitter) Paper: self;
+            stream  => ((polymorphic core stream) Stream) Emitter: emitter;
 
             renderOn: renderer => (
                 presentations do: [ :each | each renderOn: renderer ].

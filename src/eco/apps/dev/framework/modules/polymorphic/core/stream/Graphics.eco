@@ -7,18 +7,23 @@
         |
             emitter,
             origin,
-            maybeExtent
+            maybeBounds,
+            maybeExtent,
         |
 
         {
             protected polymorphic <- $package;
 
-            emitter: e Origin: o MaybeExtent: me => (
+            emitter: e Origin: o MaybeBounds: mb => (
                 emitter     <- e.
                 origin      <- o.
-                maybeExtent <- me.
-                me yes: [ :extent |
-                    emitter claimBounds: ((polymorphic math geometry Rectangle) Origin: origin Extent: extent).
+                maybeBounds <- mb.
+                maybeExtent <- No.
+                mb yes: [ :bounds |
+                    maybeExtent <- Yes: bounds corner.
+                    emitter claimBounds: (bounds translateBy: origin).
+                ] no: [
+                    maybeExtent <- No.
                 ].
               ^ self
             );
@@ -26,14 +31,7 @@
             maybeContext => emitter maybeContext;
             context      => emitter context;
 
-            maybeBounds => (
-                maybeExtent yes: [ :extent |
-                  ^ Yes: (((polymorphic math geometry) Rectangle) Origin: origin Extent: extent)
-                ].
-              ^ No
-            );
-
-            bounds => (polymorphic math geometry Rectangle) Origin: origin Extent: (maybeExtent yes);
+            bounds => maybeBounds yes;
 
             protected boundsForOffset: offset Drawable: drawable => (
               ^ (polymorphic math geometry Rectangle)
@@ -83,9 +81,5 @@
         }
     };
 
-    Emitter: emitter Origin: origin MaybeExtent: extent => (Instance clone) emitter: emitter Origin: origin MaybeExtent: extent;
-    Emitter: emitter Origin: origin Extent: extent      => Emitter: emitter Origin: origin MaybeExtent: (Yes: extent);
-    Emitter: emitter Origin: origin                     => Emitter: emitter Origin: origin MaybeExtent: No;
-    Emitter: emitter Bounds: bounds                     => Emitter: emitter Origin: (bounds origin) Extent: (bounds extent);
-    Emitter: emitter                                    => Emitter: emitter Origin: (emitter origin) MaybeExtent: (emitter maybeExtent);
+    Emitter: emitter Origin: origin MaybeBounds: maybeBounds => (Instance clone) emitter: emitter Origin: origin MaybeBounds: maybeBounds;
 }

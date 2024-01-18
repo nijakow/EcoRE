@@ -67,9 +67,6 @@ std Module
                 initWithCount: count => (
                     pointList <- std util newVector.
                     1 to: count do: [ :each | pointList add: (((polymorphic morphs) repo fun) TestMorph3_Point) link ].
-
-                    std io out << 'B: ' << ((((polymorphic morphs) repo fun) TestMorph3_Point) link minBounds) ~ newline commit.
-
                   ^ self
                 );
 
