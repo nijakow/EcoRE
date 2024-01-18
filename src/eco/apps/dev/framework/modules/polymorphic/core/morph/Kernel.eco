@@ -49,12 +49,21 @@
                 cachedMinBounds yes: [ :cm | ^ cm ].
               ^ calcMinBounds
             );
-            minWidth => minBounds w;
+            minWidth  => minBounds w;
             minHeight => minBounds h;
             minExtent => minBounds extent;
             minExtentForOrientation: orientation => (
                 (orientation horizontal?) -> [ ^ minWidth  ].
                 (orientation vertical?)   -> [ ^ minHeight ].
+              ^ std sys error ThrowMessage: 'Unknown orientation!'
+            );
+
+            minPositiveWidth  => (minBounds corner) x;
+            minPositiveHeight => (minBounds corner) y;
+            minPositiveExtent => (minBounds corner);
+            minPositiveExtentForOrientation: orientation => (
+                (orientation horizontal?) -> [ ^ minPositiveWidth  ].
+                (orientation vertical?)   -> [ ^ minPositiveHeight ].
               ^ std sys error ThrowMessage: 'Unknown orientation!'
             );
 

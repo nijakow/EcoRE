@@ -74,7 +74,7 @@ std Module
                                 | layout <- morph layoutForOrientation: orientation |
     
                                 (layout flexible?)   -> [ ^ flexSize ].
-                                (layout shrinkWrap?) -> [ ^ morph minExtentForOrientation: orientation ].
+                                (layout shrinkWrap?) -> [ ^ morph minPositiveExtentForOrientation: orientation ].
     
                               ^ std sys error ThrowMessage: 'Unknown layout type'
                             );
@@ -95,8 +95,8 @@ std Module
                                 "Compute the size of the main axis and the cross axis."
                                 morphs do: [ :morph |
                                     |
-                                        morphMainAxisExtent  <- (morph minExtentForOrientation: mainAxisOrientation),
-                                        morphCrossAxisExtent <- (morph minExtentForOrientation: crossAxisOrientation),
+                                        morphMainAxisExtent  <- (morph minPositiveExtentForOrientation: mainAxisOrientation),
+                                        morphCrossAxisExtent <- (morph minPositiveExtentForOrientation: crossAxisOrientation),
                                     |
     
                                     mainAxisSize  <- mainAxisSize + morphMainAxisExtent.
