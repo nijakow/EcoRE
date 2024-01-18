@@ -1,0 +1,26 @@
+
+std Module
+{
+    Behavior <- ($package core) NewBehavior
+                    ~ name: 'a window morph'
+                    ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
+                        | e <- (polymorphic ui) Framed(
+                                    (polymorphic ui) Margin: 2 Child: (
+                                        (polymorphic ui) Label: (kernel payload)
+                                    )
+                                ),
+                          bounds <- e minBounds,
+                        |
+
+                        stream withGraphicsDo: [ :graphics |
+                            graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
+                                                       Bounds: bounds
+                                                        Color: ((graphics context) theme) backgroundColor).
+                        ].
+
+                        stream emit: e.
+                    ] bind($package)
+                    ~ build;
+
+    Caption: caption => Behavior link: (caption);
+}

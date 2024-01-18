@@ -75,11 +75,7 @@ std Module
                 child: c => (
                     child <- Yes: c.
                     maybeTitleMorphKernel <- Yes: (
-                        (polymorphic ui) Framed(
-                            (polymorphic ui) Margin: 2 Child: (
-                                (polymorphic ui) Label: (c name)
-                            )
-                        )
+                        ((polymorphic morphs repo) system WindowTitle) Caption: (c name)
                     ).
                   ^ self
                 );
