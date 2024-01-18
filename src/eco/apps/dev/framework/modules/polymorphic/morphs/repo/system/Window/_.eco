@@ -17,14 +17,14 @@ std Module
                             graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
                                                             X: 0
                                                             Y: 0
-                                                            W: (bounds w)
-                                                            H: (bounds h)
+                                                            W: ((bounds corner) x)
+                                                            H: ((bounds corner) y)
                                                         Color: ((graphics context) theme) backgroundColor).
                             graphics atOriginPut: (((polymorphic core objects) Rectangle)
                                                             X: 0
                                                             Y: 0
-                                                            W: (bounds w)
-                                                            H: (bounds h)
+                                                            W: ((bounds corner) x)
+                                                            H: ((bounds corner) y)
                                                         Color: ((graphics context) theme) mainAccentColor).
                             
                             ((kernel payload) maybeTitleMorphKernel) yes: [ :title |
@@ -76,7 +76,7 @@ std Module
                     child <- Yes: c.
                     maybeTitleMorphKernel <- Yes: (
                         (polymorphic ui) Framed(
-                            (polymorphic ui) Margin: 5 Child: (
+                            (polymorphic ui) Margin: 2 Child: (
                                 (polymorphic ui) Label: (c name)
                             )
                         )
