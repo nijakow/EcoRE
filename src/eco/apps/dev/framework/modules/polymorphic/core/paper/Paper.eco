@@ -6,7 +6,7 @@
     {
         |
             maybeContext       <- No,
-            extent             <- No,
+            maybeFixedBounds   <- No,
             minX               <- 0,
             minY               <- 0,
             maxX               <- 0,
@@ -19,9 +19,9 @@
         {
             protected polymorphic <- $package;
 
-            initWithMaybeExtent: _extent => (
+            initWithMaybeFixedBounds: _fixed => (
                 maybeContext       <- Yes: (polymorphic DefaultRenderingContext).
-                extent             <- _extent.
+                maybeFixedBounds   <- _fixed.
                 presentations      <- std util newVector.
                 cachedMorphs       <- std util newVector.
                 node               <- ((polymorphic core morph) tree nodes) VoidNode.
@@ -40,16 +40,31 @@
                               W: realWidth
                               H: realHeight;
 
-            maybeExtent => extent;
-            realExtent  => (polymorphic math geometry Point) X: maxX Y: maxY;
+            realExtent  => ((polymorphic math geometry) Point) X: maxX Y: maxY;
+            maybeExtent => (maybeFixedBounds) yes: [ :mb | Yes: mb extent ] no: [ No ];
 
             node:    n => node <- n;
             context: c => maybeContext <- Yes: c;
 
-            resize: newExtent => (
-                extent <- Yes: newExtent.
-                maxX   <- maxX max: (newExtent x).
-                maxY   <- maxY max: (newExtent y).
+            changeFixedBounds: newFixedBounds => (
+                maybeFixedBounds <- Yes: newFixedBounds.
+                maxX             <- maxX max: ((newFixedBounds corner) x).
+                maxY             <- maxY max: ((newFixedBounds corner) y).
+              ^ self
+            );
+
+            claimBounds: bounds => (
+                |
+                    topLeft     <- bounds origin,
+                    bottomRight <- bounds corner
+                |
+
+                minX <- minX min: topLeft x.
+                minY <- minY min: topLeft y.
+
+                maxX <- maxX max: bottomRight x.
+                maxY <- maxY max: bottomRight y.
+
               ^ self
             );
 
@@ -79,21 +94,6 @@
                     ].
                 ].
               ^ No
-            );
-
-            claimBounds: bounds => (
-                |
-                    topLeft     <- bounds origin,
-                    bottomRight <- bounds bottomRight
-                |
-
-                minX <- minX min: topLeft x.
-                minY <- minY min: topLeft y.
-
-                maxX <- maxX max: bottomRight x.
-                maxY <- maxY max: bottomRight y.
-
-              ^ self
             );
 
             add: presentation => (
@@ -157,7 +157,7 @@
 
             clearAndReset => (
                 self clear.
-                self extent <- No.
+                self maybeFixedBounds <- No.
               ^ self
             );
 
@@ -176,6 +176,6 @@
         }
     };
 
-    Extent: extent => (Instance clone) initWithMaybeExtent: (Yes: extent);
-    New            => (Instance clone) initWithMaybeExtent: No;
+    FixedBounds: fixedBounds => (Instance clone) initWithMaybeFixedBounds: (Yes: fixedBounds);
+    New                      => (Instance clone) initWithMaybeFixedBounds: No;
 }

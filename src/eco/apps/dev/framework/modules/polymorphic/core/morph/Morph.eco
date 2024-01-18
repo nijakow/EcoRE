@@ -82,7 +82,7 @@
             changeBounds: newBounds => (
                 (((newBounds extent) equalsPoint: (bounds extent)) not) if: [
                     paper clearAndReset.
-                    paper resize: (newBounds extent).
+                    paper changeFixedBounds: (newBounds bounds).
                     iAmDirty.
                 ].
                 placement <- newBounds.
