@@ -38,7 +38,7 @@ class ParseEnv:
 class Parser:
 
     def _is_bin(self, c):
-        return not (c.isalnum() or c == '_' or c == '?')
+        return not (c.isalnum() or c == '_' or c == '?' or c == '!')
 
     def parse_compound(self, env, terminator=TokenType.RPAREN):
         return ASTCompound(self.parse_expressions(env.subenvironment(), terminator))

@@ -42,7 +42,7 @@ std Module
                                           if: [ ui Label: 'Nothing to show' ]
                                         else: [ (views top) morph           ],
                                 )
-                            ),
+                            ) ~ flexible!,
                             ui HFlex(
                                 ui Framed(ui Margin: 5 Child: ui Label('<--')),
                                 ui Framed(ui Margin: 5 Child: ui Label('Grab')),

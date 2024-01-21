@@ -8,17 +8,22 @@
             behavior,
             state,
             protected morphs,
-            protected cachedMinBounds
+            protected cachedMinBounds,
+            protected xLayout,
+            protected yLayout,
         |
         
         {
             protected polymorphic <- $package;
+            protected layouting => (polymorphic core morph) behavior layouting;
 
             initWithBehavior: b State: s => (
                 behavior        <- b.
                 state           <- s.
                 morphs          <- std util newVector.
                 cachedMinBounds <- No.
+                xLayout         <- (layouting) layouts ShrinkWrap.
+                yLayout         <- (layouting) layouts ShrinkWrap.
                 (behavior blessing?) -> [ state bless: self ].
               ^ self
             );
@@ -67,7 +72,19 @@
               ^ std sys error ThrowMessage: 'Unknown orientation!'
             );
 
-            layoutForOrientation: orientation => ((polymorphic core morph) behavior layouting) layouts ShrinkWrap;
+            layoutForOrientation: orientation => (
+                (orientation horizontal?) -> [ ^ xLayout ].
+                (orientation vertical?)   -> [ ^ yLayout ].
+              ^ std sys error ThrowMessage: 'Unknown orientation!'
+            );
+            xLayout: layout => xLayout <- layout;
+            yLayout: layout => yLayout <- layout;
+            xLayoutFlexible => xLayout: (layouting) layouts Flexible;
+            yLayoutFlexible => yLayout: (layouting) layouts Flexible;
+            flexible!       => xLayoutFlexible ~ yLayoutFlexible;
+            xLayoutShrinkWrap => xLayout: (layouting) layouts ShrinkWrap;
+            yLayoutShrinkWrap => yLayout: (layouting) layouts ShrinkWrap;
+            shinkWrap!        => xLayoutShrinkWrap ~ yLayoutShrinkWrap;
 
             drawOnStream: stream                    => ( (behavior presenter) drawOn: stream Kernel: self. ^ self );
             drawOnStream: stream Instance: instance => drawOnStream: stream;
