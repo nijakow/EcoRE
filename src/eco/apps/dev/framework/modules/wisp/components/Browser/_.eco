@@ -20,8 +20,9 @@ std Module
             |
 
             {
-                protected wisp <- $package;
-                protected ui   <- ($package modules polymorphic) ui;
+                protected wisp        <- $package;
+                protected polymorphic <- $package modules polymorphic;
+                protected ui          => polymorphic ui;
 
                 init => (
                     current <- No.
@@ -42,10 +43,8 @@ std Module
                                           if: [ ui Label: 'Nothing to show' ]
                                         else: [ (views top) morph           ],
                                 )
-                            ) ~ flexible!,
-                            ui Framed(
-                                ui Label: 'Boo'
-                            ) ~ flexible!,
+                            ) ~ flexibleLayout!,
+                            ((polymorphic morphs repo) fun TestMorph5) link ~ flexibleLayout!,
                             ui HFlex(
                                 ui Framed(ui Margin: 5 Child: ui Label('<--')),
                                 ui Framed(ui Margin: 5 Child: ui Label('Grab')),

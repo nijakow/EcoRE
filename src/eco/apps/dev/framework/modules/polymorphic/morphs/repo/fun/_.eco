@@ -116,6 +116,20 @@ std Module
                       ] bind($package)
                       ~ build;
     
+    TestMorph5 <- ($package core) NewBehavior
+                      ~ name: 'a rectangle morph'
+                      ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
+                            stream withGraphicsDo: [ :graphics |
+                                (graphics maybeBounds) yes: [ :bounds |
+                                    graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
+                                                                Bounds: bounds
+                                                                 Color: ((polymorphic color) R: 64 G: 0 B: 0)).
+                                ]
+                            ]
+                      ] bind($package)
+                      ~ build;
+    
+
     TestMorph4 <- ($package core) NewBehavior
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                 |
