@@ -31,7 +31,8 @@
             maybeContext => emitter maybeContext;
             context      => emitter context;
 
-            maybeExtent  => emitter maybeExtent;
+            maybeBounds => emitter maybeBounds;
+            maybeExtent => emitter maybeExtent;
 
             protected graphicsWithOrigin: origin MaybeBounds: maybeBounds => ((polymorphic core stream) Graphics) Emitter: emitter Origin: origin MaybeBounds: maybeBounds;
             protected graphicsWithOrigin: origin Bounds: bounds           => graphicsWithOrigin: origin MaybeBounds: (Yes: bounds);

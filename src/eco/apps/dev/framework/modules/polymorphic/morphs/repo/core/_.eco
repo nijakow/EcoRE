@@ -86,7 +86,7 @@ std Module
                                     mainAxisOrientation  <- orientation,
                                     crossAxisOrientation <- orientation opposite,
                                     mainAxisSize         <- 0,
-                                    crossAxisSize        <- 0,
+                                    crossAxisSize        <- (stream maybeBounds) yes: [ :b | (b corner) y ] no: [ 0 ],
                                     flexCount            <- 0,
                                     morphCount           <- morphs size,
                                     assignedSize         <- 0,
@@ -103,14 +103,14 @@ std Module
                                     crossAxisSize <- crossAxisSize max: morphCrossAxisExtent.
     
                                     (morph layoutForOrientation: mainAxisOrientation) flexible?
-                                      ~ if: [ flexCount <- flexCount + 1 ]
+                                      ~ if: [ flexCount    <- flexCount    +                   1 ]
                                       else: [ assignedSize <- assignedSize + morphMainAxisExtent ].
                                 ].
     
                                 |
                                     flexSize <- (flexCount zero?) if: [ 0 ] else: [ ((mainAxisSize - assignedSize) asFloat / flexCount asFloat) asInt ],
-                                    w        <- mainAxisOrientation selectX: mainAxisSize  Y: crossAxisSize,
-                                    h        <- mainAxisOrientation selectX: crossAxisSize Y: mainAxisSize,
+                                    w        <- mainAxisOrientation  selectX: mainAxisSize Y: crossAxisSize,
+                                    h        <- crossAxisOrientation selectX: mainAxisSize Y: crossAxisSize,
                                 |
     
                                 stream withGraphicsAtX: 0 Y: 0 W: w H: h Do: [ :graphics |
@@ -121,13 +121,13 @@ std Module
                                     morphs do: [ :morph |
     
                                         |
-                                            morphMainAxisExtent     <- calculatePreferredExtentForMorph(morph, mainAxisOrientation, flexSize),
-                                            morphCrossAxisExtent    <- calculatePreferredExtentForMorph(morph, crossAxisOrientation, crossAxisSize),
+                                            morphMainAxisExtent  <- calculatePreferredExtentForMorph(morph, mainAxisOrientation, flexSize),
+                                            morphCrossAxisExtent <- calculatePreferredExtentForMorph(morph, crossAxisOrientation, crossAxisSize),
                                             bounds <- (polymorphic math geometry Rectangle)
-                                                        X: (mainAxisOrientation selectX: offset Y: 0)
-                                                        Y: (mainAxisOrientation selectX: 0      Y: offset)
-                                                        W: (mainAxisOrientation selectX: morphMainAxisExtent  Y: morphCrossAxisExtent)
-                                                        H: (mainAxisOrientation selectX: morphCrossAxisExtent Y: morphMainAxisExtent),
+                                                        X: (mainAxisOrientation  selectX: offset Y: 0)
+                                                        Y: (crossAxisOrientation selectX: offset Y: 0)
+                                                        W: (mainAxisOrientation  selectX: morphMainAxisExtent Y: morphCrossAxisExtent)
+                                                        H: (crossAxisOrientation selectX: morphMainAxisExtent Y: morphCrossAxisExtent),
                                         |
     
                                         graphics in: bounds put: morph.

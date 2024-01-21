@@ -43,6 +43,9 @@ std Module
                                         else: [ (views top) morph           ],
                                 )
                             ) ~ flexible!,
+                            ui Framed(
+                                ui Label: 'Boo'
+                            ) ~ flexible!,
                             ui HFlex(
                                 ui Framed(ui Margin: 5 Child: ui Label('<--')),
                                 ui Framed(ui Margin: 5 Child: ui Label('Grab')),
