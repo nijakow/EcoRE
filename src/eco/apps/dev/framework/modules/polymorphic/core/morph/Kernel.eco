@@ -79,12 +79,12 @@
             );
             xLayout: layout => xLayout <- layout;
             yLayout: layout => yLayout <- layout;
-            xLayoutFlexible => xLayout: (layouting) layouts Flexible;
-            yLayoutFlexible => yLayout: (layouting) layouts Flexible;
-            flexible!       => xLayoutFlexible ~ yLayoutFlexible;
-            xLayoutShrinkWrap => xLayout: (layouting) layouts ShrinkWrap;
-            yLayoutShrinkWrap => yLayout: (layouting) layouts ShrinkWrap;
-            shinkWrap!        => xLayoutShrinkWrap ~ yLayoutShrinkWrap;
+            xLayoutFlexible! => xLayout: (layouting) layouts Flexible;
+            yLayoutFlexible! => yLayout: (layouting) layouts Flexible;
+            flexible!        => xLayoutFlexible! ~ yLayoutFlexible!;
+            xLayoutShrinkWrap! => xLayout: (layouting) layouts ShrinkWrap;
+            yLayoutShrinkWrap! => yLayout: (layouting) layouts ShrinkWrap;
+            shinkWrap!         => xLayoutShrinkWrap! ~ yLayoutShrinkWrap!;
 
             drawOnStream: stream                    => ( (behavior presenter) drawOn: stream Kernel: self. ^ self );
             drawOnStream: stream Instance: instance => drawOnStream: stream;

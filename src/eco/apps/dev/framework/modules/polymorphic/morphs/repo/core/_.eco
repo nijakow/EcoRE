@@ -72,7 +72,7 @@ std Module
     
                             protected calculatePreferredExtentForMorph(morph, orientation, flexSize) => (
                                 | layout <- morph layoutForOrientation: orientation |
-    
+
                                 (layout flexible?)   -> [ ^ flexSize ].
                                 (layout shrinkWrap?) -> [ ^ morph minPositiveExtentForOrientation: orientation ].
     
@@ -86,11 +86,13 @@ std Module
                                     mainAxisOrientation  <- orientation,
                                     crossAxisOrientation <- orientation opposite,
                                     mainAxisSize         <- 0,
-                                    crossAxisSize        <- (stream maybeBounds) yes: [ :b | (b corner) y ] no: [ 0 ],
+                                    crossAxisSize        <- (stream maybeBounds) yes: [ :b | (b corner) dimensionForOrientation: crossAxisOrientation ] no: [ 0 ],
                                     flexCount            <- 0,
                                     morphCount           <- morphs size,
                                     assignedSize         <- 0,
                                 |
+
+                                (std io out << 'Cross axis size: ' << crossAxisSize) newline commit.
     
                                 "Compute the size of the main axis and the cross axis."
                                 morphs do: [ :morph |
@@ -129,7 +131,7 @@ std Module
                                                         W: (mainAxisOrientation  selectX: morphMainAxisExtent Y: morphCrossAxisExtent)
                                                         H: (crossAxisOrientation selectX: morphMainAxisExtent Y: morphCrossAxisExtent),
                                         |
-    
+
                                         graphics in: bounds put: morph.
     
                                         offset <- offset + morphMainAxisExtent.
