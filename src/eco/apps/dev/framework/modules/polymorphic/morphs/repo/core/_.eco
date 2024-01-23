@@ -79,6 +79,15 @@ std Module
                               ^ std sys error ThrowMessage: 'Unknown layout type'
                             );
 
+                            protected calculatePreferredExtentForMorphMainAxis(morph, orientation, flexSize) => (
+                                | layout <- morph layoutForOrientation: orientation |
+
+                                (layout flexible?)   -> [ ^ (morph minPositiveExtentForOrientation: orientation) + flexSize ].
+                                (layout shrinkWrap?) -> [ ^ (morph minPositiveExtentForOrientation: orientation)            ].
+    
+                              ^ std sys error ThrowMessage: 'Unknown layout type'
+                            );
+
                             constrainedDrawOnGraphics: graphics Kernel: kernel Bounds: bounds => (
                                 |
                                     orientation          <- ((kernel state) payload) orientation,
@@ -86,6 +95,7 @@ std Module
                                     mainAxisOrientation  <- orientation,
                                     crossAxisOrientation <- orientation opposite,
                                     mainAxisSize         <- 0,
+                                    mainAxisExtraSize    <- 0,
                                     crossAxisSize        <- (bounds) dimensionForOrientation: crossAxisOrientation,
                                     flexCount            <- 0,
                                 |
@@ -95,19 +105,24 @@ std Module
                                         morphLayout <- morph layoutForOrientation: mainAxisOrientation,
                                     |
 
-                                    (morphLayout flexible?)   -> [ flexCount    <- flexCount    +                                                            1 ].
-                                    (morphLayout shrinkWrap?) -> [ mainAxisSize <- mainAxisSize + (morph minPositiveExtentForOrientation: mainAxisOrientation) ].
+                                    (morphLayout flexible?) if: [
+                                        mainAxisExtraSize <- mainAxisExtraSize + (morph minPositiveExtentForOrientation: mainAxisOrientation).
+                                        flexCount         <- flexCount + 1.
+                                    ].
+                                    (morphLayout shrinkWrap?) if: [
+                                        mainAxisSize <- mainAxisSize + (morph minPositiveExtentForOrientation: mainAxisOrientation).
+                                    ].
                                 ].
 
                                 |
                                     offset    <- 0,
-                                    flexSpace <- ((bounds corner) dimensionForOrientation: mainAxisOrientation) - mainAxisSize,
+                                    flexSpace <- ((bounds corner) dimensionForOrientation: mainAxisOrientation) - (mainAxisSize + mainAxisExtraSize),
                                     flexSize  <- (flexCount == 0) if: [ 0 ] else: [ ((flexSpace asFloat) / (flexCount asFloat)) asInt ],
                                 |
 
                                 morphs do: [ :morph |
                                     |
-                                        morphMainAxisExtent  <- calculatePreferredExtentForMorph(morph, mainAxisOrientation, flexSize),
+                                        morphMainAxisExtent  <- calculatePreferredExtentForMorphMainAxis(morph, mainAxisOrientation, flexSize),
                                         morphCrossAxisExtent <- calculatePreferredExtentForMorph(morph, crossAxisOrientation, crossAxisSize),
                                         morphMinBounds       <- morph minBounds,
                                         morphMainSize        <- morphMainAxisExtent,
