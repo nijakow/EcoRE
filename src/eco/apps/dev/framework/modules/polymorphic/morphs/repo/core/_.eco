@@ -78,66 +78,103 @@ std Module
     
                               ^ std sys error ThrowMessage: 'Unknown layout type'
                             );
-    
-                            drawOn: stream Kernel: kernel => (
+
+                            constrainedDrawOnGraphics: graphics Kernel: kernel Bounds: bounds => (
                                 |
                                     orientation          <- ((kernel state) payload) orientation,
                                     morphs               <- ((kernel state) payload) morphs,
                                     mainAxisOrientation  <- orientation,
                                     crossAxisOrientation <- orientation opposite,
                                     mainAxisSize         <- 0,
-                                    crossAxisSize        <- (stream maybeBounds) yes: [ :b | (b corner) dimensionForOrientation: crossAxisOrientation ] no: [ 0 ],
+                                    crossAxisSize        <- (bounds) dimensionForOrientation: crossAxisOrientation,
                                     flexCount            <- 0,
-                                    morphCount           <- morphs size,
-                                    assignedSize         <- 0,
                                 |
 
-                                (std io out << 'Cross axis size: ' << crossAxisSize) newline commit.
-    
-                                "Compute the size of the main axis and the cross axis."
+                                morphs do: [ :morph |
+                                    |
+                                        morphLayout <- morph layoutForOrientation: mainAxisOrientation,
+                                    |
+
+                                    (morphLayout flexible?)   -> [ flexCount    <- flexCount    +                                                            1 ].
+                                    (morphLayout shrinkWrap?) -> [ mainAxisSize <- mainAxisSize + (morph minPositiveExtentForOrientation: mainAxisOrientation) ].
+                                ].
+
+                                |
+                                    offset    <- 0,
+                                    flexSpace <- ((bounds corner) dimensionForOrientation: mainAxisOrientation) - mainAxisSize,
+                                    flexSize  <- (flexCount == 0) if: [ 0 ] else: [ ((flexSpace asFloat) / (flexCount asFloat)) asInt ],
+                                |
+
+                                morphs do: [ :morph |
+                                    |
+                                        morphMainAxisExtent  <- calculatePreferredExtentForMorph(morph, mainAxisOrientation, flexSize),
+                                        morphCrossAxisExtent <- calculatePreferredExtentForMorph(morph, crossAxisOrientation, crossAxisSize),
+                                        morphMinBounds       <- morph minBounds,
+                                        morphMainSize        <- morphMainAxisExtent,
+                                        morphCrossSize       <- morphCrossAxisExtent,
+                                        morphBounds          <- ((polymorphic math geometry) Rectangle
+                                                                    X: (mainAxisOrientation  selectX: offset Y: 0)
+                                                                    Y: (crossAxisOrientation selectX: offset Y: 0)
+                                                                    W: (mainAxisOrientation  selectX: morphMainSize Y: morphCrossSize)
+                                                                    H: (crossAxisOrientation selectX: morphMainSize Y: morphCrossSize)),
+                                    |
+
+                                    graphics in: morphBounds put: morph.
+
+                                    offset <- offset + morphMainAxisExtent.
+                                ].
+
+                              ^ self
+                            );
+
+                            freeDrawOnGraphics: graphics Kernel: kernel => (
+                                |
+                                    orientation          <- ((kernel state) payload) orientation,
+                                    morphs               <- ((kernel state) payload) morphs,
+                                    mainAxisOrientation  <- orientation,
+                                    crossAxisOrientation <- orientation opposite,
+                                    crossAxisSize        <- 0,
+                                |
+
+                                morphs do: [ :morph |
+                                    crossAxisSize <- crossAxisSize max: (morph minPositiveExtentForOrientation: crossAxisOrientation).
+                                ].
+
+                                |
+                                    offset <- 0,
+                                |
+
                                 morphs do: [ :morph |
                                     |
                                         morphMainAxisExtent  <- (morph minPositiveExtentForOrientation: mainAxisOrientation),
-                                        morphCrossAxisExtent <- (morph minPositiveExtentForOrientation: crossAxisOrientation),
+                                        morphCrossAxisExtent <- calculatePreferredExtentForMorph(morph, crossAxisOrientation, crossAxisSize),
+                                        morphMinBounds       <- morph minBounds,
+                                        morphMainSize        <- morphMainAxisExtent,
+                                        morphCrossSize       <- morphCrossAxisExtent,
+                                        morphBounds          <- ((polymorphic math geometry) Rectangle
+                                                                    X: (mainAxisOrientation  selectX: offset Y: 0)
+                                                                    Y: (crossAxisOrientation selectX: offset Y: 0)
+                                                                    W: (mainAxisOrientation  selectX: morphMainSize Y: morphCrossSize)
+                                                                    H: (crossAxisOrientation selectX: morphMainSize Y: morphCrossSize)),
                                     |
-    
-                                    mainAxisSize  <- mainAxisSize + morphMainAxisExtent.
-                                    crossAxisSize <- crossAxisSize max: morphCrossAxisExtent.
-    
-                                    (morph layoutForOrientation: mainAxisOrientation) flexible?
-                                      ~ if: [ flexCount    <- flexCount    +                   1 ]
-                                      else: [ assignedSize <- assignedSize + morphMainAxisExtent ].
-                                ].
-    
-                                |
-                                    flexSize <- (flexCount zero?) if: [ 0 ] else: [ ((mainAxisSize - assignedSize) asFloat / flexCount asFloat) asInt ],
-                                    w        <- mainAxisOrientation  selectX: mainAxisSize Y: crossAxisSize,
-                                    h        <- crossAxisOrientation selectX: mainAxisSize Y: crossAxisSize,
-                                |
-    
-                                stream withGraphicsAtX: 0 Y: 0 W: w H: h Do: [ :graphics |
-                                    |
-                                        offset <- 0,
-                                    |
-    
-                                    morphs do: [ :morph |
-    
-                                        |
-                                            morphMainAxisExtent  <- calculatePreferredExtentForMorph(morph, mainAxisOrientation, flexSize),
-                                            morphCrossAxisExtent <- calculatePreferredExtentForMorph(morph, crossAxisOrientation, crossAxisSize),
-                                            bounds <- (polymorphic math geometry Rectangle)
-                                                        X: (mainAxisOrientation  selectX: offset Y: 0)
-                                                        Y: (crossAxisOrientation selectX: offset Y: 0)
-                                                        W: (mainAxisOrientation  selectX: morphMainAxisExtent Y: morphCrossAxisExtent)
-                                                        H: (crossAxisOrientation selectX: morphMainAxisExtent Y: morphCrossAxisExtent),
-                                        |
 
-                                        graphics in: bounds put: morph.
-    
-                                        offset <- offset + morphMainAxisExtent.
-                                    ].
+                                    graphics in: morphBounds put: morph.
+
+                                    offset <- offset + morphMainAxisExtent.
                                 ].
+
+                              ^ self
+                            );
     
+                            drawOn: stream Kernel: kernel => (
+                                "Use two different layout strategies: Constrained vs non-constrained."
+
+                                stream withGraphicsDo: [ :graphics |
+                                    (graphics maybeBounds)
+                                        yes: [ :bounds | constrainedDrawOnGraphics: graphics Kernel: kernel Bounds: bounds ]
+                                         no: [           freeDrawOnGraphics:        graphics Kernel: kernel                ].
+                                ].
+
                               ^ self
                             );
     
