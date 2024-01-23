@@ -325,17 +325,16 @@ std Module
                       ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                             ((kernel state payload) child) yes: [ :child |
                                 |
-                                    origin <- ((polymorphic math geometry) Point) Origin,
-                                    extent <- child minExtent
+                                    bounds <- (stream maybeBounds) yes: [ :b | b ] no: [ child minBounds ],
                                 |
                                 stream withGraphicsDo: [ :graphics |
                                     |
                                         rect <- (polymorphic core objects) Rectangle
-                                                    Bounds: (origin extent: extent)
+                                                    Bounds: bounds
                                                      Color: ((graphics context) theme) lineColor
                                     |
-                                    graphics at: origin put: child.
-                                    graphics at: origin put: rect.
+                                    graphics atOriginPut: child.
+                                    graphics atOriginPut: rect.
                                 ].
                             ].
                         ] bind($package)
