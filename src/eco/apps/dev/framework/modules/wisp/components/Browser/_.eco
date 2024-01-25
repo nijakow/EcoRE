@@ -46,11 +46,11 @@ std Module
                             ) ~ flexibleLayout!,
                             ((polymorphic morphs repo) fun TestMorph5) link ~ flexibleLayout!,
                             ui HFlex(
-                                ui Framed(ui Margin: 5 Child: ui Label('<--')),
-                                ui Framed(ui Margin: 5 Child: ui Label('Grab')),
-                                ui Framed(ui Margin: 5 Child: ui Label('Proxy')),
-                                ui Framed(ui Margin: 5 Child: ui Label('Shell')),
-                            )
+                                ui Framed(ui Margin: 5 Child: ui Label('<--') ~ xLayoutFlexible!) ~ xLayoutFlexible!,
+                                ui Framed(ui Margin: 5 Child: ui Label('Grab') ~ xLayoutFlexible!) ~ xLayoutFlexible!,
+                                ui Framed(ui Margin: 5 Child: ui Label('Proxy') ~ xLayoutFlexible!) ~ xLayoutFlexible!,
+                                ui Framed(ui Margin: 5 Child: ui Label('Shell') ~ xLayoutFlexible!) ~ xLayoutFlexible!,
+                            ) ~ xLayoutFlexible!,
                         )
                     ).
                   ^ self
