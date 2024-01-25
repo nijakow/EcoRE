@@ -42,7 +42,7 @@ std Module
                                     (views empty?)
                                           if: [ ui Label: 'Nothing to show' ]
                                         else: [ (views top) morph           ],
-                                )
+                                ) ~ flexibleLayout!
                             ) ~ flexibleLayout!,
                             ((polymorphic morphs repo) fun TestMorph5) link ~ flexibleLayout!,
                             ui HFlex(

@@ -7,10 +7,10 @@
         |
             behavior,
             state,
+            xLayout,
+            yLayout,
             protected morphs,
             protected cachedMinBounds,
-            protected xLayout,
-            protected yLayout,
         |
         
         {

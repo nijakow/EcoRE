@@ -22,7 +22,7 @@
 
             build => (
                 maybeMorph <- Yes: (
-                    ui Label: 'A view'
+                    ui Framed(ui Label: 'A view') ~ xLayoutFlexible!
                 ).
               ^ self
             );

@@ -353,7 +353,7 @@ std Module
                                                     Bounds: bounds
                                                      Color: ((graphics context) theme) lineColor
                                     |
-                                    graphics atOriginPut: child.
+                                    graphics in: bounds put: child.
                                     graphics atOriginPut: rect.
                                 ].
                             ].
