@@ -62,6 +62,14 @@
             originForOrientation: orientation => orientation selectX: x Y: y;
             dimensionForOrientation: orientation => orientation selectX: w Y: h;
 
+            insetBy: inset => (
+              ^ (geometry Rectangle)
+                    X: (origin x + inset)
+                    Y: (origin y + inset)
+                    W: (w - (inset * 2))
+                    H: (h - (inset * 2))
+            );
+
             writeOn: w => w << 'a rectangle(' << origin << ', ' << corner << ')';
             presentOn: w => w << 'a rectangle(' present<< origin << ', ' present<< corner << ')';
         };

@@ -254,30 +254,50 @@ std Module
     
                               ^ std sys error ThrowMessage: 'Unknown layout type'
                             );
+
+                            constrainedDrawOnStream: stream Kernel: kernel Morph: morph Bounds: bounds => (
+                                |
+                                    margin      <- ((kernel state) payload) margin,
+                                    morphBounds <- bounds insetBy: margin,
+                                |
+
+                                stream withGraphicsDo: [ :graphics |
+                                    graphics in: morphBounds put: morph.
+                                ].
+
+                              ^ self
+                            );
+
+                            freeDrawOnStream: stream Kernel: kernel Morph: morph => (
+                                |
+                                    margin         <- ((kernel state) payload) margin,
+                                    morphMinBounds <- morph minBounds,
+                                    morphBounds    <- (polymorphic math geometry) Rectangle
+                                                        X: margin
+                                                        Y: margin
+                                                        W: morphMinBounds w
+                                                        H: morphMinBounds h,
+                                    ourExtent      <- (polymorphic math geometry) Point
+                                                        X: morphBounds w + (margin * 2)
+                                                        Y: morphBounds h + (margin * 2),
+                                |
+
+                                stream withRoom: ourExtent ForGraphicsDo: [ :graphics |
+                                    graphics in: morphBounds put: morph.
+                                ].
+
+                              ^ self
+                            );
     
                             drawOn: stream Kernel: kernel => (
                                 (((kernel state) payload) child) yes: [ :morph |
-                                    |
-                                        margin  <- ((kernel state) payload) margin,
-                                        extent  <- stream maybeExtent,
-                                        extent2 <- extent yes: [ :e | Yes: ((polymorphic math geometry) Point X: (e x - (margin * 2)) Y: (e y - (margin * 2))) ] no: [ No ],
-                                        w       <- calculatePreferredExtentForMorph(morph, ((polymorphic math geometry) orientation) Horizontal, extent2, margin),
-                                        h       <- calculatePreferredExtentForMorph(morph, ((polymorphic math geometry) orientation) Vertical,   extent2, margin),
-                                        bounds  <- ((polymorphic math geometry) Rectangle)
-                                                        X: margin
-                                                        Y: margin
-                                                        W: w
-                                                        H: h,
-                                        ourBounds <- ((polymorphic math geometry) Rectangle)
-                                                           X: 0
-                                                           Y: 0
-                                                      Extent: (extent yes: [ :e | e ] no: [ ((polymorphic math geometry) Point X: (bounds w + (margin * 2)) Y: (bounds h + (margin * 2)))])
-                                    |
-    
-                                    stream withGraphicsInBounds: ourBounds Do: [ :graphics |
-                                        graphics in: bounds put: morph.
-                                    ].
-    
+
+                                    "Use two different layout strategies: Constrained vs non-constrained."
+
+                                    (stream maybeBounds)
+                                        yes: [ :bounds | constrainedDrawOnStream: stream Kernel: kernel Morph: morph Bounds: bounds ]
+                                         no: [           freeDrawOnStream:        stream Kernel: kernel Morph: morph                ].
+
                                   ^ self
                                 ].
                             );
