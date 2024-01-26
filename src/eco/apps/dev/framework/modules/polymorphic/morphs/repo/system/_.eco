@@ -1,9 +1,10 @@
 
 std Module
 {
-    Session     :: (here / 'Session'     / '_.eco') importIn: $package;
-    Hand        :: (here / 'Hand'        / '_.eco') importIn: $package;
-    Desktop     :: (here / 'Desktop'     / '_.eco') importIn: $package;
-    Window      :: (here / 'Window'      / '_.eco') importIn: $package;
-    WindowTitle :: (here / 'WindowTitle' / '_.eco') importIn: $package;
+    Session       :: (here / 'Session'       / '_.eco') importIn: $package;
+    Hand          :: (here / 'Hand'          / '_.eco') importIn: $package;
+    Desktop       :: (here / 'Desktop'       / '_.eco') importIn: $package;
+    Window        :: (here / 'Window'        / '_.eco') importIn: $package;
+    WindowButtons :: (here / 'WindowButtons' / '_.eco') importIn: $package;
+    WindowTitle   :: (here / 'WindowTitle'   / '_.eco') importIn: $package;
 }

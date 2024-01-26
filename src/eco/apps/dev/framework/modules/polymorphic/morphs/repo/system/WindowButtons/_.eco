@@ -2,13 +2,11 @@
 std Module
 {
     Behavior <- ($package core) NewBehavior
-                    ~ name: 'a window title morph'
+                    ~ name: 'a window buttons morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
-                        | e <- (polymorphic ui) Framed(
-                                    (polymorphic ui) Margin: 2 Child: (
-                                        (polymorphic ui) Label: (kernel payload)
-                                                         Color: (((stream context) theme) backgroundColor)
-                                    )
+                        | e <- (polymorphic ui) Margin: 2 Child: (
+                                    (polymorphic ui) Label: 'Close X'
+                                                     Color: (((stream context) theme) backgroundColor)
                                 ),
                           bounds <- e minBounds,
                         |
@@ -23,5 +21,5 @@ std Module
                     ] bind($package)
                     ~ build;
 
-    Caption: caption => Behavior link: (caption);
+    New => Behavior link;
 }

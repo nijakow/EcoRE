@@ -31,6 +31,12 @@ std Module
                                 graphics at: ((polymorphic math geometry) Point X: 0 Y: (title minHeight negate))
                                         put: title.
                             ].
+
+                            ((kernel payload) maybeButtonsMorphKernel) yes: [ :buttons |
+                                | mb <- buttons minBounds |
+                                graphics at: ((polymorphic math geometry) Point X: (((bounds corner) x) - (mb corner x)) Y: ((mb corner y) negate))
+                                        put: buttons.
+                            ].
                             
                             ((kernel payload) child) yes: [ :c |
                                 graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
@@ -55,18 +61,20 @@ std Module
         Instance :: Clonable
         {
             |
-                maybeMorphKernel      <- No,
-                child                 <- No,
-                maybeTitleMorphKernel <- No,
+                maybeMorphKernel        <- No,
+                child                   <- No,
+                maybeTitleMorphKernel   <- No,
+                maybeButtonsMorphKernel <- No,
             |
 
             {
                 protected polymorphic <- $package;
 
                 init => (
-                    maybeMorphKernel      <- No.
-                    child                 <- No.
-                    maybeTitleMorphKernel <- No.
+                    maybeMorphKernel        <- No.
+                    child                   <- No.
+                    maybeTitleMorphKernel   <- No.
+                    maybeButtonsMorphKernel <- No.
                   ^ self
                 );
 
