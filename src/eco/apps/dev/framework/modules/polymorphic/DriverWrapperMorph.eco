@@ -53,12 +53,11 @@ Clonable {
                           ~ add: (((polymorphic morphs) repo system) Window
                                     Child: (((polymorphic morphs) repo core) MarginMorph
                                               Margin: 10
-                                               Child: ((polymorphic ui) Framed(
-                                                  (polymorphic ui) Stacked(
-                                                      (polymorphic ui) Label: 'Hello World!',
-                                                      ((polymorphic morphs) repo fun) TestMorph2 link,
-                                                  )
-                                               ))))
+                                               Child: (
+                                                  ((polymorphic ui) Button)
+                                                      Label: 'Click me!'
+                                                     Action: $[]
+                                               )))
                           ~ add: (((polymorphic morphs) repo system) Window
                                     Child: (((polymorphic morphs) repo core) MarginMorph
                                               Margin: 10
