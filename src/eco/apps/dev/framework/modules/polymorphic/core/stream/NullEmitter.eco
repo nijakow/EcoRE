@@ -7,29 +7,36 @@
     Instance :: Clonable
     {
         |
-            paper,
+            minX,
+            minY,
+            maxX,
+            maxY,
         |
 
         {
             protected polymorphic <- $package;
 
-            initWithPaper: p => (
-                paper <- p.
+            init => (
+                minX <- 0.
+                minY <- 0.
+                maxX <- 0.
+                maxY <- 0.
               ^ self
             );
 
-            maybeContext => paper maybeContext;
-            maybeBounds  => paper maybeFixedBounds;
-            maybeExtent  => maybeBounds yes: [ :bounds | Yes: bounds extent ] no: [ No ];
+            maybeContext => Yes: (polymorphic DefaultRenderingContext);
+            maybeBounds  => No;
+            maybeExtent  => No;
 
             context => maybeContext yes;
             extent  => maybeExtent  yes;
             bounds  => maybeBounds  yes;
 
+
             emitDrawable: drawable In: bounds => (
                 | presentation <- ((polymorphic core paper) presenting DrawablePresentation) Object: drawable Bounds: bounds |
 
-                paper add: presentation.
+                addAndClaim: presentation.
 
               ^ self
             );
@@ -37,7 +44,7 @@
             emitDrawable: drawable At: offset => (
                 | presentation <- ((polymorphic core paper) presenting DrawablePresentation) Object: drawable Offset: offset |
 
-                paper add: presentation.
+                addAndClaim: presentation.
 
               ^ self
             );
@@ -56,37 +63,45 @@
             );
 
             emitMorph: kernel Placement: placement => (
-                (paper lookupKernel: kernel) yes: [ :morph |
-                    morph changeBounds: placement.
+                |
+                    morph        <- kernel instantiateWithPlacement: placement MaybeContext: maybeContext,
+                    presentation <- ((polymorphic core paper) presenting MorphPresentation) Morph: morph
+                |
 
-                    |
-                        presentation <- ((polymorphic core paper) presenting MorphPresentation) Morph: morph
-                    |
+                addAndClaim: presentation.
 
-                    (morph paper) changeFixedBounds: (placement bounds).
-
-                    paper addOld: presentation.
-                ] no: [
-                    |
-                        morph        <- kernel instantiateWithPlacement: placement MaybeContext: maybeContext,
-                        presentation <- ((polymorphic core paper) presenting MorphPresentation) Morph: morph
-                    |
-
-                    (morph paper) changeFixedBounds: (placement bounds).
-
-                    paper add: presentation.
-                ].
               ^ self
             );
 
             claimBounds: bounds => (
-                paper claimBounds: bounds.
+                |
+                    topLeft     <- bounds origin,
+                    bottomRight <- bounds corner
+                |
+
+                minX <- minX min: topLeft x.
+                minY <- minY min: topLeft y.
+
+                maxX <- maxX max: bottomRight x.
+                maxY <- maxY max: bottomRight y.
+
               ^ self
             );
 
-            writeOn: w => w << 'an emitter';
+            protected addAndClaim: presentation => (
+                claimBounds: (presentation bounds).
+              ^ self
+            );
+
+            realBounds => (polymorphic math geometry) Rectangle
+                                X: minX
+                                Y: minY
+                                W: maxX - minX
+                                H: maxY - minY;
+
+            writeOn: w => w << 'a null emitter';
         }
     };
 
-    Paper: paper => (Instance clone) initWithPaper: paper;
+    New => (Instance new);
 }

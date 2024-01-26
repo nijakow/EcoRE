@@ -99,6 +99,17 @@
               ^ paper
             );
 
+            drawOnNullEmitter => (
+                |
+                    emitter <- ((polymorphic core stream) NullEmitter) New,
+                    stream  <- ((polymorphic core stream) Stream) Emitter: emitter
+                |
+
+                drawOnStream: stream.
+
+              ^ emitter
+            );
+
             instantiateWithPlacement: placement Paper: paper               => ((polymorphic core morph) Morph) Kernel: self Placement: placement Paper: paper;
             instantiateWithPlacement: placement MaybeContext: maybeContext => ((polymorphic core morph) Morph) Kernel: self Placement: placement MaybeContext: maybeContext;
 

@@ -1,7 +1,8 @@
 
 std Module
 {
-    Emitter  :: (here / 'Emitter.eco')  importIn: $package;
+    Emitter     :: (here / 'Emitter.eco')     importIn: $package;
+    NullEmitter :: (here / 'NullEmitter.eco') importIn: $package;
 
     Stream   :: (here / 'Stream.eco')   importIn: $package;
     Graphics :: (here / 'Graphics.eco') importIn: $package;
