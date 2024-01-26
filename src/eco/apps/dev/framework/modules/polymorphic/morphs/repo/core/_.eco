@@ -525,8 +525,9 @@ std Module
                                 stream emit: child.
                             ].
                         ] bind($package)
-                      ~ on: (($package event) predicates MouseClick) do: $[ :a :b |
-                                (std io out << 'Clicked the button! ') newline commit.
+                      ~ on: (($package event) predicates MouseClick) do: $[ :context :event |
+                                | action <- ((context kernel state) payload) action |
+                                action yes: [ :action | action value ].
                         ]
                       ~ build;
         
@@ -535,24 +536,38 @@ std Module
             Instance :: Clonable
             {
                 |
-                    child <- No
+                    action <- No,
+                    child  <- No,
                 |
 
                 {
                     protected polymorphic <- $package;
 
-                    child: c => child <- Yes: c;
+                    action: a => action <- Yes: a;
+                    child:  c => child  <- Yes: c;
                 }
             };
 
             New => Instance new;
         };
 
-        New      => (Behavior link: (Payload New));
+        New => (Behavior link: (Payload New));
+        Action: a => (
+            | p <- Payload New |
+            p action: a.
+          ^ (Behavior link: p)
+        );
         Child: c => (
             | p <- Payload New |
             p child: c.
           ^ (Behavior link: p)
         );
+        Action: a Child: c => (
+            | p <- Payload New |
+            p action: a.
+            p child:  c.
+          ^ (Behavior link: p)
+        );
+        Child: c Action: a => Action: a Child: c;
     };
 }

@@ -7,8 +7,8 @@ std Module
         protected polymorphic <- $package;
         protected ui          <- $;
 
-        Action: action Child: child => ((polymorphic morphs repo) core ButtonMorph) Child: child;
-        
+        Action: action Child: child => ((polymorphic morphs repo) core ButtonMorph) Action: action Child: child;
+
         Action: action Label: label => Action: action Child: (ui Framed(ui Margin: 5 Child: (ui Label: label)));
 
         Label: label Action: action => Action: action Label: label;

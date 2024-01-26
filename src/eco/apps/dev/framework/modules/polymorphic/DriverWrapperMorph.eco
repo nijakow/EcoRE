@@ -56,7 +56,7 @@ Clonable {
                                                Child: (
                                                   ((polymorphic ui) Button)
                                                       Label: 'Click me!'
-                                                     Action: $[]
+                                                     Action: $[ (std io out << 'There we go!!') newline commit ]
                                                )))
                           ~ add: (((polymorphic morphs) repo system) Window
                                     Child: (((polymorphic morphs) repo core) MarginMorph
