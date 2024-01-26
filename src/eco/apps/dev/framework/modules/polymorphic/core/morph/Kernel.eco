@@ -22,8 +22,8 @@
                 state           <- s.
                 morphs          <- std util newVector.
                 cachedMinBounds <- No.
-                xLayout         <- (layouting) layouts ShrinkWrap.
-                yLayout         <- (layouting) layouts ShrinkWrap.
+                xLayout         <- (layouting) layouts Flexible.
+                yLayout         <- (layouting) layouts Flexible.
                 (behavior blessing?) -> [ state bless: self ].
               ^ self
             );

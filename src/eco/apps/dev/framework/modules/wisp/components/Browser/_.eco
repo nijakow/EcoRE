@@ -37,7 +37,7 @@ std Module
                     views   <- std util newStack.
                     views push: view.
                     rebuild.
-                    
+
                   ^ self
                 );
 
@@ -51,15 +51,15 @@ std Module
                                     (views empty?)
                                           if: [ ui Label: 'Nothing to show' ]
                                         else: [ (views top) morph           ],
-                                ) ~ flexibleLayout!
-                            ) ~ flexibleLayout!,
-                            ((polymorphic morphs repo) fun TestMorph5) link ~ flexibleLayout!,
+                                )
+                            ),
+                            ((polymorphic morphs repo) fun TestMorph5) link,
                             ui HFlex(
-                                ui Framed(ui Margin: 5 Child: ui Label('<--') ~ xLayoutFlexible!) ~ xLayoutFlexible!,
-                                ui Framed(ui Margin: 5 Child: ui Label('Grab') ~ xLayoutFlexible!) ~ xLayoutFlexible!,
-                                ui Framed(ui Margin: 5 Child: ui Label('Proxy') ~ xLayoutFlexible!) ~ xLayoutFlexible!,
-                                ui Framed(ui Margin: 5 Child: ui Label('Shell') ~ xLayoutFlexible!) ~ xLayoutFlexible!,
-                            ) ~ xLayoutFlexible!,
+                                ui Framed(ui Margin: 5 Child: ui Label('<--')),
+                                ui Framed(ui Margin: 5 Child: ui Label('Grab')),
+                                ui Framed(ui Margin: 5 Child: ui Label('Proxy')),
+                                ui Framed(ui Margin: 5 Child: ui Label('Shell')),
+                            ) ~ yLayoutShrinkWrap!,
                         )
                     ).
                   ^ self
