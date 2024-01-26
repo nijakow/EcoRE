@@ -19,7 +19,7 @@ std Module
                                                             Y: 0
                                                             W: ((bounds corner) x)
                                                             H: ((bounds corner) y)
-                                                        Color: ((graphics context) theme) backgroundColor).
+                                                        Color: ((graphics context) theme) mainAccentColor).
                             graphics atOriginPut: (((polymorphic core objects) Rectangle)
                                                             X: 0
                                                             Y: 0
@@ -32,7 +32,12 @@ std Module
                                         put: title.
                             ].
                             
-                            ((kernel payload) child) yes: [ :c | stream emit: c ].
+                            ((kernel payload) child) yes: [ :c |
+                                graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
+                                                       Bounds: ((c minBounds) insetBy: 5)
+                                                        Color: ((graphics context) theme) backgroundColor).
+                                stream emit: c.
+                            ].
                         ].
                     ] bind($package)
                     ~ on: (($package event) predicates AddMorph) do: $[ :kernel :event |
@@ -73,7 +78,7 @@ std Module
                 );
 
                 child: c => (
-                    child <- Yes: c.
+                    child <- Yes: ((polymorphic ui) Margin: 5 Child: c).
                     maybeTitleMorphKernel <- Yes: (
                         ((polymorphic morphs repo) system WindowTitle) Caption: (c name)
                     ).

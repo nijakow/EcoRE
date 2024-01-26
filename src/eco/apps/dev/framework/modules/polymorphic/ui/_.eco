@@ -11,6 +11,8 @@ std Module
     Label: text => ((polymorphic morphs repo) core LabelMorph) Text: text;
     Label(text) => Label: text;
 
+    Label: text Color: color => ((polymorphic morphs repo) core ColorLabelMorph) Text: text Color: color;
+
     HFlex(...) => BuildFlex: (((polymorphic morphs repo) core FlexMorph) Horizontal) Elements: (std util newArray(...));
     VFlex(...) => BuildFlex: (((polymorphic morphs repo) core FlexMorph) Vertical) Elements: (std util newArray(...));
 

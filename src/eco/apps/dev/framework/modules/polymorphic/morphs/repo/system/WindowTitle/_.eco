@@ -7,6 +7,7 @@ std Module
                         | e <- (polymorphic ui) Framed(
                                     (polymorphic ui) Margin: 2 Child: (
                                         (polymorphic ui) Label: (kernel payload)
+                                                         Color: (((stream context) theme) backgroundColor)
                                     )
                                 ),
                           bounds <- e minBounds,
@@ -15,7 +16,7 @@ std Module
                         stream withGraphicsDo: [ :graphics |
                             graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
                                                        Bounds: bounds
-                                                        Color: ((graphics context) theme) backgroundColor).
+                                                        Color: ((graphics context) theme) mainAccentColor).
                         ].
 
                         stream emit: e.

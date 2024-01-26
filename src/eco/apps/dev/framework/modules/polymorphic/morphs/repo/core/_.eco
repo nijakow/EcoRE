@@ -32,6 +32,27 @@ std Module
         Text: text => Behavior link: text;
     };
 
+    ColorLabelMorph :: Module
+    {
+        protected polymorphic <- $package;
+
+        Behavior <- ($package core) NewBehavior
+                      ~ name: 'a color label morph'
+                      ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
+                            |
+                                caption <- ((kernel state) payload) at: 0,
+                                color   <- ((kernel state) payload) at: 1,
+                                text    <- ((polymorphic core objects) Text)
+                                                Caption: caption
+                                                  Color: color
+                            |
+                            stream emit: text.
+                        ] bind($package)
+                      ~ build;
+
+        Text: text Color: color => Behavior link: ((text & color) asArray);
+    };
+
     FlexMorph :: Module
     {
         protected polymorphic <- $package;
