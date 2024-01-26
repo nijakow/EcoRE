@@ -224,7 +224,7 @@ std Module
             {
                 |
                     orientation,
-                    morphs
+                    morphs,
                 |
 
                 {
@@ -406,6 +406,113 @@ std Module
           ^ (Behavior link: p)
         );
     };
+
+    StackMorph :: Module
+    {
+        protected polymorphic <- $package;
+
+        Behavior <- ($package core) NewBehavior
+                      ~ name: 'a stack morph'
+                      ~ on: (($package event) predicates AddMorph) do: $[ :kernel :event |
+                            ((kernel state) payload) add: (event body).
+                            kernel changed.
+                        ]
+                      ~ presenter:
+                          {
+                            isa std Singleton;
+    
+                            with inherited PresenterTrait <- (($package core morph) behavior presenting) PresenterTrait;
+    
+                            protected calculatePreferredExtentForMorph(morph, orientation, extentLimits) => (
+                                | layout <- morph layoutForOrientation: orientation |
+    
+                                (layout flexible?)   -> [ ^ ((extentLimits yes) dimensionForOrientation: orientation) ].
+                                (layout shrinkWrap?) -> [ ^ (morph minExtentForOrientation: orientation) ].
+    
+                              ^ std sys error ThrowMessage: 'Unknown layout type'
+                            );
+
+                            protected calculatePreferredBoundsForMorph(morph, ourBounds) => (
+                                | morphBounds <- morph minBounds |
+
+                              ^ (polymorphic math geometry) Rectangle
+                                    W: (((morph xLayout) flexible?) if: [ ourBounds ] else: [ morphBounds ] ~ corner x)
+                                    H: (((morph yLayout) flexible?) if: [ ourBounds ] else: [ morphBounds ] ~ corner y)
+                            );
+
+                            freeDrawOnStream: stream Kernel: kernel => (
+                                |
+                                    morphs <- ((kernel state) payload) morphs,
+                                    minX   <- 0,
+                                    minY   <- 0,
+                                    maxX   <- 0,
+                                    maxY   <- 0,
+                                |
+
+                                morphs do: [ :morph |
+                                    |
+                                        morphMinBounds <- morph minBounds,
+                                    |
+
+                                    minX <- minX min: (morphMinBounds origin) x.
+                                    minY <- minY min: (morphMinBounds origin) y.
+                                    maxX <- maxX max: (morphMinBounds corner) x.
+                                    maxY <- maxY max: (morphMinBounds corner) y.
+                                ].
+
+                                |
+                                    ourBounds <- (polymorphic math geometry) Rectangle
+                                                    X: minX
+                                                    Y: minY
+                                                    W: maxX - minX
+                                                    H: maxY - minY
+                                |
+
+                                stream withGraphicsInBounds: ourBounds Do: [ :graphics |
+                                    morphs do: [ :morph |
+                                        | morphBounds <- calculatePreferredBoundsForMorph(morph, ourBounds) |
+                                        graphics in: morphBounds put: morph.
+                                    ].
+                                ].
+
+                              ^ self
+                            );
+    
+                            drawOn: stream Kernel: kernel => (
+                              ^ freeDrawOnStream: stream Kernel: kernel
+                            );
+    
+                            writeOn: w => w << 'the stack presenter';
+                          }
+                      ~ build;
+        
+        Payload :: Classlike
+        {
+            Instance :: Clonable
+            {
+                |
+                    morphs,
+                |
+
+                {
+                    protected polymorphic <- $package;
+
+                    init => (
+                        morphs <- std util newVector.
+                      ^ self
+                    );
+
+                    add:    morph => morphs add:    morph;
+                    remove: morph => morphs remove: morph;
+                }
+            };
+
+            New => Instance new;
+        };
+
+        New => (Behavior link: (Payload New));
+    };
+
 
     ButtonMorph :: Module
     {

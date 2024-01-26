@@ -21,5 +21,12 @@ std Module
     Framed: child => ((polymorphic morphs repo) core FrameMorph) Child: child;
     Framed(child) => Framed: child;
 
+    protected BuildStack: stack Elements: elements => (
+        elements do: [ :each | stack add: each ].
+      ^ stack
+    );
+
+    Stacked(...) => BuildStack: (((polymorphic morphs repo) core StackMorph) New) Elements: (std util newArray(...));
+
     MiniWindow(child) => (((polymorphic morphs) repo system) Window) Child: child;
 }
