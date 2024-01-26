@@ -1,5 +1,15 @@
 
 std Module
 {
+    protected ui <- ($package modules polymorphic) ui;
     
+    For: object Navigator: navigator => (
+        | sw <- (std io StringWriter) new |
+
+        sw << object.
+
+      ^ ui Label: (sw build)
+    );
+
+    ForMirror: mirror Navigator: navigator => For: (mirror reflectee) Navigator: navigator;
 }

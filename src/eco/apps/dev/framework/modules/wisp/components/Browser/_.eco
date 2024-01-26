@@ -25,10 +25,19 @@ std Module
                 protected ui          => polymorphic ui;
 
                 init => (
+                    |
+                        mirror    <- (std reflect Mirror: 42),
+                        navigator <- (wisp components Navigator) New,
+                        view      <- (wisp components BrowserView)
+                                            Mirror: mirror
+                                         Navigator: navigator,
+                    |
+
                     current <- No.
                     views   <- std util newStack.
-                    views push: ((wisp components BrowserView) Mirror: (std reflect Mirror: 42)).
+                    views push: view.
                     rebuild.
+                    
                   ^ self
                 );
 

@@ -1,0 +1,13 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        {
+            writeOn: w => w << 'a navigator';
+        }
+    };
+
+    New => Instance new;
+}

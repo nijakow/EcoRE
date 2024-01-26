@@ -8,21 +8,26 @@
             objectMirror,
             openShells,
             maybeMorph,
+            navigator,
         |
 
         {
-            protected ui <- ($package modules polymorphic) ui;
+            protected ui   <- ($package modules polymorphic) ui;
+            protected wisp <- $package;
 
-            initWithMirror: mirror => (
+            initWithMirror: mirror Navigator: nav => (
                 objectMirror <- mirror.
                 openShells   <- std util newVector.
                 maybeMorph   <- No.
+                navigator    <- nav.
               ^ self
             );
 
             build => (
                 maybeMorph <- Yes: (
-                    ui Framed(ui Label: 'A view') ~ xLayoutFlexible!
+                    (wisp components presentations)
+                        ForMirror: objectMirror
+                        Navigator: navigator
                 ).
               ^ self
             );
@@ -36,5 +41,5 @@
         }
     };
 
-    Mirror: mirror => (Instance clone) initWithMirror: mirror;
+    Mirror: mirror Navigator: navigator => (Instance clone) initWithMirror: mirror Navigator: navigator;
 }
