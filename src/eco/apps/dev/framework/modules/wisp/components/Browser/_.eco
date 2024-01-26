@@ -26,7 +26,7 @@ std Module
 
                 init => (
                     |
-                        mirror    <- (std reflect Mirror: 42),
+                        mirror    <- (std reflect Mirror: self),
                         navigator <- (wisp components Navigator) New,
                         view      <- (wisp components BrowserView)
                                             Mirror: mirror

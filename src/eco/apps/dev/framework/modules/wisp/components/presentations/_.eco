@@ -2,14 +2,51 @@
 std Module
 {
     protected ui <- ($package modules polymorphic) ui;
+
+
+    MoleculePaneForMirror: mirror Navigator: navigator => (
+        | flex <- ui VFlex |
+
+        mirror slotsDo: [ :slot |
+            flex add: (
+                ui Framed(
+                    ui HFlex(
+                        ui Margin: 3 Child: (
+                            ui Label: 'pswio'
+                        ) ~ xLayoutShrinkWrap!,
+                        ui Margin: 3 Child: (
+                            ui Label: ((slot name) asString)
+                        ),
+                        ui Margin: 3 Child: (
+                            ui Framed(
+                                ui Margin: 3 Child: (
+                                    ui Label: 'X'
+                                )
+                            )
+                        ) ~ xLayoutShrinkWrap!
+                    )
+                ) ~ yLayoutShrinkWrap!
+            )
+        ].
+
+      ^ flex
+    );
     
-    For: object Navigator: navigator => (
+    PresentationPaneForMirror: mirror Navigator: navigator => (
         | sw <- (std io StringWriter) new |
 
-        sw << object.
+        sw << (mirror reflectee).
 
       ^ ui Label: (sw build)
     );
 
-    ForMirror: mirror Navigator: navigator => For: (mirror reflectee) Navigator: navigator;
+    ForMirror: mirror Navigator: navigator => (
+        |
+            object <- mirror reflectee
+        |
+
+        begin
+            ~ if: [ (std reflect primitives) IsMolecule:  object ] then: [ ^ MoleculePaneForMirror: mirror Navigator: navigator ]
+        ~ default: [ ^ PresentationPaneForMirror: mirror Navigator: navigator ]
+    );
 }

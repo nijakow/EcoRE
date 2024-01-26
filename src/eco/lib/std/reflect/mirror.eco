@@ -26,6 +26,11 @@
             ^ array
         );
 
+        slotsDo: aBlock => (
+            slotNames do: [ :name | aBlock value(slot: name) ].
+          ^ self
+        );
+
         slotNameForSlot: i => (
             #'ecosphere.ecore.reflect.get_type_slot_info'(typeInstance, i, -2)
         );
