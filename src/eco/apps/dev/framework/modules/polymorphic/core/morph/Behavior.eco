@@ -13,6 +13,8 @@
             animated? <- false,
             dispatch? <- true,
             disposeFunction <- No,
+            focusGainedFunction <- No,
+            focusLostFunction   <- No,
             minBoundsFunction,
         |
         
@@ -27,6 +29,8 @@
                 animated?  <- false.
                 dispatch?  <- true.
                 disposeFunction <- No.
+                focusGainedFunction <- No.
+                focusLostFunction   <- No.
                 minBoundsFunction <- $[ :kernel | ((kernel behavior) presenter) minBoundsOfKernel: kernel ].
               ^ self
             );
@@ -37,6 +41,8 @@
             animated: a => animated? <- a;
             dispatch: d => dispatch? <- d;
             disposeFunction: f => disposeFunction <- Yes: f;
+            focusGainedFunction: f => focusGainedFunction <- Yes: f;
+            focusLostFunction: f => focusLostFunction <- Yes: f;
             minBoundsFunction: f => minBoundsFunction <- f;
 
             presenter: p => presenter <- p;

@@ -38,6 +38,16 @@
               ^ self
             );
 
+            focusGainedFunction: f => (
+                behavior focusGainedFunction: f.
+              ^ self
+            );
+
+            focusLostFunction: f => (
+                behavior focusLostFunction: f.
+              ^ self
+            );
+
             minBoundsFunction: f => (
                 behavior minBoundsFunction: f.
               ^ self

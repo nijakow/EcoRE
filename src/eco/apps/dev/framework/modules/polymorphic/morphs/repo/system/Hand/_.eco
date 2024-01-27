@@ -26,6 +26,7 @@ std Module
                 position,
                 grabbedMorph,
                 grabbedMorphTranslation,
+                morphsUnder,
             |
 
             {
@@ -37,6 +38,7 @@ std Module
                     position                <- (polymorphic math geometry) Point Origin.
                     grabbedMorph            <- No.
                     grabbedMorphTranslation <- (polymorphic math geometry) Point Origin.
+                    morphsUnder             <- std util newVector,
                   ^ self
                 );
 
@@ -76,6 +78,21 @@ std Module
                       ^ true
                     ].
                   ^ false
+                );
+
+                updateMorphsUnder: morphs => (
+                    morphsUnder do: [ :each |
+                        ((morphs contains?: each) not) if: [
+                            (each kernel) focusLost.
+                        ].
+                    ].
+                    morphs do: [ :each |
+                        ((morphsUnder contains?: each) not) if: [
+                            (each kernel) focusGained.
+                        ].
+                    ].
+                    morphsUnder <- morphs.
+                  ^ self
                 );
 
                 writeOn: w => w << 'a hand';

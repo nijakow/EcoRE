@@ -63,6 +63,32 @@
               ^ self
             );
 
+            protected beginXRayAtX: x Y: y Morph: morph Do: block => (
+                |
+                    placement <- morph placement,
+                    tx        <- x - ((placement offset) x),
+                    ty        <- y - ((placement offset) y)
+                |
+
+                ((placement bounds) containsX: tx Y: ty) -> [
+                    (((morph kernel) behavior) dispatch?) -> [
+                        block value(morph).
+                        morph childrenDo: [ :each |
+                            beginXRayAtX: tx Y: ty Morph: each Do: block.
+                        ].
+                    ].
+                ].
+
+              ^ self
+            );
+
+            protected xRayAtX: x Y: y Do: block => (
+                (driver rootPaper) morphsDo: [ :each |
+                    beginXRayAtX: x Y: y Morph: each Do: block.
+                ].
+              ^ self
+            );
+
             dispatch: event AtX: x Y: y => (
                 | stopper <- [ ^ self ] |
                 (driver rootPaper) morphsDo: [ :each |
@@ -82,6 +108,17 @@
             );
 
             mouseMovedToX: x Y: y => (
+                |
+                    morphsUnder <- std util newVector,
+                |
+
+                xRayAtX: x Y: y Do: [ :each |
+                    morphsUnder add: each.
+                ].
+
+                ((driver session) hand)
+                    updateMorphsUnder: morphsUnder.
+
               ^ self
             );
 

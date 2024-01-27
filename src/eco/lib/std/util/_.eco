@@ -81,6 +81,8 @@
         forEach: [ :i, :v | (std util comparators DefaultComparator value(v, element)) if: [ ^ true ] ].
       ^ false
     );
+
+    contains?: element => contains: element;
 },
 
 #=std/util/SizedIndexable: {

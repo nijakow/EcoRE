@@ -165,6 +165,20 @@
               ^ self
             );
 
+            focusGained => (
+                (behavior focusGainedFunction) yes: [ :fgf |
+                    fgf value(self).
+                ].
+              ^ self
+            );
+
+            focusLost => (
+                (behavior focusLostFunction) yes: [ :flf |
+                    flf value(self).
+                ].
+              ^ self
+            );
+
             writeOn: w => w << 'a morph kernel';
         }
     };
