@@ -46,14 +46,11 @@ std Module
                 rebuild => (
                     current: (
                         ui VFlex(
-                            ui Framed(
-                                ui Margin: 5 Child: (
-                                    (views empty?)
-                                          if: [ ui Label: 'Nothing to show' ]
-                                        else: [ (views top) morph           ],
-                                )
+                            ui Margin: 15 Child: (
+                                (views empty?)
+                                      if: [ ui Label: 'Nothing to show' ]
+                                    else: [ (views top) morph           ],
                             ),
-                            ((polymorphic morphs repo) fun TestMorph5) link,
                             ui HFlex(
                                 (ui Button) Label: '<--'   Action: $[],
                                 (ui Button) Label: 'Grab'  Action: $[],

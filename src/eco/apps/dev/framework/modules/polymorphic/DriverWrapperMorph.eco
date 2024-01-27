@@ -44,28 +44,16 @@ Clonable {
 
                     updateDimensions.
 
-                    (added? not) if: [
+                    "(added? not) if: [
                         (theDriver session) desktopMorph
                           ~ add: (((polymorphic morphs) repo system) Window
                                     Child: (((polymorphic ui) Button)
                                                 Action: $[]
                                                  Child: (((polymorphic morphs) repo core) MarginMorph
                                                               Margin: 10
-                                                               Child: (((polymorphic morphs) repo fun) NewTestMorph3))))
-                          ~ add: (((polymorphic morphs) repo system) Window
-                                    Child: (((polymorphic morphs) repo core) MarginMorph
-                                              Margin: 10
-                                               Child: (
-                                                  ((polymorphic ui) Button)
-                                                      Label: 'Click me!'
-                                                     Action: $[ (std io out << 'There we go!!') newline commit ]
-                                               )))
-                          ~ add: (((polymorphic morphs) repo system) Window
-                                    Child: (((polymorphic morphs) repo core) MarginMorph
-                                              Margin: 10
-                                               Child: (((polymorphic morphs) repo fun) TestMorph2 link))).
+                                                               Child: (((polymorphic morphs) repo fun) NewTestMorph3)))).
                         added? <- true.
-                    ].
+                    ]."
 
                     updateX: (relativeMousePos x)
                           Y: (relativeMousePos y).
