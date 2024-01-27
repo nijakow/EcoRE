@@ -532,10 +532,10 @@ std Module
                                                    no: [ child minBounds ],
                                 |
 
-                                stream emit: child.
+                                stream withGraphicsDo: [ :graphics |
+                                    graphics in: bounds put: child.
 
-                                (payload hasFocus?) if: [
-                                    stream withGraphicsDo: [ :graphics |
+                                    (payload hasFocus?) if: [
                                         |
                                             rect <- (polymorphic core objects) FilledRectangle
                                                         Bounds: bounds
