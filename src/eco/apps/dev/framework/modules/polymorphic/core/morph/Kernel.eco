@@ -141,6 +141,9 @@
               ^ self
             );
 
+            contentChanged   => changedContent;
+            placementChanged => changedPlacement;
+
             changed => (
                 clearCaches.
                 morphs do: [ :each | each kernelChangeCallback ].
