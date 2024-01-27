@@ -154,7 +154,7 @@ compile_commands.json:
 .phony: run
 run: all
 	$(MAKE) -C $(BOOTSTRAP_ENVIRONMENT)
-	$(EXECUTABLE) $(BOOTSTRAP_MASTER)
+	$(EXECUTABLE) $(BOOTSTRAP_MASTER) | cat -n
 
 .phony: debug
 debug: $(EXECUTABLE)
