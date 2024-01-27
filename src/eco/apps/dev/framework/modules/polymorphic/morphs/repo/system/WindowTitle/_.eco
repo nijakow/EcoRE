@@ -4,24 +4,45 @@ std Module
     Behavior <- ($package core) NewBehavior
                     ~ name: 'a window title morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
-                        | e <- (polymorphic ui) Framed(
-                                    (polymorphic ui) Margin: 2 Child: (
-                                        (polymorphic ui) Label: (kernel payload)
-                                                         Color: (((stream context) theme) backgroundColor)
-                                    )
-                                ),
+                        | e <- (polymorphic ui) Margin: 2 Child: (
+                                    (polymorphic ui) Label: ((kernel payload) caption)
+                                                     Color: (((stream context) theme) backgroundColor)
+                          ),
                           bounds <- e minBounds,
                         |
 
                         stream withGraphicsDo: [ :graphics |
                             graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
                                                        Bounds: bounds
-                                                        Color: ((graphics context) theme) mainAccentColor).
+                                                        Color: ((kernel payload) color))
                         ].
 
                         stream emit: e.
                     ] bind($package)
                     ~ build;
+    
+    Payload :: Classlike
+    {
+        Instance :: Clonable
+        {
+            |
+                caption,
+                color,
+            |
 
-    Caption: caption => Behavior link: (caption);
+            {
+                initWithCaption: cap Color: col => (
+                    caption <- cap.
+                    color   <- col.
+                  ^ self
+                );
+
+                writeOn: w => w << 'a window title payload';
+            }
+        };
+
+        Caption: caption Color: color => (Instance clone) initWithCaption: caption Color: color;
+    };
+
+    Caption: caption Color: color => Behavior link: (Payload Caption: caption Color: color);
 }

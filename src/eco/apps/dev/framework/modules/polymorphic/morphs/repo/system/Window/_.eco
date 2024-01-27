@@ -19,13 +19,7 @@ std Module
                                                             Y: 0
                                                             W: ((bounds corner) x)
                                                             H: ((bounds corner) y)
-                                                        Color: ((graphics context) theme) mainAccentColor).
-                            graphics atOriginPut: (((polymorphic core objects) Rectangle)
-                                                            X: 0
-                                                            Y: 0
-                                                            W: ((bounds corner) x)
-                                                            H: ((bounds corner) y)
-                                                        Color: ((graphics context) theme) mainAccentColor).
+                                                        Color: ((kernel payload) color)).
                             
                             ((kernel payload) maybeTitleMorphKernel) yes: [ :title |
                                 graphics at: ((polymorphic math geometry) Point X: 0 Y: (title minHeight negate))
@@ -65,6 +59,7 @@ std Module
                 child                   <- No,
                 maybeTitleMorphKernel   <- No,
                 maybeButtonsMorphKernel <- No,
+                color,
             |
 
             {
@@ -75,6 +70,7 @@ std Module
                     child                   <- No.
                     maybeTitleMorphKernel   <- No.
                     maybeButtonsMorphKernel <- No.
+                    color                   <- (polymorphic color colors) Yellow.
                   ^ self
                 );
 
@@ -88,7 +84,9 @@ std Module
                 child: c => (
                     child <- Yes: ((polymorphic ui) Margin: 5 Child: c).
                     maybeTitleMorphKernel <- Yes: (
-                        ((polymorphic morphs repo) system WindowTitle) Caption: (c name)
+                        ((polymorphic morphs repo) system WindowTitle)
+                            Caption: (c name)
+                              Color: color
                     ).
                   ^ self
                 );

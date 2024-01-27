@@ -19,6 +19,14 @@ std Module
         Green <- ($ Color) R:   0 G: 255 B:   0;
         Blue  <- ($ Color) R:   0 G:   0 B: 255;
 
+        Yellow  <- ($ Color) R: 255 G: 255 B:   0;
+        Cyan    <- ($ Color) R:   0 G: 255 B: 255;
+        Magenta <- ($ Color) R: 255 G:   0 B: 255;
+
+        Orange <- ($ Color) R: 255 G: 128 B:   0;
+        Purple <- ($ Color) R: 128 G:   0 B: 255;
+        Brown  <- ($ Color) R: 128 G:  64 B:   0;
+
         Default => Green;
     };
 
