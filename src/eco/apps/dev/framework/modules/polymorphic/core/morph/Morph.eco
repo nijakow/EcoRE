@@ -151,15 +151,15 @@
             redrawFreely => (
                 | b <- paper realBounds |
                 
-                paper clearAndReset.
+                paper clear.
                 internalRedraw.
 
                 "If the size of the paper has changed, we need to forward the change to the parent presentation."
-                (((paper realBounds) equalsRectangle: b) not) -> [
+                "(((paper realBounds) equalsRectangle: b) not) -> ["
                     parentMorph yes: [ :p |
                         p aChildChanged.
                     ].
-                ].
+                "]."
               ^ self
             );
 
