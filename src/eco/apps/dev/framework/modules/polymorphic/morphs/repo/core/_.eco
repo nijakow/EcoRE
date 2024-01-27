@@ -521,14 +521,38 @@ std Module
         Behavior <- ($package core) NewBehavior
                       ~ name: 'a button morph'
                       ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
-                            ((kernel state payload) child) yes: [ :child |
+                            |
+                                payload <- (kernel state payload),
+                            |
+
+                            (payload child) yes: [ :child |
+                                |
+                                    bounds <- (stream maybeBounds)
+                                                  yes: [ :b | b ]
+                                                   no: [ child minBounds ],
+                                |
+
                                 stream emit: child.
+
+                                (payload hasFocus?) if: [
+                                    stream withGraphicsDo: [ :graphics |
+                                        |
+                                            rect <- (polymorphic core objects) FilledRectangle
+                                                        Bounds: bounds
+                                                         Color: ((graphics context) theme) transparentAttentionColor
+                                        |
+                                        graphics in: bounds put: rect.
+                                    ].
+                                ].
                             ].
                         ] bind($package)
                       ~ on: (($package event) predicates MouseClick) do: $[ :context :event |
                                 | action <- ((context kernel state) payload) action |
                                 action yes: [ :action | action value ].
                         ]
+                      ~ focusGainedFunction: $[ :kernel | ((kernel state) payload) gainFocus ]
+                      ~ focusLostFunction:   $[ :kernel | ((kernel state) payload) loseFocus ]
+                      ~ enableBlessing
                       ~ build;
         
         Payload :: Classlike
@@ -536,15 +560,35 @@ std Module
             Instance :: Clonable
             {
                 |
-                    action <- No,
-                    child  <- No,
+                    maybeMorphKernel <- No,
+                    action           <- No,
+                    child            <- No,
+                    hasFocus?        <- false,
                 |
 
                 {
                     protected polymorphic <- $package;
 
+                    bless: kernel => maybeMorphKernel <- Yes: kernel;
+
+                    protected changed => (
+                        maybeMorphKernel yes: [ :kernel |
+                            kernel changed.
+                        ].
+                      ^ self
+                    );
+
                     action: a => action <- Yes: a;
                     child:  c => child  <- Yes: c;
+
+                    protected setFocus: f => (
+                        hasFocus? <- f.
+                        changed.
+                      ^ self
+                    );
+
+                    gainFocus => setFocus: true;
+                    loseFocus => setFocus: false;
                 }
             };
 

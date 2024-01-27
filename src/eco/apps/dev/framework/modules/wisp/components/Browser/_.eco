@@ -55,10 +55,10 @@ std Module
                             ),
                             ((polymorphic morphs repo) fun TestMorph5) link,
                             ui HFlex(
-                                ui Framed(ui Margin: 5 Child: ui Label('<--')),
-                                ui Framed(ui Margin: 5 Child: ui Label('Grab')),
-                                ui Framed(ui Margin: 5 Child: ui Label('Proxy')),
-                                ui Framed(ui Margin: 5 Child: ui Label('Shell')),
+                                (ui Button) Label: '<--'   Action: $[],
+                                (ui Button) Label: 'Grab'  Action: $[],
+                                (ui Button) Label: 'Proxy' Action: $[],
+                                (ui Button) Label: 'Shell' Action: $[],
                             ) ~ yLayoutShrinkWrap!,
                         )
                     ).

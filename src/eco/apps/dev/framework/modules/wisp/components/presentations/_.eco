@@ -14,8 +14,10 @@ std Module
                         ui Margin: 3 Child: (
                             ui Label: 'pswio'
                         ) ~ xLayoutShrinkWrap!,
-                        ui Margin: 3 Child: (
-                            ui Label: ((slot name) asString)
+                        (
+                            (ui Button)
+                                 Label: ((slot name) asString)
+                                Action: $[]
                         ),
                         ui Margin: 3 Child: (
                             ui Framed(

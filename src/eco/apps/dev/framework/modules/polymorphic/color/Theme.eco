@@ -11,6 +11,7 @@
             lineColor,
             textColor,
             inverseTextColor,
+            transparentAttentionColor,
         |
 
         {
@@ -23,6 +24,7 @@
                 lineColor:        ((color) R: 0 G: 120 B: 136).
                 textColor:        ((color) R: 0 G: 182 B: 203).
                 inverseTextColor: ((color) R: 0 G: 182 B: 203).
+                transparentAttentionColor: ((color) R: 0 G: 182 B: 203 A: 64).
               ^ self
             );
 
@@ -34,6 +36,8 @@
             lineColor:        c => lineColor <- c;
             textColor:        c => textColor <- c;
             inverseTextColor: c => inverseTextColor <- c;
+
+            transparentAttentionColor: c => transparentAttentionColor <- c;
 
             writeOn: w => w << 'a polymorphic color theme';
         }
