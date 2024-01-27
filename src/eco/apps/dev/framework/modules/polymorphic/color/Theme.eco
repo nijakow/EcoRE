@@ -29,6 +29,7 @@
             );
 
             desktopColor => baseColor;
+            windowColor  => mainAccentColor;
 
             baseColor:        c => baseColor <- c;
             backgroundColor:  c => backgroundColor <- c;

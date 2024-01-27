@@ -19,7 +19,7 @@ std Module
                                                             Y: 0
                                                             W: ((bounds corner) x)
                                                             H: ((bounds corner) y)
-                                                        Color: ((kernel payload) color)).
+                                                        Color: ((graphics context) theme) windowColor).
                             
                             ((kernel payload) maybeTitleMorphKernel) yes: [ :title |
                                 graphics at: ((polymorphic math geometry) Point X: 0 Y: (title minHeight negate))
@@ -59,7 +59,6 @@ std Module
                 child                   <- No,
                 maybeTitleMorphKernel   <- No,
                 maybeButtonsMorphKernel <- No,
-                color,
             |
 
             {
@@ -70,7 +69,6 @@ std Module
                     child                   <- No.
                     maybeTitleMorphKernel   <- No.
                     maybeButtonsMorphKernel <- No.
-                    color                   <- (polymorphic color colors) Yellow.
                   ^ self
                 );
 
@@ -86,7 +84,6 @@ std Module
                     maybeTitleMorphKernel <- Yes: (
                         ((polymorphic morphs repo) system WindowTitle)
                             Caption: (c name)
-                              Color: color
                     ).
                   ^ self
                 );

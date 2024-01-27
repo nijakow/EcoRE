@@ -14,7 +14,7 @@ std Module
                         stream withGraphicsDo: [ :graphics |
                             graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
                                                        Bounds: bounds
-                                                        Color: ((kernel payload) color))
+                                                        Color: (((stream context) theme) windowColor))
                         ].
 
                         stream emit: e.
@@ -27,13 +27,11 @@ std Module
         {
             |
                 caption,
-                color,
             |
 
             {
-                initWithCaption: cap Color: col => (
+                initWithCaption: cap => (
                     caption <- cap.
-                    color   <- col.
                   ^ self
                 );
 
@@ -41,8 +39,8 @@ std Module
             }
         };
 
-        Caption: caption Color: color => (Instance clone) initWithCaption: caption Color: color;
+        Caption: caption => (Instance clone) initWithCaption: caption;
     };
 
-    Caption: caption Color: color => Behavior link: (Payload Caption: caption Color: color);
+    Caption: caption => Behavior link: (Payload Caption: caption);
 }
