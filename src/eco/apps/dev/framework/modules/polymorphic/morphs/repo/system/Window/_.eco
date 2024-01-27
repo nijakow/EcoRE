@@ -34,7 +34,7 @@ std Module
                             
                             ((kernel payload) child) yes: [ :c |
                                 graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
-                                                       Bounds: ((c minBounds) insetBy: 5)
+                                                       Bounds: ((c minBounds) insetBy: 2)
                                                         Color: ((graphics context) theme) backgroundColor).
                                 stream emit: c.
                             ].
@@ -80,7 +80,7 @@ std Module
                 );
 
                 child: c => (
-                    child <- Yes: ((polymorphic ui) Margin: 5 Child: c).
+                    child <- Yes: ((polymorphic ui) Margin: 2 Child: c).
                     maybeTitleMorphKernel <- Yes: (
                         ((polymorphic morphs repo) system WindowTitle)
                             Caption: (c name)

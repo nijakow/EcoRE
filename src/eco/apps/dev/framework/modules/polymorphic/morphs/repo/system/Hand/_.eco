@@ -9,8 +9,6 @@ std Module
                                 graphics at: ((kernel payload) grabbedMorphTranslation)
                                         put: gm. 
                             ].
-                        ] no: [
-                            stream << 'a hand'.
                         ].
                     ] bind($package)
                     ~ enableBlessing
