@@ -151,7 +151,7 @@
             redrawFreely => (
                 | b <- paper realBounds |
                 
-                paper clear.
+                paper clearAndReset.
                 internalRedraw.
 
                 "If the size of the paper has changed, we need to forward the change to the parent presentation."
