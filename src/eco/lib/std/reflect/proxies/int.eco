@@ -90,7 +90,7 @@
     < other    => #'ecosphere.ecore.math.less'(self, other);
     == other   => #'ecosphere.ecore.is'(self, other);
     != other   => (self == other) not;
-    <= other   => [ self < other ] or: [ self == other ];
+    <= other   => (self < other) or: (self == other);
     > other    => (self <= other) not;
     >= other   => (self < other) not;
 

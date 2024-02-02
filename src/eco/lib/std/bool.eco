@@ -17,6 +17,10 @@
             false: f         => unless: f;
             if: c then: b    => ( (c value) if: [ b value. ^ false ] else: [ ^ self ] );
             default: b       => ( b value. ^ self );
+
+            and: other       => other;
+            or:  other       => self;
+
             writeOn: writer  => writer << 'true';
         };
     },
@@ -38,6 +42,10 @@
             false: f         => unless: f;
             if: c then: b    => self;
             default: b       => self;
+
+            and: other       => self;
+            or:  other       => other;
+
             writeOn: writer  => writer << 'false';
         };
     }

@@ -5,9 +5,9 @@
     IsBin(c) => (
         | rfalse <- [ ^ false ] |
 
-        ([ c >= #\a ] and: [ c <= #\z ]) if: rfalse.
-        ([ c >= #\A ] and: [ c <= #\Z ]) if: rfalse.
-        ([ c >= #\0 ] and: [ c <= #\9 ]) if: rfalse.
+        ((c >= #\a) and: (c <= #\z)) if: rfalse.
+        ((c >= #\A) and: (c <= #\Z)) if: rfalse.
+        ((c >= #\0) and: (c <= #\9)) if: rfalse.
         (c == #\!) if: rfalse.
         (c == #\_) if: rfalse.
         (c == #\?) if: rfalse.
