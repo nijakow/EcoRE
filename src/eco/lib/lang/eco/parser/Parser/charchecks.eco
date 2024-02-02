@@ -3,11 +3,15 @@
     static with inherited _ = #<:std/Module>;
     
     IsBin(c) => (
-        "TODO: Rework this function!"
-        ([
-            [
-                [ [ c >= #\a ] and: [ c <= #\z ] ] or: [ [ c >= #\A ] and: [ c <= #\Z ] ]
-            ] or: [ [ c >= #\0 ] and: [ c <= #\9 ] ]
-        ] or: [ [ c == #\! ] or: [[ c == #\_ ] or: [ c == #\? ]] ]) not
+        | rfalse <- [ ^ false ] |
+
+        ([ c >= #\a ] and: [ c <= #\z ]) if: rfalse.
+        ([ c >= #\A ] and: [ c <= #\Z ]) if: rfalse.
+        ([ c >= #\0 ] and: [ c <= #\9 ]) if: rfalse.
+        (c == #\!) if: rfalse.
+        (c == #\_) if: rfalse.
+        (c == #\?) if: rfalse.
+
+      ^ true
     );
 }
