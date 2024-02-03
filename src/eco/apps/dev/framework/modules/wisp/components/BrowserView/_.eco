@@ -42,4 +42,5 @@
     };
 
     Mirror: mirror Navigator: navigator => (Instance clone) initWithMirror: mirror Navigator: navigator;
+    Object: object Navigator: navigator => Mirror: (std reflect Mirror: object) Navigator: navigator;
 }

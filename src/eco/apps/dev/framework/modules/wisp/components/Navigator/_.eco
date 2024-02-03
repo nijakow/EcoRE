@@ -4,9 +4,23 @@
 
     Instance :: Clonable
     {
+        |
+            browser,
+        |
+
         {
-            browseTo: object => (
-                (std io out << 'Browsing to ' << object) newline commit.
+            initWithBrowser: _browser => (
+                browser <- _browser.
+              ^ self
+            );
+
+            followLinkTo: object => (
+                browser navigateToObject: object Navigator: self.
+              ^ self
+            );
+
+            back => (
+                browser navigateBack.
               ^ self
             );
 
@@ -14,5 +28,5 @@
         }
     };
 
-    New => Instance new;
+    Browser: browser => (Instance clone) initWithBrowser: browser;
 }

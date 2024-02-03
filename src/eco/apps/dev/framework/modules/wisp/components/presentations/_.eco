@@ -18,7 +18,7 @@ std Module
                 (
                     (ui Button)
                          Label: ((slot name) asString)
-                        Action: $[ :(navigator, slotMirror) | navigator browseTo: (slotMirror slotValue) ] bind(navigator, slot)
+                        Action: $[ :(navigator, slotMirror) | navigator followLinkTo: (slotMirror slotValue) ] bind(navigator, slot)
                 )
             ) inject: [ :hflex |
                 (draggable?) if: [

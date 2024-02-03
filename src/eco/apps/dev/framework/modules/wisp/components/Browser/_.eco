@@ -8,6 +8,7 @@ std Module
                                 stream emit: current.
                             ].
                       ]
+                    ~ enableBlessing
                     ~ build;
     
     State :: Classlike
@@ -15,7 +16,8 @@ std Module
         Instance :: Clonable
         {
             |
-                current <- No,
+                maybeMorphKernel <- No,
+                current          <- No,
                 views,
             |
 
@@ -26,15 +28,16 @@ std Module
 
                 init => (
                     |
-                        mirror    <- (std reflect Mirror: self),
-                        navigator <- (wisp components Navigator) New,
+                        navigator <- (wisp components Navigator) Browser: self,
                         view      <- (wisp components BrowserView)
-                                            Mirror: mirror
+                                            Object: self
                                          Navigator: navigator,
                     |
 
-                    current <- No.
-                    views   <- std util newStack.
+                    maybeMorphKernel <- No.
+                    current          <- No.
+                    views            <- std util newStack.
+
                     views push: view.
                     rebuild.
 
@@ -42,6 +45,45 @@ std Module
                 );
 
                 protected current: c => current <- Yes: c;
+
+                bless: morph => maybeMorphKernel <- Yes: morph;
+
+                protected changed => (
+                    maybeMorphKernel yes: [ :morph |
+                        morph contentChanged.
+                    ].
+                  ^ self
+                );
+
+                navigateToObject: object Navigator: navigator => (
+                    |
+                        view <- (wisp components BrowserView)
+                                    Object: object
+                                 Navigator: navigator,
+                    |
+
+                    views push: view.
+                    current: view.
+                    rebuild.
+                    changed.
+
+                  ^ self
+                );
+
+                navigateBack => (
+                    ((views empty?) not) if: [
+                        views pop.
+                        ((views empty?) not) if: [
+                            current: (views top).
+                        ] else: [
+                            current <- No.
+                        ].
+                        rebuild.
+                        changed.
+                    ].
+
+                  ^ self
+                );
 
                 rebuild => (
                     current: (
@@ -52,7 +94,7 @@ std Module
                                     else: [ (views top) morph           ],
                             ),
                             ui HFlex(
-                                (ui Button) Label: '<--'   Action: $[],
+                                (ui Button) Label: '<--'   Action: $[ :(browser) | browser navigateBack ] bind(self),
                                 (ui Button) Label: 'Grab'  Action: $[],
                                 (ui Button) Label: 'Proxy' Action: $[],
                                 (ui Button) Label: 'Shell' Action: $[],
