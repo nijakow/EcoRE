@@ -3,36 +3,42 @@ std Module
 {
     protected ui <- ($package modules polymorphic) ui;
 
+    SlotMorphForSlot: slot Navigator: navigator => (
+      ^ ui Framed(
+            ui HFlex(
+                ui Margin: 3 Child: (
+                    ui HFlex(
+                        ui Label: (slot isProtected if: 'p' else: ' '),
+                        ui Label: (slot isStatic    if: 's' else: ' '),
+                        ui Label: (slot isFinal     if: 'f' else: ' '),
+                        ui Label: (slot isWith      if: 'w' else: ' '),
+                        ui Label: (slot isInherited if: 'i' else: ' '),
+                    ) ~ xLayoutShrinkWrap!
+                ) ~ xLayoutShrinkWrap!,
+                (
+                    (ui Button)
+                         Label: ((slot name) asString)
+                        Action: $[ :(navigator, slotMirror) | navigator browseTo: (slotMirror slotValue) ] bind(navigator, slot)
+                ),
+                ui Margin: 3 Child: (
+                    (ui Button)
+                         Label: 'X'
+                        Action: $[ :(builder, slotMirror, navigator) :event | ((event handMorph) payload) tryGrab: (builder DraggableSlotMorphForSlot: slotMirror Navigator: navigator) ] bind(self, slot, navigator)
+                ) ~ xLayoutShrinkWrap!
+            )
+        ) ~ yLayoutShrinkWrap!
+    );
+
+    DraggableSlotMorphForSlot: slot Navigator: navigator => (
+      ^ ui MiniWindow(SlotMorphForSlot: slot Navigator: navigator)
+    );
+
 
     MoleculePaneForMirror: mirror Navigator: navigator => (
         | flex <- ui VFlex |
 
         mirror slotsDo: [ :slot |
-            flex add: (
-                ui Framed(
-                    ui HFlex(
-                        ui Margin: 3 Child: (
-                            ui HFlex(
-                                ui Label: (slot isProtected if: 'p' else: ' '),
-                                ui Label: (slot isStatic    if: 's' else: ' '),
-                                ui Label: (slot isFinal     if: 'f' else: ' '),
-                                ui Label: (slot isWith      if: 'w' else: ' '),
-                                ui Label: (slot isInherited if: 'i' else: ' '),
-                            ) ~ xLayoutShrinkWrap!
-                        ) ~ xLayoutShrinkWrap!,
-                        (
-                            (ui Button)
-                                 Label: ((slot name) asString)
-                                Action: $[ :(navigator, slotMirror) | navigator browseTo: (slotMirror slotValue) ] bind(navigator, slot)
-                        ),
-                        ui Margin: 3 Child: (
-                            (ui Button)
-                                 Label: 'X'
-                                Action: $[]
-                        ) ~ xLayoutShrinkWrap!
-                    )
-                ) ~ yLayoutShrinkWrap!
-            )
+            flex add: (SlotMorphForSlot: slot Navigator: navigator)
         ].
 
       ^ flex
