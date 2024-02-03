@@ -5,6 +5,11 @@
     Instance :: Clonable
     {
         {
+            browseTo: object => (
+                (std io out << 'Browsing to ' << object) newline commit.
+              ^ self
+            );
+
             writeOn: w => w << 'a navigator';
         }
     };
