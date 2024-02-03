@@ -54,11 +54,13 @@
         to: end => std util newRangeFrom: self To: end;
 
         for: upper do: body => (
-            | i <- self |
-            [ i < upper ] while: [
+            | i <- self, breaker <- [ ^ self ] |
+
+            [
+                (i < upper) unless: breaker.
                 body value(i).
                 i <- i + 1.
-            ]
+            ] repeat.
         );
         to: upper do: body => for: (upper + 1) do: body;
 
