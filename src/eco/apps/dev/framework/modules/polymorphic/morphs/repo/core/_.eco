@@ -518,6 +518,33 @@ std Module
     {
         protected polymorphic <- $package;
 
+        Event :: Classlike
+        {
+            Instance :: Clonable
+            {
+                |
+                    maybeButtonMorph <- No,
+                    maybeHandMorph   <- No,
+                |
+
+                {
+                    buttonMorph: bm => maybeButtonMorph <- Yes: bm;
+                    handMorph:   hm => maybeHandMorph   <- Yes: hm;
+
+                    buttonMorph => maybeButtonMorph yes;
+                    handMorph   => maybeHandMorph   yes;
+
+                    writeOn: w => w << 'a button event';
+                }
+            };
+
+            ButtonMorph: buttonMorph HandMorph: handMorph => (
+              ^ (Instance clone)
+                    ~ buttonMorph: buttonMorph
+                    ~ handMorph:   handMorph
+            );
+        };
+
         Behavior <- ($package core) NewBehavior
                       ~ name: 'a button morph'
                       ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
@@ -546,10 +573,17 @@ std Module
                                 ].
                             ].
                         ] bind($package)
-                      ~ on: (($package event) predicates MouseClick) do: $[ :context :event |
+                      ~ on: (($package event) predicates MouseClick) do: $[ :(polymorphic) :context :event |
                                 | action <- ((context kernel state) payload) action |
-                                action yes: [ :action | action value ].
-                        ]
+                                action yes: [ :action |
+                                    |
+                                        buttonEvent <- (((polymorphic morphs repo) core ButtonMorph) Event)
+                                                            ButtonMorph: context morph
+                                                              HandMorph: (event body) hand
+                                    |
+                                    action value(buttonEvent).
+                                ].
+                        ] bind($package)
                       ~ focusGainedFunction: $[ :kernel | ((kernel state) payload) gainFocus ]
                       ~ focusLostFunction:   $[ :kernel | ((kernel state) payload) loseFocus ]
                       ~ enableBlessing
