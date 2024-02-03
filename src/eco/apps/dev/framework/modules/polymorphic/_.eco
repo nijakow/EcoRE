@@ -28,7 +28,7 @@ std Module
                     Y: 0.
 
         ((app framework) actions open) ui BuildAndOpen: [ :ui |
-            ui Window(450, 450,
+            ui Window(750, 750,
                 ui Clipped(
                     (DriverWrapperMorph new) driver: driver
                 )
