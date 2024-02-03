@@ -11,7 +11,7 @@
     != other      => (== other) not;
 
     let: block    => block value(self);
-    run: block    => ( block value(self). self );
+    inject: block => ( block value(self). self );
 
     & value       => (((std util Collector) clone) init: self) & value;
     ~> value      => ((std util MutablePair) clone) initWithFirst: self Second: value;
