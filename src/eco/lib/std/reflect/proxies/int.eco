@@ -12,8 +12,8 @@
     };
 
     with inherited min_max = {
-        min: other => (self < other) if: [ self  ] else: [ other ];
-        max: other => (self < other) if: [ other ] else: [ self  ];
+        min: other => (self < other) if: self  else: other;
+        max: other => (self < other) if: other else: self;
     };
 
     with inherited checks = {
@@ -65,11 +65,13 @@
         to: upper do: body => for: (upper + 1) do: body;
 
         to: upper by: step do: body => (
-            | i <- self |
-            [ i < upper ] while: [
+            | i <- self, breaker <- [ ^ self ] |
+
+            [
+                (i < upper) unless: breaker.
                 body value(i).
                 i <- i + step.
-            ]
+            ] repeat.
         );
     };
 
@@ -102,5 +104,5 @@
     -    other => #'ecosphere.ecore.math.sub'(self, other);
     +    other => #'ecosphere.ecore.math.add'(self, other);
 
-    writeOn: writer => (std util text writing NumberWriter) WriteInt: self To: writer;
+    writeOn: writer => ((std util text) writing NumberWriter) WriteInt: self To: writer;
 }
