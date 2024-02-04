@@ -9,6 +9,10 @@
             morphs,
             morphsToRedraw,
             morphsToTick,
+            time,
+            last,
+            count,
+            lastcount,
         |
 
         {
@@ -19,21 +23,37 @@
                 morphs         <- std util newVector.
                 morphsToRedraw <- std util newVector.
                 morphsToTick   <- std util newVector.
+                time           <- 0.
+                last           <- 0.
+                count          <- 0.
+                lastcount      <- 0.
               ^ self
             );
 
             addMorph: morph => (
-                morphs add: morph. "TODO, FIXME, XXX: Add only if not present!"
+                "morphs add: morph." "TODO, FIXME, XXX: Add only if not present!"
                 (morph tick?) if: [
                     morphsToTick add: morph.
                 ].
+                count <- count + 1.
               ^ self
             );
 
             removeMorph: morph => (
-                morphs remove: morph.
+                "
+                    TODO: The removal algorithm is not efficient enough!
+                          Use a set for the morph list.
+                "
+
+                |
+                    before <- #'ecosphere.ecore.time.since_start'()
+                |
+                "morphs         remove: morph."
                 morphsToRedraw remove: morph.
-                morphsToTick remove: morph.
+                morphsToTick   remove: morph.
+                | diff <- (#'ecosphere.ecore.time.since_start'() - before) |
+                time <- time + diff.
+                count <- count - 1.
               ^ self
             );
 
@@ -59,6 +79,16 @@
                 [ (morphsToRedraw empty?) not ] while: [
                     | morph <- morphsToRedraw removeFirst |
                     morph redrawFreely.
+                ].
+
+                (time != last) if: [
+                    (std io out << 'Time spent in removal: ' << time) newline commit.
+                    last <- time.
+                ].
+
+                (count != lastcount) if: [
+                    (std io out << 'Morph count: ' << count) newline commit.
+                    lastcount <- count.
                 ].
 
               ^ self
