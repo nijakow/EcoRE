@@ -24,6 +24,9 @@
 
             addMorph: morph => (
                 morphs add: morph. "TODO, FIXME, XXX: Add only if not present!"
+                (morph tick?) if: [
+                    morphsToTick add: morph.
+                ].
               ^ self
             );
 
@@ -45,13 +48,13 @@
             );
 
             tickAll => (
-                morphsToTick clear.
-                morphs into: morphsToTick.
+                |
+                    tickingMorphs <- std util newVector
+                |
 
-                [ (morphsToTick empty?) not ] while: [
-                    | morph <- morphsToTick removeFirst |
-                    morph tick.
-                ].
+                morphsToTick into: tickingMorphs.
+
+                tickingMorphs do: [ :morph | morph tick ].
 
                 [ (morphsToRedraw empty?) not ] while: [
                     | morph <- morphsToRedraw removeFirst |

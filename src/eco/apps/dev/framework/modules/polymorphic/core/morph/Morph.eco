@@ -170,6 +170,7 @@
               ^ self
             );
 
+            tick? => kernel tick?;
             tick => (
                 ((kernel behavior) animated?) -> [ kernel changed ].
               ^ self
