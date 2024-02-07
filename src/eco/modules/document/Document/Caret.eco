@@ -47,14 +47,13 @@
 
             (document documentStream)
                 do: [ :item |
+                    ([ln == y] and: [col == x]) if: [
+                      ^ self moveTo: off
+                    ].
                     [ :exit |
                         item ifNewline: [ ln <- ln + 1. col <- 0. exit value. ].
                         col <- col + 1.
                     ] withBreak.
-                    ([ln == y] and: [col == x]) if: [
-                        (std io out << 'Moving to ' << x << ', ' << y << ' at ' << off) newline commit.
-                      ^ self moveTo: off
-                    ].
                     off <- off + 1.
                 ].
 

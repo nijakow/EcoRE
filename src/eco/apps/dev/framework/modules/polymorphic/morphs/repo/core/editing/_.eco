@@ -76,12 +76,21 @@ std Module
                         ~ on: (($package event) predicates Key) do: $[ :(polymorphic) :context :event |
                               |
                                   payload <- ((context kernel) payload),
+                                  caret   <- (payload caret),
                                   key     <- (event body) key,
                               |
 
                               [ :break |
+                                  key ifLeft:  [ payload moveCaretToX: ((caret x) - 1) Y: (caret y). break value. ].
+                                  key ifRight: [ payload moveCaretToX: ((caret x) + 1) Y: (caret y). break value. ].
+                                  key ifUp:    [ payload moveCaretToX: (caret x) Y: ((caret y) - 1). break value. ].
+                                  key ifDown:  [ payload moveCaretToX: (caret x) Y: ((caret y) + 1). break value. ].
+
                                   key ifEnter:     [ payload newline.   break value. ].
                                   key ifBackspace: [ payload backspace. break value. ].
+
+                                  key ifHome:      [ payload moveCaretToX: 0 Y: (caret y).               break value. ].
+                                  key ifTab:       [ payload insertText: ' ' * (4 - ((caret x) mod: 4)). break value. ].
 
                                   (key keyText) yes: [ :text |
                                       payload insertText: text.
@@ -99,21 +108,76 @@ std Module
                     document,
                     caret,
                     objectMorphs,
+                    maybeLineCache <- No,
                 |
 
                 {
+                    LineInfo :: std Classlike {
+                        Instance :: Clonable {
+                            |
+                                lineStart,
+                                lineEnd,
+                            |
+
+                            {
+                                initWithStart: start end: end => (
+                                    lineStart <- start.
+                                    lineEnd   <- end.
+                                  ^ self
+                                );
+
+                                lineLength => (lineEnd - lineStart);
+                            }
+                        };
+
+                        Start: start End: end => (Instance clone) initWithStart: start end: end;
+                    };
+
                     initWithDocument: _document => (
-                        maybeMorph   <- No.
-                        document     <- _document.
-                        caret        <- _document newCaret.
-                        objectMorphs <- std util newMap.
+                        maybeMorph     <- No.
+                        document       <- _document.
+                        caret          <- _document newCaret.
+                        objectMorphs   <- std util newMap.
+                        maybeLineCache <- No.
                       ^ self
                     );
 
                     bless: morph => maybeMorph <- Yes: morph;
 
+                    protected lineCache => (
+                        maybeLineCache no: [
+                            |
+                                lc     <- std util newArray,
+                                offset <- 0,
+                                last   <- 0,
+                            |
+
+                            (document iterator) do: [ :item |
+                                item ifNewline: [
+                                    lc add: (LineInfo Start: last End: offset).
+                                    last <- offset + 1.
+                                ].
+                                offset <- offset + 1.
+                            ].
+
+                            (offset > last) if: [
+                                lc add: (LineInfo Start: last End: offset).
+                            ].
+
+                            maybeLineCache <- Yes: lc.
+                          ^ maybeLineCache
+                        ].
+                      ^ maybeLineCache
+                    );
+
                     protected changed => (
                         maybeMorph yes: [ :morph | morph changed ].
+                      ^ self
+                    );
+
+                    moveCaretToX: x Y: y => (
+                        caret moveToX: x Y: y.
+                        changed.
                       ^ self
                     );
 

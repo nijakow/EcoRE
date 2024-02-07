@@ -120,8 +120,12 @@
             );
 
             newline => (
+                | delta <- nextLineDelta max: minNextLineDelta |
                 xOffset <- 0. "TODO: Different start of line?"
-                yOffset <- yOffset + (nextLineDelta max: minNextLineDelta).
+                yOffset <- yOffset + delta.
+                maybeLineInfo yes: [ :li |
+                    li lineHeight: delta.
+                ].
                 flushLine.
               ^ self
             );
