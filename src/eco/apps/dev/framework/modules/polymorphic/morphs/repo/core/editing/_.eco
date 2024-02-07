@@ -16,6 +16,11 @@ std Module
                               |
 
                               (document iterator) do: [ :item |
+                                  (offset == caret offset) if: [
+                                      caretPos      <- Yes: stream cursor.
+                                      caretLineInfo <- Yes: stream lineInfo.
+                                  ].
+
                                   [ :break |
                                       item ifNewline: [
                                           stream newline.
@@ -52,11 +57,6 @@ std Module
                                       ].
                                   ] withBreak.
 
-                                  (offset == caret offset) if: [
-                                      caretPos      <- Yes: stream cursor.
-                                      caretLineInfo <- Yes: stream lineInfo.
-                                  ].
-
                                   offset <- offset + 1.
                               ].
 
@@ -74,13 +74,28 @@ std Module
                               ].
                           ] bind($package)
                         ~ on: (($package event) predicates Key) do: $[ :(polymorphic) :context :event |
-                              (std io out << 'Received key event: ' << (event body) key << '!') newline commit.
+                              |
+                                  payload <- ((context kernel) payload),
+                                  key     <- (event body) key,
+                              |
+
+                              [ :break |
+                                  key ifEnter:     [ payload newline.   break value. ].
+                                  key ifBackspace: [ payload backspace. break value. ].
+
+                                  (key keyText) yes: [ :text |
+                                      payload insertText: text.
+                                      break value.
+                                  ].
+                              ] withBreak.
                           ]
+                        ~ enableBlessing
                         ~ build;
         
         Payload :: std Classlike {
             Instance :: Clonable {
                 |
+                    maybeMorph <- No,
                     document,
                     caret,
                     objectMorphs,
@@ -88,9 +103,31 @@ std Module
 
                 {
                     initWithDocument: _document => (
+                        maybeMorph   <- No.
                         document     <- _document.
                         caret        <- _document newCaret.
                         objectMorphs <- std util newMap.
+                      ^ self
+                    );
+
+                    bless: morph => maybeMorph <- Yes: morph;
+
+                    protected changed => (
+                        maybeMorph yes: [ :morph | morph changed ].
+                      ^ self
+                    );
+
+                    newline => insertText: '\n';
+
+                    backspace => (
+                        caret backspace.
+                        changed.
+                      ^ self
+                    );
+
+                    insertText: text => (
+                        caret insertText: text.
+                        changed.
                       ^ self
                     );
                 }
