@@ -7,8 +7,12 @@ std Module
                         ~ name: 'a document morph'
                         ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                               |
-                                  document     <- (kernel payload) document,
-                                  objectMorphs <- (kernel payload) objectMorphs,
+                                  document      <- (kernel payload) document,
+                                  caret         <- (kernel payload) caret,
+                                  objectMorphs  <- (kernel payload) objectMorphs,
+                                  offset        <- 0,
+                                  caretPos      <- No,
+                                  caretLineInfo <- No,
                               |
 
                               (document iterator) do: [ :item |
@@ -47,7 +51,27 @@ std Module
                                           break value.
                                       ].
                                   ] withBreak.
-                              ]
+
+                                  (offset == caret offset) if: [
+                                      caretPos      <- Yes: stream cursor.
+                                      caretLineInfo <- Yes: stream lineInfo.
+                                  ].
+
+                                  offset <- offset + 1.
+                              ].
+
+                              caretPos yes: [ :pos |
+                                  stream withGraphicsDo: [ :graphics |
+                                      |
+                                          lineHeight <- caretLineInfo yes: [ :li | li lineHeight ] no: [ 10 ],
+                                          line       <- (polymorphic core objects) Line
+                                                              End: ((polymorphic math geometry) Point X: 0 Y: lineHeight)
+                                                            Color: (polymorphic color) colors Red
+                                      |
+
+                                      graphics at: pos put: line.
+                                  ].
+                              ].
                           ] bind($package)
                         ~ build;
         
@@ -55,12 +79,14 @@ std Module
             Instance :: Clonable {
                 |
                     document,
+                    caret,
                     objectMorphs,
                 |
 
                 {
                     initWithDocument: _document => (
                         document     <- _document.
+                        caret        <- _document newCaret.
                         objectMorphs <- std util newMap.
                       ^ self
                     );

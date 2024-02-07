@@ -10,22 +10,37 @@
             yOffset <- 0,
 
             nextLineDelta <- 0,
-            protected minNextLineDelta <- 0
+            protected minNextLineDelta <- 0,
+
+            protected maybeLineInfo <- No,
         |
 
         {
             protected polymorphic <- $package;
 
             emitter: e x: x y: y => (
-                emitter <- e.
-                xOffset <- x.
-                yOffset <- y.
-                nextLineDelta <- 0,
+                emitter          <- e.
+                xOffset          <- x.
+                yOffset          <- y.
+                nextLineDelta    <- 0,
                 minNextLineDelta <- ((polymorphic gfx eve) DefaultFont) height.
+                maybeLineInfo    <- No.
               ^ self
             );
 
-            protected cursor => (polymorphic math geometry Point) X: xOffset Y: yOffset;
+            lineInfo => (
+                maybeLineInfo no: [
+                    |
+                        li <- ((polymorphic core stream) meta LineInfo) New
+                    |
+                    li lineHeight: nextLineDelta.
+                    maybeLineInfo <- (Yes: li).
+                ].
+              ^ maybeLineInfo yes
+            );
+
+            cursor => (polymorphic math geometry Point) X: xOffset Y: yOffset;
+
             protected bounds => emitter bounds;
 
             maybeContext => emitter maybeContext;
@@ -46,8 +61,11 @@
             );
 
             protected reserveExtentX: x Y: y => (
-                xOffset <- xOffset + x.
+                xOffset       <- xOffset + x.
                 nextLineDelta <- nextLineDelta max: y.
+                maybeLineInfo yes: [ :li |
+                    li lineHeight: nextLineDelta.
+                ].
               ^ self
             );
 
@@ -95,10 +113,16 @@
               ^ self
             );
 
+            protected flushLine => (
+                nextLineDelta <- 0.
+                maybeLineInfo <- No.
+              ^ self
+            );
+
             newline => (
                 xOffset <- 0. "TODO: Different start of line?"
                 yOffset <- yOffset + (nextLineDelta max: minNextLineDelta).
-                nextLineDelta <- 0.
+                flushLine.
               ^ self
             );
 

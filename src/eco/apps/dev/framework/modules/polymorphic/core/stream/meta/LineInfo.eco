@@ -1,0 +1,19 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        |
+            lineHeight <- 0,
+        |
+
+        {
+            lineHeight: lh => lineHeight <- lh;
+
+            writeOn: w => w << 'a line info object';
+        }
+    };
+
+    New => Instance new;
+}
