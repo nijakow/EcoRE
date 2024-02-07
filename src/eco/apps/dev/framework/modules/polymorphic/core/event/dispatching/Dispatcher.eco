@@ -138,12 +138,17 @@
             );
 
             keyPressedAtX: x Y: y Key: key => (
-                (std io out << 'Key pressed!') newline commit.
+                |
+                    event <- (polymorphic event events) KeyPress: key Hand: ((driver session) handMorph)
+                |
+
+                dispatch: event AtX: x Y: y.
+
               ^ self
             );
 
             keyReleasedAtX: x Y: y Key: key => (
-                (std io out << 'Key released!') newline commit.
+                "TODO"
               ^ self
             );
 

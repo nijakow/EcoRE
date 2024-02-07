@@ -73,6 +73,9 @@ std Module
                                   ].
                               ].
                           ] bind($package)
+                        ~ on: (($package event) predicates Key) do: $[ :(polymorphic) :context :event |
+                              (std io out << 'Received key event: ' << (event body) key << '!') newline commit.
+                          ]
                         ~ build;
         
         Payload :: std Classlike {

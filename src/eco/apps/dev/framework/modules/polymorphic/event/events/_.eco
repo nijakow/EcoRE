@@ -17,4 +17,7 @@ std Module
     DropMorph: morph Displacement: displacement => Head: (types DropMorph) Body: ((bodies DropMorph) Morph: morph Displacement: displacement);
 
     MouseClick: info Hand: hand => Head: (types MouseClick) Body: ((bodies MouseClick) Info: info Hand: hand);
+
+    Key:      key Hand: hand => Head: (types Key) Body: ((bodies Key) Hand: hand Key: key);
+    KeyPress: key Hand: hand => Key: key Hand: hand;
 }

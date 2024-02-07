@@ -8,4 +8,5 @@ std Module
     AddMorph   => Predicate for: ((polymorphic event types) AddMorph);
     DropMorph  => Predicate for: ((polymorphic event types) DropMorph);
     MouseClick => Predicate for: ((polymorphic event types) MouseClick);
+    Key        => Predicate for: ((polymorphic event types) Key);
 }

@@ -7,4 +7,5 @@ std Module
     DropMorph :: (here / 'DropMorph.eco') importIn: (self EventType);
 
     MouseClick :: (here / 'MouseClick.eco') importIn: (self EventType);
+    Key        :: (here / 'Key.eco')        importIn: (self EventType);
 }

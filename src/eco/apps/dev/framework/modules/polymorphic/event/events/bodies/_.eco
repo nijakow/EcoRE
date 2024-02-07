@@ -3,4 +3,5 @@ std Module
 {
     DropMorph  :: (here / 'DropMorph.eco')  importIn: $package;
     MouseClick :: (here / 'MouseClick.eco') importIn: $package;
+    Key        :: (here / 'Key.eco')        importIn: $package;
 }
