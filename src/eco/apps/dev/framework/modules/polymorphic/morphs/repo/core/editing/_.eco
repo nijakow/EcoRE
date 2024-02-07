@@ -1,0 +1,75 @@
+
+std Module
+{
+    DocumentMorph :: Module
+    {
+        Behavior <- ($package core) NewBehavior
+                        ~ name: 'a document morph'
+                        ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
+                              |
+                                  document     <- (kernel payload) document,
+                                  objectMorphs <- (kernel payload) objectMorphs,
+                              |
+
+                              (document iterator) do: [ :item |
+                                  [ :break |
+                                      item ifNewline: [
+                                          stream newline.
+                                          break value.
+                                      ].
+                                      item ifCharacter: [
+                                          stream << (item content).
+                                          break value.
+                                      ].
+                                      item ifReference: [
+                                          | m <- (objectMorphs at: (item content))
+                                                    yes: [ :morph | morph ]
+                                                     no: [ |
+                                                                morph <- (polymorphic ui) Framed(
+                                                                              (polymorphic ui) Button
+                                                                                  Child: (
+                                                                                      (polymorphic ui) Margin: 2 Child: (
+                                                                                          ((polymorphic morphs repo) core WriteMorph)
+                                                                                              link: (item content)
+                                                                                      )
+                                                                                  )
+                                                                                  Action: $[]
+                                                                          )
+                                                            |
+
+                                                            objectMorphs at: (item content) put: morph.
+
+                                                            morph
+                                                        ],
+                                          |
+                                          
+                                          stream emit: m.
+                                          break value.
+                                      ].
+                                  ] withBreak.
+                              ]
+                          ] bind($package)
+                        ~ build;
+        
+        Payload :: std Classlike {
+            Instance :: Clonable {
+                |
+                    document,
+                    objectMorphs,
+                |
+
+                {
+                    initWithDocument: _document => (
+                        document     <- _document.
+                        objectMorphs <- std util newMap.
+                      ^ self
+                    );
+                }
+            };
+
+            Document: document => (Instance clone) initWithDocument: document;
+        };
+
+        Document: document => (Behavior link: (Payload Document: document));
+    };
+}

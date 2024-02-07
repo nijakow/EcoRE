@@ -1,14 +1,21 @@
 
 std Module
 {
+    editing :: (here / 'editing' / '_.eco') importIn: $package;
+
+    WriteMorph <- ($package core) NewBehavior
+                    ~ name: 'a write morph'
+                    ~ presenterFunction: $[ :stream :kernel | stream << (kernel payload) ]
+                    ~ build;
+
     EmitMorph <- ($package core) NewBehavior
                     ~ name: 'an emit morph'
-                    ~ presenterFunction: $[ :stream :kernel | stream emit: ((kernel state) payload) ]
+                    ~ presenterFunction: $[ :stream :kernel | stream emit: (kernel payload) ]
                     ~ build;
     
     FunctionEmitMorph <- ($package core) NewBehavior
                             ~ name: 'a function emit morph'
-                            ~ presenterFunction: $[ :stream :kernel | ((kernel state) payload) value(stream, kernel) ]
+                            ~ presenterFunction: $[ :stream :kernel | (kernel payload) value(stream, kernel) ]
                             ~ build;
 
     LabelMorph :: Module
