@@ -42,6 +42,11 @@
               ^ self
             );
 
+            closeShell: shell => (
+                openShells remove: shell.
+              ^ self
+            );
+
             writeOn: w => w << 'a browser view';
         }
     };
