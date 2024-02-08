@@ -56,8 +56,7 @@ Clonable {
                           ~ add: (((polymorphic morphs) repo system) Window
                                     Child: (((polymorphic morphs) repo core) MarginMorph
                                                 Margin: 10
-                                                 Child: ((((polymorphic morphs) repo core) editing DocumentMorph)
-                                                            Document: (morphic app document Test)))).
+                                                 Child: ((polymorphic ui) DocumentEditor))).
                         added? <- true.
                     ].
 
