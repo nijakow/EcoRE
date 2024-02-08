@@ -97,20 +97,24 @@ std Module
                 rebuild => (
                     current: (
                         ui VFlex(
-                            ui Margin: 15 Child: (
-                                (views empty?)
-                                      if: [ ui Label: 'Nothing to show' ]
-                                    else: [ (views top) morph           ],
+                            ui Margin: 10 Child: (
+                                ui VFlex(
+                                    ui Margin: 5 Child: (
+                                        (views empty?)
+                                              if: [ ui Label: 'Nothing to show' ]
+                                            else: [ (views top) morph           ],
+                                    ),
+                                    (ui VFlex) inject: [ :flex |
+                                        ((views empty?) not) if: [
+                                            ((views top) openShells) do: [ :shell |
+                                                flex add: (
+                                                    ui Margin: 5 Child: (ui Framed(ui Margin: 3 Child: shell))
+                                                )
+                                            ].
+                                        ].
+                                    ],
+                                )
                             ),
-                            (ui VFlex) inject: [ :flex |
-                                ((views empty?) not) if: [
-                                    ((views top) openShells) do: [ :shell |
-                                        flex add: (
-                                            ui Margin: 5 Child: (ui Framed(ui Margin: 3 Child: shell))
-                                        )
-                                    ].
-                                ].
-                            ],
                             ui HFlex(
                                 (ui Button) Label: '<--'   Action: $[ :(browser) | browser navigateBack ] bind(self),
                                 (ui Button) Label: 'Grab'  Action: $[],
