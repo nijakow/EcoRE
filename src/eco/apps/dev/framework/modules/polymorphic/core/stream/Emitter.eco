@@ -63,7 +63,7 @@
                         presentation <- ((polymorphic core paper) presenting MorphPresentation) Morph: morph
                     |
 
-                    (morph paper) changeFixedBounds: (placement bounds).
+                    "(morph paper) changeFixedBounds: (placement bounds)."
 
                     paper addOld: presentation.
                 ] no: [

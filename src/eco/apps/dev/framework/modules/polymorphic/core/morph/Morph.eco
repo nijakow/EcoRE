@@ -81,7 +81,7 @@
 
             changeBounds: newBounds => (
                 (((newBounds extent) equalsPoint: (bounds extent)) not) if: [
-                    paper clearAndReset.
+                    "paper clearAndReset."
                     paper changeFixedBounds: (newBounds bounds).
                     iAmDirty.
                 ].
