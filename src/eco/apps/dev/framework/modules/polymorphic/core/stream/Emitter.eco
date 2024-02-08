@@ -84,7 +84,7 @@
               ^ self
             );
 
-            writeOn: w => w << 'an emitter';
+            writeOn: w => w << 'a paper-based emitter';
         }
     };
 

@@ -131,6 +131,8 @@
             );
 
             commit => self;
+
+            writeOn: w => w << 'a generic polymorphic stream (using ' << emitter << ')';
         }
     };
 
