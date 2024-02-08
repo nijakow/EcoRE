@@ -6,19 +6,19 @@ std Module
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                         stream withGraphicsDo: [ :graphics |
                             |
-                                bounds <- (graphics maybeBounds)
-                                              yes: [ :b | b ]
-                                               no: [ (((polymorphic math geometry) Rectangle)
-                                                        Extent: (((kernel payload) child)
-                                                                   yes: [ :c | c minExtent ]
-                                                                    no: [ ((polymorphic math geometry) Point X: 50 Y: 50) ])) ]
+                                minExtent <- ((kernel payload) child)
+                                                yes: [ :c | c minExtent ]
+                                                 no: [ ((polymorphic math geometry) Point X: 50 Y: 50) ],
+                                bounds    <- (graphics maybeBounds)
+                                                 yes: [ :b | b ]
+                                                  no: [ ((polymorphic math geometry) Rectangle) Extent: minExtent ]
                             |
 
                             graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
                                                             X: 0
                                                             Y: 0
-                                                            W: ((bounds corner) x)
-                                                            H: ((bounds corner) y)
+                                                            W: (minExtent x)
+                                                            H: (minExtent y)
                                                         Color: ((graphics context) theme) windowColor).
                             
                             ((kernel payload) maybeTitleMorphKernel) yes: [ :title |

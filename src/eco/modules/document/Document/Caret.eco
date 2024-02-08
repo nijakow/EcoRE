@@ -49,9 +49,10 @@
 
             (document documentStream)
                 do: [ :item |
-                    ([ln == y] and: [col == x]) if: [
-                      ^ self moveTo: off
+                    (ln == y) if: [
+                        ((col == x) or: (x < 0)) if: [ ^ self moveTo: off ].
                     ].
+                    
                     [ :exit |
                         item ifNewline: [
                             (ln == y) if: [ ^ self moveTo: off ].
