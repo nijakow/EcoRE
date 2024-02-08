@@ -33,7 +33,7 @@
                     |
                         li <- ((polymorphic core stream) meta LineInfo) New
                     |
-                    li lineHeight: nextLineDelta.
+                    li lineHeight: (minNextLineDelta max: nextLineDelta).
                     maybeLineInfo <- (Yes: li).
                 ].
               ^ maybeLineInfo yes

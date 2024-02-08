@@ -60,6 +60,12 @@ std Module
                                   offset <- offset + 1.
                               ].
 
+                              "If the caret has not been placed yet, we assume it to be at the end of the document."
+                              caretPos no: [
+                                  caretPos      <- Yes: stream cursor.
+                                  caretLineInfo <- Yes: stream lineInfo.
+                              ].
+
                               caretPos yes: [ :pos |
                                   stream withGraphicsDo: [ :graphics |
                                       |
@@ -89,7 +95,9 @@ std Module
                                   key ifEnter:     [ payload newline.   break value. ].
                                   key ifBackspace: [ payload backspace. break value. ].
 
-                                  key ifHome:      [ payload moveCaretToX: 0 Y: (caret y).               break value. ].
+                                  key ifHome:      [ payload moveCaretToX: 0      Y: (caret y). break value. ].
+                                  key ifEnd:       [ payload moveCaretToX: 100000 Y: (caret y). break value. ].  "Ugh, this is nasty. But well, it works (for now)."
+
                                   key ifTab:       [ payload insertText: ' ' * (4 - ((caret x) mod: 4)). break value. ].
 
                                   (key keyText) yes: [ :text |
@@ -112,6 +120,7 @@ std Module
                 |
 
                 {
+                    "Currently, the line cache and the LineInfo structure are not used."
                     LineInfo :: std Classlike {
                         Instance :: Clonable {
                             |

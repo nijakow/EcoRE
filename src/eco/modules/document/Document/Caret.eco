@@ -43,6 +43,8 @@
         );
 
         moveToX: x Y: y => (
+            (y < 0) if: [ ^ self moveTo: 0 ].
+
             | off <- 0, ln <- 0, col <- 0 |
 
             (document documentStream)
@@ -51,13 +53,18 @@
                       ^ self moveTo: off
                     ].
                     [ :exit |
-                        item ifNewline: [ ln <- ln + 1. col <- 0. exit value. ].
+                        item ifNewline: [
+                            (ln == y) if: [ ^ self moveTo: off ].
+                            ln <- ln + 1.
+                            col <- 0.
+                            exit value.
+                        ].
                         col <- col + 1.
                     ] withBreak.
                     off <- off + 1.
                 ].
 
-          ^ self
+          ^ self moveTo: off
         );
 
         forward: delta => moveTo: offset + delta;
