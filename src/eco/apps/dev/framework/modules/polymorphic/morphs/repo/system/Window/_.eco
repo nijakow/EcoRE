@@ -22,7 +22,7 @@ std Module
                                                         Color: ((graphics context) theme) windowColor).
                             
                             ((kernel payload) maybeTitleMorphKernel) yes: [ :title |
-                                graphics at: ((polymorphic math geometry) Point X: 0 Y: (title minHeight negate))
+                                graphics at: ((polymorphic math geometry) Point X: 0 Y: ((title minHeight negate) + 1))
                                         put: title.
                             ].
 
