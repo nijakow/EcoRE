@@ -4,9 +4,23 @@ std Module
 {
     Behavior <- ($package modules polymorphic) NewBehavior
                     ~ name: 'an object morph'
-                    ~ presenterFunction: $[ :stream :kernel |
-                            stream << (kernel payload) object.
-                      ]
+                    ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
+                            |
+                                child  <- (kernel payload) child,
+                                bounds <- child minBounds,
+                            |
+                            stream withGraphicsDo: [ :graphics |
+                                graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
+                                                            Bounds: bounds
+                                                            Color: ((graphics context) theme transparentWindowColor)).
+                                graphics atOriginPut: child.
+                            ].
+                      ] bind($package modules polymorphic)
+                    ~ on: ((($package modules polymorphic) event) predicates MouseClick) do: $[ :(polymorphic) :context :event |
+                        | hand <- ((event body) hand) payload |
+                        hand tryGrab: (context kernel) Translation: ((polymorphic math geometry) Point X: ((context x) negate) Y: ((context y) negate)).
+                        (context kernel) dispose. "TODO: Only dispose if the grab was successful."
+                    ] bind($package modules polymorphic)
                     ~ build;
     
     State :: Classlike
@@ -15,6 +29,7 @@ std Module
         {
             |
                 object,
+                child,
             |
 
             {
@@ -24,6 +39,16 @@ std Module
 
                 initWithObject: _object => (
                     object <- _object.
+                    rebuild.
+                  ^ self
+                );
+
+                rebuild => (
+                    child <- ui Framed(
+                        ui Margin: 10 Child: (
+                            (((polymorphic morphs) repo core) WriteMorph) link: object
+                        )
+                    ).
                   ^ self
                 );
 
