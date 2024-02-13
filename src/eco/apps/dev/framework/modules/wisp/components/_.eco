@@ -1,10 +1,12 @@
 
 std Module
 {
-    presentations      :: (here / 'presentations' / '_.eco') importIn: $package;
+    presentations :: (here / 'presentations' / '_.eco') importIn: $package;
 
     Navigator   :: (here / 'Navigator'   / '_.eco') importIn: $package;
 
     Browser     :: (here / 'Browser'     / '_.eco') importIn: $package;
     BrowserView :: (here / 'BrowserView' / '_.eco') importIn: $package;
+
+    Object      :: (here / 'Object'      / '_.eco') importIn: $package;
 }

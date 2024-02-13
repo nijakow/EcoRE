@@ -1,0 +1,38 @@
+
+
+std Module
+{
+    Behavior <- ($package modules polymorphic) NewBehavior
+                    ~ name: 'an object morph'
+                    ~ presenterFunction: $[ :stream :kernel |
+                            stream << (kernel payload) object.
+                      ]
+                    ~ build;
+    
+    State :: Classlike
+    {
+        Instance :: Clonable
+        {
+            |
+                object,
+            |
+
+            {
+                protected wisp        <- $package;
+                protected polymorphic <- $package modules polymorphic;
+                protected ui          => polymorphic ui;
+
+                initWithObject: _object => (
+                    object <- _object.
+                  ^ self
+                );
+
+                writeOn: w => w << 'an object morph state';
+            }
+        };
+
+        Object: object => (Instance clone) initWithObject: object;
+    };
+
+    Object: object => Behavior link: (State Object: object);
+}

@@ -1,7 +1,8 @@
 
 std Module
 {
-    protected ui <- ($package modules polymorphic) ui;
+    protected wisp <- $package;
+    protected ui   <- ($package modules polymorphic) ui;
 
     SlotMorphForSlot: slot Navigator: navigator Draggable: draggable? => (
       ^ ui Framed(
@@ -26,7 +27,7 @@ std Module
                         ui Margin: 5 Child: (
                             (ui Button)
                                  Label: 'Grab'
-                                Action: $[ :(builder, slotMirror, navigator) :event | ((event handMorph) payload) tryGrab: (builder DraggableSlotMorphForSlot: slotMirror Navigator: navigator) ] bind(self, slot, navigator)
+                                Action: $[ :(wisp, slotMirror) :event | ((event handMorph) payload) tryGrab: ((wisp components Object) Object: (slotMirror slotValue)) ] bind(wisp, slot)
                         ) ~ xLayoutShrinkWrap!
                     )
                 ]
