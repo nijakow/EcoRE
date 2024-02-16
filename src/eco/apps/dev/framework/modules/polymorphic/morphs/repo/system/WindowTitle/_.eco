@@ -20,6 +20,9 @@ std Module
 
                         stream emit: e.
                     ] bind($package)
+                    ~ focusGainedFunction: $[ :kernel | ((kernel state) payload) gainFocus ]
+                    ~ focusLostFunction:   $[ :kernel | ((kernel state) payload) loseFocus ]
+                    ~ enableBlessing
                     ~ build;
     
     Payload :: Classlike
@@ -27,7 +30,9 @@ std Module
         Instance :: Clonable
         {
             |
-                caption,
+                maybeMorphKernel <- No,
+                caption          <- '',
+                expanded         <- false,
                 child,
             |
 
@@ -35,18 +40,53 @@ std Module
                 protected polymorphic <- $package;
 
                 initWithCaption: cap => (
-                    caption <- cap.
-                    child   <- (polymorphic ui) Margin: 5 Child: (
+                    caption  <- cap.
+                    expanded <- false.
+                    rebuild.
+                  ^ self
+                );
+
+                bless: kernel => maybeMorphKernel <- Yes: kernel;
+
+                protected contentChanged => (
+                    maybeMorphKernel yes: [ :kernel |
+                        kernel contentChanged.
+                    ].
+                    ^ self
+                );
+
+                protected rebuild => (
+                    child <- (polymorphic ui) Margin: 5 Child: (
                                     ((polymorphic ui) Button)
                                         Action: $[ (std io out << 'Clicked window title!') newline commit ]
                                          Child: (
-                                            (polymorphic ui) Margin: 5 Child: (
-                                                (polymorphic ui) Label: caption
-                                            )
+                                            (polymorphic ui) HFlex(
+                                                (polymorphic ui) Margin: 5 Child: (
+                                                    (polymorphic ui) Label: caption
+                                                )
+                                            ) inject: [ :flex |
+                                                (expanded) if: [
+                                                    flex add: (
+                                                        (polymorphic ui) Margin: 5 Child: (
+                                                            (polymorphic ui) Label: '(expanded)'
+                                                        )
+                                                    )
+                                                ]
+                                            ]
                                          )
-                          ).
+                    ).
+                    contentChanged.
                   ^ self
                 );
+
+                protected expanded: bool => (
+                    expanded <- bool.
+                    rebuild.
+                  ^ self
+                );
+
+                gainFocus => expanded: true;
+                loseFocus => expanded: false;
 
                 writeOn: w => w << 'a window title payload';
             }
