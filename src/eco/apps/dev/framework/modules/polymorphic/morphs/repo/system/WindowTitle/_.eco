@@ -68,10 +68,25 @@ std Module
                                                     Action: $[ (std io out << 'Clicked the menu button!') newline commit ]
                                                     Child: (
                                                         (polymorphic ui) Margin: 5 Child: (
-                                                            (polymorphic ui) Label: '(expanded button)'
+                                                            (polymorphic ui) Label: '(more...)'
                                                         )
                                                 )
-                                            )
+                                            ),
+                                            flex add: (
+                                                ((polymorphic ui) Button)
+                                                    Action: $[ (std io out << 'Clicked the roll button!') newline commit ]
+                                                    Label: ' V '
+                                            ),
+                                            flex add: (
+                                                ((polymorphic ui) Button)
+                                                    Action: $[ (std io out << 'Clicked the minimize button!') newline commit ]
+                                                    Label: ' _ '
+                                            ),
+                                            flex add: (
+                                                ((polymorphic ui) Button)
+                                                    Action: $[ (std io out << 'Clicked the close button!') newline commit ]
+                                                    Label: ' X '
+                                            ),
                                         ]
                                     ]
                     ).
