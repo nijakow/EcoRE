@@ -4,17 +4,18 @@ std Module
     Behavior <- ($package core) NewBehavior
                     ~ name: 'a window title morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
-                        | e <- (polymorphic ui) Margin: 2 Child: (
-                                    (polymorphic ui) Label: ((kernel payload) caption)
-                                                     Color: (((stream context) theme) backgroundColor)
-                          ),
-                          bounds <- e minBounds,
+                        | 
+                            e      <- (kernel payload) child,
+                            bounds <- e minBounds,
                         |
 
                         stream withGraphicsDo: [ :graphics |
                             graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
                                                        Bounds: bounds
-                                                        Color: (((stream context) theme) windowColor))
+                                                        Color: (((stream context) theme) windowBackgroundColor)).
+                            graphics atOriginPut: (((polymorphic core objects) Line) Start: (bounds topLeft)  End: (bounds topRight)    Color: ((graphics context) theme lineColor)).
+                            graphics atOriginPut: (((polymorphic core objects) Line) Start: (bounds topLeft)  End: (bounds bottomLeft)  Color: ((graphics context) theme lineColor)).
+                            graphics atOriginPut: (((polymorphic core objects) Line) Start: (bounds topRight) End: (bounds bottomRight) Color: ((graphics context) theme lineColor)).
                         ].
 
                         stream emit: e.
@@ -27,11 +28,23 @@ std Module
         {
             |
                 caption,
+                child,
             |
 
             {
+                protected polymorphic <- $package;
+
                 initWithCaption: cap => (
                     caption <- cap.
+                    child   <- (polymorphic ui) Margin: 5 Child: (
+                                    ((polymorphic ui) Button)
+                                        Action: $[ (std io out << 'Clicked window title!') newline commit ]
+                                         Child: (
+                                            (polymorphic ui) Margin: 5 Child: (
+                                                (polymorphic ui) Label: caption
+                                            )
+                                         )
+                          ).
                   ^ self
                 );
 

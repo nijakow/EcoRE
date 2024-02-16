@@ -11,7 +11,10 @@ std Module
                                                  no: [ ((polymorphic math geometry) Point X: 50 Y: 50) ],
                                 bounds    <- (graphics maybeBounds)
                                                  yes: [ :b | b ]
-                                                  no: [ ((polymorphic math geometry) Rectangle) Extent: minExtent ]
+                                                  no: [ ((polymorphic math geometry) Rectangle) Extent: minExtent ],
+                                pureBounds <- ((kernel payload) child)
+                                                yes: [ :c | c minBounds ]
+                                                 no: [ bounds ],
                             |
 
                             graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
@@ -19,11 +22,25 @@ std Module
                                                             Y: 0
                                                             W: (minExtent x)
                                                             H: (minExtent y)
-                                                        Color: ((graphics context) theme) windowColor).
+                                                        Color: ((graphics context) theme) windowBackgroundColor).
+                            graphics atOriginPut: (((polymorphic core objects) Line) Start: (pureBounds topLeft)    End: (pureBounds bottomLeft)  Color: ((graphics context) theme lineColor)).
+                            graphics atOriginPut: (((polymorphic core objects) Line) Start: (pureBounds bottomLeft) End: (pureBounds bottomRight) Color: ((graphics context) theme lineColor)).
+                            graphics atOriginPut: (((polymorphic core objects) Line) Start: (pureBounds topRight)   End: (pureBounds bottomRight) Color: ((graphics context) theme lineColor)).
                             
                             ((kernel payload) maybeTitleMorphKernel) yes: [ :title |
-                                graphics at: ((polymorphic math geometry) Point X: 0 Y: ((title minHeight negate) + 1))
-                                        put: title.
+                                |
+                                    titleOffset <- (polymorphic math geometry) Point
+                                                        X: 0
+                                                        Y: (title minHeight negate),
+                                    lineStart   <- (polymorphic math geometry) Point
+                                                        X: (title minWidth)
+                                                        Y: 0,
+                                    lineEnd     <- pureBounds topRight,
+                                |
+                                graphics at: titleOffset put: title.
+                                graphics atOriginPut: (((polymorphic core objects) Line) Start: (lineStart) End: (lineEnd) Color: ((graphics context) theme lineColor)).
+                            ] no: [
+                                graphics atOriginPut: (((polymorphic core objects) Line) Start: (pureBounds topLeft) End: (pureBounds topRight) Color: ((graphics context) theme lineColor)).
                             ].
 
                             ((kernel payload) maybeButtonsMorphKernel) yes: [ :buttons |
@@ -34,7 +51,7 @@ std Module
                             
                             ((kernel payload) child) yes: [ :c |
                                 graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
-                                                       Bounds: ((c minBounds) insetBy: 2)
+                                                       Bounds: ((c minBounds) insetBy: 15)
                                                         Color: ((graphics context) theme) backgroundColor).
                                 stream emit: c.
                             ].
@@ -80,7 +97,7 @@ std Module
                 );
 
                 child: c => (
-                    child <- Yes: ((polymorphic ui) Margin: 2 Child: c).
+                    child <- Yes: ((polymorphic ui) Margin: 15 Child: c).
                     maybeTitleMorphKernel <- Yes: (
                         ((polymorphic morphs repo) system WindowTitle)
                             Caption: (c name)

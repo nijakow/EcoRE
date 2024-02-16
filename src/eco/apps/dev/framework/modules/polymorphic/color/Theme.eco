@@ -44,7 +44,8 @@
 
             desktopColor           => baseColor;
             windowColor            => mainAccentColor;
-            transparentWindowColor => transparentMainAccentColor;
+            transparentWindowColor => transparentMainAccentColor;  "TODO: Remove this!"
+            windowBackgroundColor  => transparentWindowColor;
 
             baseColor:        c => baseColor <- c;
             backgroundColor:  c => backgroundColor <- c;
