@@ -57,23 +57,23 @@ std Module
 
                 protected rebuild => (
                     child <- (polymorphic ui) Margin: 5 Child: (
-                                    ((polymorphic ui) Button)
-                                        Action: $[ (std io out << 'Clicked window title!') newline commit ]
-                                         Child: (
-                                            (polymorphic ui) HFlex(
-                                                (polymorphic ui) Margin: 5 Child: (
-                                                    (polymorphic ui) Label: caption
-                                                )
-                                            ) inject: [ :flex |
-                                                (expanded) if: [
-                                                    flex add: (
+                                    (polymorphic ui) HFlex(
+                                        (polymorphic ui) Margin: 5 Child: (
+                                            (polymorphic ui) Label: caption
+                                        )
+                                    ) inject: [ :flex |
+                                        (expanded) if: [
+                                            flex add: (
+                                                ((polymorphic ui) Button)
+                                                    Action: $[ (std io out << 'Clicked the menu button!') newline commit ]
+                                                    Child: (
                                                         (polymorphic ui) Margin: 5 Child: (
-                                                            (polymorphic ui) Label: '(expanded)'
+                                                            (polymorphic ui) Label: '(expanded button)'
                                                         )
-                                                    )
-                                                ]
-                                            ]
-                                         )
+                                                )
+                                            )
+                                        ]
+                                    ]
                     ).
                     contentChanged.
                   ^ self
