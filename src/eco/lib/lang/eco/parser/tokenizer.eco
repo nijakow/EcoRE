@@ -85,14 +85,33 @@
         unread: token => pushbacks push: token;
 
         IsSpace(c) => (
-            (c == (char space))   if: [ ^ true ].
-            (c == (char tab))     if: [ ^ true ].
-            (c == (char newline)) if: [ ^ true ].
-            (c == (char return))  if: [ ^ true ].
+            | rtrue <- [ ^ true ] |
+
+            (c == (char space))   if: rtrue.
+            (c == (char tab))     if: rtrue.
+            (c == (char newline)) if: rtrue.
+            (c == (char return))  if: rtrue.
+
           ^ false
         );
 
-        IsSpecial(c) => [ '()[]{}.,;|^' contains: c ] or: [ IsSpace(c) ];
+        IsSpecial(c) => (
+            | rtrue <- [ ^ true ] |
+
+            (c == $'(') if: rtrue.
+            (c == $')') if: rtrue.
+            (c == $'[') if: rtrue.
+            (c == $']') if: rtrue.
+            (c == $'{') if: rtrue.
+            (c == $'}') if: rtrue.
+            (c == $'.') if: rtrue.
+            (c == $',') if: rtrue.
+            (c == $';') if: rtrue.
+            (c == $'|') if: rtrue.
+            (c == $'^') if: rtrue.
+
+          ^ IsSpace(c)
+        );
 
         skipWhitespace => (
             [ :restart |
@@ -128,14 +147,14 @@
         );
 
         newTokenWithType: type Payload: pl => (#<:lang/eco/tokenizer> Token) new tokenizer: self type: type payload: pl;
-        newTokenWithType: type => newTokenWithType: type Payload: false;
+        newTokenWithType: type             => newTokenWithType: type Payload: false;
 
         StringToChar: str => (
-            (str size == 1) -> [ ^ str at: 0 ].
-            (str equals: '') -> [ ^ $'?' "TODO" ].
-            (str equals: 'newline') -> [ ^ $'newline' ].
-            (str equals: 'tab') -> [ ^ $'tab' ].
-            (str equals: 'escape') -> [ ^ $'escape' ].
+            (str size == 1)         -> [ ^ str at: 0   ].
+            (str equals: '')        -> [ ^ $'?' "TODO" ].
+            (str equals: 'newline') -> [ ^ $'newline'  ].
+            (str equals: 'tab')     -> [ ^ $'tab'      ].
+            (str equals: 'escape')  -> [ ^ $'escape'   ].
           ^ str at: 0
         );
 
@@ -168,8 +187,15 @@
 
             skipWhitespace.
 
-            (in hasNext) unless: [ ^ newTokenWithType: TokenType EOF ].
-            (in current) ifRef: [ :r | in forward. ^ newTokenWithType: TokenType REFERENCE Payload: r ].
+            ((in hasNext) not) if: [
+              ^ newTokenWithType: TokenType EOF
+            ].
+            
+            (in current) ifRef: [ :r |
+                in forward.
+              ^ newTokenWithType: TokenType REFERENCE Payload: r
+            ].
+
             (peeks: '...') if: [ ^ newTokenWithType: TokenType ELLIPSIS    ].
             (peeks: '<-')  if: [ ^ newTokenWithType: TokenType ASSIGNMENT  ].
             (peeks: '=>')  if: [ ^ newTokenWithType: TokenType RARROW      ].
@@ -198,7 +224,7 @@
             (peeks: '$\'') if: [ ^ newTokenWithType: TokenType CHARACTER  Payload: (StringToChar: (parseString: #\')) ].
             (peeks: '"')   if: [ parseString: #\". ^ nextToken ].
 
-            (std util text parsing number ParseNumberFromStream: (in termmap: [ :c | tryChar: c ]))
+            (((std util text) parsing number) ParseNumberFromStream: (in termmap: [ :c | tryChar: c ]))
                 yes: [ :n | ^ newTokenWithType: TokenType NUMBER Payload: n ].
             
             | sb <- (std io StringWriter) new |
