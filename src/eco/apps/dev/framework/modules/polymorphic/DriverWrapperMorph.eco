@@ -44,7 +44,7 @@ Clonable {
 
                     updateDimensions.
 
-                    "(added? not) if: [
+                    (added? not) if: [
                         (theDriver session) desktopMorph
                           ~ add: (((polymorphic morphs) repo system) Window
                                     Child: (((polymorphic ui) Button)
@@ -58,7 +58,7 @@ Clonable {
                                                 Margin: 10
                                                  Child: ((polymorphic ui) DocumentEditor))).
                         added? <- true.
-                    ]."
+                    ].
 
                     updateX: (relativeMousePos x)
                           Y: (relativeMousePos y).
