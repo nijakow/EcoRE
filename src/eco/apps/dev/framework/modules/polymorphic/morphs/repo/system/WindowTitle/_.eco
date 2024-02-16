@@ -33,14 +33,16 @@ std Module
                 maybeMorphKernel <- No,
                 caption          <- '',
                 expanded         <- false,
+                window,
                 child,
             |
 
             {
                 protected polymorphic <- $package;
 
-                initWithCaption: cap => (
+                initWithCaption: cap Window: win => (
                     caption  <- cap.
+                    window   <- win.
                     expanded <- false.
                     rebuild.
                   ^ self
@@ -55,7 +57,7 @@ std Module
                     ^ self
                 );
 
-                protected rebuild => (
+                rebuild => (
                     child <- (polymorphic ui) Margin: 5 Child: (
                                     (polymorphic ui) HFlex(
                                         (polymorphic ui) Margin: 5 Child: (
@@ -74,8 +76,8 @@ std Module
                                             ),
                                             flex add: (
                                                 ((polymorphic ui) Button)
-                                                    Action: $[ (std io out << 'Clicked the roll button!') newline commit ]
-                                                    Label: ' V '
+                                                    Action: $[ :(us, window) :event | window toggleRoll. "For some reason, we have to redraw ourselves to force updating -> " us rebuild. ] bind(self, window)
+                                                    Label: ((window rolledUp) if: ' V ' else: ' ^ ')
                                             ),
                                             flex add: (
                                                 ((polymorphic ui) Button)
@@ -107,8 +109,8 @@ std Module
             }
         };
 
-        Caption: caption => (Instance clone) initWithCaption: caption;
+        Caption: caption Window: window => (Instance clone) initWithCaption: caption Window: window;
     };
 
-    Caption: caption => Behavior link: (Payload Caption: caption);
+    Caption: caption Window: window => Behavior link: (Payload Caption: caption Window: window);
 }

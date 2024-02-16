@@ -6,27 +6,30 @@ std Module
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                         stream withGraphicsDo: [ :graphics |
                             |
-                                minExtent <- ((kernel payload) child)
+                                minExtent  <- ((kernel payload) child)
                                                 yes: [ :c | c minExtent ]
                                                  no: [ ((polymorphic math geometry) Point X: 50 Y: 50) ],
-                                bounds    <- (graphics maybeBounds)
+                                bounds     <- (graphics maybeBounds)
                                                  yes: [ :b | b ]
                                                   no: [ ((polymorphic math geometry) Rectangle) Extent: minExtent ],
                                 pureBounds <- ((kernel payload) child)
                                                 yes: [ :c | c minBounds ]
                                                  no: [ bounds ],
+                                rolledUp   <- (kernel payload) rolledUp,
                             |
 
-                            graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
-                                                            X: 0
-                                                            Y: 0
-                                                            W: (minExtent x)
-                                                            H: (minExtent y)
-                                                        Color: ((graphics context) theme) windowBackgroundColor).
-                            graphics atOriginPut: (((polymorphic core objects) Line) Start: (pureBounds topLeft)    End: (pureBounds bottomLeft)  Color: ((graphics context) theme lineColor)).
-                            graphics atOriginPut: (((polymorphic core objects) Line) Start: (pureBounds bottomLeft) End: (pureBounds bottomRight) Color: ((graphics context) theme lineColor)).
-                            graphics atOriginPut: (((polymorphic core objects) Line) Start: (pureBounds topRight)   End: (pureBounds bottomRight) Color: ((graphics context) theme lineColor)).
-                            
+                            (rolledUp not) if: [
+                                graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
+                                                                X: 0
+                                                                Y: 0
+                                                                W: (minExtent x)
+                                                                H: (minExtent y)
+                                                            Color: ((graphics context) theme) windowBackgroundColor).
+                                graphics atOriginPut: (((polymorphic core objects) Line) Start: (pureBounds topLeft)    End: (pureBounds bottomLeft)  Color: ((graphics context) theme lineColor)).
+                                graphics atOriginPut: (((polymorphic core objects) Line) Start: (pureBounds bottomLeft) End: (pureBounds bottomRight) Color: ((graphics context) theme lineColor)).
+                                graphics atOriginPut: (((polymorphic core objects) Line) Start: (pureBounds topRight)   End: (pureBounds bottomRight) Color: ((graphics context) theme lineColor)).
+                            ].
+
                             ((kernel payload) maybeTitleMorphKernel) yes: [ :title |
                                 |
                                     titleOffset <- (polymorphic math geometry) Point
@@ -35,7 +38,9 @@ std Module
                                     lineStart   <- (polymorphic math geometry) Point
                                                         X: (title minWidth)
                                                         Y: 0,
-                                    lineEnd     <- pureBounds topRight,
+                                    lineEnd     <- rolledUp
+                                                        if: ((polymorphic math geometry) Point Origin)
+                                                      else: (pureBounds topRight),
                                 |
                                 graphics at: titleOffset put: title.
                                 graphics atOriginPut: (((polymorphic core objects) Line) Start: (lineStart) End: (lineEnd) Color: ((graphics context) theme lineColor)).
@@ -43,17 +48,13 @@ std Module
                                 graphics atOriginPut: (((polymorphic core objects) Line) Start: (pureBounds topLeft) End: (pureBounds topRight) Color: ((graphics context) theme lineColor)).
                             ].
 
-                            ((kernel payload) maybeButtonsMorphKernel) yes: [ :buttons |
-                                | mb <- buttons minBounds |
-                                graphics at: ((polymorphic math geometry) Point X: (((bounds corner) x) - (mb corner x)) Y: ((mb corner y) negate))
-                                        put: buttons.
-                            ].
-                            
-                            ((kernel payload) child) yes: [ :c |
-                                graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
-                                                       Bounds: ((c minBounds) insetBy: 15)
-                                                        Color: ((graphics context) theme) backgroundColor).
-                                stream emit: c.
+                            (rolledUp not) if: [                            
+                                ((kernel payload) child) yes: [ :c |
+                                    graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
+                                                           Bounds: ((c minBounds) insetBy: 15)
+                                                            Color: ((graphics context) theme) backgroundColor).
+                                    stream emit: c.
+                                ].
                             ].
                         ].
                     ] bind($package)
@@ -76,6 +77,7 @@ std Module
                 child                   <- No,
                 maybeTitleMorphKernel   <- No,
                 maybeButtonsMorphKernel <- No,
+                rolledUp                <- false,
             |
 
             {
@@ -86,6 +88,7 @@ std Module
                     child                   <- No.
                     maybeTitleMorphKernel   <- No.
                     maybeButtonsMorphKernel <- No.
+                    rolledUp                <- false.
                   ^ self
                 );
 
@@ -100,10 +103,20 @@ std Module
                     child <- Yes: ((polymorphic ui) Margin: 15 Child: c).
                     maybeTitleMorphKernel <- Yes: (
                         ((polymorphic morphs repo) system WindowTitle)
-                            Caption: (c name)
+                            Caption: (c name) Window: self
                     ).
                   ^ self
                 );
+
+                rolledUp: bool => (
+                    rolledUp <- bool.
+                    changed.
+                  ^ self
+                );
+
+                rollUp         => rolledUp: true;
+                rollDown       => rolledUp: false;
+                toggleRoll     => rolledUp: (rolledUp not);
 
                 writeOn: w => w << 'a desktop';
             }
