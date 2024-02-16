@@ -106,6 +106,15 @@ std Module
                                   ].
                               ] withBreak.
                           ]
+                        ~ on: (($package event) predicates DropMorph) do: $[ :context :event |
+                              |
+                                  kernel  <- context kernel,
+                                  payload <- kernel payload,
+                                  data    <- (event body) kernel,
+                              |
+
+                              payload insertObject: data.
+                          ]
                         ~ enableBlessing
                         ~ build;
         
@@ -200,6 +209,12 @@ std Module
 
                     insertText: text => (
                         caret insertText: text.
+                        changed.
+                      ^ self
+                    );
+
+                    insertObject: morph => (
+                        caret insertReference: morph.
                         changed.
                       ^ self
                     );

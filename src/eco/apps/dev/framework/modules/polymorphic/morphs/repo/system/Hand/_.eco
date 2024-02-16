@@ -65,7 +65,7 @@ std Module
                   ^ self
                 );
 
-                tryGrab: kernel => tryGrab: kernel Translation: ((polymorphic math geometry) Point Origin);
+                tryGrab: kernel => tryGrab: kernel Translation: (((kernel minBounds) corner / 2) negate);
 
                 tryRelease => (
                     grabbedMorph yes: [ :gm |
