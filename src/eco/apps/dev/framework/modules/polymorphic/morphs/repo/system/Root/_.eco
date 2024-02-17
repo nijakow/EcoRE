@@ -2,7 +2,7 @@
 std Module
 {
     Behavior <- ($package core) NewBehavior
-                    ~ name: 'a session morph'
+                    ~ name: 'a root morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                             |
                                 extent <- ((kernel payload) desktop) extent
@@ -44,7 +44,7 @@ std Module
                   ^ self
                 );
 
-                writeOn: w => w << 'a session';
+                writeOn: w => w << 'a root morph payload';
             }
         };
 

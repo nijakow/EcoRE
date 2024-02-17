@@ -70,7 +70,7 @@ std Module
                             ((kernel state) payload) add: (event body).
                             kernel changed.
                         ]
-                      ~ on: (($package event) predicates DropMorph) do: $[ :context :event |
+                      "~ on: (($package event) predicates DropMorph) do: $[ :context :event |
                             | kernel <- context kernel, body <- event body, x <- context x, y <- context y |
                             
                             [ :break |
@@ -87,7 +87,7 @@ std Module
                             ] withBreak.
 
                             kernel changed.
-                        ]
+                        ]"
                       ~ disposeFunction: $[ :kernel :other |
                             ((kernel state) payload) remove: other.
                             kernel changed.
