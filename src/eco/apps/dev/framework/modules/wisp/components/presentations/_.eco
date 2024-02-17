@@ -27,7 +27,7 @@ std Module
                         ui Margin: 5 Child: (
                             (ui Button)
                                  Label: 'Grab'
-                                Action: $[ :(wisp, slotMirror) :event | ((event handMorph) payload) tryGrab: ((wisp components Object) Object: (slotMirror slotValue)) ] bind(wisp, slot)
+                                Action: $[ :(wisp, slotMirror) :event | (std io out << event session) newline commit. ((event handMorph) payload) tryGrab: ((wisp components Object) Object: (slotMirror slotValue)) ] bind(wisp, slot)
                         ) ~ xLayoutShrinkWrap!
                     )
                 ]

@@ -45,14 +45,14 @@ Clonable {
                     updateDimensions.
 
                     (added? not) if: [
-                        (theDriver session) desktopMorph
+                        (theDriver rootPayload) desktopMorph
                           ~ add: (((polymorphic morphs) repo system) Window
                                     Child: (((polymorphic ui) Button)
                                                 Action: $[]
                                                  Child: (((polymorphic morphs) repo core) MarginMorph
                                                               Margin: 10
                                                                Child: (((polymorphic morphs) repo fun) NewTestMorph3)))).
-                        (theDriver session) desktopMorph
+                        (theDriver rootPayload) desktopMorph
                           ~ add: (((polymorphic morphs) repo system) Window
                                     Child: (((polymorphic morphs) repo core) MarginMorph
                                                 Margin: 10

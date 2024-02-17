@@ -33,10 +33,12 @@
 
             initWithoutWorld => initWithWorld: (((polymorphic core world) World) New);
 
-            session => rootMorph payload;
+            session => self;
+
+            rootPayload => rootMorph payload;
 
             extent: extent => (
-                session extent: extent.
+                rootPayload extent: extent.
               ^ self
             );
 
@@ -48,7 +50,7 @@
                     mouseMovedToX: x
                                 Y: y.
                 
-                (session hand)
+                (rootPayload hand)
                     moveToX: x
                           Y: y.
                 
@@ -64,7 +66,7 @@
             );
 
             mouseReleased: click => (
-                (session hand)
+                (rootPayload hand)
                     tryRelease.
                 "dispatcher
                     mouseReleasedAtX: cachedMouseX
@@ -98,7 +100,7 @@
 
                 rootPaper clear.
                 (rootPaper stream) withGraphicsDo: [ :graphics |
-                    graphics in: (session bounds)
+                    graphics in: (rootPayload bounds)
                             put: rootMorph.
                 ].
                 

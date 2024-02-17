@@ -5,16 +5,18 @@
     Instance :: Clonable
     {
         |
+            session,
             morph,
             x,
             y,
         |
 
         {
-            initWithMorph: _morph X: _x Y: _y => (
-                morph <- _morph.
-                x     <- _x.
-                y     <- _y.
+            initWithSession: _session Morph: _morph X: _x Y: _y => (
+                session <- _session.
+                morph   <- _morph.
+                x       <- _x.
+                y       <- _y.
               ^ self
             );
 
@@ -24,5 +26,5 @@
         }
     };
 
-    Morph: morph X: x Y: y => (Instance clone) initWithMorph: morph X: x Y: y;
+    Session: session Morph: morph X: x Y: y => (Instance clone) initWithSession: session Morph: morph X: x Y: y;
 }

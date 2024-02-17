@@ -530,11 +530,17 @@ std Module
             Instance :: Clonable
             {
                 |
+                    session,
                     maybeButtonMorph <- No,
                     maybeHandMorph   <- No,
                 |
 
                 {
+                    initWithSession: _session => (
+                        session <- _session.
+                      ^ self
+                    );
+
                     buttonMorph: bm => maybeButtonMorph <- Yes: bm;
                     handMorph:   hm => maybeHandMorph   <- Yes: hm;
 
@@ -545,10 +551,11 @@ std Module
                 }
             };
 
-            ButtonMorph: buttonMorph HandMorph: handMorph => (
+            Session: session ButtonMorph: buttonMorph HandMorph: handMorph => (
               ^ (Instance clone)
-                    ~ buttonMorph: buttonMorph
-                    ~ handMorph:   handMorph
+                    ~ initWithSession: session
+                    ~ buttonMorph:     buttonMorph
+                    ~ handMorph:       handMorph
             );
         };
 
@@ -585,6 +592,7 @@ std Module
                                 action yes: [ :action |
                                     |
                                         buttonEvent <- (((polymorphic morphs repo) core ButtonMorph) Event)
+                                                                Session: context session
                                                             ButtonMorph: context morph
                                                               HandMorph: (event body) hand
                                     |

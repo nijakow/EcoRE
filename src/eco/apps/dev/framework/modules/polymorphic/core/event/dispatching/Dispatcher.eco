@@ -26,6 +26,7 @@
                 |
                     behavior <- (morph kernel) behavior,
                     context  <- ((polymorphic core event) dispatching Context)
+                                  Session: driver session
                                     Morph: morph
                                         X: x
                                         Y: y
@@ -116,7 +117,7 @@
                     morphsUnder add: each.
                 ].
 
-                ((driver session) hand)
+                ((driver rootPayload) hand)
                     updateMorphsUnder: morphsUnder.
 
               ^ self
@@ -124,7 +125,7 @@
 
             mouseClickedAtX: x Y: y Click: click => (
                 |
-                    event <- (polymorphic event events) MouseClick: click Hand: ((driver session) handMorph)
+                    event <- (polymorphic event events) MouseClick: click Hand: ((driver rootPayload) handMorph)
                 |
 
                 dispatch: event AtX: x Y: y.
@@ -139,7 +140,7 @@
 
             keyPressedAtX: x Y: y Key: key => (
                 |
-                    event <- (polymorphic event events) KeyPress: key Hand: ((driver session) handMorph)
+                    event <- (polymorphic event events) KeyPress: key Hand: ((driver rootPayload) handMorph)
                 |
 
                 dispatch: event AtX: x Y: y.
