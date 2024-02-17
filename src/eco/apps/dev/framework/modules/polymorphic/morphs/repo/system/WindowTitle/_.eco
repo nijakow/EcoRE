@@ -86,7 +86,7 @@ std Module
                                             ),
                                             flex add: (
                                                 ((polymorphic ui) Button)
-                                                    Action: $[ (std io out << 'Clicked the close button!') newline commit ]
+                                                    Action: $[ :(window) | window close ] bind(window)
                                                     Label: ' X '
                                             ),
                                         ]

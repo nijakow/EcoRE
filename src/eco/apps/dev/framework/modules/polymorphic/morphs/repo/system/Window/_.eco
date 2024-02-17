@@ -67,6 +67,7 @@ std Module
                         hand tryGrab: (context kernel) Translation: ((polymorphic math geometry) Point X: ((context x) negate) Y: ((context y) negate)).
                         (context kernel) dispose. "TODO: Only dispose if the grab was successful."
                     ] bind($package)
+                    ~ enableBlessing
                     ~ build;
 
     State :: Classlike {
@@ -120,6 +121,11 @@ std Module
                 rollUp         => rolledUp: true;
                 rollDown       => rolledUp: false;
                 toggleRoll     => rolledUp: (rolledUp not);
+
+                close => (
+                    maybeMorphKernel yes: [ :kernel | kernel dispose ].
+                  ^ self
+                );
 
                 writeOn: w => w << 'a desktop';
             }
