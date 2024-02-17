@@ -142,7 +142,12 @@ std Module
                                                             ui Margin: 5 Child: (
                                                                 (ui Button)
                                                                      Label: '>'
-                                                                    Action: $[]
+                                                                    Action: $[ :(ui, browser, shell) :event |
+                                                                        browser closeShell: shell.
+                                                                        ((event handMorph) payload) tryGrab: (
+                                                                            ui MiniWindowWithTitle: 'Shell' Content: shell.
+                                                                        ).
+                                                                    ] bind(ui, self, shell)
                                                             )
                                                         ) ~ xLayoutShrinkWrap!,
                                                     )
