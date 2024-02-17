@@ -7,6 +7,7 @@ std Module
 
     Browser     :: (here / 'Browser'     / '_.eco') importIn: $package;
     BrowserView :: (here / 'BrowserView' / '_.eco') importIn: $package;
+    Shell       :: (here / 'Shell'       / '_.eco') importIn: $package;
 
     Object      :: (here / 'Object'      / '_.eco') importIn: $package;
 }

@@ -1,0 +1,75 @@
+
+std Module
+{
+    Behavior <- ($package modules polymorphic) NewBehavior
+                    ~ name: 'a shell'
+                    ~ presenterFunction: $[ :stream :kernel |
+                            ((kernel payload) current) yes: [ :current |
+                                stream withGraphicsDo: [ :graphics |
+                                    graphics fullScreenPut: current.
+                                ].
+                            ].
+                      ]
+                    ~ enableBlessing
+                    ~ build;
+    
+    State :: Classlike
+    {
+        Instance :: Clonable
+        {
+            |
+                maybeMorphKernel <- No,
+                current          <- No,
+                editor,
+            |
+
+            {
+                protected wisp        <- $package;
+                protected polymorphic <- $package modules polymorphic;
+                protected ui          => polymorphic ui;
+
+                init => (
+                    maybeMorphKernel <- No.
+                    current          <- No.
+                    editor           <- ui DocumentEditor.
+
+                    rebuild.
+
+                  ^ self
+                );
+
+                protected current: c => current <- Yes: c;
+
+                bless: morph => maybeMorphKernel <- Yes: morph;
+
+                protected changed => (
+                    maybeMorphKernel yes: [ :morph |
+                        morph contentChanged.
+                    ].
+                  ^ self
+                );
+
+                rebuild => (
+                    current: (
+                        ui VFlex(
+                            ui Margin: (3 + 5) Child: editor,
+                            ui Margin: 3 Child: (
+                                ui HFlex(
+                                    ui Margin: 3 Child: ((ui Button) Label: 'Get it' Action: $[]),
+                                    ui Margin: 3 Child: ((ui Button) Label: 'Do it'  Action: $[]),
+                                ) ~ yLayoutShrinkWrap!,
+                            ) ~ yLayoutShrinkWrap!,
+                        )
+                    ).
+                  ^ self
+                );
+
+                writeOn: w => w << 'a shell state';
+            }
+        };
+
+        New => Instance new;
+    };
+
+    New => Behavior link: (State New);
+}

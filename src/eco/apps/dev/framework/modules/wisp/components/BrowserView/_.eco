@@ -38,7 +38,7 @@
             );
 
             openShell => (
-                openShells add: (ui DocumentEditor).
+                openShells add: ((wisp components) Shell) New.
               ^ self
             );
 

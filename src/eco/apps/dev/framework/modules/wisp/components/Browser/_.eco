@@ -119,19 +119,7 @@ std Module
                                                 flex add: (
                                                     ui HFlex(
                                                         ui Margin: 5 Child: (
-                                                            ui Framed(
-                                                                ui VFlex(
-                                                                    ui Margin: (3 + 5) Child: (
-                                                                        shell,
-                                                                    ),
-                                                                    ui Margin: 3 Child: (
-                                                                        ui HFlex(
-                                                                            ui Margin: 3 Child: ((ui Button) Label: 'Get it' Action: $[]),
-                                                                            ui Margin: 3 Child: ((ui Button) Label: 'Do it' Action: $[]),
-                                                                        ) ~ yLayoutShrinkWrap!,
-                                                                    ) ~ yLayoutShrinkWrap!,
-                                                                )
-                                                            )
+                                                            ui Framed(ui Margin: 5 Child: shell)
                                                         ),
                                                         ui VFlex(
                                                             ui Margin: 5 Child: (

@@ -76,6 +76,7 @@
             atX: x Y: y Put: object                => at: ((polymorphic math geometry) Point X: x Y: y) put: object;
             inX: x Y: y W: w H: h Put: object      => in: ((polymorphic math geometry) Rectangle X: x Y: y W: w H: h) put: object;
             inX: x Y: y Extent: extent Put: object => in: ((polymorphic math geometry) Rectangle X: x Y: y Extent: extent) put: object;
+            fullScreenPut: object                  => maybeBounds yes: [ :bounds | in: bounds put: object ] no: [ atOriginPut: object ];
 
             writeOn: w => w << 'a graphics stream';
         }
