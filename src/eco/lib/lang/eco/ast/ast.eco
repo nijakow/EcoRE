@@ -81,15 +81,19 @@
         static with inherited parent = #<:std/Clonable>;
 
         type, name;
+        isWith; "The fact that this variable exists is horrible. The whole compiler should be rewritten ASAP."
 
         initWithType: t Name: n => (
-            type <- t.
-            name <- n.
+            type   <- t.
+            name   <- n.
+            isWith <- false.
           ^ self
         );
 
         getType => type;
         getName => name;
+
+        enableWith => ( isWith <- true. ^ self );
 
         writeOn: writer => writer << '[' << type << '] ' << name;
     };

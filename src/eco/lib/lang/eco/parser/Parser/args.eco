@@ -8,6 +8,27 @@
       ^ newASTType: type AndName: name
     );
 
+    parseArgdefForBlock => (
+        |
+            isWith <- (check: TokenType WITH) isYes,
+            argdef <- parseArgdef
+        |
+
+        isWith if: [ argdef enableWith. ].
+
+      ^ argdef
+    );
+
+    parseArgdefsForBlock => (
+        | defs <- std util newVector |
+        [ (check: TokenType RPAREN) isYes ] until: [
+            defs append: parseArgdefForBlock.
+            (check: TokenType RPAREN) yes: [ ^ defs ].
+            expect: TokenType SEPARATOR
+        ].
+      ^ defs
+    );
+
     parseArgdefsWithoutEllipsis => (
         | defs <- std util newVector |
         [ (check: TokenType RPAREN) isYes ] until: [

@@ -233,8 +233,8 @@
             writeOn: w => w << 'a proper block closure';
         }).
 
-        ast getClosedArgs do: [ :arg |
-            #'ecosphere.ecore.reflect.add_value_slot'(m, -1, 0b00001, any, arg getName, m)
+        (ast getClosedArgs) do: [ :arg |
+            #'ecosphere.ecore.reflect.add_value_slot'(m, -1, (arg isWith) if: 0b00011 else: 0b00001, any, arg getName, m)
         ].
 
         | mappedNames <- std util newMap |

@@ -50,7 +50,7 @@
           if: [ (check: TokenType COLON) isYes ] then: [
             ((check: TokenType LPAREN) isYes) if: [
                 "closed parameters"
-                parseArgdefsWithoutEllipsis do: [ :argdef |
+                parseArgdefsForBlock do: [ :argdef |
                     closedparameters append: argdef.
                 ].
             ] else: [
