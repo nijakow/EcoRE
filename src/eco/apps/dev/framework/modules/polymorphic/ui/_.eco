@@ -43,5 +43,5 @@ std Module
     DocumentEditor: document => (((polymorphic morphs repo) core) editing DocumentMorph) Document: document;
     DocumentEditor           => DocumentEditor: ((polymorphic app document) Test);
 
-    MiniWindow(child) => (((polymorphic morphs) repo system) Window) Child: child;
+    MiniWindowWithTitle: title Content: content => (((polymorphic morphs) repo system) Window) Title: title Child: content;
 }

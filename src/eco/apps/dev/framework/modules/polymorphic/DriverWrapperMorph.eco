@@ -47,6 +47,7 @@ Clonable {
                     (added? not) if: [
                         (theDriver rootPayload) desktopMorph
                           ~ add: (((polymorphic morphs) repo system) Window
+                                    Title: 'Sine Wave'
                                     Child: (((polymorphic ui) Button)
                                                 Action: $[]
                                                  Child: (((polymorphic morphs) repo core) MarginMorph
@@ -54,6 +55,7 @@ Clonable {
                                                                Child: (((polymorphic morphs) repo fun) NewTestMorph3)))).
                         (theDriver rootPayload) desktopMorph
                           ~ add: (((polymorphic morphs) repo system) Window
+                                    Title: 'Sample Document'
                                     Child: (((polymorphic morphs) repo core) MarginMorph
                                                 Margin: 10
                                                  Child: ((polymorphic ui) DocumentEditor))).

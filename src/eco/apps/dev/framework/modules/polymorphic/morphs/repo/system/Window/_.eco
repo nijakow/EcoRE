@@ -74,6 +74,7 @@ std Module
         {
             |
                 maybeMorphKernel        <- No,
+                title                   <- '',
                 child                   <- No,
                 maybeTitleMorphKernel   <- No,
                 maybeButtonsMorphKernel <- No,
@@ -83,7 +84,8 @@ std Module
             {
                 protected polymorphic <- $package;
 
-                init => (
+                initWithTitle: _title => (
+                    title                   <- _title.
                     maybeMorphKernel        <- No.
                     child                   <- No.
                     maybeTitleMorphKernel   <- No.
@@ -103,7 +105,8 @@ std Module
                     child <- Yes: ((polymorphic ui) Margin: 15 Child: c).
                     maybeTitleMorphKernel <- Yes: (
                         ((polymorphic morphs repo) system WindowTitle)
-                            Caption: (c name) Window: self
+                            Caption: title
+                             Window: self
                     ).
                   ^ self
                 );
@@ -122,10 +125,10 @@ std Module
             }
         };
 
-        New => Instance new;
-        Child: c => New ~ child: c;
+        Title: title              => (Instance clone) initWithTitle: title;
+        Title: title Child: child => Title: title ~ child: child;
     };
 
-    New      => Behavior link: (State New);
-    Child: c => Behavior link: (State Child: c);
+    Title: title              => Behavior link: (State Title: title);
+    Title: title Child: child => Behavior link: (State Title: title Child: child);
 }

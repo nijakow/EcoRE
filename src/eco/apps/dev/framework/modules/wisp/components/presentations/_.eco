@@ -38,7 +38,13 @@ std Module
     SlotMorphForSlot: slot Navigator: navigator => SlotMorphForSlot: slot Navigator: navigator Draggable: true;
 
     DraggableSlotMorphForSlot: slot Navigator: navigator => (
-      ^ ui MiniWindow(SlotMorphForSlot: slot Navigator: navigator Draggable: false)
+        | stream <- (std io StringWriter) new |
+
+        stream << 'The slot ' << (slot name).
+
+        | title <- stream build |
+
+      ^ ui MiniWindowWithTitle: title Content: (SlotMorphForSlot: slot Navigator: navigator Draggable: false)
     );
 
 
