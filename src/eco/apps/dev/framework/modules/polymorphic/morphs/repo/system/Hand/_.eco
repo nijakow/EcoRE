@@ -4,11 +4,14 @@ std Module
     Behavior <- ($package core) NewBehavior
                     ~ name: 'a hand morph'
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
-                        ((kernel payload) grabbedMorph) yes: [ :gm |
-                            stream withGraphicsDo: [ :graphics |
+                        stream withGraphicsDo: [ :graphics |
+                            ((kernel payload) grabbedMorph) yes: [ :gm |
                                 graphics at: ((kernel payload) grabbedMorphTranslation)
                                         put: gm. 
                             ].
+                            graphics atOriginPut: (((polymorphic core objects) Circle)
+                                                        Radius: 5
+                                                         Color: ((graphics context) theme) lineColor).
                         ].
                     ] bind($package)
                     ~ enableBlessing

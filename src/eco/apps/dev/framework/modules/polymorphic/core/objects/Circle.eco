@@ -1,0 +1,41 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable
+    {
+        with inherited DrawObject <- $package;
+        
+        |
+            radius <- 0,
+            color,
+            protected cachedBounds
+        |
+
+        {
+            initWithRadius: r Color: c => (
+                radius <- r.
+                color  <- c.
+                cachedBounds <- ((polymorphic math geometry) Rectangle) X: (r negate) Y: (r negate) W: (r * 2) H: (r * 2).
+              ^ self
+            );
+
+            initWithRadius: r => initWithRadius: r Color: ((polymorphic color colors) Default);
+
+            catches: aPoint => (aPoint distanceToOrigin) <= radius;
+
+            bounds => cachedBounds;
+
+            renderAt: offset On: renderer => (
+                color onRenderer: renderer.
+                renderer drawCircle: offset R: radius.
+              ^ self
+            );
+
+            writeOn: w => w << 'a circle of radius ' << radius;
+        }
+    };
+
+    Radius: radius Color: color => (Instance clone) initWithRadius: radius Color: color;
+    Radius: radius              => (Instance clone) initWithRadius: radius;
+}
