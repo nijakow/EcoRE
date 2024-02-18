@@ -79,7 +79,7 @@ std Module
                 child                   <- No,
                 maybeTitleMorphKernel   <- No,
                 maybeButtonsMorphKernel <- No,
-                rolledUp                <- false,
+                rolledUp                <- true,
             |
 
             {
@@ -91,7 +91,7 @@ std Module
                     child                   <- No.
                     maybeTitleMorphKernel   <- No.
                     maybeButtonsMorphKernel <- No.
-                    rolledUp                <- false.
+                    rolledUp                <- true.
                   ^ self
                 );
 
