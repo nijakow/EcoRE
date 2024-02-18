@@ -41,7 +41,7 @@ std Module
     Stacked(...) => BuildStack: (((polymorphic morphs repo) core StackMorph) New) Elements: (std util newArray(...));
 
     DocumentEditor: document => (((polymorphic morphs repo) core) editing DocumentMorph) Document: document;
-    DocumentEditor           => DocumentEditor: ((polymorphic app document) Test);
+    DocumentEditor           => DocumentEditor: ((polymorphic app document) Document new);
 
     MiniWindowWithTitle: title Content: content => (((polymorphic morphs) repo system) Window) Title: title Child: content;
 }
