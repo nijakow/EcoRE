@@ -26,9 +26,9 @@
                 lineColor:        ((color) R: 0 G: 120 B: 136).
                 textColor:        ((color) R: 0 G: 182 B: 203).
                 inverseTextColor: ((color) R: 0 G: 182 B: 203).
-                transparentAttentionColor: ((color) R: 0 G: 182 B: 203 A: 64).
+                transparentAttentionColor:  ((color) R: 0 G: 182 B: 203 A: 64).
                 transparentBackgroundColor: ((color) R: 0 G:  42 B:  47 A: 64).
-                transparentMainAccentColor: ((color) R: 0 G: 120 B: 136 A: 64).
+                transparentMainAccentColor: ((color) R: 0 G:  62 B:  69 A: 224).
 
                 "baseColor:        ((color) R: 240 G: 240 B: 240).
                 backgroundColor:  ((color) R: 240 G: 240 B: 240).

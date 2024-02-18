@@ -1,25 +1,27 @@
 
 std Module
 {
-    protected wisp <- $package;
-    protected ui   <- ($package modules polymorphic) ui;
+    protected wisp        <- $package;
+    protected polymorphic <- $package modules polymorphic;
+    protected ui          => polymorphic ui;
 
     SlotMorphForSlot: slot Navigator: navigator Draggable: draggable? => (
+        | tagColor <- (polymorphic color) Darker: ((((polymorphic color) themes) Default) textColor) |
       ^ ui Framed(
             ui HFlex(
-                ui Margin: 5 Child: (
+                ui Margin: 10 Child: (
                     ui HFlex(
-                        ui Label: (slot isProtected if: 'p' else: ' '),
-                        ui Label: (slot isStatic    if: 's' else: ' '),
-                        ui Label: (slot isFinal     if: 'f' else: ' '),
-                        ui Label: (slot isWith      if: 'w' else: ' '),
-                        ui Label: (slot isInherited if: 'i' else: ' '),
+                        ui Label: (slot isProtected if: 'p' else: ' ') Color: tagColor,
+                        ui Label: (slot isStatic    if: 's' else: ' ') Color: tagColor,
+                        ui Label: (slot isFinal     if: 'f' else: ' ') Color: tagColor,
+                        ui Label: (slot isWith      if: 'w' else: ' ') Color: tagColor,
+                        ui Label: (slot isInherited if: 'i' else: ' ') Color: tagColor,
                     )
                 ) ~ xLayoutShrinkWrap!,
-                (
+                ui Margin: 5 Child: (
                     (ui Button)
-                         Label: ((slot name) asString)
                         Action: $[ :(navigator, slotMirror) | navigator followLinkTo: (slotMirror slotValue) ] bind(navigator, slot)
+                         Child: (ui Margin: 5 Child: (ui Label: ((slot name) asString)))
                 )
             ) inject: [ :hflex |
                 (draggable?) if: [
@@ -30,14 +32,14 @@ std Module
                                 Action: $[ :(wisp, slotMirror, navigator) :event | ((event handMorph) payload) tryGrab: ((wisp components presentations) DraggableSlotMorphForSlot: slotMirror Navigator: navigator) ] bind(wisp, slot, navigator)
                         ) ~ xLayoutShrinkWrap!
                     ).
-                    hflex add: (
-                        ui Margin: 5 Child: (
-                            (ui Button)
-                                 Label: 'Value'
-                                Action: $[ :(wisp, slotMirror) :event | ((event handMorph) payload) tryGrab: ((wisp components Object) Object: (slotMirror slotValue)) ] bind(wisp, slot)
-                        ) ~ xLayoutShrinkWrap!
-                    ).
-                ]
+                ].
+                hflex add: (
+                    ui Margin: 5 Child: (
+                        (ui Button)
+                             Label: 'Value'
+                            Action: $[ :(wisp, slotMirror) :event | ((event handMorph) payload) tryGrab: ((wisp components Object) Object: (slotMirror slotValue)) ] bind(wisp, slot)
+                    ) ~ xLayoutShrinkWrap!
+                ).
             ]
         ) ~ yLayoutShrinkWrap!
     );

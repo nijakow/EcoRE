@@ -7,6 +7,8 @@ std Module
     R: r G: g B: b A: a => Color R: r G: g B: b A: a;
     R: r G: g B: b      => Color R: r G: g B: b;
 
+    Darker: color => R: (color r / 2) G: (color g / 2) B: (color b / 2) A: (color a);
+
     colors :: Module {
         Transparent <- ($ Color) R: 0 G: 0 B: 0 A: 0;
 
