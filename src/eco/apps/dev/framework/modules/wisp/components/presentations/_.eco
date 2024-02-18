@@ -5,19 +5,10 @@ std Module
     protected polymorphic <- $package modules polymorphic;
     protected ui          => polymorphic ui;
 
-    SlotMorphForSlot: slot Navigator: navigator Draggable: draggable? => (
+    SlotMorphForSlot: slot Navigator: navigator => (
         | tagColor <- (polymorphic color) Darker: ((((polymorphic color) themes) Default) textColor) |
       ^ ui Framed(
             (ui HFlex) inject: [ :hflex |
-                (draggable?) if: [
-                    hflex add: (
-                        ui Margin: 5 Child: (
-                            (ui Button)
-                                 Label: ' V '
-                                Action: $[ :(wisp, slotMirror, navigator) :event | ((event handMorph) payload) tryGrab: ((wisp components presentations) DraggableSlotMorphForSlot: slotMirror Navigator: navigator) ] bind(wisp, slot, navigator)
-                        ) ~ xLayoutShrinkWrap!
-                    ).
-                ].
                 hflex add: ( 
                     ui Margin: 10 Child: (
                         ui HFlex(
@@ -32,7 +23,7 @@ std Module
                 hflex add: (
                     ui Margin: 5 Child: (
                         (ui Button)
-                            Action: $[ :(navigator, slotMirror) | navigator followLinkTo: (slotMirror slotValue) ] bind(navigator, slot)
+                            Action: $[ :(wisp, slotMirror, navigator) :event | ((event handMorph) payload) tryGrab: ((wisp components presentations) DraggableSlotMorphForSlot: slotMirror Navigator: navigator) ] bind(wisp, slot, navigator)
                              Child: (ui Margin: 5 Child: (ui Label: ((slot name) asString)))
                     )
                 ).
@@ -47,8 +38,6 @@ std Module
         ) ~ yLayoutShrinkWrap!
     );
 
-    SlotMorphForSlot: slot Navigator: navigator => SlotMorphForSlot: slot Navigator: navigator Draggable: true;
-
     DraggableSlotMorphForSlot: slot Navigator: navigator => (
         | stream <- (std io StringWriter) new |
 
@@ -56,7 +45,7 @@ std Module
 
         | title <- stream build |
 
-      ^ ui MiniWindowWithTitle: title Content: (SlotMorphForSlot: slot Navigator: navigator Draggable: false)
+      ^ ui MiniWindowWithTitle: title Content: (SlotMorphForSlot: slot Navigator: navigator)
     );
 
 
