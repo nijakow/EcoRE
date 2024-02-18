@@ -8,31 +8,34 @@ std Module
     SlotMorphForSlot: slot Navigator: navigator Draggable: draggable? => (
         | tagColor <- (polymorphic color) Darker: ((((polymorphic color) themes) Default) textColor) |
       ^ ui Framed(
-            ui HFlex(
-                ui Margin: 10 Child: (
-                    ui HFlex(
-                        ui Label: (slot isProtected if: 'p' else: ' ') Color: tagColor,
-                        ui Label: (slot isStatic    if: 's' else: ' ') Color: tagColor,
-                        ui Label: (slot isFinal     if: 'f' else: ' ') Color: tagColor,
-                        ui Label: (slot isWith      if: 'w' else: ' ') Color: tagColor,
-                        ui Label: (slot isInherited if: 'i' else: ' ') Color: tagColor,
-                    )
-                ) ~ xLayoutShrinkWrap!,
-                ui Margin: 5 Child: (
-                    (ui Button)
-                        Action: $[ :(navigator, slotMirror) | navigator followLinkTo: (slotMirror slotValue) ] bind(navigator, slot)
-                         Child: (ui Margin: 5 Child: (ui Label: ((slot name) asString)))
-                )
-            ) inject: [ :hflex |
+            (ui HFlex) inject: [ :hflex |
                 (draggable?) if: [
                     hflex add: (
                         ui Margin: 5 Child: (
                             (ui Button)
-                                 Label: 'Slot'
+                                 Label: ' V '
                                 Action: $[ :(wisp, slotMirror, navigator) :event | ((event handMorph) payload) tryGrab: ((wisp components presentations) DraggableSlotMorphForSlot: slotMirror Navigator: navigator) ] bind(wisp, slot, navigator)
                         ) ~ xLayoutShrinkWrap!
                     ).
                 ].
+                hflex add: ( 
+                    ui Margin: 10 Child: (
+                        ui HFlex(
+                            ui Label: (slot isProtected if: 'p' else: ' ') Color: tagColor,
+                            ui Label: (slot isStatic    if: 's' else: ' ') Color: tagColor,
+                            ui Label: (slot isFinal     if: 'f' else: ' ') Color: tagColor,
+                            ui Label: (slot isWith      if: 'w' else: ' ') Color: tagColor,
+                            ui Label: (slot isInherited if: 'i' else: ' ') Color: tagColor,
+                        )
+                    ) ~ xLayoutShrinkWrap!
+                ).
+                hflex add: (
+                    ui Margin: 5 Child: (
+                        (ui Button)
+                            Action: $[ :(navigator, slotMirror) | navigator followLinkTo: (slotMirror slotValue) ] bind(navigator, slot)
+                             Child: (ui Margin: 5 Child: (ui Label: ((slot name) asString)))
+                    )
+                ).
                 hflex add: (
                     ui Margin: 5 Child: (
                         (ui Button)
