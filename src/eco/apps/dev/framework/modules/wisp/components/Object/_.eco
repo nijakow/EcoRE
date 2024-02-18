@@ -7,20 +7,12 @@ std Module
                     ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
                             |
                                 child  <- (kernel payload) child,
-                                bounds <- child minBounds,
                             |
                             stream withGraphicsDo: [ :graphics |
-                                graphics atOriginPut: (((polymorphic core objects) FilledRectangle)
-                                                            Bounds: bounds
-                                                            Color: ((graphics context) theme transparentWindowColor)).
-                                graphics atOriginPut: child.
+                                graphics fullScreenPut: child.
                             ].
                       ] bind($package modules polymorphic)
-                    ~ on: ((($package modules polymorphic) event) predicates MouseClick) do: $[ :(polymorphic) :context :event |
-                        | hand <- ((event body) hand) payload |
-                        hand tryGrab: (context kernel) Translation: ((polymorphic math geometry) Point X: ((context x) negate) Y: ((context y) negate)).
-                        (context kernel) dispose. "TODO: Only dispose if the grab was successful."
-                    ] bind($package modules polymorphic)
+                    ~ enableBlessing
                     ~ build;
     
     State :: Classlike
@@ -28,8 +20,10 @@ std Module
         Instance :: Clonable
         {
             |
-                object,
-                child,
+                maybeMorphKernel <- No,
+                mirror,
+                child <- No,
+                shells,
             |
 
             {
@@ -37,18 +31,76 @@ std Module
                 protected polymorphic <- $package modules polymorphic;
                 protected ui          => polymorphic ui;
 
-                initWithObject: _object => (
-                    object <- _object.
+                initWithMirror: _mirror => (
+                    mirror <- _mirror.
+                    child  <- No.
+                    shells <- std util newVector.
                     rebuild.
+                  ^ self
+                );
+                initWithObject: object => initWithMirror: (std reflect Mirror: object);
+
+                bless: kernel => maybeMorphKernel <- Yes: kernel;
+
+                protected changed => (
+                    maybeMorphKernel yes: [ :kernel | kernel contentChanged ].
                   ^ self
                 );
 
                 rebuild => (
-                    child <- ui Framed(
+                    child <- ui VFlex(
                         ui Margin: 10 Child: (
-                            (((polymorphic morphs) repo core) WriteMorph) link: object
-                        )
+                            ui VFlex(
+                                ui Margin: 5 Child: (
+                                    (wisp components presentations) ForMirror: mirror Navigator: self
+                                ),
+                                (ui VFlex) inject: [ :flex |
+                                    shells do: [ :shell |
+                                        flex add: (
+                                            ui HFlex(
+                                                ui Margin: 5 Child: (
+                                                    ui Framed(ui Margin: 5 Child: shell)
+                                                ),
+                                                ui VFlex(
+                                                    ui Margin: 5 Child: (
+                                                        (ui Button)
+                                                             Label: 'X'
+                                                            Action: $[ :(browser, shell) | browser closeShell: shell ] bind(self, shell)
+                                                    ),
+                                                    ui Margin: 5 Child: (
+                                                        (ui Button)
+                                                             Label: '>'
+                                                            Action: $[ :(ui, browser, shell) :event |
+                                                                browser closeShell: shell.
+                                                                ((event handMorph) payload) tryGrab: (
+                                                                    ui MiniWindowWithTitle: 'Shell' Content: shell.
+                                                                ).
+                                                            ] bind(ui, self, shell)
+                                                    )
+                                                ) ~ xLayoutShrinkWrap!,
+                                            )
+                                        )
+                                    ].
+                                ],
+                            ),
+                        ),
+                        ui HFlex(
+                            (ui Button) Label: 'Shell' Action: $[ :(browser) | browser openShell ] bind(self),
+                        ) ~ yLayoutShrinkWrap!,
                     ).
+                    changed.
+                  ^ self
+                );
+
+                openShell => (
+                    shells add: ((wisp components) Shell) New.
+                    rebuild.
+                  ^ self
+                );
+
+                closeShell: shell => (
+                    shells remove: shell.
+                    rebuild.
                   ^ self
                 );
 

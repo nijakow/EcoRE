@@ -23,7 +23,7 @@ std Module
         |
 
         ((driver rootPayload) desktop)
-            openMorph: (ui MiniWindowWithTitle: 'Browser' Content: (ui Margin: 10 Child: ((framework modules wisp) components Browser) New))
+            openMorph: (ui MiniWindowWithTitle: 'Browser' Content: (ui Margin: 10 Child: (((framework modules wisp) components Object) Object: self)))
                   AtX: 100
                     Y: 100.
 

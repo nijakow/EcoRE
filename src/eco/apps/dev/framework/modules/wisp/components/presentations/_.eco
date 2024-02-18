@@ -5,11 +5,21 @@ std Module
     protected polymorphic <- $package modules polymorphic;
     protected ui          => polymorphic ui;
 
+    Object: object => (
+        | stream <- (std io StringWriter) new |
+
+        stream << object.
+
+        | title <- stream build |
+
+      ^ ui MiniWindowWithTitle: title Content: (ui Margin: 10 Child: ((wisp components Object) Object: object))
+    );
+
     SlotMorphForSlot: slot Navigator: navigator => (
         | tagColor <- (polymorphic color) Darker: ((((polymorphic color) themes) Default) textColor) |
       ^ ui Framed(
             (ui HFlex) inject: [ :hflex |
-                hflex add: ( 
+                hflex add: (
                     ui Margin: 10 Child: (
                         ui HFlex(
                             ui Label: (slot isProtected if: 'p' else: ' ') Color: tagColor,
@@ -31,7 +41,7 @@ std Module
                     ui Margin: 5 Child: (
                         (ui Button)
                              Label: 'Value'
-                            Action: $[ :(wisp, slotMirror) :event | ((event handMorph) payload) tryGrab: ((wisp components Object) Object: (slotMirror slotValue)) ] bind(wisp, slot)
+                            Action: $[ :(us, wisp, slotMirror) :event | ((event handMorph) payload) tryGrab: (us Object: (slotMirror slotValue)) ] bind(self, wisp, slot)
                     ) ~ xLayoutShrinkWrap!
                 ).
             ]
