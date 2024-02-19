@@ -67,6 +67,17 @@ std Module
                         hand tryGrab: (context kernel) Translation: ((polymorphic math geometry) Point X: ((context x) negate) Y: ((context y) negate)).
                         (context kernel) dispose. "TODO: Only dispose if the grab was successful."
                     ] bind($package)
+                    ~ on: (($package event) predicates Key) do: $[ :(polymorphic) :context :event |
+                              |
+                                  payload <- ((context kernel) payload),
+                                  key     <- (event body) key,
+                              |
+
+                              [ :break |
+                                  key ifEscape: [ payload close. break value. ].
+                                  "TODO: Ignore key and/or dispatch to the next morph."
+                              ] withBreak.
+                    ] bind($package)
                     ~ enableBlessing
                     ~ build;
 

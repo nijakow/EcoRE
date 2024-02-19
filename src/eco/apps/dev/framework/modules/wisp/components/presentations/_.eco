@@ -31,10 +31,12 @@ std Module
                     ) ~ xLayoutShrinkWrap!
                 ).
                 hflex add: (
-                    ui Margin: 5 Child: (
-                        (ui Button)
-                            Action: $[ :(wisp, slotMirror, navigator) :event | ((event handMorph) payload) tryGrab: ((wisp components presentations) DraggableSlotMorphForSlot: slotMirror Navigator: navigator) ] bind(wisp, slot, navigator)
-                             Child: (ui Margin: 5 Child: (ui Label: ((slot name) asString)))
+                    ui Framed(
+                        ui Margin: 5 Child: (
+                            (ui Button)
+                                Action: $[ :(wisp, slotMirror, navigator) :event | ((event handMorph) payload) tryGrab: ((wisp components presentations) DraggableSlotMorphForSlot: slotMirror Navigator: navigator) ] bind(wisp, slot, navigator)
+                                 Child: (ui Margin: 5 Child: (ui Label: ((slot name) asString)))
+                        )
                     )
                 ).
                 hflex add: (
