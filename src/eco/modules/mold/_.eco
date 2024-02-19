@@ -1,0 +1,19 @@
+
+std Module
+{
+    Concept :: (here / 'Concept.eco') importIn: self;
+
+    SubclassOf: concept Base: base => (
+        | obj <- #'ecosphere.ecore.clone'({}) |
+
+        #'ecosphere.ecore.reflect.add_value_slot'(obj, -1, 18, any, #'__', std Clonable).
+        #'ecosphere.ecore.reflect.add_value_slot'(obj, -1, 2, any, #'_', base).
+        #'ecosphere.ecore.reflect.add_value_slot'(obj, -1, 1, any, #'magicMoldMetadata', Yes: (concept createSubconcept)).
+
+      ^ obj
+    );
+
+    SubclassOf: concept => SubclassOf: concept Base: std Clonable;
+
+    MetadataFor: object => object magicMoldMetadata;
+}

@@ -1,0 +1,39 @@
+
+{
+    isa std Classlike;
+
+    Instance :: Clonable {
+        |
+            parent <- No,
+        |
+
+        {
+            protected mold <- $package;
+
+            initWithMaybeParent: mp => (
+                parent <- mp.
+              ^ self
+            );
+
+            initWithParent: p => initWithMaybeParent: (Yes: p);
+            initWithoutParent => initWithMaybeParent: No;
+
+            createSubconcept => (mold Concept) Parent: self;
+
+            includes: other => other isKindOf: self;
+            
+            isKindOf: other => (
+                (self == other) -> [ ^ true ].
+
+                parent yes: [ :p | ^ p isKindOf: other ].
+
+              ^ self
+            );
+
+            writeOn: w => w << 'a concept';
+        }
+    };
+
+    New       => (Instance clone) initWithoutParent;
+    Parent: p => (Instance clone) initWithParent: p;
+}

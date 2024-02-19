@@ -160,6 +160,7 @@
             own eve,
             own document,
             own math,
+            own mold,
             own gfx,
             own app
         }
@@ -175,6 +176,7 @@
     modules eve <- eve.
     modules document <- (here / 'document' / '_.eco') importIn: modules.
     modules math <- (here / 'math' / '_.eco') importIn: modules.
+    modules mold <- (here / 'mold' / '_.eco') importIn: modules.
     modules gfx <- (here / 'gfx' / '_.eco') importIn: modules.
     modules app <- (here / 'app' / '_.eco') importIn: modules.
 
