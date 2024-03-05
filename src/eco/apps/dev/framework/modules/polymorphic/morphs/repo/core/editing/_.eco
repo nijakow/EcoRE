@@ -218,6 +218,12 @@ std Module
                         changed.
                       ^ self
                     );
+
+                    clear => (
+                        document clear.
+                        changed.
+                      ^ self
+                    );
                 }
             };
 

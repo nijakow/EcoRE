@@ -65,10 +65,18 @@ std Module
                                                OnSuccess: [ :val |
                                                     ((event handMorph) payload) tryGrab: ((wisp components presentations) Object: val).
                                                ]
-                                               OnFailure: [ (std io out << 'Failure!') newline commit. ].
+                                               OnFailure: [].
                                         ] bind(wisp, target, (editor payload) document)
                                     ),
-                                    ui Margin: 3 Child: ((ui Button) Label: 'Do it'  Action: $[]),
+                                    ui Margin: 3 Child: ((ui Button) Label: 'Do it'  Action: $[ :(wisp, environment, document) :event |
+                                        (((event session) framework) actions eval)
+                                                Document: document
+                                                      In: environment
+                                               OnSuccess: []
+                                               OnFailure: [].
+                                        ] bind(wisp, target, (editor payload) document)
+                                    ),
+                                    ui Margin: 3 Child: ((ui Button) Label: 'Cancel' Action: $[ :(editor) :event | editor clear ] bind(editor payload))
                                 ) ~ yLayoutShrinkWrap!,
                             ) ~ yLayoutShrinkWrap!,
                         )
