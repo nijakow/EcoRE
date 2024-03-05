@@ -38,7 +38,7 @@
             );
 
             openShell => (
-                openShells add: ((wisp components) Shell) New.
+                openShells add: (((wisp components) Shell) Target: (objectMirror reflectee)).
               ^ self
             );
 

@@ -20,6 +20,7 @@ std Module
             |
                 maybeMorphKernel <- No,
                 current          <- No,
+                target,
                 editor,
             |
 
@@ -28,9 +29,10 @@ std Module
                 protected polymorphic <- $package modules polymorphic;
                 protected ui          => polymorphic ui;
 
-                init => (
+                initWithTarget: _target => (
                     maybeMorphKernel <- No.
                     current          <- No.
+                    target           <- _target.
                     editor           <- ui DocumentEditor.
 
                     rebuild.
@@ -55,7 +57,7 @@ std Module
                             ui Margin: (3 + 5) Child: editor,
                             ui Margin: 3 Child: (
                                 ui HFlex(
-                                    ui Margin: 3 Child: ((ui Button) Label: 'Get it' Action: $[]),
+                                    ui Margin: 3 Child: ((ui Button) Label: 'Get it' Action: $[ :(obj) | (std io out << 'Running on object: ' << obj) newline commit. ] bind(target)),
                                     ui Margin: 3 Child: ((ui Button) Label: 'Do it'  Action: $[]),
                                 ) ~ yLayoutShrinkWrap!,
                             ) ~ yLayoutShrinkWrap!,
@@ -68,8 +70,8 @@ std Module
             }
         };
 
-        New => Instance new;
+        Target: target => (Instance clone) initWithTarget: target;
     };
 
-    New => Behavior link: (State New);
+    Target: target => Behavior link: (State Target: target);
 }
