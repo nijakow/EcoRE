@@ -7,4 +7,5 @@ std Module
     Window        :: (here / 'Window'        / '_.eco') importIn: $package;
     WindowButtons :: (here / 'WindowButtons' / '_.eco') importIn: $package;
     WindowTitle   :: (here / 'WindowTitle'   / '_.eco') importIn: $package;
+    Menu          :: (here / 'Menu'          / '_.eco') importIn: $package;
 }

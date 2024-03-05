@@ -138,7 +138,7 @@ std Module
                   ^ self
                 );
 
-                writeOn: w => w << 'a desktop';
+                writeOn: w => w << 'a window payload';
             }
         };
 
