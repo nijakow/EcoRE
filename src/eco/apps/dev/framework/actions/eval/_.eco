@@ -1,8 +1,32 @@
 
 std Module
 {
-    Document: document On: object OnSuccess: successBlock OnFailure: failureBlock => (
-        (std io out << 'Evaluating ' << document << ' on ' << object) newline commit.
+    Document: document In: environment OnSuccess: successBlock OnFailure: failureBlock => (
+        [
+            |
+                parser <- (lang eco controller) CreateParserForSourceStream: (document documentStream)
+            |
+
+            parser exprDo: [ :expr |
+                [
+                    | result <- expr basicEvaluateInEnv: environment |
+                    successBlock value(result).
+                  ^ self
+                ] catch: [ :e |
+                    | sw <- (std io StringWriter) new |
+                    (sw << 'Error while evaluating expression!') newline newline.
+                    sw << e.
+                    failureBlock value(sw build).
+                  ^ self
+                ]
+            ]
+        ] catch: [ :e |
+            | sw <- (std io StringWriter) new |
+            (sw << 'Syntax error while parsing expression:') newline newline.
+            sw << e.
+            failureBlock value(sw build).
+          ^ self
+        ].
       ^ self
     );
 }

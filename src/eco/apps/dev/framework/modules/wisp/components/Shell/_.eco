@@ -58,10 +58,10 @@ std Module
                             ui Margin: 3 Child: (
                                 ui HFlex(
                                     ui Margin: 3 Child: (
-                                        (ui Button) Label: 'Get it' Action: $[ :(target, document) :event |
+                                        (ui Button) Label: 'Get it' Action: $[ :(environment, document) :event |
                                             (((event session) framework) actions eval)
                                                 Document: document
-                                                      On: target
+                                                      In: environment
                                                OnSuccess: [ (std io out << 'Success!') newline commit. ]
                                                OnFailure: [ (std io out << 'Failure!') newline commit. ].
                                         ] bind(target, (editor payload) document)
