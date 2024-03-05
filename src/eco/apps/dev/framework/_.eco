@@ -6,5 +6,7 @@ std Module
     actions :: (here / 'actions' / '_.eco') importIn: self;
     modules :: (here / 'modules' / '_.eco') importIn: self;
 
+    writeOn: w => w << 'the framework (v2)';
+
     QuickRun => (modules polymorphic) Test;
 }

@@ -1,0 +1,8 @@
+
+std Module
+{
+    Document: document On: object OnSuccess: successBlock OnFailure: failureBlock => (
+        (std io out << 'Evaluating ' << document << ' on ' << object) newline commit.
+      ^ self
+    );
+}

@@ -57,7 +57,15 @@ std Module
                             ui Margin: (3 + 5) Child: editor,
                             ui Margin: 3 Child: (
                                 ui HFlex(
-                                    ui Margin: 3 Child: ((ui Button) Label: 'Get it' Action: $[ :(obj) | (std io out << 'Running on object: ' << obj) newline commit. ] bind(target)),
+                                    ui Margin: 3 Child: (
+                                        (ui Button) Label: 'Get it' Action: $[ :(target, document) :event |
+                                            (((event session) framework) actions eval)
+                                                Document: document
+                                                      On: target
+                                               OnSuccess: [ (std io out << 'Success!') newline commit. ]
+                                               OnFailure: [ (std io out << 'Failure!') newline commit. ].
+                                        ] bind(target, (editor payload) document)
+                                    ),
                                     ui Margin: 3 Child: ((ui Button) Label: 'Do it'  Action: $[]),
                                 ) ~ yLayoutShrinkWrap!,
                             ) ~ yLayoutShrinkWrap!,

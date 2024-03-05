@@ -1,5 +1,5 @@
 
 std Module
 {
-    
+    eval :: (here / 'eval' / '_.eco') importIn: $package;
 }

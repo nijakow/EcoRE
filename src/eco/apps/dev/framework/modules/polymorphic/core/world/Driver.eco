@@ -17,6 +17,9 @@
         {
             protected polymorphic <- $package;
 
+            "This is a trampoline, since currently the driver acts as a session... change that!"
+            framework => polymorphic framework;
+
             initWithWorld: w => (
                 world      <- w.
                 rootPaper  <- ((polymorphic core paper) Paper) FixedBounds: ((polymorphic math geometry) Rectangle W: 400 H: 400).
