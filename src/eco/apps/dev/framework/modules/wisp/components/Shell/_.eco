@@ -58,13 +58,15 @@ std Module
                             ui Margin: 3 Child: (
                                 ui HFlex(
                                     ui Margin: 3 Child: (
-                                        (ui Button) Label: 'Get it' Action: $[ :(environment, document) :event |
+                                        (ui Button) Label: 'Get it' Action: $[ :(wisp, environment, document) :event |
                                             (((event session) framework) actions eval)
                                                 Document: document
                                                       In: environment
-                                               OnSuccess: [ (std io out << 'Success!') newline commit. ]
+                                               OnSuccess: [ :val |
+                                                    ((event handMorph) payload) tryGrab: ((wisp components presentations) Object: val).
+                                               ]
                                                OnFailure: [ (std io out << 'Failure!') newline commit. ].
-                                        ] bind(target, (editor payload) document)
+                                        ] bind(wisp, target, (editor payload) document)
                                     ),
                                     ui Margin: 3 Child: ((ui Button) Label: 'Do it'  Action: $[]),
                                 ) ~ yLayoutShrinkWrap!,
