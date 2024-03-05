@@ -44,4 +44,6 @@ std Module
     DocumentEditor           => DocumentEditor: ((polymorphic app document) Document new);
 
     MiniWindowWithTitle: title Content: content => (((polymorphic morphs) repo system) Window) Title: title Child: content;
+
+    MainAccentSurface => ((polymorphic morphs repo) core MainAccentSurfaceMorph) New;
 }

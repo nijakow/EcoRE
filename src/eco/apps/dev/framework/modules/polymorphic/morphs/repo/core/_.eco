@@ -18,6 +18,28 @@ std Module
                             ~ presenterFunction: $[ :stream :kernel | (kernel payload) value(stream, kernel) ]
                             ~ build;
 
+    MainAccentSurfaceMorph :: Module
+    {
+        protected polymorphic <- $package;
+
+        Behavior <- ($package core) NewBehavior
+                      ~ name: 'a main accent surface morph'
+                      ~ presenterFunction: $[ :(polymorphic) :stream :kernel |
+                            (stream maybeBounds) yes: [ :bounds |
+                                |
+                                    color   <- ((stream context) theme) transparentMainAccentColor,
+                                    rect    <- ((polymorphic core objects) FilledRectangle)
+                                                    Bounds: bounds
+                                                     Color: color, 
+                                |
+                                stream emit: rect.
+                            ].
+                        ] bind($package)
+                      ~ build;
+
+        New => Behavior link;
+    };
+
     LabelMorph :: Module
     {
         protected polymorphic <- $package;

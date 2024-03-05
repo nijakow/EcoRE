@@ -57,28 +57,30 @@ std Module
                                 (ui VFlex) inject: [ :flex |
                                     shells do: [ :shell |
                                         flex add: (
-                                            ui Framed(
-                                                ui HFlex(
-                                                    ui Margin: 5 Child: (
-                                                        ui Framed(ui Margin: 5 Child: shell)
-                                                    ),
-                                                    ui VFlex(
+                                            ui Margin: 5 Child: (
+                                                ui Framed(
+                                                    ui HFlex(
                                                         ui Margin: 5 Child: (
-                                                            (ui Button)
-                                                                 Label: 'X'
-                                                                Action: $[ :(browser, shell) | browser closeShell: shell ] bind(self, shell)
+                                                            ui Framed(ui Margin: 5 Child: shell)
                                                         ),
-                                                        ui Margin: 5 Child: (
-                                                            (ui Button)
-                                                                 Label: '>'
-                                                                Action: $[ :(ui, browser, shell) :event |
-                                                                    browser closeShell: shell.
-                                                                    ((event handMorph) payload) tryGrab: (
-                                                                        ui MiniWindowWithTitle: 'Shell' Content: shell.
-                                                                    ).
-                                                                ] bind(ui, self, shell)
-                                                        )
-                                                    ) ~ xLayoutShrinkWrap!,
+                                                        ui VFlex(
+                                                            ui Margin: 5 Child: (
+                                                                (ui Button)
+                                                                     Label: 'X'
+                                                                    Action: $[ :(browser, shell) | browser closeShell: shell ] bind(self, shell)
+                                                            ),
+                                                            ui Margin: 5 Child: (
+                                                                (ui Button)
+                                                                     Label: '>'
+                                                                    Action: $[ :(ui, browser, shell) :event |
+                                                                        browser closeShell: shell.
+                                                                        ((event handMorph) payload) tryGrab: (
+                                                                            ui MiniWindowWithTitle: 'Shell' Content: shell.
+                                                                        ).
+                                                                    ] bind(ui, self, shell)
+                                                            )
+                                                        ) ~ xLayoutShrinkWrap!,
+                                                    )
                                                 )
                                             )
                                         )
