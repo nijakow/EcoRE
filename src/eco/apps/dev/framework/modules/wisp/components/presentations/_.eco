@@ -42,8 +42,8 @@ std Module
                 hflex add: (
                     ui Margin: 5 Child: (
                         (ui Button)
-                             Label: 'Value'
                             Action: $[ :(us, wisp, slotMirror) :event | ((event handMorph) payload) tryGrab: (us Object: (slotMirror slotValue)) ] bind(self, wisp, slot)
+                             Child: (ui Margin: 5 Child: (ui Label: ' / '))
                     ) ~ xLayoutShrinkWrap!
                 ).
             ]
