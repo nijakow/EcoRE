@@ -1,6 +1,24 @@
 
 std Module
 {
+    Line :: Classlike
+    {
+        Instance :: Clonable {
+            |
+            |
+
+            {
+                init => (
+                  ^ self
+                );
+
+                writeOn: w => w << 'a line';
+            }
+        };
+
+        New => Instance new;
+    };
+
     DocumentMorph :: Module
     {
         Behavior <- ($package core) NewBehavior
@@ -13,6 +31,10 @@ std Module
                                   offset        <- 0,
                                   caretPos      <- No,
                                   caretLineInfo <- No,
+                                  "
+                                  lines         <- std util newVector,
+                                  line          <- (((polymorphic morphs) repo core) editing) Line New,
+                                  "
                               |
 
                               (document iterator) do: [ :item |
@@ -33,16 +55,9 @@ std Module
                                       item ifReference: [
                                           | m <- (objectMorphs at: (item content))
                                                     yes: [ :morph | morph ]
-                                                     no: [ |
-                                                                morph <- (polymorphic ui) Framed(
-                                                                              (polymorphic ui) Button
-                                                                                  Child: (
-                                                                                      (polymorphic ui) Margin: 2 Child: (
-                                                                                          ((polymorphic morphs repo) core WriteMorph)
-                                                                                              link: (item content)
-                                                                                      )
-                                                                                  )
-                                                                                  Action: $[]
+                                                     no: [  |
+                                                                morph <- (polymorphic ui) MiniWindowWithTitle: 'a thing' Content: (
+                                                                              (polymorphic ui) Label: 'No content'
                                                                           )
                                                             |
 

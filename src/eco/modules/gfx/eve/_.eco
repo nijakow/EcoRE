@@ -158,7 +158,7 @@
 
     InitEve => (
         |
-            r <- Eve_Init value(DefaultFontPath, 14, 1280, 800)
+            r <- Eve_Init value(DefaultFontPath, 16, 1280, 800)
         |
         DefaultFont <- ((Font clone) initWithFont: GetDefaultFont ShouldClose: false).
       ^ r
