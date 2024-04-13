@@ -592,4 +592,24 @@ bool Eco_VM_Builtin_FFILib_At(struct Eco_Fiber* fiber, unsigned int args)
     return true;
 }
 
+bool Eco_VM_Builtin_SetPeriodic(struct Eco_Fiber* fiber, unsigned int args)
+{
+    // Extract a pointer to a C function (FFI system) and print it
+
+    struct Eco_FFIObject*  func;
+    Eco_Any                any;
+
+    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 1, 1))
+        return false;
+
+    Eco_Log_Debug("Setting periodic function...\n");
+
+    any  = Eco_Fiber_Pop(fiber);
+    func = Eco_Any_AsPointer(any);
+
+    Eco_VM_SetPeriodicFunc(fiber->vm, *((Eco_PeriodicFunc*) Eco_FFIObject_GetBytes(func)));
+
+    return true;
+}
+
 #endif

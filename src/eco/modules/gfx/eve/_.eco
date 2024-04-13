@@ -8,6 +8,7 @@
 
     protected Eve_Init,
     protected Eve_Terminate,
+    protected Eve_Periodic,
     protected Eve_CurrentWidth,
     protected Eve_CurrentHeight,
     protected Eve_PushFrame,
@@ -95,6 +96,7 @@
         lib <- (ffi DLOpen: libpath) yes.
         Eve_Init <- (lib function: #'Eve_Init' type: ((ffi types void) function(ffi types string, ffi types uint, ffi types int, ffi types int))) yes.
         Eve_Terminate <- (lib function: #'Eve_Terminate' type: ((ffi types void) function())) yes.
+        Eve_Periodic <- (lib function: #'Eve_Periodic' type: ((ffi types void) function())) yes.
         Eve_CurrentWidth <- (lib function: #'Eve_CurrentWidth' type: ((ffi types uint) function())) yes.
         Eve_CurrentHeight <- (lib function: #'Eve_CurrentHeight' type: ((ffi types uint) function())) yes.
         Eve_PushFrame <- (lib function: #'Eve_PushFrame' type: ((ffi types void) function())) yes.
@@ -161,6 +163,7 @@
             r <- Eve_Init value(DefaultFontPath, 16, 1280, 800)
         |
         DefaultFont <- ((Font clone) initWithFont: GetDefaultFont ShouldClose: false).
+        #'ecosphere.ecore.ffi.set_periodic'(Eve_Periodic ptr).
       ^ r
     );
     TerminateEve => Eve_Terminate value();

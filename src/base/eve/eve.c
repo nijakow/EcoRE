@@ -431,6 +431,7 @@ struct Eve_RenderState {
     struct Eve_Font*       font;
 
     SDL_Event              event;
+    struct timeval         last_poll_time;
 
     struct Eve_FrameStack  frame_stack;
     struct Eve_Frame       frame;
@@ -470,6 +471,8 @@ void Eve_RenderState_Create(struct Eve_RenderState* self, struct SDL_Window* win
     self->frame.ymax  = self->height;
 
     Eve_TextCache_Create(&self->text_cache);
+
+    gettimeofday(&self->last_poll_time, NULL);
 }
 
 void Eve_RenderState_Destroy(struct Eve_RenderState* self) {
@@ -481,6 +484,23 @@ void Eve_RenderState_Destroy(struct Eve_RenderState* self) {
 
     SDL_DestroyRenderer(self->renderer);
     SDL_DestroyWindow(self->window);
+}
+
+// Forward declaration.
+bool Eve_RenderState_PollEvent(struct Eve_RenderState* self);
+
+void Eve_RenderState_Periodic(struct Eve_RenderState* self) {
+    struct timeval now;
+
+    gettimeofday(&now, NULL);
+
+    if (now.tv_sec - self->last_poll_time.tv_sec > 1) {
+        printf("Emergency poll event.\n");
+        self->last_poll_time = now;
+        while (Eve_RenderState_PollEvent(self)) {
+            // Do nothing.
+        }
+    }
 }
 
 void Eve_RenderState_Reset(struct Eve_RenderState* self) {
@@ -848,6 +868,8 @@ void Eve_RenderState_Render(struct Eve_RenderState* self) {
 }
 
 bool Eve_RenderState_PollEvent(struct Eve_RenderState* self) {
+    gettimeofday(&self->last_poll_time, NULL);
+
     if (SDL_PollEvent(&self->event) != 0) {
         if (self->event.type == SDL_WINDOWEVENT) {
             // Handle window events, if needed.
@@ -1218,4 +1240,8 @@ void Eve_Terminate() {
     Eve_RenderState_Destroy(&EVE_DEFAULT_RENDER_STATE);
     TTF_Quit();
     SDL_Quit();
+}
+
+void Eve_Periodic() {
+    Eve_RenderState_Periodic(&EVE_DEFAULT_RENDER_STATE);
 }

@@ -9,6 +9,8 @@
 struct Eco_GC_State;
 struct Eco_Code;
 
+typedef void (*Eco_PeriodicFunc)();
+
 
 struct Eco_VM
 {
@@ -30,6 +32,8 @@ struct Eco_VM
     } constants;
 
     struct timeval                start_time;
+
+    Eco_PeriodicFunc              periodic_func;
 };
 
 
@@ -53,5 +57,9 @@ bool Eco_VM_LoadImage(struct Eco_VM*, char*, unsigned long);
 Eco_Integer Eco_VM_NewFiberId(struct Eco_VM*);
 
 struct Eco_Fiber* Eco_VM_GetFiberById(struct Eco_VM*, Eco_Integer);
+
+static inline void Eco_VM_SetPeriodicFunc(struct Eco_VM* vm, Eco_PeriodicFunc func) {
+    vm->periodic_func = func;
+}
 
 #endif

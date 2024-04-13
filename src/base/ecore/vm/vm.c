@@ -27,6 +27,8 @@ void Eco_VM_Create(struct Eco_VM* vm)
     vm->constants.cfalse      = Eco_Any_Default();
     vm->constants.basic_error = Eco_Any_Default();
 
+    vm->periodic_func         = NULL;
+
     Eco_WeakObjectManager_Create(&vm->weak_objects);
     Eco_GC_State_Create(&vm->gc_state, vm);
     Eco_Scheduler_Create(&vm->scheduler);
@@ -86,6 +88,10 @@ void Eco_VM_Run(struct Eco_VM* vm)
         Eco_Scheduler_Run(&vm->scheduler);
         Eco_VM_HandleEvents(vm);
         Eco_GC_Step(&vm->gc_state); // TODO: Only call this if necessary!
+
+        if (vm->periodic_func != NULL) {
+            vm->periodic_func();
+        }
     }
 }
 

@@ -45,6 +45,8 @@ bool Eco_VM_Builtin_FFIObjectDLSym(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFILib_Open(struct Eco_Fiber*, unsigned int);
 bool Eco_VM_Builtin_FFILib_At(struct Eco_Fiber*, unsigned int);
 
+bool Eco_VM_Builtin_SetPeriodic(struct Eco_Fiber*, unsigned int);
+
 #endif
 
 #endif

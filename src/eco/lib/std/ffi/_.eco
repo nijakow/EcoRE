@@ -63,7 +63,7 @@
         static with inherited parent = #<:std/Clonable>;
 
         protected name,
-        protected ptr,
+        ptr,
         type;
 
         with inherited trait = {
