@@ -61,6 +61,10 @@ std Module
                                                                           )
                                                             |
 
+                                                            (morph payload)
+                                                              ~ draggable: false
+                                                              ~ keyable:   false.
+
                                                             objectMorphs at: (item content) put: morph.
 
                                                             morph

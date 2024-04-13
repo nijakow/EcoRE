@@ -22,7 +22,7 @@
                 ((predicate accepts?: event) not) if: [                    
                   ^ failure value
                 ].
-              ^ success value(predicate forwardEvent: event ToHandler: handler Context: context)
+              ^ success value(predicate forwardEvent: event ToHandler: handler Context: context Abort: failure)
             );
 
             writeOn: w => w << 'a basic rule';

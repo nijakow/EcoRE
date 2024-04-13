@@ -23,10 +23,13 @@
 
             handle: event context: context => (
                 rules do: [ :rule |
+                  [ :break |
                     rule
                         runWithEvent: event
                              Context: context
                            OnSuccess: [ :v | ^ (((polymorphic core event) handling) results Success) Value: v ]
+                           OnFailure: break
+                  ] withBreak
                 ].
               ^ ((polymorphic core event) handling) results Failure
             );

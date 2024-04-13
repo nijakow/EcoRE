@@ -62,16 +62,23 @@ std Module
                         ((kernel state) payload) child: (event body).
                         kernel changed.
                     ]
-                    ~ on: (($package event) predicates MouseClick) do: $[ :(polymorphic) :context :event |
-                        | hand <- ((event body) hand) payload |
-                        hand tryGrab: (context kernel) Translation: ((polymorphic math geometry) Point X: ((context x) negate) Y: ((context y) negate)).
-                        (context kernel) dispose. "TODO: Only dispose if the grab was successful."
+                    ~ on: (($package event) predicates MouseClick) do: $[ :(polymorphic) :context :event :abort |
+                        (((context kernel) payload) draggable?) if: [
+                            | hand <- ((event body) hand) payload |
+                            hand tryGrab: (context kernel) Translation: ((polymorphic math geometry) Point X: ((context x) negate) Y: ((context y) negate)).
+                            (context kernel) dispose. "TODO: Only dispose if the grab was successful."
+                        ] else: [
+                            (std io out << 'Not draggable!') newline commit.
+                            abort value.
+                        ].
                     ] bind($package)
-                    ~ on: (($package event) predicates Key) do: $[ :(polymorphic) :context :event |
+                    ~ on: (($package event) predicates Key) do: $[ :(polymorphic) :context :event :abort |
                               |
                                   payload <- ((context kernel) payload),
                                   key     <- (event body) key,
                               |
+
+                              ((payload keyable?) not) if: [ abort value ].
 
                               [ :break |
                                   key ifEscape: [ payload close. break value. ].
@@ -91,6 +98,8 @@ std Module
                 maybeTitleMorphKernel   <- No,
                 maybeButtonsMorphKernel <- No,
                 rolledUp                <- true,
+                draggable?              <- true,
+                keyable?                <- true,
             |
 
             {
@@ -132,6 +141,9 @@ std Module
                 rollUp         => rolledUp: true;
                 rollDown       => rolledUp: false;
                 toggleRoll     => rolledUp: (rolledUp not);
+
+                draggable: bool => draggable? <- bool;
+                keyable:   bool => keyable?   <- bool;
 
                 close => (
                     maybeMorphKernel yes: [ :kernel | kernel dispose ].

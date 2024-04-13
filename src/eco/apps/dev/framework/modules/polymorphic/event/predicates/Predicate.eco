@@ -18,7 +18,7 @@
 
             accepts?: event => (type == (event head));
 
-            forwardEvent: event ToHandler: handler Context: context => handler value(context, event);
+            forwardEvent: event ToHandler: handler Context: context Abort: abort => handler value(context, event, abort);
         }
     };
 
