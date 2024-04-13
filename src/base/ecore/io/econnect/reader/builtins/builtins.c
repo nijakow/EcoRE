@@ -4,7 +4,6 @@
 #include "objects/key.h"
 #include "objects/string.h"
 #include "objects/array.h"
-#include "objects/interface.h"
 #include "objects/ints.h"
 #include "objects/object.h"
 #include "objects/code.h"
@@ -32,8 +31,6 @@ void Eco_EConnect_InitReaderBuiltins()
     Eco_EConnect_InstallCallback("ecosphere.object.char", Eco_EConnect_Builtin_GetCharacter);
     Eco_EConnect_InstallCallback("ecosphere.object.object", Eco_EConnect_Builtin_GetMolecule);
     Eco_EConnect_InstallCallback("ecosphere.object.molecule", Eco_EConnect_Builtin_GetMolecule);
-    Eco_EConnect_InstallCallback("ecosphere.object.interface", Eco_EConnect_Builtin_GetInterface);
-    Eco_EConnect_InstallCallback("ecosphere.object.interface.default", Eco_EConnect_Builtin_GetDefaultInterface);
     Eco_EConnect_InstallCallback("ecosphere.object.code", Eco_EConnect_Builtin_GetCode);
     Eco_EConnect_InstallCallback("ecosphere.econnect.compressed.gz", Eco_EConnect_Builtin_GZip);
 }

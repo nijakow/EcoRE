@@ -4,7 +4,6 @@
 #include <ecore/objects/base/type.h>
 #include <ecore/objects/base/type/sending.h>
 #include <ecore/vm/core/send.h>
-#include <ecore/objects/vm/interface/interface.h>
 
 bool Eco_Object_Send(struct Eco_Message*  message,
                      struct Eco_Object*   target,

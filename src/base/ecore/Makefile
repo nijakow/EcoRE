@@ -21,7 +21,6 @@ eco.c \
 objects/objects.c \
 objects/base/type/copying.c \
 objects/base/type/gc.c \
-objects/base/type/interface.c \
 objects/base/type/sending.c \
 objects/base/type/slot_info.c \
 objects/base/type/slot.c \
@@ -44,7 +43,6 @@ objects/pseudo/float.c \
 objects/pseudo/integer.c \
 objects/vm/code/code.c \
 objects/vm/code/closure.c \
-objects/vm/interface/interface.c \
 objects/vm/weakbox/weakbox.c \
 objects/vm/ffi/ffitype.c \
 objects/vm/ffi/ffiobject.c \
@@ -94,7 +92,6 @@ io/econnect/reader/builtins/builtins.c \
 io/econnect/reader/builtins/compression/gz.c \
 io/econnect/reader/builtins/protocol/protocol.c \
 io/econnect/reader/builtins/objects/array.c \
-io/econnect/reader/builtins/objects/interface.c \
 io/econnect/reader/builtins/objects/ints.c \
 io/econnect/reader/builtins/objects/object.c \
 io/econnect/reader/builtins/objects/object_body.c \

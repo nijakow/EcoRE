@@ -13,7 +13,6 @@
 #include <ecore/objects/misc/key/key.h>
 #include <ecore/objects/vm/code/code.h>
 #include <ecore/objects/vm/code/closure.h>
-#include <ecore/objects/vm/interface/interface.h>
 #include <ecore/vm/core/clone.h>
 #include <ecore/vm/core/send.h>
 #include <ecore/vm/fiber/fiber.h>
@@ -63,11 +62,6 @@ struct Eco_Type* Eco_Type_New(unsigned int slot_count)
 void Eco_Type_Del(struct Eco_Type* type)
 {
     unsigned int  index;
-
-    if (type->interface != NULL)
-        Eco_Interface_NotifyNotImplementedBy(type->interface, type);
-    if (type->public_interface != NULL)
-        Eco_Interface_NotifyNotImplementedBy(type->public_interface, type);
 
     for (index = 0; index < type->inheriting_types.fill; index++)
         Eco_TypeList_Remove(&type->inheriting_types.types[index]->inherited_types, type);

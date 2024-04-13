@@ -11,7 +11,6 @@
 #include "pseudo/integer.h"
 #include "vm/code/code.h"
 #include "vm/code/closure.h"
-#include "vm/interface/interface.h"
 #include "vm/weakbox/weakbox.h"
 #include "vm/ffi/ffitype.h"
 #include "vm/ffi/ffiobject.h"
@@ -24,7 +23,6 @@ void Eco_Objects_Init()
     Eco_Object_Init();
     Eco_Molecule_Init();
     Eco_Key_Init();
-    Eco_Interface_Init();
     Eco_WeakBox_Init();
     Eco_Code_Init();
     Eco_Integer_Init();
@@ -55,7 +53,6 @@ void Eco_Objects_Terminate()
     Eco_Integer_Terminate();
     Eco_Code_Terminate();
     Eco_WeakBox_Terminate();
-    Eco_Interface_Terminate();
     Eco_Key_Terminate();
     Eco_Molecule_Terminate();
     Eco_Object_Terminate();

@@ -28,9 +28,10 @@
 
             stack add: object.
             [
+                object writeOn: self."
                 ((std reflect PublicInterfaceFor: object) implementsMessage: #'writeOn:')
                       if: [ object writeOn: self ]
-                    else: [ << 'an object'       ].
+                    else: [ << 'an object'       ]."
             ] ensure: [
                 stack erase: (stack size - 1).
             ].

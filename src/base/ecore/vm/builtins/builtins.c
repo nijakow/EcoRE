@@ -123,27 +123,15 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.write_to", Eco_VM_Builtin_BlobWriteTo);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.blob.open_file", Eco_VM_Builtin_BlobOpenFile);
 
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.get_parents", Eco_VM_Builtin_InterfaceGetParents);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.get_implementing_types", Eco_VM_Builtin_InterfaceGetImplementingTypes);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.get_entry_info", Eco_VM_Builtin_InterfaceGetEntryInfo);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.add_parent", Eco_VM_Builtin_InterfaceAddParent);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.add_entry", Eco_VM_Builtin_InterfaceAddEntry);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.implements_message", Eco_VM_Builtin_InterfaceImplementsMessage);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.implements_interface", Eco_VM_Builtin_InterfaceImplementsInterface);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.interface.get_all_interfaces", Eco_VM_Builtin_InterfaceGetAllInterfaces);
-
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.weakbox.new", Eco_VM_Builtin_WeakBoxNew);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.weakbox.get", Eco_VM_Builtin_WeakBoxGet);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.object.weakbox.set", Eco_VM_Builtin_WeakBoxSet);
 
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.is_molecule", Eco_VM_Builtin_IsMolecule);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.is_interface", Eco_VM_Builtin_IsInterface);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.is_code", Eco_VM_Builtin_IsCode);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_proxy", Eco_VM_Builtin_GetProxy);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.slot_value", Eco_VM_Builtin_GetSlotValue);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.slot_flags", Eco_VM_Builtin_GetSlotFlags);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.type_get_private_interface", Eco_VM_Builtin_GetInterface);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.type_get_public_interface", Eco_VM_Builtin_GetPublicInterface);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type", Eco_VM_Builtin_GetType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type_slot_names", Eco_VM_Builtin_GetTypeSlotNames);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.reflect.get_type_slot_info", Eco_VM_Builtin_GetTypeSlotInfo);
@@ -220,8 +208,6 @@ void Eco_VM_Builtins_Init()
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.block_type", Eco_VM_Builtin_GetBlockType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.key_type", Eco_VM_Builtin_GetKeyType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.string_type", Eco_VM_Builtin_GetStringType);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.interface_type", Eco_VM_Builtin_GetInterfaceType);
-    Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.any", Eco_VM_Builtin_GetDefaultInterface);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.weakbox_type", Eco_VM_Builtin_GetWeakBoxType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.ffitype_type", Eco_VM_Builtin_GetFFITypeType);
     Eco_VM_Builtins_AddBuiltin("ecosphere.ecore.constant.ffiobject_type", Eco_VM_Builtin_GetFFIObjectType);

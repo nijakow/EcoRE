@@ -18,7 +18,6 @@ struct Eco_TypeSlot
 {
     enum   Eco_TypeSlotType   type;
     struct Eco_BasicSlotInfo  info;
-    struct Eco_Interface*     interface;
 
     union {
         struct {

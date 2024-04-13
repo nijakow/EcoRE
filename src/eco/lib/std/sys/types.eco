@@ -73,27 +73,4 @@
     };
 
     SumTypeOf: a And: b => (SumType clone) initWithA: a B: b;
-
-
-    own InterfaceType = {
-        static with inherited _ = #<:std/Clonable>;
-        with inherited TypeTrait = #<:std/sys/types/TypeTrait>;
-
-        protected interface <- %[];
-
-        with inherited trait = {
-            static with inherited _ = #<:std/Trait>;
-
-            initWithInterface: _interface => (
-                interface <- _interface.
-              ^ self
-            );
-
-            probe: object => (std reflect PublicInterfaceFor: object) implementsInterface: interface;
-        
-            writeOn: w => w << 'an interface type(' << interface << ')';
-        };
-    };
-
-    InterfaceTypeFor: interface => (InterfaceType clone) initWithInterface: interface;
 }

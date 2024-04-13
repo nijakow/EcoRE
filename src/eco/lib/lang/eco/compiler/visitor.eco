@@ -176,7 +176,7 @@
     );
 
     visitInterface: ast => (
-        | i <- %[] |
+        | i <- "%[]" 42 |
         ast parents do: [ :p | i <- i addParent: (EvaluateExpression: p In: i) ].
         ast entries do: [ :s | i <- AddSlot: s ToInterface: i ].
         compiler loadConstant: i

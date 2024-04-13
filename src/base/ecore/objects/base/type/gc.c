@@ -11,7 +11,6 @@ void Eco_Type_MarkChildren(struct Eco_GC_State* state, struct Eco_Type* type)
     for (i = 0; i < type->slot_count; i++)
     {
         Eco_GC_State_MarkObject(state, type->slots[i].info.key);
-        Eco_GC_State_MarkObject(state, (struct Eco_Object*) type->slots[i].interface);
         switch (type->slots[i].type)
         {
             case Eco_TypeSlotType_INLINED:

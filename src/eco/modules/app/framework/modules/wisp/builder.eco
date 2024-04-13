@@ -193,7 +193,6 @@
     OutlinerContentPaneFor: object Ui: ui Replacer: replacer => (
         begin
             ~ if: [ std reflect primitives IsMolecule:  object ] then: [ ^ MoleculePaneFor:  object Ui: ui Replacer: replacer ]
-            ~ if: [ std reflect primitives IsInterface: object ] then: [ ^ InterfacePaneFor: object Ui: ui                    ]
             ~ if: [ std reflect primitives IsArray:     object ] then: [ ^ ArrayPaneFor:     object Ui: ui Replacer: replacer ]
             "~ if: [ std reflect primitives IsCode:      object ] then: [ ^ CodePaneFor:      object Ui: ui ]"
         ~ default: [ ^ PresentationPaneFor: object Ui: ui ]

@@ -12,7 +12,6 @@
 #include <ecore/objects/misc/key/key.h>
 #include <ecore/objects/vm/code/code.h>
 #include <ecore/objects/vm/code/closure.h>
-#include <ecore/objects/vm/interface/interface.h>
 #include <ecore/vm/core/clone.h>
 #include <ecore/vm/core/send.h>
 #include <ecore/vm/fiber/fiber.h>
@@ -26,7 +25,6 @@
 void Eco_TypeSlot_Initialize(struct Eco_TypeSlot* slot)
 {
     // slot->referenced_types will be initialized by other code
-    slot->interface = Eco_Interface_GetDefaultInterface();
     Eco_BasicSlotInfo_Create(&slot->info);
 }
 

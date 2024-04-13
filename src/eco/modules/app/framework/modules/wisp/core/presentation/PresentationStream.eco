@@ -32,9 +32,10 @@
             commit   => self;
 
             << object => (
+                object presentOn: self."
                 ((std reflect PublicInterfaceFor: object) implementsMessage: #'presentOn:')
                       if: [ object presentOn: self ]
-                    else: [ << 'an object'         ].
+                    else: [ << 'an object'         ]."
               ^ self
             );
 
@@ -44,9 +45,10 @@
                     substream    <- (presentation PresentationStream) NewWithPresenter: subpresenter,
                 |
 
+                object presentOn: substream. "
                 ((std reflect PublicInterfaceFor: object) implementsMessage: #'presentOn:')
                       if: [ object presentOn: substream ]
-                    else: [ substream << 'an object'    ].
+                    else: [ substream << 'an object'    ]."
                 
                 emitter emit: subpresenter presentation: (presentation presentations) PresenterPresentation.
 

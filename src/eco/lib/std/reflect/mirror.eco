@@ -12,9 +12,11 @@
 
         typeInstance => #'ecosphere.ecore.reflect.get_type'(reflectee);
 
+        "
         interface => publicInterface;
         publicInterface => std reflect PublicInterfaceFor: reflectee;
         privateInterface => std reflect PrivateInterfaceFor: reflectee;
+        "
 
         slotCount => (
             #'ecosphere.ecore.reflect.get_type_slot_info'(typeInstance, -1, -1)

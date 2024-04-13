@@ -16,7 +16,7 @@
         #'ecosphere.ecore.init.set_true'(#<:std/bool/true>).
         #'ecosphere.ecore.init.set_false'(#<:std/bool/false>).
         #'ecosphere.ecore.init.set_basic_error'(#<:std/sys/error/InternalBasicError>).
-        any <- #'ecosphere.ecore.constant.any'().
+        any <- 42.
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.type_type'(), #<:std/reflect/proxies/Type>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.array_type'(), #<:std/reflect/proxies/Array>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.blob_type'(), #<:std/reflect/proxies/Blob>).
@@ -27,7 +27,6 @@
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.character_type'(), #<:std/reflect/proxies/Char>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.key_type'(), #<:std/reflect/proxies/Key>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.string_type'(), #<:std/reflect/proxies/String>).
-        #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.interface_type'(), #<:std/reflect/proxies/Interface>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.weakbox_type'(), #<:std/reflect/proxies/WeakBox>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.ffifunc_type'(), #<:std/reflect/proxies/ffi/FFIFunc>).
         #'ecosphere.ecore.init.set_proxy'(#'ecosphere.ecore.constant.ffiobject_type'(), #<:std/reflect/proxies/ffi/FFIObject>).

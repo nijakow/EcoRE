@@ -11,7 +11,6 @@
 #include <ecore/objects/misc/key/key.h>
 #include <ecore/objects/vm/code/code.h>
 #include <ecore/objects/vm/code/closure.h>
-#include <ecore/objects/vm/interface/interface.h>
 #include <ecore/vm/core/clone.h>
 #include <ecore/vm/core/send.h>
 #include <ecore/vm/fiber/fiber.h>
@@ -102,7 +101,6 @@ bool Eco_Type_CopyWithNewInlinedSlot(struct Eco_Type*           self,
 
         the_slot->type                          = Eco_TypeSlotType_INLINED;
         the_slot->info                          = *info;
-        the_slot->interface                     = interface;
         the_slot->body.inlined.value_size       = slot_value_size;
         the_slot->body.inlined.offset           = the_copy->instance_payload_size - slot_value_size;
         /*
@@ -140,7 +138,6 @@ bool Eco_Type_CopyWithNewCodeSlot(struct Eco_Type*          self,
 
         the_slot->type             = Eco_TypeSlotType_CODE;
         the_slot->info             = *info;
-        the_slot->interface        = interface;
         the_slot->body.code.code   = code;
 
         *type_loc                  = the_copy;

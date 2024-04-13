@@ -201,7 +201,7 @@ class Tokenizer:
         elif self._s.peeks('{'): return Token(self, TokenType.LCURLY)
         elif self._s.peeks('}'): return Token(self, TokenType.RCURLY)
         elif self._s.peeks('#('): return Token(self, TokenType.HASHLPAREN)
-        elif self._s.peeks('%['): return Token(self, TokenType.PERCLBRACK)
+        # elif self._s.peeks('%['): return Token(self, TokenType.PERCLBRACK)
         elif self._s.peeks('.'): return Token(self, TokenType.SEPARATOR)
         elif self._s.peeks(','): return Token(self, TokenType.SEPARATOR)
         elif self._s.peeks(';'): return Token(self, TokenType.SEPARATOR)

@@ -2,7 +2,6 @@
 
 #include <ecore/objects/base/type.h>
 #include <ecore/objects/misc/string/string.h>
-#include <ecore/objects/vm/interface/interface.h>
 #include <ecore/vm/vm.h>
 #include <ecore/vm/fiber/stackops.h>
 #include <ecore/util/libc.h>
@@ -20,7 +19,6 @@ extern struct Eco_Type*  Eco_Character_TYPE;
 extern struct Eco_Type*  Eco_Closure_TYPE;
 extern struct Eco_Type*  Eco_Key_TYPE;
 extern struct Eco_Type*  Eco_String_TYPE;
-extern struct Eco_Type*  Eco_Interface_TYPE;
 extern struct Eco_Type*  Eco_WeakBox_TYPE;
 extern struct Eco_Type*  Eco_FFIType_TYPE;
 extern struct Eco_Type*  Eco_FFIObject_TYPE;
@@ -220,28 +218,6 @@ bool Eco_VM_Builtin_GetStringType(struct Eco_Fiber* fiber, unsigned int args)
     if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
         return false;
     value = Eco_Any_FromPointer(Eco_String_TYPE);
-    Eco_Fiber_Push(fiber, value);
-    return true;
-}
-
-bool Eco_VM_Builtin_GetInterfaceType(struct Eco_Fiber* fiber, unsigned int args)
-{
-    Eco_Any  value;
-
-    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
-        return false;
-    value = Eco_Any_FromPointer(Eco_Interface_TYPE);
-    Eco_Fiber_Push(fiber, value);
-    return true;
-}
-
-bool Eco_VM_Builtin_GetDefaultInterface(struct Eco_Fiber* fiber, unsigned int args)
-{
-    Eco_Any  value;
-
-    if (!Eco_VM_Builtin_Tool_ArgExpect(fiber, args, 0, 0))
-        return false;
-    value = Eco_Any_FromPointer(Eco_Interface_GetDefaultInterface());
     Eco_Fiber_Push(fiber, value);
     return true;
 }
