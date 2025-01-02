@@ -1,4 +1,8 @@
 
+.phony: install-deps
+install-deps:
+	scripts/deps.sh
+
 .phony: all
 all:
 	$(MAKE) -C src/base/eve
