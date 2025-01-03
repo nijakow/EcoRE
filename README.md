@@ -57,6 +57,18 @@ In order to create the bootstrap image, you also need Python (version 3).
 
 You might have to change a few things in order to get it to run on your machine.
 
+Once the VM has started, you will be greeted by a black loading screen. The loading process takes about one minute, depending on your hardware. After that, the main menu will open:
+
+![Eco main menu](./doc/repo/resources/eco_menu.png)
+
+You can now choose between
+ - **Outliner** to examine and modify the current session object (for debugging purposes)
+ - **Files** to load Eco files from the disk
+ - **Apps** to try out various programs written in Eco
+ - **New** to start a shell or an editor (a context menu will open)
+
+To close the session, press `Shift+Esc`.
+
 # Screenshots and Impressions
 
 ![A screenshot of EcoRE booting](./doc/repo/resources/eco_loading.png)
