@@ -8,6 +8,12 @@ It acts as a virtual machine and runtime environment for my programming language
 
 I shared the inspiration for this project in [an E-Mail to the mailing list of the Self programming language](https://lists.selflanguage.org/archives/list/self-interest@lists.selflanguage.org/thread/NGRNRIPZZJTUDMFBRRYUXG56TEQJORG6/).
 
+## Disclaimer
+
+This implementation was designed for experimental purposes only, and will be superseded by improved VMs in the future. It is in no way fit for any productive use.
+
+The repository contains some undocumented, outdated and buggy files and features.
+
 ## Features and Scope
 
 EcoRE is capable of executing a graphical programming environment for the Eco programming language, supporting:
@@ -21,8 +27,6 @@ EcoRE is capable of executing a graphical programming environment for the Eco pr
  - Outliners and Reflection
  - Code reloading
  - Seamless FFI calls to various libraries
-
-However, the system was designed for experimental purposes only, and will be superseded by improved VMs in the future.
 
 Planned and partially implemented features are:
 
