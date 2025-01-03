@@ -12,6 +12,7 @@ I shared the inspiration for this project in [an E-Mail to the mailing list of t
 
 EcoRE is capable of executing a graphical programming environment for the Eco programming language, supporting:
 
+ - A Morphic-like user interface
  - Image-based persistence
  - Automatic garbage collection
  - Interactive code editing
@@ -19,8 +20,18 @@ EcoRE is capable of executing a graphical programming environment for the Eco pr
  - Draggable objects
  - Outliners and Reflection
  - Code reloading
+ - Seamless FFI calls to various libraries
 
 However, the system was designed for experimental purposes only, and will be superseded by improved VMs in the future.
+
+Planned and partially implemented features are:
+
+ - Extracting FFI information from DWARF debugging data
+ - Python interop
+ - Distributed objects and networking support
+ - Multiple languages sharing the same object space (Eco, Smalltalk, Lisp)
+ - Support for virtual reality and a 3D user interface
+ - A presentation mechanism similar to McCLIM
 
 ## Building and Running EcoRE
 
