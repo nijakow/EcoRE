@@ -6,6 +6,8 @@ This is **EcoRE**, my little programming language playground that I've been work
 
 It acts as a virtual machine and runtime environment for my programming language **Eco**, which is a language inspired by [Self](https://selflanguage.org/).
 
+I shared the inspiration for this project in [an E-Mail to the mailing list of the Self programming language](https://lists.selflanguage.org/archives/list/self-interest@lists.selflanguage.org/thread/NGRNRIPZZJTUDMFBRRYUXG56TEQJORG6/).
+
 ## Features and Scope
 
 EcoRE is capable of executing a graphical programming environment for the Eco programming language, supporting:
