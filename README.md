@@ -25,4 +25,14 @@ EcoRE depends on:
  - zlib
  - libffi
 
+In order to create the bootstrap image, you also need Python (version 3).
+
 You might have to change a few things in order to get it to run on your machine.
+
+# Screenshots and Impressions
+
+![A screenshot of EcoRE booting](./doc/repo/resources/eco_loading.png)
+
+![Eco with its standard theme](./doc/repo/resources/eco_standard_theme.png)
+
+![Eco with its pumpkin theme](./doc/repo/resources/eco_pumpkin_theme.png)
