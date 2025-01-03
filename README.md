@@ -37,4 +37,4 @@ You might have to change a few things in order to get it to run on your machine.
 
 ![Eco with its pumpkin theme](./doc/repo/resources/eco_pumpkin_theme.png)
 
-![Dragging objects](./doc/repo/resources/eco_dragging_objects.webm)
+![Dragging objects](./doc/repo/resources/eco_dragging_objects.gif)
