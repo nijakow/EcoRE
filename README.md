@@ -1,6 +1,6 @@
 # EcoRE - The Ecosphere Runtime Environment
 
-![Eco with its standard theme](./doc/repo/resources/eco_standard_theme.png)
+![Eco with its standard theme](./doc/repo/resources/eco_main.png)
 
 This is **EcoRE**, my little programming language playground that I've been working on in my spare time since 2020.
 
@@ -71,14 +71,30 @@ To close the session, press `Shift+Esc`.
 
 # Screenshots and Impressions
 
+## Loading Screen
+
 ![A screenshot of EcoRE booting](./doc/repo/resources/eco_loading.png)
 
-![Eco with its standard theme](./doc/repo/resources/eco_standard_theme.png)
+## User Interface
 
-![Eco with its pumpkin theme](./doc/repo/resources/eco_pumpkin_theme.png)
+![Eco with its standard theme](./doc/repo/resources/eco_main.png)
 
 ![Dragging objects](./doc/repo/resources/eco_dragging_objects.gif)
 
 ![Outliners](./doc/repo/resources/eco_outliners.gif)
 
 ![Animation](./doc/repo/resources/eco_animation.gif)
+
+## Themes
+
+![Eco with its default theme](./doc/repo/resources/eco_main.png)
+
+![Eco with its orange theme](./doc/repo/resources/eco_theme_orange.png)
+
+![Eco with its pumpkin theme](./doc/repo/resources/eco_theme_pumpkin.png)
+
+![Eco with its purple theme](./doc/repo/resources/eco_theme_purple.png)
+
+![Eco with its green theme](./doc/repo/resources/eco_theme_green.png)
+
+![Eco with its black-and-white theme](./doc/repo/resources/eco_theme_black.png)
