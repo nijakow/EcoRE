@@ -1,9 +1,24 @@
 # EcoRE - The Ecosphere Runtime Environment
 
+![Eco with its standard theme](./doc/repo/resources/eco_standard_theme.png)
+
 This is **EcoRE**, my little programming language playground that I've been working on in my spare time since 2020.
 
 It acts as a virtual machine and runtime environment for my programming language **Eco**, which is a language inspired by [Self](https://selflanguage.org/).
 
+## Features and Scope
+
+EcoRE is capable of executing a graphical programming environment for the Eco programming language, supporting:
+
+ - Image-based persistence
+ - Automatic garbage collection
+ - Interactive code editing
+ - Decompilation of bytecodes
+ - Draggable objects
+ - Outliners and Reflection
+ - Code reloading
+
+However, the system was designed for experimental purposes only, and will be superseded by improved VMs in the future.
 
 ## Building and Running EcoRE
 
