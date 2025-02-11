@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Check if we are on Debian or Fedora, and call either deps.debian.sh or deps.fedora.sh
 
