@@ -1,7 +1,7 @@
 # Compiler and linker options
 CC := gcc
-CFLAGS := -Wall -Werror -fPIC -MMD $(shell sdl2-config --cflags)
-LDFLAGS := -lm -shared $(shell sdl2-config --libs)
+CFLAGS := -Wall -Werror -fPIC -MMD $(shell pkg-config --cflags sdl2 SDL2_ttf SDL2_gfx SDL2_image)
+LDFLAGS := -lm -shared $(shell pkg-config --libs sdl2 SDL2_ttf SDL2_gfx SDL2_image)
 LIBS := -lSDL2 -lSDL2_ttf -lSDL2_image -lSDL2_gfx
 
 # Source files and object files
